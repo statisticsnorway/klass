@@ -1,0 +1,288 @@
+/* Removes blue border around clicked buttons */
+$v-focus-style: 0;
+  
+@import "../valo/valo.scss";
+
+@mixin klasstheme {
+  /* Include all the styles from the valo theme */
+  @include valo;
+
+  /* Insert your theme rules here */
+
+  .force-scroll .v-table-body {
+    overflow-y: scroll !important;
+  }
+
+  /* General rules */
+  .link-button {
+    &:hover {
+      color: green;
+      text-decoration: underline;
+    }
+  }
+  
+  /* Makes the tabs of accordions more visible */
+  .v-accordion-item-caption {
+    background: lightgrey;
+    &:hover {
+      background: grey;
+      .v-captiontext {
+        color: lightgreen;
+        text-decoration: underline;
+      }
+    }
+  }
+
+  /* Makes drop target row (in table) more visible */
+  .v-table-drag {
+    .v-table-row-drag-middle, .v-table-row-drag-top, .v-table-row-drag-bottom {
+      .v-table-cell-content{
+        background: #197de1;
+        color: white;
+      }
+    }
+  }
+
+  /* Treetable will have plus and minus sign to indicate children, instead of an arrow */
+  .v-treetable-node-closed:BEFORE {
+    font-family: FontAwesome;
+    content: '\f067'; /* pluss icon */
+    font-size: 12px;
+  }
+  .v-treetable-node-open:BEFORE {
+    font-family: FontAwesome;
+    content: '\f068'; /* minus icon */
+    font-size: 12px;
+  }
+
+  .textfield-error {
+    border: 2px solid red !important;
+  }
+  
+  .action-text-button {
+    color: #191919;
+    //font-weight: bold;
+    text-decoration: underline;
+    &:hover {
+      color: green;
+    }
+  }
+  .language-separator-line {
+    border-right: thin solid lightgray;
+  }
+  .horizontal-line {
+    border-top: thin solid lightgray;
+  }
+  
+  .klass-icon-highlighted {
+    &:not(.v-disabled) .v-icon {
+     color: green;
+    }
+    .v-icon {
+      font-size: 20px;
+    }
+  }
+  
+  /* Header row rules */
+  .header-row {
+    background-color: black;
+    padding-bottom: 5px;
+    .klasslogo {
+      font-size: 50px;
+      color: white;
+      font-weight: bold;
+      height: 70px;
+    }
+    .v-slot-user-menu {
+      .user-menu {
+        margin-top: 2px;
+        margin-bottom: 0px;
+        .v-icon {
+          font-size: 26px;
+          color: white;
+        }
+        .v-menubar-menuitem {
+          background: transparent;
+          font-size: 18px;
+          color: white;
+        }
+      }
+    }
+  }
+
+  /* Select row rules */
+  .select-row {
+    background-color: grey;
+    padding-bottom: 15px;    
+    padding-top: 15px;    
+  }
+
+  /* Search results rules*/
+  .search-result-layout {
+    padding-left: 37px;
+    padding-top: 37px;
+    //padding-right: 37px;
+  }
+
+  .page-number {
+    color: black;
+  }
+  .page-selector {
+    vertical-align: middle;
+  }
+
+  .highlighted-number {
+    background-color: #A3B351;
+    text-align: center;
+    width: 25px;
+    height: 25px;
+  }
+
+  .search-result-description {
+    /* max-height: 45px;
+     overflow-y: hidden;*/
+  }
+  .search-result-title {
+    color: Black;
+
+  }
+
+  .search-result-selectable {
+    user-select: text;
+    -webkit-user-select: text;
+    -khtml-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+  }
+
+  .search-result-hierarchy {
+    font-style: italic;
+    color: dimgrey;
+  }
+  .label-gray {
+    color: darkgrey;
+  }
+
+  /* Classification family rules */
+  .classification-family {
+    .family-icon .v-icon {
+      width: 20px;
+      height: 20px;
+    }
+    .favorite-heading {
+      margin-top: 25px;
+      font-size: 22px;
+      .v-icon {
+        font-size: 20px;
+        margin-right: 8px;
+      }
+    }
+    .favorite-info {
+      color: dimgrey;
+      opacity: 1;
+    }
+
+    .favorite {
+      .v-button {
+        font-size: 14px;
+        padding-left: 4px;
+        padding-right: 10px;
+        .v-icon {
+          font-size: 14px;
+          color: orange;
+        }
+      }
+    }
+  }
+  
+  /* Classification list rules */
+  .classification-list {
+    .row-button {
+      padding-left: 0px;
+      padding-right: 0px;
+  	}
+  	.table-header {
+      padding-left: 12px;
+    }
+    .favorite-button .v-icon {
+      color: orange;
+    }
+  }
+
+
+  
+  .code-editor {
+    .v-table:not(.selectable-code-table) {
+      .v-table-row, .v-table-row-odd {
+        .v-icon {
+          visibility: hidden;
+        }
+        &:hover {
+          background: lightgrey;
+          opacity: 1;
+          .v-icon {
+            visibility: visible;
+          }
+        }
+        .v-panel {
+          background: transparent;
+        }
+      }
+    }
+    .v-table-row-referenced {
+       background: lightgrey;
+       opacity: 1;
+     }
+
+    .level-textfield {
+      background: transparent;
+      &:hover, &:focus {
+        background: white;
+        border:1px solid #197de1;
+      }
+    }
+    .user-tip {
+      &.show-tip {
+        background: lightgrey;
+        opacity: 1;
+        border-radius: 5px;
+      }
+      padding-top: 10px;
+      padding-bottom: 10px;
+      margin: 4px;
+    }
+  }
+
+  .small-margin-right {
+    margin-right: 10px;
+  }
+  .small-margin-left {
+    margin-left: 10px;
+  }
+  .small-margin-top {
+    margin-top: 10px;
+  }
+
+  .klass-upload {
+    .v-button {
+      height: 25px;
+      font-size: 12px;
+    }
+  }
+  .klass-admin-field {
+    background: lightgoldenrodyellow;
+  }
+
+
+  .v-table-cell-content-reportPublishedColor {
+    background: #ADF7C1;
+  }
+  
+  .v-table-cell-content-reportNotPublishedColor {
+    background: #FCD7F2;
+  }
+  /*button got miss aligned in firefox; unsetting to fix problem*/
+  .resetbuttonfortextfield-resetbutton {
+    vertical-align: unset;
+  }
+}

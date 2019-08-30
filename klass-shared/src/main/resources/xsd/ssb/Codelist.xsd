@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2006 sp2 U (http://www.altova.com) by J.A.Linnerud (Statistics Norway) -->
+<!-- Forslag til felles standard for kodelister i SSB -->
+<xs:schema xmlns="http://www.ssb.no/ns/meta/codelist" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:common="http://www.ssb.no/ns/meta/common" targetNamespace="http://www.ssb.no/ns/meta/codelist" elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.2">
+	<xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="xml.xsd"/>
+	<xs:import namespace="http://www.ssb.no/ns/meta/common" schemaLocation="MetaCommon.xsd"/>
+	<xs:element name="Codelist">
+		<xs:annotation>
+			<xs:documentation>Root element for a complete codelist, including metadata. Value Domain in ISO/IEC 11179  and Neuchâtel terminology.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="CodelistType"/>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="CodelistRef">
+		<xs:annotation>
+			<xs:documentation>Root element for a codelist, ONLY metadata</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="CodelistRefType"/>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="CodelistRefs">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="CodelistRef" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="NoteGrp">
+		<xs:annotation>
+			<xs:documentation>Multi-lingual notes and footnotes</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Note" type="common:StringLangType" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="KeywordGrp">
+		<xs:annotation>
+			<xs:documentation>Multi-lingual keywords, aliases etc</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Keyword" type="common:StringLangType" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="DescriptionGrp">
+		<xs:annotation>
+			<xs:documentation>Multi-lingual description</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Description" type="common:StringLangType" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>General multilingual description of the value domain, including its purpose and usage for different contextual variables.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="TitleGrp">
+		<xs:annotation>
+			<xs:documentation>Mutli-lingual title</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Title" type="common:StringLangType" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>The multilingual title is a single word or group of words that designates the value domain. It is either a systematic name according to the naming conventions in the organization or a natural language name that reflects the idea or concept of this value domain.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="CodesType">
+		<xs:annotation>
+			<xs:documentation>Datatype for the element 'Codes'</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Code" type="CodeType" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>1 or more code elements.   A value domain item is identified by an alphabetical, numerical or alphanumerical code, which is in line with the code structure (constraint) of the value domain. The code is unique within the value domain to which the value domain item belongs.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CodelistType">
+		<xs:annotation>
+			<xs:documentation>Datatype for the whole codelist, including metadata</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="CodelistRefType">
+				<xs:sequence>
+					<xs:element name="Codes" type="CodesType">
+						<xs:annotation>
+							<xs:documentation>Codes are value domain items in Neuchâtel terminology.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CodelistRefType">
+		<xs:annotation>
+			<xs:documentation>Datatype for a codelist, ONLY metadata</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="CodelistMeta" type="CodelistMetaType"/>
+		</xs:sequence>
+		<xs:attributeGroup ref="CodelistAttr"/>
+	</xs:complexType>
+	<xs:complexType name="CodelistMetaType">
+		<xs:annotation>
+			<xs:documentation>Datatype for codelist metadata</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element ref="TitleGrp"/>
+			<xs:element ref="DescriptionGrp"/>
+			<xs:element name="ContactInformation" type="common:PersonType"/>
+			<xs:element ref="NoteGrp" minOccurs="0"/>
+			<xs:element ref="KeywordGrp" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CodeType">
+		<xs:annotation>
+			<xs:documentation>Datatype for a given code</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="CodeValue" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Code value; 0,1,2 or 0301,1103 etc.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CodeTextGrp">
+				<xs:annotation>
+					<xs:documentation>Multi-lingual code text.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="CodeText" type="common:StringLangType" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>Code text; Female, Male or Oslo, Stavanger etc. NB: xml:lang is mandatory</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element ref="DescriptionGrp" minOccurs="0"/>
+			<xs:element ref="NoteGrp" minOccurs="0"/>
+			<xs:element ref="KeywordGrp" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="id" type="xs:string" use="optional">
+			<xs:annotation>
+				<xs:documentation>This ID is a free text field and is valid only for this instance.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="validFrom" type="xs:date" use="optional"/>
+		<xs:attribute name="validTo" type="xs:date" use="optional"/>
+		<xs:attribute name="lastChangedDate" type="xs:dateTime" use="optional"/>
+		<xs:attribute name="parentCodeId"/>
+	</xs:complexType>
+	<xs:complexType name="CodelistArrayType">
+		<xs:annotation>
+			<xs:documentation>Datatype for 1 or more codelists</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element ref="Codelist" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:attributeGroup name="CodelistAttr">
+		<xs:annotation>
+			<xs:documentation>Group of attributes for codelist</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="id" type="common:CodelistIdType" use="required">
+			<xs:annotation>
+				<xs:documentation>A unique, language independent identifier is used to identify the value domain. This may typically be an abbreviation of its name or a systematic number. The identifier has to be unique among all value domains</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="defaultValidFrom" type="xs:date" use="optional"/>
+		<xs:attribute name="defaultValidTo" type="xs:date" use="optional"/>
+		<xs:attribute name="lastChangedBy" type="xs:string" use="optional"/>
+		<xs:attribute name="lastChangedDate" type="xs:date" use="optional"/>
+		<xs:attribute name="parentCodelistId" type="common:CodelistIdType" use="optional"/>
+		<xs:attribute name="childCodelistId" type="common:CodelistIdType" use="optional"/>
+		<xs:attribute name="isCurrent" type="xs:boolean" use="optional"/>
+		<xs:attribute name="relationId" type="common:RelationIdType" use="optional"/>
+	</xs:attributeGroup>
+	<xs:simpleType name="CodeReferenceTypeType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="relatedTo"/>
+			<xs:enumeration value="partOf"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

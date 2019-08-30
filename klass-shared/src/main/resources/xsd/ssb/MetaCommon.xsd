@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2006 sp2 U (http://www.altova.com) by J.A.Linnerud (Statistics Norway) -->
+<xs:schema xmlns="http://www.ssb.no/ns/meta/common" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.ssb.no/ns/meta/common" elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.2">
+	<xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="xml.xsd"/>
+	<xs:complexType name="StringLangType">
+		<xs:annotation>
+			<xs:documentation>Datatype for string + mandatory language</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute ref="xml:lang" use="required"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="StringLangChoiceType">
+		<xs:annotation>
+			<xs:documentation>Datatype for string + optional language</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute ref="xml:lang" use="optional"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="PersonType">
+		<xs:annotation>
+			<xs:documentation>Represents a person with a division</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Person" type="xs:string"/>
+			<xs:element name="Division" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="UrnIdTemplate">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="urn:ssb:codelist:"/>
+			<xs:enumeration value="urn:ssb:contextvariable:"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="CodelistIdType">
+		<xs:annotation>
+			<xs:documentation>urn:ssb:codelist:stabas:3202107 . Persistent reference to a given codelist. This can be any codelist and SHOULD be specified by URN-notation</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:anyURI">
+			<xs:pattern value="urn:\w+:codelist:\w+[:]?(\w+)?"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ContextVariableIdType">
+		<xs:annotation>
+			<xs:documentation>urn:ssb:contextvariable:datadok:12345, urn:ssb:contextvariable:metadb:12592</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:anyURI">
+			<xs:pattern value="urn:\w+:contextvariable:\w+[:]?(\w+)?"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ProjectIdType">
+		<xs:annotation>
+			<xs:documentation>urn:ssb:project:metadb:1001, urn:ssb:project:metadb:1004</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:anyURI">
+			<xs:pattern value="urn:\w+:project:\w+[:]?(\w+)?"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ThemeIdType">
+		<xs:annotation>
+			<xs:documentation>urn:ssb:theme:metadb:10016:10012</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:anyURI">
+			<xs:pattern value="urn:\w+:theme:\w+[:]?(\w+)?"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="DatasetIdType">
+		<xs:annotation>
+			<xs:documentation>urn:ssb:dataset:metadb:11343, urn:ssb:dataset:datadok:1082276</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:anyURI">
+			<xs:pattern value="urn:\w+:dataset:\w+[:]?(\w+)?"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="VariableIdType">
+		<xs:annotation>
+			<xs:documentation>urn:ssb:conceptvariable:vardok:123</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:anyURI">
+			<xs:pattern value="urn:\w+:variable:\w+[:]?(\w+)?"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="RegisterIdType">
+		<xs:annotation>
+			<xs:documentation>urn:ssb:register:datadok:123345</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:anyURI">
+			<xs:pattern value="urn:\w+:register:\w+[:]?(\w+)?"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ClassificationIdType">
+		<xs:annotation>
+			<xs:documentation>urn:ssb:classification:stabas:670101</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:anyURI">
+			<xs:pattern value="urn:\w+:classification:\w+[:]?(\w+)?"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ClassificationVersionIdType">
+		<xs:annotation>
+			<xs:documentation>urn:ssb:classversion:stabas:3202101 </xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:anyURI">
+			<xs:pattern value="urn:\w+:classversion:\w+[:]?(\w+)?"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ClassificationLevelIdType">
+		<xs:annotation>
+			<xs:documentation>urn:ssb:codelist:stabas:1304524</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:anyURI">
+			<xs:pattern value="urn:\w+:classlevel:\w+[:]?(\w+)?"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="CorrespondenceTableIdType">
+		<xs:annotation>
+			<xs:documentation>urn:ssb:corrtable:stabas:2926929 </xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:anyURI">
+			<xs:pattern value="urn:\w+:corrtable:\w+[:]?(\w+)?"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="CorrespondenceItemIdType">
+		<xs:annotation>
+			<xs:documentation>urn:\w+:classversion:\w+[:]?(\w+)?, urn:\w+:codelist:\w+[:]?(\w+)?</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:anyURI">
+			<xs:pattern value="urn:\w+:classversion:\w+[:]?(\w+)?"/>
+			<xs:pattern value="urn:\w+:codelist:\w+[:]?(\w+)?"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="CodeIdType">
+		<xs:annotation>
+			<xs:documentation>urn:ssb:code:stabas:1303901#1303905</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:anyURI">
+			<xs:pattern value="urn:\w+:code:\w+:(\d+)#(\d+)"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="StatbankTableIdType">
+		<xs:restriction base="xs:anyURI">
+			<xs:pattern value="urn:\w+:statbanktable:\w+[:]?(\w+)?"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="RelationIdType">
+		<xs:annotation>
+			<xs:documentation>urn:\w+:contextvariable:\w+[:]?(\w+)?, urn:\w+:variable:\w+[:]?(\w+)?, urn:\w+:classversion:\w+[:]?(\w+)?</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:anyURI">
+			<xs:pattern value="urn:\w+:contextvariable:\w+[:]?(\w+)?"/>
+			<xs:pattern value="urn:\w+:variable:\w+[:]?(\w+)?"/>
+			<xs:pattern value="urn:\w+:classversion:\w+[:]?(\w+)?"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

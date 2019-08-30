@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2006 sp2 U (http://www.altova.com) by Trygve Falch (Statistics Norway) -->
+<xs:schema xmlns="http://www.ssb.no/ns/meta" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:common="http://www.ssb.no/ns/meta/common" targetNamespace="http://www.ssb.no/ns/meta" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:import namespace="http://www.ssb.no/ns/meta/common" schemaLocation="MetaCommon.xsd"/>
+	<xs:include schemaLocation="ContextVariable.xsd"/>
+	<xs:element name="Dataset" type="DatasetType">
+		<xs:annotation>
+			<xs:documentation>Rotelement for tabell, med variabeldata</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="DatasetRef">
+		<xs:annotation>
+			<xs:documentation>Referanse til et gitt datasett</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:attribute name="id" type="common:DatasetIdType" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="DatasetType">
+		<xs:annotation>
+			<xs:documentation>Datatype for en gitt tabell (Men er ikke dette egnetlig et Datasett? Tilsvarende filutrekksbeskrivelse i Datadok?)</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element ref="Title"/>
+			<xs:element ref="Description"/>
+			<xs:element name="Type" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Tabell eller filbeskrivelse</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="Table"/>
+						<xs:enumeration value="Filedescription"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="ContactInformation" type="common:PersonType"/>
+			<xs:element ref="ContextVariable" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="id" type="common:DatasetIdType" use="required"/>
+		<xs:attribute name="parentThemeId" type="common:ThemeIdType" use="optional"/>
+		<xs:attribute name="validFrom" type="xs:date" use="optional"/>
+		<xs:attribute name="validTo" type="xs:date" use="optional"/>
+		<xs:attribute name="lastChangedBy" type="xs:string" use="optional"/>
+		<xs:attribute name="lastChangedDate" type="xs:date" use="optional"/>
+	</xs:complexType>
+</xs:schema>

@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="design-properties"
+          content="{&quot;RULERS_VISIBLE&quot;:true,&quot;GUIDELINES_VISIBLE&quot;:false,&quot;SNAP_TO_OBJECTS&quot;:true,&quot;SNAP_TO_GRID&quot;:true,&quot;SNAPPING_DISTANCE&quot;:10,&quot;JAVA_SOURCES_ROOT&quot;:&quot;src/main/java&quot;,&quot;THEME&quot;:&quot;klasstheme&quot;}">
+    <meta name="vaadin-version" content="7.7.0">
+    <meta name="package-mapping" content="no_ssb_klass_designer_editing_variant:no.ssb.klass.designer.editing.variant">
+    <meta name="package-mapping"
+          content="no_ssb_klass_designer_components_metadata:no.ssb.klass.designer.components.metadata">
+    <meta name="package-mapping" content="no_ssb_klass_designer_editing_codes:no.ssb.klass.designer.editing.codes">
+    <meta name="package-mapping"
+          content="no_ssb_klass_designer_components_common:no.ssb.klass.designer.components.common">
+    <meta name="package-mapping"
+          content="no_ssb_klass_designer_components_sidepanel:no.ssb.klass.designer.components.sidepanel">
+ </head>
+<body>
+<vaadin-vertical-layout spacing size-full margin>
+    <no_ssb_klass_designer_components_common-type-and-name-header-component
+            _id="header"></no_ssb_klass_designer_components_common-type-and-name-header-component>
+   <vaadin-accordion size-full _id="accordion" :expand> 
+    <tab caption="Metadata for variant" selected> 
+     <vaadin-panel size-full> 
+      <no_ssb_klass_designer_components_metadata-metadata-editor-component id="metadata-editor" _id="metadataEditor"></no_ssb_klass_designer_components_metadata-metadata-editor-component> 
+     </vaadin-panel>
+    </tab>
+       <tab caption="Elementer (kode og navn)">
+           <no_ssb_klass_designer_editing_variant-variant-code-editor-view id="code-editor" size-full
+                                                                           _id="codeEditor"></no_ssb_klass_designer_editing_variant-variant-code-editor-view>
+       </tab>
+   </vaadin-accordion>
+     <vaadin-vertical-layout spacing size-auto>
+         <no_ssb_klass_designer_components_common-confirm-or-cancel-component
+                 _id="actionButtons"></no_ssb_klass_designer_components_common-confirm-or-cancel-component>
+   </vaadin-vertical-layout> 
+  </vaadin-vertical-layout>  
+ </body>
+</html>

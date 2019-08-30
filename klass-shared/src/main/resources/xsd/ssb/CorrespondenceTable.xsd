@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2006 sp2 U (http://www.altova.com) by J.A.Linnerud (Statistics Norway) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.ssb.no/ns/meta/correspondence" xmlns:codelist="http://www.ssb.no/ns/meta/codelist" xmlns:common="http://www.ssb.no/ns/meta/common" targetNamespace="http://www.ssb.no/ns/meta/correspondence" elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.2">
+	<xs:import namespace="http://www.ssb.no/ns/meta/codelist" schemaLocation="Codelist.xsd"/>
+	<xs:import namespace="http://www.ssb.no/ns/meta/common" schemaLocation="MetaCommon.xsd"/>
+	<xs:element name="CorrespondenceTable" type="CorrespondenceTableType"/>
+	<xs:complexType name="CorrespondenceTableType">
+		<xs:annotation>
+			<xs:documentation>Comment describing your root element</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="TitleGrp" type="TitleGroupType">
+				<xs:annotation>
+					<xs:documentation>Multi-lingual title</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DescriptionGrp" type="DescriptionGroupType">
+				<xs:annotation>
+					<xs:documentation>Multi-lingual description</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ContactInformation" type="common:PersonType">
+				<xs:annotation>
+					<xs:documentation>The statistical office or other authority, which created and maintains the correspondence table.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CorrespondenceItemGroup" type="CorrespondenceItemGroupType" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="id" type="common:CorrespondenceTableIdType" use="required">
+			<xs:annotation>
+				<xs:documentation>A correspondence table is identified by a unique identifier, which may typically include the identifiers of the versions or variants involved.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="classVersionSourceId" type="common:ClassificationVersionIdType" use="required">
+			<xs:annotation>
+				<xs:documentation>The classification version or variant from which the correspondence is
+made.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="classVersionTargetId" type="common:ClassificationVersionIdType" use="required">
+			<xs:annotation>
+				<xs:documentation>The classification version or variant to which the correspondence is directed.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="classLevelSourceId" type="common:CodelistIdType" use="required">
+			<xs:annotation>
+				<xs:documentation>The correspondence is normally restricted to a certain level in the source
+version. In this case target items are assigned only to source items on the given level. If no level is indicated target items can be assigned to any level of the source version.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="classLevelTargetId" type="common:CodelistIdType" use="required">
+			<xs:annotation>
+				<xs:documentation>The correspondence is normally restricted to a certain level in the target
+version. In this case source items are assigned only to target items on the given level. If nolevel is indicated source items can be assigned to any level of the target version.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="showInternet" type="xs:boolean" use="required"/>
+		<xs:attribute name="showIntranet" type="xs:boolean" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="AdministrativeInfoType">
+		<xs:sequence/>
+	</xs:complexType>
+	<xs:complexType name="CorrespondenceItemRelationType">
+		<xs:attribute name="targetItem" type="common:CodeIdType">
+			<xs:annotation>
+				<xs:documentation>The target item refers to the classification item in the target version.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="CorrespondenceItemType">
+		<xs:complexContent>
+			<xs:extension base="codelist:CodeType">
+				<xs:sequence>
+					<xs:element name="CorrespondenceItemRelation" type="CorrespondenceItemRelationType" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="CorrespondenceItemGroupType">
+		<xs:sequence>
+			<xs:element name="CorrespondenceItem" type="CorrespondenceItemType" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>A correspondence item expresses the relation between an item of the source version and a corresponding item of the target version. Depending on the relationship type of the correspondence table, there may be several correspondence items for a single source or target item.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="id" type="common:CorrespondenceItemIdType" use="required">
+			<xs:annotation>
+				<xs:documentation>Points to the source/target versions/levels</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="relationshipType" type="CorrespondenceRelationshipType">
+			<xs:annotation>
+				<xs:documentation>1:1, 1:N, N:1. M:N, N:M</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:simpleType name="CorrespondenceRelationshipType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="1:1"/>
+			<xs:enumeration value="1:N"/>
+			<xs:enumeration value="N:1"/>
+			<xs:enumeration value="M:N"/>
+			<xs:enumeration value="N:M"/>
+			<xs:enumeration value=""/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="TitleGroupType">
+		<xs:sequence>
+			<xs:element name="Title" type="common:StringLangType" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="DescriptionGroupType">
+		<xs:sequence>
+			<xs:element name="Description" type="common:StringLangType" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

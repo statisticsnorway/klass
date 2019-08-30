@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2006 sp2 U (http://www.altova.com) by J.A.Linnerud (Statistics Norway) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.ssb.no/ns/meta/classification" xmlns:codelist="http://www.ssb.no/ns/meta/codelist" xmlns:common="http://www.ssb.no/ns/meta/common" targetNamespace="http://www.ssb.no/ns/meta/classification" elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.2">
+	<xs:import namespace="http://www.ssb.no/ns/meta/codelist" schemaLocation="Codelist.xsd"/>
+	<xs:import namespace="http://www.ssb.no/ns/meta/common" schemaLocation="MetaCommon.xsd"/>
+	<xs:element name="Classification" type="ClassificationType">
+		<xs:annotation>
+			<xs:documentation>Classification describes the ensemble of one or several consecutive classification versions. It is a "name" which serves as an umbrella for the classification version(s).</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="Level" type="LevelType">
+		<xs:annotation>
+			<xs:documentation>A classification version is composed of one or several levels. In a hierarchical classification the items of each level but the highest (most aggregated) level are aggregated to the nearest higher level. A linear classification has only one level.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="ClassificationType">
+		<xs:sequence>
+			<xs:element ref="TitleGrp"/>
+			<xs:element ref="DescriptionGrp"/>
+			<xs:element name="StatisticalUnitGrp">
+				<xs:annotation>
+					<xs:documentation>A classification is designed to classify a specific type of object/unit according to a specific attribute.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="StatisticalUnit" type="common:StringLangType" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="OwnerGrp">
+				<xs:annotation>
+					<xs:documentation>The statistical office or other authority, which created and maintains the classification </xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Owner" type="common:StringLangType" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="SubjectArea" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Areas of statistics in which the classification is implemented.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ClassificationVersions" type="ClassificationVersionsType">
+				<xs:annotation>
+					<xs:documentation>A classification has at least one classification version </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attributeGroup ref="ClassificationAttrGrp"/>
+	</xs:complexType>
+	<xs:complexType name="ClassificationVersionType">
+		<xs:sequence>
+			<xs:element ref="TitleGrp"/>
+			<xs:element ref="DescriptionGrp"/>
+			<xs:element name="IntroductionGrp">
+				<xs:annotation>
+					<xs:documentation>A detailed description of the classification version, the background for its creation, the classification variable and objects/units classified, classification rules etc. </xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Indtroduction" type="common:StringLangType" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="ContactInformation" type="common:PersonType">
+				<xs:annotation>
+					<xs:documentation>The statistical office or other authority, which created and maintains the version(s) of the classification. </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ExternalDocumentGrp" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>A list of the publications in which the classification version has been published.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="ExternalDocument" type="common:StringLangType" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="ChangesGrp" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Summary description of changes which have occurred within the classification version or which have occurred from the previous classification version to the actual version.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Change" type="common:StringLangType" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="DerivedFromGrp" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>A classification version can be derived from one of the classification versions of another classification</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="DerviedFrom" type="common:StringLangType" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="LegalBaseGrp" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Indicates that the classification version is covered by a legal act or by some other formal agreement.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="LegalBase" type="common:StringLangType" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element ref="Level"/>
+			<xs:element name="CorrespondenceTableRelations" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>A classification version may be linked to other classification versions or classification variants through correspondence tables. </xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="CorrespondenceTableRelation" type="CorrespondenceReferenceType"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attributeGroup ref="ClassificationVersionAttrGrp"/>
+	</xs:complexType>
+	<xs:element name="ClassificationVersion" type="ClassificationVersionType">
+		<xs:annotation>
+			<xs:documentation>A classification version is a list of mutually exclusive categories representing the version-specific values of the classification variable. A classification version has a certain normative status and is valid for a given period of time. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="ClassificationVersionsType">
+		<xs:sequence>
+			<xs:element ref="ClassificationVersion" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="LevelType">
+		<xs:sequence>
+			<xs:element ref="TitleGrp"/>
+			<xs:choice>
+				<xs:element name="CodelistReference" type="common:CodelistIdType"/>
+				<xs:element ref="codelist:Codelist"/>
+			</xs:choice>
+			<xs:element name="Level" type="LevelType" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="levelNumber" type="xs:int"/>
+		<xs:attribute name="id" type="common:CodelistIdType"/>
+		<xs:attribute name="codeStructure" type="xs:string"/>
+	</xs:complexType>
+	<xs:complexType name="AdministrativeInfoType"/>
+	<xs:complexType name="CorrespondenceReferenceType">
+		<xs:annotation>
+			<xs:documentation>A correspondence table expresses the relationship between different versions of the same classification or between versions of different classifications.</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="id" type="common:CorrespondenceTableIdType" use="required"/>
+	</xs:complexType>
+	<xs:attributeGroup name="ClassificationAttrGrp">
+		<xs:annotation>
+			<xs:documentation>Attributes for the classification.</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="id" type="common:ClassificationIdType" use="required">
+			<xs:annotation>
+				<xs:documentation>A classification is identified by a unique identifier, which may typically be an abbreviation of its title.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="currentVersionId" type="common:ClassificationVersionIdType" use="optional">
+			<xs:annotation>
+				<xs:documentation>If there are several versions of a classification, one version may be assigned as the currently valid version.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="ClassificationVersionAttrGrp">
+		<xs:annotation>
+			<xs:documentation>Attributes for the classification version.</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="id" type="common:ClassificationVersionIdType" use="required">
+			<xs:annotation>
+				<xs:documentation>A classification version is identified by a unique identifier, which may typically be an abbreviation of its title. It is often distinguished from other versions of the same classification by reference to a revision number or to the year of the version's coming into force.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="isCurrentVersion" type="xs:boolean" use="required">
+			<xs:annotation>
+				<xs:documentation>Indicates whether or not the classification version is the currently valid version.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="validFrom" type="xs:date" use="optional">
+			<xs:annotation>
+				<xs:documentation>Date on which the classification version was released. </xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="validTo" type="xs:date" use="optional">
+			<xs:annotation>
+				<xs:documentation>Date on which the classification version ceased to be valid.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="predecessor" type="common:ClassificationVersionIdType" use="optional">
+			<xs:annotation>
+				<xs:documentation>The nearest previous classification version to the actual version.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="sucessor" type="common:ClassificationVersionIdType" use="optional">
+			<xs:annotation>
+				<xs:documentation>The classification version immediately following the actual version.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="isUnderConstruction" type="xs:boolean" use="required"/>
+		<xs:attribute name="updatesPossible" type="xs:boolean" use="required">
+			<xs:annotation>
+				<xs:documentation>Indicates whether or not updates are allowed within the classification version, i.e. without leading to a new version.</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="disseminationAllowed" type="xs:boolean" use="required">
+			<xs:annotation>
+				<xs:documentation>Indicates whether or not the classification version may be published or disseminated (e.g. on the Web).</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="lastChangedDate" type="xs:date" use="optional"/>
+		<xs:attribute name="showIntranet" type="xs:boolean" use="required"/>
+		<xs:attribute name="showInternet" type="xs:boolean" use="required"/>
+	</xs:attributeGroup>
+	<xs:element name="TitleGrp">
+		<xs:annotation>
+			<xs:documentation>Multi-lingual title.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Title" type="common:StringLangType" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="DescriptionGrp">
+		<xs:annotation>
+			<xs:documentation>Mulit-lingual description.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Description" type="common:StringLangType" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

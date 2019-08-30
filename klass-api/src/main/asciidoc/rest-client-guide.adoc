@@ -1,0 +1,49 @@
+= RestClient Guide
+:doctype: book
+// :icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:numbered:
+:sectlinks:
+:data-uri:
+// disable web fonts, since default fetches fonts from web, which does not work in ssb's production zone
+:webfonts!:
+
+== Overview
+To explore Klass Rest api using a Rest client. The suggested Rest client is installed as a firefox plugin. 
+
+== Requirements
+- http://www.firefox.com[Firefox] browser installed
+- Install Firefox plugin https://addons.mozilla.org/en-US/firefox/addon/restclient/[RESTClient]
+
+== Instructions
+=== Start RESTClient
+When RESTClient is installed the Rest client is activated by clicking the symbol encircled below
+
+image::start-rest-client.png[]
+
+[[specifying-response-format]]
+=== Specifying response format
+User may select response format. These are typically `application/json`, `text/xml` or `text/csv`.
+To select response format click `Headers->Custom Header` and for Name enter Accept. Example for application/json is seen below.
+
+image::select-header.png[]
+
+=== Listing classifications
+image::classifications-request.png[]
+
+If status code is 200, all is OK. Example of OK response.
+
+image::classifications-header-response.png[]
+
+To see actual result, click Response Body (Raw).
+image:classifications-body-response.png[]
+
+=== View classification
+image:classification.png[]
+
+
+=== View classification codes in csv
+Make a new Custom Header as described in <<specifying-response-format, Specifying response format>> this time with value `text/csv`.
+image:codes.png[]

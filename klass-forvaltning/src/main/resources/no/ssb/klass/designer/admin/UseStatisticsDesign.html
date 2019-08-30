@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+ <head>
+  <meta charset="UTF-8" name="design-properties" content="{&quot;RULERS_VISIBLE&quot;:true,&quot;GUIDELINES_VISIBLE&quot;:false,&quot;SNAP_TO_OBJECTS&quot;:true,&quot;SNAP_TO_GRID&quot;:true,&quot;SNAPPING_DISTANCE&quot;:10,&quot;JAVA_SOURCES_ROOT&quot;:&quot;src/main/java&quot;,&quot;THEME&quot;:&quot;klasstheme&quot;}">
+ </head> 
+ <body> 
+  <vaadin-vertical-layout size-full margin-left margin-right margin-bottom> 
+   <vaadin-label style-name="h2" size-auto plain-text>
+     Bruk- og søkestatistikk 
+   </vaadin-label> 
+   <vaadin-vertical-layout height="177px" margin-bottom> 
+    <vaadin-label style-name="h3" size-auto plain-text>
+      Filter: 
+    </vaadin-label> 
+    <vaadin-vertical-layout> 
+     <vaadin-label size-auto plain-text>
+       Periode 
+     </vaadin-label> 
+     <vaadin-horizontal-layout> 
+      <vaadin-date-field caption="Fra og med Dato" _id="fromDate"></vaadin-date-field> 
+      <vaadin-absolute-layout width="20px"></vaadin-absolute-layout> 
+      <vaadin-date-field caption="Til og med Dato" _id="toDate"></vaadin-date-field> 
+     </vaadin-horizontal-layout> 
+    </vaadin-vertical-layout> 
+   </vaadin-vertical-layout> 
+   <vaadin-vertical-layout size-full :expand> 
+    <vaadin-table _id="mainReport"></vaadin-table> 
+   </vaadin-vertical-layout> 
+  </vaadin-vertical-layout>  
+ </body>
+</html>

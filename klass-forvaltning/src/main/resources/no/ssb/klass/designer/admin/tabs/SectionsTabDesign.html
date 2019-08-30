@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8" name="design-properties"
+          content="{&quot;RULERS_VISIBLE&quot;:true,&quot;GUIDELINES_VISIBLE&quot;:false,&quot;SNAP_TO_OBJECTS&quot;:true,&quot;SNAP_TO_GRID&quot;:true,&quot;SNAPPING_DISTANCE&quot;:10,&quot;JAVA_SOURCES_ROOT&quot;:&quot;src/main/java&quot;,&quot;THEME&quot;:&quot;klasstheme&quot;}">
+</head>
+<body>
+<vaadin-vertical-layout spacing size-full>
+    <vaadin-label style-name="h3 bold" size-auto plain-text>
+        Oppdatering av opplysninger for alle kontaktpersoner
+    </vaadin-label>
+    <vaadin-grid-layout spacing>
+        <row>
+            <column>
+                <vaadin-label size-auto plain-text>
+                    Kontaktpersoner totalt
+                </vaadin-label>
+            </column>
+            <column>
+                <vaadin-label style-name="align-center" width="100px" plain-text _id="usersTotalLabel">
+                    ?
+                </vaadin-label>
+            </column>
+        </row>
+        <row>
+            <column>
+                <vaadin-label size-auto plain-text>
+                    Kontaktpersoner oppdatert
+                </vaadin-label>
+            </column>
+            <column>
+                <vaadin-label style-name="align-center" width="100px" plain-text _id="usersUpdatedLabel">
+                    -
+                </vaadin-label>
+            </column>
+        </row>
+        <row>
+            <column>
+                <vaadin-label size-auto plain-text>
+                    Kontaktpersoner uendret
+                </vaadin-label>
+            </column>
+            <column>
+                <vaadin-label style-name="align-center" width="100px" plain-text _id="usersUnchangedLabel">
+                    -
+                </vaadin-label>
+            </column>
+        </row>
+        <row>
+            <column>
+                <vaadin-label size-auto plain-text>
+                    Kontaktpersoner ikke funnet
+                </vaadin-label>
+            </column>
+            <column>
+                <vaadin-label style-name="align-center" width="100px" plain-text _id="usersNotFoundLabel">
+                    -
+                </vaadin-label>
+            </column>
+        </row>
+    </vaadin-grid-layout>
+    <vaadin-button plain-text _id="updateButton">
+        Oppdater opplysninger
+    </vaadin-button>
+    <vaadin-button primary-style-name="action-text-button" plain-text _id="logButton">
+        Vis detaljert log
+    </vaadin-button>
+    <vaadin-text-area rows="15" size-full _id="logTextArea" :expand></vaadin-text-area>
+</vaadin-vertical-layout>
+</body>
+</html>

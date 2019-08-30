@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>no.ssb.klass</groupId>
+    <artifactId>klass-root</artifactId>
+    <version>2.0.12-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.4.4.RELEASE</version>
+        <relativePath /> <!-- lookup parent from repository -->
+    </parent>
+
+    <modules>
+        <module>klass-solr</module>
+        <module>klass-shared</module>
+        <module>klass-api</module>
+        <module>klass-forvaltning</module>
+    </modules>
+
+    <distributionManagement>
+        <repository>
+            <id>releases</id>
+            <url>https://nexus.ssb.no/repository/maven-releases</url>
+        </repository>
+        <snapshotRepository>
+            <id>snapshots</id>
+            <url>https://nexus.ssb.no/repository/maven-snapshots</url>
+            <uniqueVersion>false</uniqueVersion>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <properties>
+
+        <java.version>1.8</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+        <findbugs-version>3.0.2</findbugs-version>
+        <checkstyle-version>2.17</checkstyle-version>
+
+
+
+        <solr-version>5.5.0</solr-version>
+
+
+        <spring.version>4.3.7.RELEASE</spring.version>
+        <vaadin-spring-boot-starter-version>1.0.0</vaadin-spring-boot-starter-version>
+        <vaadin-spring-ext-security-version>0.0.7.RELEASE</vaadin-spring-ext-security-version>
+        <objenesis-version>2.4</objenesis-version>
+        <guava-version>19.0</guava-version>
+        <vaadin-version>7.7.6</vaadin-version>
+        <vaadin.plugin.version>7.7.6</vaadin.plugin.version>
+        <vaadin.widgetset.mode>local</vaadin.widgetset.mode>
+        <woodstox-version>4.4.1</woodstox-version>
+        <commons-lang3-version>3.4</commons-lang3-version>
+        <rest-assured-version>2.9.0</rest-assured-version>
+        <apacheds-server-jndi-version>1.5.5</apacheds-server-jndi-version>
+        <asciidoctor-version>1.5.3</asciidoctor-version>
+        <maven-jaxb2-plugin-version>0.13.1</maven-jaxb2-plugin-version>
+        <tomcat7-maven-plugin-version>2.2</tomcat7-maven-plugin-version>
+
+        <!--IMPORTANT HIBERNATE BUG FIX ( needed for Translatable as lobs)-->
+        <!--https://hibernate.atlassian.net/browse/HHH-10818-->
+        <hibernate.version>5.2.3.Final</hibernate.version>
+
+
+        <!-- Override Spring Boot managed version. Flyway bug #995 forces us to use version 4.0 or newer.
+             Replacing old search engine with solr search
+             Remove when Spring Boot includes this version or newer -->
+        <flyway.version>4.1.1</flyway.version>
+        <!-- Override Spring Boot managed version. Spring restdocs bug #286 in version 1.1.1 (duplicate query parameters)
+             forces us to downgrade to version 1.1.0. (https://github.com/spring-projects/spring-restdocs/issues/286)
+             Remove when Spring Boot includes version 1.1.2 or newer -->
+        <spring-restdocs.version>1.2.1.RELEASE</spring-restdocs.version>
+
+        <maven.deploy.skip>true</maven.deploy.skip>
+
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.vaadin</groupId>
+                <artifactId>vaadin-bom</artifactId>
+                <version>${vaadin-version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.jayway.restassured</groupId>
+                <artifactId>rest-assured</artifactId>
+                <version>${rest-assured-version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.data</groupId>
+                <artifactId>spring-data-solr</artifactId>
+                <version>2.1.0.RELEASE</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>external.atlassian.jgitflow</groupId>
+                    <artifactId>jgitflow-maven-plugin</artifactId>
+                    <version>1.0-m5.1</version>
+                    <configuration>
+                        <!-- see goals wiki page for configuration options -->
+                        <flowInitContext>
+                            <masterBranchName>master</masterBranchName>
+                            <developBranchName>develop</developBranchName>
+                            <featureBranchPrefix>feature/</featureBranchPrefix>
+                            <releaseBranchPrefix>release/</releaseBranchPrefix>
+                            <hotfixBranchPrefix>hotfix/</hotfixBranchPrefix>
+                            <versionTagPrefix>klass_v</versionTagPrefix>
+                        </flowInitContext>
+                        <pushReleases>true</pushReleases>
+                        <scmCommentPrefix>[RELEASE]-</scmCommentPrefix>
+                        <noDeploy>true</noDeploy>
+                        <autoVersionSubmodules>true</autoVersionSubmodules>
+                        <arguments>-Pdocumentation -Dmaven.javadoc.skip=true</arguments>
+                        <allowSnapshots>true</allowSnapshots>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <version>2.5.3</version>
+                    <configuration>
+                        <releaseProfiles>documentation</releaseProfiles>
+                        <!--TODO find a solution for the javadoc error on generated sources-->
+                        <arguments>-Pdocumentation -Dmaven.javadoc.skip=true</arguments>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+    </build>
+
+</project>

@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    
+    <name>Klass API</name>
+    <description>API for uthenting av kodeverk</description>
+    <artifactId>klass-api</artifactId>
+    <packaging>war</packaging>
+
+    <parent>
+        <groupId>no.ssb.klass</groupId>
+        <artifactId>klass-root</artifactId>
+        <version>2.0.12-SNAPSHOT</version>
+<!--        <relativePath>../</relativePath>-->
+    </parent>
+    
+    <properties>
+        <snippetsDirectory>${project.build.directory}/generated-snippets</snippetsDirectory>
+        <maven.deploy.skip>false</maven.deploy.skip>
+    </properties>
+
+    
+    <dependencies>
+        <!--KLASS-->
+        <dependency>
+            <groupId>no.ssb.klass</groupId>
+            <artifactId>klass-shared</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>no.ssb.klass</groupId>
+            <artifactId>klass-solr</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        
+        <!--Spring-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-hateoas</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-solr</artifactId>
+        </dependency>
+
+
+        <!--TOMCAT-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-jasper</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- JSTL og EL for JSP / monitor page -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.el</groupId>
+            <artifactId>javax.el-api</artifactId>
+            <version>3.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>javax.el</artifactId>
+            <version>3.0.0</version>
+        </dependency>
+        
+        <!--TEST SCOPE-->
+        <dependency>
+            <groupId>no.ssb.klass</groupId>
+            <artifactId>klass-shared</artifactId>
+            <type>test-jar</type>
+            <scope>test</scope>
+            <version>${project.parent.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>no.ssb.klass</groupId>
+            <artifactId>klass-solr</artifactId>
+            <type>test-jar</type>
+            <scope>test</scope>
+            <version>${project.parent.version}</version>
+        </dependency>
+
+        <!--Spring TEST-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.restdocs</groupId>
+            <artifactId>spring-restdocs-mockmvc</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.jayway.jsonpath</groupId>
+            <artifactId>json-path</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.jayway.restassured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+    <profiles>
+        <profile>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <id>documentation</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <argLine>-Dfile.encoding=UTF-8</argLine>
+                            <includes>
+                                <include>**/*Tests.java</include>
+                                <include>**/*Test.java</include>
+                                <include>**/*Documentation.java</include>
+                            </includes>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.asciidoctor</groupId>
+                        <artifactId>asciidoctor-maven-plugin</artifactId>
+                        <version>${asciidoctor-version}</version>
+                        <executions>
+                            <execution>
+                                <id>generate-docs</id>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>process-asciidoc</goal>
+                                </goals>
+                                <configuration>
+                                    <backend>html</backend>
+                                    <doctype>book</doctype>
+                                    <attributes>
+                                        <snippets>${snippetsDirectory}</snippets>
+                                    </attributes>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-resources-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>copy-resources-tomcat</id>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                <!-- COPYING API-GUIDE FOR USE WITH TOMCAT -->
+                                    <outputDirectory>
+                                        ${project.build.outputDirectory}/static/v1
+                                    </outputDirectory>
+                                    <resources>
+                                        <resource>
+                                            <directory>
+                                                ${project.build.directory}/generated-docs
+                                            </directory>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>copy-resources-locally</id>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <!--   MAKING API-GUIDE AVAILABLE WHEN RUNNING LOCALLY-->
+                                    <outputDirectory>
+                                        ${project.build.outputDirectory}/static/api/klass/v1
+                                    </outputDirectory>
+                                    <resources>
+                                        <resource>
+                                            <directory>
+                                                ${project.build.directory}/generated-docs
+                                            </directory>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+    <build>
+        <finalName>api#klass-${project.version}</finalName>
+
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>pl.project13.maven</groupId>
+                <artifactId>git-commit-id-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5.3</version>
+                <configuration>
+
+                    <releaseProfiles>documentation</releaseProfiles>
+                    <!--TODO find a solution for the javadoc error on generated sources-->
+                    <arguments>-Pdocumentation -Dmaven.javadoc.skip=true</arguments>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    
+</project>

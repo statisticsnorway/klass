@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2006 sp2 U (http://www.altova.com) by Trygve Falch (Statistics Norway) -->
+<xs:schema xmlns="http://www.ssb.no/ns/meta" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:common="http://www.ssb.no/ns/meta/common" targetNamespace="http://www.ssb.no/ns/meta" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:import namespace="http://www.ssb.no/ns/meta/common" schemaLocation="MetaCommon.xsd"/>
+	<xs:include schemaLocation="ContextVariable.xsd"/>
+	<xs:include schemaLocation="Dataset.xsd"/>
+	<xs:element name="Project" type="ProjectType">
+		<xs:annotation>
+			<xs:documentation>Rotelement for prosjekt med overtema,undertema,tabell og variabeldata</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="Theme" type="ThemeType">
+		<xs:annotation>
+			<xs:documentation>Både overtemaer og undertemaer</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="ThemeType">
+		<xs:annotation>
+			<xs:documentation>Datatype for ett gitt overtema</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element ref="Title"/>
+			<xs:element ref="Description"/>
+			<xs:choice>
+				<xs:element ref="Theme" maxOccurs="unbounded"/>
+				<xs:element ref="Dataset" maxOccurs="unbounded"/>
+			</xs:choice>
+		</xs:sequence>
+		<xs:attribute name="id" type="common:ThemeIdType" use="required"/>
+		<xs:attribute name="parentProjectId" type="common:ProjectIdType"/>
+		<xs:attribute name="parentThemeId" type="common:ThemeIdType"/>
+	</xs:complexType>
+	<xs:complexType name="ProjectType">
+		<xs:annotation>
+			<xs:documentation>Datatype for ett gitt prosjekt</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element ref="Title"/>
+			<xs:element ref="Description"/>
+			<xs:element ref="Theme" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="id" type="common:ProjectIdType" use="required"/>
+	</xs:complexType>
+</xs:schema>

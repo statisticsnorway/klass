@@ -1,0 +1,101 @@
+<!doctype html>
+<html>
+ <head>
+  <meta charset="UTF-8" name="design-properties" content="{&quot;RULERS_VISIBLE&quot;:true,&quot;GUIDELINES_VISIBLE&quot;:false,&quot;SNAP_TO_OBJECTS&quot;:true,&quot;SNAP_TO_GRID&quot;:true,&quot;SNAPPING_DISTANCE&quot;:10,&quot;JAVA_SOURCES_ROOT&quot;:&quot;src/main/java&quot;,&quot;THEME&quot;:&quot;klasstheme&quot;}">
+  <meta charset="UTF-8" name="package-mapping" content="no_ssb_klass_designer_components_sidepanel:no.ssb.klass.designer.components.sidepanel">
+ </head> 
+ <body> 
+  <vaadin-vertical-layout margin-bottom> 
+   <vaadin-vertical-layout margin-left margin-top :expand> 
+    <vaadin-label style-name="h3 bold" id="version-name" size-auto plain-text _id="headerLabel">
+      Tittel 
+    </vaadin-label> 
+   </vaadin-vertical-layout> 
+   <vaadin-vertical-layout margin> 
+    <vaadin-horizontal-layout width-full> 
+     <vaadin-vertical-layout style-name="language-separator-line" margin-right _id="bokmalLayout"> 
+      <vaadin-horizontal-layout width-full height="30px"> 
+       <vaadin-label style-name="bold" size-auto plain-text _id="primaryLabel" :middle :center>
+         Bokmål 
+       </vaadin-label> 
+      </vaadin-horizontal-layout> 
+      <vaadin-horizontal-layout width-full _id="intervalPanel"> 
+       <vaadin-vertical-layout spacing width="50.05%" height-full margin-bottom _id="primary" :expand> 
+        <vaadin-horizontal-layout caption="Gyldighetsperiode" spacing> 
+         <vaadin-label size-auto plain-text _id="fromLabel" :middle>
+           fra og med 
+         </vaadin-label> 
+         <vaadin-date-field resolution="month" _id="fromDate" :middle></vaadin-date-field> 
+         <vaadin-label size-auto plain-text :middle>
+           til og med 
+         </vaadin-label> 
+         <vaadin-date-field resolution="month" _id="toDate" :middle></vaadin-date-field> 
+        </vaadin-horizontal-layout> 
+       </vaadin-vertical-layout> 
+      </vaadin-horizontal-layout> 
+      <vaadin-vertical-layout spacing size-full :expand>
+       <vaadin-text-field
+               description="Med dette feltet kan du overstyre det automatisk genererte navnet på versjonen, dette er kun ment til bruk i spesielle tilfeller der man av forskjellige årsaker ikke kan bruke Klass standardisert navngivning. NB! Hvis du skal overstyre navn husk alle språk."
+               caption="Overstyr navn  (kun for Administrator)" style-name="klass-admin-field" width-full
+               _id="alias"></vaadin-text-field>
+       <vaadin-text-area caption="Beskrivelse" required rows="2" immediate size-full _id="introduction"></vaadin-text-area> 
+       <vaadin-text-field caption="Lovhjemmel" width-full _id="legalBase"></vaadin-text-field> 
+       <vaadin-text-field caption="Publikasjon" width-full _id="publications"></vaadin-text-field> 
+       <vaadin-text-field caption="Basert på" width-full _id="derivedFrom"></vaadin-text-field> 
+       <vaadin-combo-box caption="Kontakt person" invalid-allowed="false" required width-full _id="contactPersonCombobox"></vaadin-combo-box> 
+       <vaadin-text-field caption="Ansvarlig seksjon" invalid-allowed="false" width-full _id="sectionTextfield"></vaadin-text-field> 
+      </vaadin-vertical-layout> 
+     </vaadin-vertical-layout> 
+     <vaadin-vertical-layout margin-left _id="otherLanguages"> 
+      <vaadin-horizontal-layout width-full _id="languagesHeader"> 
+       <vaadin-grid-layout width-full> 
+        <row> 
+         <column expand="1"> 
+          <vaadin-horizontal-layout width-full></vaadin-horizontal-layout> 
+         </column> 
+         <column expand="1"> 
+          <vaadin-horizontal-layout visible="false" _id="languageLayout"> 
+           <vaadin-button primary-style-name="action-text-button" plain-text _id="secondaryLanguageButton" :center>
+             Nynorsk 
+           </vaadin-button> 
+           <vaadin-label size-auto plain-text>
+             | 
+           </vaadin-label> 
+           <vaadin-button primary-style-name="action-text-button" plain-text _id="thirdLanguageButton">
+             Engelsk 
+           </vaadin-button> 
+          </vaadin-horizontal-layout> 
+         </column> 
+         <column expand="1"> 
+          <vaadin-horizontal-layout width-full> 
+           <vaadin-button primary-style-name="action-text-button" style-name="tiny" plain-text _id="languageToggleButton" :right>
+             Rediger språk 
+           </vaadin-button> 
+          </vaadin-horizontal-layout> 
+         </column> 
+        </row> 
+       </vaadin-grid-layout> 
+      </vaadin-horizontal-layout> 
+      <vaadin-vertical-layout width-auto height="105px"></vaadin-vertical-layout> 
+      <vaadin-vertical-layout spacing height="100.98%" _id="secondaryLanguageLayout" :expand>
+       <vaadin-text-field caption="Overstyr navn  (kun for Administrator)" style-name="klass-admin-field" width-full
+                          _id="secondaryAlias"></vaadin-text-field>
+       <vaadin-text-area caption="Beskrivelse" required rows="2" immediate size-full _id="secondaryIntroduction"></vaadin-text-area> 
+       <vaadin-text-field caption="Lovhjemmel" width-full _id="secondaryLegalBase"></vaadin-text-field> 
+       <vaadin-text-field caption="Publikasjon" width-full _id="secondaryPublications"></vaadin-text-field> 
+       <vaadin-text-field caption="Basert på" width-full _id="secondaryDerivedFrom"></vaadin-text-field> 
+      </vaadin-vertical-layout> 
+      <vaadin-vertical-layout visible="false" spacing size-full _id="thirdLanguageLayout" :expand>
+       <vaadin-text-field caption="Overstyr navn  (kun for Administrator)" style-name="klass-admin-field" width-full
+                          _id="thirdAlias"></vaadin-text-field>
+       <vaadin-text-area caption="Beskrivelse" required rows="2" immediate size-full _id="thirdIntroduction"></vaadin-text-area> 
+       <vaadin-text-field caption="Lovhjemmel" width-full _id="thirdLegalBase"></vaadin-text-field> 
+       <vaadin-text-field caption="Publikasjon" width-full _id="thirdPublications"></vaadin-text-field> 
+       <vaadin-text-field caption="Basert på" width-full _id="thirdDerivedFrom"></vaadin-text-field> 
+      </vaadin-vertical-layout> 
+     </vaadin-vertical-layout> 
+    </vaadin-horizontal-layout> 
+   </vaadin-vertical-layout> 
+  </vaadin-vertical-layout>  
+ </body>
+</html>

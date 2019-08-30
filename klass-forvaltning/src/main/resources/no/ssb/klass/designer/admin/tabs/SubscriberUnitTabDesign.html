@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+ <head>  
+  <meta charset="UTF-8" name="design-properties" content="{&quot;RULERS_VISIBLE&quot;:true,&quot;GUIDELINES_VISIBLE&quot;:false,&quot;SNAP_TO_OBJECTS&quot;:true,&quot;SNAP_TO_GRID&quot;:true,&quot;SNAPPING_DISTANCE&quot;:10,&quot;JAVA_SOURCES_ROOT&quot;:&quot;src/main/java&quot;,&quot;THEME&quot;:&quot;klasstheme&quot;}">
+  <meta charset="UTF-8" name="vaadin-version" content="7.7.0">
+  <meta charset="UTF-8" name="package-mapping" content="no_ssb_klass_designer_admin:no.ssb.klass.designer.admin">
+ </head> 
+ <body> 
+  <vaadin-vertical-layout size-full> 
+   <vaadin-label style-name="h2" size-auto plain-text>
+     Abonnementsstatistikk 
+   </vaadin-label> 
+   <vaadin-vertical-layout margin-top :expand> 
+    <vaadin-table width-full _id="subscriberUnitTable" :expand></vaadin-table> 
+   </vaadin-vertical-layout> 
+   <vaadin-button style-name="borderless link" plain-text _id="backButton">
+     &lt; Tilbake 
+   </vaadin-button> 
+   <vaadin-label style-name="h4" size-auto plain-text _id="headingText">
+     Overskrift 
+   </vaadin-label> 
+   <vaadin-label size-auto plain-text _id="numberOfRowsHeader">
+     Totalt antall 
+   </vaadin-label> 
+   <vaadin-panel size-full :expand> 
+    <vaadin-vertical-layout size-full margin-top _id="detailedSubscriberLayout"> 
+     <vaadin-table width-full _id="detailedSubscriberTable" :expand></vaadin-table> 
+    </vaadin-vertical-layout> 
+   </vaadin-panel> 
+   <vaadin-panel style-name="borderless" width="25%"> 
+    <vaadin-horizontal-layout spacing _id="pagingButtons"></vaadin-horizontal-layout> 
+   </vaadin-panel> 
+  </vaadin-vertical-layout>  
+ </body>
+</html>

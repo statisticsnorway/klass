@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+ <head>
+     <meta charset="UTF-8">
+     <meta name="design-properties"
+           content="{&quot;RULERS_VISIBLE&quot;:true,&quot;GUIDELINES_VISIBLE&quot;:false,&quot;SNAP_TO_OBJECTS&quot;:true,&quot;SNAP_TO_GRID&quot;:true,&quot;SNAPPING_DISTANCE&quot;:10,&quot;JAVA_SOURCES_ROOT&quot;:&quot;src/main/java&quot;,&quot;THEME&quot;:&quot;klasstheme&quot;}">
+     <meta name="vaadin-version" content="7.7.0">
+ </head>
+ <body>
+ <vaadin-vertical-layout spacing size-full margin>
+   <vaadin-label style-name="h3 bold" size-auto plain-text>
+     Korrigering av loggmeldinger
+   </vaadin-label>
+      <vaadin-vertical-layout width="500px">
+          <vaadin-combo-box caption="Klassifikasjoner" item-caption-mode="id" width-full _id="classificationComboBox">
+              <option>Option 1</option>
+              <option>Option 2</option>
+              <option>Option 3</option>
+          </vaadin-combo-box>
+          <vaadin-combo-box caption="Versjoner" item-caption-mode="id" width-full _id="versionComboBox">
+              <option>Option 1</option>
+              <option>Option 2</option>
+              <option>Option 3</option>
+          </vaadin-combo-box>
+      </vaadin-vertical-layout>
+   <vaadin-button width="110px" height="36px" plain-text _id="newButton" :right>
+     Ny
+   </vaadin-button>
+      <vaadin-grid caption="Loggmeldinger" size-full _id="loggMessageGrid"></vaadin-grid>
+      <vaadin-vertical-layout size-auto margin>
+          <vaadin-horizontal-layout caption="Loggmelding" spacing width="198.46%" _id="hlayout">
+              <vaadin-date-field caption="Dato" invalid-allowed="false" resolution="minute"
+                                 _id="dato"></vaadin-date-field>
+              <vaadin-text-area caption="Kommentarer" width="519px" _id="kommentarer" :center></vaadin-text-area>
+          </vaadin-horizontal-layout>
+      </vaadin-vertical-layout>
+      <vaadin-vertical-layout size-auto>
+          <vaadin-horizontal-layout spacing margin-left margin-right _id="buttonhlayout">
+     <vaadin-button width="110px" height="36px" plain-text _id="saveButton">
+       Lagre
+     </vaadin-button>
+     <vaadin-button width="110px" height="36px" plain-text _id="cancelButton">
+       Avbryt
+     </vaadin-button>
+    </vaadin-horizontal-layout>
+   </vaadin-vertical-layout>
+  </vaadin-vertical-layout>
+ </body>
+</html>

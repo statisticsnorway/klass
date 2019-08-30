@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- edited with XMLSpy v2006 sp2 U (http://www.altova.com) by J.A.Linnerud (Statistics Norway) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.ssb.no/ns/meta/vardok/variable" xmlns:codelist="http://www.ssb.no/ns/meta/codelist" xmlns:common="http://www.ssb.no/ns/meta/common" targetNamespace="http://www.ssb.no/ns/meta/vardok/variable" elementFormDefault="qualified">
+	<!--Versjon: 1.999-->
+	<xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="xml.xsd"/>
+	<xs:import namespace="http://www.ssb.no/ns/meta/codelist" schemaLocation="Codelist.xsd"/>
+	<xs:import namespace="http://www.ssb.no/ns/meta/common" schemaLocation="MetaCommon.xsd"/>
+	<xs:element name="ConceptVariables">
+		<xs:annotation>
+			<xs:documentation>Root element for ConceptVariables.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="ConceptVariable" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ConceptVariable" type="ConceptVariableType">
+		<xs:annotation>
+			<xs:documentation>Data Element Concept in ISO/IEC 1179. Object variable in Neuchâtel terminology. An object variable defines the concept of a variable in connection with a defined statistical unit type (e.g. the income of a person) and a conceptual domain.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="ExternalDocument" type="common:StringLangType"/>
+	<xs:complexType name="ConceptVariableType">
+		<xs:sequence>
+			<xs:element name="NameGrp">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Name" type="common:StringLangType" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="DefinitionGrp">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Definition" type="common:StringLangType" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="StatisticalUnitGrp">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="StatisticalUnit" type="common:StringLangType" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>Statistical unit type in Neuchâtel terminology. Object class in ISO/IEC 11179.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="CommentGrp" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Multi-lingual comments for external use</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Comment" type="common:StringLangType" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="InternalCommentGrp" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Multi-lingual comments for use in Statistics Norway only.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="InternalComment" type="common:StringLangType" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="DataElementName" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Short name</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="AdministrativeInfo" type="AdministrativeInfoType"/>
+			<xs:element name="Calculation" type="xs:string" minOccurs="0"/>
+			<xs:element name="ClassificationRelation" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Relation in ISO/IEC 11179 from "Data Element Concept" tol "Conceptual Domain". Can refer to a classification version or a classification or a level.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Classification" type="ClassificationRelationType"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="ConceptVariableRelation" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Relation in ISO/IEC 11179 from  "Data Element Concept" to "Data Element Concept" (for linking to and from Vardok-variables).</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Variable" type="VariableReferenceType" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="ContextVariableRelation" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Relation in ISO/IEC 11179 from "Data Element Concept" to "Data Element" A number of contextual variables may be associated with the object variable. </xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Variable" type="VariableReferenceType" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="CodelistRelation" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Relationship that breaks with ISO/IEC 11179. Should really be from "Conecptual Domain" or "Data Element" tol "Value Domain"</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Codelist" type="CodelistReferenceType" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attributeGroup ref="VariableAttr"/>
+	</xs:complexType>
+	<xs:complexType name="CommentGroupType">
+		<xs:sequence>
+			<xs:element name="Comment" type="common:StringLangType" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="NameGroupType">
+		<xs:sequence>
+			<xs:element name="Name" type="common:StringLangType" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="StatisticalUnitGroupType">
+		<xs:sequence>
+			<xs:element name="StatisticalUnit" type="common:StringLangType" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="DefinitionGroupType">
+		<xs:sequence>
+			<xs:element name="Definition" type="DefinitionType" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ClassificationRelationType">
+		<xs:attribute name="id" type="common:ClassificationIdType" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="VariableReferenceType">
+		<xs:attribute name="id" type="xs:anyURI" use="required"/>
+		<xs:attribute name="direction">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="to"/>
+					<xs:enumeration value="from"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="CodelistReferenceType">
+		<xs:attribute name="id" type="common:CodelistIdType" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="DefinitionType">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute ref="xml:lang" use="required"/>
+				<xs:attribute name="approved" use="required">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="internet"/>
+							<xs:enumeration value="internal"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:attributeGroup name="VariableAttr">
+		<xs:attribute name="id" type="common:VariableIdType" use="required"/>
+		<xs:attribute name="createdOn" type="xs:date" use="required"/>
+		<xs:attribute name="lastChangedDate" type="xs:date" use="optional"/>
+		<xs:attribute name="validFrom" type="xs:date" use="optional"/>
+		<xs:attribute name="validTo" type="xs:date" use="optional"/>
+	</xs:attributeGroup>
+	<xs:complexType name="AdministrativeInfoType">
+		<xs:sequence>
+			<xs:element name="Sensitivity"/>
+			<xs:element name="SubjectArea">
+				<xs:annotation>
+					<xs:documentation>Areas of statistics in which the concept variable is implemented.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ContactInformation"/>
+			<xs:element name="ShortNameWeb" minOccurs="0"/>
+			<xs:element name="InternalSource" minOccurs="0"/>
+			<xs:element name="ExternalSource" minOccurs="0"/>
+			<xs:sequence minOccurs="0">
+				<xs:element name="ExternalDocumentGrp">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="ExternalDocument"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="Adminstrativeinfo"/>
+</xs:schema>

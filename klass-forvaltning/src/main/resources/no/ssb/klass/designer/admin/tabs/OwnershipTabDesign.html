@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8" name="design-properties"
+          content="{&quot;RULERS_VISIBLE&quot;:true,&quot;GUIDELINES_VISIBLE&quot;:false,&quot;SNAP_TO_OBJECTS&quot;:true,&quot;SNAP_TO_GRID&quot;:true,&quot;SNAPPING_DISTANCE&quot;:10,&quot;JAVA_SOURCES_ROOT&quot;:&quot;src/main/java&quot;,&quot;THEME&quot;:&quot;klasstheme&quot;}">
+</head>
+<body>
+<vaadin-vertical-layout size-full>
+    <vaadin-vertical-layout spacing size-full>
+        <vaadin-label style-name="h3 bold" size-auto plain-text>
+            Overføre kodeverk fra en kontaktperson til en annen
+        </vaadin-label>
+        <vaadin-vertical-layout size-auto margin-top>
+            <vaadin-label size-auto plain-text>
+                Nåværende kontaktperson
+            </vaadin-label>
+            <vaadin-text-field input-prompt="Skriv inn initialer" _id="oldContactPerson"></vaadin-text-field>
+        </vaadin-vertical-layout>
+        <vaadin-vertical-layout size-auto margin-top margin-bottom>
+            <vaadin-label size-auto plain-text>
+                Ny kontaktperson
+            </vaadin-label>
+            <vaadin-text-field input-prompt="Skriv inn initialer" _id="newContactPerson"></vaadin-text-field>
+            <vaadin-vertical-layout size-auto margin-top>
+                <vaadin-horizontal-layout spacing>
+                    <vaadin-button plain-text _id="transferUsers">
+                        Overfør alle kodeverk
+                    </vaadin-button>
+                    <vaadin-button plain-text _id="cancel">
+                        eller avbryt
+                    </vaadin-button>
+                </vaadin-horizontal-layout>
+            </vaadin-vertical-layout>
+        </vaadin-vertical-layout>
+    </vaadin-vertical-layout>
+</vaadin-vertical-layout>
+</body>
+</html>

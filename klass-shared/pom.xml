@@ -1,0 +1,392 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    
+    <artifactId>klass-shared</artifactId>
+    <packaging>jar</packaging>
+<!--    <packaging>pom</packaging>-->
+
+    <name>Klass Shared</name>
+    <description>Felles klasser og resurser for Klass komponentene</description>
+
+    <parent>
+        <groupId>no.ssb.klass</groupId>
+        <artifactId>klass-root</artifactId>
+        <version>2.0.12-SNAPSHOT</version>
+    </parent>
+
+    <properties>
+
+        <!--
+        ja disse skal være her og skal være tomme,de er  nødvendig siden jgitflow plugin ikke plukker opp at  local profilen er activateByDefault
+        (på server defaulter disse til applications.properties)
+        -->
+        <klass.env.name />
+        <klass.doc.env.url />
+        <klass.doc.env.port />
+
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+        
+
+        <findbugs-version>3.0.2</findbugs-version>
+        <checkstyle-version>2.17</checkstyle-version>
+        <spring.version>4.3.7.RELEASE</spring.version>
+        <objenesis-version>2.4</objenesis-version>
+        <guava-version>19.0</guava-version>
+        <woodstox-version>4.4.1</woodstox-version>
+        <commons-lang3-version>3.4</commons-lang3-version>
+        <rest-assured-version>2.9.0</rest-assured-version>
+        <apacheds-server-jndi-version>1.5.5</apacheds-server-jndi-version>
+        <asciidoctor-version>1.5.3</asciidoctor-version>
+        <maven-jaxb2-plugin-version>0.13.1</maven-jaxb2-plugin-version>
+        <tomcat7-maven-plugin-version>2.2</tomcat7-maven-plugin-version>
+
+        <!--IMPORTANT HIBERNATE BUG FIX ( needed for Translatable as lobs)-->
+        <!--https://hibernate.atlassian.net/browse/HHH-10818-->
+        <hibernate.version>5.2.3.Final</hibernate.version>
+
+
+        <!-- Override Spring Boot managed version. Flyway bug #995 forces us to use version 4.0 or newer.
+             Replacing old search engine with solr search
+             Remove when Spring Boot includes this version or newer -->
+        <flyway.version>4.1.1</flyway.version>
+        <!-- Override Spring Boot managed version. Spring restdocs bug #286 in version 1.1.1 (duplicate query parameters)
+             forces us to downgrade to version 1.1.0. (https://github.com/spring-projects/spring-restdocs/issues/286)
+             Remove when Spring Boot includes version 1.1.2 or newer -->
+        <spring-restdocs.version>1.2.1.RELEASE</spring-restdocs.version>
+
+    </properties>
+
+    <distributionManagement>
+        <repository>
+            <id>releases</id>
+            <url>https://nexus.ssb.no/repository/maven-releases</url>
+        </repository>
+        <snapshotRepository>
+            <id>snapshots</id>
+            <url>https://nexus.ssb.no/repository/maven-snapshots</url>
+            <uniqueVersion>false</uniqueVersion>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <scm>
+        <url>https://git-adm.ssb.no/projects/KLAS/repos/klass/browse</url>
+        <connection>scm:git:https://git-adm.ssb.no/scm/klas/klass.git</connection>
+        <developerConnection>scm:git:https://git-adm.ssb.no/scm/klas/klass.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
+
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-solr</artifactId>
+            <version>2.1.0.RELEASE</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.solr</groupId>
+            <artifactId>solr-solrj</artifactId>
+            <version>5.5.0</version>
+            <!--https://github.com/FasterXML/jackson-dataformat-xml/issues/132-->
+            <exclusions>
+                <exclusion>
+                    <groupId>org.codehaus.woodstox</groupId>
+                    <artifactId>wstx-asl</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+<!--        <dependency>-->
+<!--            <groupId>org.apache.solr</groupId>-->
+<!--            <artifactId>solr-core</artifactId>-->
+<!--            <version>5.5.0</version>-->
+<!--            &lt;!&ndash;https://github.com/FasterXML/jackson-dataformat-xml/issues/132&ndash;&gt;-->
+<!--            <exclusions>-->
+<!--                <exclusion>-->
+<!--                    <groupId>org.codehaus.woodstox</groupId>-->
+<!--                    <artifactId>wstx-asl</artifactId>-->
+<!--                </exclusion>-->
+<!--            </exclusions>-->
+<!--        </dependency>-->
+        <dependency>
+            <groupId>org.apache.solr</groupId>
+            <artifactId>solr-dataimporthandler</artifactId>
+            <version>5.5.0</version>
+            <!--https://github.com/FasterXML/jackson-dataformat-xml/issues/132-->
+            <exclusions>
+                <exclusion>
+                    <groupId>org.codehaus.woodstox</groupId>
+                    <artifactId>wstx-asl</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.objenesis</groupId>
+            <artifactId>objenesis</artifactId>
+            <version>${objenesis-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-jasper</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-hateoas</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-ldap</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mariadb.jdbc</groupId>
+            <artifactId>mariadb-java-client</artifactId>
+        </dependency>
+        <dependency>
+            <!--java based ldap server for testing-->
+            <groupId>org.apache.directory.server</groupId>
+            <artifactId>apacheds-server-jndi</artifactId>
+            <version>${apacheds-server-jndi-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-csv</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-xml</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.jayway.jsonpath</groupId>
+            <artifactId>json-path</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.restdocs</groupId>
+            <artifactId>spring-restdocs-mockmvc</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons-lang3-version}</version>
+        </dependency>
+        <dependency>
+            <!-- woodstox needed to pretty print json and xml -->
+            <groupId>org.codehaus.woodstox</groupId>
+            <artifactId>woodstox-core-asl</artifactId>
+            <version>${woodstox-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.jayway.restassured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <version>${rest-assured-version}</version>
+            <scope>test</scope>
+        </dependency>
+         
+    </dependencies>
+
+    <profiles>
+        <profile>
+            <id>findbugs</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>findbugs-maven-plugin</artifactId>
+                        <version>${findbugs-version}</version>
+                        <configuration>
+                            <includeTests>true</includeTests>
+                            <threshold>High</threshold>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>check</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>checkstyle</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-checkstyle-plugin</artifactId>
+                        <version>${checkstyle-version}</version>
+                        <configuration>
+                            <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
+                            <configLocation>../build_tools/checkstyle.xml</configLocation>
+                            <includeTestSourceDirectory>true</includeTestSourceDirectory>
+                            <violationSeverity>warning</violationSeverity>
+                            <logViolationsToConsole>true</logViolationsToConsole>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>check</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>testbench</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <includes>
+                                <include>**/*TestBench.java</include>
+                            </includes>
+                            <systemPropertyVariables>
+                                <!-- useHeadless=true uses phantomjs driver, a headless browser used on Jenkins -->
+                                <useHeadless>false</useHeadless>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        
+
+    </profiles>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.jvnet.jaxb2.maven2</groupId>
+                <artifactId>maven-jaxb2-plugin</artifactId>
+                <version>${maven-jaxb2-plugin-version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <schemaDirectory>src/main/resources/xsd/ssb</schemaDirectory>
+                </configuration>
+            </plugin>
+
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.2</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>test-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            
+        </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>external.atlassian.jgitflow</groupId>
+                    <artifactId>jgitflow-maven-plugin</artifactId>
+                    <version>1.0-m5.1</version>
+                    <configuration>
+                        <!-- see goals wiki page for configuration options -->
+                        <flowInitContext>
+                            <masterBranchName>master</masterBranchName>
+                            <developBranchName>develop</developBranchName>
+                            <featureBranchPrefix>feature/</featureBranchPrefix>
+                            <releaseBranchPrefix>release/</releaseBranchPrefix>
+                            <hotfixBranchPrefix>hotfix/</hotfixBranchPrefix>
+                            <versionTagPrefix>klass_v</versionTagPrefix>
+                        </flowInitContext>
+                        <releaseProfiles>documentation</releaseProfiles>
+                        <arguments>-Pdocumentation -Dmaven.javadoc.skip=true</arguments>
+                    </configuration>
+                </plugin>
+                
+                <plugin>
+                    <groupId>org.apache.tomcat.maven</groupId>
+                    <artifactId>tomcat7-maven-plugin</artifactId>
+                    <version>${tomcat7-maven-plugin-version}</version>
+                    <configuration>
+                        <url>${deploy.server.url}</url>
+                        <path>/</path>
+                        <username>${deploy.credentials.username}</username>
+                        <password>${deploy.credentials.password}</password>
+                    </configuration>
+                </plugin>
+
+            </plugins>
+        </pluginManagement>
+    </build>
+</project>

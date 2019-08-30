@@ -1,0 +1,164 @@
+<?xml version="1.0"?>
+<!DOCTYPE module PUBLIC
+        "-//Puppy Crawl//DTD Check Configuration 1.2//EN"
+        "http://www.puppycrawl.com/dtds/configuration_1_2.dtd">
+<module name="Checker">
+    <property name="severity" value="error" />
+
+    <module name="SuppressionCommentFilter" />
+
+    <!-- Checks that a package.html file exists for each package. -->
+    <!--module name="PackageHtml"/ -->
+    <!-- Checks whether files end with a new line. -->
+    <!--module name="NewlineAtEndOfFile"/ -->
+    <!-- Checks that property files contain the same keys. -->
+    <!-- <module name="Translation" /> -->
+    <!-- Checks for Size Violations. -->
+    <module name="FileLength">
+        <property name="max" value="3000" />
+        <property name="fileExtensions" value="java" />
+    </module>
+
+    <module name="FileLength">
+        <property name="max" value="300000" />
+        <property name="fileExtensions" value="xml" />
+    </module>
+
+    <module name="FileTabCharacter">
+        <!-- Checks that there are no tab characters in the file. -->
+        <property name="eachLine" value="true" />
+        <property name="fileExtensions" value="java,xml" />
+    </module>
+
+    <module name="TreeWalker">
+
+        <module name="FileContentsHolder" />
+
+
+        <!-- Checks for Javadoc comments. -->
+        <module name="ConstantName">
+            <!-- default for ConstantName but allows 'log' as well -->
+            <property name="format" value="^([A-Z][A-Z0-9]*(_[A-Z0-9]+)*|log)$" />
+        </module>
+        <module name="LocalFinalVariableName">
+            <!-- default for LocalFinalVariableName but allow currencies as well -->
+            <property name="format" value="^([a-z][a-zA-Z0-9]*|NOK|SEK|DKK|EUR)$" />
+        </module>
+        <module name="LocalVariableName">
+            <!-- default for LocalVariableName but allow currencies as well -->
+            <property name="format" value="^([a-z][a-zA-Z0-9]*|NOK|SEK|DKK|EUR)$" />
+        </module>
+        <module name="StaticVariableName" />
+        <module name="TypeName" />
+        <module name="AvoidStarImport">
+            <!-- <property name="excludes" value="org.easymock.EasyMock,org.junit.Assert" /> -->
+            <property name="allowClassImports" value="true"/>
+            <property name="allowStaticMemberImports" value="true" />
+        </module>
+        <module name="IllegalImport">
+            <!-- defaults to sun.* packages -->
+        </module>
+        <module name="RedundantImport" />
+        <module name="UnusedImports" />
+        <module name="LineLength">
+            <property name="max" value="150" />
+        </module>
+        <module name="MethodLength">
+            <property name="max" value="1000" />
+        </module>
+        <module name="ParameterNumber">
+            <property name="max" value="10" />
+        </module>
+        <!-- Checks for whitespace -->
+        <module name="EmptyForIteratorPad" />
+        <module name="MethodParamPad" />
+        <module name="NoWhitespaceAfter">
+            <property name="tokens" value="BNOT, DEC, DOT, INC, LNOT, UNARY_MINUS, UNARY_PLUS" />
+        </module>
+        <module name="NoWhitespaceBefore" />
+        <module name="OperatorWrap" />
+        <module name="ParenPad" />
+        <module name="TypecastParenPad">
+            <property name="option" value="nospace" />
+        </module>
+        <module name="WhitespaceAround">
+            <!-- RCURLY is taken out since caused problem with anonymous classes: new Anonymous { }.method() -->
+            <property name="tokens"
+                value="ASSIGN, COLON, LCURLY, LITERAL_ASSERT, LITERAL_CATCH, LITERAL_DO, LITERAL_ELSE,
+                 LITERAL_FINALLY, LITERAL_FOR, LITERAL_IF, LITERAL_RETURN, LITERAL_SYNCHRONIZED, LITERAL_TRY, 
+                 LITERAL_WHILE, MINUS, MINUS_ASSIGN, MOD, MOD_ASSIGN, NOT_EQUAL, PLUS, PLUS_ASSIGN, QUESTION" />
+        </module>
+        <module name="WhitespaceAfter">
+            <property name="tokens" value="COMMA, SEMI" />
+        </module>
+        <!-- Modifier Checks -->
+        <module name="ModifierOrder" />
+        <module name="RedundantModifier" />
+        <!-- Checks for blocks. You know, those {}'s -->
+        <module name="AvoidNestedBlocks" />
+        <module name="EmptyBlock">
+            <!-- Swallowing exception in catch blocks are bad. But according to Joshua Bloch item 47: 'At the very least, 
+                the catch block should contain a comment explaining why it is appropriate to ignore the exception '. So need at lease a comment -->
+            <property name="option" value="text" />
+        </module>
+        <module name="LeftCurly" />
+        <module name="NeedBraces" />
+        <module name="RightCurly" />
+        <!-- Checks for common coding problems -->
+        <!-- <module name="DoubleCheckedLocking" /> -->
+        <module name="EqualsHashCode" />
+        <!--module name="HiddenField"/ -->
+        <module name="IllegalInstantiation" />
+        <module name="InnerAssignment" />
+        <!--module name="MagicNumber"/ -->
+        <module name="MissingSwitchDefault" />
+        <!--         <module name="RedundantThrows" />   karsten has been deprecated in checkstyle 6.2-->
+        <module name="SimplifyBooleanExpression" />
+        <module name="SimplifyBooleanReturn" />
+        <!-- Checks for class design -->
+        <!--module name="DesignForExtension"/ -->
+        <module name="FinalClass" />
+        <module name="HideUtilityClassConstructor" />
+        <module name="InterfaceIsType" />
+        <module name="VisibilityModifier">
+            <property name="packageAllowed" value="true" />
+            <property name="protectedAllowed" value="true" />
+        </module>
+        <!-- Miscellaneous other checks. -->
+        <!-- See http://checkstyle.sf.net/config_misc.html -->
+        <module name="ArrayTypeStyle" />
+        <!--module name="FinalParameters"/ -->
+        <!-- Removed trailing spaces check -->
+        <!--module name="GenericIllegalRegexp"> <property name="format" value="\s+$" /> <property name="message" value="Line 
+            has trailing spaces." /> </module -->
+        <!--module name="TodoComment"/ -->
+        <module name="UpperEll" />
+        <!-- Additional tests not included in standard code style from Sun -->
+        <!--module name="Indentation"> <property name="severity" value="ignore" /> </module -->
+        <!--module name="NPathComplexity" / -->
+        <!--module name="MultipleStringLiterals"/ -->
+        <module name="StringLiteralEquality" />
+        <module name="UnnecessaryParentheses" />
+        <module name="RegexpSinglelineJava">
+            <property name="format" value="System\.out\.print" />
+            <property name="message" value="Calling System.out.print(ln)." />
+            <property name="ignoreComments" value="true" />
+        </module>
+
+        <module name="RegexpSinglelineJava">
+            <property name="format" value="System\.err\.print" />
+            <property name="message" value="Calling System.err.print(ln)." />
+            <property name="ignoreComments" value="true" />
+        </module>
+        <module name="RegexpSinglelineJava">
+            <property name="format" value="System\.exit" />
+            <property name="message" value="Calling System.exit." />
+            <property name="ignoreComments" value="true" />
+        </module>
+        <module name="RegexpSinglelineJava">
+            <property name="format" value="\.printStackTrace\(\)" />
+            <property name="message" value="Calling printStackTrace." />
+            <property name="ignoreComments" value="true" />
+        </module>
+    </module>
+</module>

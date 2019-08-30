@@ -1,0 +1,59 @@
+dn: ou=groups,dc=springframework,dc=org
+objectclass: top
+objectclass: organizationalUnit
+ou: groups
+
+dn: ou=people,dc=springframework,dc=org
+objectclass: top
+objectclass: organizationalUnit
+ou: people
+
+
+
+dn: uid=admin1,ou=people,dc=springframework,dc=org
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+objectclass: inetOrgPerson
+displayName: Klass Administrator
+sn: Administrator
+uid: admin1
+userPassword: admin1
+description: 1337(TEST USER)
+department: Klass testbruker 1337
+
+dn: uid=ziggy,ou=people,dc=springframework,dc=org
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+objectclass: inetOrgPerson
+displayName: Ziggy Stardust
+sn: Stardust
+uid: ziggy
+userPassword: ziggy
+description: 714(TEST USER)
+department: Klass testbruker 714
+
+
+dn: uid=bowie,ou=people,dc=springframework,dc=org
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+objectclass: inetOrgPerson
+displayName: David Bowie
+sn: Bowie
+uid: bowie
+userPassword: bowie
+description: 430(TEST USER)
+department: Klass testbruker 430
+
+
+
+
+dn: cn=KLASS_administrator,ou=groups,dc=springframework,dc=org
+objectclass: top
+objectclass: groupOfNames
+cn: KLASS_administrator
+uniqueMember: uid=admin1,ou=people,dc=springframework,dc=org
+
+

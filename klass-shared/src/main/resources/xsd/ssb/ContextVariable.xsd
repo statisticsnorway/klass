@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2006 sp2 U (http://www.altova.com) by J.A.Linnerud (Statistics Norway) -->
+<xs:schema xmlns="http://www.ssb.no/ns/meta" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:common="http://www.ssb.no/ns/meta/common" xmlns:codelist="http://www.ssb.no/ns/meta/codelist" targetNamespace="http://www.ssb.no/ns/meta" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:import namespace="http://www.ssb.no/ns/meta/common" schemaLocation="MetaCommon.xsd"/>
+	<xs:import namespace="http://www.ssb.no/ns/meta/codelist" schemaLocation="Codelist.xsd"/>
+	<xs:element name="ContextVariable" type="ContextVariableType">
+		<xs:annotation>
+			<xs:documentation>Root element for data element in ISO/IEC 11179 or contextual variabel in Nechâtel terminology</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="Description" type="common:StringLangChoiceType">
+		<xs:annotation>
+			<xs:documentation>Decription or fiull name.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="Title" type="common:StringLangChoiceType">
+		<xs:annotation>
+			<xs:documentation>Title or short name</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="ContextVariableType">
+		<xs:annotation>
+			<xs:documentation>Datatype for a given contextual variabel</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element ref="Title">
+				<xs:annotation>
+					<xs:documentation>Short name</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element ref="Description"/>
+			<xs:element name="Comments" type="xs:string" minOccurs="0"/>
+			<xs:element name="Properties" type="PropertiesType"/>
+			<xs:element name="VariableReference" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Reference to a conceptual variable in Neuchâtel termnology or data elemrent concept in ISO/IEC 11179</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:string">
+							<xs:attribute name="id" type="common:VariableIdType" use="required"/>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element ref="codelist:Codelist" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attributeGroup ref="ContextVariableAttributesGrp"/>
+	</xs:complexType>
+	<xs:complexType name="PropertiesType">
+		<xs:sequence>
+			<xs:element name="Datatype" type="xs:string"/>
+			<xs:element name="Length" type="xs:integer"/>
+			<xs:element name="StartPosition" type="xs:integer" minOccurs="0"/>
+			<xs:element name="ContextVariableType" type="xs:string" minOccurs="0"/>
+			<xs:element name="Precision" type="xs:integer" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>number of decimals</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="VariableDateFormat" type="xs:string" minOccurs="0"/>
+			<xs:element name="EventDateFormat" type="xs:string" minOccurs="0"/>
+			<xs:element name="UpdateControl" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string"/>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="ValueRange" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>A value range is an interval or grouping of numerical values with a lower and an upper boundary, which can be open or closed e.g. (0, 110], [1, 20).</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:attributeGroup name="ContextVariableAttributesGrp">
+		<xs:attribute name="id" type="common:ContextVariableIdType" use="required"/>
+		<xs:attribute name="datasetId" type="common:DatasetIdType" use="optional"/>
+		<xs:attribute name="validFrom" type="xs:date" use="optional"/>
+		<xs:attribute name="validTo" type="xs:date" use="optional"/>
+	</xs:attributeGroup>
+</xs:schema>
