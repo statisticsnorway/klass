@@ -65,8 +65,7 @@ public class ClassificationVersionResource extends ClassificationVersionSummaryR
         LocalDate targetFrom = correspondenceTable.getTarget().getDateRange().getFrom();
         // if either source or target From date is later than current date we consider this a future correspondence
         // and return false so that it is not included when filtering
-        return  !(LocalDate.now().isAfter(sourceFrom) || LocalDate.now().isAfter(targetFrom));
-
+        return  !(sourceFrom.isAfter(LocalDate.now()) || targetFrom.isAfter(LocalDate.now()));
     }
 
     public String getIntroduction() {
