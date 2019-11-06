@@ -1,8 +1,5 @@
 package no.ssb.klass.api.controllers;
 
-/**
- * @author Mads Lundemo, SSB.
- */
 public class MonitorStatus {
 
     private final String name;
