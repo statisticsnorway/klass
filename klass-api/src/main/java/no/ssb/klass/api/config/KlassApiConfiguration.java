@@ -22,20 +22,20 @@ public class KlassApiConfiguration extends WebSecurityConfigurerAdapter {
                 //block sensitive endpoints (actuator)
                 .antMatchers("/manage**").denyAll() //alt. hasIpAddress("127.0.0.1")
                 .antMatchers("/manage/**").denyAll()
-                
+
                 //MLO: Some endpoints might be useful, consider allowing non sensitive ones.
 //                .antMatchers("/manage/metrics").permitAll()
-                
+
                 //allow rest API and health checks
-                .antMatchers(RestConstants.REST_PREFIX+"/**").permitAll()
+                .antMatchers(RestConstants.API_VERSION_V1 +"/**").permitAll()
                 .antMatchers(PingController.PATH).permitAll()
                 .antMatchers(MonitorController.PATH).permitAll()
-                
+
                 .and()
                 .csrf().disable()
                 .headers()
                 .addHeaderWriter((request, response) -> {
-                    if (request.getServletPath().startsWith(RestConstants.REST_PREFIX)) {
+                    if (request.getServletPath().startsWith(RestConstants.API_VERSION_V1)) {
                         // Workaround to Force CORS header all the time for API
                         response.addHeader("Access-Control-Allow-Origin", "*");
                         // Header telling cache server what is varying in our responses
