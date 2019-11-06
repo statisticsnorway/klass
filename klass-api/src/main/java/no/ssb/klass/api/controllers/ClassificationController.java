@@ -83,7 +83,7 @@ import no.ssb.klass.api.util.RestConstants;
 @RestController
 // NOTE: CrossOrigin config moved to KlassSecurityConfiguration
 // due to conditional behavior where some requests didn't get CORS headers and cause cache problems
-@RequestMapping(value = { RestConstants.REST_PREFIX, "/rest/v1" })
+@RequestMapping(value = { RestConstants.API_VERSION_V1,"/api/klass"+RestConstants.API_VERSION_V1, "/rest/v1" })
 public class ClassificationController {
     private static final Logger log = LoggerFactory.getLogger(ClassificationController.class);
     private final ClassificationService classificationService;
