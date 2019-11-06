@@ -35,9 +35,6 @@ import no.ssb.klass.api.util.RestConstants;
 import no.ssb.klass.testutil.ConstantClockSource;
 import no.ssb.klass.testutil.TestUtil;
 
-/**
- * @author Mads Lundemo, SSB.
- */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = { ApplicationTestConfig.class }, webEnvironment = WebEnvironment.RANDOM_PORT)
 @ActiveProfiles(profiles = { ConfigurationProfiles.H2_INMEMORY, ConfigurationProfiles.MOCK_SEARCH })
@@ -46,7 +43,7 @@ public abstract class AbstractRestApiApplicationTest {
 
     public static final String CONTENT_TYPE_CSV = "text/csv";
 
-    public static final String REQUEST = RestConstants.REST_PREFIX + "/classifications";
+    public static final String REQUEST = RestConstants.API_VERSION_V1 + "/classifications";
     public static final String REQUEST_WITH_ID = REQUEST + "/{classificationId}";
     public static final String REQUEST_SEARCH = REQUEST + "/search";
     public static final String REQUEST_WITH_ID_AND_CODES = REQUEST + "/{classificationId}/codes";
@@ -56,11 +53,11 @@ public abstract class AbstractRestApiApplicationTest {
     public static final String REQUEST_WITH_ID_AND_CORRESPONDS = REQUEST + "/{classificationId}/corresponds";
     public static final String REQUEST_WITH_ID_AND_CORRESPONDS_AT = REQUEST + "/{classificationId}/correspondsAt";
 
-    public static final String REQUEST_CORRESPONDENCE_TABLES = RestConstants.REST_PREFIX + "/correspondencetables/{correspondencetablesId}";
+    public static final String REQUEST_CORRESPONDENCE_TABLES = RestConstants.API_VERSION_V1 + "/correspondencetables/{correspondencetablesId}";
 
-    public static final String REQUEST_SSB_SECTION = RestConstants.REST_PREFIX + "/ssbsections";
+    public static final String REQUEST_SSB_SECTION = RestConstants.API_VERSION_V1 + "/ssbsections";
 
-    public static final String REQUEST_CLASSIFICATION_FAMILY = RestConstants.REST_PREFIX + "/classificationfamilies";
+    public static final String REQUEST_CLASSIFICATION_FAMILY = RestConstants.API_VERSION_V1 + "/classificationfamilies";
     public static final String REQUEST_CLASSIFICATION_FAMILY_WITH_ID = REQUEST_CLASSIFICATION_FAMILY
             + "/{classificationfamilyId}";
 
@@ -135,46 +132,44 @@ public abstract class AbstractRestApiApplicationTest {
         applicationTestUtil.clearDatabase();
         applicationTestUtil.clearSearch();
         // if (!testDataInitialized) {
-            User user = userRepository.save(TestUtil.createUser());
+        User user = userRepository.save(TestUtil.createUser());
         TimeUtil.setClockSource(new ConstantClockSource(parseDate(CHANGED_SINCE_OLD_DATE)));
-            classificationFamily = classificationFamilyRepository.save(TestUtil
-                    .createClassificationFamily("Befolkning"));
-            kommuneinndeling = TestDataProvider.createClassificationKommuneinndeling();
-            kommuneinndeling.setContactPerson(user);
-            classificationFamily.addClassificationSeries(kommuneinndeling);
+        classificationFamily = classificationFamilyRepository.save(TestUtil
+                .createClassificationFamily("Befolkning"));
+        kommuneinndeling = TestDataProvider.createClassificationKommuneinndeling();
+        kommuneinndeling.setContactPerson(user);
+        classificationFamily.addClassificationSeries(kommuneinndeling);
         TimeUtil.setClockSource(new ConstantClockSource(parseDate(CHANGED_SINCE_NEW_DATE)));
-            bydelsinndeling = TestDataProvider.createClassificationBydelsinndeling();
-            bydelsinndeling.setContactPerson(user);
-            classificationFamily.addClassificationSeries(bydelsinndeling);
+        bydelsinndeling = TestDataProvider.createClassificationBydelsinndeling();
+        bydelsinndeling.setContactPerson(user);
+        classificationFamily.addClassificationSeries(bydelsinndeling);
 
-            familieGrupperingCodelist = TestDataProvider.createFamiliegrupperingCodelist(user);
-            classificationFamily.addClassificationSeries(familieGrupperingCodelist);
-            classificationService.saveAndIndexClassification(familieGrupperingCodelist);
+        familieGrupperingCodelist = TestDataProvider.createFamiliegrupperingCodelist(user);
+        classificationFamily.addClassificationSeries(familieGrupperingCodelist);
+        classificationService.saveAndIndexClassification(familieGrupperingCodelist);
 
-            kommuneinndeling = classificationService.saveAndIndexClassification(kommuneinndeling);
-            bydelsinndeling = classificationService.saveAndIndexClassification(bydelsinndeling);
+        kommuneinndeling = classificationService.saveAndIndexClassification(kommuneinndeling);
+        bydelsinndeling = classificationService.saveAndIndexClassification(bydelsinndeling);
 
-            correspondenceTable = TestDataProvider.createAndAddCorrespondenceTable(kommuneinndeling,
-                    bydelsinndeling);
-            correspondenceTableRepository.save(correspondenceTable);
-            correspondenceTableRepository.save(TestDataProvider.createAndAddCorrespondenceTableTableFutureVersion(kommuneinndeling,
+        correspondenceTable = TestDataProvider.createAndAddCorrespondenceTable(kommuneinndeling,
+                bydelsinndeling);
+        correspondenceTableRepository.save(correspondenceTable);
+        correspondenceTableRepository.save(TestDataProvider.createAndAddCorrespondenceTableTableFutureVersion(kommuneinndeling,
                 bydelsinndeling));
-            correspondenceTableRepository.save(TestDataProvider.createAndAddChangeCorrespondenceTable(
-                    kommuneinndeling));
-            correspondenceTableRepository.save(TestDataProvider.createAndAddChangeCorrespondenceTableFutureVersion(
+        correspondenceTableRepository.save(TestDataProvider.createAndAddChangeCorrespondenceTable(
+                kommuneinndeling));
+        correspondenceTableRepository.save(TestDataProvider.createAndAddChangeCorrespondenceTableFutureVersion(
                 kommuneinndeling));
 
         TimeUtil.setClockSource(new ConstantClockSource(parseDate(CHANGED_SINCE_OLD_DATE)));
-            classificationService.saveAndIndexClassification(kommuneinndeling);
-            TimeUtil.revertClockSource();
+        classificationService.saveAndIndexClassification(kommuneinndeling);
+        TimeUtil.revertClockSource();
 
-            TransactionStatus transaction = template.getTransactionManager().getTransaction(null);
-            seriesRepository.updateClassificationLastModified(bydelsinndeling.getId(), bydelsinndeling
-                    .getLastModified());
-            template.getTransactionManager().commit(transaction);
+        TransactionStatus transaction = template.getTransactionManager().getTransaction(null);
+        seriesRepository.updateClassificationLastModified(bydelsinndeling.getId(), bydelsinndeling
+                .getLastModified());
+        template.getTransactionManager().commit(transaction);
         // testDataInitialized = true;
-
-        // }
     }
 
     protected Date parseDate(String date) {
