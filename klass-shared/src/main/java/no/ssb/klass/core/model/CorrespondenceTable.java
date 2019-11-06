@@ -66,6 +66,8 @@ public class CorrespondenceTable extends BaseEntity implements ClassificationEnt
     public CorrespondenceTable(Translatable description, ClassificationVersion source, int sourceLevelNumber,
             ClassificationVersion target, int targetLevelNumber) {
         this.description = checkNotNull(description);
+        // TODO Mads: vuder hvorvidt denne er nødvendig og skriv om GUI dersom denne enforces
+        // checkArgument(!description.isEmpty(), "Description is empty");
         this.published = Published.none();
         this.source = checkNotNull(source);
         checkArgument(sourceLevelNumber == 0 || source.hasLevel(sourceLevelNumber),

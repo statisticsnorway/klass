@@ -85,7 +85,7 @@ public class RestApiDraftIntegrationTest extends AbstractRestApiApplicationTest 
     @Test
     public void testThatDraftVariantIsNotExposed() {
         given().port(port).accept(ContentType.JSON)
-                .get(RestConstants.API_VERSION_V1 + "/versions/" + familieGrupperingCodelist.getClassificationVersions().get(0).getId())
+                .get(RestConstants.REST_PREFIX + "/versions/" + familieGrupperingCodelist.getClassificationVersions().get(0).getId())
 //                .prettyPeek()
                 .then()
                 .statusCode(HttpStatus.OK.value())
@@ -97,7 +97,7 @@ public class RestApiDraftIntegrationTest extends AbstractRestApiApplicationTest 
     @Test
     public void testThatDraftVariantIncludeFutureVersionIsNotExposed() {
         given().port(port).accept(ContentType.JSON).param("includeFuture", true)
-                .get(RestConstants.API_VERSION_V1 + "/versions/" + familieGrupperingCodelist.getClassificationVersions().get(0).getId())
+                .get(RestConstants.REST_PREFIX + "/versions/" + familieGrupperingCodelist.getClassificationVersions().get(0).getId())
 //                .prettyPeek()
                 .then()
                 .statusCode(HttpStatus.OK.value())
@@ -110,7 +110,7 @@ public class RestApiDraftIntegrationTest extends AbstractRestApiApplicationTest 
     @Test
     public void testThatDraftCorrespondenceIsNotExposed() {
         given().port(port).accept(ContentType.JSON)
-                .get(RestConstants.API_VERSION_V1 + "/versions/" + kommuneinndeling.getClassificationVersions().get(0).getId())
+                .get(RestConstants.REST_PREFIX + "/versions/" + kommuneinndeling.getClassificationVersions().get(0).getId())
 //                .prettyPeek()
                 .then()
                 .statusCode(HttpStatus.OK.value())
@@ -122,7 +122,7 @@ public class RestApiDraftIntegrationTest extends AbstractRestApiApplicationTest 
     @Test
     public void testThatDraftCorrespondenceIncludeFutureVersionIsNotExposed() {
         given().port(port).accept(ContentType.JSON).param("includeFuture", true)
-                .get(RestConstants.API_VERSION_V1 + "/versions/" + kommuneinndeling.getClassificationVersions().get(0).getId())
+                .get(RestConstants.REST_PREFIX + "/versions/" + kommuneinndeling.getClassificationVersions().get(0).getId())
 //                .prettyPeek()
                 .then()
                 .statusCode(HttpStatus.OK.value())

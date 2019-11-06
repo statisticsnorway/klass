@@ -24,6 +24,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
@@ -107,10 +108,15 @@ public class ApiDocumentation {
         this.documentationHandler = document("{method-name}", preprocessRequest(prettyPrint()),
                 preprocessResponse(/* prettyPrint() */));
         // preprocessResponse prittyPrint breaks CSVs :( (not sure when it started failing things look aceptable anyhow)
-
+        // @formatter:off        
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context)
-                .apply(documentationConfiguration(this.restDocumentation))
+                .apply(
+                        documentationConfiguration(this.restDocumentation)
+                                .uris().withHost(server).withPort(port)
+                )
+//              .alwaysDo(print()) // Include if want to print requests and responses for debugging
                 .alwaysDo(this.documentationHandler).build();
+        // @formatter:on
     }
 
     @After
@@ -368,7 +374,7 @@ public class ApiDocumentation {
                                 fieldWithPath("validFrom").description("Date the version is valid from"),
                                 fieldWithPath("validTo").description("Date the version is valid to"),
                                 fieldWithPath("lastModified").description("Time and date the version was last time modified at"),
-                                fieldWithPath("published").description("List of languages the version is published in"),
+                                fieldWithPath("published").description("List of languages the version is published on"),
                                 fieldWithPath("introduction").description("Version description"),
                                 fieldWithPath("legalBase").description("Legal base"),
                                 fieldWithPath("publications").description("Source references"),
@@ -570,7 +576,7 @@ public class ApiDocumentation {
                                 fieldWithPath("contactPerson").description("Contact information to the SSB section representative"),
                                 fieldWithPath("owningSection").description("SSB section number"),
                                 fieldWithPath("lastModified").description("Time and date the variant was last time modified at"),
-                                fieldWithPath("published").description("List of languages the version is published in"),
+                                fieldWithPath("published").description("List of languages the version is published on"),
                                 fieldWithPath("validFrom").description("Date the variant is valid from"),
                                 fieldWithPath("validTo").description("Date the variant is valid to"),
                                 fieldWithPath("introduction").description("Variant description"),
@@ -714,7 +720,7 @@ public class ApiDocumentation {
                                 fieldWithPath("targetId").description("ID to the target classification version"),
                                 fieldWithPath("changeTable").description("Changes done to the table"),
                                 fieldWithPath("lastModified").description("Timestamp for the last modifications done to the table"),
-                                fieldWithPath("published").description("A list of the languages the correspondence table is published in"),
+                                fieldWithPath("published").description("A list of the languages the correspondence table is published on"),
                                 fieldWithPath("sourceLevel").description("Level name and number for the source classification version"),
                                 fieldWithPath("targetLevel").description("Level name and number for the target classification version"),
                                 fieldWithPath("description").description("Description"),
@@ -957,7 +963,7 @@ public class ApiDocumentation {
 
     private ParameterDescriptor targetClassificationIdParameterDescription() {
         return parameterWithName("targetClassificationId").description(
-                "[Mandatory] specifies id of target classification");
+                "[Mandatory] specifies id of corresponding classification");
     }
 
     private ParameterDescriptor variantNameParameterDescription() {
@@ -1009,12 +1015,12 @@ public class ApiDocumentation {
 
     public MockHttpServletRequestBuilder getWithContext(String urlTemplate,
                                                         Object... urlVariables) {
-        return MockMvcRequestBuilders.get(contextPath + RestConstants.API_VERSION_V1 + urlTemplate, urlVariables)
+        return MockMvcRequestBuilders.get(contextPath + RestConstants.REST_PREFIX  + urlTemplate, urlVariables)
                 .requestAttr(RestDocumentationGenerator.ATTRIBUTE_NAME_URL_TEMPLATE, urlTemplate).contextPath(contextPath);
     }
 
     public  MockHttpServletRequestBuilder getWithContextUri(String url) {
-        return MockMvcRequestBuilders.get(toUri(contextPath + RestConstants.API_VERSION_V1 + url)).contextPath(contextPath);
+        return MockMvcRequestBuilders.get(toUri(contextPath + RestConstants.REST_PREFIX  + url)).contextPath(contextPath);
     }
 
     private Page<SolrSearchResult> createSearchPage(Pageable pageable) {

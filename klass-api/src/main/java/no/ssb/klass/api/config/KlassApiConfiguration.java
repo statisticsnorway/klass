@@ -27,7 +27,7 @@ public class KlassApiConfiguration extends WebSecurityConfigurerAdapter {
 //                .antMatchers("/manage/metrics").permitAll()
                 
                 //allow rest API and health checks
-                .antMatchers(RestConstants.API_VERSION_V1 +"/**").permitAll()
+                .antMatchers(RestConstants.REST_PREFIX+"/**").permitAll()
                 .antMatchers(PingController.PATH).permitAll()
                 .antMatchers(MonitorController.PATH).permitAll()
                 
@@ -35,7 +35,7 @@ public class KlassApiConfiguration extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .headers()
                 .addHeaderWriter((request, response) -> {
-                    if (request.getServletPath().startsWith(RestConstants.API_VERSION_V1)) {
+                    if (request.getServletPath().startsWith(RestConstants.REST_PREFIX)) {
                         // Workaround to Force CORS header all the time for API
                         response.addHeader("Access-Control-Allow-Origin", "*");
                         // Header telling cache server what is varying in our responses

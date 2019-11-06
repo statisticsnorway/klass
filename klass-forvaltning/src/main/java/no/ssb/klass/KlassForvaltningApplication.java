@@ -19,6 +19,10 @@ public class KlassForvaltningApplication extends SpringBootServletInitializer {
         return application.sources(KlassForvaltningApplication.class);
     }
 
+//    @Bean
+//    public TomcatEmbeddedServletContainerFactory tomcatEmbeddedServletContainerFactory() {
+//        return new TomcatEmbeddedServletContainerFactory();
+//    }
 
     public static void main(String[] args) {
         SpringApplication.run(KlassForvaltningApplication.class, args);

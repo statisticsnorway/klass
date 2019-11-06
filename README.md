@@ -44,7 +44,7 @@ You can find the collection of SQL scripts in the Klass-shared module under `src
 If the classification tables are empty Klass will by default attempt to import data from its predecessor. 
 This process can take quite some time as there is a lot of data and its also sent to Solr to populate the search index.
 
-Tips: If you are only setting up Klass for testing/development purposes you can use the `small-import` spring profile to reduce the amount of data being imported.
+Tips: If you are only setting up Klass for testing/development purposes you can use the `small-import` spring profile to reduce the amount of data beeing imported.
 
 ### Development
 its recommended to build with maven before starting development as some classes are generated as part of the build process. 
@@ -65,7 +65,7 @@ below is a quick summary of the profiles available (see _application.properties_
 #
 # Profiles for development
 #   ad-offline          = will only use test/embeded AD (apacheDS) [Forvaltning only]
-#   small-import        = imports a small number of classifications from legacy system, useful during development
+#   small-import        = imports a small number of classifications from Stabas, useful during development
 #   mock-mailserver     = outgoing emails are only logged
 #   h2                  = use h2 database (stored on your filesystem)   
 #   h2-inmemory         = use h2 database but keep everything in memory only.
@@ -73,8 +73,15 @@ below is a quick summary of the profiles available (see _application.properties_
 ```
 
 #### Build profiles
-we have created custom profiles for time consuming tests that can be toggled on and off to help speed up compile time during development. 
-The profile named `documentation` will generate API documentation with AsciiDoc (default: enabled)
+AsciiDoc only provides static HTML files and we have multiple environment we deploy to. 
+We have therefor created profiles for each environment with corresponding Urls so the documentation will contain correct urls in all environment.
+```
+- documentation (generates API documentation, active by default)
+- local (active by default)
+- test
+- qa
+- prod
+```
 We also have a custom profile (`testbench`) for running GUI tests using TestBench (Vaadin licensed product).
 There's also a `checkstyle` and a `findbugs` for use with Jenkins to create code quality reports.
     
@@ -110,3 +117,5 @@ the solution is to set workdir manually in your run configuration (set it to `$M
 
 
 [![IntelliJ](docs/troubleshoot_workdir_small.png)](./docs/troubleshoot_workdir.png)
+
+//TODO MLO: explain how to set up mariadb & solr for complete local environment. 

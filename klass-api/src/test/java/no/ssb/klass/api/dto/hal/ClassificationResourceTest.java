@@ -32,7 +32,7 @@ public class ClassificationResourceTest {
 
         // then
         assertEquals(name, subject.getName());
-        assertEquals("http://localhost" + RestConstants.API_VERSION_V1 + "/classifications/" + id, subject.getLink("self")
+        assertEquals("http://localhost" + RestConstants.REST_PREFIX + "/classifications/" + id, subject.getLink("self")
                 .getHref());
         assertEquals(0, subject.getVersions().size());
     }

@@ -4,7 +4,7 @@
     
     <name>Klass API</name>
     <description>API for uthenting av kodeverk</description>
-    <artifactId>klass-api</artifactId>
+    <artifactId>${buildName}</artifactId>
     <packaging>war</packaging>
 
     <parent>
@@ -16,6 +16,7 @@
     
     <properties>
         <snippetsDirectory>${project.build.directory}/generated-snippets</snippetsDirectory>
+        <buildName>klass-api-local</buildName>
         <maven.deploy.skip>false</maven.deploy.skip>
     </properties>
 
@@ -148,7 +149,7 @@
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-surefire-plugin</artifactId>
                         <configuration>
-                            <argLine>-Dfile.encoding=UTF-8</argLine>
+                            <argLine>-Dfile.encoding=UTF-8 ${klass.doc.env.url} ${klass.doc.env.port}</argLine>
                             <includes>
                                 <include>**/*Tests.java</include>
                                 <include>**/*Test.java</include>

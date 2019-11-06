@@ -33,14 +33,11 @@ public class KlassSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private static final String WILDCARD = "**";
 
+    private static final String REMEMBER_ME_KEY = "d571c22b-a106-421d-b551-deae9b130020";
 
     @NotEmpty
-    @Value("${klass.env.security.ldap.remember.time}")
-    private int rememberTime;
-
-    @NotEmpty
-    @Value("${klass.env.security.remember.key}")
-    private String rememberKey;
+    @Value("${klass.security.ldap.remember}")
+    private int remember;
 
     @Autowired
     private RememberMeServices rememberMeServices;
@@ -54,9 +51,9 @@ public class KlassSecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.exceptionHandling().authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/"+LoginUI.PATH));
         http.rememberMe()
-                .key(rememberKey)
+                .key(REMEMBER_ME_KEY)
                 .rememberMeServices(rememberMeServices)
-                .tokenValiditySeconds(rememberTime);
+                .tokenValiditySeconds(remember);
         // .useSecureCookie(true); TODO enable secure cookie when(or if) we switch to https
 
         http.authorizeRequests()

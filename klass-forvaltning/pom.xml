@@ -4,10 +4,11 @@
     
     <name>Klass Forvaltning</name>
     <description>Forvaltningsgrensesnitt for Klass</description>
-    <artifactId>klass-forvaltning</artifactId>
+    <artifactId>${buildName}</artifactId>
     <packaging>war</packaging>
 
     <properties>
+        <buildName>klass-forvaltning-local</buildName>
         <maven.deploy.skip>false</maven.deploy.skip>
     </properties>
 
