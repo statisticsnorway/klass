@@ -43,7 +43,7 @@ public class KlassUserDetailsMapper extends LdapUserDetailsMapper {
 
     @Override
     public UserDetails mapUserFromContext(DirContextOperations ctx, String username,
-            Collection<? extends GrantedAuthority> authorities) {
+                                          Collection<? extends GrantedAuthority> authorities) {
 
         List<SimpleGrantedAuthority> prefixed = PrefixAuthorities(authorities);
 
@@ -54,16 +54,7 @@ public class KlassUserDetailsMapper extends LdapUserDetailsMapper {
         String mobile = getOptionalValueFromContext(ctx, MOBILE_PHONE_ATTRIBUTE);
         String landline = getOptionalValueFromContext(ctx, LANDLINE_PHONE_ATTRIBUTE);
         // if no mobile phone number is found fall back on landline numbers
-        String phone = mobile;
-        if (phone == null && landline != null) {
-            // according to Anne Gro 6288 is the needed prefix for the 4 digit numbers in AD
-            //!!2109 er Oslo prefix!!
-            if (landline.length() == 4) {
-                phone = "6288" + landline;
-            } else {
-                phone = landline;
-            }
-        }
+        String phone = mobile != null ? mobile : landline;
         KlassUserDetails klassUserDetails = new KlassUserDetails(ldapUserDetails, displayName, ssbSection, email,
                 phone);
 
