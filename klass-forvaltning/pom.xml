@@ -8,7 +8,6 @@
     <packaging>war</packaging>
 
     <properties>
-        <buildName>klass-forvaltning-local</buildName>
         <maven.deploy.skip>false</maven.deploy.skip>
     </properties>
 
