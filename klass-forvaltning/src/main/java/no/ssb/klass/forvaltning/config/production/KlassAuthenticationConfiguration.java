@@ -30,28 +30,37 @@ import no.ssb.klass.core.ldap.KlassUserDetailsMapper;
 @Profile(value = ConfigurationProfiles.PRODUCTION)
 public class KlassAuthenticationConfiguration extends GlobalAuthenticationConfigurerAdapter {
 
-    public static final String SEARCH_BASE = "OU=Brukere,OU=SSB,DC=ssb,DC=no";
-    public static final String SEARCH_FILTER = "(&(objectClass=user)(sAMAccountName={0}))";
-
     /**
      * "secret" hashing salt for remember me service
      */
-    public static final String REMEMBER_ME_KEY = "d571c22b-a106-421d-b551-deae9b130020";
+    @NotEmpty
+    @Value("${klass.env.security.remember.key")
+    protected String rememberMeKey;
 
     @NotEmpty
-    @Value("${klass.security.ldap.domain}")
-    protected String domain;
-    
+    @Value("${klass.env.security.ldap.search.base}")
+    protected String searchBase;
+
+
     @NotEmpty
-    @Value("${klass.security.ldap.url}")
+    @Value("${klass.env.security.ldap.search.filter}")
+    protected String searchFilter;
+
+
+    @NotEmpty
+    @Value("${klass.env.security.ldap.domain}")
+    protected String domain;
+
+    @NotEmpty
+    @Value("${klass.env.security.ldap.url}")
     protected String url;
 
     @NotEmpty
-    @Value("${klass.security.ldap.user}")
+    @Value("${klass.env.security.ldap.user}")
     private String user;
 
     @NotEmpty
-    @Value("${klass.security.ldap.password}")
+    @Value("${klass.env.security.ldap.password}")
     private String password;
 
 //    @Autowired
@@ -61,7 +70,8 @@ public class KlassAuthenticationConfiguration extends GlobalAuthenticationConfig
     public PasswordEncoder passwordEncoder() {
         // just making sure we wont use weak MD5 or SHA encoder for anything (remember me service etc)
         // as far as i know default behavior for remember me service would be
-        // MD5(username + expirationTime + password + REMEMBER_ME_KEY)
+        // MD5(username + expirationTime + password + salt(rememberMeKey))
+        //TokenBasedRememberMeServices#makeTokenSignature
         return new BCryptPasswordEncoder();
     }
 
@@ -76,7 +86,7 @@ public class KlassAuthenticationConfiguration extends GlobalAuthenticationConfig
 
     @Bean
     public FilterBasedLdapUserSearch ldapUserSearch(LdapContextSource ldapContext) {
-        FilterBasedLdapUserSearch search = new FilterBasedLdapUserSearch(SEARCH_BASE, SEARCH_FILTER, ldapContext);
+        FilterBasedLdapUserSearch search = new FilterBasedLdapUserSearch(searchBase, searchFilter, ldapContext);
         String[] attributes = { KlassUserDetailsMapper.SECTION_ATTRIBUTE,
                 KlassUserDetailsMapper.NAME_ATTRIBUTE,
                 KlassUserDetailsMapper.MAIL_ATTRIBUTE,
@@ -100,7 +110,7 @@ public class KlassAuthenticationConfiguration extends GlobalAuthenticationConfig
         // (We might want to change this if we start using multiple servers and load balancing)
         InMemoryTokenRepositoryImpl rememberMeTokenRepository = new InMemoryTokenRepositoryImpl();
         PersistentTokenBasedRememberMeServices services = new PersistentTokenBasedRememberMeServices(
-                REMEMBER_ME_KEY, rememberMeUserDetailsService, rememberMeTokenRepository);
+                rememberMeKey, rememberMeUserDetailsService, rememberMeTokenRepository);
         services.setAlwaysRemember(false);
         return services;
     }
