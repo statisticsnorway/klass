@@ -4,7 +4,7 @@
     
     <name>Klass Forvaltning</name>
     <description>Forvaltningsgrensesnitt for Klass</description>
-    <artifactId>${buildName}</artifactId>
+    <artifactId>klass-forvaltning</artifactId>
     <packaging>war</packaging>
 
     <properties>

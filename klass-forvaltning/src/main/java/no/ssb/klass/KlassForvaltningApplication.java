@@ -9,7 +9,6 @@ import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 
-// CHECKSTYLE:OFF
 @SpringBootApplication
 @Import(EmbeddedServletContainerAutoConfiguration.EmbeddedTomcat.class)
 public class KlassForvaltningApplication extends SpringBootServletInitializer {
@@ -19,13 +18,7 @@ public class KlassForvaltningApplication extends SpringBootServletInitializer {
         return application.sources(KlassForvaltningApplication.class);
     }
 
-//    @Bean
-//    public TomcatEmbeddedServletContainerFactory tomcatEmbeddedServletContainerFactory() {
-//        return new TomcatEmbeddedServletContainerFactory();
-//    }
-
     public static void main(String[] args) {
         SpringApplication.run(KlassForvaltningApplication.class, args);
     }
 }
-// CHECKSTYLE:ON
