@@ -86,7 +86,7 @@ You can start an application using maven with the following command
     mvn spring-boot:run
     
 Or from your IDE using the `KlassApiApplication` / `KlassForvaltningApplication` classes.
-IntelliJ is recomended, it makes it very easy to start spring boot applications and will make sure your run/debug configuration has all the necessary dependencies (will include maven dependencies with provided scope).
+IntelliJ is recommended, it makes it very easy to start spring boot applications and will make sure your run/debug configuration has all the necessary dependencies (will include maven dependencies with provided scope).
     
 Frontend may be accessed at:
 
