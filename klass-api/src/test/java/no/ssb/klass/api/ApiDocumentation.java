@@ -106,7 +106,7 @@ public class ApiDocumentation {
     public void setup() {
         this.documentationHandler = document("{method-name}", preprocessRequest(prettyPrint()),
                 preprocessResponse(/* prettyPrint() */));
-        // preprocessResponse prittyPrint breaks CSVs :( (not sure when it started failing things look aceptable anyhow)
+        // preprocessResponse prettyPrint breaks CSVs :( (not sure when it started failing things look acceptable anyhow)
 
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context)
                 .apply(documentationConfiguration(this.restDocumentation))
