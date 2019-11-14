@@ -71,10 +71,7 @@ public class CorrespondenceMap extends BaseEntity implements Comparable<Correspo
     }
 
     private String getCodeFromItem(ClassificationItem item) {
-        if (item == null) {
-            return null;
-        }
-        return item.getCode();
+        return item == null ? null : item.getCode();
     }
 
     private void assertBothNotNull(ClassificationItem source, ClassificationItem target) {

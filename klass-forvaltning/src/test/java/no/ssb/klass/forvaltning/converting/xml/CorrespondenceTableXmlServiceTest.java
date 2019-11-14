@@ -27,6 +27,32 @@ public class CorrespondenceTableXmlServiceTest {
 
     private CorrespondenceTableXmlService service = new CorrespondenceTableXmlService();
 
+
+
+    @Test
+    public void convertFromXml() throws IOException, ImportException {
+        ClassificationSeries classification = TestDataProvider.createClassificationKommuneinndeling();
+        CorrespondenceTable testData = TestDataProvider.createAndAddChangeCorrespondenceTable(classification);
+
+        try (InputStream inputStream = service.toXmlStream(testData)) {
+
+            ClassificationVersion version = classification.getClassificationVersions().get(1);
+            CorrespondenceTable correspondenceTable = TestUtil.createCorrespondenceTable(version, version);
+
+            assertThat(correspondenceTable.getCorrespondenceMaps().size(), is(0));
+            service.fromXmlStreamAndMerge(inputStream, correspondenceTable);
+            assertThat(correspondenceTable.getCorrespondenceMaps().size(), is(2));
+
+            CorrespondenceMap item1 = correspondenceTable.getCorrespondenceMaps().get(0);
+            assertThat(item1.getSource().get().getCode(), is("1739"));
+            assertThat(item1.getTarget().get().getCode(), is("1739"));
+            CorrespondenceMap item2 = correspondenceTable.getCorrespondenceMaps().get(1);
+            assertThat(item2.getSource().get().getCode(), is("1939"));
+            assertThat(item2.getTarget().get().getCode(), is("1939"));
+
+        }
+    }
+
     @Test
     public void convertToXml() throws IOException {
         ClassificationSeries classification = TestDataProvider.createClassificationKommuneinndeling();
@@ -55,26 +81,37 @@ public class CorrespondenceTableXmlServiceTest {
     }
 
     @Test
-    public void convertFromXml() throws IOException, ImportException {
+    public void convertToXml_with_outdated_codes() throws IOException {
         ClassificationSeries classification = TestDataProvider.createClassificationKommuneinndeling();
-        CorrespondenceTable testData = TestDataProvider.createAndAddChangeCorrespondenceTable(classification);
+        CorrespondenceTable correspondenceTable =
+                TestDataProvider.createAndAddChangeCorrespondenceTable_withOutdatedCodes(classification);
 
-        try (InputStream inputStream = service.toXmlStream(testData)) {
-
-            ClassificationVersion version = classification.getClassificationVersions().get(1);
-            CorrespondenceTable correspondenceTable = TestUtil.createCorrespondenceTable(version, version);
-
-            assertThat(correspondenceTable.getCorrespondenceMaps().size(), is(0));
-            service.fromXmlStreamAndMerge(inputStream, correspondenceTable);
-            assertThat(correspondenceTable.getCorrespondenceMaps().size(), is(2));
-
-            CorrespondenceMap item1 = correspondenceTable.getCorrespondenceMaps().get(0);
-            assertThat(item1.getSource().get().getCode(), is("1739"));
-            assertThat(item1.getTarget().get().getCode(), is("1739"));
-            CorrespondenceMap item2 = correspondenceTable.getCorrespondenceMaps().get(1);
-            assertThat(item2.getSource().get().getCode(), is("1939"));
-            assertThat(item2.getTarget().get().getCode(), is("1939"));
-
+        try (InputStream inputStream = service.toXmlStream(correspondenceTable)) {
+            String xml = IOUtils.toString(inputStream);
+            // xsd check
+            assertThat(xml, containsString("correspondenceTable.xsd"));
+            assertThat(xml, containsString("xmlns=\"http://klass.ssb.no/correspondenceTable\""));
+            // first correspondence
+            assertThat(xml, containsString("<Korrespondanse>"));
+            assertThat(xml, containsString("<kilde_kode/>"));
+            assertThat(xml, containsString("<kilde_tittel/>"));
+            assertThat(xml, containsString("<mål_kode>1739</mål_kode>"));
+            assertThat(xml, containsString("<mål_tittel>Røyrvik</mål_tittel>"));
+            assertThat(xml, containsString("</Korrespondanse>"));
+            // second correspondence
+            assertThat(xml, containsString("<Korrespondanse>"));
+            assertThat(xml, containsString("<kilde_kode/>"));
+            assertThat(xml, containsString("<kilde_tittel/>"));
+            assertThat(xml, containsString("<mål_kode>1939</mål_kode>"));
+            assertThat(xml, containsString("<mål_tittel>Storfjord</mål_tittel>"));
+            assertThat(xml, containsString("</Korrespondanse>"));
+            // last correspondence
+            assertThat(xml, containsString("<Korrespondanse>"));
+            assertThat(xml, containsString("<kilde_kode>1939</kilde_kode>"));
+            assertThat(xml, containsString("<kilde_tittel>Omasvuotna Storfjord Omasvuonon</kilde_tittel>"));
+            assertThat(xml, containsString("<mål_kode/>"));
+            assertThat(xml, containsString("<mål_tittel/>"));
+            assertThat(xml, containsString("</Korrespondanse>"));
         }
     }
 
