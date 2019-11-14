@@ -109,10 +109,30 @@ public final class TestDataProvider {
         ClassificationVersion kommune2012 = kommuneClassification.getClassificationVersions().get(2);
         CorrespondenceTable correspondenceTable = TestUtil.createCorrespondenceTable(kommune2014, kommune2012);
         kommune2014.addCorrespondenceTable(correspondenceTable);
-        correspondenceTable.addCorrespondenceMap(new CorrespondenceMap(kommune2014.findItem("1739"), kommune2012
-                .findItem("1739")));
-        correspondenceTable.addCorrespondenceMap(new CorrespondenceMap(kommune2014.findItem("1939"), kommune2012
-                .findItem("1939")));
+        correspondenceTable.addCorrespondenceMap(new CorrespondenceMap(
+                kommune2014.findItem("1739"),
+                kommune2012.findItem("1739")));
+        correspondenceTable.addCorrespondenceMap(new CorrespondenceMap(
+                kommune2014.findItem("1939"),
+                kommune2012.findItem("1939")));
+        return correspondenceTable;
+    }
+
+    public static CorrespondenceTable createAndAddChangeCorrespondenceTable_withOutdatedCodes(
+            ClassificationSeries kommuneClassification) {
+        ClassificationVersion kommune2014 = kommuneClassification.getClassificationVersions().get(1);
+        ClassificationVersion kommune2012 = kommuneClassification.getClassificationVersions().get(2);
+        CorrespondenceTable correspondenceTable = TestUtil.createCorrespondenceTable(kommune2014, kommune2012);
+        kommune2014.addCorrespondenceTable(correspondenceTable);
+        correspondenceTable.addCorrespondenceMap(new CorrespondenceMap(
+                null,
+                kommune2012.findItem("1739")));
+        correspondenceTable.addCorrespondenceMap(new CorrespondenceMap(
+                null,
+                kommune2012.findItem("1939")));
+        correspondenceTable.addCorrespondenceMap(new CorrespondenceMap(
+                kommune2014.findItem("1939"),
+                null));
         return correspondenceTable;
     }
 
