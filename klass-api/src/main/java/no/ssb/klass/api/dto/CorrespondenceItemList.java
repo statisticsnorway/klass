@@ -54,7 +54,7 @@ public class CorrespondenceItemList {
         if (displayWithValidRange) {
             return correspondenceItems;
         }
-        return correspondenceItems.stream().map(i -> new CorrespondenceItem(i)).collect(toList());
+        return correspondenceItems.stream().map(CorrespondenceItem::new).collect(toList());
     }
 
     @JsonIgnore
@@ -63,9 +63,9 @@ public class CorrespondenceItemList {
     }
 
     public CorrespondenceItemList convert(List<CorrespondenceDto> correspondences) {
-        log.error("KF-316: funnet correspondanser" + correspondences);
+        log.error("KF-316: funnet correspondanser" + correspondences.stream().filter(i -> i.getTargetName().equalsIgnoreCase("aremark")));
         CorrespondenceItemList o = newCorrespondenceItemList(correspondences.stream().map(RangedCorrespondenceItem::new).collect(toList()));
-        log.error("KF-316: ny range list" + o);
+        log.error("KF-316: convert ny range list" + o.getCorrespondenceItems().stream().filter(i -> ((CorrespondenceItem) i).getTargetName().equalsIgnoreCase("aremark")));
         return o;
     }
 
@@ -76,26 +76,26 @@ public class CorrespondenceItemList {
     public CorrespondenceItemList removeOutside(DateRange dateRange) {
         Preconditions.checkNotNull(dateRange);
         CorrespondenceItemList o = newCorrespondenceItemList(correspondenceItems.stream()
-                .filter(correspondenceItem -> correspondenceItem.getDateRange(includeFuture).overlaps(dateRange)).collect(toList()));
-        log.error("KF-316: removeOutside list" + o);
+                .filter(i -> i.getDateRange(includeFuture).overlaps(dateRange, i.getTargetName().equalsIgnoreCase("aremark"))).collect(toList()));
+        log.error("KF-316: removeOutside list" + o.getCorrespondenceItems().stream().filter(i -> ((CorrespondenceItem) i).getTargetName().equalsIgnoreCase("aremark")));
         return o;
     }
 
     public CorrespondenceItemList limit(DateRange dateRange) {
         CorrespondenceItemList o =  newCorrespondenceItemList(correspondenceItems.stream()
-                .map(correspondenceItem -> new RangedCorrespondenceItem(
-                                correspondenceItem,
-                                correspondenceItem.getDateRange(includeFuture).subRange(dateRange))).collect(toList())
+                .map(i -> new RangedCorrespondenceItem(i, i.getDateRange(includeFuture).subRange(dateRange, i.getTargetName().equalsIgnoreCase("aremark")))).collect(toList())
         );
-        log.error("KF-316: limited list" + o);
+        log.error("KF-316: limited list" + o.getCorrespondenceItems().stream().filter(i -> ((CorrespondenceItem) i).getTargetName().equalsIgnoreCase("aremark")));
         return o;
     }
 
     public CorrespondenceItemList compress() {
         Map<RangedCorrespondenceItem, List<RangedCorrespondenceItem>> grouped = correspondenceItems.stream().collect(
                 groupingBy(correspondenceItem -> correspondenceItem));
-        return newCorrespondenceItemList(grouped.entrySet().stream().map(entry -> combineCorrespondenceItems(entry
+        CorrespondenceItemList o = newCorrespondenceItemList(grouped.entrySet().stream().map(entry -> combineCorrespondenceItems(entry
                 .getKey(), entry.getValue())).collect(toList()));
+        log.error("KF-316: compress list" + o.getCorrespondenceItems().stream().filter(i -> ((CorrespondenceItem) i).getTargetName().equalsIgnoreCase("aremark")));
+        return o;
     }
 
     private RangedCorrespondenceItem combineCorrespondenceItems(RangedCorrespondenceItem base,

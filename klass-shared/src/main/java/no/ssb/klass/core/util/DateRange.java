@@ -35,8 +35,8 @@ public final class DateRange {
         return (LocalDate.now().isEqual(from)|| LocalDate.now().isAfter(from)) && (LocalDate.now().isBefore(to));
     }
 
-    public boolean overlaps(DateRange other) {
-        log.error("KF-316: overlaps other [" + other + "] with to ["+to+"] and from ["+from+"] ? " + (other.to.isAfter(from) && other.from.isBefore(to)) );
+    public boolean overlaps(DateRange other, boolean l) {
+        if (l) log.error("KF-316: overlaps other [" + other + "] with to ["+to+"] and from ["+from+"] ? " + (other.to.isAfter(from) && other.from.isBefore(to)) );
         return other.to.isAfter(from) && other.from.isBefore(to);
     }
 
@@ -48,11 +48,11 @@ public final class DateRange {
         return to;
     }
 
-    public DateRange subRange(DateRange other) {
-        if (!overlaps(other)) {
+    public DateRange subRange(DateRange other, boolean l) {
+        if (!overlaps(other, false)) {
             throw new IllegalArgumentException("dateRanges do not overlap. This: " + this + ". Other: " + other);
         }
-        log.error("KF-316: subRange other [" + other + "] with to ["+to+"] and from ["+from+"] ? " + new DateRange(
+        if (l) log.error("KF-316: subRange other [" + other + "] with to ["+to+"] and from ["+from+"] ? " + new DateRange(
                 TimeUtil.max(Lists.newArrayList(from, other.getFrom())),
                 TimeUtil.min(Lists.newArrayList(to, other.getTo()))) );
         LocalDate highestFrom = TimeUtil.max(Lists.newArrayList(from, other.getFrom()));
@@ -60,8 +60,8 @@ public final class DateRange {
         return new DateRange(highestFrom, lowestTo);
     }
 
-    public boolean contains(LocalDate date) {
-        log.error("KF-316: contains other [" + date + "] with to ["+to+"] and from ["+from+"] ? " + ((from.isBefore(date) || from.equals(date)) && to.isAfter(date)) );
+    public boolean contains(LocalDate date, boolean l) {
+        if (l) log.error("KF-316: contains other [" + date + "] with to ["+to+"] and from ["+from+"] ? " + ((from.isBefore(date) || from.equals(date)) && to.isAfter(date)) );
         return (from.isBefore(date) || from.equals(date)) && to.isAfter(date);
     }
 
