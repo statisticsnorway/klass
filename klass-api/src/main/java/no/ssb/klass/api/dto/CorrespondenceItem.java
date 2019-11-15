@@ -13,10 +13,13 @@ import no.ssb.klass.core.service.dto.CorrespondenceDto;
 import no.ssb.klass.core.util.DateRange;
 import no.ssb.klass.core.util.TimeUtil;
 import no.ssb.klass.api.util.CustomLocalDateSerializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @JsonPropertyOrder(value = { "sourceCode", "sourceName", "sourceShortName", "targetCode", "targetName",
         "targetShortName" })
 public class CorrespondenceItem implements Comparable<CorrespondenceItem> {
+
     private final String sourceCode;
     private final String sourceName;
     private final String sourceShortName;
@@ -73,10 +76,7 @@ public class CorrespondenceItem implements Comparable<CorrespondenceItem> {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
+        if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
 
@@ -135,5 +135,17 @@ public class CorrespondenceItem implements Comparable<CorrespondenceItem> {
             return validRange;
         }
 
+        @Override
+        public String toString() {
+            return "RangedCorrespondenceItem{" +
+                    "sourceCode='" + super.sourceCode + '\'' +
+                    ", sourceName='" + super.sourceName + '\'' +
+                    ", sourceShortName='" + super.sourceShortName + '\'' +
+                    ", targetCode='" + super.targetCode + '\'' +
+                    ", targetName='" + super.targetName + '\'' +
+                    ", targetShortName='" + super.targetShortName + '\'' +
+                    ", validRange=" + validRange +
+                    '}';
+        }
     }
 }

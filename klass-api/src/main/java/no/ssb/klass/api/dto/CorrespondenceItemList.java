@@ -18,9 +18,13 @@ import no.ssb.klass.core.service.dto.CorrespondenceDto;
 import no.ssb.klass.core.util.DateRange;
 import no.ssb.klass.core.util.TimeUtil;
 import no.ssb.klass.api.dto.CorrespondenceItem.RangedCorrespondenceItem;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @JacksonXmlRootElement(localName = "correspondenceItemList")
 public class CorrespondenceItemList {
+    private static final Logger log = LoggerFactory.getLogger(CorrespondenceItemList.class);
+
     private final char csvSeparator;
     private final boolean displayWithValidRange;
     private final List<RangedCorrespondenceItem> correspondenceItems;
@@ -59,7 +63,10 @@ public class CorrespondenceItemList {
     }
 
     public CorrespondenceItemList convert(List<CorrespondenceDto> correspondences) {
-        return newCorrespondenceItemList(correspondences.stream().map(RangedCorrespondenceItem::new).collect(toList()));
+        log.error("KF-316: funnet correspondanser" + correspondences);
+        CorrespondenceItemList o = newCorrespondenceItemList(correspondences.stream().map(RangedCorrespondenceItem::new).collect(toList()));
+        log.error("KF-316: ny range list" + o);
+        return o;
     }
 
     private CorrespondenceItemList newCorrespondenceItemList(List<RangedCorrespondenceItem> items) {
@@ -68,14 +75,20 @@ public class CorrespondenceItemList {
 
     public CorrespondenceItemList removeOutside(DateRange dateRange) {
         Preconditions.checkNotNull(dateRange);
-        return newCorrespondenceItemList(correspondenceItems.stream().filter(correspondenceItem -> correspondenceItem
-                .getDateRange(includeFuture).overlaps(dateRange)).collect(toList()));
+        CorrespondenceItemList o = newCorrespondenceItemList(correspondenceItems.stream()
+                .filter(correspondenceItem -> correspondenceItem.getDateRange(includeFuture).overlaps(dateRange)).collect(toList()));
+        log.error("KF-316: removeOutside list" + o);
+        return o;
     }
 
     public CorrespondenceItemList limit(DateRange dateRange) {
-        return newCorrespondenceItemList(correspondenceItems.stream().map(
-                correspondenceItem -> new RangedCorrespondenceItem(correspondenceItem, correspondenceItem.getDateRange(includeFuture)
-                        .subRange(dateRange))).collect(toList()));
+        CorrespondenceItemList o =  newCorrespondenceItemList(correspondenceItems.stream()
+                .map(correspondenceItem -> new RangedCorrespondenceItem(
+                                correspondenceItem,
+                                correspondenceItem.getDateRange(includeFuture).subRange(dateRange))).collect(toList())
+        );
+        log.error("KF-316: limited list" + o);
+        return o;
     }
 
     public CorrespondenceItemList compress() {
@@ -111,4 +124,13 @@ public class CorrespondenceItemList {
         return displayWithValidRange ? RangedCorrespondenceItem.class : CorrespondenceItem.class;
     }
 
+    @Override
+    public String toString() {
+        return "CorrespondenceItemList{" +
+                "csvSeparator=" + csvSeparator +
+                ", displayWithValidRange=" + displayWithValidRange +
+                ", correspondenceItems=" + correspondenceItems +
+                ", includeFuture=" + includeFuture +
+                '}';
+    }
 }

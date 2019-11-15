@@ -7,12 +7,16 @@ import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 import com.google.common.collect.Lists;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * Represents a date range. From is inclusive and to is exclusive |-->.
- *
+ * Represents a date range.
+ * From is inclusive and to is exclusive.
  */
 public final class DateRange {
+    private static final Logger log = LoggerFactory.getLogger(DateRange.class);
+
     private final LocalDate from;
     private final LocalDate to;
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE;
@@ -32,12 +36,8 @@ public final class DateRange {
     }
 
     public boolean overlaps(DateRange other) {
-        if (other.to.isAfter(from)) {
-            if (other.from.isBefore(to)) {
-                return true;
-            }
-        }
-        return false;
+        log.error("KF-316: overlaps other [" + other + "] with to ["+to+"] and from ["+from+"] ? " + (other.to.isAfter(from) && other.from.isBefore(to)) );
+        return other.to.isAfter(from) && other.from.isBefore(to);
     }
 
     public LocalDate getFrom() {
@@ -52,18 +52,17 @@ public final class DateRange {
         if (!overlaps(other)) {
             throw new IllegalArgumentException("dateRanges do not overlap. This: " + this + ". Other: " + other);
         }
+        log.error("KF-316: subRange other [" + other + "] with to ["+to+"] and from ["+from+"] ? " + new DateRange(
+                TimeUtil.max(Lists.newArrayList(from, other.getFrom())),
+                TimeUtil.min(Lists.newArrayList(to, other.getTo()))) );
         LocalDate highestFrom = TimeUtil.max(Lists.newArrayList(from, other.getFrom()));
         LocalDate lowestTo = TimeUtil.min(Lists.newArrayList(to, other.getTo()));
         return new DateRange(highestFrom, lowestTo);
     }
 
     public boolean contains(LocalDate date) {
-        if (from.isBefore(date) || from.equals(date)) {
-            if (to.isAfter(date)) {
-                return true;
-            }
-        }
-        return false;
+        log.error("KF-316: contains other [" + date + "] with to ["+to+"] and from ["+from+"] ? " + ((from.isBefore(date) || from.equals(date)) && to.isAfter(date)) );
+        return (from.isBefore(date) || from.equals(date)) && to.isAfter(date);
     }
 
     @Override
@@ -73,10 +72,7 @@ public final class DateRange {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
+        if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
 

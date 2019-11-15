@@ -391,8 +391,13 @@ public class ClassificationController {
             DateRangeHolder dateRangeHolder, String csvSeparator, Language language, Boolean includeFuture) {
         List<CorrespondenceDto> correspondences = classificationService.findCorrespondences(id, targetClassificationId,
                 dateRangeHolder.dateRange, language, includeFuture);
-        return new CorrespondenceItemList(csvSeparator, dateRangeHolder.withRange, includeFuture).convert(correspondences)
-                .removeOutside(dateRangeHolder.dateRange).limit(dateRangeHolder.dateRange).compress().sort();
+        log.error("KF-316: query range" + dateRangeHolder);
+        return new CorrespondenceItemList(csvSeparator, dateRangeHolder.withRange, includeFuture)
+                .convert(correspondences)
+                .removeOutside(dateRangeHolder.dateRange)
+                .limit(dateRangeHolder.dateRange)
+                .compress()
+                .sort();
     }
 
     @Transactional
@@ -492,6 +497,14 @@ public class ClassificationController {
         DateRangeHolder(LocalDate date) {
             this.dateRange = DateRange.create(date, date.plusDays(1));
             this.withRange = false;
+        }
+
+        @Override
+        public String toString() {
+            return "DateRangeHolder{" +
+                    "dateRange=" + dateRange +
+                    ", withRange=" + withRange +
+                    '}';
         }
     }
 
