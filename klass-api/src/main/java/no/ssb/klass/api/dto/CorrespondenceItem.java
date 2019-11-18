@@ -137,13 +137,11 @@ public class CorrespondenceItem implements Comparable<CorrespondenceItem> {
 
         @Override
         public String toString() {
-            return "RangedCorrespondenceItem{" +
+            return "\nRangedCorrespondenceItem{" +
                     "sourceCode='" + super.sourceCode + '\'' +
-                    ", sourceName='" + super.sourceName + '\'' +
-                    ", sourceShortName='" + super.sourceShortName + '\'' +
+                    ", sourceName='_______" + super.sourceName.toUpperCase() + '\'' +
                     ", targetCode='" + super.targetCode + '\'' +
                     ", targetName='" + super.targetName + '\'' +
-                    ", targetShortName='" + super.targetShortName + '\'' +
                     ", validRange=" + validRange +
                     '}';
         }

@@ -404,7 +404,7 @@ public class ClassificationController {
     @RequestMapping(value = "/classifications/{classificationId}/trackChanges", method = RequestMethod.POST)
     public ResponseEntity<SubscribeResponse> trackChanges(@PathVariable Long classificationId, @RequestParam(
             value = "email") String email) {
-        ClassificationSeries classification = null;
+        ClassificationSeries classification;
         try {
             classification = classificationService.getClassificationSeries(classificationId);
             if (subscriberService.containsTracking(email, classification)) {

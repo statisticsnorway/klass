@@ -56,4 +56,14 @@ public class CorrespondenceDto {
     public DateRange getValidRange() {
         return validRange;
     }
+
+    @Override
+    public String toString() {
+        return "\nCorrespondenceDto{" +
+                "sourceCode='" + sourceCode + '\'' +
+                ", sourceName='" + sourceName + '\'' +
+                ", targetCode='___________" + targetName.toUpperCase() + '\'' +
+                ", validRange=" + validRange +
+                '}';
+    }
 }
