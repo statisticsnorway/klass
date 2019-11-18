@@ -35,6 +35,10 @@ public final class DateRange {
         return (LocalDate.now().isEqual(from)|| LocalDate.now().isAfter(from)) && (LocalDate.now().isBefore(to));
     }
 
+    public boolean overlaps(DateRange other) {
+        return other.to.isAfter(from) && other.from.isBefore(to);
+    }
+
     public boolean overlaps(DateRange other, boolean l) {
         if (l) {
             log.error("KF-316: overlaps other [" + other + "] with from ["+from+"] and to ["+to+"] ? " + (other.to.isAfter(from) && other.from.isBefore(to)) );
@@ -50,6 +54,15 @@ public final class DateRange {
         return to;
     }
 
+    public DateRange subRange(DateRange other) {
+        if (!overlaps(other, false)) {
+            throw new IllegalArgumentException("dateRanges do not overlap. This: " + this + ". Other: " + other);
+        }
+        LocalDate highestFrom = TimeUtil.max(Lists.newArrayList(from, other.getFrom()));
+        LocalDate lowestTo = TimeUtil.min(Lists.newArrayList(to, other.getTo()));
+        return new DateRange(highestFrom, lowestTo);
+    }
+
     public DateRange subRange(DateRange other, boolean l) {
         if (!overlaps(other, false)) {
             throw new IllegalArgumentException("dateRanges do not overlap. This: " + this + ". Other: " + other);
@@ -62,6 +75,10 @@ public final class DateRange {
         LocalDate highestFrom = TimeUtil.max(Lists.newArrayList(from, other.getFrom()));
         LocalDate lowestTo = TimeUtil.min(Lists.newArrayList(to, other.getTo()));
         return new DateRange(highestFrom, lowestTo);
+    }
+
+    public boolean contains(LocalDate date) {
+        return (from.isBefore(date) || from.equals(date)) && to.isAfter(date);
     }
 
     public boolean contains(LocalDate date, boolean l) {
