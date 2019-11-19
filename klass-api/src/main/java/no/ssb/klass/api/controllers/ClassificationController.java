@@ -391,7 +391,7 @@ public class ClassificationController {
             DateRangeHolder dateRangeHolder, String csvSeparator, Language language, Boolean includeFuture) {
         List<CorrespondenceDto> correspondences = classificationService.findCorrespondences(id, targetClassificationId,
                 dateRangeHolder.dateRange, language, includeFuture);
-        log.error("KF-316: query range" + dateRangeHolder);
+        log.error("KF-316: query range " + dateRangeHolder);
         return new CorrespondenceItemList(csvSeparator, dateRangeHolder.withRange, includeFuture)
                 .convert(correspondences)
                 .removeOutside(dateRangeHolder.dateRange)

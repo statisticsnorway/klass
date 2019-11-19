@@ -88,36 +88,50 @@ public class CorrespondenceItemList {
         log.error("KF-316: before compress aremark list" + aremark);
 
         Map<RangedCorrespondenceItem, List<RangedCorrespondenceItem>> grouped = correspondenceItems.stream().collect(groupingBy(i -> i));
+        log.error("KF-316: grouped aremark group");
+
         CorrespondenceItemList o = newList(grouped.values().stream()
                 .map(i -> newList(i).mergeContiguous())
                 .flatMap(Collection::stream)
                 .collect(toList()));
 
         List<CorrespondenceItem> aremark_o = o.getCorrespondenceItems().stream().filter(i -> i.getTargetName().equalsIgnoreCase("aremark")).collect(toList());
-        log.error("KF-316: compress list" + aremark_o);
+        log.error("KF-316: compressed list" + aremark_o);
         return o;
     }
 
     // NB! suits for equal correspondence items (source and target, but not range)
     public List<RangedCorrespondenceItem> mergeContiguous() {
-        if (correspondenceItems == null || correspondenceItems.size() == 0) {
+        if (correspondenceItems == null || correspondenceItems.isEmpty()) {
+            log.error("KF-316: mergeContiguous EMPTY");
             return Collections.emptyList();
         }
         if (correspondenceItems.size() == 1) {
-            return Arrays.asList(correspondenceItems.get(0));
+            log.error("KF-316: mergeContiguous SINGLE");
+            return Collections.singletonList(correspondenceItems.get(0));
         }
 
         // TODO: strait forward logic, try with groupingBy map later
         // The code could be simpler if correspondence item members or data range member are not final
         correspondenceItems.sort(Comparator.comparing(RangedCorrespondenceItem::getValidFrom));
+        if (correspondenceItems.get(0).getTargetName().equalsIgnoreCase("aremark")) {
+            log.error("KF-316: sorted aremark list " + correspondenceItems);
+        }
         List<DateRange> ranges = Arrays.asList(correspondenceItems.get(0).getDateRange(includeFuture));
         correspondenceItems.stream().forEach(i -> {
+
             DateRange lastRange = ranges.get(ranges.size() - 1);
             DateRange nextItemRange = i.getDateRange(includeFuture);
+            if (correspondenceItems.get(0).getTargetName().equalsIgnoreCase("aremark")) {
+                log.error("KF-316: merge aremark " + lastRange + " and "+ nextItemRange);
+            }
             if (lastRange.contiguous(nextItemRange)) {
                 lastRange = new DateRange(lastRange.getFrom(), nextItemRange.getTo());
             } else {
                 ranges.add(nextItemRange);
+            }
+            if (correspondenceItems.get(0).getTargetName().equalsIgnoreCase("aremark")) {
+                log.error("KF-316: last aremark range " + ranges.get(ranges.size() - 1));
             }
         });
         return ranges.stream().map(i -> new RangedCorrespondenceItem(correspondenceItems.get(0), i)).collect(toList());
