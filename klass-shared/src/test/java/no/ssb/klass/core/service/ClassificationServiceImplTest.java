@@ -422,7 +422,6 @@ public class ClassificationServiceImplTest {
         verify(statisticalUnitRepositoryMock, times(1)).findAll();
     }
 
-    @Ignore
     @Test
     public void copyClassificationVersion() throws Exception {
         String introduction = "TEST 2016";

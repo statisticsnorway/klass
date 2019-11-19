@@ -99,7 +99,6 @@ public class CorrespondenceTableTest {
      *    expected        |-------|
      * </pre>
      */
-    @Ignore
     @Test
     public void getDateRangeSourceFirst() {
         // given
@@ -122,7 +121,6 @@ public class CorrespondenceTableTest {
      *    expected        |-------|
      * </pre>
      */
-    @Ignore
     @Test
     public void getDateRangeTargetFirst() {
         // given
@@ -145,7 +143,6 @@ public class CorrespondenceTableTest {
      *    expected        |-------|
      * </pre>
      */
-    @Ignore
     @Test
     public void getDateRangeContained() {
         // given

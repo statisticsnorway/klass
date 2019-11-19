@@ -69,7 +69,7 @@ public final class DateRange {
 
     @Override
     public boolean equals(Object obj) {
-        return obj != null && getClass() != obj.getClass() &&
+        return obj != null && getClass() == obj.getClass() &&
                 Objects.equals(this.from, ((DateRange) obj).from) &&
                 Objects.equals(this.to, ((DateRange) obj).to);
     }

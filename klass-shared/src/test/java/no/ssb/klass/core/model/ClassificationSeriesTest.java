@@ -187,7 +187,6 @@ public class ClassificationSeriesTest {
         assertEquals("nn", subject.getDescriptionInPrimaryLanguage());
     }
 
-    @Ignore
     @Test
     public void getVersionByRange() {
         DateRange dateRangeNoMatch1 = DateRange.create(LocalDate.of(2016, 1, 1), LocalDate.of(2016, 12, 1));

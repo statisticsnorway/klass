@@ -72,7 +72,6 @@ public class DateRangeTest {
      *    other     |------|
      * </pre>
      */
-    @Ignore
     @Test
     public void subRange() {
         // given
