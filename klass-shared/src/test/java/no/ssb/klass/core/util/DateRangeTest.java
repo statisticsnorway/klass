@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.time.LocalDate;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class DateRangeTest {
@@ -71,6 +72,7 @@ public class DateRangeTest {
      *    other     |------|
      * </pre>
      */
+    @Ignore
     @Test
     public void subRange() {
         // given

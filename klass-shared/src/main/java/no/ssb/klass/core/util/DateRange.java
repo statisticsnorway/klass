@@ -1,22 +1,19 @@
 package no.ssb.klass.core.util;
 
 import static com.google.common.base.Preconditions.*;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
-
 import com.google.common.collect.Lists;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Represents a date range.
  * From is inclusive and to is exclusive.
  */
 public final class DateRange {
-    private static final Logger log = LoggerFactory.getLogger(DateRange.class);
-
     private final LocalDate from;
     private final LocalDate to;
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE;
@@ -39,13 +36,6 @@ public final class DateRange {
         return other.to.isAfter(from) && other.from.isBefore(to);
     }
 
-    public boolean overlaps(DateRange other, boolean l) {
-        if (l) {
-            log.error("KF-316: overlaps other [" + other + "] with from ["+from+"] and to ["+to+"] ? " + (other.to.isAfter(from) && other.from.isBefore(to)) );
-        }
-        return other.to.isAfter(from) && other.from.isBefore(to);
-    }
-
     public LocalDate getFrom() {
         return from;
     }
@@ -54,23 +44,14 @@ public final class DateRange {
         return to;
     }
 
-    public DateRange subRange(DateRange other) {
-        if (!overlaps(other, false)) {
-            throw new IllegalArgumentException("dateRanges do not overlap. This: " + this + ". Other: " + other);
-        }
-        LocalDate highestFrom = TimeUtil.max(Lists.newArrayList(from, other.getFrom()));
-        LocalDate lowestTo = TimeUtil.min(Lists.newArrayList(to, other.getTo()));
-        return new DateRange(highestFrom, lowestTo);
+    // NB! suits for chronologically sorted date ranges
+    public boolean contiguous(DateRange other) {
+        return other.to.isAfter(to) && other.from.equals(to);
     }
 
-    public DateRange subRange(DateRange other, boolean l) {
-        if (!overlaps(other, false)) {
+    public DateRange subRange(DateRange other) {
+        if (!overlaps(other)) {
             throw new IllegalArgumentException("dateRanges do not overlap. This: " + this + ". Other: " + other);
-        }
-        if (l) {
-            log.error("KF-316: subRange other [" + other + "] with from [" + from + "] and to [" + to + "] ? " + new DateRange(
-                    TimeUtil.max(Lists.newArrayList(from, other.getFrom())),
-                    TimeUtil.min(Lists.newArrayList(to, other.getTo()))));
         }
         LocalDate highestFrom = TimeUtil.max(Lists.newArrayList(from, other.getFrom()));
         LocalDate lowestTo = TimeUtil.min(Lists.newArrayList(to, other.getTo()));
@@ -81,13 +62,6 @@ public final class DateRange {
         return (from.isBefore(date) || from.equals(date)) && to.isAfter(date);
     }
 
-    public boolean contains(LocalDate date, boolean l) {
-        if (l) {
-            log.error("KF-316: contains other [" + date + "] with from ["+from+"] and to ["+to+"] ? " + ((from.isBefore(date) || from.equals(date)) && to.isAfter(date)) );
-        }
-        return (from.isBefore(date) || from.equals(date)) && to.isAfter(date);
-    }
-
     @Override
     public int hashCode() {
         return Objects.hash(from, to);
@@ -95,12 +69,9 @@ public final class DateRange {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null || getClass() != obj.getClass()) {
-            return false;
-        }
-
-        DateRange other = (DateRange) obj;
-        return Objects.equals(this.from, other.from) && Objects.equals(this.to, other.to);
+        return obj != null && getClass() != obj.getClass() &&
+                Objects.equals(this.from, ((DateRange) obj).from) &&
+                Objects.equals(this.to, ((DateRange) obj).to);
     }
 
     @Override

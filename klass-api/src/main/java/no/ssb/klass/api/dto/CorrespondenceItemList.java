@@ -3,10 +3,7 @@ package no.ssb.klass.api.dto;
 import static java.util.stream.Collectors.*;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
@@ -63,61 +60,73 @@ public class CorrespondenceItemList {
     }
 
     public CorrespondenceItemList convert(List<CorrespondenceDto> correspondences) {
-        List<CorrespondenceDto> aremark = correspondences.stream()
-                .filter(i -> i.getTargetName().equalsIgnoreCase("aremark"))
-                .collect(toList());
-        log.error("KF-316: funnet aremark correspondanser (" + aremark.size() + ") " + aremark);
-        CorrespondenceItemList o = newCorrespondenceItemList(correspondences.stream()
-                .map(RangedCorrespondenceItem::new).collect(toList()));
-        List<CorrespondenceItem> aremark_o = o.getCorrespondenceItems().stream()
-                .filter(i -> i.getTargetName().equalsIgnoreCase("aremark")).collect(toList());
-        log.error("KF-316: convert ny range list aremark (" + aremark_o.size() + " total size " + o.getCorrespondenceItems().size() + ") " + aremark_o);
-        return o;
+        return newList(correspondences.stream()
+                .map(RangedCorrespondenceItem::new)
+                .collect(toList()));
     }
 
-    private CorrespondenceItemList newCorrespondenceItemList(List<RangedCorrespondenceItem> items) {
+    private CorrespondenceItemList newList(List<RangedCorrespondenceItem> items) {
         return new CorrespondenceItemList(csvSeparator, displayWithValidRange, items, includeFuture);
     }
 
     public CorrespondenceItemList removeOutside(DateRange dateRange) {
         Preconditions.checkNotNull(dateRange);
-        CorrespondenceItemList o = newCorrespondenceItemList(correspondenceItems.stream()
-                .filter(i -> i.getDateRange(includeFuture)
-                        .overlaps(dateRange, i.getTargetName().equalsIgnoreCase("aremark")))
+        return newList(correspondenceItems.stream()
+                .filter(i -> i.getDateRange(includeFuture).overlaps(dateRange))
                 .collect(toList()));
-        List<CorrespondenceItem> aremark_o = o.getCorrespondenceItems().stream()
-                .filter(i -> i.getTargetName().equalsIgnoreCase("aremark")).collect(toList());
-        log.error("KF-316: removeOutside list (" + aremark_o.size() + " total size " + o.getCorrespondenceItems().size() + ") " + aremark_o);
-        return o;
     }
 
     public CorrespondenceItemList limit(DateRange dateRange) {
-        CorrespondenceItemList o =  newCorrespondenceItemList(correspondenceItems.stream()
-                .map(i -> new RangedCorrespondenceItem(i,
-                        i.getDateRange(includeFuture).subRange(dateRange, i.getTargetName().equalsIgnoreCase("aremark"))))
-                .collect(toList())
-        );
-        List<CorrespondenceItem> aremark_o = o.getCorrespondenceItems().stream()
-                .filter(i -> i.getTargetName().equalsIgnoreCase("aremark")).collect(toList());
-        log.error("KF-316: limited list (" + aremark_o.size() + " total size " + o.getCorrespondenceItems().size() + ") " + aremark_o);
-        return o;
+        return newList(correspondenceItems.stream()
+                .map(i -> new RangedCorrespondenceItem(i, i.getDateRange(includeFuture).subRange(dateRange)))
+                .collect(toList()));
     }
 
     public CorrespondenceItemList compress() {
-        Map<RangedCorrespondenceItem, List<RangedCorrespondenceItem>> grouped = correspondenceItems.stream().collect(
-                groupingBy(correspondenceItem -> correspondenceItem));
-        CorrespondenceItemList o = newCorrespondenceItemList(grouped.entrySet().stream()
-                .map(entry -> combineCorrespondenceItems(entry.getKey(), entry.getValue()))
+        List<RangedCorrespondenceItem> aremark = correspondenceItems.stream().filter(i -> i.getTargetName().equalsIgnoreCase("aremark")).collect(toList());
+        aremark.sort(Comparator.comparing(RangedCorrespondenceItem::getValidFrom));
+        log.error("KF-316: before compress aremark list" + aremark);
+
+        Map<RangedCorrespondenceItem, List<RangedCorrespondenceItem>> grouped = correspondenceItems.stream().collect(groupingBy(i -> i));
+        CorrespondenceItemList o = newList(grouped.values().stream()
+                .map(i -> newList(i).mergeContiguous())
+                .flatMap(Collection::stream)
                 .collect(toList()));
+
         List<CorrespondenceItem> aremark_o = o.getCorrespondenceItems().stream().filter(i -> i.getTargetName().equalsIgnoreCase("aremark")).collect(toList());
         log.error("KF-316: compress list" + aremark_o);
         return o;
     }
 
-    private RangedCorrespondenceItem combineCorrespondenceItems(RangedCorrespondenceItem base,
-            List<RangedCorrespondenceItem> correspondenceItems) {
-        // TODO kmgv need to check dateRanges of correspondenceItems, and group those that are back to back.
-        DateRange dateRange = DateRange.create(minValidFrom(correspondenceItems), maxValidTo(correspondenceItems));
+    // NB! suits for equal correspondence items (source and target, but not range)
+    public List<RangedCorrespondenceItem> mergeContiguous() {
+        if (correspondenceItems == null || correspondenceItems.size() == 0) {
+            return Collections.emptyList();
+        }
+        if (correspondenceItems.size() == 1) {
+            return Arrays.asList(correspondenceItems.get(0));
+        }
+
+        // TODO: strait forward logic, try with groupingBy map later
+        // The code could be simpler if correspondence item members or data range member are not final
+        correspondenceItems.sort(Comparator.comparing(RangedCorrespondenceItem::getValidFrom));
+        List<DateRange> ranges = Arrays.asList(correspondenceItems.get(0).getDateRange(includeFuture));
+        correspondenceItems.stream().forEach(i -> {
+            DateRange lastRange = ranges.get(ranges.size() - 1);
+            DateRange nextItemRange = i.getDateRange(includeFuture);
+            if (lastRange.contiguous(nextItemRange)) {
+                lastRange = new DateRange(lastRange.getFrom(), nextItemRange.getTo());
+            } else {
+                ranges.add(nextItemRange);
+            }
+        });
+        return ranges.stream().map(i -> new RangedCorrespondenceItem(correspondenceItems.get(0), i)).collect(toList());
+    }
+
+    private RangedCorrespondenceItem combine(
+            RangedCorrespondenceItem base,
+            List<RangedCorrespondenceItem> items) {
+        DateRange dateRange = DateRange.create(minValidFrom(items), maxValidTo(items));
         return new RangedCorrespondenceItem(base, dateRange);
     }
 

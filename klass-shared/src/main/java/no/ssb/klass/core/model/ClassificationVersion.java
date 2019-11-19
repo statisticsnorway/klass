@@ -13,6 +13,7 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.springframework.util.StringUtils;
 
 import no.ssb.klass.core.util.DateRange;

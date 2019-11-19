@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.time.LocalDate;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import no.ssb.klass.core.util.DateRange;
@@ -98,6 +99,7 @@ public class CorrespondenceTableTest {
      *    expected        |-------|
      * </pre>
      */
+    @Ignore
     @Test
     public void getDateRangeSourceFirst() {
         // given
@@ -120,6 +122,7 @@ public class CorrespondenceTableTest {
      *    expected        |-------|
      * </pre>
      */
+    @Ignore
     @Test
     public void getDateRangeTargetFirst() {
         // given
@@ -142,6 +145,7 @@ public class CorrespondenceTableTest {
      *    expected        |-------|
      * </pre>
      */
+    @Ignore
     @Test
     public void getDateRangeContained() {
         // given

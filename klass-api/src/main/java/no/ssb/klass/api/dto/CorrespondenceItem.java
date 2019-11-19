@@ -76,25 +76,24 @@ public class CorrespondenceItem implements Comparable<CorrespondenceItem> {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null || getClass() != obj.getClass()) {
-            return false;
-        }
-
-        CorrespondenceItem other = (CorrespondenceItem) obj;
-        return Objects.equals(this.sourceCode, other.sourceCode) && Objects.equals(this.sourceName, other.sourceName)
-                && Objects.equals(this.targetCode, other.targetCode) && Objects.equals(this.targetName,
-                        other.targetName);
+        return obj != null && getClass() == obj.getClass() &&
+                Objects.equals(this.sourceCode, ((CorrespondenceItem) obj).sourceCode) &&
+                Objects.equals(this.sourceName, ((CorrespondenceItem) obj).sourceName) &&
+                Objects.equals(this.targetCode, ((CorrespondenceItem) obj).targetCode) &&
+                Objects.equals(this.targetName, ((CorrespondenceItem) obj).targetName);
     }
 
     @Override
     public int compareTo(CorrespondenceItem other) {
-        return ComparisonChain.start().compare(this.sourceCode, other.sourceCode).compare(this.sourceName,
-                other.sourceName).compare(this.targetCode, other.targetCode).compare(this.targetName, other.targetName)
-                .result();
+        return ComparisonChain.start()
+                .compare(this.sourceCode, other.sourceCode)
+                .compare(this.sourceName, other.sourceName)
+                .compare(this.targetCode, other.targetCode)
+                .compare(this.targetName, other.targetName).result();
     }
 
     /**
-     * A CorrespondenceItem that has a valid range
+     * A CorrespondenceItem that has a validity range
      */
     @JsonPropertyOrder(value = { "sourceCode", "sourceName", "sourceShortName", "targetCode", "targetName",
             "targetShortName", "validFrom", "validTo" })
@@ -113,26 +112,19 @@ public class CorrespondenceItem implements Comparable<CorrespondenceItem> {
 
         @JsonSerialize(using = CustomLocalDateSerializer.class)
         public LocalDate getValidFrom() {
-            if (TimeUtil.isMinDate(validRange.getFrom())) {
-                return null;
-            }
-            return validRange.getFrom();
+            return TimeUtil.isMinDate(validRange.getFrom()) ? null : validRange.getFrom();
         }
 
         @JsonSerialize(using = CustomLocalDateSerializer.class)
         public LocalDate getValidTo() {
-            if (TimeUtil.isMaxDate(validRange.getTo())) {
-                return null;
-            }
-            return validRange.getTo();
+            return TimeUtil.isMaxDate(validRange.getTo()) ? null : validRange.getTo();
         }
 
         @JsonIgnore
         public DateRange getDateRange(boolean includeFuture) {
-            if (!includeFuture && validRange.isCurrentVersion() ) {
-                return new DateRange(validRange.getFrom(), LocalDate.MAX);
-            }
-            return validRange;
+            return includeFuture && validRange.isCurrentVersion()
+                    ? validRange
+                    : new DateRange(validRange.getFrom(), LocalDate.MAX);
         }
 
         @Override
