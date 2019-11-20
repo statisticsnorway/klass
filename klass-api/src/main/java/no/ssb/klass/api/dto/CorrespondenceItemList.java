@@ -122,7 +122,6 @@ public class CorrespondenceItemList {
         correspondenceItems.sort(Comparator.comparing(RangedCorrespondenceItem::getValidFrom));
 
         List<DateRange> ranges = new ArrayList<>();
-        ranges.add(correspondenceItems.get(0).getDateRange(includeFuture));
 
         correspondenceItems.forEach(i -> {
             DateRange next = i.getDateRange(includeFuture);
