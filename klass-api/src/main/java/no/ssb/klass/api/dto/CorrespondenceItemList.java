@@ -84,7 +84,7 @@ public class CorrespondenceItemList {
         log.error("\nKF-316: before limit aremark " + aremark);
 
         return newList(correspondenceItems.stream()
-                .map(i -> new RangedCorrespondenceItem(i, i.getDateRange(false).subRange(dateRange)))
+                .map(i -> new RangedCorrespondenceItem(i, i.getDateRange().subRange(dateRange)))
                 .collect(toList()));
     }
 
@@ -137,7 +137,7 @@ public class CorrespondenceItemList {
                 }
             } else {
                 DateRange lastRange = ranges.get(ranges.size()-1);
-                DateRange nextItemRange = i.getDateRange(false);
+                DateRange nextItemRange = i.getDateRange();
                 if (correspondenceItems.get(0).getTargetName().equalsIgnoreCase("aremark")) {
                     log.error("KF-316: merge aremark " + lastRange + " and " + nextItemRange);
                     log.error("KF-316: contiguous ? " + lastRange.contiguous(nextItemRange));
