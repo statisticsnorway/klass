@@ -135,11 +135,10 @@ public class CorrespondenceItemList {
             ranges.add(prev.contiguous(next)
                     ? new DateRange(prev.getFrom(), next.getTo())
                     : next);
+            if (correspondenceItems.get(0).getTargetName().equalsIgnoreCase("aremark")) {
+                log.error("\nKF-316: ranges " + ranges);
+            }
         });
-
-        if (correspondenceItems.get(0).getTargetName().equalsIgnoreCase("aremark")) {
-            log.error("\nKF-316: ranges " + ranges);
-        }
 
         return ranges.stream().map(i -> new RangedCorrespondenceItem(correspondenceItems.get(0), i)).collect(toList());
     }
