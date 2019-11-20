@@ -394,7 +394,7 @@ public class ClassificationController {
         return new CorrespondenceItemList(csvSeparator, dateRangeHolder.withRange, includeFuture)
                 .convert(correspondences)
                 .removeOutside(dateRangeHolder.dateRange)
-                .limit(dateRangeHolder.dateRange)
+              //  .limit(dateRangeHolder.dateRange)
                 .merge()
                 .sort();
     }
