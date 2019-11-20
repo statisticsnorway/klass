@@ -42,8 +42,8 @@ public final class DateRange {
     }
 
     // NB! suits for chronologically sorted date ranges
-    public boolean contiguous(DateRange other) {
-        return other.to.isAfter(to) && other.from.equals(to);
+    public boolean contiguous(DateRange earlier) {
+        return earlier != null && (this.to.isAfter(earlier.to) && this.from.equals(earlier.to));
     }
 
     public DateRange subRange(DateRange other) {
