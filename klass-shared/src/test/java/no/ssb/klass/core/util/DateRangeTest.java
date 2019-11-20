@@ -25,7 +25,7 @@ public class DateRangeTest {
         boolean result = subject.overlaps(other);
 
         // then
-        assertEquals(true, result);
+        assertTrue(result);
     }
 
     /**
@@ -44,13 +44,14 @@ public class DateRangeTest {
         boolean result = subject.overlaps(other);
 
         // then
-        assertEquals(false, result);
+        assertFalse(result);
     }
 
     /**
      * <pre>
      *    subject          |------|
      *    other     |------|
+     *    result         false
      * </pre>
      */
     @Test
@@ -63,13 +64,14 @@ public class DateRangeTest {
         boolean result = subject.overlaps(other);
 
         // then
-        assertEquals(false, result);
+        assertFalse(result);
     }
 
     /**
      * <pre>
      *    subject       |------|
      *    other     |------|
+     *    result        |--|
      * </pre>
      */
     @Test
@@ -88,8 +90,51 @@ public class DateRangeTest {
 
     /**
      * <pre>
+     *    subject   |---------|
+     *    other      |-----|
+     *    result     |-----|
+     * </pre>
+     */
+    @Test
+    public void subRangeInclusive() {
+        // given
+        DateRange subject = DateRange.create("2011-01-01", "2015-01-01");
+        DateRange other = DateRange.create("2013-01-01", "2014-01-01");
+
+        // when
+        DateRange result = subject.subRange(other);
+
+        // then
+        DateRange expected = DateRange.create("2013-01-01", "2014-01-01");
+        assertEquals(expected, result);
+    }
+
+    /**
+     * <pre>
+     *    subject    |-----|
+     *    other    |--------|
+     *    result     |-----|
+     * </pre>
+     */
+    @Test
+    public void subRangeInclusive2() {
+        // given
+        DateRange other = DateRange.create("2011-01-01", "2015-01-01");
+        DateRange subject = DateRange.create("2013-01-01", "2014-01-01");
+
+        // when
+        DateRange result = subject.subRange(other);
+
+        // then
+        DateRange expected = DateRange.create("2013-01-01", "2014-01-01");
+        assertEquals(expected, result);
+    }
+
+    /**
+     * <pre>
      *    subject   |------|
      *    other            |------|
+     *    result        none
      * </pre>
      */
     @Test(expected = IllegalArgumentException.class)
@@ -112,10 +157,11 @@ public class DateRangeTest {
         DateRange subject = DateRange.create(start, end);
 
         // then
-        assertEquals(false, subject.contains(start.minusYears(1)));
-        assertEquals(true, subject.contains(start));
-        assertEquals(true, subject.contains(start.plusYears(1)));
-        assertEquals(false, subject.contains(end));
+        assertTrue(subject.contains(start));
+        assertTrue(subject.contains(start.plusYears(1)));
+
+        assertFalse(subject.contains(start.minusYears(1)));
+        assertFalse(subject.contains(end));
     }
 
     @Test(expected = IllegalArgumentException.class)

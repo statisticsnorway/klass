@@ -127,11 +127,6 @@ public class CorrespondenceItem implements Comparable<CorrespondenceItem> {
                     : new DateRange(validRange.getFrom(), LocalDate.MAX);
         }
 
-        @JsonIgnore
-        public DateRange getDateRange() {
-            return validRange;
-        }
-
         @Override
         public String toString() {
             return "\nRangedCorrespondenceItem{" +
