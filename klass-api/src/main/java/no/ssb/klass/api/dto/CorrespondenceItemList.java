@@ -110,7 +110,7 @@ public class CorrespondenceItemList {
         log.error("\nKF-316: before compress aremark list" + aremark);
 
         Map<RangedCorrespondenceItem, List<RangedCorrespondenceItem>> grouped = correspondenceItems.stream().collect(groupingBy(i -> i));
-        log.error("\nKF-316: grouped aremark group");
+        log.error("\nKF-316: grouped " + grouped.keySet());
 
         CorrespondenceItemList o = newList(grouped.entrySet().stream()
                 .map(i -> newList(i.getValue()).mergeContiguous())
@@ -154,6 +154,7 @@ public class CorrespondenceItemList {
             DateRange nextItemRange = i.getDateRange();
             if (correspondenceItems.get(0).getTargetName().equalsIgnoreCase("aremark")) {
                 log.error("KF-316: merge aremark " + lastRange + " and "+ nextItemRange);
+                log.error("KF-316: contiguous ? " + lastRange.contiguous(nextItemRange));
             }
             if (lastRange.contiguous(nextItemRange)) {
                 lastRange = new DateRange(lastRange.getFrom(), nextItemRange.getTo());
