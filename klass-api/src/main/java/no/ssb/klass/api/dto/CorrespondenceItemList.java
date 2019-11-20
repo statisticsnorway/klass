@@ -77,12 +77,18 @@ public class CorrespondenceItemList {
     }
 
     public CorrespondenceItemList limit(DateRange dateRange) {
+        List<RangedCorrespondenceItem> aremark = correspondenceItems.stream()
+                .filter(i -> i.getTargetName().equalsIgnoreCase("aremark"))
+                .sorted(Comparator.comparing(RangedCorrespondenceItem::getValidFrom))
+                .collect(toList());
+        log.error("\nKF-316: before limit aremark " + aremark);
+
         return newList(correspondenceItems.stream()
-                .map(i -> new RangedCorrespondenceItem(i, i.getDateRange(includeFuture).subRange(dateRange)))
+                .map(i -> new RangedCorrespondenceItem(i, i.getDateRange().subRange(dateRange)))
                 .collect(toList()));
     }
 
-    public CorrespondenceItemList compress1() {
+/*    public CorrespondenceItemList compress1() {
         Map<RangedCorrespondenceItem, List<RangedCorrespondenceItem>> grouped = correspondenceItems.stream()
                 .collect(groupingBy(i -> i));
         return newList(grouped.entrySet().stream()
@@ -94,23 +100,27 @@ public class CorrespondenceItemList {
         // TODO kmgv need to check dateRanges of correspondenceItems, and group those that are back to back.
         DateRange dateRange = DateRange.create(minValidFrom(correspondenceItems), maxValidTo(correspondenceItems));
         return new RangedCorrespondenceItem(base, dateRange);
-    }
+    }*/
 
     public CorrespondenceItemList compress() {
-        List<RangedCorrespondenceItem> aremark = correspondenceItems.stream().filter(i -> i.getTargetName().equalsIgnoreCase("aremark")).collect(toList());
-        aremark.sort(Comparator.comparing(RangedCorrespondenceItem::getValidFrom));
-        log.error("KF-316: before compress aremark list" + aremark);
+        List<RangedCorrespondenceItem> aremark = correspondenceItems.stream()
+                .filter(i -> i.getTargetName().equalsIgnoreCase("aremark"))
+                .sorted(Comparator.comparing(RangedCorrespondenceItem::getValidFrom))
+                .collect(toList());
+        log.error("\nKF-316: before compress aremark list" + aremark);
 
         Map<RangedCorrespondenceItem, List<RangedCorrespondenceItem>> grouped = correspondenceItems.stream().collect(groupingBy(i -> i));
-        log.error("KF-316: grouped aremark group");
+        log.error("\nKF-316: grouped aremark group");
 
         CorrespondenceItemList o = newList(grouped.entrySet().stream()
                 .map(i -> newList(i.getValue()).mergeContiguous())
                 .flatMap(Collection::stream)
                 .collect(toList()));
 
-        List<CorrespondenceItem> aremark_o = o.getCorrespondenceItems().stream().filter(i -> i.getTargetName().equalsIgnoreCase("aremark")).collect(toList());
-        log.error("KF-316: compressed list" + aremark_o);
+        List<CorrespondenceItem> aremark_o = o.getCorrespondenceItems().stream()
+                .filter(i -> i.getTargetName().equalsIgnoreCase("aremark"))
+                .collect(toList());
+        log.error("\nKF-316: compressed list" + aremark_o);
         return o;
     }
 
@@ -141,7 +151,7 @@ public class CorrespondenceItemList {
         correspondenceItems.forEach(i -> {
 
             DateRange lastRange = ranges.get(ranges.size() - 1);
-            DateRange nextItemRange = i.getDateRange(!includeFuture);
+            DateRange nextItemRange = i.getDateRange();
             if (correspondenceItems.get(0).getTargetName().equalsIgnoreCase("aremark")) {
                 log.error("KF-316: merge aremark " + lastRange + " and "+ nextItemRange);
             }
