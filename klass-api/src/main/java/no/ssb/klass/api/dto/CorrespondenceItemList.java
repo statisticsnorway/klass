@@ -111,12 +111,6 @@ public class CorrespondenceItemList {
     }
 
     public CorrespondenceItemList group() {
-        List<RangedCorrespondenceItem> aremark = correspondenceItems.stream()
-                .filter(i -> i.getTargetName().equalsIgnoreCase("aremark"))
-                .sorted(Comparator.comparing(RangedCorrespondenceItem::getValidFrom))
-                .collect(toList());
-        log.error("\nKF-316: before merge aremark list" + aremark);
-
         Map<RangedCorrespondenceItem, List<RangedCorrespondenceItem>> grouped = correspondenceItems.stream().collect(groupingBy(i -> i));
 
         return newList(grouped.values().stream()
@@ -142,6 +136,11 @@ public class CorrespondenceItemList {
                     ? new DateRange(prev.getFrom(), next.getTo())
                     : next);
         });
+
+        if (correspondenceItems.get(0).getTargetName().equalsIgnoreCase("aremark")) {
+            log.error("\nKF-316: ranges " + ranges);
+        }
+
         return ranges.stream().map(i -> new RangedCorrespondenceItem(correspondenceItems.get(0), i)).collect(toList());
     }
 
