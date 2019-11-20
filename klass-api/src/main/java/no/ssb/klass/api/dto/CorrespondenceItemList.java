@@ -138,7 +138,7 @@ public class CorrespondenceItemList {
             DateRange next = i.getDateRange(includeFuture);
             DateRange prev = ranges.isEmpty() ? next : ranges.remove(ranges.size() - 1);
 
-            ranges.add(next.contiguous(prev)
+            ranges.add(prev.contiguous(next)
                     ? new DateRange(prev.getFrom(), next.getTo())
                     : next);
         });
