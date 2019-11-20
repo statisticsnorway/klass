@@ -84,7 +84,7 @@ public class CorrespondenceItemList {
         log.error("\nKF-316: before limit aremark " + aremark);
 
         return newList(correspondenceItems.stream()
-                .map(i -> new RangedCorrespondenceItem(i, i.getDateRange().subRange(dateRange)))
+                .map(i -> new RangedCorrespondenceItem(i, i.getDateRange(includeFuture).subRange(dateRange)))
                 .collect(toList()));
     }
 
