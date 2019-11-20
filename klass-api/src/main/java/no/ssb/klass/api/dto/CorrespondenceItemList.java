@@ -133,8 +133,9 @@ public class CorrespondenceItemList {
         if (correspondenceItems.get(0).getTargetName().equalsIgnoreCase("aremark")) {
             log.error("KF-316: sorted aremark list " + correspondenceItems);
         }
-        List<DateRange> ranges = Arrays.asList(correspondenceItems.get(0).getDateRange(includeFuture));
-        correspondenceItems.stream().forEach(i -> {
+        List<DateRange> ranges = new ArrayList<>();
+        ranges.add(correspondenceItems.get(0).getDateRange(includeFuture));
+        correspondenceItems.forEach(i -> {
 
             DateRange lastRange = ranges.get(ranges.size() - 1);
             DateRange nextItemRange = i.getDateRange(includeFuture);
