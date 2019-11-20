@@ -155,6 +155,7 @@ public class CorrespondenceItemList {
             if (correspondenceItems.get(0).getTargetName().equalsIgnoreCase("aremark")) {
                 log.error("KF-316: merge aremark " + lastRange + " and "+ nextItemRange);
                 log.error("KF-316: contiguous ? " + lastRange.contiguous(nextItemRange));
+                log.error("KF-316: to equals from ? " + lastRange.getTo().equals(nextItemRange.getFrom()));
             }
             if (lastRange.contiguous(nextItemRange)) {
                 lastRange = new DateRange(lastRange.getFrom(), nextItemRange.getTo());
