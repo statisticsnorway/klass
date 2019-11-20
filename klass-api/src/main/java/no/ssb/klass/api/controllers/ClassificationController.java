@@ -395,7 +395,7 @@ public class ClassificationController {
                 .convert(correspondences)
                 .removeOutside(dateRangeHolder.dateRange)
                 .limit(dateRangeHolder.dateRange)
-                .merge()
+                .group()
                 .sort();
     }
 

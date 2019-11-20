@@ -88,7 +88,7 @@ public class CorrespondenceItemList {
                 .collect(toList()));
     }
 
-    public CorrespondenceItemList merge() {
+    public CorrespondenceItemList group() {
         List<RangedCorrespondenceItem> aremark = correspondenceItems.stream()
                 .filter(i -> i.getTargetName().equalsIgnoreCase("aremark"))
                 .sorted(Comparator.comparing(RangedCorrespondenceItem::getValidFrom))
@@ -98,8 +98,8 @@ public class CorrespondenceItemList {
         Map<RangedCorrespondenceItem, List<RangedCorrespondenceItem>> grouped = correspondenceItems.stream().collect(groupingBy(i -> i));
         log.error("\nKF-316: grouped " + grouped.keySet());
 
-        CorrespondenceItemList o = newList(grouped.entrySet().stream()
-                .map(i -> newList(i.getValue()).ranges())
+        CorrespondenceItemList o = newList(grouped.values().stream()
+                .map(i -> newList(i).merge())
                 .flatMap(Collection::stream)
                 .collect(toList()));
 
@@ -111,7 +111,7 @@ public class CorrespondenceItemList {
     }
 
     // NB! suits for equal correspondence items (source and target, but not range)
-    public List<RangedCorrespondenceItem> ranges() {
+    public List<RangedCorrespondenceItem> merge() {
         log.error("KF-316: mergeContiguous");
 
         if (correspondenceItems == null || correspondenceItems.isEmpty()) {
