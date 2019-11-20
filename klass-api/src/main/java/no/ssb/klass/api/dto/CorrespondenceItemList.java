@@ -122,6 +122,9 @@ public class CorrespondenceItemList {
             log.error("KF-316: mergeContiguous EMPTY");
             return Collections.emptyList();
         }
+        if (correspondenceItems.get(0).getTargetName().equalsIgnoreCase("aremark")) {
+            log.error("KF-316: mergeContiguous aremark ", correspondenceItems);
+        }
         if (correspondenceItems.size() == 1) {
             log.error("KF-316: mergeContiguous SINGLE");
             return Collections.singletonList(correspondenceItems.get(0));
@@ -138,7 +141,7 @@ public class CorrespondenceItemList {
         correspondenceItems.forEach(i -> {
 
             DateRange lastRange = ranges.get(ranges.size() - 1);
-            DateRange nextItemRange = i.getDateRange(includeFuture);
+            DateRange nextItemRange = i.getDateRange(!includeFuture);
             if (correspondenceItems.get(0).getTargetName().equalsIgnoreCase("aremark")) {
                 log.error("KF-316: merge aremark " + lastRange + " and "+ nextItemRange);
             }
