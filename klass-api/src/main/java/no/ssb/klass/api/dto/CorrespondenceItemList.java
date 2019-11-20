@@ -150,24 +150,27 @@ public class CorrespondenceItemList {
         correspondenceItems.forEach(i -> {
             if (ranges.size() == 0) {
                 ranges.add(i.getDateRange());
+                if (correspondenceItems.get(0).getTargetName().equalsIgnoreCase("aremark")) {
+                    log.error("KF-316: first aremark range " + ranges.get(ranges.size() - 1));
+                }
             } else {
-            DateRange lastRange = ranges.get(ranges.size()-1);
-            DateRange nextItemRange = i.getDateRange();
-            if (correspondenceItems.get(0).getTargetName().equalsIgnoreCase("aremark")) {
-                log.error("KF-316: merge aremark " + lastRange + " and "+ nextItemRange);
-                log.error("KF-316: contiguous ? " + lastRange.contiguous(nextItemRange));
-                log.error("KF-316: to equals from ? " + lastRange.getTo().equals(nextItemRange.getFrom()));
+                DateRange lastRange = ranges.get(ranges.size() - 1);
+                DateRange nextItemRange = i.getDateRange();
+                if (correspondenceItems.get(0).getTargetName().equalsIgnoreCase("aremark")) {
+                    log.error("KF-316: merge aremark " + lastRange + " and " + nextItemRange);
+                    log.error("KF-316: contiguous ? " + lastRange.contiguous(nextItemRange));
+                    log.error("KF-316: to equals from ? " + lastRange.getTo().equals(nextItemRange.getFrom()));
+                }
+                if (lastRange.contiguous(nextItemRange)) {
+                    ranges.set(ranges.size() - 1, new DateRange(lastRange.getFrom(), nextItemRange.getTo());
+                } else {
+                    ranges.add(nextItemRange);
+                }
+                if (correspondenceItems.get(0).getTargetName().equalsIgnoreCase("aremark")) {
+                    log.error("KF-316: last aremark range " + ranges.get(ranges.size() - 1));
+                }
             }
-            if (lastRange.contiguous(nextItemRange)) {
-                ranges.set(ranges.size()-1, new DateRange(lastRange.getFrom(), nextItemRange.getTo());
-            } else {
-                ranges.add(nextItemRange);
-            }
-            if (correspondenceItems.get(0).getTargetName().equalsIgnoreCase("aremark")) {
-                log.error("KF-316: last aremark range " + ranges.get(ranges.size() - 1));
-            }
-            }
-        });
+            });
         return ranges.stream().map(i -> new RangedCorrespondenceItem(correspondenceItems.get(0), i)).collect(toList());
     }
 
