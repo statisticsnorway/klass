@@ -84,7 +84,7 @@ public class CorrespondenceItemList {
         log.error("\nKF-316: before limit aremark " + aremark);
 
         return newList(correspondenceItems.stream()
-                .map(i -> new RangedCorrespondenceItem(i, i.getDateRange().subRange(dateRange)))
+                .map(i -> new RangedCorrespondenceItem(i, i.getDateRange(includeFuture).subRange(dateRange)))
                 .collect(toList()));
     }
 
@@ -133,11 +133,11 @@ public class CorrespondenceItemList {
             if (ranges.isEmpty()) {
                 ranges.add(i.getDateRange(false));
                 if (correspondenceItems.get(0).getTargetName().equalsIgnoreCase("aremark")) {
-                    log.error("KF-316: first aremark range " + ranges.get(ranges.size() - 1));
+                    log.error("KF-316: first aremark range " + ranges.get(ranges.size()-1));
                 }
             } else {
                 DateRange lastRange = ranges.get(ranges.size()-1);
-                DateRange nextItemRange = i.getDateRange();
+                DateRange nextItemRange = i.getDateRange(includeFuture);
                 if (correspondenceItems.get(0).getTargetName().equalsIgnoreCase("aremark")) {
                     log.error("KF-316: merge aremark " + lastRange + " and " + nextItemRange);
                     log.error("KF-316: contiguous ? " + lastRange.contiguous(nextItemRange));
@@ -149,7 +149,7 @@ public class CorrespondenceItemList {
                     ranges.add(nextItemRange);
                 }
                 if (correspondenceItems.get(0).getTargetName().equalsIgnoreCase("aremark")) {
-                    log.error("KF-316: last aremark range " + ranges.get(ranges.size() - 1));
+                    log.error("KF-316: last aremark range " + ranges.get(ranges.size()-1));
                 }
             }
             });

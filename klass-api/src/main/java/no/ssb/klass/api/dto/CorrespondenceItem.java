@@ -122,23 +122,18 @@ public class CorrespondenceItem implements Comparable<CorrespondenceItem> {
 
         @JsonIgnore
         public DateRange getDateRange(boolean includeFuture) {
-            return includeFuture && validRange.isCurrentVersion()
-                    ? validRange
-                    : new DateRange(validRange.getFrom(), LocalDate.MAX);
-        }
-
-        @JsonIgnore
-        public DateRange getDateRange() {
-            return validRange;
+            return !includeFuture && validRange.isCurrentVersion()
+                    ? new DateRange(validRange.getFrom(), LocalDate.MAX)
+                    : validRange;
         }
 
         @Override
         public String toString() {
             return "\nRangedCorrespondenceItem{" +
                     "sourceCode='" + super.sourceCode + '\'' +
-                    ", sourceName='_______" + super.sourceName.toUpperCase() + '\'' +
+                    ", sourceName='" + super.sourceName + '\'' +
                     ", targetCode='" + super.targetCode + '\'' +
-                    ", targetName='" + super.targetName + '\'' +
+                    ", targetName='_______" + super.targetName.toUpperCase() + '\'' +
                     ", validRange=" + validRange +
                     '}';
         }
