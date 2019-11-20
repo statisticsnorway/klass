@@ -77,12 +77,6 @@ public class CorrespondenceItemList {
     }
 
     public CorrespondenceItemList limit(DateRange dateRange) {
-        List<RangedCorrespondenceItem> aremark = correspondenceItems.stream()
-                .filter(i -> i.getTargetName().equalsIgnoreCase("aremark"))
-                .sorted(Comparator.comparing(RangedCorrespondenceItem::getValidFrom))
-                .collect(toList());
-        log.error("\nKF-316: before limit aremark " + aremark);
-
         return newList(correspondenceItems.stream()
                 .map(i -> new RangedCorrespondenceItem(i, i.getDateRange(includeFuture).subRange(dateRange)))
                 .collect(toList()));
@@ -129,16 +123,15 @@ public class CorrespondenceItemList {
 
         List<DateRange> ranges = new ArrayList<>();
         ranges.add(correspondenceItems.get(0).getDateRange(includeFuture));
-        
+
         correspondenceItems.forEach(i -> {
             DateRange next = i.getDateRange(includeFuture);
-            DateRange prev = ranges.remove(ranges.size() - 1);
+            DateRange prev = ranges.isEmpty() ? next : ranges.get(ranges.size() - 1);
 
-            ranges.add(prev.contiguous(next)
-                    ? new DateRange(prev.getFrom(), next.getTo())
-                    : next);
-            if (correspondenceItems.get(0).getTargetName().equalsIgnoreCase("aremark")) {
-                log.error("\nKF-316: ranges " + ranges);
+            if (prev.contiguous(next)) {
+                ranges.set(ranges.size() - 1, new DateRange(prev.getFrom(), next.getTo()));
+            } else {
+                ranges.add(next);
             }
         });
 
