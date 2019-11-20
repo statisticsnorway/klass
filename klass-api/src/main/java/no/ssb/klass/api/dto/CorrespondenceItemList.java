@@ -162,7 +162,7 @@ public class CorrespondenceItemList {
                     log.error("KF-316: to equals from ? " + lastRange.getTo().equals(nextItemRange.getFrom()));
                 }
                 if (lastRange.contiguous(nextItemRange)) {
-                    ranges.set(ranges.size() - 1, new DateRange(lastRange.getFrom(), nextItemRange.getTo());
+                    ranges.set(ranges.size() - 1, new DateRange(lastRange.getFrom(), nextItemRange.getTo()));
                 } else {
                     ranges.add(nextItemRange);
                 }
