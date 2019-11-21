@@ -16,7 +16,7 @@ public class DateRangeTest {
      * </pre>
      */
     @Test
-    public void overlaps() {
+    public void overlapsTest() {
         // given
         DateRange subject = DateRange.create("2012-01-01", "2014-01-01");
         DateRange other = DateRange.create("2013-01-01", "2015-01-01");
@@ -35,7 +35,7 @@ public class DateRangeTest {
      * </pre>
      */
     @Test
-    public void overlapsSubjectFirst() {
+    public void overlapsSubjectFirstTest() {
         // given
         DateRange subject = DateRange.create("2012-01-01", "2014-01-01");
         DateRange other = DateRange.create("2014-01-01", "2016-01-01");
@@ -55,7 +55,7 @@ public class DateRangeTest {
      * </pre>
      */
     @Test
-    public void overlapsSubjectLast() {
+    public void overlapsSubjectLastTest() {
         // given
         DateRange subject = DateRange.create("2014-01-01", "2016-01-01");
         DateRange other = DateRange.create("2012-01-01", "2014-01-01");
@@ -75,7 +75,7 @@ public class DateRangeTest {
      * </pre>
      */
     @Test
-    public void subRange() {
+    public void subRangeTest() {
         // given
         DateRange subject = DateRange.create("2012-01-01", "2014-01-01");
         DateRange other = DateRange.create("2013-01-01", "2015-01-01");
@@ -96,7 +96,7 @@ public class DateRangeTest {
      * </pre>
      */
     @Test
-    public void subRangeInclusive() {
+    public void subRangeInclusiveTest() {
         // given
         DateRange subject = DateRange.create("2011-01-01", "2015-01-01");
         DateRange other = DateRange.create("2013-01-01", "2014-01-01");
@@ -117,7 +117,7 @@ public class DateRangeTest {
      * </pre>
      */
     @Test
-    public void subRangeInclusive2() {
+    public void subRangeCommutativeTest() {
         // given
         DateRange other = DateRange.create("2011-01-01", "2015-01-01");
         DateRange subject = DateRange.create("2013-01-01", "2014-01-01");
@@ -138,7 +138,7 @@ public class DateRangeTest {
      * </pre>
      */
     @Test(expected = IllegalArgumentException.class)
-    public void subRangeNotOverlaping() {
+    public void subRangeNoOverlapTest() {
         // given
         DateRange subject = DateRange.create("2012-01-01", "2014-01-01");
         DateRange other = DateRange.create("2014-01-01", "2016-01-01");
@@ -150,7 +150,7 @@ public class DateRangeTest {
     }
 
     @Test
-    public void contains() {
+    public void containsTest() {
         // given
         LocalDate start = TimeUtil.createDate("2014-01-01");
         LocalDate end = start.plusYears(2);
@@ -172,5 +172,67 @@ public class DateRangeTest {
     @Test(expected = IllegalArgumentException.class)
     public void fromEqualTo() {
         DateRange.create("2016-01-01", "2016-01-01");
+    }
+
+    /**
+     * <pre>
+     *    prev     |------|
+     *    next            |------|
+     *    result         true
+     * </pre>
+     */
+    @Test
+    public void contiguousTest() {
+        // given
+        DateRange prev = DateRange.create("2014-01-01", "2016-01-01");
+        DateRange next = DateRange.create("2016-01-01", "2017-01-01");
+
+        // when
+        boolean result1 = prev.contiguous(next);
+        boolean result2 = next.contiguous(prev);
+
+        // then
+        assertTrue(result1);
+        assertFalse(result2);
+    }
+
+    /**
+     * <pre>
+     *    prev     |------|
+     *    next              |------|
+     *    result         false
+     * </pre>
+     */
+    @Test
+    public void contiguousGapTest() {
+        // given
+        DateRange prev = DateRange.create("2014-01-01", "2015-01-01");
+        DateRange next = DateRange.create("2016-01-01", "2017-01-01");
+
+        // when
+        boolean result = prev.contiguous(next);
+
+        // then
+        assertFalse(result);
+    }
+
+    /**
+     * <pre>
+     *    prev     |------|
+     *    next          |------|
+     *    result         false
+     * </pre>
+     */
+    @Test
+    public void contiguousOverlapTest() {
+        // given
+        DateRange prev = DateRange.create("2014-01-01", "2016-01-01");
+        DateRange next = DateRange.create("2015-01-01", "2017-01-01");
+
+        // when
+        boolean result = prev.contiguous(next);
+
+        // then
+        assertFalse(result);
     }
 }

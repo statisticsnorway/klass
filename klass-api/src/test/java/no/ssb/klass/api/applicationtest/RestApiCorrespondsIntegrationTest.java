@@ -13,7 +13,6 @@ import com.jayway.restassured.http.ContentType;
 /**
  * @author Mads Lundemo, SSB.
  */
-@Ignore
 public class RestApiCorrespondsIntegrationTest extends AbstractRestApiApplicationTest {
     // @formatter:off
     @Test

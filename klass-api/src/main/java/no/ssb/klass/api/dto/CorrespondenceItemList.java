@@ -82,28 +82,6 @@ public class CorrespondenceItemList {
                 .collect(toList()));
     }
 
-    public CorrespondenceItemList group1() {
-        List<RangedCorrespondenceItem> aremark = correspondenceItems.stream()
-                .filter(i -> i.getTargetName().equalsIgnoreCase("aremark"))
-                .sorted(Comparator.comparing(RangedCorrespondenceItem::getValidFrom))
-                .collect(toList());
-        log.error("\nKF-316: before merge aremark list" + aremark);
-
-        Map<RangedCorrespondenceItem, List<RangedCorrespondenceItem>> grouped = correspondenceItems.stream().collect(groupingBy(i -> i));
-        log.error("\nKF-316: grouped " + grouped.keySet());
-
-        CorrespondenceItemList o = newList(grouped.values().stream()
-                .map(i -> newList(i).merge())
-                .flatMap(Collection::stream)
-                .collect(toList()));
-
-        List<CorrespondenceItem> aremark_o = o.getCorrespondenceItems().stream()
-                .filter(i -> i.getTargetName().equalsIgnoreCase("aremark"))
-                .collect(toList());
-        log.error("\nKF-316: compressed list" + aremark_o);
-        return o;
-    }
-
     public CorrespondenceItemList group() {
         Map<RangedCorrespondenceItem, List<RangedCorrespondenceItem>> grouped = correspondenceItems.stream().collect(groupingBy(i -> i));
 
