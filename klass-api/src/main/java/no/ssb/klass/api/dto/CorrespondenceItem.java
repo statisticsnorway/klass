@@ -27,6 +27,17 @@ public class CorrespondenceItem implements Comparable<CorrespondenceItem> {
     private final String targetName;
     private final String targetShortName;
 
+    public CorrespondenceItem(String sourceCode, String sourceName, String sourceShortName,
+                              String targetCode, String targetName, String targetShortName)
+    {
+        this.sourceCode = sourceCode;
+        this.sourceName = sourceName;
+        this.sourceShortName = sourceShortName;
+        this.targetCode = targetCode;
+        this.targetName = targetName;
+        this.targetShortName = targetShortName;
+    }
+
     public CorrespondenceItem(CorrespondenceItem correspondenceItem) {
         this.sourceCode = correspondenceItem.getSourceCode();
         this.sourceName = correspondenceItem.getSourceName();
@@ -129,11 +140,11 @@ public class CorrespondenceItem implements Comparable<CorrespondenceItem> {
 
         @Override
         public String toString() {
-            return "\nRangedCorrespondenceItem{" +
+            return "RangedCorrespondenceItem{" +
                     "sourceCode='" + super.sourceCode + '\'' +
                     ", sourceName='" + super.sourceName + '\'' +
                     ", targetCode='" + super.targetCode + '\'' +
-                    ", targetName='_______" + super.targetName.toUpperCase() + '\'' +
+                    ", targetName='" + super.targetName + '\'' +
                     ", validRange=" + validRange +
                     '}';
         }

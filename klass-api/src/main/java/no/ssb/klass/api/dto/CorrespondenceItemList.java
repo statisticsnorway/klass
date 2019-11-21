@@ -1,27 +1,18 @@
 package no.ssb.klass.api.dto;
 
 import static java.util.stream.Collectors.*;
-
-import java.time.LocalDate;
 import java.util.*;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import com.google.common.base.Preconditions;
-
 import no.ssb.klass.core.service.dto.CorrespondenceDto;
 import no.ssb.klass.core.util.DateRange;
-import no.ssb.klass.core.util.TimeUtil;
 import no.ssb.klass.api.dto.CorrespondenceItem.RangedCorrespondenceItem;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @JacksonXmlRootElement(localName = "correspondenceItemList")
 public class CorrespondenceItemList {
-    private static final Logger log = LoggerFactory.getLogger(CorrespondenceItemList.class);
-
     private final char csvSeparator;
     private final boolean displayWithValidRange;
     private final List<RangedCorrespondenceItem> correspondenceItems;

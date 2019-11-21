@@ -59,10 +59,10 @@ public class CorrespondenceDto {
 
     @Override
     public String toString() {
-        return "\nCorrespondenceDto{" +
+        return "CorrespondenceDto{" +
                 "sourceCode='" + sourceCode + '\'' +
                 ", sourceName='" + sourceName + '\'' +
-                ", targetCode='___________" + targetName.toUpperCase() + '\'' +
+                ", targetCode='" + targetName + '\'' +
                 ", validRange=" + validRange +
                 '}';
     }
