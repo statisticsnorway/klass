@@ -1,16 +1,14 @@
 package no.ssb.klass.core.util;
 
 import static com.google.common.base.Preconditions.*;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
-
 import com.google.common.collect.Lists;
 
 /**
- * Represents a date range. From is inclusive and to is exclusive |-->.
- *
+ * Represents a date range.
+ * From is inclusive and to is exclusive.
  */
 public final class DateRange {
     private final LocalDate from;
@@ -28,16 +26,11 @@ public final class DateRange {
     }
 
     public Boolean isCurrentVersion() {
-        return (LocalDate.now().isEqual(from)|| LocalDate.now().isAfter(from)) && (LocalDate.now().isBefore(to));
+        return (LocalDate.now().isEqual(from) || LocalDate.now().isAfter(from)) && (LocalDate.now().isBefore(to));
     }
 
     public boolean overlaps(DateRange other) {
-        if (other.to.isAfter(from)) {
-            if (other.from.isBefore(to)) {
-                return true;
-            }
-        }
-        return false;
+        return other.to.isAfter(from) && other.from.isBefore(to);
     }
 
     public LocalDate getFrom() {
@@ -46,6 +39,11 @@ public final class DateRange {
 
     public LocalDate getTo() {
         return to;
+    }
+
+    // NB! suits for chronologically sorted date ranges
+    public boolean contiguous(DateRange other) {
+        return other.to.isAfter(to) && other.from.equals(to);
     }
 
     public DateRange subRange(DateRange other) {
@@ -58,12 +56,7 @@ public final class DateRange {
     }
 
     public boolean contains(LocalDate date) {
-        if (from.isBefore(date) || from.equals(date)) {
-            if (to.isAfter(date)) {
-                return true;
-            }
-        }
-        return false;
+        return (from.isBefore(date) || from.equals(date)) && to.isAfter(date);
     }
 
     @Override
@@ -73,15 +66,9 @@ public final class DateRange {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-
-        DateRange other = (DateRange) obj;
-        return Objects.equals(this.from, other.from) && Objects.equals(this.to, other.to);
+        return obj != null && getClass() == obj.getClass() &&
+                Objects.equals(this.from, ((DateRange) obj).from) &&
+                Objects.equals(this.to, ((DateRange) obj).to);
     }
 
     @Override

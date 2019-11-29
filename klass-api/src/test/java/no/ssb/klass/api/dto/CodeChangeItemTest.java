@@ -1,11 +1,8 @@
 package no.ssb.klass.api.dto;
 
 import static org.junit.Assert.*;
-
-import java.time.LocalDate;
-
 import org.junit.Test;
-
+import java.time.LocalDate;
 import no.ssb.klass.core.model.ClassificationItem;
 import no.ssb.klass.core.model.ConcreteClassificationItem;
 import no.ssb.klass.core.model.CorrespondenceMap;

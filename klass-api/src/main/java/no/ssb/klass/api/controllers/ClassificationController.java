@@ -391,15 +391,19 @@ public class ClassificationController {
             DateRangeHolder dateRangeHolder, String csvSeparator, Language language, Boolean includeFuture) {
         List<CorrespondenceDto> correspondences = classificationService.findCorrespondences(id, targetClassificationId,
                 dateRangeHolder.dateRange, language, includeFuture);
-        return new CorrespondenceItemList(csvSeparator, dateRangeHolder.withRange, includeFuture).convert(correspondences)
-                .removeOutside(dateRangeHolder.dateRange).limit(dateRangeHolder.dateRange).compress().sort();
+        return new CorrespondenceItemList(csvSeparator, dateRangeHolder.withRange, includeFuture)
+                .convert(correspondences)
+                .removeOutside(dateRangeHolder.dateRange)
+                .limit(dateRangeHolder.dateRange)
+                .group()
+                .sort();
     }
 
     @Transactional
     @RequestMapping(value = "/classifications/{classificationId}/trackChanges", method = RequestMethod.POST)
     public ResponseEntity<SubscribeResponse> trackChanges(@PathVariable Long classificationId, @RequestParam(
             value = "email") String email) {
-        ClassificationSeries classification = null;
+        ClassificationSeries classification;
         try {
             classification = classificationService.getClassificationSeries(classificationId);
             if (subscriberService.containsTracking(email, classification)) {
@@ -492,6 +496,14 @@ public class ClassificationController {
         DateRangeHolder(LocalDate date) {
             this.dateRange = DateRange.create(date, date.plusDays(1));
             this.withRange = false;
+        }
+
+        @Override
+        public String toString() {
+            return "DateRangeHolder{" +
+                    "dateRange=" + dateRange +
+                    ", withRange=" + withRange +
+                    '}';
         }
     }
 

@@ -1,22 +1,14 @@
 package no.ssb.klass.api.dto;
 
 import static java.util.stream.Collectors.*;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-
+import java.util.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import com.google.common.base.Preconditions;
-
 import no.ssb.klass.core.service.dto.CorrespondenceDto;
 import no.ssb.klass.core.util.DateRange;
-import no.ssb.klass.core.util.TimeUtil;
 import no.ssb.klass.api.dto.CorrespondenceItem.RangedCorrespondenceItem;
 
 @JacksonXmlRootElement(localName = "correspondenceItemList")
@@ -50,7 +42,7 @@ public class CorrespondenceItemList {
         if (displayWithValidRange) {
             return correspondenceItems;
         }
-        return correspondenceItems.stream().map(i -> new CorrespondenceItem(i)).collect(toList());
+        return correspondenceItems.stream().map(CorrespondenceItem::new).collect(toList());
     }
 
     @JsonIgnore
@@ -59,47 +51,59 @@ public class CorrespondenceItemList {
     }
 
     public CorrespondenceItemList convert(List<CorrespondenceDto> correspondences) {
-        return newCorrespondenceItemList(correspondences.stream().map(RangedCorrespondenceItem::new).collect(toList()));
+        return newList(correspondences.stream()
+                .map(RangedCorrespondenceItem::new)
+                .collect(toList()));
     }
 
-    private CorrespondenceItemList newCorrespondenceItemList(List<RangedCorrespondenceItem> items) {
+    private CorrespondenceItemList newList(List<RangedCorrespondenceItem> items) {
         return new CorrespondenceItemList(csvSeparator, displayWithValidRange, items, includeFuture);
     }
 
     public CorrespondenceItemList removeOutside(DateRange dateRange) {
         Preconditions.checkNotNull(dateRange);
-        return newCorrespondenceItemList(correspondenceItems.stream().filter(correspondenceItem -> correspondenceItem
-                .getDateRange(includeFuture).overlaps(dateRange)).collect(toList()));
+        return newList(correspondenceItems.stream()
+                .filter(i -> i.getDateRange(includeFuture).overlaps(dateRange))
+                .collect(toList()));
     }
 
     public CorrespondenceItemList limit(DateRange dateRange) {
-        return newCorrespondenceItemList(correspondenceItems.stream().map(
-                correspondenceItem -> new RangedCorrespondenceItem(correspondenceItem, correspondenceItem.getDateRange(includeFuture)
-                        .subRange(dateRange))).collect(toList()));
+        return newList(correspondenceItems.stream()
+                .map(i -> new RangedCorrespondenceItem(i, i.getDateRange(includeFuture).subRange(dateRange)))
+                .collect(toList()));
     }
 
-    public CorrespondenceItemList compress() {
-        Map<RangedCorrespondenceItem, List<RangedCorrespondenceItem>> grouped = correspondenceItems.stream().collect(
-                groupingBy(correspondenceItem -> correspondenceItem));
-        return newCorrespondenceItemList(grouped.entrySet().stream().map(entry -> combineCorrespondenceItems(entry
-                .getKey(), entry.getValue())).collect(toList()));
+    public CorrespondenceItemList group() {
+        Map<RangedCorrespondenceItem, List<RangedCorrespondenceItem>> grouped = correspondenceItems.stream().collect(groupingBy(i -> i));
+
+        return newList(grouped.values().stream()
+                .map(i -> newList(i).merge())
+                .flatMap(Collection::stream)
+                .collect(toList()));
     }
 
-    private RangedCorrespondenceItem combineCorrespondenceItems(RangedCorrespondenceItem base,
-            List<RangedCorrespondenceItem> correspondenceItems) {
-        // TODO kmgv need to check dateRanges of correspondenceItems, and group those that are back to back.
-        DateRange dateRange = DateRange.create(minValidFrom(correspondenceItems), maxValidTo(correspondenceItems));
-        return new RangedCorrespondenceItem(base, dateRange);
-    }
+    // NB! suits for equal correspondence items (source and target, but not range)
+    public List<RangedCorrespondenceItem> merge() {
+        if (correspondenceItems == null || correspondenceItems.isEmpty()) {
+            return Collections.emptyList();
+        }
 
-    private LocalDate maxValidTo(List<RangedCorrespondenceItem> correspondenceItems) {
-        return TimeUtil.max(correspondenceItems.stream().map(correspondenceItem -> correspondenceItem.getDateRange(includeFuture)
-                .getTo()).collect(toList()));
-    }
+        correspondenceItems.sort(Comparator.comparing(RangedCorrespondenceItem::getValidFrom));
 
-    private LocalDate minValidFrom(List<RangedCorrespondenceItem> correspondenceItems) {
-        return TimeUtil.min(correspondenceItems.stream().map(correspondenceItem -> correspondenceItem.getDateRange(includeFuture)
-                .getFrom()).collect(toList()));
+        List<DateRange> ranges = new ArrayList<>();
+
+        correspondenceItems.forEach(i -> {
+            DateRange next = i.getDateRange(includeFuture);
+            DateRange prev = ranges.isEmpty() ? next : ranges.get(ranges.size() - 1);
+
+            if (prev.contiguous(next)) {
+                ranges.set(ranges.size() - 1, new DateRange(prev.getFrom(), next.getTo()));
+            } else {
+                ranges.add(next);
+            }
+        });
+
+        return ranges.stream().map(i -> new RangedCorrespondenceItem(correspondenceItems.get(0), i)).collect(toList());
     }
 
     public CorrespondenceItemList sort() {
@@ -111,4 +115,13 @@ public class CorrespondenceItemList {
         return displayWithValidRange ? RangedCorrespondenceItem.class : CorrespondenceItem.class;
     }
 
+    @Override
+    public String toString() {
+        return "CorrespondenceItemList{" +
+                "csvSeparator=" + csvSeparator +
+                ", displayWithValidRange=" + displayWithValidRange +
+                ", correspondenceItems=" + correspondenceItems +
+                ", includeFuture=" + includeFuture +
+                '}';
+    }
 }
