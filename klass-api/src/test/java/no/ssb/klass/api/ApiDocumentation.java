@@ -78,6 +78,7 @@ import no.ssb.klass.testutil.TestUtil;
 @ActiveProfiles(ConfigurationProfiles.H2_INMEMORY)
 public class ApiDocumentation {
     private static final int CLASS_ID_FAMILIEGRUPPERING = 17;
+    private static final int CLASS_ID_GREENHOUSE_GASES = 84;
     private static final long CLASS_FAMILY_BEFOLKNING = 3L;
     private static final long CLASS_VARIANT_POLITIDISTRIKT = 2L;
     private static final long CLASS_VARIANT_KOMMUNEINNDELING = 7L;
@@ -478,12 +479,12 @@ public class ApiDocumentation {
     @Test
     public void variantExample() throws Exception {
         DateRange dateRange = DateRange.create("2014-01-01", "2015-01-01");
-        List<CodeDto> codes = createFamilieInndelingCodes(dateRange);
+        List<CodeDto> codes = createGreenhouseGasesCodes(dateRange);
         when(classificationServiceMock.findVariantClassificationCodes(any(), any(), any(), any(), any())).thenReturn(codes);
         // @formatter:off
         this.mockMvc.perform(
-                getWithContext("/classifications/" + CLASS_ID_FAMILIEGRUPPERING
-                        + "/variant?variantName=Tilleggsinndeling for familier&from=2014-01-01&to=2015-01-01")
+                getWithContext("/classifications/" + CLASS_ID_GREENHOUSE_GASES
+                        + "/variant?variantName=Klimagasser&from=2014-01-01&to=2015-01-01")
                         .header("Accept", "text/csv; charset=UTF-8"))
                 .andExpect(status().isOk());
         // @formatter:on
@@ -496,8 +497,8 @@ public class ApiDocumentation {
                 createFamilieInndelingCodes(dateRange));
         // @formatter:off
         this.mockMvc.perform(
-                getWithContextUri("/classifications/" + CLASS_ID_FAMILIEGRUPPERING
-                        + "/variant?variantName=Tilleggsinndeling for familier"
+                getWithContextUri("/classifications/" + CLASS_ID_GREENHOUSE_GASES
+                        + "/variant?variantName=Klimagasser"
                         + "&from=2014-01-01&to=2015-01-01&csvSeparator=;&selectLevel=1&selectCodes=01*"
                         + "&presentationNamePattern={code}-{name}&language=nb&includeFuture=true").accept("text/csv"))
                 .andDo(this.documentationHandler.document(
@@ -517,13 +518,13 @@ public class ApiDocumentation {
 
     @Test
     public void variantAtExample() throws Exception {
-        DateRange dateRange = DateRange.create("2015-01-01", "2016-01-01");
+        DateRange dateRange = DateRange.create("2015-01-01", null);
         when(classificationServiceMock.findVariantClassificationCodes(any(), any(), any(), any(), any())).thenReturn(
-                createFamilieInndelingCodes(dateRange));
+                createGreenhouseGasesCodes(dateRange));
         // @formatter:off
         this.mockMvc.perform(
-                getWithContext("/classifications/" + CLASS_ID_FAMILIEGRUPPERING
-                        + "/variantAt?variantName=Variant - Tilleggsinndeling for familier&date=2015-01-01")
+                getWithContext("/classifications/" + CLASS_ID_GREENHOUSE_GASES
+                        + "/variantAt?variantName=Klimagasser&date=2015-01-01")
                         .header("Accept", "text/csv; charset=ISO-8859-1"))
                 .andExpect(status().isOk());
         // @formatter:on
@@ -531,13 +532,13 @@ public class ApiDocumentation {
 
     @Test
     public void variantAtOptionalParametersExample() throws Exception {
-        DateRange dateRange = DateRange.create("2015-01-01", "2016-01-01");
+        DateRange dateRange = DateRange.create("2015-01-01", null);
         when(classificationServiceMock.findVariantClassificationCodes(any(), any(), any(), any(), any())).thenReturn(
-                createFamilieInndelingCodes(dateRange));
+                createGreenhouseGasesCodes(dateRange));
         // @formatter:off
         this.mockMvc.perform(
-                getWithContextUri("/classifications/" + CLASS_ID_FAMILIEGRUPPERING
-                        + "/variantAt?variantName=Variant - Tilleggsinndeling for familier"
+                getWithContextUri("/classifications/" + CLASS_ID_GREENHOUSE_GASES
+                        + "/variantAt?variantName=Klimagasser"
                         + "&date=2015-01-01&csvSeparator=;&selectLevel=1&selectCodes=01*"
                         + "&presentationNamePattern={code}-{name}&language=nb&includeFuture=true").accept("text/csv"))
                 .andDo(this.documentationHandler.document(
@@ -1061,6 +1062,16 @@ public class ApiDocumentation {
         codes.add(createCode(1, "B", "Ektepar", dateRange));
         codes.add(createCode(2, "BA", "Ektepar med barn (yngste barn 0-17 år)", dateRange));
         codes.add(createCode(2, "BB", "Ektepar uten barn 0-17 år", dateRange));
+        return codes;
+    }
+
+    private List<CodeDto> createGreenhouseGasesCodes(DateRange dateRange) {
+        List<CodeDto> codes = new ArrayList<>();
+        codes.add(createCode(1, "01", "CO2 - karbondioksid", dateRange));
+        codes.add(createCode(1, "02", "CH4 - metan", dateRange));
+        codes.add(createCode(1, "03", "N2O - lystgass", dateRange));
+        codes.add(createCode(1, "04", "Fluorgasser", dateRange));
+        codes.add(createCode(2, "04.1", "HFK - hydrofluorkarboner", dateRange));
         return codes;
     }
 
