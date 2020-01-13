@@ -11,11 +11,14 @@
 
 == Overview
 === Rest Client
-Examples in this documentation use https://en.wikipedia.org/wiki/CURL[curl]. If this tool is unknown an alternative is
-to use a Rest client to explore Klass Rest interface, see instructions link:rest-client-guide.html[Rest client guide].
+Examples in this documentation use https://en.wikipedia.org/wiki/CURL[curl]. The -i parameter in the examples includes the HTTP response headers. Be aware that when running Curl on MS Windows all single ' have to be replaced by double ". If Curl is unknown, an alternative is
+to use a Rest client to explore Klass Rest interface, like https://www.getpostman.com/product/api-client[Postman].
+
+In many cases it is possible to get output in the supported formats without using Curl -H. Add the dot-prefix .json, .csv or .xml in the URL before the request parameters.
+e.g. json: http://data.ssb.no/api/klass/v1/classifications/104/codesAt.json?date=2020-01-01[http://data.ssb.no/api/klass/v1/classifications/104/codesAt.json?date=2020-01-01]
 
 === URL Encoding
-The current version of this API requires you to use Percent-encoding for symbols and characters that are not part of the standard unreserved URI characters.
+This API requires you to use Percent-encoding for symbols and characters that are not part of the standard unreserved URI characters.
 
 For more information on Percent-encoding see this https://en.wikipedia.org/wiki/Percent-encoding[wikipedia article]
 
@@ -48,6 +51,13 @@ will produce a `404 Not Found` response:
 
 include::{snippets}/error-example/http-response.adoc[]
 
+
+=== Character sets
+Charset for the formats XML and JSON are UTF-8. Default charset for CSV is ISO 8859-1. This can be changed in Accept header to UTF-8.
+
+=== Output formats
+Default output format is XML. In many cases it is possible to get output in the supported output formats without using Curl -H (--header). Add the dot-prefix .json, .csv or .xml in the URL before the request parameters.
+e.g. json: http://data.ssb.no/api/klass/v1/classifications/104/codesAt.json?date=2020-01-01[http://data.ssb.no/api/klass/v1/classifications/104/codesAt.json?date=2020-01-01]
 
 == Classification Resources
 
@@ -126,17 +136,17 @@ include::{snippets}/classification-optional-parameters-example/request-parameter
 
 
 
-=== Codes
+=== codes
 Used to get codes from a classification. A range is specified when requesting the codes,
 and the response will for each code indicate its valid range (validFrom/validTo).
-The format and character set used, must be set in the http header (setting character set is only available for csv).
+The format and character set used, can be set in the http header (setting character set is only available for csv).
 For more information about the range see <<range, range>>. +
-To get a snapshot of codes valid at a specified date, use <<CodesAt, CodesAt>>
+To get a snapshot of codes valid at a specified date, use <<codesAt, codesAt>>
 
 ===== Supported formats
 `text/csv`, `application/json`, `text/xml`
 
-===== Supported character sets (csv only)
+===== Supported character sets
 `ISO-8859-1` (csv only), `UTF-8`
 
 ===== Example request (csv with UTF-8)
@@ -150,15 +160,15 @@ include::{snippets}/codes-optional-parameters-example/request-parameters.adoc[]
 
 
 
-=== CodesAt
+=== codesAt
 Used to get codes from a classification. A date is specified when requesting the codes,
 and the response will include all codes valid at the specified date.
-The format and character set used, must be specified in the http header (character set is only available for csv).
+The format and character set used, can be specified in the http header (character set is only available for csv).
 
 ===== Supported formats
 `text/csv`, `application/json`, `text/xml`
 
-===== Supported character sets (csv only)
+===== Supported character sets
 `ISO-8859-1` (csv only), `UTF-8`
 
 ===== Example request (csv with ISO-8859-1)
@@ -198,17 +208,17 @@ include::{snippets}/versions-example-csv/http-request.adoc[]
 include::{snippets}/versions-example-csv/http-response.adoc[]
 
 
-=== Variant
+=== variant
 Used to search codes from a classification variant. A range is specified when requesting the codes,
 and the response will for each code indicate its valid range (validFrom/validTo).
-The format and character set used, must be specified in the http header (character set is only available for csv).
+The format and character set used, can be specified in the http header (character set is only available for csv).
 For more information about the range see <<range, range>>. +
-To get a snapshot of codes valid at a specified date, use <<VariantAt, VariantAt>>
+To get a snapshot of codes valid at a specified date, use <<variantAt, variantAt>>
 
 ===== Supported formats
 `text/csv`, `application/json`, `text/xml`
 
-===== Supported character sets (csv only)
+===== Supported character sets
 `ISO-8859-1` (csv only), `UTF-8`
 
 ===== Example request (csv with UTF-8)
@@ -222,15 +232,15 @@ include::{snippets}/variant-optional-parameters-example/request-parameters.adoc[
 
 
 
-=== VariantAt
+=== variantAt
 Used to search codes from a classification variant. A date is specified when requesting the codes,
 and the response will include all codes valid at the specified date.
-The format and character set used, must be specified in the http header (character set is only available for csv).
+The format and character set used, can be specified in the http header (character set is only available for csv).
 
 ===== Supported formats
 `text/csv`, `application/json`, `text/xml`
 
-===== Supported character sets (csv only)
+===== Supported character sets
 `ISO-8859-1` (csv only), `UTF-8`
 
 ===== Example request (csv with ISO-8859-1)
@@ -272,20 +282,20 @@ include::{snippets}/variants-example-csv/http-response.adoc[]
 
 
 
-=== Corresponds
+=== corresponds
 Used to get correspondence mappings between a source classification and a target classification.
 The Corresponds call works only in the direction the correspondence table has been made. A switch of source and target, returns 404 (no correspondence table).
 A range is specified when requesting the correspondence mappings,
 and the response will for each correspondence map indicate its valid range (validFrom/validTo).
 If a correspondence table is missing for parts of the range, the API will return 404 (not found).
-The format and character set used, must be specified in the http header (character set is only available for csv).
+The format and character set used, can be specified in the http header (character set is only available for csv).
 For more information about the range see <<range, range>>. +
-To get a snapshot of correspondence mappings valid at a specified date, use <<CorrespondsAt, CorrespondsAt>>
+To get a snapshot of correspondence mappings valid at a specified date, use <<correspondsAt, correspondsAt>>
 
 ===== Supported formats
 `text/csv`, `application/json`, `text/xml`
 
-===== Supported character sets (csv only)
+===== Supported character sets
 `ISO-8859-1` (csv only), `UTF-8`
 
 ===== Example request (csv with UTF-8)
@@ -298,16 +308,16 @@ include::{snippets}/corresponds-example/http-response.adoc[]
 include::{snippets}/corresponds-optional-parameters-example/request-parameters.adoc[]
 
 
-=== CorrespondsAt
+=== correspondsAt
 Used to get correspondence mappings between a source classification and a target classification.
 CorrespondsAt works only in the direction the correspondence table has been made. A switch of source and target, returns 404 (no correspondence table).
-The format and character set used, must be specified in the http header (character set is only available for csv).
+The format and character set used, can be specified in the http header (character set is only available for csv).
 A date is specified when requesting the correspondence mappings, and the response will include all correspondence mappings valid at the specified date.
 
 ===== Supported formats
 `text/csv`, `application/json`, `text/xml`
 
-===== Supported character sets (csv only)
+===== Supported character sets
 `ISO-8859-1` (csv only), `UTF-8`
 
 ===== Example request (csv with UTF-8)
@@ -328,7 +338,7 @@ To navigate to the target or the source classification version use <<corresponde
 ===== Supported formats
 `text/csv`, `application/json`, `text/xml`
 
-===== Supported character sets (csv only)
+===== Supported character sets
 `ISO-8859-1` (csv only), `UTF-8`
 
 ===== Example request (csv with ISO-8859-1)
@@ -354,9 +364,9 @@ include::{snippets}/correspondence-tables-example-json/links.adoc[]
 include::{snippets}/correspondence-tables-optional-parameters-example/request-parameters.adoc[]
 
 
-=== Changes
+=== changes
 List codes that have changed within a time range.
-The format and character set used, must be specified in the http header (character set is only available for csv).
+The format and character set used, can be specified in the http header (character set is only available for csv).
 
 - If no oldCode is present it means that newCode started to exist at time given by changeOccurred.
 - If no newCode is present it means that oldCode ceased to exist at time given by changeOccurred.
@@ -364,7 +374,7 @@ The format and character set used, must be specified in the http header (charact
 ===== Supported formats
 `text/csv`, `application/json`, `text/xml`
 
-===== Supported character sets (csv only)
+===== Supported character sets
 `ISO-8859-1` (csv only), `UTF-8`
 
 ===== Example request (csv with ISO-8859-1)
@@ -378,8 +388,8 @@ include::{snippets}/changes-optional-parameters-example/request-parameters.adoc[
 
 
 
-=== List classificationFamilies
-ClassificationFamily is a grouping of classifications, used on the opening page of the Klass application.
+=== List classificationfamilies
+Classificationfamily is a grouping of classifications, used on the opening page of the Klass application.
 
 ===== Supported formats
 `application/json`, `text/xml`
@@ -403,8 +413,8 @@ include::{snippets}/classification-families-optional-parameters-example/request-
 
 
 [[classification-family]]
-=== ClassificationFamily
-Get details of a classificationFamily, used on the opening page of the Klass application.
+=== classificationfamily
+Get details of a classificationfamily, used on the opening page of the Klass application.
 
 ===== Supported formats
 `application/json` +
@@ -428,8 +438,8 @@ include::{snippets}/classification-family-optional-parameters-example/request-pa
 
 
 
-=== List ssbSections
-List Statistics Norway sections that are responsible for at least one classification.
+=== List ssbsections
+List Statistics Norway divisions that are responsible for at least one classification.
 
 ===== Supported formats
 `application/json`, `text/xml`
@@ -450,6 +460,27 @@ include::{snippets}/ssb-sections-example/links.adoc[]
 ===== Request parameters
 none
 
+=== versions
+Used to get codes from a classification or code list version. The response for each code indicates the valid range (validFrom/validTo). Unfortunately does not the response give which classificiation the version is part of.
+
+===== Supported formats
+`text/csv`, `application/json`, `text/xml`
+
+===== Supported character sets
+`ISO-8859-1` (csv only), `UTF-8`
+
+
+ ===== Example request (json)
+coming..
+
+===== Example response (json)
+
+===== Response structure
+
+[[versions-links]]
+===== Links
+
+
 
 == Request parameters
 [[range]]
@@ -457,7 +488,7 @@ none
 A range is a time period with a `from` date and a `to` date. The dates are specified in format `<yyyy-MM-dd>`.
 `from` is inclusive and `to` is exclusive. `to` is optional, and if not specified the end of the range is considered to be indefinite.
 
-When retrieving codes with a range it must be understood that the code may change during the range. This is indicated in result with `validFrom` and `validTo`.
+When retrieving codes with a range the code may change during the range. This is indicated in the result with `validFrom` and `validTo`.
 
 ===== Example
 A classification whose codes were updated 2014-01-01. If asking for codes for year 2013, then `validFrom/validTo` in response will be equal to `from/to` in request
@@ -484,15 +515,17 @@ include::{snippets}/changed-since-example/http-request.adoc[]
 
 |===
 | |Codes selected
-| selectCodes = 0104| Only 0104
-| selectCodes = 0104, 0106 | Only 0104 and 0106
-| selectCodes = 0104, 02* | 0104 and all starting with 02
+| selectCodes = 3004| Only 0104
+| selectCodes = 3004, 3006 | Only 0104 and 0106
+| selectCodes = 3004, 11* | 0104 and all starting with 11
 | selectCodes = 0104-0200 | range from 0104 to 0200
 | selectCodes = 0104-02* | range from 0104 to any higher code starting with 02
 |===
 
 ===== Example request for selectCodes=0301,01*;
 include::{snippets}/select-codes-example/http-request.adoc[]
+
+
 ===== Example response
 include::{snippets}/select-codes-example/http-response.adoc[]
 
