@@ -59,6 +59,9 @@ Charset for the formats XML and JSON are UTF-8. Default charset for CSV is ISO 8
 Default output format is XML. In many cases it is possible to get output in the supported output formats without using Curl -H (--header). Add the dot-prefix .json, .csv or .xml in the URL before the request parameters.
 e.g. json: http://data.ssb.no/api/klass/v1/classifications/104/codesAt.json?date=2020-01-01[http://data.ssb.no/api/klass/v1/classifications/104/codesAt.json?date=2020-01-01]
 
+=== Other
+In PxWebApi references to a classification in Klass has the form "urn:ssb:classification:klass:ID". This can be rewritten to http://data.ssb.no/api/klass/v1/classifications/ID.
+
 == Classification Resources
 
 [[classifications-list]]
@@ -111,7 +114,7 @@ include::{snippets}/search-optional-parameters-example/request-parameters.adoc[]
 
 
 [[classification]]
-=== Classification
+=== Classification by ID
 Get details of a classification. To get codes from the classification use operations specified in <<classification-links, Links>>
 
 ===== Supported formats
@@ -180,8 +183,8 @@ include::{snippets}/codes-at-example/http-response.adoc[]
 ===== Request parameters
 include::{snippets}/codes-at-optional-parameters-example/request-parameters.adoc[]
 
-=== Versions by ID
-Used to get a classification variant by ID. Use `includeFeature` flag in the request to also list variants and correspondencetables that are not valid yet.
+=== Version by ID
+Used to get a classification version by ID.
 
 ===== Supported formats
 `text/csv`, `application/json`, `text/xml`
@@ -460,26 +463,6 @@ include::{snippets}/ssb-sections-example/links.adoc[]
 ===== Request parameters
 none
 
-=== versions
-Used to get codes from a classification or code list version. The response for each code indicates the valid range (validFrom/validTo). Unfortunately does not the response give which classificiation the version is part of.
-
-===== Supported formats
-`text/csv`, `application/json`, `text/xml`
-
-===== Supported character sets
-`ISO-8859-1` (csv only), `UTF-8`
-
-
- ===== Example request (json)
-coming..
-
-===== Example response (json)
-
-===== Response structure
-
-[[versions-links]]
-===== Links
-
 
 
 == Request parameters
@@ -515,11 +498,11 @@ include::{snippets}/changed-since-example/http-request.adoc[]
 
 |===
 | |Codes selected
-| selectCodes = 3004| Only 0104
-| selectCodes = 3004, 3006 | Only 0104 and 0106
-| selectCodes = 3004, 11* | 0104 and all starting with 11
-| selectCodes = 0104-0200 | range from 0104 to 0200
-| selectCodes = 0104-02* | range from 0104 to any higher code starting with 02
+| selectCodes = 3004| Only 3004
+| selectCodes = 3004, 3006 | Only 3004 and 3006
+| selectCodes = 3004, 11* | 3004 and all starting with 11
+| selectCodes = 3004-3400 | range from 3004 to 3400
+| selectCodes = 3004-34* | range from 3004 to any higher code starting with 34
 |===
 
 ===== Example request for selectCodes=0301,01*;
