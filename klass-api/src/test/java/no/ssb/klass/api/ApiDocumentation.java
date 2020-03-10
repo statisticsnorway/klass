@@ -96,21 +96,20 @@ public class ApiDocumentation {
 
     private MockMvc mockMvc;
 
-    @Value("${klass.env.server}")
-    private String server;
-    @Value("${klass.env.port}")
-    private int port;
+    private String server = "data.ssb.no";
+    private int port = 80;
     @Value("${klass.env.api.path}")
     private String contextPath;
 
     @Before
     public void setup() {
         this.documentationHandler = document("{method-name}", preprocessRequest(prettyPrint()),
-                preprocessResponse(/* prettyPrint() */));
-        // preprocessResponse prettyPrint breaks CSVs :( (not sure when it started failing things look acceptable anyhow)
+                preprocessResponse(prettyPrint()));
+        // FIXME: preprocessResponse prettyPrint breaks CSVs since 2017
+        // https://docs.spring.io/spring-restdocs/docs/1.2.6.RELEASE/reference/html5/#customizing-requests-and-responses-preprocessors-pretty-print
 
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context)
-                .apply(documentationConfiguration(this.restDocumentation))
+                .apply(documentationConfiguration(this.restDocumentation).uris().withHost(server).withPort(port))
                 .alwaysDo(this.documentationHandler).build();
     }
 
@@ -404,6 +403,9 @@ public class ApiDocumentation {
         // @formatter:off
         this.mockMvc.perform(getWithContext("/versions/" + CLASS_ID_KOMMUNEINNDELING)
                 .header("Accept", "text/csv; charset=ISO-8859-1"))
+                .andDo(this.documentationHandler = document("{method-name}",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(/*prettyPrint()*/)))
                 .andExpect(status().isOk());
         // @formatter:on
     }
@@ -414,8 +416,11 @@ public class ApiDocumentation {
         List<CodeDto> codes = createKommuneInndelingCodes(dateRange);
         when(classificationServiceMock.findClassificationCodes(any(), any(), any(), any())).thenReturn(codes);
         // @formatter:off
-        this.mockMvc.perform(getWithContext("/classifications/" + CLASS_ID_KOMMUNEINNDELING + "/codes?from=2014-01-01&to=2015-01-01")
+        this.mockMvc.perform(getWithContext("/classifications/" + CLASS_ID_KOMMUNEINNDELING + "/codes?from=2014-01-01&to=2015-01-01&csvSeparator=;")
                 .header("Accept", "text/csv; charset=UTF-8"))
+                .andDo(this.documentationHandler = document("{method-name}",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(/*prettyPrint()*/)))
                 .andExpect(status().isOk());
         // @formatter:on
     }
@@ -428,7 +433,8 @@ public class ApiDocumentation {
         // @formatter:off
         this.mockMvc.perform(getWithContextUri("/classifications/" + CLASS_ID_KOMMUNEINNDELING + "/codes?from=2014-01-01&to=2015-01-01&csvSeparator=;"
                 + "&selectLevel=1&selectCodes=01*&presentationNamePattern={code}-{name}&language=nb&includeFuture=true").accept("text/csv"))
-                .andDo(this.documentationHandler.document(
+                .andDo(this.documentationHandler
+                        .document(
                         requestParameters(
                                 fromParameterDescription(),
                                 toParameterDescription(),
@@ -450,6 +456,9 @@ public class ApiDocumentation {
         // @formatter:off
         this.mockMvc.perform(getWithContext("/classifications/" + CLASS_ID_KOMMUNEINNDELING + "/codesAt?date=2015-01-01")
                 .header("Accept", "text/csv; charset=ISO-8859-1"))
+                .andDo(this.documentationHandler = document("{method-name}",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(/*prettyPrint()*/)))
                 .andExpect(status().isOk());
         // @formatter:on
     }
@@ -486,6 +495,9 @@ public class ApiDocumentation {
                 getWithContext("/classifications/" + CLASS_ID_GREENHOUSE_GASES
                         + "/variant?variantName=Klimagasser&from=2014-01-01&to=2015-01-01")
                         .header("Accept", "text/csv; charset=UTF-8"))
+                .andDo(this.documentationHandler = document("{method-name}",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(/*prettyPrint()*/)))
                 .andExpect(status().isOk());
         // @formatter:on
     }
@@ -501,6 +513,9 @@ public class ApiDocumentation {
                         + "/variant?variantName=Klimagasser"
                         + "&from=2014-01-01&to=2015-01-01&csvSeparator=;&selectLevel=1&selectCodes=01*"
                         + "&presentationNamePattern={code}-{name}&language=nb&includeFuture=true").accept("text/csv"))
+                .andDo(this.documentationHandler = document("{method-name}",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(/*prettyPrint()*/)))
                 .andDo(this.documentationHandler.document(
                         requestParameters(
                                 variantNameParameterDescription(),
@@ -526,6 +541,9 @@ public class ApiDocumentation {
                 getWithContext("/classifications/" + CLASS_ID_GREENHOUSE_GASES
                         + "/variantAt?variantName=Klimagasser&date=2015-01-01")
                         .header("Accept", "text/csv; charset=ISO-8859-1"))
+                .andDo(this.documentationHandler = document("{method-name}",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(/*prettyPrint()*/)))
                 .andExpect(status().isOk());
         // @formatter:on
     }
@@ -541,6 +559,9 @@ public class ApiDocumentation {
                         + "/variantAt?variantName=Klimagasser"
                         + "&date=2015-01-01&csvSeparator=;&selectLevel=1&selectCodes=01*"
                         + "&presentationNamePattern={code}-{name}&language=nb&includeFuture=true").accept("text/csv"))
+                .andDo(this.documentationHandler = document("{method-name}",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(/*prettyPrint()*/)))
                 .andDo(this.documentationHandler.document(
                         requestParameters(
                                 variantNameParameterDescription(),
@@ -606,6 +627,9 @@ public class ApiDocumentation {
         // @formatter:off
         this.mockMvc.perform(getWithContext("/variants/" + 1111L)
                 .header("Accept", "text/csv; charset=ISO-8859-1"))
+                .andDo(this.documentationHandler = document("{method-name}",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(/*prettyPrint()*/)))
                 .andExpect(status().isOk());
         // @formatter:on
     }
@@ -622,6 +646,9 @@ public class ApiDocumentation {
                         + "/corresponds?targetClassificationId=" + CLASS_ID_BYDELSINNDELING
                         + "&from=2014-01-01&to=2015-01-01")
                         .header("Accept", "text/csv; charset=UTF-8"))
+                .andDo(this.documentationHandler = document("{method-name}",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(/*prettyPrint()*/)))
                 .andExpect(status().isOk());
         // @formatter:on
     }
@@ -637,6 +664,9 @@ public class ApiDocumentation {
                         + "/corresponds?targetClassificationId=" + CLASS_ID_BYDELSINNDELING
                         + "&from=2014-01-01&to=2016-01-01&csvSeparator=;"
                         + "&language=nb&includeFuture=true").accept("text/csv"))
+                .andDo(this.documentationHandler = document("{method-name}",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(/*prettyPrint()*/)))
                 .andDo(this.documentationHandler.document(
                         requestParameters(
                                 targetClassificationIdParameterDescription(),
@@ -659,6 +689,9 @@ public class ApiDocumentation {
                 getWithContext("/classifications/" + CLASS_ID_KOMMUNEINNDELING
                         + "/correspondsAt?targetClassificationId=" + CLASS_ID_BYDELSINNDELING + "&date=2014-01-01")
                         .header("Accept", "text/csv; charset=UTF-8"))
+                .andDo(this.documentationHandler = document("{method-name}",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(/*prettyPrint()*/)))
                 .andExpect(status().isOk());
         // @formatter:on
     }
@@ -673,6 +706,9 @@ public class ApiDocumentation {
                 getWithContext("/classifications/" + CLASS_ID_KOMMUNEINNDELING
                         + "/correspondsAt?targetClassificationId=" + CLASS_ID_BYDELSINNDELING + "&date=2016-01-01&csvSeparator=;"
                         + "&language=nb&includeFuture=true").accept("text/csv"))
+                .andDo(this.documentationHandler = document("{method-name}",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(/*prettyPrint()*/)))
                 .andDo(this.documentationHandler.document(
                         requestParameters(
                                 targetClassificationIdParameterDescription(),
@@ -690,6 +726,9 @@ public class ApiDocumentation {
         // @formatter:off
         this.mockMvc.perform(getWithContext("/correspondencetables/" + 1L)
                 .header("Accept", "text/csv; charset=ISO-8859-1"))
+                .andDo(this.documentationHandler = document("{method-name}",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(/*prettyPrint()*/)))
                 .andExpect(status().isOk());
         // @formatter:on
     }
@@ -746,6 +785,9 @@ public class ApiDocumentation {
         this.mockMvc.perform(
                 getWithContext("/classifications/" + CLASS_ID_KOMMUNEINNDELING
                         + "/changes?from=2014-01-01&to=2015-01-01").accept("text/csv"))
+                .andDo(this.documentationHandler = document("{method-name}",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(/*prettyPrint()*/)))
                 .andExpect(status().isOk());
         // @formatter:on
     }
@@ -759,6 +801,9 @@ public class ApiDocumentation {
                 getWithContext("/classifications/" + CLASS_ID_KOMMUNEINNDELING
                         + "/changes?from=2014-01-01&to=2016-01-01&csvSeparator=;&language=nb&includeFuture=true")
                         .accept("text/csv"))
+                .andDo(this.documentationHandler = document("{method-name}",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(/*prettyPrint()*/)))
                 .andDo(this.documentationHandler.document(
                         requestParameters(
                                 fromParameterDescription(),
@@ -780,6 +825,9 @@ public class ApiDocumentation {
                 getWithContext("/classifications/" + CLASS_ID_KOMMUNEINNDELING
                         + "/codes?from=2014-01-01&to=2015-01-01&csvSeparator=;")
                         .accept("text/csv"))
+                .andDo(this.documentationHandler = document("{method-name}",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(/*prettyPrint()*/)))
                 .andExpect(status().isOk());
         // @formatter:on
     }
@@ -792,6 +840,9 @@ public class ApiDocumentation {
         // @formatter:off
         this.mockMvc.perform(getWithContext("/classifications/" + CLASS_ID_FAMILIEGRUPPERING
                 + "/codes?from=2014-01-01&to=2015-01-01&selectLevel=2").accept("text/csv"))
+                .andDo(this.documentationHandler = document("{method-name}",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(/*prettyPrint()*/)))
                 .andExpect(status().isOk());
         // @formatter:on
     }
@@ -806,6 +857,9 @@ public class ApiDocumentation {
                 getWithContextUri("/classifications/" + CLASS_ID_KOMMUNEINNDELING
                         + "/codes?from=2014-01-01&to=2015-01-01&presentationNamePattern={code}-{uppercase(name)}")
                         .accept("text/csv"))
+                .andDo(this.documentationHandler = document("{method-name}",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(/*prettyPrint()*/)))
                 .andExpect(status().isOk());
         // @formatter:on
     }
@@ -838,6 +892,9 @@ public class ApiDocumentation {
         // @formatter:off
         this.mockMvc.perform(getWithContext("/classifications/" + CLASS_ID_KOMMUNEINNDELING
                 + "/codes?from=2013-01-01&to=2014-01-01").accept("text/csv"))
+                .andDo(this.documentationHandler = document("{method-name}",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(/*prettyPrint()*/)))
                 .andExpect(status().isOk());
         // @formatter:on
     }
@@ -861,6 +918,9 @@ public class ApiDocumentation {
                 getWithContext("/classifications/" + CLASS_ID_KOMMUNEINNDELING
                         + "/codes?from=2013-01-01&to=2015-01-01")
                         .accept("text/csv"))
+                .andDo(this.documentationHandler = document("{method-name}",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(/*prettyPrint()*/)))
                 .andExpect(status().isOk());
         // @formatter:on
     }
@@ -877,6 +937,9 @@ public class ApiDocumentation {
                 getWithContext("/classifications/" + CLASS_ID_KOMMUNEINNDELING
                         + "/codes?from=2015-01-01&to=2016-01-01&selectCodes=0301-0305,01*")
                         .accept("text/csv"))
+                .andDo(this.documentationHandler = document("{method-name}",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(/*prettyPrint()*/)))
                 .andExpect(status().isOk());
         // @formatter:on
     }
@@ -891,6 +954,9 @@ public class ApiDocumentation {
                 getWithContext("/classifications/" + CLASS_ID_KOMMUNEINNDELING
                         + "/codes?from=2015-01-01&to=2016-01-01&language=nb")
                         .accept("text/csv"))
+                .andDo(this.documentationHandler = document("{method-name}",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(/*prettyPrint()*/)))
                 .andExpect(status().isOk());
         // @formatter:on
     }
