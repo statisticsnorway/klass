@@ -348,7 +348,7 @@ public class ApiDocumentation {
         this.mockMvc.perform(getWithContext("/classifications/" + CLASS_ID_KOMMUNEINNDELING + "?language=nb&includeFuture=true")
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(this.documentationHandler.document(
-                        requestParameters(languageDescription(),includeFutureDescription())))
+                        requestParameters(languageDescription(),includeFutureDescription(""))))
                 .andExpect(status().isOk());
         // @formatter:on
     }
@@ -391,7 +391,7 @@ public class ApiDocumentation {
         this.mockMvc.perform(getWithContext("/versions/" + CLASS_ID_KOMMUNEINNDELING + "?language=nb&includeFuture=true")
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(this.documentationHandler.document(
-                        requestParameters(languageDescription(),includeFutureDescription())))
+                        requestParameters(languageDescription(),includeFutureDescription(""))))
                 .andExpect(status().isOk());
         // @formatter:on
     }
@@ -411,13 +411,25 @@ public class ApiDocumentation {
     }
 
     @Test
-    public void codesExample() throws Exception {
+    public void codesExampleJson() throws Exception {
         DateRange dateRange = DateRange.create("2014-01-01", "2015-01-01");
         List<CodeDto> codes = createKommuneInndelingCodes(dateRange);
         when(classificationServiceMock.findClassificationCodes(any(), any(), any(), any())).thenReturn(codes);
         // @formatter:off
         this.mockMvc.perform(getWithContext("/classifications/" + CLASS_ID_KOMMUNEINNDELING + "/codes?from=2014-01-01&to=2015-01-01&csvSeparator=;")
-                .header("Accept", "text/csv; charset=UTF-8"))
+                .header("Accept", MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk());
+        // @formatter:on
+    }
+
+    @Test
+    public void codesExampleCsv() throws Exception {
+        DateRange dateRange = DateRange.create("2014-01-01", "2015-01-01");
+        List<CodeDto> codes = createKommuneInndelingCodes(dateRange);
+        when(classificationServiceMock.findClassificationCodes(any(), any(), any(), any())).thenReturn(codes);
+        // @formatter:off
+        this.mockMvc.perform(getWithContext("/classifications/" + CLASS_ID_KOMMUNEINNDELING + "/codes?from=2014-01-01&to=2015-01-01&csvSeparator=;")
+                .header("Accept", "text/csv; charset=ISO-8859-1"))
                 .andDo(this.documentationHandler = document("{method-name}",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(/*prettyPrint()*/)))
@@ -432,7 +444,8 @@ public class ApiDocumentation {
         when(classificationServiceMock.findClassificationCodes(any(), any(), any(), any())).thenReturn(codes);
         // @formatter:off
         this.mockMvc.perform(getWithContextUri("/classifications/" + CLASS_ID_KOMMUNEINNDELING + "/codes?from=2014-01-01&to=2015-01-01&csvSeparator=;"
-                + "&selectLevel=1&selectCodes=01*&presentationNamePattern={code}-{name}&language=nb&includeFuture=true").accept("text/csv"))
+                + "&selectLevel=1&selectCodes=01*&presentationNamePattern={code}-{name}&language=nb&includeFuture=true")
+                .accept("text/csv"))
                 .andDo(this.documentationHandler
                         .document(
                         requestParameters(
@@ -443,13 +456,13 @@ public class ApiDocumentation {
                                 selectLevelParameterDescription(),
                                 presentationNamePatternParameterDescription(),
                                 languageDescription(),
-                                includeFutureDescription())))
+                                includeFutureDescription("codes from the"))))
                 .andExpect(status().isOk());
         // @formatter:on
     }
 
     @Test
-    public void codesAtExample() throws Exception {
+    public void codesAtExampleCsv() throws Exception {
         DateRange dateRange = DateRange.create("2015-01-01", "2016-01-01");
         List<CodeDto> codes = createKommuneInndelingCodes(dateRange);
         when(classificationServiceMock.findClassificationCodes(any(), any(), any(), any())).thenReturn(codes);
@@ -459,6 +472,18 @@ public class ApiDocumentation {
                 .andDo(this.documentationHandler = document("{method-name}",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(/*prettyPrint()*/)))
+                .andExpect(status().isOk());
+        // @formatter:on
+    }
+
+    @Test
+    public void codesAtExampleJson() throws Exception {
+        DateRange dateRange = DateRange.create("2015-01-01", "2016-01-01");
+        List<CodeDto> codes = createKommuneInndelingCodes(dateRange);
+        when(classificationServiceMock.findClassificationCodes(any(), any(), any(), any())).thenReturn(codes);
+        // @formatter:off
+        this.mockMvc.perform(getWithContext("/classifications/" + CLASS_ID_KOMMUNEINNDELING + "/codesAt?date=2015-01-01")
+                .header("Accept", MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
         // @formatter:on
     }
@@ -480,13 +505,13 @@ public class ApiDocumentation {
                                 selectLevelParameterDescription(),
                                 presentationNamePatternParameterDescription(),
                                 languageDescription(),
-                                includeFutureDescription())))
+                                includeFutureDescription("variants of the"))))
                 .andExpect(status().isOk());
         // @formatter:on
     }
 
     @Test
-    public void variantExample() throws Exception {
+    public void variantExampleCsv() throws Exception {
         DateRange dateRange = DateRange.create("2014-01-01", "2015-01-01");
         List<CodeDto> codes = createGreenhouseGasesCodes(dateRange);
         when(classificationServiceMock.findVariantClassificationCodes(any(), any(), any(), any(), any())).thenReturn(codes);
@@ -503,6 +528,20 @@ public class ApiDocumentation {
     }
 
     @Test
+    public void variantExampleJson() throws Exception {
+        DateRange dateRange = DateRange.create("2014-01-01", "2015-01-01");
+        List<CodeDto> codes = createGreenhouseGasesCodes(dateRange);
+        when(classificationServiceMock.findVariantClassificationCodes(any(), any(), any(), any(), any())).thenReturn(codes);
+        // @formatter:off
+        this.mockMvc.perform(
+                getWithContext("/classifications/" + CLASS_ID_GREENHOUSE_GASES
+                        + "/variant?variantName=Klimagasser&from=2014-01-01&to=2015-01-01")
+                        .header("Accept", MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk());
+        // @formatter:on
+    }
+
+    @Test
     public void variantOptionalParametersExample() throws Exception {
         DateRange dateRange = DateRange.create("2014-01-01", "2015-01-01");
         when(classificationServiceMock.findVariantClassificationCodes(any(), any(), any(), any(), any())).thenReturn(
@@ -512,7 +551,8 @@ public class ApiDocumentation {
                 getWithContextUri("/classifications/" + CLASS_ID_GREENHOUSE_GASES
                         + "/variant?variantName=Klimagasser"
                         + "&from=2014-01-01&to=2015-01-01&csvSeparator=;&selectLevel=1&selectCodes=01*"
-                        + "&presentationNamePattern={code}-{name}&language=nb&includeFuture=true").accept("text/csv"))
+                        + "&presentationNamePattern={code}-{name}&language=nb&includeFuture=true")
+                        .accept("text/csv"))
                 .andDo(this.documentationHandler = document("{method-name}",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(/*prettyPrint()*/)))
@@ -526,13 +566,13 @@ public class ApiDocumentation {
                                 selectLevelParameterDescription(),
                                 presentationNamePatternParameterDescription(),
                                 languageDescription(),
-                                includeFutureDescription())))
+                                includeFutureDescription("variants of the"))))
                 .andExpect(status().isOk());
         // @formatter:on
     }
 
     @Test
-    public void variantAtExample() throws Exception {
+    public void variantAtExampleCsv() throws Exception {
         DateRange dateRange = DateRange.create("2015-01-01", null);
         when(classificationServiceMock.findVariantClassificationCodes(any(), any(), any(), any(), any())).thenReturn(
                 createGreenhouseGasesCodes(dateRange));
@@ -544,6 +584,20 @@ public class ApiDocumentation {
                 .andDo(this.documentationHandler = document("{method-name}",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(/*prettyPrint()*/)))
+                .andExpect(status().isOk());
+        // @formatter:on
+    }
+
+    @Test
+    public void variantAtExampleJson() throws Exception {
+        DateRange dateRange = DateRange.create("2015-01-01", null);
+        when(classificationServiceMock.findVariantClassificationCodes(any(), any(), any(), any(), any())).thenReturn(
+                createGreenhouseGasesCodes(dateRange));
+        // @formatter:off
+        this.mockMvc.perform(
+                getWithContext("/classifications/" + CLASS_ID_GREENHOUSE_GASES
+                        + "/variantAt?variantName=Klimagasser&date=2015-01-01")
+                        .header("Accept", MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
         // @formatter:on
     }
@@ -571,7 +625,7 @@ public class ApiDocumentation {
                                 selectLevelParameterDescription(),
                                 presentationNamePatternParameterDescription(),
                                 languageDescription(),
-                                includeFutureDescription())))
+                                includeFutureDescription("variants of the"))))
                 .andExpect(status().isOk());
         // @formatter:on
     }
@@ -674,7 +728,7 @@ public class ApiDocumentation {
                                 toParameterDescription(),
                                 csvSeparatorParameterDescription(),
                                 languageDescription(),
-                                includeFutureDescription())))
+                                includeFutureDescription(""))))
                 .andExpect(status().isOk());
         // @formatter:on
     }
@@ -715,7 +769,7 @@ public class ApiDocumentation {
                                 dateParameterDescription(),
                                 csvSeparatorParameterDescription(),
                                 languageDescription(),
-                                includeFutureDescription())))
+                                includeFutureDescription(""))))
                 .andExpect(status().isOk());
         // @formatter:on
     }
@@ -810,7 +864,7 @@ public class ApiDocumentation {
                                 toParameterDescription(),
                                 csvSeparatorParameterDescription(),
                                 languageDescription(),
-                                includeFutureDescription())))
+                                includeFutureDescription(""))))
                 .andExpect(status().isOk());
         // @formatter:on
     }
@@ -926,7 +980,7 @@ public class ApiDocumentation {
     }
 
     @Test
-    public void selectCodesExample() throws Exception {
+    public void selectCodesExampleCsv() throws Exception {
         DateRange dateRange = DateRange.create("2015-01-01", "2016-01-01");
         List<CodeDto> codes = createKommuneInndelingCodes(dateRange);
         codes.add(createCode(1, "0301", "Oslo", dateRange));
@@ -940,6 +994,22 @@ public class ApiDocumentation {
                 .andDo(this.documentationHandler = document("{method-name}",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(/*prettyPrint()*/)))
+                .andExpect(status().isOk());
+        // @formatter:on
+    }
+
+    @Test
+    public void selectCodesExampleJson() throws Exception {
+        DateRange dateRange = DateRange.create("2015-01-01", "2016-01-01");
+        List<CodeDto> codes = createKommuneInndelingCodes(dateRange);
+        codes.add(createCode(1, "0301", "Oslo", dateRange));
+        codes.add(createCode(1, "0304", "Oslo", dateRange));
+        when(classificationServiceMock.findClassificationCodes(any(), any(), any(), any())).thenReturn(codes);
+        // @formatter:off
+        this.mockMvc.perform(
+                getWithContext("/classifications/" + CLASS_ID_KOMMUNEINNDELING
+                        + "/codes?from=2015-01-01&to=2016-01-01&selectCodes=0301-0305,01*")
+                        .accept(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
         // @formatter:on
     }
@@ -1065,9 +1135,9 @@ public class ApiDocumentation {
                 + " classifications. Default is false");
     }
 
-    private ParameterDescriptor includeFutureDescription() {
-        return parameterWithName("includeFuture").description(
-                "[Optional] include future versions if available. Default is false.");
+    private ParameterDescriptor includeFutureDescription(String part) {
+        return parameterWithName("includeFuture").description(String.format(
+                "[Optional] include %s future versions if available. Default is false.", part));
     }
 
     private URI toUri(String url) {
