@@ -605,8 +605,8 @@ public class ApiDocumentation {
     @Test
     public void variantAtOptionalParametersExample() throws Exception {
         DateRange dateRange = DateRange.create("2015-01-01", null);
-        when(classificationServiceMock.findVariantClassificationCodes(any(), any(), any(), any(), any())).thenReturn(
-                createGreenhouseGasesCodes(dateRange));
+        when(classificationServiceMock.findVariantClassificationCodes(any(), any(), any(), any(), any()))
+                .thenReturn(createGreenhouseGasesCodes(dateRange));
         // @formatter:off
         this.mockMvc.perform(
                 getWithContextUri("/classifications/" + CLASS_ID_GREENHOUSE_GASES
