@@ -56,7 +56,7 @@ Default output format is XML. In many cases it is possible to get output in the 
 e.g. json: http://data.ssb.no/api/klass/v1/classifications/104/codesAt.json?date=2020-01-01[http://data.ssb.no/api/klass/v1/classifications/104/codesAt.json?date=2020-01-01]
 
 === Other
-In PxWebApi references to a classification in Klass has the form "urn:ssb:classification:klass:ID". This can be rewritten to http://data.ssb.no/api/klass/v1/classifications/ID.
+In PxWebApi references to a classification in Klass has the form [.small]#urn:ssb:classification:klass:ID#. This can be rewritten to [.underline]#httр://data.ssb.no/api/klass/v1/classifications/ID#.
 
 == Classification Resources
 
