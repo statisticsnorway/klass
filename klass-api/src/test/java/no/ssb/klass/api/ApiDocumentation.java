@@ -651,7 +651,7 @@ public class ApiDocumentation {
                                 fieldWithPath("validTo").description("Date the variant is valid to"),
                                 fieldWithPath("introduction").description("Variant description"),
                                 fieldWithPath("correspondenceTables").description("List of correspondence tables for the variant"),
-                                fieldWithPath("changelogs").description("Log og changes"),
+                                fieldWithPath("changelogs").description("Log of changes"),
                                 fieldWithPath("levels").description("List of levels"),
                                 fieldWithPath("classificationItems").description("Array of classification items"),
                                 fieldWithPath("_links").description("Links to operations on the variant"))))
