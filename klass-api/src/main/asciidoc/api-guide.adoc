@@ -14,9 +14,6 @@
 Examples in this documentation use https://en.wikipedia.org/wiki/CURL[curl]. The `-i` parameter in the examples includes the HTTP response headers. Be aware that when running Curl on MS Windows all single ' have to be replaced by double ". If Curl is not installed, an alternative is
 to use any REST client to explore Klass Rest interface, like https://www.getpostman.com/product/api-client[Postman] or address line in browser.
 
-In many cases it is possible to get output in the supported formats without using Curl `-H`. Add the dot-prefix `.json`, `.csv` or `.xml` in the URL before the request parameters.
-e.g. json: http://data.ssb.no/api/klass/v1/classifications/104/codesAt.json?date=2020-01-01[http://data.ssb.no/api/klass/v1/classifications/104/codesAt.json?date=2020-01-01]
-
 === URL Encoding
 This API requires you to use Percent-encoding for symbols and characters that are not part of the standard unreserved URI characters.
 
@@ -431,7 +428,7 @@ include::{snippets}/classification-family-example/curl-request.adoc[]
 include::{snippets}/classification-family-example/http-response.adoc[]
 
 ===== Response structure
-include::{snippets}/classification-family-example/response-fields.adoc[]0
+include::{snippets}/classification-family-example/response-fields.adoc[]
 
 [[classification-family-links]]
 ===== Links
