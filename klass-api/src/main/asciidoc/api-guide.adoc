@@ -590,9 +590,6 @@ include::{snippets}/presentation-name-pattern-example/curl-request.adoc[]
 
 ===== Example response
 include::{snippets}/presentation-name-pattern-example/http-response.adoc[]
-===== Example body
-include::{snippets}/presentation-name-pattern-example/response-body.adoc[]
-
 
 === ssbSection
 `ssbSection` is used to limit result to classifications belonging to specified SSB division when searching classifications. Default is all SSB divisions.
