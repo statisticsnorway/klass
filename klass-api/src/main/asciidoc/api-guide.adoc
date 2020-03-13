@@ -57,6 +57,7 @@ e.g. json: http://data.ssb.no/api/klass/v1/classifications/104/codesAt.json?date
 
 === Other
 In PxWebApi references to a classification in Klass has the form [.small]#urn:ssb:classification:klass:ID#. This can be rewritten to [.underline]#httр://data.ssb.no/api/klass/v1/classifications/ID#.
+For questions about Statistics Norway's APIs use: statistikkbanken@ssb.no.
 
 == Classification Resources
 
