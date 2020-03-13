@@ -1,4 +1,4 @@
-= Klass API Guide
+= API guide to Statistical Classifications and Codelists (Klass)
 :doctype: book
 // :icons: font
 :source-highlighter: highlightjs
@@ -19,7 +19,7 @@ This API requires you to use Percent-encoding for symbols and characters that ar
 
 For more information on Percent-encoding see this https://en.wikipedia.org/wiki/Percent-encoding[wikipedia article]
 
-You can also see it in use in the request example for <<presentationNamePattern, presentationNamePattern>>
+You can also see it in use in the request example for <<_presentationnamepattern, presentationNamePattern>>
 
 
 === HTTP status codes
@@ -78,6 +78,7 @@ include::{snippets}/classifications-example/http-response.adoc[]
 ===== Response structure
 include::{snippets}/classifications-example/response-fields.adoc[]
 
+[[classifications-links]]
 ===== Links
 include::{snippets}/classifications-example/links.adoc[]
 
@@ -125,6 +126,7 @@ include::{snippets}/classification-example/http-response.adoc[]
 ===== Response structure
 include::{snippets}/classification-example/response-fields.adoc[]
 
+[[classification-links]]
 ===== Links
 include::{snippets}/classification-example/links.adoc[]
 
@@ -136,8 +138,8 @@ include::{snippets}/classification-optional-parameters-example/request-parameter
 Used to get codes from a classification. A range is specified when requesting the codes,
 and the response will for each code indicate its valid range (validFrom/validTo).
 The format and character set used, can be set in the http header (setting character set is only available for csv).
-For more information about the range see <<range, range>>. +
-To get a snapshot of codes valid at a specified date, use <<codesAt, codesAt>>
+For more information about the range see <<_range, range>>. +
+To get a snapshot of codes valid at a specified date, use <<_codesat, codesAt>>
 
 ===== Supported formats
 `text/csv`, `application/json`, `text/xml`
@@ -157,7 +159,6 @@ include::{snippets}/codes-example-json/http-response.adoc[]
 ===== Request parameters
 include::{snippets}/codes-optional-parameters-example/request-parameters.adoc[]
 
-[[codesAt]]
 === codesAt
 Used to get codes from a classification. A date is specified when requesting the codes,
 and the response will include all codes valid at the specified date.
@@ -214,8 +215,9 @@ include::{snippets}/versions-example-csv/http-response.adoc[]
 Used to search codes from a classification variant. A range is specified when requesting the codes,
 and the response will for each code indicate its valid range (validFrom/validTo).
 The format and character set used, can be specified in the http header (character set is only available for csv).
-For more information about the range see <<range, range>>. +
-To get a snapshot of codes valid at a specified date, use <<variantAt, variantAt>>
+For more information about the range see <<_range, range>>. +
+To get a snapshot of codes valid at a specified date, use <<_variantaAt, variantAt>>.
+See also <<_variants_by_id, variants>>
 
 ===== Supported formats
 `text/csv`, `application/json`, `text/xml`
@@ -295,8 +297,8 @@ A range is specified when requesting the correspondence mappings,
 and the response will for each correspondence map indicate its valid range (validFrom/validTo).
 If a correspondence table is missing for parts of the range, the API will return 404 (not found).
 The format and character set used, can be specified in the http header (character set is only available for csv).
-For more information about the range see <<range, range>>. +
-To get a snapshot of correspondence mappings valid at a specified date, use <<correspondsAt, correspondsAt>>
+For more information about the range see <<_range, range>>. +
+To get a snapshot of correspondence mappings valid at a specified date, use <<_correspondsat, correspondsAt>>
 
 ===== Supported formats
 `text/csv`, `application/json`, `text/xml`
@@ -312,7 +314,6 @@ include::{snippets}/corresponds-example/http-response.adoc[]
 
 ===== Request parameters
 include::{snippets}/corresponds-optional-parameters-example/request-parameters.adoc[]
-
 
 === correspondsAt
 Used to get correspondence mappings between a source classification and a target classification.
@@ -464,7 +465,6 @@ none
 
 
 == Request parameters
-[[range]]
 === range
 A range is a time period with a `from` date and a `to` date. The dates are specified in format `<yyyy-MM-dd>`.
 `from` is inclusive and `to` is exclusive. `to` is optional, and if not specified the end of the range is considered to be indefinite.
@@ -480,7 +480,6 @@ If now increasing the range to also include 2014, it is seen that some codes are
 include::{snippets}/range-extended-example/curl-request.adoc[]
 include::{snippets}/range-extended-example/http-response.adoc[]
 
-[[changedSince]]
 === changedSince
 `changedSince` is used to find classifications that have been updated since a specified time.
 `changedSince` is specified in ISO 8601 DateTime format `<yyyy-MM-dd'T'HH:mm:ss.SSSZ>` e.g. "2015-10-31T01:30:00.000-0200"
@@ -488,7 +487,6 @@ include::{snippets}/range-extended-example/http-response.adoc[]
 ===== Example
 include::{snippets}/changed-since-example/curl-request.adoc[]
 
-[[selectCodes]]
 === selectCodes
 `selectCodes` is used to limit the result to codes that match the pattern given by selectCodes. +
 `selectCodes` is a comma separated list of codes (may also use wildcard ' * ') +
@@ -511,7 +509,6 @@ include::{snippets}/select-codes-example-csv/curl-request.adoc[]
 include::{snippets}/select-codes-example-csv/http-response.adoc[]
 
 
-[[csvSeparator]]
 === csvSeparator
 `csvSeparator` is used to specify separator to be used for csv format. Default is `,`
 
@@ -520,7 +517,6 @@ include::{snippets}/csv-separator-example/curl-request.adoc[]
 ===== Example response
 include::{snippets}/csv-separator-example/http-response.adoc[]
 
-[[language]]
 === language
 `language` is used to specify which language data shall be presented in. Default if none is selected is nb (Norwegian Bokmål).
 
@@ -538,7 +534,6 @@ include::{snippets}/language-example/curl-request.adoc[]
 include::{snippets}/language-example/http-response.adoc[]
 
 
-[[selectLevel]]
 === selectLevel
 `selectLevel` is used to limit result to codes that are at specified level
 
@@ -548,7 +543,6 @@ include::{snippets}/select-level-example/curl-request.adoc[]
 include::{snippets}/select-level-example/http-response.adoc[]
 
 
-[[presentationNamePattern]]
 === presentationNamePattern
 `presentationNamePattern` is used to build an alternative presentationName.
 To build a presentationName use curly braces to access other columns:
@@ -603,7 +597,6 @@ include::{snippets}/search-optional-parameters-example/http-response.adoc[]
 
 
 == Other
-[[page]]
 === page
 When the response contains a collection of resources (e.g. classifications or searchResults).
 The response will limit the returned collection to a page of configurable size.
