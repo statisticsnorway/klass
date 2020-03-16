@@ -229,8 +229,7 @@ public class ApiDocumentation {
                 i -> createPage(i.getArgumentAt(2, Pageable.class), classifications));
         // @formatter:off        
         this.mockMvc.perform(getWithContext("/classifications").accept(MediaType.APPLICATION_JSON))
-                .andDo(this.documentationHandler.document(
-                        links(
+                .andDo(this.documentationHandler.document(links(
                                 halLinks(),
                                 linkWithRel("self").description("The current request"),
                                 linkWithRel("search").description("Link to search for classifications")),
@@ -240,7 +239,7 @@ public class ApiDocumentation {
                                 fieldWithPath("_embedded.classifications[].lastModified").description("Last modification time of classification"),
                                 fieldWithPath("_embedded.classifications[]._links").description("Link to classification"),
                                 fieldWithPath("_links").description("<<classifications-links,Links>> to other resources"),
-                                fieldWithPath("page").description("Describes number of classifications returned, see <<page, page>>"))))
+                                fieldWithPath("page").description("Describes number of classifications returned, see <<_page, page>>"))))
                 .andExpect(status().isOk());
         // @formatter:on        
     }
@@ -277,7 +276,7 @@ public class ApiDocumentation {
                                         .description("Represents this classifications relevans for the search"),
                                 fieldWithPath("_embedded.searchResults[]._links").description("Link to classification that matched search"),
                                 fieldWithPath("_links").description("<<search-links,Links>> to other resources"),
-                                fieldWithPath("page").description("Describes number of classifications returned, see <<page, page>>"))))
+                                fieldWithPath("page").description("Describes number of classifications returned, see <<_page, page>>"))))
                 .andExpect(status().isOk());
         // @formatter:on
     }
@@ -308,19 +307,19 @@ public class ApiDocumentation {
                         links(
                                 halLinks(),
                                 linkWithRel("self").description("The current request"),
-                                linkWithRel("codes").description("Used for getting codes from the classification, see <<Codes, codes>>"),
+                                linkWithRel("codes").description("Used for getting codes from the classification, see <<_codes, codes>>"),
                                 linkWithRel("codesAt")
-                                        .description("Used for getting codes from the classification valid at a specific date, see <<CodesAt, codesAt>>"),
-                                linkWithRel("variant").description("Used for getting codes from a classification variant, see <<Variant, variant>>"),
+                                        .description("Used for getting codes from the classification valid at a specific date, see <<_codesat, codesAt>>"),
+                                linkWithRel("variant").description("Used for getting codes from a classification variant, see <<_variant, variant>>"),
                                 linkWithRel("variantAt")
                                         .description("Used for getting codes from a variant of the classification valid at a specific date, "
-                                                + "see <<VariantAt, variantAt>>"),
+                                                + "see <<_variantat, variantAt>>"),
                                 linkWithRel("corresponds")
-                                        .description("Used for getting mappings between two classifications, see <<Corresponds, corresponds>>"),
+                                        .description("Used for getting mappings between two classifications, see <<_corresponds, corresponds>>"),
                                 linkWithRel("correspondsAt")
                                         .description("Used for getting mappings between two classifications at a specific date, "
-                                                + "see <<CorrespondsAt, correspondsAt>>"),
-                                linkWithRel("changes").description("Used for getting changes in codes, see <<Changes, changes>>")),
+                                                + "see <<_correspondsat, correspondsAt>>"),
+                                linkWithRel("changes").description("Used for getting changes in codes, see <<_changes, changes>>")),
                         relaxedResponseFields(
                                 fieldWithPath("name").description("Classification name"),
                                 fieldWithPath("description").description("Description of classification"),
@@ -1068,23 +1067,23 @@ public class ApiDocumentation {
 
     private ParameterDescriptor languageDescription() {
         return parameterWithName("language").description(
-                "[Optional] specifies language of retrieved data. Default is nb (Norwegian Bokmål). For details see <<language, language>>");
+                "[Optional] specifies language of retrieved data. Default is nb (Norwegian Bokmål). For details see <<_language, language>>");
     }
 
     private ParameterDescriptor changedSinceDescription() {
         return parameterWithName("changedSince").description(
-                "[Optional] specifies that only classifications that have been changed since changedSince shall be included in the reponse." +
-                        " For details see  <<changedSince, changedSince>>");
+                "[Optional] specifies that only classifications that have been changed since changedSince shall be included in the response." +
+                        " For details see  <<_changedsince, changedSince>>");
     }
 
     private ParameterDescriptor fromParameterDescription() {
         return parameterWithName("from").description(
-                "[Mandatory] specifies beginning of range with format `<yyyy-MM-dd>`. For details see <<range, range>>");
+                "[Mandatory] specifies beginning of range with format `<yyyy-MM-dd>`. For details see <<_range, range>>");
     }
 
     private ParameterDescriptor toParameterDescription() {
         return parameterWithName("to").description("[Optional] specifies end of range with format `<yyyy-MM-dd>`. "
-                + "If not set means that to is indefinite. For details see <<range, range>>");
+                + "If not set means that to is indefinite. For details see <<_range, range>>");
     }
 
     private ParameterDescriptor dateParameterDescription() {
@@ -1101,27 +1100,27 @@ public class ApiDocumentation {
         return parameterWithName("variantName").description("[Mandatory] specifies name of classification variant\n\n"
                 + "NOTE: If you want to look up codes from variants across multiple versions do not include the year "
                 + "(or year month) and do not include everything after that\n\n"
-                + "Ex. for `Particulate matter 2009  - Variant of substances emitted to air 2009` would be `Particulate matter`");
+                + "Example for `Particulate matter 2009  - Variant of substances emitted to air 2009` would be `Particulate matter`");
     }
 
     private ParameterDescriptor csvSeparatorParameterDescription() {
         return parameterWithName("csvSeparator").description(
-                "[Optional] specifies separator to be used for csv format. For details see <<csvSeparator, csvSeparator>>");
+                "[Optional] specifies separator to be used for csv format. For details see <<_csvseparator, csvSeparator>>");
     }
 
     private ParameterDescriptor selectCodesParameterDescription() {
         return parameterWithName("selectCodes").description(
-                "[Optional] only return codes that match pattern given by selectCodes. For details see <<selectCodes, selectCodes>>");
+                "[Optional] only return codes that match pattern given by selectCodes. For details see <<_selectcodes, selectCodes>>");
     }
 
     private ParameterDescriptor selectLevelParameterDescription() {
         return parameterWithName("selectLevel").description(
-                "[Optional] only return codes with matching level. For details see <<selectLevel, selectLevel>>");
+                "[Optional] only return codes with matching level. For details see <<_selectlevel, selectLevel>>");
     }
 
     private ParameterDescriptor presentationNamePatternParameterDescription() {
         return parameterWithName("presentationNamePattern").description(
-                "[Optional] used to build a presentationName. For details see <<presentationNamePattern, presentationNamePattern>>");
+                "[Optional] used to build a presentationName. For details see <<_presentationnamepattern, presentationNamePattern>>");
     }
 
     private ParameterDescriptor ssbSectionParameterDescription(String part) {
