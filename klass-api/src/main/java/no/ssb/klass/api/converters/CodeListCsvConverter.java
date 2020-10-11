@@ -19,7 +19,7 @@ public class CodeListCsvConverter extends AbstractCsvConverter<CodeList> {
     @Override
     protected void writeInternal(CodeList codeList, HttpOutputMessage outputMessage) throws IOException {
         Charset charset = selectCharsetAndUpdateOutput(outputMessage);
-        ObjectWriter writer = createWriter(codeList.codeItemsJavaType(), codeList.getCsvSeparator());
+        ObjectWriter writer = createWriter(codeList.codeItemsJavaType(), codeList.getCsvSeparator(), codeList.getCsvFields());
         writer.writeValue(new OutputStreamWriter(outputMessage.getBody(), charset), codeList.getCodes());
     }
 }

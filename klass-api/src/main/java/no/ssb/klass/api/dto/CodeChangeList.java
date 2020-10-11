@@ -18,6 +18,7 @@ import no.ssb.klass.core.model.Language;
 public class CodeChangeList {
     private final char csvSeparator;
     private final List<CodeChangeItem> codeChanges;
+    private List<String> csvFields;
 
     public CodeChangeList(String csvSeparator) {
         if (csvSeparator.toCharArray().length != 1) {
@@ -41,6 +42,16 @@ public class CodeChangeList {
     @JsonIgnore
     public char getCsvSeparator() {
         return csvSeparator;
+    }
+
+    @JsonIgnore
+    public List<String> getCsvFields() {
+        return csvFields;
+    }
+
+    @JsonIgnore
+    public void setCsvFields(List<String> csvFields) {
+        this.csvFields = csvFields;
     }
 
     public CodeChangeList convert(CorrespondenceTable correspondenceTable, Language language) {

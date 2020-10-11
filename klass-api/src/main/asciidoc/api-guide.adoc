@@ -517,6 +517,19 @@ include::{snippets}/csv-separator-example/curl-request.adoc[]
 ===== Example response
 include::{snippets}/csv-separator-example/http-response.adoc[]
 
+
+
+=== csvFields
+`csvFields` is an optional parameter that allows you to specify which columns and in what order you want them to appear
+in the Csv output. Please note that the column names are case sensitive and adding an non-existing column may result
+in an invalid Csv.
+
+===== Example request for csvSeparator=;
+include::{snippets}/csv-fields-example/curl-request.adoc[]
+===== Example response
+include::{snippets}/csv-fields-example/http-response.adoc[]
+
+
 === language
 `language` is used to specify which language data shall be presented in. Default if none is selected is nb (Norwegian Bokmål).
 
