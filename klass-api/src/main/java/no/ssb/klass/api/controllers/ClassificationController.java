@@ -277,7 +277,7 @@ public class ClassificationController {
     }
 
     @RequestMapping(value = "/classifications/{id}/codesAt", method = RequestMethod.GET)
-    public Object codesAt(@PathVariable Long id,
+    public CodeList codesAt(@PathVariable Long id,
             // @formatter:off
                           @RequestParam(value = "date") @DateTimeFormat(pattern = RestConstants.DATE_FORMAT) LocalDate date,
                           @RequestParam(value = "csvSeparator", defaultValue = ",") String csvSeparator,
