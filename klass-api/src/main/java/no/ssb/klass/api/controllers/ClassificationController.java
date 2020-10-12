@@ -3,6 +3,7 @@ package no.ssb.klass.api.controllers;
 import static java.util.stream.Collectors.*;
 
 import java.beans.PropertyEditorSupport;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDate;
@@ -12,6 +13,11 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import com.fasterxml.jackson.dataformat.csv.CsvMapper;
+import com.fasterxml.jackson.dataformat.csv.CsvSchema;
+import no.ssb.klass.api.dto.CodeChangeItem;
+import no.ssb.klass.api.dto.CodeItem;
+import no.ssb.klass.api.dto.CorrespondenceItem;
 import no.ssb.klass.core.util.AlphaNumericalComparator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -119,6 +125,12 @@ public class ClassificationController {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String argumentTypeMismatchExceptionHandler(MethodArgumentTypeMismatchException exception) {
+        return exception.getMessage();
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String argumentTypeMismatchExceptionHandler(IllegalArgumentException exception) {
         return exception.getMessage();
     }
 
@@ -271,7 +283,9 @@ public class ClassificationController {
                 presentationNamePattern, language, includeFuture);
 
         if (!csvFields.isEmpty())  {
-            codeList.setCsvFields(getCsvFieldsList(csvFields));
+            List<String> csvFieldsList = getCsvFieldsList(csvFields);
+            validateFieldsList(CodeChangeItem.class, csvFieldsList);
+            codeList.setCsvFields(csvFieldsList);
         }
         return codeList;
     }
@@ -294,9 +308,10 @@ public class ClassificationController {
                 presentationNamePattern, language, includeFuture);
 
         if (!csvFields.isEmpty())  {
-            codeList.setCsvFields(getCsvFieldsList(csvFields));
+            List<String> csvFieldsList = getCsvFieldsList(csvFields);
+            validateFieldsList(CodeItem.class, csvFieldsList);
+            codeList.setCsvFields(csvFieldsList);
         }
-
         return codeList;
     }
 
@@ -333,7 +348,9 @@ public class ClassificationController {
         }
 
         if (!csvFields.isEmpty())  {
-            codeChanges.setCsvFields(getCsvFieldsList(csvFields));
+            List<String> csvFieldsList = getCsvFieldsList(csvFields);
+            validateFieldsList(CodeItem.class, csvFieldsList);
+            codeChanges.setCsvFields(csvFieldsList);
         }
 
         return codeChanges;
@@ -358,7 +375,9 @@ public class ClassificationController {
                 presentationNamePattern, language, includeFuture);
 
         if (!csvFields.isEmpty())  {
-            codeList.setCsvFields(getCsvFieldsList(csvFields));
+            List<String> csvFieldsList = getCsvFieldsList(csvFields);
+            validateFieldsList(CodeItem.class, csvFieldsList);
+            codeList.setCsvFields(csvFieldsList);
         }
 
         return codeList;
@@ -383,7 +402,9 @@ public class ClassificationController {
                 presentationNamePattern, language, includeFuture);
 
         if (!csvFields.isEmpty())  {
-            codeList.setCsvFields(getCsvFieldsList(csvFields));
+            List<String> csvFieldsList = getCsvFieldsList(csvFields);
+            validateFieldsList(CodeItem.class, csvFieldsList);
+            codeList.setCsvFields(csvFieldsList);
         }
 
         return codeList;
@@ -414,7 +435,9 @@ public class ClassificationController {
         CorrespondenceItemList correspondenceList = correspondsInternal(id, targetClassificationId, new DateRangeHolder(from, to), csvSeparator, language, includeFuture);
 
         if (!csvFields.isEmpty())  {
-            correspondenceList.setCsvFields(Arrays.asList(csvFields.split(",")));
+            List<String> csvFieldsList = getCsvFieldsList(csvFields);
+            validateFieldsList(CorrespondenceItem.RangedCorrespondenceItem.class, csvFieldsList);
+            correspondenceList.setCsvFields(csvFieldsList);
         }
 
         return correspondenceList;
@@ -433,8 +456,11 @@ public class ClassificationController {
         CorrespondenceItemList correspondenceList = correspondsInternal(id, targetClassificationId, new DateRangeHolder(date), csvSeparator, language, includeFuture);
 
         if (!csvFields.isEmpty())  {
-            correspondenceList.setCsvFields(Arrays.asList(csvFields.split(",")));
+            List<String> csvFieldsList = getCsvFieldsList(csvFields);
+            validateFieldsList(CorrespondenceItem.RangedCorrespondenceItem.class, csvFieldsList);
+            correspondenceList.setCsvFields(csvFieldsList);
         }
+
         return correspondenceList;
     }
 
@@ -532,6 +558,15 @@ public class ClassificationController {
 
     private List<String> getCsvFieldsList(String csvFields) {
         return Arrays.asList(csvFields.split(","));
+    }
+
+    private void validateFieldsList(Class<?> clazz, List<String> csvFields)  {
+        CsvMapper mapper = new CsvMapper();
+        CsvSchema fullSchema = mapper.schemaFor(clazz);
+        List<String> notFound = csvFields.stream().filter(s -> fullSchema.column(s) == null).collect(toList());
+        if(!notFound.isEmpty()) {
+            throw new IllegalArgumentException("field(s) not found: " + String.join(",", notFound));
+        }
     }
 
     @InitBinder
