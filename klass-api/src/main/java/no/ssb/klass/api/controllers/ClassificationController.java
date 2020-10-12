@@ -3,7 +3,6 @@ package no.ssb.klass.api.controllers;
 import static java.util.stream.Collectors.*;
 
 import java.beans.PropertyEditorSupport;
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDate;
