@@ -560,11 +560,10 @@ public class ClassificationController {
     }
 
     private void validateFieldsList(Class<?> clazz, List<String> csvFields)  {
-        CsvMapper mapper = new CsvMapper();
-        CsvSchema schema = mapper.schemaFor(clazz);
-        List<String> notFound = csvFields.stream().filter(s -> schema.column(s) == null).collect(toList());
-        if(!notFound.isEmpty()) {
-            throw new IllegalArgumentException("field(s) not found: " + String.join(",", notFound));
+        CsvSchema schema = new CsvMapper().schemaFor(clazz);
+        List<String> FieldsNotFound = csvFields.stream().filter(s -> schema.column(s) == null).collect(toList());
+        if(!FieldsNotFound.isEmpty()) {
+            throw new IllegalArgumentException("field(s) not found: " + String.join(",", FieldsNotFound));
         }
     }
 
