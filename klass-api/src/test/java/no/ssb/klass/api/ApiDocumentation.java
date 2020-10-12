@@ -719,7 +719,7 @@ public class ApiDocumentation {
         this.mockMvc.perform(
                 getWithContext("/classifications/" + CLASS_ID_KOMMUNEINNDELING
                         + "/corresponds?targetClassificationId=" + CLASS_ID_BYDELSINNDELING
-                        + "&from=2014-01-01&to=2016-01-01&csvSeparator=;&csvFields=name,code"
+                        + "&from=2014-01-01&to=2016-01-01&csvSeparator=;&csvFields=sourceCode,sourceName"
                         + "&language=nb&includeFuture=true").accept("text/csv"))
                 .andDo(this.documentationHandler = document("{method-name}",
                         preprocessRequest(prettyPrint()),
@@ -762,7 +762,7 @@ public class ApiDocumentation {
         // @formatter:off
         this.mockMvc.perform(
                 getWithContext("/classifications/" + CLASS_ID_KOMMUNEINNDELING
-                        + "/correspondsAt?targetClassificationId=" + CLASS_ID_BYDELSINNDELING + "&date=2016-01-01&csvSeparator=;&csvFields=name,code"
+                        + "/correspondsAt?targetClassificationId=" + CLASS_ID_BYDELSINNDELING + "&date=2016-01-01&csvSeparator=;&csvFields=sourceCode,sourceName"
                         + "&language=nb&includeFuture=true").accept("text/csv"))
                 .andDo(this.documentationHandler = document("{method-name}",
                         preprocessRequest(prettyPrint()),

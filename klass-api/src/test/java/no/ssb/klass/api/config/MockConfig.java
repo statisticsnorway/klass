@@ -52,6 +52,11 @@ public class MockConfig {
         return Mockito.mock(UserService.class);
     }
 
+    @Bean
+    private CsvFieldsValidator csvFieldsValidator() {
+        return new CsvFieldsValidator();
+    }
+
 
     @Bean
     public ClassificationController classificationController() {

@@ -287,7 +287,7 @@ public class ClassificationController {
 
         if (!csvFields.isEmpty())  {
             List<String> csvFieldsList = getCsvFieldsList(csvFields);
-            csvFieldsValidator.validateFieldsChangeItemSchema( csvFieldsList);
+            csvFieldsValidator.validateFieldsCodeItem( csvFieldsList);
             codeList.setCsvFields(csvFieldsList);
         }
         return codeList;
@@ -352,7 +352,7 @@ public class ClassificationController {
 
         if (!csvFields.isEmpty())  {
             List<String> csvFieldsList = getCsvFieldsList(csvFields);
-            csvFieldsValidator.validateFieldsCodeItem(csvFieldsList);
+            csvFieldsValidator.validateFieldsChangeItemSchema(csvFieldsList);
             codeChanges.setCsvFields(csvFieldsList);
         }
 
