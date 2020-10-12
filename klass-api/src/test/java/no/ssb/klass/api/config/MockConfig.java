@@ -1,5 +1,6 @@
 package no.ssb.klass.api.config;
 
+import no.ssb.klass.api.controllers.validators.CsvFieldsValidator;
 import no.ssb.klass.core.service.*;
 import no.ssb.klass.api.controllers.ClassificationController;
 import org.mockito.Mockito;
@@ -19,9 +20,12 @@ public class MockConfig {
     
     @Autowired
     private StatisticsService statisticsService;
-    @Autowired
 
+    @Autowired
     private UserService userService;
+
+    @Autowired
+    private CsvFieldsValidator csvFieldsValidator;
 
     @Bean
     public ClassificationService classificationService() {
@@ -48,8 +52,9 @@ public class MockConfig {
         return Mockito.mock(UserService.class);
     }
 
+
     @Bean
     public ClassificationController classificationController() {
-        return new ClassificationController(classificationService, subscriberService, searchService, statisticsService);
+        return new ClassificationController(classificationService, subscriberService, searchService, statisticsService, csvFieldsValidator);
     }
 }

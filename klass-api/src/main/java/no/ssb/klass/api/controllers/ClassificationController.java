@@ -14,6 +14,7 @@ import javax.transaction.Transactional;
 
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
+import no.ssb.klass.api.controllers.validators.CsvFieldsValidator;
 import no.ssb.klass.api.dto.CodeChangeItem;
 import no.ssb.klass.api.dto.CodeItem;
 import no.ssb.klass.api.dto.CorrespondenceItem;
@@ -96,15 +97,18 @@ public class ClassificationController {
     private final SubscriberService subscriberService;
     private final SearchService searchService;
     private final StatisticsService statisticsService;
+    private final CsvFieldsValidator csvFieldsValidator;
 
     @Autowired
     public ClassificationController(ClassificationService classificationService,
             SubscriberService subscriberService,
-            SearchService searchService, StatisticsService statisticsService) {
+            SearchService searchService, StatisticsService statisticsService,
+            CsvFieldsValidator csvFieldsValidator) {
         this.classificationService = classificationService;
         this.subscriberService = subscriberService;
         this.searchService = searchService;
         this.statisticsService = statisticsService;
+        this.csvFieldsValidator = csvFieldsValidator;
     }
 
     @ExceptionHandler
@@ -283,7 +287,7 @@ public class ClassificationController {
 
         if (!csvFields.isEmpty())  {
             List<String> csvFieldsList = getCsvFieldsList(csvFields);
-            validateFieldsList(CodeChangeItem.class, csvFieldsList);
+            csvFieldsValidator.validateFieldsChangeItemSchema( csvFieldsList);
             codeList.setCsvFields(csvFieldsList);
         }
         return codeList;
@@ -308,7 +312,7 @@ public class ClassificationController {
 
         if (!csvFields.isEmpty())  {
             List<String> csvFieldsList = getCsvFieldsList(csvFields);
-            validateFieldsList(CodeItem.class, csvFieldsList);
+            csvFieldsValidator.validateFieldsCodeItem(csvFieldsList);
             codeList.setCsvFields(csvFieldsList);
         }
         return codeList;
@@ -348,7 +352,7 @@ public class ClassificationController {
 
         if (!csvFields.isEmpty())  {
             List<String> csvFieldsList = getCsvFieldsList(csvFields);
-            validateFieldsList(CodeItem.class, csvFieldsList);
+            csvFieldsValidator.validateFieldsCodeItem(csvFieldsList);
             codeChanges.setCsvFields(csvFieldsList);
         }
 
@@ -375,7 +379,7 @@ public class ClassificationController {
 
         if (!csvFields.isEmpty())  {
             List<String> csvFieldsList = getCsvFieldsList(csvFields);
-            validateFieldsList(CodeItem.class, csvFieldsList);
+            csvFieldsValidator.validateFieldsCodeItem(csvFieldsList);
             codeList.setCsvFields(csvFieldsList);
         }
 
@@ -402,7 +406,7 @@ public class ClassificationController {
 
         if (!csvFields.isEmpty())  {
             List<String> csvFieldsList = getCsvFieldsList(csvFields);
-            validateFieldsList(CodeItem.class, csvFieldsList);
+            csvFieldsValidator.validateFieldsCodeItem(csvFieldsList);
             codeList.setCsvFields(csvFieldsList);
         }
 
@@ -435,7 +439,7 @@ public class ClassificationController {
 
         if (!csvFields.isEmpty())  {
             List<String> csvFieldsList = getCsvFieldsList(csvFields);
-            validateFieldsList(CorrespondenceItem.RangedCorrespondenceItem.class, csvFieldsList);
+            csvFieldsValidator.validateFieldsCorrespondenceItem(csvFieldsList);
             correspondenceList.setCsvFields(csvFieldsList);
         }
 
@@ -456,7 +460,7 @@ public class ClassificationController {
 
         if (!csvFields.isEmpty())  {
             List<String> csvFieldsList = getCsvFieldsList(csvFields);
-            validateFieldsList(CorrespondenceItem.RangedCorrespondenceItem.class, csvFieldsList);
+            csvFieldsValidator.validateFieldsCorrespondenceItem(csvFieldsList);
             correspondenceList.setCsvFields(csvFieldsList);
         }
 
@@ -559,13 +563,6 @@ public class ClassificationController {
         return Arrays.asList(csvFields.split(","));
     }
 
-    private void validateFieldsList(Class<?> clazz, List<String> csvFields)  {
-        CsvSchema schema = new CsvMapper().schemaFor(clazz);
-        List<String> fieldsNotFound = csvFields.stream().filter(s -> schema.column(s) == null).collect(toList());
-        if(!fieldsNotFound.isEmpty()) {
-            throw new IllegalArgumentException("field(s) not found: " + String.join(",", fieldsNotFound));
-        }
-    }
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
