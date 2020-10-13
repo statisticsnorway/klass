@@ -216,7 +216,7 @@ Used to search codes from a classification variant. A range is specified when re
 and the response will for each code indicate its valid range (validFrom/validTo).
 The format and character set used, can be specified in the http header (character set is only available for csv).
 For more information about the range see <<_range, range>>. +
-To get a snapshot of codes valid at a specified date, use <<_variantaAt, variantAt>>.
+To get a snapshot of codes valid at a specified date, use <<_variantat, variantAt>>.
 See also <<_variants_by_id, variants>>
 
 ===== Supported formats
