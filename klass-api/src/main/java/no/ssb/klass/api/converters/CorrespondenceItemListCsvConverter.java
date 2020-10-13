@@ -21,7 +21,7 @@ public class CorrespondenceItemListCsvConverter extends AbstractCsvConverter<Cor
             throws IOException {
         Charset charset = selectCharsetAndUpdateOutput(outputMessage);
         ObjectWriter writer = createWriter(correspondenceItemList.classificationItemsJavaType(), correspondenceItemList
-                .getCsvSeparator());
+                .getCsvSeparator(),  correspondenceItemList.getCsvFields());
         writer.writeValue(new OutputStreamWriter(outputMessage.getBody(), charset), correspondenceItemList
                 .getCorrespondenceItems());
     }

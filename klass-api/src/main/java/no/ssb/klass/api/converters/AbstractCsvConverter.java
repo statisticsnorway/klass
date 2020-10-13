@@ -3,7 +3,9 @@ package no.ssb.klass.api.converters;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.util.List;
 
+import com.fasterxml.jackson.core.JsonGenerator;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpOutputMessage;
 import org.springframework.http.MediaType;
@@ -29,11 +31,24 @@ public abstract class AbstractCsvConverter<T> extends AbstractHttpMessageConvert
     }
 
     protected ObjectWriter createWriter(Class<?> clazz, char csvSeparator) {
+        return createWriter(clazz, csvSeparator, null);
+    }
+    protected ObjectWriter createWriter(Class<?> clazz, char csvSeparator, List<String> csvFields) {
         CsvMapper mapper = new CsvMapper();
-        CsvSchema schema = mapper.schemaFor(clazz).withHeader().withColumnSeparator(csvSeparator);
+        CsvSchema schema;
+        if (csvFields == null) {
+            schema = mapper
+                    .schemaFor(clazz)
+                    .withHeader()
+                    .withColumnSeparator(csvSeparator);
+        } else {
+            mapper.enable(JsonGenerator.Feature.IGNORE_UNKNOWN);
+            schema = CsvSchema.builder()
+                    .addColumns(csvFields, CsvSchema.ColumnType.STRING)
+                    .build().withHeader().withColumnSeparator(csvSeparator);
+        }
 
-        return mapper.writer(schema).withFeatures(
-                CsvGenerator.Feature.ALWAYS_QUOTE_STRINGS,
+        return mapper.writer(schema).withFeatures(CsvGenerator.Feature.ALWAYS_QUOTE_STRINGS,
                 CsvGenerator.Feature.OMIT_MISSING_TAIL_COLUMNS);
     }
 

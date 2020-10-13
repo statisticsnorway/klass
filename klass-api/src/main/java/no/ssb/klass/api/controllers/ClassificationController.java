@@ -6,11 +6,18 @@ import java.beans.PropertyEditorSupport;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 import javax.transaction.Transactional;
 
+import com.fasterxml.jackson.dataformat.csv.CsvMapper;
+import com.fasterxml.jackson.dataformat.csv.CsvSchema;
+import no.ssb.klass.api.controllers.validators.CsvFieldsValidator;
+import no.ssb.klass.api.dto.CodeChangeItem;
+import no.ssb.klass.api.dto.CodeItem;
+import no.ssb.klass.api.dto.CorrespondenceItem;
 import no.ssb.klass.core.util.AlphaNumericalComparator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -90,15 +97,18 @@ public class ClassificationController {
     private final SubscriberService subscriberService;
     private final SearchService searchService;
     private final StatisticsService statisticsService;
+    private final CsvFieldsValidator csvFieldsValidator;
 
     @Autowired
     public ClassificationController(ClassificationService classificationService,
             SubscriberService subscriberService,
-            SearchService searchService, StatisticsService statisticsService) {
+            SearchService searchService, StatisticsService statisticsService,
+            CsvFieldsValidator csvFieldsValidator) {
         this.classificationService = classificationService;
         this.subscriberService = subscriberService;
         this.searchService = searchService;
         this.statisticsService = statisticsService;
+        this.csvFieldsValidator = csvFieldsValidator;
     }
 
     @ExceptionHandler
@@ -118,6 +128,12 @@ public class ClassificationController {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String argumentTypeMismatchExceptionHandler(MethodArgumentTypeMismatchException exception) {
+        return exception.getMessage();
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String argumentTypeMismatchExceptionHandler(IllegalArgumentException exception) {
         return exception.getMessage();
     }
 
@@ -200,7 +216,7 @@ public class ClassificationController {
             // @formatter:off
                 @RequestParam(value = "query") String query,
                 @RequestParam(value = "ssbSection", required = false) String ssbSection,
-                @RequestParam(value = "includeCodelists", defaultValue = "false") boolean includeCodelists, 
+                @RequestParam(value = "includeCodelists", defaultValue = "false") boolean includeCodelists,
                 Pageable pageable, PagedResourcesAssembler<SolrSearchResult> assembler) {
             // @formatter:on
         Link self = new Link(getCurrentRequest(), Link.REL_SELF);
@@ -258,6 +274,7 @@ public class ClassificationController {
                           @RequestParam(value = "from") @DateTimeFormat(pattern = RestConstants.DATE_FORMAT) LocalDate from,
                           @RequestParam(value = "to", required = false) @DateTimeFormat(pattern = RestConstants.DATE_FORMAT) LocalDate to,
                           @RequestParam(value = "csvSeparator", defaultValue = ",") String csvSeparator,
+                          @RequestParam(value = "csvFields", defaultValue = "") String csvFields,
                           @RequestParam(value = "selectLevel", required = false) String selectLevel,
                           @RequestParam(value = "selectCodes", required = false) String selectCodes,
                           @RequestParam(value = "presentationNamePattern", required = false) String presentationNamePattern,
@@ -265,8 +282,15 @@ public class ClassificationController {
                           @RequestParam(value = "includeFuture", defaultValue = "false") Boolean includeFuture
                           ) {
             // @formatter:on
-        return codesInternal(id, new DateRangeHolder(from, to), csvSeparator, selectLevel, selectCodes,
+        CodeList codeList = codesInternal(id, new DateRangeHolder(from, to), csvSeparator, selectLevel, selectCodes,
                 presentationNamePattern, language, includeFuture);
+
+        if (!csvFields.isEmpty())  {
+            List<String> csvFieldsList = getCsvFieldsList(csvFields);
+            csvFieldsValidator.validateFieldsCodeItem( csvFieldsList);
+            codeList.setCsvFields(csvFieldsList);
+        }
+        return codeList;
     }
 
     @RequestMapping(value = "/classifications/{id}/codesAt", method = RequestMethod.GET)
@@ -274,6 +298,7 @@ public class ClassificationController {
             // @formatter:off
                           @RequestParam(value = "date") @DateTimeFormat(pattern = RestConstants.DATE_FORMAT) LocalDate date,
                           @RequestParam(value = "csvSeparator", defaultValue = ",") String csvSeparator,
+                          @RequestParam(value = "csvFields", defaultValue = "") String csvFields,
                           @RequestParam(value = "selectLevel", required = false) String selectLevel,
                           @RequestParam(value = "selectCodes", required = false) String selectCodes,
                           @RequestParam(value = "presentationNamePattern", required = false) String presentationNamePattern,
@@ -281,8 +306,16 @@ public class ClassificationController {
                           @RequestParam(value = "includeFuture", defaultValue = "false") Boolean includeFuture
                           ) {
             // @formatter:on
-        return codesInternal(id, new DateRangeHolder(date), csvSeparator, selectLevel, selectCodes,
+
+        CodeList codeList = codesInternal(id, new DateRangeHolder(date), csvSeparator, selectLevel, selectCodes,
                 presentationNamePattern, language, includeFuture);
+
+        if (!csvFields.isEmpty())  {
+            List<String> csvFieldsList = getCsvFieldsList(csvFields);
+            csvFieldsValidator.validateFieldsCodeItem(csvFieldsList);
+            codeList.setCsvFields(csvFieldsList);
+        }
+        return codeList;
     }
 
     private CodeList codesInternal(Long id, DateRangeHolder dateRangeHolder, String csvSeparator, String selectLevel,
@@ -304,6 +337,7 @@ public class ClassificationController {
                           @RequestParam(value = "from") @DateTimeFormat(pattern = RestConstants.DATE_FORMAT) LocalDate from,
                           @RequestParam(value = "to", required = false) @DateTimeFormat(pattern = RestConstants.DATE_FORMAT) LocalDate to,
                           @RequestParam(value = "csvSeparator", defaultValue = ",") String csvSeparator,
+                          @RequestParam(value = "csvFields", defaultValue = "") String csvFields,
                           @RequestParam(value = "language", defaultValue = "nb") Language language,
                           @RequestParam(value = "includeFuture", defaultValue = "false") Boolean includeFuture) {
             // @formatter:on
@@ -315,6 +349,13 @@ public class ClassificationController {
         for (CorrespondenceTable changeTable : changeTables) {
             codeChanges = codeChanges.merge(codeChanges.convert(changeTable, language));
         }
+
+        if (!csvFields.isEmpty())  {
+            List<String> csvFieldsList = getCsvFieldsList(csvFields);
+            csvFieldsValidator.validateFieldsChangeItemSchema(csvFieldsList);
+            codeChanges.setCsvFields(csvFieldsList);
+        }
+
         return codeChanges;
     }
 
@@ -325,6 +366,7 @@ public class ClassificationController {
                           @RequestParam(value = "from") @DateTimeFormat(pattern = RestConstants.DATE_FORMAT) LocalDate from,
                           @RequestParam(value = "to", required = false) @DateTimeFormat(pattern = RestConstants.DATE_FORMAT) LocalDate to,
                           @RequestParam(value = "csvSeparator", defaultValue = ",") String csvSeparator,
+                          @RequestParam(value = "csvFields", defaultValue = "") String csvFields,
                           @RequestParam(value = "level", required = false) String selectLevel,
                           @RequestParam(value = "selectCodes", required = false) String selectCodes,
                           @RequestParam(value = "presentationNamePattern", required = false) String presentationNamePattern,
@@ -332,8 +374,17 @@ public class ClassificationController {
                           @RequestParam(value = "includeFuture", defaultValue = "false") Boolean includeFuture
                           ) {
             // @formatter:on
-        return variantInternal(id, variantName, new DateRangeHolder(from, to), csvSeparator, selectLevel, selectCodes,
+        CodeList codeList = variantInternal(id, variantName, new DateRangeHolder(from, to), csvSeparator, selectLevel, selectCodes,
                 presentationNamePattern, language, includeFuture);
+
+        if (!csvFields.isEmpty())  {
+            List<String> csvFieldsList = getCsvFieldsList(csvFields);
+            csvFieldsValidator.validateFieldsCodeItem(csvFieldsList);
+            codeList.setCsvFields(csvFieldsList);
+        }
+
+        return codeList;
+
     }
 
     @RequestMapping(value = "/classifications/{id}/variantAt", method = RequestMethod.GET)
@@ -342,6 +393,7 @@ public class ClassificationController {
                           @RequestParam(value = "variantName") String variantName,
                           @RequestParam(value = "date", required = false) @DateTimeFormat(pattern = RestConstants.DATE_FORMAT) LocalDate date,
                           @RequestParam(value = "csvSeparator", defaultValue = ",") String csvSeparator,
+                          @RequestParam(value = "csvFields", defaultValue = "") String csvFields,
                           @RequestParam(value = "level", required = false) String selectLevel,
                           @RequestParam(value = "selectCodes", required = false) String selectCodes,
                           @RequestParam(value = "presentationNamePattern", required = false) String presentationNamePattern,
@@ -349,9 +401,19 @@ public class ClassificationController {
                           @RequestParam(value = "includeFuture", defaultValue = "false") Boolean includeFuture
                           ) {
             // @formatter:on
-        return variantInternal(id, variantName, new DateRangeHolder(date), csvSeparator, selectLevel, selectCodes,
+        CodeList codeList = variantInternal(id, variantName, new DateRangeHolder(date), csvSeparator, selectLevel, selectCodes,
                 presentationNamePattern, language, includeFuture);
+
+        if (!csvFields.isEmpty())  {
+            List<String> csvFieldsList = getCsvFieldsList(csvFields);
+            csvFieldsValidator.validateFieldsCodeItem(csvFieldsList);
+            codeList.setCsvFields(csvFieldsList);
+        }
+
+        return codeList;
     }
+
+
 
     private CodeList variantInternal(Long id, String variantName, DateRangeHolder dateRangeHolder, String csvSeparator,
             String selectLevel, String selectCodes, String presentationNamePattern, Language language, Boolean includeFuture) {
@@ -369,10 +431,19 @@ public class ClassificationController {
                           @RequestParam(value = "from") @DateTimeFormat(pattern = RestConstants.DATE_FORMAT) LocalDate from,
                           @RequestParam(value = "to", required = false) @DateTimeFormat(pattern = RestConstants.DATE_FORMAT) LocalDate to,
                           @RequestParam(value = "csvSeparator", defaultValue = ",") String csvSeparator,
+                          @RequestParam(value = "csvFields", defaultValue = "") String csvFields,
                           @RequestParam(value = "language", defaultValue = "nb") Language language,
                           @RequestParam(value = "includeFuture", defaultValue = "false") Boolean includeFuture) {
             // @formatter:on
-        return correspondsInternal(id, targetClassificationId, new DateRangeHolder(from, to), csvSeparator, language, includeFuture);
+        CorrespondenceItemList correspondenceList = correspondsInternal(id, targetClassificationId, new DateRangeHolder(from, to), csvSeparator, language, includeFuture);
+
+        if (!csvFields.isEmpty())  {
+            List<String> csvFieldsList = getCsvFieldsList(csvFields);
+            csvFieldsValidator.validateFieldsCorrespondenceItem(csvFieldsList);
+            correspondenceList.setCsvFields(csvFieldsList);
+        }
+
+        return correspondenceList;
     }
 
     @RequestMapping(value = "/classifications/{id}/correspondsAt", method = RequestMethod.GET)
@@ -381,10 +452,19 @@ public class ClassificationController {
                           @RequestParam(value = "targetClassificationId") Long targetClassificationId,
                           @RequestParam(value = "date", required = false) @DateTimeFormat(pattern = RestConstants.DATE_FORMAT) LocalDate date,
                           @RequestParam(value = "csvSeparator", defaultValue = ",") String csvSeparator,
+                          @RequestParam(value = "csvFields", defaultValue = "") String csvFields,
                           @RequestParam(value = "language", defaultValue = "nb") Language language,
                           @RequestParam(value = "includeFuture", defaultValue = "false") Boolean includeFuture) {
             // @formatter:on
-        return correspondsInternal(id, targetClassificationId, new DateRangeHolder(date), csvSeparator, language, includeFuture);
+        CorrespondenceItemList correspondenceList = correspondsInternal(id, targetClassificationId, new DateRangeHolder(date), csvSeparator, language, includeFuture);
+
+        if (!csvFields.isEmpty())  {
+            List<String> csvFieldsList = getCsvFieldsList(csvFields);
+            csvFieldsValidator.validateFieldsCorrespondenceItem(csvFieldsList);
+            correspondenceList.setCsvFields(csvFieldsList);
+        }
+
+        return correspondenceList;
     }
 
     private CorrespondenceItemList correspondsInternal(Long id, Long targetClassificationId,
@@ -478,6 +558,11 @@ public class ClassificationController {
     private String extractSsbSection(String ssbSection) {
         return Strings.isNullOrEmpty(ssbSection) ? null : ssbSection;
     }
+
+    private List<String> getCsvFieldsList(String csvFields) {
+        return Arrays.asList(csvFields.split(","));
+    }
+
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {

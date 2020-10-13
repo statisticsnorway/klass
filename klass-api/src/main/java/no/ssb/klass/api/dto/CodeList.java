@@ -33,6 +33,7 @@ public class CodeList {
     private final List<RangedCodeItem> codeItems;
     private final Boolean includeFuture;
     private final DateRange dateRange;
+    private List<String> csvFields;
 
     public CodeList(String csvSeparator, boolean displayWithValidRange, DateRange dateRange, Boolean includeFuture) {
         if (csvSeparator.toCharArray().length != 1) {
@@ -65,6 +66,16 @@ public class CodeList {
     @JsonIgnore
     public char getCsvSeparator() {
         return csvSeparator;
+    }
+
+    @JsonIgnore
+    public List<String> getCsvFields() {
+        return csvFields;
+    }
+
+    @JsonIgnore
+    public void setCsvFields(List<String> csvFields) {
+        this.csvFields = csvFields;
     }
 
     public CodeList merge(CodeList other) {

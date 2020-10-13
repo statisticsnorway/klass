@@ -95,14 +95,14 @@ public class ClassificationResource extends ClassificationSummaryResource {
 
     private Link createVariantAtRelation(Long id) {
         ControllerLinkBuilder linkBuilder = linkTo(ControllerLinkBuilder.methodOn(ClassificationController.class).variantAt(id, "name",
-                LocalDate.now(), ",", "level", "selectCodes", "presentationNamePattern", Language.getDefault(), null));
+                LocalDate.now(), ",", null, "level", "selectCodes", "presentationNamePattern", Language.getDefault(), null));
         return new Link(createUriTemplate(linkBuilder, "variantName", date(), "csvSeparator", "level", "selectCodes",
                 "presentationNamePattern"), "variantAt");
     }
 
     private Link createVariantRelation(Long id) {
         ControllerLinkBuilder linkBuilder = linkTo(ControllerLinkBuilder.methodOn(ClassificationController.class).variant(id, "name",
-                LocalDate.now(), LocalDate.now(), ",", "level", "selectCodes", "presentationNamePattern", Language
+                LocalDate.now(), LocalDate.now(), ",",null, "level", "selectCodes", "presentationNamePattern", Language
                         .getDefault(), null));
         return new Link(createUriTemplate(linkBuilder, "variantName", from(), to(), "csvSeparator", "level",
                 "selectCodes", "presentationNamePattern"), "variant");
@@ -110,34 +110,34 @@ public class ClassificationResource extends ClassificationSummaryResource {
 
     private Link createCodesAtRelation(Long id) {
         ControllerLinkBuilder linkBuilder = linkTo(ControllerLinkBuilder.methodOn(ClassificationController.class).codesAt(id, LocalDate.now(),
-                ",", "level", "selectCodes", "presentationNamePattern", Language.getDefault(), null));
+                ",",null, "level", "selectCodes", "presentationNamePattern", Language.getDefault(), null));
         return new Link(createUriTemplate(linkBuilder, date(), "csvSeparator", "level", "selectCodes",
                 "presentationNamePattern"), "codesAt");
     }
 
     private Link createCodesRelation(Long id) {
         ControllerLinkBuilder linkBuilder = linkTo(ControllerLinkBuilder.methodOn(ClassificationController.class).codes(id, LocalDate.now(),
-                LocalDate.now(), ",", "level", "selectCodes", "presentationNamePattern", Language.getDefault(), null));
+                LocalDate.now(), ",",null, "level", "selectCodes", "presentationNamePattern", Language.getDefault(), null));
         return new Link(createUriTemplate(linkBuilder, from(), to(), "csvSeparator", "level", "selectCodes",
                 "presentationNamePattern"), "codes");
     }
 
     private Link createChangesRelation(Long id) {
         ControllerLinkBuilder linkBuilder = linkTo(ControllerLinkBuilder.methodOn(ClassificationController.class).changes(id, LocalDate.now(),
-                LocalDate.now(), ",", Language.getDefault(), null));
+                LocalDate.now(), ",",null, Language.getDefault(), null));
         return new Link(createUriTemplate(linkBuilder, from(), to(), "csvSeparator"), "changes");
     }
 
     private Link createCorrespondsAtRelation(Long id) {
         ControllerLinkBuilder linkBuilder = linkTo(ControllerLinkBuilder.methodOn(ClassificationController.class).correspondsAt(id, 2L,
-                LocalDate.now(), ",", Language.getDefault(), null));
+                LocalDate.now(), ",",null, Language.getDefault(), null));
         return new Link(createUriTemplate(linkBuilder, "targetClassificationId", date(), "csvSeparator"),
                 "correspondsAt");
     }
 
     private Link createCorrespondsRelation(Long id) {
         ControllerLinkBuilder linkBuilder = linkTo(ControllerLinkBuilder.methodOn(ClassificationController.class).corresponds(id, 2L,
-                LocalDate.now(), LocalDate.now(), ",", Language.getDefault(), null));
+                LocalDate.now(), LocalDate.now(), ",",null, Language.getDefault(), null));
         return new Link(createUriTemplate(linkBuilder, "targetClassificationId", from(), to(), "csvSeparator"),
                 "corresponds");
     }
