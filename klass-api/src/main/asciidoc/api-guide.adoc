@@ -527,9 +527,9 @@ Please note that the field names are case-sensitive If the service fails to matc
 a 400 BAD REQUEST response will be returned.
 
 ===== Example request for csvFields=name,code with /codesAt;
-include::{snippets}/csv-fields-codesAt-example/curl-request.adoc[]
+include::{snippets}/csv-fields-codes-at-example/curl-request.adoc[]
 ===== Example response
-include::{snippets}/csv-fields-codesAt-example/http-response.adoc[]
+include::{snippets}/csv-fields-codes-at-example/http-response.adoc[]
 
 ===== Example request for csvFields=name,code with /codes;
 include::{snippets}/csv-fields-codes-example/curl-request.adoc[]

@@ -9,15 +9,8 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-
 import javax.transaction.Transactional;
-
-import com.fasterxml.jackson.dataformat.csv.CsvMapper;
-import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import no.ssb.klass.api.controllers.validators.CsvFieldsValidator;
-import no.ssb.klass.api.dto.CodeChangeItem;
-import no.ssb.klass.api.dto.CodeItem;
-import no.ssb.klass.api.dto.CorrespondenceItem;
 import no.ssb.klass.core.util.AlphaNumericalComparator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
