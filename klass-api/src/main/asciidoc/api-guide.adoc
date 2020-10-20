@@ -510,7 +510,7 @@ include::{snippets}/select-codes-example-csv/http-response.adoc[]
 
 
 === csvSeparator
-`csvSeparator` is used to specify separator to be used for csv format. Default is `,`
+`csvSeparator` is used to specify a separator symbol to be used for csv format. Default is `,`
 
 ===== Example request for csvSeparator=;
 include::{snippets}/csv-separator-example/curl-request.adoc[]
@@ -518,13 +518,11 @@ include::{snippets}/csv-separator-example/curl-request.adoc[]
 include::{snippets}/csv-separator-example/http-response.adoc[]
 
 
-
 === csvFields
 `csvFields` is an optional parameter that allows a user to filter columns and specify columns order in the Csv output.
 It is only applicable for `/codes` and `/codesAt` services.
 
-Please note that the field names are case-sensitive If the service fails to match a field name with the available data
-a 400 BAD REQUEST response will be returned.
+The field names are case-sensitive. Misspelled field names will cause a 400 BAD REQUEST error.
 
 ===== Example request for csvFields=name,code with /codesAt;
 include::{snippets}/csv-fields-codes-at-example/curl-request.adoc[]
