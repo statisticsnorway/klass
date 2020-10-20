@@ -520,20 +520,25 @@ include::{snippets}/csv-separator-example/http-response.adoc[]
 
 
 === csvFields
-`csvFields` is an optional parameter that allows you to specify which columns and in what order you want them to appear
-in the Csv output.
+`csvFields` is an optional parameter that allows a user to filter columns and specify columns order in the Csv output.
+It is only applicable for `/codes` and `/codesAt` services.
 
-Please note that the field names are case sensitive If the service fails to match  a field name  with the available data
+Please note that the field names are case-sensitive If the service fails to match a field name with the available data
 a 400 BAD REQUEST response will be returned.
 
-===== Example request for csvSeparator=;
-include::{snippets}/csv-fields-example/curl-request.adoc[]
+===== Example request for csvFields=name,code with /codesAt;
+include::{snippets}/csv-fields-codesAt-example/curl-request.adoc[]
 ===== Example response
-include::{snippets}/csv-fields-example/http-response.adoc[]
+include::{snippets}/csv-fields-codesAt-example/http-response.adoc[]
+
+===== Example request for csvFields=name,code with /codes;
+include::{snippets}/csv-fields-codes-example/curl-request.adoc[]
+===== Example response
+include::{snippets}/csv-fields-codes-example/http-response.adoc[]
 
 
 === language
-`language` is used to specify which language data shall be presented in. Default if none is selected is nb (Norwegian Bokmål).
+`language` is used to specify a language data shall be presented in. If none selected, the default is "nb" (Norwegian Bokmål).
 
 Supported languages
 |===

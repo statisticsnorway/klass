@@ -891,7 +891,7 @@ public class ApiDocumentation {
         // @formatter:on
     }
     @Test
-    public void csvFieldsExample() throws Exception {
+    public void csvFieldsCodesExample() throws Exception {
         DateRange dateRange = DateRange.create("2014-01-01", "2015-01-01");
         when(classificationServiceMock.findClassificationCodes(any(), any(), any(), any())).thenReturn(
                 createKommuneInndelingCodes(dateRange));
@@ -906,7 +906,22 @@ public class ApiDocumentation {
                 .andExpect(status().isOk());
         // @formatter:on
     }
-
+    @Test
+    public void csvFieldsCodesAtExample() throws Exception {
+        DateRange dateRange = DateRange.create("2014-01-01", "2015-01-01");
+        when(classificationServiceMock.findClassificationCodes(any(), any(), any(), any())).thenReturn(
+                createKommuneInndelingCodes(dateRange));
+        // @formatter:off
+        this.mockMvc.perform(
+                getWithContext("/classifications/" + CLASS_ID_KOMMUNEINNDELING
+                        + "/codesAt?date=2014-01-01&csvSeparator=;&csvFields=name,code")
+                        .accept("text/csv"))
+                .andDo(this.documentationHandler = document("{method-name}",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(/*prettyPrint()*/)))
+                .andExpect(status().isOk());
+        // @formatter:on
+    }
     @Test
     public void selectLevelExample() throws Exception {
         DateRange dateRange = DateRange.create("2014-01-01", "2015-01-01");
