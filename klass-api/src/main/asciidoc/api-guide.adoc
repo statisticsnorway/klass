@@ -520,7 +520,7 @@ include::{snippets}/csv-separator-example/http-response.adoc[]
 
 === csvFields
 `csvFields` is an optional parameter that allows a user to filter columns and specify columns order in the Csv output.
-It is only applicable for `/codes` and `/codesAt` services.
+It is applicable for `/codes`, `/codesAt`, `/variantAt`, `/correspondsAt` services.
 
 The field names are case-sensitive. Misspelled field names will cause a 400 BAD REQUEST error.
 
@@ -528,11 +528,6 @@ The field names are case-sensitive. Misspelled field names will cause a 400 BAD 
 include::{snippets}/csv-fields-codes-at-example/curl-request.adoc[]
 ===== Example response
 include::{snippets}/csv-fields-codes-at-example/http-response.adoc[]
-
-===== Example request for csvFields=name,code with /codes;
-include::{snippets}/csv-fields-codes-example/curl-request.adoc[]
-===== Example response
-include::{snippets}/csv-fields-codes-example/http-response.adoc[]
 
 
 === language
