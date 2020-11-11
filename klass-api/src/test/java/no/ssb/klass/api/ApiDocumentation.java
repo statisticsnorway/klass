@@ -442,7 +442,7 @@ public class ApiDocumentation {
         List<CodeDto> codes = createKommuneInndelingCodes(dateRange);
         when(classificationServiceMock.findClassificationCodes(any(), any(), any(), any())).thenReturn(codes);
         // @formatter:off
-        this.mockMvc.perform(getWithContextUri("/classifications/" + CLASS_ID_KOMMUNEINNDELING + "/codes?from=2014-01-01&to=2015-01-01&csvSeparator=;"
+        this.mockMvc.perform(getWithContextUri("/classifications/" + CLASS_ID_KOMMUNEINNDELING + "/codes?from=2014-01-01&to=2015-01-01&csvSeparator=;&csvFields=name,code"
                 + "&selectLevel=1&selectCodes=01*&presentationNamePattern={code}-{name}&language=nb&includeFuture=true")
                 .accept("text/csv"))
                 .andDo(this.documentationHandler
@@ -451,6 +451,7 @@ public class ApiDocumentation {
                                 fromParameterDescription(),
                                 toParameterDescription(),
                                 csvSeparatorParameterDescription(),
+                                csvFieldsParameterDescription(),
                                 selectCodesParameterDescription(),
                                 selectLevelParameterDescription(),
                                 presentationNamePatternParameterDescription(),
@@ -494,12 +495,13 @@ public class ApiDocumentation {
         when(classificationServiceMock.findClassificationCodes(any(), any(), any(), any())).thenReturn(codes);
         // @formatter:off
         this.mockMvc.perform(getWithContextUri("/classifications/" + CLASS_ID_KOMMUNEINNDELING
-                + "/codesAt?date=2015-01-01&csvSeparator=;&selectLevel=1&selectCodes=01*"
+                + "/codesAt?date=2015-01-01&csvSeparator=;&csvFields=name,code&selectLevel=1&selectCodes=01*"
                 + "&presentationNamePattern={code}-{name}&language=nb&includeFuture=true").accept("text/csv"))
                 .andDo(this.documentationHandler.document(
                         requestParameters(
                                 dateParameterDescription(),
                                 csvSeparatorParameterDescription(),
+                                csvFieldsParameterDescription(),
                                 selectCodesParameterDescription(),
                                 selectLevelParameterDescription(),
                                 presentationNamePatternParameterDescription(),
@@ -549,7 +551,7 @@ public class ApiDocumentation {
         this.mockMvc.perform(
                 getWithContextUri("/classifications/" + CLASS_ID_GREENHOUSE_GASES
                         + "/variant?variantName=Klimagasser"
-                        + "&from=2014-01-01&to=2015-01-01&csvSeparator=;&selectLevel=1&selectCodes=01*"
+                        + "&from=2014-01-01&to=2015-01-01&csvSeparator=;&csvFields=name,code&selectLevel=1&selectCodes=01*"
                         + "&presentationNamePattern={code}-{name}&language=nb&includeFuture=true")
                         .accept("text/csv"))
                 .andDo(this.documentationHandler = document("{method-name}",
@@ -561,6 +563,7 @@ public class ApiDocumentation {
                                 fromParameterDescription(),
                                 toParameterDescription(),
                                 csvSeparatorParameterDescription(),
+                                csvFieldsParameterDescription(),
                                 selectCodesParameterDescription(),
                                 selectLevelParameterDescription(),
                                 presentationNamePatternParameterDescription(),
@@ -610,7 +613,7 @@ public class ApiDocumentation {
         this.mockMvc.perform(
                 getWithContextUri("/classifications/" + CLASS_ID_GREENHOUSE_GASES
                         + "/variantAt?variantName=Klimagasser"
-                        + "&date=2015-01-01&csvSeparator=;&selectLevel=1&selectCodes=01*"
+                        + "&date=2015-01-01&csvSeparator=;&csvFields=name,code&selectLevel=1&selectCodes=01*"
                         + "&presentationNamePattern={code}-{name}&language=nb&includeFuture=true").accept("text/csv"))
                 .andDo(this.documentationHandler = document("{method-name}",
                         preprocessRequest(prettyPrint()),
@@ -620,6 +623,7 @@ public class ApiDocumentation {
                                 variantNameParameterDescription(),
                                 dateParameterDescription(),
                                 csvSeparatorParameterDescription(),
+                                csvFieldsParameterDescription(),
                                 selectCodesParameterDescription(),
                                 selectLevelParameterDescription(),
                                 presentationNamePatternParameterDescription(),
@@ -715,7 +719,7 @@ public class ApiDocumentation {
         this.mockMvc.perform(
                 getWithContext("/classifications/" + CLASS_ID_KOMMUNEINNDELING
                         + "/corresponds?targetClassificationId=" + CLASS_ID_BYDELSINNDELING
-                        + "&from=2014-01-01&to=2016-01-01&csvSeparator=;"
+                        + "&from=2014-01-01&to=2016-01-01&csvSeparator=;&csvFields=sourceCode,sourceName"
                         + "&language=nb&includeFuture=true").accept("text/csv"))
                 .andDo(this.documentationHandler = document("{method-name}",
                         preprocessRequest(prettyPrint()),
@@ -725,6 +729,7 @@ public class ApiDocumentation {
                                 targetClassificationIdParameterDescription(),
                                 fromParameterDescription(),
                                 toParameterDescription(),
+                                csvFieldsParameterDescription(),
                                 csvSeparatorParameterDescription(),
                                 languageDescription(),
                                 includeFutureDescription(""))))
@@ -757,7 +762,7 @@ public class ApiDocumentation {
         // @formatter:off
         this.mockMvc.perform(
                 getWithContext("/classifications/" + CLASS_ID_KOMMUNEINNDELING
-                        + "/correspondsAt?targetClassificationId=" + CLASS_ID_BYDELSINNDELING + "&date=2016-01-01&csvSeparator=;"
+                        + "/correspondsAt?targetClassificationId=" + CLASS_ID_BYDELSINNDELING + "&date=2016-01-01&csvSeparator=;&csvFields=sourceCode,sourceName"
                         + "&language=nb&includeFuture=true").accept("text/csv"))
                 .andDo(this.documentationHandler = document("{method-name}",
                         preprocessRequest(prettyPrint()),
@@ -767,6 +772,7 @@ public class ApiDocumentation {
                                 targetClassificationIdParameterDescription(),
                                 dateParameterDescription(),
                                 csvSeparatorParameterDescription(),
+                                csvFieldsParameterDescription(),
                                 languageDescription(),
                                 includeFutureDescription(""))))
                 .andExpect(status().isOk());
@@ -884,7 +890,38 @@ public class ApiDocumentation {
                 .andExpect(status().isOk());
         // @formatter:on
     }
-
+    @Test
+    public void csvFieldsCodesExample() throws Exception {
+        DateRange dateRange = DateRange.create("2014-01-01", "2015-01-01");
+        when(classificationServiceMock.findClassificationCodes(any(), any(), any(), any())).thenReturn(
+                createKommuneInndelingCodes(dateRange));
+        // @formatter:off
+        this.mockMvc.perform(
+                getWithContext("/classifications/" + CLASS_ID_KOMMUNEINNDELING
+                        + "/codes?from=2014-01-01&to=2015-01-01&csvSeparator=;&csvFields=name,code")
+                        .accept("text/csv"))
+                .andDo(this.documentationHandler = document("{method-name}",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(/*prettyPrint()*/)))
+                .andExpect(status().isOk());
+        // @formatter:on
+    }
+    @Test
+    public void csvFieldsCodesAtExample() throws Exception {
+        DateRange dateRange = DateRange.create("2014-01-01", "2015-01-01");
+        when(classificationServiceMock.findClassificationCodes(any(), any(), any(), any())).thenReturn(
+                createKommuneInndelingCodes(dateRange));
+        // @formatter:off
+        this.mockMvc.perform(
+                getWithContext("/classifications/" + CLASS_ID_KOMMUNEINNDELING
+                        + "/codesAt?date=2014-01-01&csvSeparator=;&csvFields=name,code")
+                        .accept("text/csv"))
+                .andDo(this.documentationHandler = document("{method-name}",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(/*prettyPrint()*/)))
+                .andExpect(status().isOk());
+        // @formatter:on
+    }
     @Test
     public void selectLevelExample() throws Exception {
         DateRange dateRange = DateRange.create("2014-01-01", "2015-01-01");
@@ -1106,6 +1143,10 @@ public class ApiDocumentation {
     private ParameterDescriptor csvSeparatorParameterDescription() {
         return parameterWithName("csvSeparator").description(
                 "[Optional] specifies separator to be used for csv format. For details see <<_csvseparator, csvSeparator>>");
+    }
+    private ParameterDescriptor csvFieldsParameterDescription() {
+        return parameterWithName("csvFields").description(
+                "[Optional] specifies which fields should be included in the csv output. For details see <<_csvfields, csvfields>>");
     }
 
     private ParameterDescriptor selectCodesParameterDescription() {

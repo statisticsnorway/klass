@@ -216,7 +216,7 @@ Used to search codes from a classification variant. A range is specified when re
 and the response will for each code indicate its valid range (validFrom/validTo).
 The format and character set used, can be specified in the http header (character set is only available for csv).
 For more information about the range see <<_range, range>>. +
-To get a snapshot of codes valid at a specified date, use <<_variantaAt, variantAt>>.
+To get a snapshot of codes valid at a specified date, use <<_variantat, variantAt>>.
 See also <<_variants_by_id, variants>>
 
 ===== Supported formats
@@ -510,15 +510,28 @@ include::{snippets}/select-codes-example-csv/http-response.adoc[]
 
 
 === csvSeparator
-`csvSeparator` is used to specify separator to be used for csv format. Default is `,`
+`csvSeparator` is used to specify a separator symbol to be used for csv format. Default is `,`
 
 ===== Example request for csvSeparator=;
 include::{snippets}/csv-separator-example/curl-request.adoc[]
 ===== Example response
 include::{snippets}/csv-separator-example/http-response.adoc[]
 
+
+=== csvFields
+`csvFields` is an optional parameter that allows a user to filter columns and specify columns order in the Csv output.
+It is applicable for `/codes`, `/codesAt`, `/variantAt`, `/correspondsAt` services.
+
+The field names are case-sensitive. Misspelled field names will cause a 400 BAD REQUEST error.
+
+===== Example request for csvFields=name,code with /codesAt;
+include::{snippets}/csv-fields-codes-at-example/curl-request.adoc[]
+===== Example response
+include::{snippets}/csv-fields-codes-at-example/http-response.adoc[]
+
+
 === language
-`language` is used to specify which language data shall be presented in. Default if none is selected is nb (Norwegian Bokmål).
+`language` is used to specify a language data shall be presented in. If none selected, the default is "nb" (Norwegian Bokmål).
 
 Supported languages
 |===

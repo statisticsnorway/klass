@@ -17,6 +17,7 @@ public class CorrespondenceItemList {
     private final boolean displayWithValidRange;
     private final List<RangedCorrespondenceItem> correspondenceItems;
     private final Boolean includeFuture;
+    private List<String> csvFields;
 
     public CorrespondenceItemList(String csvSeparator, boolean displayWithValidRange, boolean includeFuture) {
         if (csvSeparator.toCharArray().length != 1) {
@@ -49,6 +50,17 @@ public class CorrespondenceItemList {
     public char getCsvSeparator() {
         return csvSeparator;
     }
+
+    @JsonIgnore
+    public List<String> getCsvFields() {
+        return csvFields;
+    }
+
+    @JsonIgnore
+    public void setCsvFields(List<String> csvFields) {
+        this.csvFields = csvFields;
+    }
+
 
     public CorrespondenceItemList convert(List<CorrespondenceDto> correspondences) {
         return newList(correspondences.stream()
