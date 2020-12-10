@@ -55,6 +55,9 @@ Charset for the formats XML and JSON are UTF-8. Default charset for CSV is ISO 8
 Default output format is XML. In many cases it is possible to get output in the supported output formats without using Curl `-H` (`--header`). Add the dot-prefix `.json`, `.csv` or `.xml` in the URL before the request parameters.
 e.g. json: http://data.ssb.no/api/klass/v1/classifications/104/codesAt.json?date=2020-01-01[http://data.ssb.no/api/klass/v1/classifications/104/codesAt.json?date=2020-01-01]
 
+=== License
+We use the Norwegian Licence for Open Government Data, [NLOD](https://data.norge.no/nlod/en/), which is compatible to CC4-BY.
+
 === Other
 In PxWebApi references to a classification in Klass has the form [.small]#urn:ssb:classification:klass:ID#. This can be rewritten to [.underline]#httр://data.ssb.no/api/klass/v1/classifications/ID#.
 For questions about Statistics Norway's APIs use: statistikkbanken@ssb.no.
