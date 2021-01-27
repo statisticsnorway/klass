@@ -187,7 +187,7 @@ include::{snippets}/codes-at-optional-parameters-example/request-parameters.adoc
 
 
 === versions by ID
-Used to get a classification version by ID.
+Used to get a classification version by ID. The ID is shown under classifications.
 
 ===== Supported formats
 `text/csv`, `application/json`, `text/xml`
@@ -266,7 +266,7 @@ include::{snippets}/variant-at-optional-parameters-example/request-parameters.ad
 
 
 === variants by ID
-Used to get a classification variant by ID.
+Used to get a classification variant by ID. The ID is shown under versions.
 
 ===== Supported formats
 `application/json`, `text/xml`, `text/csv`
@@ -343,7 +343,7 @@ include::{snippets}/corresponds-at-optional-parameters-example/request-parameter
 === correspondenceTables by ID
 Used to get an existent correspondence table by its ID specified in the URL. The format and character set used, must be specified in the http request header (character set is only available for csv).
 Correspondence table will be shown only if it exists, in the direction it has been made. Returns 404 if no correspondence table with this id.
-To navigate to the target or the source classification version use <<correspondence-tables-links,links>> specified in the JSON or XML response.
+To navigate to the target or the source classification version use <<correspondence-tables-links,links>> specified in the JSON or XML response. The ID is shown under versions.
 
 ===== Supported formats
 `text/csv`, `application/json`, `text/xml`
