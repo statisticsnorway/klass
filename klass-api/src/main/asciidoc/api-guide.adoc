@@ -150,10 +150,10 @@ To get a snapshot of codes valid at a specified date, use <<_codesat, codesAt>>
 ===== Supported character sets
 `ISO-8859-1` (csv only), `UTF-8`
 
-===== Example request (CSV with UTF-8)
+===== Example request (CSV with ISO-8859-1)
 include::{snippets}/codes-example-csv/curl-request.adoc[]
 
-===== Example response (CSV with UTF-8)
+===== Example response (CSV with ISO-8859-1)
 include::{snippets}/codes-example-csv/http-response.adoc[]
 
 ===== Example response (JSON)
