@@ -190,10 +190,10 @@ include::{snippets}/codes-at-optional-parameters-example/request-parameters.adoc
 Used to get a classification version by ID. The ID is shown under classifications.
 
 ===== Supported formats
-`text/csv`, `application/json`, `text/xml`
+`application/json`, `text/xml`
 
 ===== Supported character sets
-`UTF-8`, `ISO-8859-1` (csv only)
+`UTF-8`
 
 ===== Request parameters
 include::{snippets}/versions-request-parameters-example/request-parameters.adoc[]
