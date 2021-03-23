@@ -102,6 +102,28 @@
         <pluginManagement>
             <plugins>
                 <plugin>
+                    <groupId>external.atlassian.jgitflow</groupId>
+                    <artifactId>jgitflow-maven-plugin</artifactId>
+                    <version>1.0-m5.1</version>
+                    <configuration>
+                        <!-- see goals wiki page for configuration options -->
+                        <flowInitContext>
+                            <masterBranchName>master</masterBranchName>
+                            <developBranchName>develop</developBranchName>
+                            <featureBranchPrefix>feature/</featureBranchPrefix>
+                            <releaseBranchPrefix>release/</releaseBranchPrefix>
+                            <hotfixBranchPrefix>hotfix/</hotfixBranchPrefix>
+                            <versionTagPrefix>klass_v</versionTagPrefix>
+                        </flowInitContext>
+                        <pushReleases>true</pushReleases>
+                        <scmCommentPrefix>[RELEASE]-</scmCommentPrefix>
+                        <noDeploy>true</noDeploy>
+                        <autoVersionSubmodules>true</autoVersionSubmodules>
+                        <arguments>-Pdocumentation -Dmaven.javadoc.skip=true</arguments>
+                        <allowSnapshots>true</allowSnapshots>
+                    </configuration>
+                </plugin>
+                <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-release-plugin</artifactId>
                     <version>2.5.3</version>
