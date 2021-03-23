@@ -136,10 +136,6 @@
             <artifactId>spring-boot-maven-plugin</artifactId>
         </plugin>
         <plugin>
-            <groupId>pl.project13.maven</groupId>
-            <artifactId>git-commit-id-plugin</artifactId>
-        </plugin>
-        <plugin>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-maven-plugin</artifactId>
             <version>${vaadin.plugin.version}</version>
