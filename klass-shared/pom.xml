@@ -11,7 +11,7 @@
     <parent>
         <groupId>no.ssb.klass</groupId>
         <artifactId>klass-root</artifactId>
-        <version>2.1.0</version>
+        <version>2.1.1</version>
     </parent>
 
     <properties>
@@ -73,7 +73,7 @@
         <url>https://git-adm.ssb.no/projects/KLAS/repos/klass/browse</url>
         <connection>scm:git:https://git-adm.ssb.no/scm/klas/klass.git</connection>
         <developerConnection>scm:git:https://git-adm.ssb.no/scm/klas/klass.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>klass-root-2.1.1</tag>
     </scm>
 
 

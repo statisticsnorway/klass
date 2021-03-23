@@ -4,7 +4,7 @@
 
     <groupId>no.ssb.klass</groupId>
     <artifactId>klass-root</artifactId>
-    <version>2.1.1-SNAPSHOT</version>
+    <version>2.1.1</version>
     <packaging>pom</packaging>
 
     <parent>
@@ -23,7 +23,8 @@
 
     <scm>
         <developerConnection>scm:git:https://github.com/runejo/klass.git</developerConnection>
-    </scm>
+      <tag>klass-root-2.1.1</tag>
+  </scm>
     <distributionManagement>
         <repository>
             <id>github</id>
