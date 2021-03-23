@@ -45,3 +45,6 @@ target
 .designer/designer-theme.css
 klass.log*
 /.checkstyle
+.factorypath
+.vscode/
+klass-forvaltning/src/main/webapp/VAADIN/themes/klasstheme/styles.css
