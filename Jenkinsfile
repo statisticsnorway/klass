@@ -13,6 +13,7 @@ pipeline {
     tools {
         jdk 'Oracle Java 8'
         maven 'Maven 3.5.2'
+        git 'Default'
     }
 
     parameters {
@@ -34,7 +35,8 @@ pipeline {
                 expression { params.RELEASE }
             }
             steps {
-                sh "mvn -B -DdryRun=false release:update-versions"
+                sh "mvn -B -DdryRun=false -DpushChanges=false release:prepare"
+
                 sh "mvn -B -DdryRun=false release:perform"
             }
         }
