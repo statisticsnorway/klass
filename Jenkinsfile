@@ -23,13 +23,13 @@ pipeline {
     }
 
     stages {
-/*
+
         stage("Build & Deploy SNAPSHOT") {
             steps {
                 sh "mvn -B clean deploy -Pdocumentation"
             }
         }
-*/
+
         stage("Release") {
             when {
                 expression { params.RELEASE }
