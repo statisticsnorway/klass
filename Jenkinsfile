@@ -19,7 +19,7 @@ pipeline {
     parameters {
         booleanParam(name: "RELEASE",
             description: "Build a release from current commit.",
-            defaultValue: true)
+            defaultValue: false)
     }
 
     stages {
@@ -35,11 +35,11 @@ pipeline {
                 expression { params.RELEASE }
             }
             steps {
-                sh "mvn -B -DdryRun=false -DpushChanges=false release:prepare"
+                sh "mvn -B -DpushChanges=false release:prepare"
                 sshagent(['0dbe3a0a-6b80-451f-a60d-e65527dc9085']) {
                     sh('git push --follow-tags') 
                 }
-                sh "mvn -B -DdryRun=false release:perform"
+                sh "mvn -B release:perform"
             }
         }
 
