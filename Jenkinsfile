@@ -13,8 +13,8 @@ pipeline {
 
     parameters {
         booleanParam(name: "RELEASE",
-                description: "Build a release from current commit.",
-                defaultValue: false)
+            description: "Build a release from current commit.",
+            defaultValue: false)
     }
 
     stages {
@@ -30,8 +30,8 @@ pipeline {
                 expression { params.RELEASE }
             }
             steps {
-                sh "mvn -B release:prepare"
-                sh "mvn -B release:perform"
+                sh "mvn -B -DdryRun=true release:prepare"
+                sh "mvn -B -DdryRun=true release:perform"
             }
         }
 
