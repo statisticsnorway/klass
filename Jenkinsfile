@@ -3,16 +3,7 @@ pipeline {
     agent any
 
     tools {
-        maven "Maven"
-    }
-
-    triggers {
-        pollSCM "* * * * *"
-    }
-    
-    options {
-        timestamps()
-        ansiColor("xterm")
+        maven "Maven 3.5.2"
     }
 
     parameters {
@@ -39,11 +30,5 @@ pipeline {
             }
         }
 
-    }
-
-    post {
-        always {
-            deleteDir()
-        }
     }
 }
