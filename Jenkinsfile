@@ -36,7 +36,9 @@ pipeline {
             }
             steps {
                 sh "mvn -B -DdryRun=false -DpushChanges=false release:prepare"
-
+                sshagent(['0dbe3a0a-6b80-451f-a60d-e65527dc9085']) {
+                    sh('git push') 
+                }
                 sh "mvn -B -DdryRun=false release:perform"
             }
         }
