@@ -1,3 +1,6 @@
+[![Java CI with Maven](https://github.com/runejo/klass/actions/workflows/maven.yml/badge.svg)](https://github.com/runejo/klass/actions/workflows/maven.yml)
+[![CodeQL](https://github.com/runejo/klass/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/runejo/klass/actions/workflows/codeql-analysis.yml)
+
 # KLASS
 Spring Boot applications that handles classifications for SSB.
 Klass provides a REST api that clients can use to read classifications, and a Vaadin frontend for maintaining classifications.

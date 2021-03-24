@@ -24,7 +24,8 @@
     <scm>
         <developerConnection>scm:git:https://github.com/runejo/klass.git</developerConnection>
       <tag>HEAD</tag>
-  </scm>
+    </scm>
+
     <distributionManagement>
         <repository>
             <id>github</id>
