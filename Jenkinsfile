@@ -34,8 +34,8 @@ pipeline {
                 expression { params.RELEASE }
             }
             steps {
-                sh "mvn -B -DdryRun=false release:prepare"
-                sh "mvn -B -DdryRun=false release:perform"
+                sh "mvn -B -X -DdryRun=false release:prepare"
+                sh "mvn -B -X -DdryRun=false release:perform"
             }
         }
 
