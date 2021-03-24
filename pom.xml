@@ -27,11 +27,13 @@
     </scm>
 
     <distributionManagement>
+        <!--
         <repository>
             <id>github</id>
             <name>GitHub runejo Apache Maven Packages</name>
             <url>https://maven.pkg.github.com/runejo/klass</url>
         </repository>
+        -->
         <repository>
             <id>releases</id>
             <url>https://nexus.ssb.no/repository/maven-releases</url>
