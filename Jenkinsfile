@@ -7,7 +7,8 @@ pipeline {
     }
 
     tools {
-        maven "(Default)"
+        jdk 'Oracle Java 8'
+        maven 'Maven 3.5.2'
     }
 
     parameters {
