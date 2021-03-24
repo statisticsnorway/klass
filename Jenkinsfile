@@ -16,7 +16,7 @@ pipeline {
 
         stage("Build & Deploy SNAPSHOT") {
             steps {
-                sh "mvn -B package"
+                sh "mvn -B clean deploy -Pdocumentation"
             }
         }
 
