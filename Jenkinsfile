@@ -24,13 +24,13 @@ pipeline {
 
     stages {
 
-        stage("Build & Deploy SNAPSHOT") {
+        stage("Build & deploy SNAPSHOT to Nexus") {
             steps {
                 sh "mvn -B clean deploy -Pdocumentation"
             }
         }
 
-        stage("Release") {
+        stage("Build & deploy RELEASE to Nexus") {
             when {
                 expression { params.RELEASE }
             }
