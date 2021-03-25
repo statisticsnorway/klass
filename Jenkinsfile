@@ -26,6 +26,9 @@ pipeline {
 
         stage("Build & deploy SNAPSHOT to Nexus") {
             steps {
+                sh "java -version"
+                sh "mvn -version"
+                sh "git --version"
                 sh "mvn -B clean deploy -Pdocumentation"
             }
         }
@@ -35,11 +38,13 @@ pipeline {
                 expression { params.RELEASE }
             }
             steps {
-                sh "mvn -B -DpushChanges=false release:prepare"
                 sshagent(['0dbe3a0a-6b80-451f-a60d-e65527dc9085']) {
-                    sh('git push --follow-tags') 
+                    //DEBUG
+                    sh "java -version"
+                    sh "mvn -version"
+                    sh "git --version"
+                    sh "mvn -B release:prepare release:perform"
                 }
-                sh "mvn -B release:perform"
             }
         }
 
