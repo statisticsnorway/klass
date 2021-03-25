@@ -21,6 +21,11 @@
         <module>klass-forvaltning</module>
     </modules>
 
+    <scm>
+        <developerConnection>scm:git:https://github.com/statisticsnorway/klass.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
+
     <distributionManagement>
         <repository>
             <id>releases</id>
@@ -129,6 +134,8 @@
                     <version>2.5.3</version>
                     <configuration>
                         <releaseProfiles>documentation</releaseProfiles>
+                        <autoVersionSubmodules>true</autoVersionSubmodules>
+                        <tagNameFormat>v@{project.version}</tagNameFormat>
                         <!--TODO find a solution for the javadoc error on generated sources-->
                         <arguments>-Pdocumentation -Dmaven.javadoc.skip=true</arguments>
                     </configuration>
