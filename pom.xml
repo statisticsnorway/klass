@@ -4,7 +4,7 @@
 
     <groupId>no.ssb.klass</groupId>
     <artifactId>klass-root</artifactId>
-    <version>2.1.0</version>
+    <version>2.1.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <parent>
@@ -20,6 +20,11 @@
         <module>klass-api</module>
         <module>klass-forvaltning</module>
     </modules>
+
+    <scm>
+        <developerConnection>scm:git:https://github.com/statisticsnorway/klass.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
 
     <distributionManagement>
         <repository>
@@ -129,6 +134,8 @@
                     <version>2.5.3</version>
                     <configuration>
                         <releaseProfiles>documentation</releaseProfiles>
+                        <autoVersionSubmodules>true</autoVersionSubmodules>
+                        <tagNameFormat>v@{project.version}</tagNameFormat>
                         <!--TODO find a solution for the javadoc error on generated sources-->
                         <arguments>-Pdocumentation -Dmaven.javadoc.skip=true</arguments>
                     </configuration>
