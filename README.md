@@ -1,5 +1,6 @@
 [![Java CI with Maven](https://github.com/runejo/klass/actions/workflows/maven.yml/badge.svg)](https://github.com/runejo/klass/actions/workflows/maven.yml)
 [![CodeQL](https://github.com/runejo/klass/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/runejo/klass/actions/workflows/codeql-analysis.yml)
+[![Maintainability](https://api.codeclimate.com/v1/badges/34eed0d4c7e9abd16add/maintainability)](https://codeclimate.com/github/statisticsnorway/klass/maintainability)
 
 # KLASS
 Spring Boot applications that handles classifications for SSB.
