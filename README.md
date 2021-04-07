@@ -1,3 +1,4 @@
+[![Maintainability](https://api.codeclimate.com/v1/badges/34eed0d4c7e9abd16add/maintainability)](https://codeclimate.com/github/statisticsnorway/klass/maintainability)
 [![CodeQL](https://github.com/statisticsnorway/klass/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/statisticsnorway/klass/actions/workflows/codeql-analysis.yml)
 
 # KLASS
