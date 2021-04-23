@@ -10,6 +10,7 @@ import no.ssb.klass.core.model.StatisticalClassification;
 import no.ssb.klass.core.util.TimeUtil;
 import no.ssb.klass.core.util.Translatable;
 import no.ssb.klass.designer.editing.codetables.events.CodeCreatedEvent;
+import no.ssb.klass.designer.util.VaadinUtil;
 
 /**
  * NewCodeEditor is a code editor that allows adding new codes. Only used in PrimaryCodeTable, since only
@@ -95,7 +96,7 @@ public class NewCodeEditor extends CodeEditor {
         }
         if (showValidityFields()) {
             newItem.setValidFrom(TimeUtil.toLocalDate(validFrom.getValue()));
-            newItem.setValidTo(TimeUtil.toLocalDate(validTo.getValue()));
+            newItem.setValidTo(VaadinUtil.convertToExclusiveDate(TimeUtil.toLocalDate(validTo.getValue())));
         }
         return newItem;
     }
