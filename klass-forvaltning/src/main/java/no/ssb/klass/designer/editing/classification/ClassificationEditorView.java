@@ -1,18 +1,5 @@
 package no.ssb.klass.designer.editing.classification;
 
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.vaadin.spring.annotation.PrototypeScope;
-
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 import com.vaadin.data.Property;
@@ -23,7 +10,6 @@ import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.AbstractSelect;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
-
 import no.ssb.klass.core.model.ClassificationFamily;
 import no.ssb.klass.core.model.ClassificationSeries;
 import no.ssb.klass.core.model.ClassificationType;
@@ -41,6 +27,18 @@ import no.ssb.klass.designer.util.ComponentUtil;
 import no.ssb.klass.designer.util.ParameterUtil;
 import no.ssb.klass.designer.util.PassiveValidationUtil;
 import no.ssb.klass.designer.util.VaadinUtil;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.vaadin.spring.annotation.PrototypeScope;
+
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author Mads Lundemo, SSB.
@@ -458,8 +456,8 @@ public class ClassificationEditorView extends ClassificationEditorComponentLayer
         List<StatisticalUnit> unitList = classificationFacade.findAllStatisticalUnits().stream()
                 .sorted(Comparator.comparing(o -> o.getName(Language.NB))).collect(Collectors.toList());
 
-        statisticalUnitSelector.setLeftColumnCaption("Tilgjengelige enheter");
-        statisticalUnitSelector.setRightColumnCaption("Valgte enheter");
+        statisticalUnitSelector.setLeftColumnCaption("Tilgjengelige enhetstyper");
+        statisticalUnitSelector.setRightColumnCaption("Valgte enhetstyper");
         statisticalUnitSelector.setItemCaptionMode(AbstractSelect.ItemCaptionMode.EXPLICIT);
 
         statisticalUnitSelector.clear();
