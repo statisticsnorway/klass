@@ -1,7 +1,5 @@
 package no.ssb.klass.designer.editing.codetables.codeeditors;
 
-import java.util.Objects;
-
 import com.google.common.base.Strings;
 import com.google.common.eventbus.EventBus;
 import com.vaadin.event.ShortcutAction.KeyCode;
@@ -20,7 +18,6 @@ import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
-
 import no.ssb.klass.core.model.ClassificationItem;
 import no.ssb.klass.core.model.ClassificationVersion;
 import no.ssb.klass.core.model.Language;
@@ -30,6 +27,8 @@ import no.ssb.klass.designer.components.common.layouts.VerticalSpacedLayout;
 import no.ssb.klass.designer.editing.codetables.events.CancelEditEvent;
 import no.ssb.klass.designer.listeners.EnterListener;
 import no.ssb.klass.designer.util.KlassTheme;
+
+import java.util.Objects;
 
 /**
  * A CodeEditor edits a row in a codeTable
@@ -77,10 +76,10 @@ public abstract class CodeEditor extends CustomComponent {
         if (showValidityFields()) {
             validFrom = createDateField();
             validTo = createDateField();
-            Label validFromLabel = new Label("Gyldig fra");
+            Label validFromLabel = new Label("Gyldig fra og med");
             validityLayout.addComponent(validFromLabel);
             validityLayout.addComponent(validFrom);
-            Label validToLabel = new Label("til");
+            Label validToLabel = new Label("til og med");
             validityLayout.addComponent(validToLabel);
             validityLayout.addComponent(validTo);
             validityLayout.setVisible(false);
