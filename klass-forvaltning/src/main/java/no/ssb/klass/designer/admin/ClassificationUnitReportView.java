@@ -33,7 +33,7 @@ public class ClassificationUnitReportView extends ClassificationUnitReportDesign
     public void makeDetailedReport(StatisticalUnit statisticalUnit, ClassificationReportData<ClassificationReportDto> classifications,
             StatisticalUnitView statisticalUnitView) {
         this.statisticalUnitView = statisticalUnitView;
-        headingText.setValue("Statistisk enhet: " + statisticalUnit.getName(Language.getDefault()));
+        headingText.setValue("Enhetstype: " + statisticalUnit.getName(Language.getDefault()));
         numberOfRowsHeader.setValue("Antall klassifikasjoner: " + classifications.genNumberOfRows());
         Table report = null;
         detailedUseReport.clear();
