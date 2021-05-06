@@ -53,7 +53,10 @@ Charset for the formats XML and JSON are UTF-8. Default charset for CSV is ISO 8
 
 === Output formats
 Default output format is XML. In many cases it is possible to get output in the supported output formats without using Curl `-H` (`--header`). Add the dot-prefix `.json`, `.csv` or `.xml` in the URL before the request parameters.
-e.g. json: http://data.ssb.no/api/klass/v1/classifications/104/codesAt.json?date=2020-01-01[http://data.ssb.no/api/klass/v1/classifications/104/codesAt.json?date=2020-01-01]
+e.g. json: http://data.ssb.no/api/klass/v1/classifications/104/codesAt.json?date=2020-01-01[http://data.ssb.no/api/klass/v1/classifications/104/codesAt.json?date=2020-01-01]. Be aware that you then get the default character sets. 
+
+=== License
+We use the Norwegian Licence for Open Government Data, [NLOD](https://data.norge.no/nlod/en/), which is compatible to Creative Commons 4.0 Attribution (CC BY 4.0).
 
 === Other
 In PxWebApi references to a classification in Klass has the form [.small]#urn:ssb:classification:klass:ID#. This can be rewritten to [.underline]#httр://data.ssb.no/api/klass/v1/classifications/ID#.
@@ -147,10 +150,10 @@ To get a snapshot of codes valid at a specified date, use <<_codesat, codesAt>>
 ===== Supported character sets
 `ISO-8859-1` (csv only), `UTF-8`
 
-===== Example request (CSV with UTF-8)
+===== Example request (CSV with ISO-8859-1)
 include::{snippets}/codes-example-csv/curl-request.adoc[]
 
-===== Example response (CSV with UTF-8)
+===== Example response (CSV with ISO-8859-1)
 include::{snippets}/codes-example-csv/http-response.adoc[]
 
 ===== Example response (JSON)
@@ -184,13 +187,13 @@ include::{snippets}/codes-at-optional-parameters-example/request-parameters.adoc
 
 
 === versions by ID
-Used to get a classification version by ID.
+Used to get a classification version by ID. The ID is shown under classifications.
 
 ===== Supported formats
-`text/csv`, `application/json`, `text/xml`
+`application/json`, `text/xml`
 
 ===== Supported character sets
-`UTF-8`, `ISO-8859-1` (csv only)
+`UTF-8`
 
 ===== Request parameters
 include::{snippets}/versions-request-parameters-example/request-parameters.adoc[]
@@ -263,7 +266,7 @@ include::{snippets}/variant-at-optional-parameters-example/request-parameters.ad
 
 
 === variants by ID
-Used to get a classification variant by ID.
+Used to get a classification variant by ID. The ID is shown under versions.
 
 ===== Supported formats
 `application/json`, `text/xml`, `text/csv`
@@ -340,7 +343,7 @@ include::{snippets}/corresponds-at-optional-parameters-example/request-parameter
 === correspondenceTables by ID
 Used to get an existent correspondence table by its ID specified in the URL. The format and character set used, must be specified in the http request header (character set is only available for csv).
 Correspondence table will be shown only if it exists, in the direction it has been made. Returns 404 if no correspondence table with this id.
-To navigate to the target or the source classification version use <<correspondence-tables-links,links>> specified in the JSON or XML response.
+To navigate to the target or the source classification version use <<correspondence-tables-links,links>> specified in the JSON or XML response. The ID is shown under versions.
 
 ===== Supported formats
 `text/csv`, `application/json`, `text/xml`
