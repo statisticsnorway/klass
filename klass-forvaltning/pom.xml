@@ -122,7 +122,7 @@
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-testbench-api</artifactId>
-            <version>${vaadin-version}</version>
+            <version>${vaadin.testbench.api.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
