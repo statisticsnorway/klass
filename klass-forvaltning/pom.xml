@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    
+
     <name>Klass Forvaltning</name>
     <description>Forvaltningsgrensesnitt for Klass</description>
     <artifactId>klass-forvaltning</artifactId>
@@ -24,7 +24,7 @@
             <url>http://maven.vaadin.com/vaadin-addons</url>
         </repository>
     </repositories>
-    
+
     <dependencies>
         <!--KLASS-->
         <dependency>
@@ -44,13 +44,13 @@
             <artifactId>spring-boot-starter-tomcat</artifactId>
             <scope>provided</scope>
         </dependency>
-        
+
         <dependency>
             <groupId>org.apache.tomcat.embed</groupId>
             <artifactId>tomcat-embed-jasper</artifactId>
             <scope>provided</scope>
         </dependency>
-        
+
         <!--VAADIN-->
         <dependency>
             <groupId>org.vaadin.spring.extensions</groupId>
@@ -125,6 +125,11 @@
             <version>${vaadin-version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
 
@@ -174,5 +179,5 @@
         </plugin>
         </plugins>
     </build>
-    
+
 </project>

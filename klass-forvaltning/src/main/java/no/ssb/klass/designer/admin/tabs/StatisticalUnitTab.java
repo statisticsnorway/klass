@@ -1,13 +1,5 @@
 package no.ssb.klass.designer.admin.tabs;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
-
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.vaadin.data.Container;
 import com.vaadin.data.Item;
 import com.vaadin.data.util.IndexedContainer;
@@ -16,7 +8,6 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
-
 import no.ssb.klass.core.model.Language;
 import no.ssb.klass.core.model.StatisticalUnit;
 import no.ssb.klass.core.model.User;
@@ -25,6 +16,13 @@ import no.ssb.klass.designer.service.ClassificationFacade;
 import no.ssb.klass.designer.user.UserContext;
 import no.ssb.klass.designer.util.ConfirmationDialog;
 import no.ssb.klass.designer.util.VaadinUtil;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Created by jro on 09.11.2016.
@@ -54,7 +52,7 @@ public class StatisticalUnitTab extends StatisticalUnitTabDesign {
         statisticalUnitGrid.getColumn("Nynorsk").setExpandRatio(3);
         statisticalUnitGrid.getColumn("Engelsk").setExpandRatio(3);
         statisticalUnitGrid.getColumn("data").setHidden(true);
-        statisticalUnitGrid.setCaption("Statistiske enheter");
+        statisticalUnitGrid.setCaption("Enhetstyper");
         statisticalUnitGrid.setSelectionMode(Grid.SelectionMode.SINGLE);
         statisticalUnitGrid.addSelectionListener(this::updateForm);
         saveButton.setEnabled(false);
@@ -98,13 +96,13 @@ public class StatisticalUnitTab extends StatisticalUnitTabDesign {
 
     private void saveButtonClick(Button.ClickEvent clickEvent) {
         if (statisticalUnitGrid.getSelectedRows().isEmpty()) {
-            Notification.show("Ingen enhet er valgt", Notification.Type.WARNING_MESSAGE);
+            Notification.show("Ingen enhetstype er valgt", Notification.Type.WARNING_MESSAGE);
         } else {
             StatisticalUnit stat = getSelectedStatisticalUnit();
             if (Objects.equals(stat.getName(Language.NB), nb.getValue())
                     && Objects.equals(stat.getName(Language.NN), nn.getValue())
                     && Objects.equals(stat.getName(Language.EN), en.getValue())) {
-                Notification.show("FEIL!! Statistisk enhet ikke endret", Notification.Type.ERROR_MESSAGE);
+                Notification.show("FEIL!! Enhetstype ikke endret", Notification.Type.ERROR_MESSAGE);
             } else {
                 stat.setName(nb.getValue(), Language.NB);
                 stat.setName(nn.getValue(), Language.NN);
@@ -121,7 +119,7 @@ public class StatisticalUnitTab extends StatisticalUnitTabDesign {
             StatisticalUnit stat = getSelectedStatisticalUnit();
             StringBuilder confirmationText = new StringBuilder("Er du sikker på at du ønsker å slette ");
             confirmationText.append(stat.getName(Language.NB));
-            ConfirmationDialog confWindow = new ConfirmationDialog("Sletter statististisk enhet", "Ja", "Nei", (
+            ConfirmationDialog confWindow = new ConfirmationDialog("Sletter enhetstyper", "Ja", "Nei", (
                     answerYes) -> {
                 if (answerYes) {
                     classificationFacade.deleteStatisticalUnit(stat);
@@ -137,11 +135,11 @@ public class StatisticalUnitTab extends StatisticalUnitTabDesign {
     private void newButtonClick(Button.ClickEvent clickEvent) {
         if (statisticalUnitGrid.getSelectedRows().isEmpty()) {
             if (StringUtils.isEmpty(nb.getValue())) {
-                Notification.show("Statistisk enhet - Bokmål må fylles ut", Notification.Type.WARNING_MESSAGE);
+                Notification.show("Enhetstype - Bokmål må fylles ut", Notification.Type.WARNING_MESSAGE);
             } else if (StringUtils.isEmpty(nn.getValue())) {
-                Notification.show("Statistisk enhet - Nynorsk må fylles ut", Notification.Type.WARNING_MESSAGE);
+                Notification.show("Enhetstype - Nynorsk må fylles ut", Notification.Type.WARNING_MESSAGE);
             } else if (StringUtils.isEmpty(en.getValue())) {
-                Notification.show("Statistisk enhet - Engelsk må fylles ut", Notification.Type.WARNING_MESSAGE);
+                Notification.show("Enhetstype - Engelsk må fylles ut", Notification.Type.WARNING_MESSAGE);
             } else {
                 Translatable name = new Translatable(nb.getValue(), nn.getValue(), en.getValue());
                 StatisticalUnit newStatUnit = new StatisticalUnit(name);

@@ -1,13 +1,5 @@
 package no.ssb.klass.designer.util;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
 import com.google.common.collect.ImmutableMap;
 import com.vaadin.data.Item;
 import com.vaadin.data.util.BeanItem;
@@ -20,11 +12,18 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.UI;
-
 import no.ssb.klass.core.util.TimeUtil;
 import no.ssb.klass.designer.ClassificationListView;
 import no.ssb.klass.designer.components.BreadcumbPanel.Breadcrumb;
 import no.ssb.klass.designer.ui.KlassUI;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 public final class VaadinUtil {
     private VaadinUtil() {
@@ -99,20 +98,28 @@ public final class VaadinUtil {
      * Presented to user the <b>to</b> date of a dateRange shall be viewed as inclusive.
      */
     public static LocalDate convertToInclusive(LocalDate to) {
-        if (TimeUtil.isMaxDate(to)) {
-            return to;
-        }
-        return to.minusMonths(1);
+        return (to == null || TimeUtil.isMaxDate(to)) ? to : to.minusMonths(1);
     }
 
     /**
      * Convert <b>to</to> date presented to user as inclusive, to an exclusive date as used internally within Klass
      */
     public static LocalDate convertToExclusive(LocalDate localDate) {
-        if (localDate == null) {
-            return null;
-        }
-        return localDate.plusMonths(1);
+        return localDate == null ? null : localDate.plusMonths(1);
+    }
+
+    /**
+     * Presented to user the <b>to</b> date of a dateRange shall be viewed as inclusive.
+     */
+    public static LocalDate convertToInclusiveDate(LocalDate to) {
+        return (to == null || TimeUtil.isMaxDate(to)) ? to : to.minusDays(1);
+    }
+
+    /**
+     * Convert <b>to</to> date presented to user as inclusive, to an exclusive date as used internally within Klass
+     */
+    public static LocalDate convertToExclusiveDate(LocalDate localDate) {
+        return localDate == null ? null : localDate.plusDays(1);
     }
 
     public static void navigateTo(Breadcrumb breadcrumb) {

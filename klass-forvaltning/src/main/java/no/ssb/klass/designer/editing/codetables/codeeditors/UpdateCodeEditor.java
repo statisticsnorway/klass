@@ -8,6 +8,7 @@ import no.ssb.klass.core.model.Language;
 import no.ssb.klass.core.model.StatisticalClassification;
 import no.ssb.klass.core.util.TimeUtil;
 import no.ssb.klass.designer.editing.codetables.events.CodeUpdatedEvent;
+import no.ssb.klass.designer.util.VaadinUtil;
 
 /**
  * UpdateCodeEditor is a code editor that allows to update existing codes.
@@ -36,7 +37,7 @@ public class UpdateCodeEditor extends CodeEditor {
         }
 
         if (showValidityFields()) {
-            validTo.setValue(TimeUtil.toDate(editItem.getValidTo()));
+            validTo.setValue(TimeUtil.toDate(VaadinUtil.convertToInclusiveDate(editItem.getValidTo())));
             validFrom.setValue(TimeUtil.toDate(editItem.getValidFrom()));
             validityLayout.setVisible(true);
         }
@@ -58,7 +59,7 @@ public class UpdateCodeEditor extends CodeEditor {
         if (showValidityFields()) {
             if (showValidityFields()) {
                 editItem.setValidFrom(TimeUtil.toLocalDate(validFrom.getValue()));
-                editItem.setValidTo(TimeUtil.toLocalDate(validTo.getValue()));
+                editItem.setValidTo(VaadinUtil.convertToExclusiveDate(TimeUtil.toLocalDate(validTo.getValue())));
             }
         }
         return new CodeUpdatedEvent(editItem);
