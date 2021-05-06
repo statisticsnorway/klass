@@ -1,0 +1,15 @@
+<settings>
+  <mirrors>
+    <mirror>
+      <id>maven-restletMirror</id>
+      <url>https://maven.restlet.com</url>
+      <mirrorOf>maven-restlet</mirrorOf>
+    </mirror>
+    <mirror>
+      <id>vaadin-addonsMirror</id>
+      <url>https://maven.vaadin.com/vaadin-addons</url>
+      <mirrorOf>vaadin-addons</mirrorOf>
+    </mirror>
+  </mirrors>
+</settings>
+

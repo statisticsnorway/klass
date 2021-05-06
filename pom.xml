@@ -57,7 +57,7 @@
         <vaadin-spring-boot-starter-version>1.0.0</vaadin-spring-boot-starter-version>
         <vaadin-spring-ext-security-version>0.0.7.RELEASE</vaadin-spring-ext-security-version>
         <objenesis-version>2.4</objenesis-version>
-        <guava-version>19.0</guava-version>
+        <guava-version>20.0</guava-version>
         <vaadin-version>7.7.25</vaadin-version>
         <vaadin.plugin.version>7.7.25</vaadin.plugin.version>
         <vaadin.testbench.api.version>7.7.14</vaadin.testbench.api.version>
