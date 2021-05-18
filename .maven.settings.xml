@@ -1,0 +1,10 @@
+<settings>
+  <mirrors>
+    <mirror>
+      <id>maven-restletMirror</id>
+      <url>https://maven.restlet.com</url>
+      <mirrorOf>maven-restlet</mirrorOf>
+    </mirror>
+  </mirrors>
+</settings>
+
