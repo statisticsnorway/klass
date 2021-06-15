@@ -36,6 +36,6 @@ public class CreateClassificationPage extends AbstractEditingPage {
     }
 
     public void setEnhet(String enhet) {
-        $(TwinColSelectElement.class).caption("Statistisk enheter").first().selectByText(enhet);
+        $(TwinColSelectElement.class).caption("Enhetstype").first().selectByText(enhet);
     }
 }
