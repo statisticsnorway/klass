@@ -1,10 +1,5 @@
 package no.ssb.klass.core.service;
 
-import static java.util.stream.Collectors.*;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import no.ssb.klass.core.model.ClassificationItem;
 import no.ssb.klass.core.model.ClassificationSeries;
 import no.ssb.klass.core.model.ClassificationVariant;
@@ -18,6 +13,11 @@ import no.ssb.klass.core.service.dto.CodeDto;
 import no.ssb.klass.core.service.dto.CorrespondenceDto;
 import no.ssb.klass.core.util.DateRange;
 import no.ssb.klass.core.util.KlassResourceNotFoundException;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 final class ClassificationServiceHelper {
 
@@ -85,7 +85,9 @@ final class ClassificationServiceHelper {
     }
 
     static List<CorrespondenceDto> findCorrespondences(ClassificationSeries sourceClassification,
-                                                       ClassificationSeries targetClassification, DateRange dateRange, Language language, Boolean includeFuture) {
+                                                       ClassificationSeries targetClassification,
+                                                       DateRange dateRange, Language language,
+                                                       Boolean includeFuture, Boolean inverted) {
         List<CorrespondenceDto> correspondences = new ArrayList<>();
         for (ClassificationVersion version : sourceClassification.getClassificationVersions()) {
             if (version.isDraft()) {
@@ -97,7 +99,7 @@ final class ClassificationServiceHelper {
                 for (CorrespondenceTable correspondenceTable : tables) {
                     correspondences.addAll(mapCorrespondenceMapsToCorrespondences(correspondenceTable,
                             version.getDateRange().subRange(correspondenceTable.getTarget().getDateRange()),
-                            language));
+                            language, inverted));
                 }
             }
         }
@@ -122,14 +124,14 @@ final class ClassificationServiceHelper {
                 correspondenceTables.add(correspondenceTable);
             }
         }
-        if (correspondenceTables.isEmpty()) {
-            throw new KlassResourceNotFoundException(createCorrespondenceNotFoundErrorMessage(
-                    version, targetClassification));
-        }
+//        if (correspondenceTables.isEmpty()) {
+//            throw new KlassResourceNotFoundException(createCorrespondenceNotFoundErrorMessage(
+//                    version, targetClassification));
+//        }
         return correspondenceTables;
     }
 
-    private static String createCorrespondenceNotFoundErrorMessage(ClassificationVersion version,
+    public static String createCorrespondenceNotFoundErrorMessage(ClassificationVersion version,
             ClassificationSeries targetClassification) {
         return "Classification Version: '" + version.getName(Language.getDefault())
                 + "' has no correspondence table with Classification: '" + targetClassification.getName(Language
@@ -137,12 +139,12 @@ final class ClassificationServiceHelper {
     }
 
     private static List<CorrespondenceDto> mapCorrespondenceMapsToCorrespondences(
-            CorrespondenceTable correspondenceTable, DateRange subRange, Language language) {
+            CorrespondenceTable correspondenceTable, DateRange subRange, Language language, Boolean inverted) {
         List<CorrespondenceDto> correspondences = new ArrayList<>();
         for (CorrespondenceMap correspondenceMap : correspondenceTable.getCorrespondenceMaps()) {
             ClassificationItem source = correspondenceMap.getSource().orElse(null);
             ClassificationItem target = correspondenceMap.getTarget().orElse(null);
-            correspondences.add(new CorrespondenceDto(source, target, subRange, language));
+            correspondences.add(new CorrespondenceDto(inverted ? target : source, inverted ? source : target, subRange, language));
         }
         return correspondences;
     }
