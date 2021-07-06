@@ -1,13 +1,13 @@
 package no.ssb.klass.api.applicationtest;
 
-import static com.jayway.restassured.RestAssured.*;
-import static org.hamcrest.Matchers.*;
-
+import com.jayway.restassured.http.ContentType;
 import no.ssb.klass.testutil.TestDataProvider;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
 
-import com.jayway.restassured.http.ContentType;
+import static com.jayway.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.equalTo;
 
 /**
  * @author Mads Lundemo, SSB.
@@ -109,6 +109,7 @@ public class RestApiCodeIntegrationTest extends AbstractRestApiApplicationTest {
                 .body("codeList.codeItem[0].name", equalTo("Halden"))
                 .body("codeList.codeItem[0].validFromInRequestedRange", equalTo(TestDataProvider.TEN_YEARS_LATER_DATE))
                 .body("codeList.codeItem[0].validToInRequestedRange", equalTo(TestDataProvider.FIFTEEN_YEARS_LATER_DATE))
+                .body("codeList.codeItem[0].notes", equalTo(""))
                 //2
                 .body("codeList.codeItem[4].code", equalTo("5043"))
                 .body("codeList.codeItem[4].level", equalTo("1"))
@@ -129,12 +130,12 @@ public class RestApiCodeIntegrationTest extends AbstractRestApiApplicationTest {
 
                 .content(containsString(
                         "\"code\",\"parentCode\",\"level\",\"name\",\"shortName\",\"presentationName\","
-                                + "\"validFrom\",\"validTo\",\"validFromInRequestedRange\",\"validToInRequestedRange\"\n"
-                                + "\"0101\",,\"1\",\"Halden\",\"\",\"\",,,\"2014-01-01\",\"2015-01-01\"\n"
-                                + "\"0104\",,\"1\",\"Moss\",\"\",\"\",,,\"2014-01-01\",\"2015-01-01\"\n"
-                                + "\"0301\",,\"1\",\"Oslo\",\"\",\"\",,,\"2014-01-01\",\"2015-01-01\"\n"
-                                + "\"1739\",,\"1\",\"Raarvihke Røyrvik\",\"\",\"\",,,\"2014-01-01\",\"2015-01-01\"\n"
-                                + "\"1939\",,\"1\",\"Omasvuotna Storfjord Omasvuonon\",\"\",\"\",,,\"2014-01-01\",\"2015-01-01\""
+                                + "\"validFrom\",\"validTo\",\"validFromInRequestedRange\",\"validToInRequestedRange\",\"notes\"\n"
+                                + "\"0101\",,\"1\",\"Halden\",\"\",\"\",,,\"2014-01-01\",\"2015-01-01\",\"\"\n"
+                                + "\"0104\",,\"1\",\"Moss\",\"\",\"\",,,\"2014-01-01\",\"2015-01-01\",\"\"\n"
+                                + "\"0301\",,\"1\",\"Oslo\",\"\",\"\",,,\"2014-01-01\",\"2015-01-01\",\"\"\n"
+                                + "\"1739\",,\"1\",\"Raarvihke Røyrvik\",\"\",\"\",,,\"2014-01-01\",\"2015-01-01\",\"\"\n"
+                                + "\"1939\",,\"1\",\"Omasvuotna Storfjord Omasvuonon\",\"\",\"\",,,\"2014-01-01\",\"2015-01-01\",\"\""
                 ));
 
     }
@@ -150,12 +151,12 @@ public class RestApiCodeIntegrationTest extends AbstractRestApiApplicationTest {
 
                 .content(containsString(
                         "\"code\",\"parentCode\",\"level\",\"name\",\"shortName\",\"presentationName\","
-                                + "\"validFrom\",\"validTo\",\"validFromInRequestedRange\",\"validToInRequestedRange\"\n"
-                                + "\"0101\",,\"1\",\"Halden\",\"\",\"\",,,\""+TestDataProvider.TEN_YEARS_LATER_DATE+"\",\""+TestDataProvider.FIFTEEN_YEARS_LATER_DATE+"\"\n"
-                                + "\"0104\",,\"1\",\"Moss\",\"\",\"\",,,\""+TestDataProvider.TEN_YEARS_LATER_DATE+"\",\""+TestDataProvider.FIFTEEN_YEARS_LATER_DATE+"\"\n"
-                                + "\"0301\",,\"1\",\"Oslo\",\"\",\"\",,,\""+TestDataProvider.TEN_YEARS_LATER_DATE+"\",\""+TestDataProvider.FIFTEEN_YEARS_LATER_DATE+"\"\n"
-                                + "\"1939\",,\"1\",\"Omasvuotna Storfjord Omasvuonon\",\"\",\"\",,,\""+TestDataProvider.TEN_YEARS_LATER_DATE+"\",\""+TestDataProvider.FIFTEEN_YEARS_LATER_DATE+"\"\n"
-                                + "\"5043\",,\"1\",\"Raarvihke Røyrvik\",\"\",\"\",,,\""+TestDataProvider.TEN_YEARS_LATER_DATE+"\",\""+TestDataProvider.FIFTEEN_YEARS_LATER_DATE+"\""
+                                + "\"validFrom\",\"validTo\",\"validFromInRequestedRange\",\"validToInRequestedRange\",\"notes\"\n"
+                                + "\"0101\",,\"1\",\"Halden\",\"\",\"\",,,\""+TestDataProvider.TEN_YEARS_LATER_DATE+"\",\""+TestDataProvider.FIFTEEN_YEARS_LATER_DATE+"\",\"\"\n"
+                                + "\"0104\",,\"1\",\"Moss\",\"\",\"\",,,\""+TestDataProvider.TEN_YEARS_LATER_DATE+"\",\""+TestDataProvider.FIFTEEN_YEARS_LATER_DATE+"\",\"\"\n"
+                                + "\"0301\",,\"1\",\"Oslo\",\"\",\"\",,,\""+TestDataProvider.TEN_YEARS_LATER_DATE+"\",\""+TestDataProvider.FIFTEEN_YEARS_LATER_DATE+"\",\"\"\n"
+                                + "\"1939\",,\"1\",\"Omasvuotna Storfjord Omasvuonon\",\"\",\"\",,,\""+TestDataProvider.TEN_YEARS_LATER_DATE+"\",\""+TestDataProvider.FIFTEEN_YEARS_LATER_DATE+"\",\"\"\n"
+                                + "\"5043\",,\"1\",\"Raarvihke Røyrvik\",\"\",\"\",,,\""+TestDataProvider.TEN_YEARS_LATER_DATE+"\",\""+TestDataProvider.FIFTEEN_YEARS_LATER_DATE+"\",\"\""
                 ));
 
     }

@@ -1,13 +1,13 @@
 package no.ssb.klass.api.applicationtest;
 
-import static com.jayway.restassured.RestAssured.*;
-import static org.hamcrest.Matchers.*;
-
+import com.jayway.restassured.http.ContentType;
 import no.ssb.klass.testutil.TestDataProvider;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
 
-import com.jayway.restassured.http.ContentType;
+import static com.jayway.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.equalTo;
 
 /**
  * @author Mads Lundemo, SSB.
@@ -196,12 +196,12 @@ public class RestApiCodeAtIntegrationTest extends AbstractRestApiApplicationTest
                 .contentType(CONTENT_TYPE_CSV)
 
                 .content(containsString(
-                        "\"code\",\"parentCode\",\"level\",\"name\",\"shortName\",\"presentationName\",\"validFrom\",\"validTo\"\n"
-                                + "\"0101\",,\"1\",\"Halden\",\"\",\"\"\n"
-                                + "\"0104\",,\"1\",\"Moss\",\"\",\"\"\n"
-                                + "\"0301\",,\"1\",\"Oslo\",\"\",\"\"\n"
-                                + "\"1739\",,\"1\",\"Raarvihke Røyrvik\",\"\",\"\"\n"
-                                + "\"1939\",,\"1\",\"Omasvuotna Storfjord Omasvuonon\",\"\",\"\""
+                        "\"code\",\"parentCode\",\"level\",\"name\",\"shortName\",\"presentationName\",\"validFrom\",\"validTo\",\"notes\"\n"
+                                + "\"0101\",,\"1\",\"Halden\",\"\",\"\",,,\"\"\n"
+                                + "\"0104\",,\"1\",\"Moss\",\"\",\"\",,,\"\"\n"
+                                + "\"0301\",,\"1\",\"Oslo\",\"\",\"\",,,\"\"\n"
+                                + "\"1739\",,\"1\",\"Raarvihke Røyrvik\",\"\",\"\",,,\"\"\n"
+                                + "\"1939\",,\"1\",\"Omasvuotna Storfjord Omasvuonon\",\"\",\"\",,,\"\""
                 ));
 
     }
@@ -216,12 +216,12 @@ public class RestApiCodeAtIntegrationTest extends AbstractRestApiApplicationTest
                 .contentType(CONTENT_TYPE_CSV)
 
                 .content(containsString(
-                        "\"code\",\"parentCode\",\"level\",\"name\",\"shortName\",\"presentationName\",\"validFrom\",\"validTo\"\n"
-                                + "\"0101\",,\"1\",\"Halden\",\"\",\"\"\n"
-                                + "\"0104\",,\"1\",\"Moss\",\"\",\"\"\n"
-                                + "\"0301\",,\"1\",\"Oslo\",\"\",\"\"\n"
-                                + "\"1939\",,\"1\",\"Omasvuotna Storfjord Omasvuonon\",\"\",\"\"\n"
-                                + "\"5043\",,\"1\",\"Raarvihke Røyrvik\",\"\",\"\""
+                        "\"code\",\"parentCode\",\"level\",\"name\",\"shortName\",\"presentationName\",\"validFrom\",\"validTo\",\"notes\"\n"
+                                + "\"0101\",,\"1\",\"Halden\",\"\",\"\",,,\"\"\n"
+                                + "\"0104\",,\"1\",\"Moss\",\"\",\"\",,,\"\"\n"
+                                + "\"0301\",,\"1\",\"Oslo\",\"\",\"\",,,\"\"\n"
+                                + "\"1939\",,\"1\",\"Omasvuotna Storfjord Omasvuonon\",\"\",\"\",,,\"\"\n"
+                                + "\"5043\",,\"1\",\"Raarvihke Røyrvik\",\"\",\"\",,,\"\""
                 ));
 
     }
@@ -241,12 +241,11 @@ public class RestApiCodeAtIntegrationTest extends AbstractRestApiApplicationTest
                 .contentType(CONTENT_TYPE_CSV)
 
                 .content(containsString(
-                        "\"code\",\"parentCode\",\"level\",\"name\",\"shortName\",\"presentationName\",\"validFrom\",\"validTo\"\n"
-                                + "\"0101\",,\"1\",\"Halden\",\"\",\"\"\n"
-                                + "\"0104\",,\"1\",\"Moss\",\"\",\"\"\n"
-                                + "\"0301\",,\"1\",\"Oslo\",\"\",\"\"\n"
-                                + "\"1739\",,\"1\",\"Røyrvik\",\"\",\"\"\n"
-                                + "\"1939\",,\"1\",\"Storfjord\",\"\",\"\""
+                        "\"code\",\"parentCode\",\"level\",\"name\",\"shortName\",\"presentationName\",\"validFrom\",\"validTo\",\"notes\"\n"                                + "\"0101\",,\"1\",\"Halden\",\"\",\"\",,,\"\"\n"
+                                + "\"0104\",,\"1\",\"Moss\",\"\",\"\",,,\"\"\n"
+                                + "\"0301\",,\"1\",\"Oslo\",\"\",\"\",,,\"\"\n"
+                                + "\"1739\",,\"1\",\"Røyrvik\",\"\",\"\",,,\"\"\n"
+                                + "\"1939\",,\"1\",\"Storfjord\",\"\",\"\",,,\"\""
                 ));
 
     }
@@ -266,12 +265,12 @@ public class RestApiCodeAtIntegrationTest extends AbstractRestApiApplicationTest
                 .contentType(CONTENT_TYPE_CSV)
 
                 .content(containsString(
-                        "\"code\";\"parentCode\";\"level\";\"name\";\"shortName\";\"presentationName\";\"validFrom\";\"validTo\"\n"
-                                + "\"0101\";;\"1\";\"Halden\";\"\";\"\"\n"
-                                + "\"0104\";;\"1\";\"Moss\";\"\";\"\"\n"
-                                + "\"0301\";;\"1\";\"Oslo\";\"\";\"\"\n"
-                                + "\"1739\";;\"1\";\"Røyrvik\";\"\";\"\"\n"
-                                + "\"1939\";;\"1\";\"Storfjord\";\"\";\"\""
+                        "\"code\";\"parentCode\";\"level\";\"name\";\"shortName\";\"presentationName\";\"validFrom\";\"validTo\";\"notes\"\n"
+                                + "\"0101\";;\"1\";\"Halden\";\"\";\"\";;;\"\"\n"
+                                + "\"0104\";;\"1\";\"Moss\";\"\";\"\";;;\"\"\n"
+                                + "\"0301\";;\"1\";\"Oslo\";\"\";\"\";;;\"\"\n"
+                                + "\"1739\";;\"1\";\"Røyrvik\";\"\";\"\";;;\"\"\n"
+                                + "\"1939\";;\"1\";\"Storfjord\";\"\";\"\";;;\"\""
                 ));
 
     }
