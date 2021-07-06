@@ -1,20 +1,21 @@
 package no.ssb.klass.api.dto;
 
+import java.time.LocalDate;
+import java.util.Objects;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import no.ssb.klass.api.util.CustomLocalDateSerializer;
-import no.ssb.klass.api.util.PresentationNameBuilder;
+
 import no.ssb.klass.core.service.dto.CodeDto;
 import no.ssb.klass.core.util.DateRange;
 import no.ssb.klass.core.util.TimeUtil;
-
-import java.time.LocalDate;
-import java.util.Objects;
+import no.ssb.klass.api.util.CustomLocalDateSerializer;
+import no.ssb.klass.api.util.PresentationNameBuilder;
 
 @JsonPropertyOrder(value = { "code", "parentCode", "level", "name", "shortName", "presentationName", "validFrom",
-        "validTo", "notes" })
+        "validTo" })
 public class CodeItem implements Comparable<CodeItem> {
     private final String code;
     private final String parentCode;
@@ -23,7 +24,6 @@ public class CodeItem implements Comparable<CodeItem> {
     private final String presentationName;
     private final String level;
     private final DateRange validity;
-    private final String notes;
 
     public CodeItem(CodeItem codeItem, PresentationNameBuilder builder) {
         this.code = codeItem.getCode();
@@ -34,7 +34,6 @@ public class CodeItem implements Comparable<CodeItem> {
         this.validity = codeItem.getValidity();
         this.presentationName = builder.presentationName(codeItem.getCode(), codeItem.getName(), codeItem
                 .getShortName());
-        this.notes = codeItem.getNotes();
     }
 
     public CodeItem(CodeItem codeItem) {
@@ -45,7 +44,6 @@ public class CodeItem implements Comparable<CodeItem> {
         this.level = codeItem.getLevel();
         this.validity = codeItem.getValidity();
         this.presentationName = codeItem.getPresentationName();
-        this.notes = codeItem.getNotes();
     }
 
     public CodeItem(CodeDto code) {
@@ -56,7 +54,6 @@ public class CodeItem implements Comparable<CodeItem> {
         this.level = code.getLevel();
         this.validity = code.getValidity();
         this.presentationName = "";
-        this.notes = code.getNotes();
     }
 
     public String getCode() {
@@ -82,8 +79,6 @@ public class CodeItem implements Comparable<CodeItem> {
     public String getName() {
         return name;
     }
-
-    public String getNotes() { return notes; }
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonSerialize(using = CustomLocalDateSerializer.class)
