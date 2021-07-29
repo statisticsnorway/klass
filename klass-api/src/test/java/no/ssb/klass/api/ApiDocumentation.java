@@ -1,23 +1,32 @@
 package no.ssb.klass.api;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyBoolean;
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Mockito.*;
-import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import no.ssb.klass.api.config.MockConfig;
 import no.ssb.klass.api.config.TestConfig;
+import no.ssb.klass.api.util.RestConstants;
+import no.ssb.klass.core.model.ClassificationFamily;
+import no.ssb.klass.core.model.ClassificationItem;
+import no.ssb.klass.core.model.ClassificationSeries;
+import no.ssb.klass.core.model.ClassificationType;
+import no.ssb.klass.core.model.ClassificationVariant;
+import no.ssb.klass.core.model.ClassificationVersion;
+import no.ssb.klass.core.model.CorrespondenceMap;
+import no.ssb.klass.core.model.CorrespondenceTable;
+import no.ssb.klass.core.model.Language;
+import no.ssb.klass.core.model.Level;
+import no.ssb.klass.core.model.User;
+import no.ssb.klass.core.repository.ClassificationFamilySummary;
+import no.ssb.klass.core.service.ClassificationService;
+import no.ssb.klass.core.service.SearchService;
+import no.ssb.klass.core.service.dto.CodeDto;
+import no.ssb.klass.core.service.dto.CorrespondenceDto;
+import no.ssb.klass.core.service.search.SolrSearchResult;
+import no.ssb.klass.core.util.DateRange;
+import no.ssb.klass.core.util.KlassResourceNotFoundException;
+import no.ssb.klass.core.util.Translatable;
+import no.ssb.klass.solr.config.ConfigurationProfiles;
+import no.ssb.klass.testutil.TestUtil;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -46,32 +55,30 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
-import no.ssb.klass.solr.config.ConfigurationProfiles;
-import no.ssb.klass.core.model.ClassificationFamily;
-import no.ssb.klass.core.model.ClassificationItem;
-import no.ssb.klass.core.model.ClassificationSeries;
-import no.ssb.klass.core.model.ClassificationType;
-import no.ssb.klass.core.model.ClassificationVariant;
-import no.ssb.klass.core.model.ClassificationVersion;
-import no.ssb.klass.core.model.CorrespondenceMap;
-import no.ssb.klass.core.model.CorrespondenceTable;
-import no.ssb.klass.core.model.Language;
-import no.ssb.klass.core.model.Level;
-import no.ssb.klass.core.model.User;
-import no.ssb.klass.core.repository.ClassificationFamilySummary;
-import no.ssb.klass.core.service.ClassificationService;
-import no.ssb.klass.core.service.SearchService;
-import no.ssb.klass.core.service.dto.CodeDto;
-import no.ssb.klass.core.service.dto.CorrespondenceDto;
-import no.ssb.klass.core.service.search.SolrSearchResult;
-import no.ssb.klass.core.util.DateRange;
-import no.ssb.klass.core.util.KlassResourceNotFoundException;
-import no.ssb.klass.core.util.Translatable;
-import no.ssb.klass.api.util.RestConstants;
-import no.ssb.klass.testutil.TestUtil;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyBoolean;
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.when;
+import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.halLinks;
+import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.linkWithRel;
+import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.links;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.relaxedResponseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = { TestConfig.class, MockConfig.class }, webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -84,6 +91,7 @@ public class ApiDocumentation {
     private static final long CLASS_VARIANT_KOMMUNEINNDELING = 7L;
     private static final int CLASS_ID_BYDELSINNDELING = 103;
     private static final int CLASS_ID_KOMMUNEINNDELING = 131;
+    private static final int CLASS_ID_FYLKEINNDELING = 104;
     @Rule
     public JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation("target/generated-snippets");
     private RestDocumentationResultHandler documentationHandler;
@@ -191,7 +199,7 @@ public class ApiDocumentation {
     public void classificationFamilyOptionalParametersExample() throws Exception {
         ClassificationFamily family = createClassificationFamily();
         when(classificationServiceMock.getClassificationFamily(any(Long.class))).thenReturn(family);
-        // @formatter:off        
+        // @formatter:off
         this.mockMvc.perform(getWithContext("/classificationfamilies/" + CLASS_FAMILY_BEFOLKNING + "?ssbSection=714&includeCodelists=true&language=nb")
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(this.documentationHandler.document(
@@ -227,7 +235,7 @@ public class ApiDocumentation {
                 createClassificationBydelsinndeling(), createClassificationFamiliegruppering(TestUtil.createUser()));
         when(classificationServiceMock.findAllPublic(anyBoolean(), any(Date.class), any(Pageable.class))).then(
                 i -> createPage(i.getArgumentAt(2, Pageable.class), classifications));
-        // @formatter:off        
+        // @formatter:off
         this.mockMvc.perform(getWithContext("/classifications").accept(MediaType.APPLICATION_JSON))
                 .andDo(this.documentationHandler.document(links(
                                 halLinks(),
@@ -241,7 +249,7 @@ public class ApiDocumentation {
                                 fieldWithPath("_links").description("<<classifications-links,Links>> to other resources"),
                                 fieldWithPath("page").description("Describes number of classifications returned, see <<_page, page>>"))))
                 .andExpect(status().isOk());
-        // @formatter:on        
+        // @formatter:on
     }
 
     @Test
@@ -256,7 +264,7 @@ public class ApiDocumentation {
                                 includeCodelistsDescription(),
                                 changedSinceDescription())))
                 .andExpect(status().isOk());
-        // @formatter:on        
+        // @formatter:on
     }
 
     @Test
@@ -463,12 +471,12 @@ public class ApiDocumentation {
 
     @Test
     public void codesAtExampleCsv() throws Exception {
-        DateRange dateRange = DateRange.create("2015-01-01", "2016-01-01");
+        DateRange dateRange = DateRange.create("2020-01-01", "2021-01-01");
         List<CodeDto> codes = createKommuneInndelingCodes(dateRange);
         when(classificationServiceMock.findClassificationCodes(any(), any(), any(), any())).thenReturn(codes);
         // @formatter:off
-        this.mockMvc.perform(getWithContext("/classifications/" + CLASS_ID_KOMMUNEINNDELING + "/codesAt?date=2015-01-01")
-                .header("Accept", "text/csv; charset=ISO-8859-1"))
+        this.mockMvc.perform(getWithContext("/classifications/" + CLASS_ID_FYLKEINNDELING + "/codesAt?date=2020-01-01")
+                .header("Accept", "text/csv; charset=UTF-8"))
                 .andDo(this.documentationHandler = document("{method-name}",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(/*prettyPrint()*/)))
