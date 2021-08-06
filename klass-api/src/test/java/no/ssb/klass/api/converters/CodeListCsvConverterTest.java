@@ -77,7 +77,7 @@ public class CodeListCsvConverterTest {
         // then
         assertEquals(
                 "\"code\",\"parentCode\",\"level\",\"name\",\"shortName\",\"presentationName\",\"validFrom\",\"validTo\"\n"
-                        + "\"0104\",,\"1\",\"Sandefjord\",\"\",\"\"\n", outputMessage
+                        + "\"0104\",,\"1\",\"Sandefjord\",\"\",\"\",,\n", outputMessage
                         .getBody()
                         .toString());
     }

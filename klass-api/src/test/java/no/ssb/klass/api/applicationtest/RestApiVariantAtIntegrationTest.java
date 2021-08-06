@@ -156,11 +156,11 @@ public class RestApiVariantAtIntegrationTest extends AbstractRestApiApplicationT
                 .contentType(CONTENT_TYPE_CSV)
                 .content(containsString(
                         "\"code\",\"parentCode\",\"level\",\"name\",\"shortName\",\"presentationName\",\"validFrom\",\"validTo\"\n"
-                                + "\"A\",,\"1\",\"Enpersonfamilie\",\"\",\"\"\n"
-                                + "\"A_\",\"A\",\"2\",\"Enpersonfamilie\",\"\",\"\"\n"
-                                + "\"B\",,\"1\",\"Ektepar\",\"\",\"\"\n"
-                                + "\"BA\",\"B\",\"2\",\"Ektepar med barn (yngste barn 0-17 år)\",\"\",\"\"\n"
-                                + "\"BB\",\"B\",\"2\",\"Ektepar uten barn 0-17 år\",\"\",\"\""
+                                + "\"A\",,\"1\",\"Enpersonfamilie\",\"\",\"\",,\n"
+                                + "\"A_\",\"A\",\"2\",\"Enpersonfamilie\",\"\",\"\",,\n"
+                                + "\"B\",,\"1\",\"Ektepar\",\"\",\"\",,\n"
+                                + "\"BA\",\"B\",\"2\",\"Ektepar med barn (yngste barn 0-17 år)\",\"\",\"\",,\n"
+                                + "\"BB\",\"B\",\"2\",\"Ektepar uten barn 0-17 år\",\"\",\"\",,"
                 ));
 
     }
@@ -176,9 +176,9 @@ public class RestApiVariantAtIntegrationTest extends AbstractRestApiApplicationT
                 .contentType(CONTENT_TYPE_CSV)
                 .content(containsString(
                         "\"code\",\"parentCode\",\"level\",\"name\",\"shortName\",\"presentationName\",\"validFrom\",\"validTo\"\n"
-                                + "\"C\",,\"1\",\"Enslig person med barn\",\"\",\"\"\n"
-                                + "\"CA\",\"C\",\"2\",\"Enslig person med barn 0-5 år\",\"\",\"\"\n"
-                                + "\"CB\",\"C\",\"2\",\"Enslig person med barn 6-17 år\",\"\",\"\""
+                                + "\"C\",,\"1\",\"Enslig person med barn\",\"\",\"\",,\n"
+                                + "\"CA\",\"C\",\"2\",\"Enslig person med barn 0-5 år\",\"\",\"\",,\n"
+                                + "\"CB\",\"C\",\"2\",\"Enslig person med barn 6-17 år\",\"\",\"\",,"
                 ));
 
     }
@@ -196,11 +196,11 @@ public class RestApiVariantAtIntegrationTest extends AbstractRestApiApplicationT
                 .contentType(CONTENT_TYPE_CSV)
                 .content(containsString(
                         "\"code\",\"parentCode\",\"level\",\"name\",\"shortName\",\"presentationName\",\"validFrom\",\"validTo\"\n"
-                                + "\"A\",,\"1\",\"Enpersonfamilie\",\"\",\"\"\n"
-                                + "\"A_\",\"A\",\"2\",\"Enpersonfamilie\",\"\",\"\"\n"
-                                + "\"B\",,\"1\",\"Ektepar\",\"\",\"\"\n"
-                                + "\"BA\",\"B\",\"2\",\"Ektepar med barn (yngste barn 0-17 år)\",\"\",\"\"\n"
-                                + "\"BB\",\"B\",\"2\",\"Ektepar uten barn 0-17 år\",\"\",\"\""
+                                + "\"A\",,\"1\",\"Enpersonfamilie\",\"\",\"\",,\n"
+                                + "\"A_\",\"A\",\"2\",\"Enpersonfamilie\",\"\",\"\",,\n"
+                                + "\"B\",,\"1\",\"Ektepar\",\"\",\"\",,\n"
+                                + "\"BA\",\"B\",\"2\",\"Ektepar med barn (yngste barn 0-17 år)\",\"\",\"\",,\n"
+                                + "\"BB\",\"B\",\"2\",\"Ektepar uten barn 0-17 år\",\"\",\"\",,"
                 ));
 
     }
@@ -219,9 +219,9 @@ public class RestApiVariantAtIntegrationTest extends AbstractRestApiApplicationT
                 .contentType(CONTENT_TYPE_CSV)
                 .content(containsString(
                         "\"code\",\"parentCode\",\"level\",\"name\",\"shortName\",\"presentationName\",\"validFrom\",\"validTo\"\n"
-                                + "\"C\",,\"1\",\"Enslig person med barn\",\"\",\"\"\n"
-                                + "\"CA\",\"C\",\"2\",\"Enslig person med barn 0-5 år\",\"\",\"\"\n"
-                                + "\"CB\",\"C\",\"2\",\"Enslig person med barn 6-17 år\",\"\",\"\""
+                                + "\"C\",,\"1\",\"Enslig person med barn\",\"\",\"\",,\n"
+                                + "\"CA\",\"C\",\"2\",\"Enslig person med barn 0-5 år\",\"\",\"\",,\n"
+                                + "\"CB\",\"C\",\"2\",\"Enslig person med barn 6-17 år\",\"\",\"\",,"
                 ));
 
     }
