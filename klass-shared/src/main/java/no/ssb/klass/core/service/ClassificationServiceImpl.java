@@ -1,25 +1,6 @@
 package no.ssb.klass.core.service;
 
-import static com.google.common.base.Preconditions.*;
-import static java.util.stream.Collectors.*;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-
-import org.hibernate.Hibernate;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.google.common.collect.Lists;
-
 import no.ssb.klass.core.model.ClassificationEntityOperations;
 import no.ssb.klass.core.model.ClassificationFamily;
 import no.ssb.klass.core.model.ClassificationItem;
@@ -53,6 +34,25 @@ import no.ssb.klass.core.util.DateRange;
 import no.ssb.klass.core.util.KlassResourceNotFoundException;
 import no.ssb.klass.core.util.TimeUtil;
 import no.ssb.klass.core.util.Translatable;
+import org.hibernate.Hibernate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 
 @Service
 @Transactional(readOnly = true)
@@ -287,13 +287,29 @@ public class ClassificationServiceImpl implements ClassificationService {
 
     @Override
     public List<CorrespondenceDto> findCorrespondences(Long sourceClassificationId, Long targetClassificationId,
-                                                       DateRange dateRange, Language language, Boolean includeFuture) {
+                                                       DateRange dateRange, Language language, Boolean includeFuture,
+                                                       Boolean inverted ) {
         checkNotNull(dateRange);
         checkNotNull(language);
         ClassificationSeries sourceClassification = getClassificationSeries(sourceClassificationId);
         ClassificationSeries targetClassification = getClassificationSeries(targetClassificationId);
-        return ClassificationServiceHelper.findCorrespondences(sourceClassification, targetClassification, dateRange,
-                language, includeFuture);
+        List<CorrespondenceDto> correspondences = ClassificationServiceHelper.findCorrespondences(
+                sourceClassification, targetClassification, dateRange, language, includeFuture, inverted);
+        if (correspondences.isEmpty()) {
+            correspondences = ClassificationServiceHelper.findCorrespondences(
+                    targetClassification, sourceClassification, dateRange, language, includeFuture, !inverted);
+        }
+        if (correspondences.isEmpty())
+            throw new KlassResourceNotFoundException(createCorrespondenceNotFoundErrorMessage(
+                    sourceClassification, targetClassification));
+        return correspondences;
+    }
+
+    public static String createCorrespondenceNotFoundErrorMessage(ClassificationSeries sourceClassification,
+                                                                  ClassificationSeries targetClassification) {
+        return "Classification '" + sourceClassification.getName(Language.getDefault())
+                + "' has no correspondence table with Classification '" + targetClassification.getName(Language
+                .getDefault()) + "'";
     }
 
     @Override
