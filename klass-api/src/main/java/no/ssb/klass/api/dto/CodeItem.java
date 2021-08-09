@@ -1,18 +1,16 @@
 package no.ssb.klass.api.dto;
 
-import java.time.LocalDate;
-import java.util.Objects;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
+import no.ssb.klass.api.util.CustomLocalDateSerializer;
+import no.ssb.klass.api.util.PresentationNameBuilder;
 import no.ssb.klass.core.service.dto.CodeDto;
 import no.ssb.klass.core.util.DateRange;
 import no.ssb.klass.core.util.TimeUtil;
-import no.ssb.klass.api.util.CustomLocalDateSerializer;
-import no.ssb.klass.api.util.PresentationNameBuilder;
+
+import java.time.LocalDate;
+import java.util.Objects;
 
 @JsonPropertyOrder(value = { "code", "parentCode", "level", "name", "shortName", "presentationName", "validFrom",
         "validTo" })
@@ -80,13 +78,13 @@ public class CodeItem implements Comparable<CodeItem> {
         return name;
     }
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
+//    @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonSerialize(using = CustomLocalDateSerializer.class)
     public LocalDate getValidFrom() {
         return validity == null ? null : validity.getFrom();
     }
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
+//    @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonSerialize(using = CustomLocalDateSerializer.class)
     public LocalDate getValidTo() {
         if (validity == null || TimeUtil.isMaxDate(validity.getTo())) {

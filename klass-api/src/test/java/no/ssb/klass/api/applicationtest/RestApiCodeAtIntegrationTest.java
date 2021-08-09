@@ -197,11 +197,11 @@ public class RestApiCodeAtIntegrationTest extends AbstractRestApiApplicationTest
 
                 .content(containsString(
                         "\"code\",\"parentCode\",\"level\",\"name\",\"shortName\",\"presentationName\",\"validFrom\",\"validTo\"\n"
-                                + "\"0101\",,\"1\",\"Halden\",\"\",\"\"\n"
-                                + "\"0104\",,\"1\",\"Moss\",\"\",\"\"\n"
-                                + "\"0301\",,\"1\",\"Oslo\",\"\",\"\"\n"
-                                + "\"1739\",,\"1\",\"Raarvihke Røyrvik\",\"\",\"\"\n"
-                                + "\"1939\",,\"1\",\"Omasvuotna Storfjord Omasvuonon\",\"\",\"\""
+                                + "\"0101\",,\"1\",\"Halden\",\"\",\"\",,\n"
+                                + "\"0104\",,\"1\",\"Moss\",\"\",\"\",,\n"
+                                + "\"0301\",,\"1\",\"Oslo\",\"\",\"\",,\n"
+                                + "\"1739\",,\"1\",\"Raarvihke Røyrvik\",\"\",\"\",,\n"
+                                + "\"1939\",,\"1\",\"Omasvuotna Storfjord Omasvuonon\",\"\",\"\",,"
                 ));
 
     }
@@ -217,11 +217,11 @@ public class RestApiCodeAtIntegrationTest extends AbstractRestApiApplicationTest
 
                 .content(containsString(
                         "\"code\",\"parentCode\",\"level\",\"name\",\"shortName\",\"presentationName\",\"validFrom\",\"validTo\"\n"
-                                + "\"0101\",,\"1\",\"Halden\",\"\",\"\"\n"
-                                + "\"0104\",,\"1\",\"Moss\",\"\",\"\"\n"
-                                + "\"0301\",,\"1\",\"Oslo\",\"\",\"\"\n"
-                                + "\"1939\",,\"1\",\"Omasvuotna Storfjord Omasvuonon\",\"\",\"\"\n"
-                                + "\"5043\",,\"1\",\"Raarvihke Røyrvik\",\"\",\"\""
+                                + "\"0101\",,\"1\",\"Halden\",\"\",\"\",,\n"
+                                + "\"0104\",,\"1\",\"Moss\",\"\",\"\",,\n"
+                                + "\"0301\",,\"1\",\"Oslo\",\"\",\"\",,\n"
+                                + "\"1939\",,\"1\",\"Omasvuotna Storfjord Omasvuonon\",\"\",\"\",,\n"
+                                + "\"5043\",,\"1\",\"Raarvihke Røyrvik\",\"\",\"\",,"
                 ));
 
     }
@@ -242,11 +242,11 @@ public class RestApiCodeAtIntegrationTest extends AbstractRestApiApplicationTest
 
                 .content(containsString(
                         "\"code\",\"parentCode\",\"level\",\"name\",\"shortName\",\"presentationName\",\"validFrom\",\"validTo\"\n"
-                                + "\"0101\",,\"1\",\"Halden\",\"\",\"\"\n"
-                                + "\"0104\",,\"1\",\"Moss\",\"\",\"\"\n"
-                                + "\"0301\",,\"1\",\"Oslo\",\"\",\"\"\n"
-                                + "\"1739\",,\"1\",\"Røyrvik\",\"\",\"\"\n"
-                                + "\"1939\",,\"1\",\"Storfjord\",\"\",\"\""
+                                + "\"0101\",,\"1\",\"Halden\",\"\",\"\",,\n"
+                                + "\"0104\",,\"1\",\"Moss\",\"\",\"\",,\n"
+                                + "\"0301\",,\"1\",\"Oslo\",\"\",\"\",,\n"
+                                + "\"1739\",,\"1\",\"Røyrvik\",\"\",\"\",,\n"
+                                + "\"1939\",,\"1\",\"Storfjord\",\"\",\"\",,"
                 ));
 
     }
@@ -267,11 +267,11 @@ public class RestApiCodeAtIntegrationTest extends AbstractRestApiApplicationTest
 
                 .content(containsString(
                         "\"code\";\"parentCode\";\"level\";\"name\";\"shortName\";\"presentationName\";\"validFrom\";\"validTo\"\n"
-                                + "\"0101\";;\"1\";\"Halden\";\"\";\"\"\n"
-                                + "\"0104\";;\"1\";\"Moss\";\"\";\"\"\n"
-                                + "\"0301\";;\"1\";\"Oslo\";\"\";\"\"\n"
-                                + "\"1739\";;\"1\";\"Røyrvik\";\"\";\"\"\n"
-                                + "\"1939\";;\"1\";\"Storfjord\";\"\";\"\""
+                                + "\"0101\";;\"1\";\"Halden\";\"\";\"\";;\n"
+                                + "\"0104\";;\"1\";\"Moss\";\"\";\"\";;\n"
+                                + "\"0301\";;\"1\";\"Oslo\";\"\";\"\";;\n"
+                                + "\"1739\";;\"1\";\"Røyrvik\";\"\";\"\";;\n"
+                                + "\"1939\";;\"1\";\"Storfjord\";\"\";\"\";;"
                 ));
 
     }
