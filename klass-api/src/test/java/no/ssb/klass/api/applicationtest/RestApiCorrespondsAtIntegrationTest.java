@@ -1,13 +1,13 @@
 package no.ssb.klass.api.applicationtest;
 
-import static com.jayway.restassured.RestAssured.*;
-import static org.hamcrest.Matchers.*;
-
+import com.jayway.restassured.http.ContentType;
 import no.ssb.klass.testutil.TestDataProvider;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
 
-import com.jayway.restassured.http.ContentType;
+import static com.jayway.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.equalTo;
 
 /**
  * @author Mads Lundemo, SSB.
@@ -41,6 +41,36 @@ public class RestApiCorrespondsAtIntegrationTest extends AbstractRestApiApplicat
                 .body(JSON_CORRESPONDENCES + "[2].targetName", equalTo("Sagene"))
                 .body(JSON_CORRESPONDENCES + "[2].targetShortName", equalTo(""));
 
+    }
+
+    // @formatter:off
+    @Test
+    public void restServiceCorrespondsAtInvertedJSON() {
+        given().port(port).accept(ContentType.JSON)
+                .param("targetClassificationId", bydelsinndeling.getId())
+                .param("date", "2015-01-01")
+                .param("inverted", true)
+                .get(REQUEST_WITH_ID_AND_CORRESPONDS_AT, kommuneinndeling.getId())
+//                .prettyPeek()
+                .then()
+                .contentType(ContentType.JSON)
+                .statusCode(HttpStatus.OK.value())
+                .body(JSON_CORRESPONDENCES + ".size()", equalTo(3))
+                //1
+                .body(JSON_CORRESPONDENCES + "[0].targetCode", equalTo("0301"))
+                .body(JSON_CORRESPONDENCES + "[0].targetName", equalTo("Oslo"))
+                .body(JSON_CORRESPONDENCES + "[0].targetShortName", equalTo(""))
+                .body(JSON_CORRESPONDENCES + "[0].sourceCode", equalTo("030101"))
+                .body(JSON_CORRESPONDENCES + "[0].sourceName", equalTo("Gamle Oslo"))
+                .body(JSON_CORRESPONDENCES + "[0].sourceShortName", equalTo(""))
+                //...
+                //3
+                .body(JSON_CORRESPONDENCES + "[2].targetCode", equalTo("0301"))
+                .body(JSON_CORRESPONDENCES + "[2].targetName", equalTo("Oslo"))
+                .body(JSON_CORRESPONDENCES + "[2].targetShortName", equalTo(""))
+                .body(JSON_CORRESPONDENCES + "[2].sourceCode", equalTo("030103"))
+                .body(JSON_CORRESPONDENCES + "[2].sourceName", equalTo("Sagene"))
+                .body(JSON_CORRESPONDENCES + "[2].sourceShortName", equalTo(""));
     }
 
     @Test
