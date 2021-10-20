@@ -94,12 +94,31 @@ public final class TestDataProvider {
                 null);
         version2012.addClassificationItem(TestUtil.createClassificationItem("0301", "Oslo"), level2012.getLevelNumber(),
                 null);
-        version2012.addClassificationItem(TestUtil.createClassificationItem("1739", "Røyrvik"), level2012
+        version2012.addClassificationItem(TestUtil.createClassificationItem("1739", "Røyrvik", null,
+                "Tospråklig navn Raarvihke - Røyrvik innført fra 1. 1. 2015. Før het kommunen Røyrvik."), level2012
                 .getLevelNumber(), null);
         version2012.addClassificationItem(TestUtil.createClassificationItem("1939", "Storfjord"), level2012
                 .getLevelNumber(), null);
         version2012.publish(Language.NB);
         classification.addClassificationVersion(version2012);
+
+        ClassificationVersion version2008 = TestUtil.createClassificationVersion(DateRange.create("2008-01-01",
+                "2012-01-01"));
+
+        Level level2008 = TestUtil.createLevel(1);
+        version2008.addLevel(level2008);
+        version2008.addClassificationItem(TestUtil.createClassificationItem("0101", "Halden"), level2008
+                .getLevelNumber(), null);
+        version2008.addClassificationItem(TestUtil.createClassificationItem("0104", "Moss"), level2008.getLevelNumber(),
+                null);
+        version2008.addClassificationItem(TestUtil.createClassificationItem("0301", "Oslo"), level2008.getLevelNumber(),
+                null);
+        version2008.addClassificationItem(TestUtil.createClassificationItem("1739", "Røyrvik"), level2008.getLevelNumber(),
+                null);
+        version2008.addClassificationItem(TestUtil.createClassificationItem("1939", "Storfjord"), level2008
+                .getLevelNumber(), null);
+        version2008.publish(Language.NB);
+        classification.addClassificationVersion(version2008);
 
         return classification;
     }

@@ -254,7 +254,7 @@ public class RestApiCodeAtIntegrationTest extends AbstractRestApiApplicationTest
                         "\"code\",\"parentCode\",\"level\",\"name\",\"shortName\",\"presentationName\",\"validFrom\",\"validTo\",\"notes\"\n"                                + "\"0101\",,\"1\",\"Halden\",\"\",\"\",,,\"\"\n"
                                 + "\"0104\",,\"1\",\"Moss\",\"\",\"\",,,\"\"\n"
                                 + "\"0301\",,\"1\",\"Oslo\",\"\",\"\",,,\"\"\n"
-                                + "\"1739\",,\"1\",\"Røyrvik\",\"\",\"\",,,\"\"\n"
+                                + "\"1739\",,\"1\",\"Røyrvik\",\"\",\"\",,,\"Tospråklig navn Raarvihke - Røyrvik innført fra 1. 1. 2015. Før het kommunen Røyrvik.\"\n"
                                 + "\"1939\",,\"1\",\"Storfjord\",\"\",\"\",,,\"\""
                 ));
 
@@ -279,7 +279,7 @@ public class RestApiCodeAtIntegrationTest extends AbstractRestApiApplicationTest
                                 + "\"0101\";;\"1\";\"Halden\";\"\";\"\";;;\"\"\n"
                                 + "\"0104\";;\"1\";\"Moss\";\"\";\"\";;;\"\"\n"
                                 + "\"0301\";;\"1\";\"Oslo\";\"\";\"\";;;\"\"\n"
-                                + "\"1739\";;\"1\";\"Røyrvik\";\"\";\"\";;;\"\"\n"
+                                + "\"1739\";;\"1\";\"Røyrvik\";\"\";\"\";;;\"Tospråklig navn Raarvihke - Røyrvik innført fra 1. 1. 2015. Før het kommunen Røyrvik.\"\n"
                                 + "\"1939\";;\"1\";\"Storfjord\";\"\";\"\";;;\"\""
                 ));
 

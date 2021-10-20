@@ -45,6 +45,45 @@ public class RestApiCodeIntegrationTest extends AbstractRestApiApplicationTest {
     }
 
     @Test
+    public void restServiceCodesDifferentNamesAndNotesJSON() {
+        given().port(port).accept(ContentType.JSON).param("from", "2008-01-01").param("to", "2015-01-01")
+                .get(REQUEST_WITH_ID_AND_CODES, kommuneinndeling.getId())
+//                .prettyPeek()
+                .then()
+                .statusCode(HttpStatus.OK.value())
+                .contentType(ContentType.JSON)
+                .body("codes.size()", equalTo(8))
+                //4
+                .body("codes[3].code", equalTo("1739"))
+                .body("codes[3].level", equalTo("1"))
+                .body("codes[3].name", equalTo("Raarvihke Røyrvik"))
+                .body("codes[3].shortName", equalTo(""))
+                .body("codes[3].notes", equalTo("13. juni 2014 ble det vedtatt at kommunenavnet skulle være tospråklig (samisk -norsk)"))
+                .body("codes[3].presentationName", equalTo(""))
+                .body("codes[3].validFromInRequestedRange", equalTo("2014-01-01"))
+                .body("codes[3].validToInRequestedRange", equalTo("2015-01-01"))
+                //5
+                .body("codes[4].code", equalTo("1739"))
+                .body("codes[4].level", equalTo("1"))
+                .body("codes[4].name", equalTo("Røyrvik"))
+                .body("codes[4].shortName", equalTo(""))
+                .body("codes[4].notes", equalTo(""))
+                .body("codes[4].presentationName", equalTo(""))
+                .body("codes[4].validFromInRequestedRange", equalTo("2008-01-01"))
+                .body("codes[4].validToInRequestedRange", equalTo("2012-01-01"))
+                //6
+                .body("codes[5].code", equalTo("1739"))
+                .body("codes[5].level", equalTo("1"))
+                .body("codes[5].name", equalTo("Røyrvik"))
+                .body("codes[5].shortName", equalTo(""))
+                .body("codes[5].notes", equalTo("Tospråklig navn Raarvihke - Røyrvik innført fra 1. 1. 2015. Før het kommunen Røyrvik."))
+                .body("codes[5].presentationName", equalTo(""))
+                .body("codes[5].validFromInRequestedRange", equalTo("2012-01-01"))
+                .body("codes[5].validToInRequestedRange", equalTo("2014-01-01"));
+        //...
+    }
+
+    @Test
     public void restServiceCodesIncludeFutureVersionJSON() {
         given().port(port).accept(ContentType.JSON).param("from", TestDataProvider.TEN_YEARS_LATER_DATE).param("to", TestDataProvider.FIFTEEN_YEARS_LATER_DATE).param("includeFuture", true)
                 .get(REQUEST_WITH_ID_AND_CODES, kommuneinndeling.getId())
