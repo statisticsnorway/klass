@@ -28,6 +28,7 @@ public class RestApiCodeIntegrationTest extends AbstractRestApiApplicationTest {
                 .body("codes[0].level", equalTo("1"))
                 .body("codes[0].name", equalTo("Halden"))
                 .body("codes[0].shortName", equalTo(""))
+                .body("codes[0].notes", equalTo(""))
                 .body("codes[0].presentationName", equalTo(""))
                 .body("codes[0].validFromInRequestedRange", equalTo("2014-01-01"))
                 .body("codes[0].validToInRequestedRange", equalTo("2015-01-01"))
@@ -36,6 +37,7 @@ public class RestApiCodeIntegrationTest extends AbstractRestApiApplicationTest {
                 .body("codes[1].level", equalTo("1"))
                 .body("codes[1].name", equalTo("Moss"))
                 .body("codes[1].shortName", equalTo(""))
+                .body("codes[1].notes", equalTo(""))
                 .body("codes[1].presentationName", equalTo(""))
                 .body("codes[1].validFromInRequestedRange", equalTo("2014-01-01"))
                 .body("codes[1].validToInRequestedRange", equalTo("2015-01-01"));
@@ -80,6 +82,7 @@ public class RestApiCodeIntegrationTest extends AbstractRestApiApplicationTest {
                 .body("codeList.codeItem[0].level", equalTo("1"))
                 .body("codeList.codeItem[0].name", equalTo("Halden"))
                 .body("codeList.codeItem[0].shortName", equalTo(""))
+                .body("codeList.codeItem[0].notes", equalTo(""))
                 .body("codeList.codeItem[0].presentationName", equalTo(""))
                 .body("codeList.codeItem[0].validFromInRequestedRange", equalTo("2014-01-01"))
                 .body("codeList.codeItem[0].validToInRequestedRange", equalTo("2015-01-01"))
@@ -88,6 +91,7 @@ public class RestApiCodeIntegrationTest extends AbstractRestApiApplicationTest {
                 .body("codeList.codeItem[1].level", equalTo("1"))
                 .body("codeList.codeItem[1].name", equalTo("Moss"))
                 .body("codeList.codeItem[1].shortName", equalTo(""))
+                .body("codeList.codeItem[1].notes", equalTo(""))
                 .body("codeList.codeItem[1].presentationName", equalTo(""))
                 .body("codeList.codeItem[1].validFromInRequestedRange", equalTo("2014-01-01"))
                 .body("codeList.codeItem[1].validToInRequestedRange", equalTo("2015-01-01"));
@@ -115,7 +119,8 @@ public class RestApiCodeIntegrationTest extends AbstractRestApiApplicationTest {
                 .body("codeList.codeItem[4].level", equalTo("1"))
                 .body("codeList.codeItem[4].name", equalTo("Raarvihke Røyrvik"))
                 .body("codeList.codeItem[4].validFromInRequestedRange", equalTo(TestDataProvider.TEN_YEARS_LATER_DATE))
-                .body("codeList.codeItem[4].validToInRequestedRange", equalTo(TestDataProvider.FIFTEEN_YEARS_LATER_DATE));
+                .body("codeList.codeItem[4].validToInRequestedRange", equalTo(TestDataProvider.FIFTEEN_YEARS_LATER_DATE))
+                .body("codeList.codeItem[4].notes", equalTo(""));
         //...
     }
 
@@ -134,7 +139,7 @@ public class RestApiCodeIntegrationTest extends AbstractRestApiApplicationTest {
                                 + "\"0101\",,\"1\",\"Halden\",\"\",\"\",,,\"2014-01-01\",\"2015-01-01\",\"\"\n"
                                 + "\"0104\",,\"1\",\"Moss\",\"\",\"\",,,\"2014-01-01\",\"2015-01-01\",\"\"\n"
                                 + "\"0301\",,\"1\",\"Oslo\",\"\",\"\",,,\"2014-01-01\",\"2015-01-01\",\"\"\n"
-                                + "\"1739\",,\"1\",\"Raarvihke Røyrvik\",\"\",\"\",,,\"2014-01-01\",\"2015-01-01\",\"\"\n"
+                                + "\"1739\",,\"1\",\"Raarvihke Røyrvik\",\"\",\"\",,,\"2014-01-01\",\"2015-01-01\",\"13. juni 2014 ble det vedtatt at kommunenavnet skulle være tospråklig (samisk -norsk)\"\n"
                                 + "\"1939\",,\"1\",\"Omasvuotna Storfjord Omasvuonon\",\"\",\"\",,,\"2014-01-01\",\"2015-01-01\",\"\""
                 ));
 

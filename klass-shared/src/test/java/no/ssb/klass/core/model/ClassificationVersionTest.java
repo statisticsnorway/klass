@@ -461,7 +461,7 @@ public class ClassificationVersionTest {
         // given
         ClassificationVersion version = createVersion();
         version.addNextLevel();
-        version.addClassificationItem(TestUtil.createClassificationItem("code", "officialName", "shortName"), 1, null);
+        version.addClassificationItem(TestUtil.createClassificationItem("code", "officialName", "shortName", "notes"), 1, null);
 
         // when
         boolean result = version.hasShortNames();

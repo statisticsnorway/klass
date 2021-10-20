@@ -150,19 +150,29 @@ public class RestApiCodeAtIntegrationTest extends AbstractRestApiApplicationTest
                 .body(XML_CODES + "[0].name", equalTo("Halden"))
                 .body(XML_CODES + "[0].shortName", equalTo(""))
                 .body(XML_CODES + "[0].presentationName", equalTo(""))
+                .body(XML_CODES + "[0].notes", equalTo(""))
                 //2
                 .body(XML_CODES + "[1].code", equalTo("0104"))
                 .body(XML_CODES + "[1].level", equalTo("1"))
                 .body(XML_CODES + "[1].name", equalTo("Moss"))
                 .body(XML_CODES + "[1].shortName", equalTo(""))
                 .body(XML_CODES + "[1].presentationName", equalTo(""))
+                .body(XML_CODES + "[1].notes", equalTo(""))
                 //...
+                //4
+                .body(XML_CODES + "[3].code", equalTo("1739"))
+                .body(XML_CODES + "[3].level", equalTo("1"))
+                .body(XML_CODES + "[3].name", equalTo("Raarvihke Røyrvik"))
+                .body(XML_CODES + "[3].shortName", equalTo(""))
+                .body(XML_CODES + "[3].presentationName", equalTo(""))
+                .body(XML_CODES + "[3].notes", equalTo("13. juni 2014 ble det vedtatt at kommunenavnet skulle være tospråklig (samisk -norsk)"))
                 //5
                 .body(XML_CODES + "[4].code", equalTo("1939"))
                 .body(XML_CODES + "[4].level", equalTo("1"))
                 .body(XML_CODES + "[4].name", equalTo("Omasvuotna Storfjord Omasvuonon"))
                 .body(XML_CODES + "[4].shortName", equalTo(""))
-                .body(XML_CODES + "[4].presentationName", equalTo(""));
+                .body(XML_CODES + "[4].presentationName", equalTo(""))
+                .body(XML_CODES + "[4].notes", equalTo(""));
     }
 
     @Test
@@ -200,7 +210,7 @@ public class RestApiCodeAtIntegrationTest extends AbstractRestApiApplicationTest
                                 + "\"0101\",,\"1\",\"Halden\",\"\",\"\",,,\"\"\n"
                                 + "\"0104\",,\"1\",\"Moss\",\"\",\"\",,,\"\"\n"
                                 + "\"0301\",,\"1\",\"Oslo\",\"\",\"\",,,\"\"\n"
-                                + "\"1739\",,\"1\",\"Raarvihke Røyrvik\",\"\",\"\",,,\"\"\n"
+                                + "\"1739\",,\"1\",\"Raarvihke Røyrvik\",\"\",\"\",,,\"13. juni 2014 ble det vedtatt at kommunenavnet skulle være tospråklig (samisk -norsk)\"\n"
                                 + "\"1939\",,\"1\",\"Omasvuotna Storfjord Omasvuonon\",\"\",\"\",,,\"\""
                 ));
 

@@ -76,7 +76,8 @@ public final class TestDataProvider {
                 null);
         version2014.addClassificationItem(TestUtil.createClassificationItem("0301", "Oslo"), level.getLevelNumber(),
                 null);
-        version2014.addClassificationItem(TestUtil.createClassificationItem("1739", "Raarvihke Røyrvik"), level
+        version2014.addClassificationItem(TestUtil.createClassificationItem("1739", "Raarvihke Røyrvik", null,
+                "13. juni 2014 ble det vedtatt at kommunenavnet skulle være tospråklig (samisk -norsk)"), level
                 .getLevelNumber(), null);
         version2014.addClassificationItem(TestUtil.createClassificationItem("1939", "Omasvuotna Storfjord Omasvuonon"),
                 level.getLevelNumber(), null);
