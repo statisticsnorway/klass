@@ -1,13 +1,13 @@
 package no.ssb.klass.api.applicationtest;
 
-import static com.jayway.restassured.RestAssured.*;
-import static org.hamcrest.Matchers.*;
-
+import com.jayway.restassured.http.ContentType;
 import no.ssb.klass.testutil.TestDataProvider;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
 
-import com.jayway.restassured.http.ContentType;
+import static com.jayway.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.equalTo;
 
 /**
  * @author Mads Lundemo, SSB.
@@ -155,12 +155,12 @@ public class RestApiVariantAtIntegrationTest extends AbstractRestApiApplicationT
                 .statusCode(HttpStatus.OK.value())
                 .contentType(CONTENT_TYPE_CSV)
                 .content(containsString(
-                        "\"code\",\"parentCode\",\"level\",\"name\",\"shortName\",\"presentationName\",\"validFrom\",\"validTo\"\n"
-                                + "\"A\",,\"1\",\"Enpersonfamilie\",\"\",\"\",,\n"
-                                + "\"A_\",\"A\",\"2\",\"Enpersonfamilie\",\"\",\"\",,\n"
-                                + "\"B\",,\"1\",\"Ektepar\",\"\",\"\",,\n"
-                                + "\"BA\",\"B\",\"2\",\"Ektepar med barn (yngste barn 0-17 år)\",\"\",\"\",,\n"
-                                + "\"BB\",\"B\",\"2\",\"Ektepar uten barn 0-17 år\",\"\",\"\",,"
+                        "\"code\",\"parentCode\",\"level\",\"name\",\"shortName\",\"presentationName\",\"validFrom\",\"validTo\",\"notes\"\n"
+                                + "\"A\",,\"1\",\"Enpersonfamilie\",\"\",\"\",,,\"\"\n"
+                                + "\"A_\",\"A\",\"2\",\"Enpersonfamilie\",\"\",\"\",,,\"\"\n"
+                                + "\"B\",,\"1\",\"Ektepar\",\"\",\"\",,,\"\"\n"
+                                + "\"BA\",\"B\",\"2\",\"Ektepar med barn (yngste barn 0-17 år)\",\"\",\"\",,,\"\"\n"
+                                + "\"BB\",\"B\",\"2\",\"Ektepar uten barn 0-17 år\",\"\",\"\",,,\"\""
                 ));
 
     }
@@ -175,10 +175,10 @@ public class RestApiVariantAtIntegrationTest extends AbstractRestApiApplicationT
                 .statusCode(HttpStatus.OK.value())
                 .contentType(CONTENT_TYPE_CSV)
                 .content(containsString(
-                        "\"code\",\"parentCode\",\"level\",\"name\",\"shortName\",\"presentationName\",\"validFrom\",\"validTo\"\n"
-                                + "\"C\",,\"1\",\"Enslig person med barn\",\"\",\"\",,\n"
-                                + "\"CA\",\"C\",\"2\",\"Enslig person med barn 0-5 år\",\"\",\"\",,\n"
-                                + "\"CB\",\"C\",\"2\",\"Enslig person med barn 6-17 år\",\"\",\"\",,"
+                        "\"code\",\"parentCode\",\"level\",\"name\",\"shortName\",\"presentationName\",\"validFrom\",\"validTo\",\"notes\"\n"
+                                + "\"C\",,\"1\",\"Enslig person med barn\",\"\",\"\",,,\"\"\n"
+                                + "\"CA\",\"C\",\"2\",\"Enslig person med barn 0-5 år\",\"\",\"\",,,\"\"\n"
+                                + "\"CB\",\"C\",\"2\",\"Enslig person med barn 6-17 år\",\"\",\"\",,,\"\""
                 ));
 
     }
@@ -195,12 +195,12 @@ public class RestApiVariantAtIntegrationTest extends AbstractRestApiApplicationT
                 .statusCode(HttpStatus.OK.value())
                 .contentType(CONTENT_TYPE_CSV)
                 .content(containsString(
-                        "\"code\",\"parentCode\",\"level\",\"name\",\"shortName\",\"presentationName\",\"validFrom\",\"validTo\"\n"
-                                + "\"A\",,\"1\",\"Enpersonfamilie\",\"\",\"\",,\n"
-                                + "\"A_\",\"A\",\"2\",\"Enpersonfamilie\",\"\",\"\",,\n"
-                                + "\"B\",,\"1\",\"Ektepar\",\"\",\"\",,\n"
-                                + "\"BA\",\"B\",\"2\",\"Ektepar med barn (yngste barn 0-17 år)\",\"\",\"\",,\n"
-                                + "\"BB\",\"B\",\"2\",\"Ektepar uten barn 0-17 år\",\"\",\"\",,"
+                        "\"code\",\"parentCode\",\"level\",\"name\",\"shortName\",\"presentationName\",\"validFrom\",\"validTo\",\"notes\"\n"
+                                + "\"A\",,\"1\",\"Enpersonfamilie\",\"\",\"\",,,\"\"\n"
+                                + "\"A_\",\"A\",\"2\",\"Enpersonfamilie\",\"\",\"\",,,\"\"\n"
+                                + "\"B\",,\"1\",\"Ektepar\",\"\",\"\",,,\"\"\n"
+                                + "\"BA\",\"B\",\"2\",\"Ektepar med barn (yngste barn 0-17 år)\",\"\",\"\",,,\"\"\n"
+                                + "\"BB\",\"B\",\"2\",\"Ektepar uten barn 0-17 år\",\"\",\"\",,,\"\""
                 ));
 
     }
@@ -218,10 +218,10 @@ public class RestApiVariantAtIntegrationTest extends AbstractRestApiApplicationT
                 .statusCode(HttpStatus.OK.value())
                 .contentType(CONTENT_TYPE_CSV)
                 .content(containsString(
-                        "\"code\",\"parentCode\",\"level\",\"name\",\"shortName\",\"presentationName\",\"validFrom\",\"validTo\"\n"
-                                + "\"C\",,\"1\",\"Enslig person med barn\",\"\",\"\",,\n"
-                                + "\"CA\",\"C\",\"2\",\"Enslig person med barn 0-5 år\",\"\",\"\",,\n"
-                                + "\"CB\",\"C\",\"2\",\"Enslig person med barn 6-17 år\",\"\",\"\",,"
+                        "\"code\",\"parentCode\",\"level\",\"name\",\"shortName\",\"presentationName\",\"validFrom\",\"validTo\",\"notes\"\n"
+                                + "\"C\",,\"1\",\"Enslig person med barn\",\"\",\"\",,,\"\"\n"
+                                + "\"CA\",\"C\",\"2\",\"Enslig person med barn 0-5 år\",\"\",\"\",,,\"\"\n"
+                                + "\"CB\",\"C\",\"2\",\"Enslig person med barn 6-17 år\",\"\",\"\",,,\"\""
                 ));
 
     }

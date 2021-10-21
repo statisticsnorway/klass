@@ -108,6 +108,11 @@ public final class TestUtil {
                 Translatable.create(shortName, Language.getDefault()));
     }
 
+    public static ConcreteClassificationItem createClassificationItem(String code, String officialName, String shortName, String notes) {
+        return new ConcreteClassificationItem(code, Translatable.create(officialName, Language.getDefault()),
+                Translatable.create(shortName, Language.getDefault()), Translatable.create(notes, Language.getDefault()));
+    }
+
     public static ReferencingClassificationItem createReferencingClassificationItem(ClassificationItem item) {
         return new ReferencingClassificationItem(item);
     }
