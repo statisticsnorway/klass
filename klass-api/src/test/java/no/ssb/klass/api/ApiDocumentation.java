@@ -91,6 +91,7 @@ public class ApiDocumentation {
     private static final long CLASS_VARIANT_KOMMUNEINNDELING = 7L;
     private static final int CLASS_ID_BYDELSINNDELING = 103;
     private static final int CLASS_ID_KOMMUNEINNDELING = 131;
+    private static final int CLASS_ID_FYLKEINNDELING = 104;
     @Rule
     public JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation("target/generated-snippets");
     private RestDocumentationResultHandler documentationHandler;
@@ -470,12 +471,12 @@ public class ApiDocumentation {
 
     @Test
     public void codesAtExampleCsv() throws Exception {
-        DateRange dateRange = DateRange.create("2015-01-01", "2016-01-01");
+        DateRange dateRange = DateRange.create("2020-01-01", "2021-01-01");
         List<CodeDto> codes = createKommuneInndelingCodes(dateRange);
         when(classificationServiceMock.findClassificationCodes(any(), any(), any(), any())).thenReturn(codes);
         // @formatter:off
-        this.mockMvc.perform(getWithContext("/classifications/" + CLASS_ID_KOMMUNEINNDELING + "/codesAt?date=2015-01-01")
-                .header("Accept", "text/csv; charset=ISO-8859-1"))
+        this.mockMvc.perform(getWithContext("/classifications/" + CLASS_ID_FYLKEINNDELING + "/codesAt?date=2020-01-01")
+                .header("Accept", "text/csv; charset=UTF-8"))
                 .andDo(this.documentationHandler = document("{method-name}",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(/*prettyPrint()*/)))
