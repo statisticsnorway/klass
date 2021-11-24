@@ -419,11 +419,11 @@ public class ApiDocumentation {
 
     @Test
     public void codesExampleJson() throws Exception {
-        DateRange dateRange = DateRange.create("2014-01-01", "2015-01-01");
+        DateRange dateRange = DateRange.create("2020-01-01", "2021-01-01");
         List<CodeDto> codes = createKommuneInndelingCodes(dateRange);
         when(classificationServiceMock.findClassificationCodes(any(), any(), any(), any())).thenReturn(codes);
         // @formatter:off
-        this.mockMvc.perform(getWithContext("/classifications/" + CLASS_ID_KOMMUNEINNDELING + "/codes?from=2014-01-01&to=2015-01-01&csvSeparator=;")
+        this.mockMvc.perform(getWithContext("/classifications/" + CLASS_ID_KOMMUNEINNDELING + "/codes?from=2020-01-01&to=2021-01-01&csvSeparator=;")
                 .header("Accept", MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
         // @formatter:on
@@ -431,11 +431,11 @@ public class ApiDocumentation {
 
     @Test
     public void codesExampleCsv() throws Exception {
-        DateRange dateRange = DateRange.create("2014-01-01", "2015-01-01");
+        DateRange dateRange = DateRange.create("2020-01-01", "2021-01-01");
         List<CodeDto> codes = createKommuneInndelingCodes(dateRange);
         when(classificationServiceMock.findClassificationCodes(any(), any(), any(), any())).thenReturn(codes);
         // @formatter:off
-        this.mockMvc.perform(getWithContext("/classifications/" + CLASS_ID_KOMMUNEINNDELING + "/codes?from=2014-01-01&to=2015-01-01&csvSeparator=;")
+        this.mockMvc.perform(getWithContext("/classifications/" + CLASS_ID_KOMMUNEINNDELING + "/codes?from=2020-01-01&to=2021-01-01&csvSeparator=;")
                 .header("Accept", "text/csv; charset=ISO-8859-1"))
                 .andDo(this.documentationHandler = document("{method-name}",
                         preprocessRequest(prettyPrint()),
@@ -446,11 +446,11 @@ public class ApiDocumentation {
 
     @Test
     public void codesOptionalParametersExample() throws Exception {
-        DateRange dateRange = DateRange.create("2014-01-01", "2015-01-01");
+        DateRange dateRange = DateRange.create("2020-01-01", "2021-01-01");
         List<CodeDto> codes = createKommuneInndelingCodes(dateRange);
         when(classificationServiceMock.findClassificationCodes(any(), any(), any(), any())).thenReturn(codes);
         // @formatter:off
-        this.mockMvc.perform(getWithContextUri("/classifications/" + CLASS_ID_KOMMUNEINNDELING + "/codes?from=2014-01-01&to=2015-01-01&csvSeparator=;&csvFields=name,code"
+        this.mockMvc.perform(getWithContextUri("/classifications/" + CLASS_ID_KOMMUNEINNDELING + "/codes?from=2020-01-01&to=2021-01-01&csvSeparator=;&csvFields=name,code"
                 + "&selectLevel=1&selectCodes=01*&presentationNamePattern={code}-{name}&language=nb&includeFuture=true")
                 .accept("text/csv"))
                 .andDo(this.documentationHandler
@@ -486,11 +486,11 @@ public class ApiDocumentation {
 
     @Test
     public void codesAtExampleJson() throws Exception {
-        DateRange dateRange = DateRange.create("2015-01-01", "2016-01-01");
+        DateRange dateRange = DateRange.create("2020-01-01", "2021-01-01");
         List<CodeDto> codes = createKommuneInndelingCodes(dateRange);
         when(classificationServiceMock.findClassificationCodes(any(), any(), any(), any())).thenReturn(codes);
         // @formatter:off
-        this.mockMvc.perform(getWithContext("/classifications/" + CLASS_ID_KOMMUNEINNDELING + "/codesAt?date=2015-01-01")
+        this.mockMvc.perform(getWithContext("/classifications/" + CLASS_ID_KOMMUNEINNDELING + "/codesAt?date=2020-01-01")
                 .header("Accept", MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
         // @formatter:on
@@ -498,12 +498,12 @@ public class ApiDocumentation {
 
     @Test
     public void codesAtOptionalParametersExample() throws Exception {
-        DateRange dateRange = DateRange.create("2015-01-01", "2016-01-01");
+        DateRange dateRange = DateRange.create("2021-01-01", "2022-01-01");
         List<CodeDto> codes = createKommuneInndelingCodes(dateRange);
         when(classificationServiceMock.findClassificationCodes(any(), any(), any(), any())).thenReturn(codes);
         // @formatter:off
         this.mockMvc.perform(getWithContextUri("/classifications/" + CLASS_ID_KOMMUNEINNDELING
-                + "/codesAt?date=2015-01-01&csvSeparator=;&csvFields=name,code&selectLevel=1&selectCodes=01*"
+                + "/codesAt?date=2021-01-01&csvSeparator=;&csvFields=name,code&selectLevel=1&selectCodes=01*"
                 + "&presentationNamePattern={code}-{name}&language=nb&includeFuture=true").accept("text/csv"))
                 .andDo(this.documentationHandler.document(
                         requestParameters(
@@ -521,13 +521,13 @@ public class ApiDocumentation {
 
     @Test
     public void variantExampleCsv() throws Exception {
-        DateRange dateRange = DateRange.create("2014-01-01", "2015-01-01");
+        DateRange dateRange = DateRange.create("2020-01-01", "2021-01-01");
         List<CodeDto> codes = createGreenhouseGasesCodes(dateRange);
         when(classificationServiceMock.findVariantClassificationCodes(any(), any(), any(), any(), any())).thenReturn(codes);
         // @formatter:off
         this.mockMvc.perform(
                 getWithContext("/classifications/" + CLASS_ID_GREENHOUSE_GASES
-                        + "/variant?variantName=Klimagasser&from=2014-01-01&to=2015-01-01")
+                        + "/variant?variantName=Klimagasser&from=2020-01-01&to=2021-01-01")
                         .header("Accept", "text/csv; charset=UTF-8"))
                 .andDo(this.documentationHandler = document("{method-name}",
                         preprocessRequest(prettyPrint()),
@@ -538,13 +538,13 @@ public class ApiDocumentation {
 
     @Test
     public void variantExampleJson() throws Exception {
-        DateRange dateRange = DateRange.create("2014-01-01", "2015-01-01");
+        DateRange dateRange = DateRange.create("2020-01-01", "2021-01-01");
         List<CodeDto> codes = createGreenhouseGasesCodes(dateRange);
         when(classificationServiceMock.findVariantClassificationCodes(any(), any(), any(), any(), any())).thenReturn(codes);
         // @formatter:off
         this.mockMvc.perform(
                 getWithContext("/classifications/" + CLASS_ID_GREENHOUSE_GASES
-                        + "/variant?variantName=Klimagasser&from=2014-01-01&to=2015-01-01")
+                        + "/variant?variantName=Klimagasser&from=2020-01-01&to=2021-01-01")
                         .header("Accept", MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
         // @formatter:on
@@ -552,14 +552,14 @@ public class ApiDocumentation {
 
     @Test
     public void variantOptionalParametersExample() throws Exception {
-        DateRange dateRange = DateRange.create("2014-01-01", "2015-01-01");
+        DateRange dateRange = DateRange.create("2020-01-01", "2021-01-01");
         when(classificationServiceMock.findVariantClassificationCodes(any(), any(), any(), any(), any())).thenReturn(
                 createFamilieInndelingCodes(dateRange));
         // @formatter:off
         this.mockMvc.perform(
                 getWithContextUri("/classifications/" + CLASS_ID_GREENHOUSE_GASES
                         + "/variant?variantName=Klimagasser"
-                        + "&from=2014-01-01&to=2015-01-01&csvSeparator=;&csvFields=name,code&selectLevel=1&selectCodes=01*"
+                        + "&from=2020-01-01&to=2021-01-01&csvSeparator=;&csvFields=name,code&selectLevel=1&selectCodes=01*"
                         + "&presentationNamePattern={code}-{name}&language=nb&includeFuture=true")
                         .accept("text/csv"))
                 .andDo(this.documentationHandler = document("{method-name}",
@@ -701,7 +701,7 @@ public class ApiDocumentation {
 
     @Test
     public void correspondsExample() throws Exception {
-        DateRange dateRange = DateRange.create("2014-01-01", "2015-01-01");
+        DateRange dateRange = DateRange.create("2020-01-01", "2021-01-01");
         when(classificationServiceMock.findCorrespondences(any(), any(), any(), any(), any())).thenReturn(
                 createKommuneToBydelCorrespondences(dateRange));
 
@@ -709,7 +709,7 @@ public class ApiDocumentation {
         this.mockMvc.perform(
                 getWithContext("/classifications/" + CLASS_ID_KOMMUNEINNDELING
                         + "/corresponds?targetClassificationId=" + CLASS_ID_BYDELSINNDELING
-                        + "&from=2014-01-01&to=2015-01-01")
+                        + "&from=2020-01-01&to=2021-01-01")
                         .header("Accept", "text/csv; charset=UTF-8"))
                 .andDo(this.documentationHandler = document("{method-name}",
                         preprocessRequest(prettyPrint()),
@@ -720,14 +720,14 @@ public class ApiDocumentation {
 
     @Test
     public void correspondsOptionalParametersExample() throws Exception {
-        DateRange dateRange = DateRange.create("2014-01-01", "2015-01-01");
+        DateRange dateRange = DateRange.create("2018-01-01", "2019-01-01");
         when(classificationServiceMock.findCorrespondences(any(), any(), any(), any(), any())).thenReturn(
                 createKommuneToBydelCorrespondences(dateRange));
         // @formatter:off
         this.mockMvc.perform(
                 getWithContext("/classifications/" + CLASS_ID_KOMMUNEINNDELING
                         + "/corresponds?targetClassificationId=" + CLASS_ID_BYDELSINNDELING
-                        + "&from=2014-01-01&to=2016-01-01&csvSeparator=;&csvFields=sourceCode,sourceName"
+                        + "&from=2018-01-01&to=2019-01-01&csvSeparator=;&csvFields=sourceCode,sourceName"
                         + "&language=nb&includeFuture=true").accept("text/csv"))
                 .andDo(this.documentationHandler = document("{method-name}",
                         preprocessRequest(prettyPrint()),
@@ -747,13 +747,13 @@ public class ApiDocumentation {
 
     @Test
     public void correspondsAtExample() throws Exception {
-        DateRange dateRange = DateRange.create("2014-01-01", "2015-01-01");
+        DateRange dateRange = DateRange.create("2018-01-01", "2019-01-01");
         when(classificationServiceMock.findCorrespondences(any(), any(), any(), any(), any())).thenReturn(
                 createKommuneToBydelCorrespondences(dateRange));
         // @formatter:off
         this.mockMvc.perform(
                 getWithContext("/classifications/" + CLASS_ID_KOMMUNEINNDELING
-                        + "/correspondsAt?targetClassificationId=" + CLASS_ID_BYDELSINNDELING + "&date=2014-01-01")
+                        + "/correspondsAt?targetClassificationId=" + CLASS_ID_BYDELSINNDELING + "&date=2018-01-01")
                         .header("Accept", "text/csv; charset=UTF-8"))
                 .andDo(this.documentationHandler = document("{method-name}",
                         preprocessRequest(prettyPrint()),
@@ -764,7 +764,7 @@ public class ApiDocumentation {
 
     @Test
     public void correspondsAtOptionalParametersExample() throws Exception {
-        DateRange dateRange = DateRange.create("2014-01-01", "2015-01-01");
+        DateRange dateRange = DateRange.create("2020-01-01", "2021-01-01");
         when(classificationServiceMock.findCorrespondences(any(), any(), any(), any(), any())).thenReturn(
                 createKommuneToBydelCorrespondences(dateRange));
         // @formatter:off
@@ -851,7 +851,7 @@ public class ApiDocumentation {
         // @formatter:off
         this.mockMvc.perform(
                 getWithContext("/classifications/" + CLASS_ID_KOMMUNEINNDELING
-                        + "/changes?from=2014-01-01&to=2015-01-01").accept("text/csv"))
+                        + "/changes?from=2020-01-01&to=2021-01-01").accept("text/csv"))
                 .andDo(this.documentationHandler = document("{method-name}",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(/*prettyPrint()*/)))
@@ -866,7 +866,7 @@ public class ApiDocumentation {
         // @formatter:off
         this.mockMvc.perform(
                 getWithContext("/classifications/" + CLASS_ID_KOMMUNEINNDELING
-                        + "/changes?from=2014-01-01&to=2016-01-01&csvSeparator=;&language=nb&includeFuture=true")
+                        + "/changes?from=2020-01-01&to=2022-01-01&csvSeparator=;&language=nb&includeFuture=true")
                         .accept("text/csv"))
                 .andDo(this.documentationHandler = document("{method-name}",
                         preprocessRequest(prettyPrint()),
@@ -884,13 +884,13 @@ public class ApiDocumentation {
 
     @Test
     public void csvSeparatorExample() throws Exception {
-        DateRange dateRange = DateRange.create("2014-01-01", "2015-01-01");
+        DateRange dateRange = DateRange.create("2020-01-01", "2021-01-01");
         when(classificationServiceMock.findClassificationCodes(any(), any(), any(), any())).thenReturn(
                 createKommuneInndelingCodes(dateRange));
         // @formatter:off
         this.mockMvc.perform(
                 getWithContext("/classifications/" + CLASS_ID_KOMMUNEINNDELING
-                        + "/codes?from=2014-01-01&to=2015-01-01&csvSeparator=;")
+                        + "/codes?from=2020-01-01&to=2021-01-01&csvSeparator=;")
                         .accept("text/csv"))
                 .andDo(this.documentationHandler = document("{method-name}",
                         preprocessRequest(prettyPrint()),
@@ -900,13 +900,13 @@ public class ApiDocumentation {
     }
     @Test
     public void csvFieldsCodesExample() throws Exception {
-        DateRange dateRange = DateRange.create("2014-01-01", "2015-01-01");
+        DateRange dateRange = DateRange.create("2020-01-01", "2021-01-01");
         when(classificationServiceMock.findClassificationCodes(any(), any(), any(), any())).thenReturn(
                 createKommuneInndelingCodes(dateRange));
         // @formatter:off
         this.mockMvc.perform(
                 getWithContext("/classifications/" + CLASS_ID_KOMMUNEINNDELING
-                        + "/codes?from=2014-01-01&to=2015-01-01&csvSeparator=;&csvFields=name,code")
+                        + "/codes?from=2020-01-01&to=2021-01-01&csvSeparator=;&csvFields=name,code")
                         .accept("text/csv"))
                 .andDo(this.documentationHandler = document("{method-name}",
                         preprocessRequest(prettyPrint()),
@@ -916,13 +916,13 @@ public class ApiDocumentation {
     }
     @Test
     public void csvFieldsCodesAtExample() throws Exception {
-        DateRange dateRange = DateRange.create("2014-01-01", "2015-01-01");
+        DateRange dateRange = DateRange.create("2020-01-01", "2021-01-01");
         when(classificationServiceMock.findClassificationCodes(any(), any(), any(), any())).thenReturn(
                 createKommuneInndelingCodes(dateRange));
         // @formatter:off
         this.mockMvc.perform(
                 getWithContext("/classifications/" + CLASS_ID_KOMMUNEINNDELING
-                        + "/codesAt?date=2014-01-01&csvSeparator=;&csvFields=name,code")
+                        + "/codesAt?date=2020-01-01&csvSeparator=;&csvFields=name,code")
                         .accept("text/csv"))
                 .andDo(this.documentationHandler = document("{method-name}",
                         preprocessRequest(prettyPrint()),
@@ -932,12 +932,12 @@ public class ApiDocumentation {
     }
     @Test
     public void selectLevelExample() throws Exception {
-        DateRange dateRange = DateRange.create("2014-01-01", "2015-01-01");
+        DateRange dateRange = DateRange.create("2020-01-01", "2021-01-01");
         when(classificationServiceMock.findClassificationCodes(any(), any(), any(), any())).thenReturn(
                 createFamilieInndelingCodes(dateRange));
         // @formatter:off
         this.mockMvc.perform(getWithContext("/classifications/" + CLASS_ID_FAMILIEGRUPPERING
-                + "/codes?from=2014-01-01&to=2015-01-01&selectLevel=2").accept("text/csv"))
+                + "/codes?from=2020-01-01&to=2021-01-01&selectLevel=2").accept("text/csv"))
                 .andDo(this.documentationHandler = document("{method-name}",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(/*prettyPrint()*/)))
@@ -947,13 +947,13 @@ public class ApiDocumentation {
 
     @Test
     public void presentationNamePatternExample() throws Exception {
-        DateRange dateRange = DateRange.create("2014-01-01", "2015-01-01");
+        DateRange dateRange = DateRange.create("2020-01-01", "2021-01-01");
         when(classificationServiceMock.findClassificationCodes(any(), any(), any(), any())).thenReturn(
                 createKommuneInndelingCodes(dateRange));
         // @formatter:off
         this.mockMvc.perform(
                 getWithContextUri("/classifications/" + CLASS_ID_KOMMUNEINNDELING
-                        + "/codes?from=2014-01-01&to=2015-01-01&presentationNamePattern={code}-{uppercase(name)}")
+                        + "/codes?from=2020-01-01&to=2021-01-01&presentationNamePattern={code}-{uppercase(name)}")
                         .accept("text/csv"))
                 .andDo(this.documentationHandler = document("{method-name}",
                         preprocessRequest(prettyPrint()),
@@ -979,17 +979,18 @@ public class ApiDocumentation {
 
     @Test
     public void rangeExample() throws Exception {
-        DateRange dateRange = DateRange.create("2013-01-01", "2014-01-01");
+        DateRange dateRange = DateRange.create("2019-01-01", "2020-01-01");
         List<CodeDto> codes = new ArrayList<>();
         codes.add(createCode(1, "0101", "Halden", dateRange));
         codes.add(createCode(1, "0104", "Moss", dateRange));
-        codes.add(createCode(1, "1739", "Røyrvik", dateRange));
-        codes.add(createCode(1, "1939", "Storfjord", dateRange));
+        codes.add(createCode(1, "1515", "Herøy", dateRange));
+        codes.add(createCode(1, "1825", "Grane", dateRange));
+        codes.add(createCode(1, "1826", "Hattfjelldal", dateRange));
 
         when(classificationServiceMock.findClassificationCodes(any(), any(), any(), any())).thenReturn(codes);
         // @formatter:off
         this.mockMvc.perform(getWithContext("/classifications/" + CLASS_ID_KOMMUNEINNDELING
-                + "/codes?from=2013-01-01&to=2014-01-01").accept("text/csv"))
+                + "/codes?from=2019-01-01&to=2020-01-01").accept("text/csv"))
                 .andDo(this.documentationHandler = document("{method-name}",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(/*prettyPrint()*/)))
@@ -999,22 +1000,25 @@ public class ApiDocumentation {
 
     @Test
     public void rangeExtendedExample() throws Exception {
-        DateRange dateRange = DateRange.create("2013-01-01", "2015-01-01");
-        DateRange startRange = DateRange.create("2013-01-01", "2014-01-01");
-        DateRange endRange = DateRange.create("2014-01-01", "2015-01-01");
+        DateRange dateRange = DateRange.create("2019-01-01", "2021-01-01");
+        DateRange startRange = DateRange.create("2019-01-01", "2020-01-01");
+        DateRange endRange = DateRange.create("2020-01-01", "2021-01-01");
         List<CodeDto> codes = new ArrayList<>();
-        codes.add(createCode(1, "0101", "Halden", dateRange));
-        codes.add(createCode(1, "0104", "Moss", dateRange));
-        codes.add(createCode(1, "1739", "Røyrvik", startRange));
-        codes.add(createCode(1, "1739", "Raarvihke Røyrvik", endRange));
-        codes.add(createCode(1, "1939", "Storfjord", startRange));
-        codes.add(createCode(1, "1939", "Omasvuotna Storfjord Omasvuonon", endRange));
+        codes.add(createCode(1, "0101", "Halden", startRange));
+        codes.add(createCode(1, "0301", "Halden", endRange));
+        codes.add(createCode(1, "0104", "Moss", startRange));
+        codes.add(createCode(1, "0104", "Moss", endRange));
+        codes.add(createCode(1, "1515", "Herøy", startRange));
+        codes.add(createCode(1, "1515", "Herøy (Møre og Romsdal)", endRange));
+        codes.add(createCode(1, "1825", "Grane", dateRange));
+        codes.add(createCode(1, "1826", "Hattfjelldal", startRange));
+        codes.add(createCode(1, "1826", "Aarborte - Hattfjelldal", endRange));
 
         when(classificationServiceMock.findClassificationCodes(any(), any(), any(), any())).thenReturn(codes);
         // @formatter:off
         this.mockMvc.perform(
                 getWithContext("/classifications/" + CLASS_ID_KOMMUNEINNDELING
-                        + "/codes?from=2013-01-01&to=2015-01-01")
+                        + "/codes?from=2019-01-01&to=2021-01-01")
                         .accept("text/csv"))
                 .andDo(this.documentationHandler = document("{method-name}",
                         preprocessRequest(prettyPrint()),
@@ -1025,15 +1029,20 @@ public class ApiDocumentation {
 
     @Test
     public void selectCodesExampleCsv() throws Exception {
-        DateRange dateRange = DateRange.create("2015-01-01", "2016-01-01");
+        DateRange dateRange = DateRange.create("2020-01-01", "2021-01-01");
         List<CodeDto> codes = createKommuneInndelingCodes(dateRange);
-        codes.add(createCode(1, "0301", "Oslo", dateRange));
-        codes.add(createCode(1, "0304", "Oslo", dateRange));
+        codes.add(createCode(1, "3005", "Drammen", dateRange));
+        codes.add(createCode(1, "3006", "Kongsberg", dateRange));
+        codes.add(createCode(1, "3007", "Ringerike", dateRange));
+        codes.add(createCode(1, "3415", "Sør-Odal", dateRange));
+        codes.add(createCode(1, "3416", "Eidskog", dateRange));
+        codes.add(createCode(1, "3417", "Grue", dateRange));
+        codes.add(createCode(1, "3418", "Åsnes", dateRange));
         when(classificationServiceMock.findClassificationCodes(any(), any(), any(), any())).thenReturn(codes);
         // @formatter:off
         this.mockMvc.perform(
                 getWithContext("/classifications/" + CLASS_ID_KOMMUNEINNDELING
-                        + "/codes?from=2015-01-01&to=2016-01-01&selectCodes=0301-0305,01*")
+                        + "/codes?from=2020-01-01&to=2021-01-01&selectCodes=3415-3418,300*")
                         .accept("text/csv"))
                 .andDo(this.documentationHandler = document("{method-name}",
                         preprocessRequest(prettyPrint()),
@@ -1232,10 +1241,10 @@ public class ApiDocumentation {
 
     private List<CodeDto> createKommuneInndelingCodes(DateRange dateRange) {
         List<CodeDto> codes = new ArrayList<>();
-        codes.add(createCode(1, "0101", "Halden", dateRange));
-        codes.add(createCode(1, "0104", "Moss", dateRange));
-        codes.add(createCode(1, "0105", "Sarpsborg", dateRange));
-        codes.add(createCode(1, "0106", "Fredrikstad", dateRange));
+        codes.add(createCode(1, "3001", "Halden", dateRange));
+        codes.add(createCode(1, "3002", "Moss", dateRange));
+        codes.add(createCode(1, "3003", "Sarpsborg", dateRange));
+        codes.add(createCode(1, "3004", "Fredrikstad", dateRange));
         return codes;
     }
 
