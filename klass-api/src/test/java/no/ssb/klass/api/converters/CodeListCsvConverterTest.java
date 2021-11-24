@@ -1,23 +1,22 @@
 package no.ssb.klass.api.converters;
 
-import static org.junit.Assert.*;
-
-import java.util.Arrays;
-import java.util.Date;
-
+import no.ssb.klass.api.dto.CodeList;
+import no.ssb.klass.core.model.Language;
+import no.ssb.klass.core.service.dto.CodeDto;
+import no.ssb.klass.core.util.DateRange;
+import no.ssb.klass.core.util.TimeUtil;
+import no.ssb.klass.testutil.ConstantClockSource;
+import no.ssb.klass.testutil.TestUtil;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.HttpOutputMessage;
 import org.springframework.mock.http.MockHttpOutputMessage;
 
-import no.ssb.klass.core.model.Language;
-import no.ssb.klass.core.service.dto.CodeDto;
-import no.ssb.klass.core.util.DateRange;
-import no.ssb.klass.core.util.TimeUtil;
-import no.ssb.klass.api.dto.CodeList;
-import no.ssb.klass.testutil.ConstantClockSource;
-import no.ssb.klass.testutil.TestUtil;
+import java.util.Arrays;
+import java.util.Date;
+
+import static org.junit.Assert.assertEquals;
 
 public class CodeListCsvConverterTest {
     private CodeListCsvConverter subject;
@@ -59,8 +58,8 @@ public class CodeListCsvConverterTest {
         // then
         assertEquals(
                 "\"code\",\"parentCode\",\"level\",\"name\",\"shortName\",\"presentationName\",\"validFrom\","
-                        + "\"validTo\",\"validFromInRequestedRange\",\"validToInRequestedRange\"\n"
-                        + "\"0104\",,\"1\",\"Sandefjord\",\"\",\"\",,,\"2008-01-01\",\"2020-01-01\"\n",
+                        + "\"validTo\",\"validFromInRequestedRange\",\"validToInRequestedRange\",\"notes\"\n"
+                        + "\"0104\",,\"1\",\"Sandefjord\",\"\",\"\",,,\"2008-01-01\",\"2020-01-01\",\"\"\n",
                 outputMessage.getBody().toString());
     }
 
@@ -76,8 +75,8 @@ public class CodeListCsvConverterTest {
 
         // then
         assertEquals(
-                "\"code\",\"parentCode\",\"level\",\"name\",\"shortName\",\"presentationName\",\"validFrom\",\"validTo\"\n"
-                        + "\"0104\",,\"1\",\"Sandefjord\",\"\",\"\"\n", outputMessage
+                "\"code\",\"parentCode\",\"level\",\"name\",\"shortName\",\"presentationName\",\"validFrom\",\"validTo\",\"notes\"\n"
+                        + "\"0104\",,\"1\",\"Sandefjord\",\"\",\"\",,,\"\"\n", outputMessage
                         .getBody()
                         .toString());
     }

@@ -1,17 +1,43 @@
 package no.ssb.klass.api.controllers;
 
-import static java.util.stream.Collectors.*;
-
-import java.beans.PropertyEditorSupport;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import javax.transaction.Transactional;
+import com.google.common.base.Strings;
 import no.ssb.klass.api.controllers.validators.CsvFieldsValidator;
+import no.ssb.klass.api.dto.CodeChangeList;
+import no.ssb.klass.api.dto.CodeList;
+import no.ssb.klass.api.dto.CorrespondenceItemList;
+import no.ssb.klass.api.dto.KlassPagedResources;
+import no.ssb.klass.api.dto.KlassResources;
+import no.ssb.klass.api.dto.SubscribeResponse;
+import no.ssb.klass.api.dto.hal.ClassificationFamilyResource;
+import no.ssb.klass.api.dto.hal.ClassificationFamilySummaryResource;
+import no.ssb.klass.api.dto.hal.ClassificationResource;
+import no.ssb.klass.api.dto.hal.ClassificationSummaryResource;
+import no.ssb.klass.api.dto.hal.ClassificationVariantResource;
+import no.ssb.klass.api.dto.hal.ClassificationVersionResource;
+import no.ssb.klass.api.dto.hal.CorrespondenceTableResource;
+import no.ssb.klass.api.dto.hal.ResourceUtil;
+import no.ssb.klass.api.dto.hal.SearchResultResource;
+import no.ssb.klass.api.dto.hal.SsbSectionResource;
+import no.ssb.klass.api.util.RestConstants;
+import no.ssb.klass.core.model.ClassificationFamily;
+import no.ssb.klass.core.model.ClassificationSeries;
+import no.ssb.klass.core.model.ClassificationType;
+import no.ssb.klass.core.model.ClassificationVariant;
+import no.ssb.klass.core.model.ClassificationVersion;
+import no.ssb.klass.core.model.CorrespondenceTable;
+import no.ssb.klass.core.model.Language;
+import no.ssb.klass.core.repository.ClassificationFamilySummary;
+import no.ssb.klass.core.service.ClassificationService;
+import no.ssb.klass.core.service.SearchService;
+import no.ssb.klass.core.service.StatisticsService;
+import no.ssb.klass.core.service.SubscriberService;
+import no.ssb.klass.core.service.dto.CodeDto;
+import no.ssb.klass.core.service.dto.CorrespondenceDto;
+import no.ssb.klass.core.service.search.SolrSearchResult;
 import no.ssb.klass.core.util.AlphaNumericalComparator;
+import no.ssb.klass.core.util.ClientException;
+import no.ssb.klass.core.util.DateRange;
+import no.ssb.klass.core.util.KlassResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,43 +68,16 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.servlet.view.RedirectView;
 
-import com.google.common.base.Strings;
+import javax.transaction.Transactional;
+import java.beans.PropertyEditorSupport;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
-import no.ssb.klass.core.model.ClassificationFamily;
-import no.ssb.klass.core.model.ClassificationSeries;
-import no.ssb.klass.core.model.ClassificationType;
-import no.ssb.klass.core.model.ClassificationVariant;
-import no.ssb.klass.core.model.ClassificationVersion;
-import no.ssb.klass.core.model.CorrespondenceTable;
-import no.ssb.klass.core.model.Language;
-import no.ssb.klass.core.repository.ClassificationFamilySummary;
-import no.ssb.klass.core.service.ClassificationService;
-import no.ssb.klass.core.service.SearchService;
-import no.ssb.klass.core.service.StatisticsService;
-import no.ssb.klass.core.service.SubscriberService;
-import no.ssb.klass.core.service.dto.CodeDto;
-import no.ssb.klass.core.service.dto.CorrespondenceDto;
-import no.ssb.klass.core.service.search.SolrSearchResult;
-import no.ssb.klass.core.util.ClientException;
-import no.ssb.klass.core.util.DateRange;
-import no.ssb.klass.core.util.KlassResourceNotFoundException;
-import no.ssb.klass.api.dto.CodeChangeList;
-import no.ssb.klass.api.dto.CodeList;
-import no.ssb.klass.api.dto.CorrespondenceItemList;
-import no.ssb.klass.api.dto.KlassPagedResources;
-import no.ssb.klass.api.dto.KlassResources;
-import no.ssb.klass.api.dto.SubscribeResponse;
-import no.ssb.klass.api.dto.hal.ClassificationFamilyResource;
-import no.ssb.klass.api.dto.hal.ClassificationFamilySummaryResource;
-import no.ssb.klass.api.dto.hal.ClassificationResource;
-import no.ssb.klass.api.dto.hal.ClassificationSummaryResource;
-import no.ssb.klass.api.dto.hal.ClassificationVariantResource;
-import no.ssb.klass.api.dto.hal.ClassificationVersionResource;
-import no.ssb.klass.api.dto.hal.CorrespondenceTableResource;
-import no.ssb.klass.api.dto.hal.ResourceUtil;
-import no.ssb.klass.api.dto.hal.SearchResultResource;
-import no.ssb.klass.api.dto.hal.SsbSectionResource;
-import no.ssb.klass.api.util.RestConstants;
+import static java.util.stream.Collectors.toList;
 
 @RestController
 // NOTE: CrossOrigin config moved to KlassSecurityConfiguration
@@ -428,7 +427,8 @@ public class ClassificationController {
                           @RequestParam(value = "language", defaultValue = "nb") Language language,
                           @RequestParam(value = "includeFuture", defaultValue = "false") Boolean includeFuture) {
             // @formatter:on
-        CorrespondenceItemList correspondenceList = correspondsInternal(id, targetClassificationId, new DateRangeHolder(from, to), csvSeparator, language, includeFuture);
+        CorrespondenceItemList correspondenceList = correspondsInternal(id, targetClassificationId,
+                new DateRangeHolder(from, to), csvSeparator, language, includeFuture, false);
 
         if (!csvFields.isEmpty())  {
             List<String> csvFieldsList = getCsvFieldsList(csvFields);
@@ -447,9 +447,11 @@ public class ClassificationController {
                           @RequestParam(value = "csvSeparator", defaultValue = ",") String csvSeparator,
                           @RequestParam(value = "csvFields", defaultValue = "") String csvFields,
                           @RequestParam(value = "language", defaultValue = "nb") Language language,
-                          @RequestParam(value = "includeFuture", defaultValue = "false") Boolean includeFuture) {
+                          @RequestParam(value = "includeFuture", defaultValue = "false") Boolean includeFuture,
+                          @RequestParam(value = "inverted", defaultValue = "false") Boolean inverted) {
             // @formatter:on
-        CorrespondenceItemList correspondenceList = correspondsInternal(id, targetClassificationId, new DateRangeHolder(date), csvSeparator, language, includeFuture);
+        CorrespondenceItemList correspondenceList = correspondsInternal(id, targetClassificationId,
+                new DateRangeHolder(date), csvSeparator, language, includeFuture, inverted);
 
         if (!csvFields.isEmpty())  {
             List<String> csvFieldsList = getCsvFieldsList(csvFields);
@@ -461,9 +463,10 @@ public class ClassificationController {
     }
 
     private CorrespondenceItemList correspondsInternal(Long id, Long targetClassificationId,
-            DateRangeHolder dateRangeHolder, String csvSeparator, Language language, Boolean includeFuture) {
+            DateRangeHolder dateRangeHolder, String csvSeparator, Language language,
+            Boolean includeFuture, Boolean inverted) {
         List<CorrespondenceDto> correspondences = classificationService.findCorrespondences(id, targetClassificationId,
-                dateRangeHolder.dateRange, language, includeFuture);
+                dateRangeHolder.dateRange, language, includeFuture, inverted);
         return new CorrespondenceItemList(csvSeparator, dateRangeHolder.withRange, includeFuture)
                 .convert(correspondences)
                 .removeOutside(dateRangeHolder.dateRange)

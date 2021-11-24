@@ -1,13 +1,13 @@
 package no.ssb.klass.api.applicationtest;
 
-import static com.jayway.restassured.RestAssured.*;
-import static org.hamcrest.Matchers.*;
-
+import com.jayway.restassured.http.ContentType;
 import no.ssb.klass.testutil.TestDataProvider;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
 
-import com.jayway.restassured.http.ContentType;
+import static com.jayway.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.equalTo;
 
 /**
  * @author Mads Lundemo, SSB.
@@ -244,12 +244,12 @@ public class RestApiVariantIntegrationTest extends AbstractRestApiApplicationTes
                 .contentType(CONTENT_TYPE_CSV)
                 .content(containsString(
                         "\"code\",\"parentCode\",\"level\",\"name\",\"shortName\",\"presentationName\","
-                                + "\"validFrom\",\"validTo\",\"validFromInRequestedRange\",\"validToInRequestedRange\"\n"
-                                + "\"A\",,\"1\",\"Enpersonfamilie\",\"\",\"\",,,\"2014-01-01\",\n"
-                                + "\"A_\",\"A\",\"2\",\"Enpersonfamilie\",\"\",\"\",,,\"2014-01-01\",\n"
-                                + "\"B\",,\"1\",\"Ektepar\",\"\",\"\",,,\"2014-01-01\",\n"
-                                + "\"BA\",\"B\",\"2\",\"Ektepar med barn (yngste barn 0-17 år)\",\"\",\"\",,,\"2014-01-01\",\n"
-                                + "\"BB\",\"B\",\"2\",\"Ektepar uten barn 0-17 år\",\"\",\"\",,,\"2014-01-01\","
+                                + "\"validFrom\",\"validTo\",\"validFromInRequestedRange\",\"validToInRequestedRange\",\"notes\"\n"
+                                + "\"A\",,\"1\",\"Enpersonfamilie\",\"\",\"\",,,\"2014-01-01\",,\"\"\n"
+                                + "\"A_\",\"A\",\"2\",\"Enpersonfamilie\",\"\",\"\",,,\"2014-01-01\",,\"\"\n"
+                                + "\"B\",,\"1\",\"Ektepar\",\"\",\"\",,,\"2014-01-01\",,\"\"\n"
+                                + "\"BA\",\"B\",\"2\",\"Ektepar med barn (yngste barn 0-17 år)\",\"\",\"\",,,\"2014-01-01\",,\"\"\n"
+                                + "\"BB\",\"B\",\"2\",\"Ektepar uten barn 0-17 år\",\"\",\"\",,,\"2014-01-01\",,\"\""
                 ));
 
     }
@@ -265,15 +265,15 @@ public class RestApiVariantIntegrationTest extends AbstractRestApiApplicationTes
                 .contentType(CONTENT_TYPE_CSV)
                 .content(containsString(
                         "\"code\",\"parentCode\",\"level\",\"name\",\"shortName\",\"presentationName\","
-                                + "\"validFrom\",\"validTo\",\"validFromInRequestedRange\",\"validToInRequestedRange\"\n"
-                                + "\"A\",,\"1\",\"Enpersonfamilie\",\"\",\"\",,,\"2014-01-01\",\""+TestDataProvider.TEN_YEARS_LATER_DATE+"\"\n"
-                                + "\"A_\",\"A\",\"2\",\"Enpersonfamilie\",\"\",\"\",,,\"2014-01-01\",\""+TestDataProvider.TEN_YEARS_LATER_DATE+"\"\n"
-                                + "\"B\",,\"1\",\"Ektepar\",\"\",\"\",,,\"2014-01-01\",\""+TestDataProvider.TEN_YEARS_LATER_DATE+"\"\n"
-                                + "\"BA\",\"B\",\"2\",\"Ektepar med barn (yngste barn 0-17 år)\",\"\",\"\",,,\"2014-01-01\",\""+TestDataProvider.TEN_YEARS_LATER_DATE+"\"\n"
-                                + "\"BB\",\"B\",\"2\",\"Ektepar uten barn 0-17 år\",\"\",\"\",,,\"2014-01-01\",\""+TestDataProvider.TEN_YEARS_LATER_DATE+"\"\n"
-                                + "\"C\",,\"1\",\"Enslig person med barn\",\"\",\"\",,,\""+TestDataProvider.TEN_YEARS_LATER_DATE+"\",\n"
-                                + "\"CA\",\"C\",\"2\",\"Enslig person med barn 0-5 år\",\"\",\"\",,,\""+TestDataProvider.TEN_YEARS_LATER_DATE+"\",\n"
-                                + "\"CB\",\"C\",\"2\",\"Enslig person med barn 6-17 år\",\"\",\"\",,,\""+TestDataProvider.TEN_YEARS_LATER_DATE+"\","
+                                + "\"validFrom\",\"validTo\",\"validFromInRequestedRange\",\"validToInRequestedRange\",\"notes\"\n"
+                                + "\"A\",,\"1\",\"Enpersonfamilie\",\"\",\"\",,,\"2014-01-01\",\""+TestDataProvider.TEN_YEARS_LATER_DATE+"\",\"\"\n"
+                                + "\"A_\",\"A\",\"2\",\"Enpersonfamilie\",\"\",\"\",,,\"2014-01-01\",\""+TestDataProvider.TEN_YEARS_LATER_DATE+"\",\"\"\n"
+                                + "\"B\",,\"1\",\"Ektepar\",\"\",\"\",,,\"2014-01-01\",\""+TestDataProvider.TEN_YEARS_LATER_DATE+"\",\"\"\n"
+                                + "\"BA\",\"B\",\"2\",\"Ektepar med barn (yngste barn 0-17 år)\",\"\",\"\",,,\"2014-01-01\",\""+TestDataProvider.TEN_YEARS_LATER_DATE+"\",\"\"\n"
+                                + "\"BB\",\"B\",\"2\",\"Ektepar uten barn 0-17 år\",\"\",\"\",,,\"2014-01-01\",\""+TestDataProvider.TEN_YEARS_LATER_DATE+"\",\"\"\n"
+                                + "\"C\",,\"1\",\"Enslig person med barn\",\"\",\"\",,,\""+TestDataProvider.TEN_YEARS_LATER_DATE+"\",,\"\"\n"
+                                + "\"CA\",\"C\",\"2\",\"Enslig person med barn 0-5 år\",\"\",\"\",,,\""+TestDataProvider.TEN_YEARS_LATER_DATE+"\",,\"\"\n"
+                                + "\"CB\",\"C\",\"2\",\"Enslig person med barn 6-17 år\",\"\",\"\",,,\""+TestDataProvider.TEN_YEARS_LATER_DATE+"\",,\"\""
                 ));
 
     }
