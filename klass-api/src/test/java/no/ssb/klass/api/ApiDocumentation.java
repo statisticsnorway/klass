@@ -748,7 +748,7 @@ public class ApiDocumentation {
     @Test
     public void correspondsAtExample() throws Exception {
         DateRange dateRange = DateRange.create("2018-01-01", "2019-01-01");
-        when(classificationServiceMock.findCorrespondences(any(), any(), any(), any(), any())).thenReturn(
+        when(classificationServiceMock.findCorrespondences(any(), any(), any(), any(), any(), any())).thenReturn(
                 createKommuneToBydelCorrespondences(dateRange));
         // @formatter:off
         this.mockMvc.perform(
