@@ -54,6 +54,7 @@
              forces us to downgrade to version 1.1.0. (https://github.com/spring-projects/spring-restdocs/issues/286)
              Remove when Spring Boot includes version 1.1.2 or newer -->
         <spring-restdocs.version>1.2.1.RELEASE</spring-restdocs.version>
+        <log4j2.version>2.15.0</log4j2.version>
 
     </properties>
 
@@ -221,7 +222,7 @@
             <version>${rest-assured-version}</version>
             <scope>test</scope>
         </dependency>
-         
+
     </dependencies>
 
     <profiles>
@@ -294,7 +295,7 @@
                 </plugins>
             </build>
         </profile>
-        
+
 
     </profiles>
 
@@ -329,7 +330,7 @@
                     </execution>
                 </executions>
             </plugin>
-            
+
         </plugins>
         <pluginManagement>
             <plugins>
@@ -351,7 +352,7 @@
                         <arguments>-Pdocumentation -Dmaven.javadoc.skip=true</arguments>
                     </configuration>
                 </plugin>
-                
+
                 <plugin>
                     <groupId>org.apache.tomcat.maven</groupId>
                     <artifactId>tomcat7-maven-plugin</artifactId>

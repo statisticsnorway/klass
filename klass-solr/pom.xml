@@ -8,6 +8,7 @@
 
     <properties>
         <maven.deploy.skip>true</maven.deploy.skip>
+        <log4j2.version>2.15.0</log4j2.version>
     </properties>
 
     <parent>
@@ -78,7 +79,7 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-    
+
     <build>
 
         <testResources>
@@ -89,7 +90,7 @@
                 </excludes>
             </testResource>
         </testResources>
-        
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
