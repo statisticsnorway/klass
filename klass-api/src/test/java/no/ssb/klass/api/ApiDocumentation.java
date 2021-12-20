@@ -1005,9 +1005,9 @@ public class ApiDocumentation {
         DateRange endRange = DateRange.create("2020-01-01", "2021-01-01");
         List<CodeDto> codes = new ArrayList<>();
         codes.add(createCode(1, "0101", "Halden", startRange));
-        codes.add(createCode(1, "0301", "Halden", endRange));
+        codes.add(createCode(1, "3001", "Halden", endRange));
         codes.add(createCode(1, "0104", "Moss", startRange));
-        codes.add(createCode(1, "0104", "Moss", endRange));
+        codes.add(createCode(1, "3002", "Moss", endRange));
         codes.add(createCode(1, "1515", "Herøy", startRange));
         codes.add(createCode(1, "1515", "Herøy (Møre og Romsdal)", endRange));
         codes.add(createCode(1, "1825", "Grane", dateRange));
