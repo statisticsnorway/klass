@@ -91,7 +91,7 @@ public class ApiDocumentation {
     private static final long CLASS_VARIANT_KOMMUNEINNDELING = 7L;
     private static final int CLASS_ID_BYDELSINNDELING = 103;
     private static final int CLASS_ID_KOMMUNEINNDELING = 131;
-//    private static final int CLASS_ID_FYLKEINNDELING = 104;
+    private static final int CLASS_ID_FYLKEINNDELING = 104;
     @Rule
     public JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation("target/generated-snippets");
     private RestDocumentationResultHandler documentationHandler;
@@ -472,10 +472,10 @@ public class ApiDocumentation {
     @Test
     public void codesAtExampleCsv() throws Exception {
         DateRange dateRange = DateRange.create("2020-01-01", "2021-01-01");
-        List<CodeDto> codes = createKommuneInndelingCodes(dateRange);
+        List<CodeDto> codes = createFylkeInndelingCodes(dateRange);
         when(classificationServiceMock.findClassificationCodes(any(), any(), any(), any())).thenReturn(codes);
         // @formatter:off
-        this.mockMvc.perform(getWithContext("/classifications/" + CLASS_ID_KOMMUNEINNDELING + "/codesAt?date=2020-01-01")
+        this.mockMvc.perform(getWithContext("/classifications/" + CLASS_ID_FYLKEINNDELING + "/codesAt?date=2020-01-01")
                 .header("Accept", "text/csv; charset=UTF-8"))
                 .andDo(this.documentationHandler = document("{method-name}",
                         preprocessRequest(prettyPrint()),
@@ -487,7 +487,7 @@ public class ApiDocumentation {
     @Test
     public void codesAtExampleJson() throws Exception {
         DateRange dateRange = DateRange.create("2020-01-01", "2021-01-01");
-        List<CodeDto> codes = createKommuneInndelingCodes(dateRange);
+        List<CodeDto> codes = createFylkeInndelingCodes(dateRange);
         when(classificationServiceMock.findClassificationCodes(any(), any(), any(), any())).thenReturn(codes);
         // @formatter:off
         this.mockMvc.perform(getWithContext("/classifications/" + CLASS_ID_KOMMUNEINNDELING + "/codesAt?date=2020-01-01")
@@ -1245,6 +1245,16 @@ public class ApiDocumentation {
         codes.add(createCode(1, "3002", "Moss", dateRange));
         codes.add(createCode(1, "3003", "Sarpsborg", dateRange));
         codes.add(createCode(1, "3004", "Fredrikstad", dateRange));
+        return codes;
+    }
+
+    private List<CodeDto> createFylkeInndelingCodes(DateRange dateRange) {
+        List<CodeDto> codes = new ArrayList<>();
+        codes.add(createCode(1, "03", "Oslo", dateRange));
+        codes.add(createCode(1, "11", "Rogaland", dateRange));
+        codes.add(createCode(1, "15", "Møre og Romsdal", dateRange));
+        codes.add(createCode(1, "18", "Nordland - Nordlánnda", dateRange));
+        codes.add(createCode(1, "30", "Viken", dateRange));
         return codes;
     }
 
