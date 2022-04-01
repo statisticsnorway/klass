@@ -12,7 +12,7 @@
 == Overview
 === REST Client
 Examples in this documentation use https://en.wikipedia.org/wiki/CURL[curl]. The `-i` parameter in the examples includes the HTTP response headers. Be aware that when running Curl on MS Windows all single ' have to be replaced by double ". If Curl is not installed, an alternative is
-to use any REST client to explore Klass Rest interface, like https://www.getpostman.com/product/api-client[Postman] or address line in browser.
+to use any REST client to explore Klass Rest interface, like https://www.getpostman.com/product/api-client[Postman] or address field in the browser.
 
 === URL Encoding
 This API requires you to use Percent-encoding for symbols and characters that are not part of the standard unreserved URI characters.
@@ -47,19 +47,26 @@ will produce a `404 Not Found` response:
 
 include::{snippets}/error-example/http-response.adoc[]
 
+=== Output formats
+Default output format is XML. JSON is optional, and in many cases CSV. It is possible to get output in the supported output formats without using Curl `-H` (`--header`). Add the dot-prefix `.json`, `.csv` or `.xml` in the URL before the request parameters.
+e.g. json: http://data.ssb.no/api/klass/v1/classifications/104/codesAt.json?date=2020-01-01[http://data.ssb.no/api/klass/v1/classifications/104/codesAt.json?date=2020-01-01]. When adding this in the URL you only get the default character sets.
 
 === Character sets
+<<<<<<< Updated upstream
 Charset for the formats XML and JSON are UTF-8. Default charset for CSV is ISO 8859-1. This can be changed in Accept header to UTF-8.
 
 === Output formats
 Default output format is XML. In many cases it is possible to get output in the supported output formats without using Curl `-H` (`--header`). Add the dot-prefix `.json`, `.csv` or `.xml` in the URL before the request parameters.
 e.g. json: http://data.ssb.no/api/klass/v1/classifications/104/codesAt.json?date=2020-01-01[http://data.ssb.no/api/klass/v1/classifications/104/codesAt.json?date=2020-01-01]. Be aware that you then get the default character sets. 
+=======
+Charset for the formats XML and JSON are UTF-8. For CSV default charset is ISO 8859-1 and can be changed in Accept header to UTF-8.
+>>>>>>> Stashed changes
 
 === License
-We use the Norwegian Licence for Open Government Data, [NLOD](https://data.norge.no/nlod/en/), which is compatible to Creative Commons 4.0 Attribution (CC BY 4.0).
+We use Creative Commons Attribution 4.0 International (https://creativecommons.org/licenses/by/4.0/deed[CC BY 4.0]).
 
 === Other
-In PxWebApi references to a classification in Klass has the form [.small]#urn:ssb:classification:klass:ID#. This can be rewritten to [.underline]#httр://data.ssb.no/api/klass/v1/classifications/ID#.
+In PxWebApi references to a classification in Klass has the form [.small]#urn:ssb:classification:klass:ID#. This can be rewritten using the classification ID to [.underline]#httр://data.ssb.no/api/klass/v1/classifications/ID#.
 For questions about Statistics Norway's APIs use: statistikkbanken@ssb.no.
 
 == Classification Resources
@@ -140,15 +147,21 @@ include::{snippets}/classification-optional-parameters-example/request-parameter
 === codes
 Used to get codes from a classification. A range is specified when requesting the codes,
 and the response will for each code indicate its valid range (validFrom/validTo).
-The format and character set used, can be set in the http header (setting character set is only available for csv).
-For more information about the range see <<_range, range>>. +
+ValidTo is optional. For more information about the range see <<_range, range>>. +
+The format and character set used, can be set in the http header.
+
 To get a snapshot of codes valid at a specified date, use <<_codesat, codesAt>>
 
 ===== Supported formats
 `text/csv`, `application/json`, `text/xml`
 
+<<<<<<< Updated upstream
 ===== Supported character sets
 `ISO-8859-1` (csv only), `UTF-8`
+=======
+==== Supported character sets
+`UTF-8`, `ISO-8859-1` (csv only)
+>>>>>>> Stashed changes
 
 ===== Example request (CSV with ISO-8859-1)
 include::{snippets}/codes-example-csv/curl-request.adoc[]
@@ -165,13 +178,18 @@ include::{snippets}/codes-optional-parameters-example/request-parameters.adoc[]
 === codesAt
 Used to get codes from a classification. A date is specified when requesting the codes,
 and the response will include all codes valid at the specified date.
-The format and character set used, can be specified in the http header (character set is only available for csv).
+The format and character set used, can be specified in the http header.
 
 ===== Supported formats
 `text/csv`, `application/json`, `text/xml`
 
+<<<<<<< Updated upstream
 ===== Supported character sets
 `ISO-8859-1` (csv only), `UTF-8`
+=======
+==== Supported character sets
+`UTF-8`, `ISO-8859-1` (csv only)
+>>>>>>> Stashed changes
 
 ===== Example request (CSV with ISO-8859-1)
 include::{snippets}/codes-at-example-csv/curl-request.adoc[]
@@ -189,11 +207,19 @@ include::{snippets}/codes-at-optional-parameters-example/request-parameters.adoc
 === versions by ID
 Used to get a classification version by ID. The ID is shown under classifications.
 
+<<<<<<< Updated upstream
 ===== Supported formats
 `application/json`, `text/xml`
 
 ===== Supported character sets
 `UTF-8`
+=======
+==== Supported formats
+`text/csv`, `application/json`, `text/xml`
+
+==== Supported character sets
+`UTF-8`, `ISO-8859-1` (csv only)
+>>>>>>> Stashed changes
 
 ===== Request parameters
 include::{snippets}/versions-request-parameters-example/request-parameters.adoc[]
@@ -217,7 +243,7 @@ include::{snippets}/versions-example-csv/http-response.adoc[]
 === variant
 Used to search codes from a classification variant. A range is specified when requesting the codes,
 and the response will for each code indicate its valid range (validFrom/validTo).
-The format and character set used, can be specified in the http header (character set is only available for csv).
+The format and character set used, can be specified in the http header.
 For more information about the range see <<_range, range>>. +
 To get a snapshot of codes valid at a specified date, use <<_variantat, variantAt>>.
 See also <<_variants_by_id, variants>>
@@ -225,8 +251,13 @@ See also <<_variants_by_id, variants>>
 ===== Supported formats
 `text/csv`, `application/json`, `text/xml`
 
+<<<<<<< Updated upstream
 ===== Supported character sets
 `ISO-8859-1` (csv only), `UTF-8`
+=======
+==== Supported character sets
+`UTF-8`, `ISO-8859-1` (csv only)
+>>>>>>> Stashed changes
 
 ===== Example request (CSV with UTF-8)
 include::{snippets}/variant-example-csv/curl-request.adoc[]
@@ -244,13 +275,18 @@ include::{snippets}/variant-optional-parameters-example/request-parameters.adoc[
 === variantAt
 Used to search codes from a classification variant. A date is specified when requesting the codes,
 and the response will include all codes valid at the specified date.
-The format and character set used, can be specified in the http header (character set is only available for csv).
+The format and character set used, can be specified in the http header.
 
 ===== Supported formats
 `text/csv`, `application/json`, `text/xml`
 
+<<<<<<< Updated upstream
 ===== Supported character sets
 `ISO-8859-1` (csv only), `UTF-8`
+=======
+==== Supported character sets
+`UTF-8`, `ISO-8859-1` (csv only)
+>>>>>>> Stashed changes
 
 ===== Example request (CSV with ISO-8859-1)
 include::{snippets}/variant-at-example-csv/curl-request.adoc[]
@@ -295,12 +331,12 @@ include::{snippets}/variants-example-csv/http-response.adoc[]
 
 === corresponds
 Used to get correspondence mappings between a source classification and a target classification.
-The Corresponds call works only in the direction the correspondence table has been made. A switch of source and target, returns 404 (no correspondence table).
 A range is specified when requesting the correspondence mappings,
 and the response will for each correspondence map indicate its valid range (validFrom/validTo).
+For more information about the range see <<_range, range>>.
 If a correspondence table is missing for parts of the range, the API will return 404 (not found).
-The format and character set used, can be specified in the http header (character set is only available for csv).
-For more information about the range see <<_range, range>>. +
+The format and character set used, can be specified in the http header.
+
 To get a snapshot of correspondence mappings valid at a specified date, use <<_correspondsat, correspondsAt>>
 
 ===== Supported formats
@@ -320,8 +356,8 @@ include::{snippets}/corresponds-optional-parameters-example/request-parameters.a
 
 === correspondsAt
 Used to get correspondence mappings between a source classification and a target classification.
-CorrespondsAt works only in the direction the correspondence table has been made. A switch of source and target, returns 404 (no correspondence table).
-The format and character set used, can be specified in the http header (character set is only available for csv).
+
+The format and character set used, can be specified in the http header.
 A date is specified when requesting the correspondence mappings, and the response will include all correspondence mappings valid at the specified date.
 
 ===== Supported formats
@@ -341,9 +377,8 @@ include::{snippets}/corresponds-at-optional-parameters-example/request-parameter
 
 
 === correspondenceTables by ID
-Used to get an existent correspondence table by its ID specified in the URL. The format and character set used, must be specified in the http request header (character set is only available for csv).
-Correspondence table will be shown only if it exists, in the direction it has been made. Returns 404 if no correspondence table with this id.
-To navigate to the target or the source classification version use <<correspondence-tables-links,links>> specified in the JSON or XML response. The ID is shown under versions.
+Used to get an existent correspondence table by its ID specified in the URL.
+To navigate to the target or the source classification version use <<correspondence-tables-links, links>> specified in the JSON or XML response. The ID is shown under <<_versions_by_id, versions by ID>>. This method can also be used within versions of the same classification.
 
 ===== Supported formats
 `text/csv`, `application/json`, `text/xml`
@@ -469,7 +504,7 @@ none
 
 == Request parameters
 === range
-A range is a time period with a `from` date and a `to` date. The dates are specified in format `<yyyy-MM-dd>`.
+A range is a time period with a `from` date and a `to` date. The dates are specified in format `<yyyy-mm-dd>`.
 `from` is inclusive and `to` is exclusive. `to` is optional, and if not specified the end of the range is considered to be indefinite.
 
 When retrieving codes with a range the code may change during the range. This is indicated in the result with `validFrom` and `validTo`.
@@ -525,7 +560,7 @@ include::{snippets}/csv-separator-example/http-response.adoc[]
 `csvFields` is an optional parameter that allows a user to filter columns and specify columns order in the Csv output.
 It is applicable for `/codes`, `/codesAt`, `/variantAt`, `/correspondsAt` services.
 
-The field names are case-sensitive. Misspelled field names will cause a 400 BAD REQUEST error.
+The field names are case-sensitive. Misspelled field names will cause a `400 Bad Request` error.
 
 ===== Example request for csvFields=name,code with /codesAt;
 include::{snippets}/csv-fields-codes-at-example/curl-request.adoc[]
@@ -595,8 +630,13 @@ name = Halden +
 
 |===
 
+<<<<<<< Updated upstream
 ===== Example request for presentationNamePattern={code}-{uppercase(name)}
 (In request due to url encoding %7B = { and %7D = })
+=======
+==== Example request for presentationNamePattern={code}-{uppercase(name)}
+(In request due to <<_url_encoding, url encoding>> %7B = { , and %7D = })
+>>>>>>> Stashed changes
 include::{snippets}/presentation-name-pattern-example/curl-request.adoc[]
 
 ===== Example response
@@ -614,8 +654,8 @@ include::{snippets}/search-optional-parameters-example/http-response.adoc[]
 
 == Other
 === page
-When the response contains a collection of resources (e.g. classifications or searchResults).
-The response will limit the returned collection to a page of configurable size.
+When the response contains a collection of resources (e.g. classifications or searchResults),
+the response will limit the returned collection to a page of configurable size.
 It is possible to set the size of the page in the request.
 
 ===== Example request
