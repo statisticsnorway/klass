@@ -48,15 +48,11 @@ will produce a `404 Not Found` response:
 include::{snippets}/error-example/http-response.adoc[]
 
 === Output formats
-Default output format is XML. JSON is optional, and in many cases CSV. It is possible to get output in the supported output formats without using Curl `-H` (`--header`). Add the dot-prefix `.json`, `.csv` or `.xml` in the URL before the request parameters.
+Default output format is XML. JSON is optional, and in many cases CSV. It is possible to get output in the supported output formats without using Curl `-H` (`--header`). Add the dot-prefix `.json`, `.csv` or `.xml` in the URL before the request parameters, 
 e.g. json: http://data.ssb.no/api/klass/v1/classifications/104/codesAt.json?date=2020-01-01[http://data.ssb.no/api/klass/v1/classifications/104/codesAt.json?date=2020-01-01]. When adding this in the URL you only get the default character sets.
 
 === Character sets
 Charset for the formats XML and JSON are UTF-8. Default charset for CSV is ISO 8859-1. This can be changed in Accept header to UTF-8.
-
-=== Output formats
-Default output format is XML. In many cases it is possible to get output in the supported output formats without using Curl `-H` (`--header`). Add the dot-prefix `.json`, `.csv` or `.xml` in the URL before the request parameters.
-e.g. json: http://data.ssb.no/api/klass/v1/classifications/104/codesAt.json?date=2020-01-01[http://data.ssb.no/api/klass/v1/classifications/104/codesAt.json?date=2020-01-01]. Be aware that you then get the default character sets.
 
 === License
 We use Creative Commons Attribution 4.0 International (https://creativecommons.org/licenses/by/4.0/deed[CC BY 4.0]).
@@ -72,23 +68,23 @@ For questions about Statistics Norway's APIs use: statistikkbanken@ssb.no.
 === classifications
 List classifications in Klass
 
-===== Supported formats
+==== Supported formats
 `application/json`, `text/xml`
 
-===== Example request (JSON)
+==== Example request (JSON)
 include::{snippets}/classifications-example/curl-request.adoc[]
 
-===== Example response (JSON)
+==== Example response (JSON)
 include::{snippets}/classifications-example/http-response.adoc[]
 
-===== Response structure
+==== Response structure
 include::{snippets}/classifications-example/response-fields.adoc[]
 
 [[classifications-links]]
-===== Links
+==== Links
 include::{snippets}/classifications-example/links.adoc[]
 
-===== Request parameters
+==== Request parameters
 include::{snippets}/classifications-optional-parameters-example/request-parameters.adoc[]
 
 
@@ -96,23 +92,23 @@ include::{snippets}/classifications-optional-parameters-example/request-paramete
 === Search for classifications
 Search for classifications in Klass
 
-===== Supported formats
+==== Supported formats
 `application/json`, `text/xml`
 
-===== Example request (JSON)
+==== Example request (JSON)
 include::{snippets}/search-example/curl-request.adoc[]
 
-===== Example response (JSON)
+==== Example response (JSON)
 include::{snippets}/search-example/http-response.adoc[]
 
-===== Response structure
+==== Response structure
 include::{snippets}/search-example/response-fields.adoc[]
 
 [[search-links]]
-===== Links
+==== Links
 include::{snippets}/search-example/links.adoc[]
 
-===== Request parameters
+==== Request parameters
 include::{snippets}/search-optional-parameters-example/request-parameters.adoc[]
 
 
@@ -120,23 +116,23 @@ include::{snippets}/search-optional-parameters-example/request-parameters.adoc[]
 === classifications by ID
 Get details of a classification. To get codes from the classification use operations specified in <<classification-links, Links>>
 
-===== Supported formats
+==== Supported formats
 `application/json`, `text/xml`
 
-===== Example request (JSON)
+==== Example request (JSON)
 include::{snippets}/classification-example/curl-request.adoc[]
 
-===== Example response (JSON)
+==== Example response (JSON)
 include::{snippets}/classification-example/http-response.adoc[]
 
-===== Response structure
+==== Response structure
 include::{snippets}/classification-example/response-fields.adoc[]
 
 [[classification-links]]
-===== Links
+==== Links
 include::{snippets}/classification-example/links.adoc[]
 
-===== Request parameters
+==== Request parameters
 include::{snippets}/classification-optional-parameters-example/request-parameters.adoc[]
 
 
@@ -148,27 +144,22 @@ The format and character set used, can be set in the http header.
 
 To get a snapshot of codes valid at a specified date, use <<_codesat, codesAt>>
 
-===== Supported formats
+==== Supported formats
 `text/csv`, `application/json`, `text/xml`
 
-<<<<<<< Updated upstream
-===== Supported character sets
-`ISO-8859-1` (csv only), `UTF-8`
-=======
 ==== Supported character sets
 `UTF-8`, `ISO-8859-1` (csv only)
->>>>>>> Stashed changes
 
-===== Example request (CSV with ISO-8859-1)
+==== Example request (CSV with ISO-8859-1)
 include::{snippets}/codes-example-csv/curl-request.adoc[]
 
-===== Example response (CSV with ISO-8859-1)
+==== Example response (CSV with ISO-8859-1)
 include::{snippets}/codes-example-csv/http-response.adoc[]
 
-===== Example response (JSON)
+==== Example response (JSON)
 include::{snippets}/codes-example-json/http-response.adoc[]
 
-===== Request parameters
+==== Request parameters
 include::{snippets}/codes-optional-parameters-example/request-parameters.adoc[]
 
 === codesAt
@@ -176,63 +167,50 @@ Used to get codes from a classification. A date is specified when requesting the
 and the response will include all codes valid at the specified date.
 The format and character set used, can be specified in the http header.
 
-===== Supported formats
+==== Supported formats
 `text/csv`, `application/json`, `text/xml`
 
-<<<<<<< Updated upstream
-===== Supported character sets
-`ISO-8859-1` (csv only), `UTF-8`
-=======
 ==== Supported character sets
 `UTF-8`, `ISO-8859-1` (csv only)
->>>>>>> Stashed changes
 
-===== Example request (CSV with ISO-8859-1)
+==== Example request (CSV with ISO-8859-1)
 include::{snippets}/codes-at-example-csv/curl-request.adoc[]
 
-===== Example response (CSV with ISO-8859-1)
+==== Example response (CSV with UTF-8)
 include::{snippets}/codes-at-example-csv/http-response.adoc[]
 
-===== Example response (JSON)
+==== Example response (JSON)
 include::{snippets}/codes-at-example-json/http-response.adoc[]
 
-===== Request parameters
+==== Request parameters
 include::{snippets}/codes-at-optional-parameters-example/request-parameters.adoc[]
 
 
 === versions by ID
 Used to get a classification version by ID. The ID is shown under classifications.
 
-<<<<<<< Updated upstream
-===== Supported formats
-`application/json`, `text/xml`
-
-===== Supported character sets
-`UTF-8`
-=======
 ==== Supported formats
 `text/csv`, `application/json`, `text/xml`
 
 ==== Supported character sets
 `UTF-8`, `ISO-8859-1` (csv only)
->>>>>>> Stashed changes
 
-===== Request parameters
+==== Request parameters
 include::{snippets}/versions-request-parameters-example/request-parameters.adoc[]
 
-===== Example request (JSON with UTF-8)
+==== Example request (JSON with UTF-8)
 include::{snippets}/versions-example-json/curl-request.adoc[]
 
-===== Response structure (JSON, XML)
+==== Response structure (JSON, XML)
 include::{snippets}/versions-example-json/response-fields.adoc[]
 
-===== Response structure (JSON, XML)
+==== Response structure (JSON, XML)
 include::{snippets}/versions-example-json/http-response.adoc[]
 
-===== Example request (CSV with ISO-8859-1)
+==== Example request (CSV with ISO-8859-1)
 include::{snippets}/versions-example-csv/curl-request.adoc[]
 
-===== Example response (CSV with ISO-8859-1)
+==== Example response (CSV with ISO-8859-1)
 include::{snippets}/versions-example-csv/http-response.adoc[]
 
 
@@ -244,27 +222,22 @@ For more information about the range see <<_range, range>>. +
 To get a snapshot of codes valid at a specified date, use <<_variantat, variantAt>>.
 See also <<_variants_by_id, variants>>
 
-===== Supported formats
+==== Supported formats
 `text/csv`, `application/json`, `text/xml`
 
-<<<<<<< Updated upstream
-===== Supported character sets
-`ISO-8859-1` (csv only), `UTF-8`
-=======
 ==== Supported character sets
 `UTF-8`, `ISO-8859-1` (csv only)
->>>>>>> Stashed changes
 
-===== Example request (CSV with UTF-8)
+==== Example request (CSV with UTF-8)
 include::{snippets}/variant-example-csv/curl-request.adoc[]
 
-===== Example response (CSV with UTF-8)
+==== Example response (CSV with UTF-8)
 include::{snippets}/variant-example-csv/http-response.adoc[]
 
-===== Example response (JSON)
+==== Example response (JSON)
 include::{snippets}/variant-example-json/http-response.adoc[]
 
-===== Request parameters
+==== Request parameters
 include::{snippets}/variant-optional-parameters-example/request-parameters.adoc[]
 
 
@@ -273,55 +246,50 @@ Used to search codes from a classification variant. A date is specified when req
 and the response will include all codes valid at the specified date.
 The format and character set used, can be specified in the http header.
 
-===== Supported formats
+==== Supported formats
 `text/csv`, `application/json`, `text/xml`
 
-<<<<<<< Updated upstream
-===== Supported character sets
-`ISO-8859-1` (csv only), `UTF-8`
-=======
 ==== Supported character sets
 `UTF-8`, `ISO-8859-1` (csv only)
->>>>>>> Stashed changes
 
-===== Example request (CSV with ISO-8859-1)
+==== Example request (CSV with ISO-8859-1)
 include::{snippets}/variant-at-example-csv/curl-request.adoc[]
 
-===== Example response (CSV with ISO-8859-1)
+==== Example response (CSV with ISO-8859-1)
 include::{snippets}/variant-at-example-csv/http-response.adoc[]
 
-===== Example response (JSON)
+==== Example response (JSON)
 include::{snippets}/variant-at-example-json/http-response.adoc[]
 
-===== Request parameters
+==== Request parameters
 include::{snippets}/variant-at-optional-parameters-example/request-parameters.adoc[]
 
 
 === variants by ID
 Used to get a classification variant by ID. The ID is shown under versions.
 
-===== Supported formats
+==== Supported formats
 `application/json`, `text/xml`, `text/csv`
 
-===== Supported character sets
+==== Supported character sets
 `UTF-8`, `ISO-8859-1` (csv only)
 
-===== Request parameters
+==== Request parameters
 include::{snippets}/variants-request-parameters-example/request-parameters.adoc[]
 
-===== Example request (JSON with UTF-8)
+==== Example request (JSON with UTF-8)
 include::{snippets}/variants-example-json/curl-request.adoc[]
 
-===== Response structure (JSON, XML)
+==== Response structure (JSON, XML)
 include::{snippets}/variants-example-json/response-fields.adoc[]
 
-===== Response structure (JSON, XML)
+==== Response structure (JSON, XML)
 include::{snippets}/variants-example-json/http-response.adoc[]
 
-===== Example request (CSV with ISO-8859-1)
+==== Example request (CSV with ISO-8859-1)
 include::{snippets}/variants-example-csv/curl-request.adoc[]
 
-===== Example response (CSV with ISO-8859-1)
+==== Example response (CSV with ISO-8859-1)
 include::{snippets}/variants-example-csv/http-response.adoc[]
 
 
@@ -335,19 +303,19 @@ The format and character set used, can be specified in the http header.
 
 To get a snapshot of correspondence mappings valid at a specified date, use <<_correspondsat, correspondsAt>>
 
-===== Supported formats
+==== Supported formats
 `text/csv`, `application/json`, `text/xml`
 
-===== Supported character sets
+==== Supported character sets
 `ISO-8859-1` (csv only), `UTF-8`
 
-===== Example request (CSV with UTF-8)
+==== Example request (CSV with UTF-8)
 include::{snippets}/corresponds-example/curl-request.adoc[]
 
-===== Example response (CSV with UTF-8)
+==== Example response (CSV with UTF-8)
 include::{snippets}/corresponds-example/http-response.adoc[]
 
-===== Request parameters
+==== Request parameters
 include::{snippets}/corresponds-optional-parameters-example/request-parameters.adoc[]
 
 === correspondsAt
@@ -356,19 +324,19 @@ Used to get correspondence mappings between a source classification and a target
 The format and character set used, can be specified in the http header.
 A date is specified when requesting the correspondence mappings, and the response will include all correspondence mappings valid at the specified date.
 
-===== Supported formats
+==== Supported formats
 `text/csv`, `application/json`, `text/xml`
 
-===== Supported character sets
+==== Supported character sets
 `ISO-8859-1` (csv only), `UTF-8`
 
-===== Example request (CSV with UTF-8)
+==== Example request (CSV with UTF-8)
 include::{snippets}/corresponds-at-example/curl-request.adoc[]
 
-===== Example response (CSV with UTF-8)
+==== Example response (CSV with UTF-8)
 include::{snippets}/corresponds-at-example/http-response.adoc[]
 
-===== Request parameters
+==== Request parameters
 include::{snippets}/corresponds-at-optional-parameters-example/request-parameters.adoc[]
 
 
@@ -376,32 +344,32 @@ include::{snippets}/corresponds-at-optional-parameters-example/request-parameter
 Used to get an existent correspondence table by its ID specified in the URL.
 To navigate to the target or the source classification version use <<correspondence-tables-links, links>> specified in the JSON or XML response. The ID is shown under <<_versions_by_id, versions by ID>>. This method can also be used within versions of the same classification.
 
-===== Supported formats
+==== Supported formats
 `text/csv`, `application/json`, `text/xml`
 
-===== Supported character sets
+==== Supported character sets
 `ISO-8859-1` (csv only), `UTF-8`
 
-===== Example request (CSV with ISO-8859-1)
+==== Example request (CSV with ISO-8859-1)
 include::{snippets}/correspondence-tables-example-csv/curl-request.adoc[]
 
-===== Example response (CSV with ISO-8859-1)
+==== Example response (CSV with ISO-8859-1)
 include::{snippets}/correspondence-tables-example-csv/http-response.adoc[]
 
-===== Example request (JSON with UTF-8)
+==== Example request (JSON with UTF-8)
 include::{snippets}/correspondence-tables-example-json/curl-request.adoc[]
 
-===== Response structure (JSON, XML)
+==== Response structure (JSON, XML)
 include::{snippets}/correspondence-tables-example-json/response-fields.adoc[]
 
-===== Example response (JSON with UTF-8)
+==== Example response (JSON with UTF-8)
 include::{snippets}/correspondence-tables-example-json/http-response.adoc[]
 
 [[correspondence-tables-links]]
-===== Links
+==== Links
 include::{snippets}/correspondence-tables-example-json/links.adoc[]
 
-===== Request parameters
+==== Request parameters
 include::{snippets}/correspondence-tables-optional-parameters-example/request-parameters.adoc[]
 
 
@@ -412,88 +380,88 @@ The format and character set used, can be specified in the http header (characte
 - If no oldCode is present it means that newCode started to exist at time given by changeOccurred.
 - If no newCode is present it means that oldCode ceased to exist at time given by changeOccurred.
 
-===== Supported formats
+==== Supported formats
 `text/csv`, `application/json`, `text/xml`
 
-===== Supported character sets
+==== Supported character sets
 `ISO-8859-1` (csv only), `UTF-8`
 
-===== Example request (CSV with ISO-8859-1)
+==== Example request (CSV with ISO-8859-1)
 include::{snippets}/changes-example/curl-request.adoc[]
 
-===== Example response (CSV with ISO-8859-1)
+==== Example response (CSV with ISO-8859-1)
 include::{snippets}/changes-example/http-response.adoc[]
 
-===== Request parameters
+==== Request parameters
 include::{snippets}/changes-optional-parameters-example/request-parameters.adoc[]
 
 
 === classificationfamilies
 Classification family is a grouping of classifications, used on the opening page of the Klass application.
 
-===== Supported formats
+==== Supported formats
 `application/json`, `text/xml`
 
-===== Example request (JSON)
+==== Example request (JSON)
 include::{snippets}/classification-families-example/curl-request.adoc[]
 
-===== Example response (JSON)
+==== Example response (JSON)
 include::{snippets}/classification-families-example/http-response.adoc[]
 
-===== Response structure
+==== Response structure
 include::{snippets}/classification-families-example/response-fields.adoc[]
 
 [[classification-families-links]]
-===== Links
+==== Links
 include::{snippets}/classification-families-example/links.adoc[]
 
-===== Request parameters
+==== Request parameters
 include::{snippets}/classification-families-optional-parameters-example/request-parameters.adoc[]
 
 [[classification-family]]
 === classificationfamilies by ID
 Get details of a classification family, used on the opening page of the Klass application.
 
-===== Supported formats
+==== Supported formats
 `application/json`, `text/xml`
 
-===== Example request (JSON)
+==== Example request (JSON)
 include::{snippets}/classification-family-example/curl-request.adoc[]
 
-===== Example response (JSON)
+==== Example response (JSON)
 include::{snippets}/classification-family-example/http-response.adoc[]
 
-===== Response structure
+==== Response structure
 include::{snippets}/classification-family-example/response-fields.adoc[]
 
 [[classification-family-links]]
-===== Links
+==== Links
 include::{snippets}/classification-family-example/links.adoc[]
 
-===== Request parameters
+==== Request parameters
 include::{snippets}/classification-family-optional-parameters-example/request-parameters.adoc[]
 
 
 === ssbsections
 List Statistics Norway divisions responsible for at least one classification.
 
-===== Supported formats
+==== Supported formats
 `application/json`, `text/xml`
 
-===== Example request (JSON)
+==== Example request (JSON)
 include::{snippets}/ssb-sections-example/curl-request.adoc[]
 
-===== Example response (JSON)
+==== Example response (JSON)
 include::{snippets}/ssb-sections-example/http-response.adoc[]
 
-===== Response structure
+==== Response structure
 include::{snippets}/ssb-sections-example/response-fields.adoc[]
 
 [[ssb-sections-links]]
-===== Links
+==== Links
 include::{snippets}/ssb-sections-example/links.adoc[]
 
-===== Request parameters
+==== Request parameters
 none
 
 
@@ -505,7 +473,7 @@ A range is a time period with a `from` date and a `to` date. The dates are speci
 
 When retrieving codes with a range the code may change during the range. This is indicated in the result with `validFrom` and `validTo`.
 
-===== Example
+==== Example
 A classification whose codes were updated 2014-01-01. If asking for codes for year 2013, then `validFrom/validTo` in response will be equal to `from/to` in request
 include::{snippets}/range-example/curl-request.adoc[]
 include::{snippets}/range-example/http-response.adoc[]
@@ -518,7 +486,7 @@ include::{snippets}/range-extended-example/http-response.adoc[]
 `changedSince` is used to find classifications that have been updated since a specified time.
 `changedSince` is specified in ISO 8601 DateTime format `<yyyy-MM-dd'T'HH:mm:ss.SSSZ>` e.g. "2015-10-31T01:30:00.000-0200"
 
-===== Example
+==== Example
 include::{snippets}/changed-since-example/curl-request.adoc[]
 
 === selectCodes
@@ -535,20 +503,20 @@ include::{snippets}/changed-since-example/curl-request.adoc[]
 | selectCodes = 3004-34* | range from 3004 to any higher code starting with 34
 |===
 
-===== Example request for selectCodes=0301,01*;
+==== Example request for selectCodes=0301,01*;
 include::{snippets}/select-codes-example-csv/curl-request.adoc[]
 
 
-===== Example response
+==== Example response
 include::{snippets}/select-codes-example-csv/http-response.adoc[]
 
 
 === csvSeparator
 `csvSeparator` is used to specify a separator symbol to be used for csv format. Default is `,`
 
-===== Example request for csvSeparator=;
+==== Example request for csvSeparator=;
 include::{snippets}/csv-separator-example/curl-request.adoc[]
-===== Example response
+==== Example response
 include::{snippets}/csv-separator-example/http-response.adoc[]
 
 
@@ -558,9 +526,9 @@ It is applicable for `/codes`, `/codesAt`, `/variantAt`, `/correspondsAt` servic
 
 The field names are case-sensitive. Misspelled field names will cause a `400 Bad Request` error.
 
-===== Example request for csvFields=name,code with /codesAt;
+==== Example request for csvFields=name,code with /codesAt;
 include::{snippets}/csv-fields-codes-at-example/curl-request.adoc[]
-===== Example response
+==== Example response
 include::{snippets}/csv-fields-codes-at-example/http-response.adoc[]
 
 
@@ -575,18 +543,18 @@ Supported languages
 | en | English
 |===
 
-===== Example request for language=nb
+==== Example request for language=nb
 include::{snippets}/language-example/curl-request.adoc[]
-===== Example response
+==== Example response
 include::{snippets}/language-example/http-response.adoc[]
 
 
 === selectLevel
 `selectLevel` is used to limit result to codes that are at specified level
 
-===== Example request for selectLevel=1
+==== Example request for selectLevel=1
 include::{snippets}/select-level-example/curl-request.adoc[]
-===== Example response
+==== Example response
 include::{snippets}/select-level-example/http-response.adoc[]
 
 
@@ -601,7 +569,7 @@ To build a presentationName use curly braces to access other columns:
 {uppercase(code/name/shortname)} +
 {capitalize(code/name/shortname)}
 
-===== Examples
+==== Examples
 Given that: +
 code = 0101 +
 name = Halden +
@@ -626,24 +594,19 @@ name = Halden +
 
 |===
 
-<<<<<<< Updated upstream
-===== Example request for presentationNamePattern={code}-{uppercase(name)}
-(In request due to url encoding %7B = { and %7D = })
-=======
 ==== Example request for presentationNamePattern={code}-{uppercase(name)}
 (In request due to <<_url_encoding, url encoding>> %7B = { , and %7D = })
->>>>>>> Stashed changes
 include::{snippets}/presentation-name-pattern-example/curl-request.adoc[]
 
-===== Example response
+==== Example response
 include::{snippets}/presentation-name-pattern-example/http-response.adoc[]
 
 === ssbSection
 `ssbSection` is used to limit result to classifications belonging to specified SSB division when searching classifications. Default is all SSB divisions.
 
-===== Example request for ssbSection
+==== Example request for ssbSection
 include::{snippets}/search-optional-parameters-example/curl-request.adoc[]
-===== Example response
+==== Example response
 include::{snippets}/search-optional-parameters-example/http-response.adoc[]
 
 
@@ -654,14 +617,14 @@ When the response contains a collection of resources (e.g. classifications or se
 the response will limit the returned collection to a page of configurable size.
 It is possible to set the size of the page in the request.
 
-===== Example request
+==== Example request
 include::{snippets}/page-example/curl-request.adoc[]
 
-===== Example response
+==== Example response
 include::{snippets}/page-example/http-response.adoc[]
 
-===== Response structure
+==== Response structure
 include::{snippets}/page-example/response-fields.adoc[]
 
-===== Links
+==== Links
 include::{snippets}/page-example/links.adoc[]
