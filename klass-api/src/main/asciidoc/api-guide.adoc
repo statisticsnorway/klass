@@ -52,15 +52,11 @@ Default output format is XML. JSON is optional, and in many cases CSV. It is pos
 e.g. json: http://data.ssb.no/api/klass/v1/classifications/104/codesAt.json?date=2020-01-01[http://data.ssb.no/api/klass/v1/classifications/104/codesAt.json?date=2020-01-01]. When adding this in the URL you only get the default character sets.
 
 === Character sets
-<<<<<<< Updated upstream
 Charset for the formats XML and JSON are UTF-8. Default charset for CSV is ISO 8859-1. This can be changed in Accept header to UTF-8.
 
 === Output formats
 Default output format is XML. In many cases it is possible to get output in the supported output formats without using Curl `-H` (`--header`). Add the dot-prefix `.json`, `.csv` or `.xml` in the URL before the request parameters.
-e.g. json: http://data.ssb.no/api/klass/v1/classifications/104/codesAt.json?date=2020-01-01[http://data.ssb.no/api/klass/v1/classifications/104/codesAt.json?date=2020-01-01]. Be aware that you then get the default character sets. 
-=======
-Charset for the formats XML and JSON are UTF-8. For CSV default charset is ISO 8859-1 and can be changed in Accept header to UTF-8.
->>>>>>> Stashed changes
+e.g. json: http://data.ssb.no/api/klass/v1/classifications/104/codesAt.json?date=2020-01-01[http://data.ssb.no/api/klass/v1/classifications/104/codesAt.json?date=2020-01-01]. Be aware that you then get the default character sets.
 
 === License
 We use Creative Commons Attribution 4.0 International (https://creativecommons.org/licenses/by/4.0/deed[CC BY 4.0]).
