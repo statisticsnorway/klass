@@ -39,7 +39,7 @@ public class StatisticalUnitView extends StatisticalUnitDesign {
         statisticalUnittable.setWidth(100, Unit.PERCENTAGE);
         statisticalUnittable.setHeight(-1, Unit.PIXELS);
         statisticalUnittable.setPageLength(0);
-        statisticalUnittable.addContainerProperty("Name", String.class, null, "Statistisk enhet", null, null);
+        statisticalUnittable.addContainerProperty("Name", String.class, null, "Enhetstype", null, null);
         statisticalUnittable.addContainerProperty("Value", Integer.class, null, "<b>Antall knytninger</b>", null, null);
         statisticalUnittable.addContainerProperty("LookAll", Button.class, null, " ", null, Table.Align.CENTER);
         statisticalUnittable.addContainerProperty("ExportToExcel", Button.class, null, " ", null, Table.Align.CENTER);

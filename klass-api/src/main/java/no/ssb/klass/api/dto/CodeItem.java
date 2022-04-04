@@ -1,21 +1,19 @@
 package no.ssb.klass.api.dto;
 
-import java.time.LocalDate;
-import java.util.Objects;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
+import no.ssb.klass.api.util.CustomLocalDateSerializer;
+import no.ssb.klass.api.util.PresentationNameBuilder;
 import no.ssb.klass.core.service.dto.CodeDto;
 import no.ssb.klass.core.util.DateRange;
 import no.ssb.klass.core.util.TimeUtil;
-import no.ssb.klass.api.util.CustomLocalDateSerializer;
-import no.ssb.klass.api.util.PresentationNameBuilder;
+
+import java.time.LocalDate;
+import java.util.Objects;
 
 @JsonPropertyOrder(value = { "code", "parentCode", "level", "name", "shortName", "presentationName", "validFrom",
-        "validTo" })
+        "validTo", "notes" })
 public class CodeItem implements Comparable<CodeItem> {
     private final String code;
     private final String parentCode;
@@ -24,6 +22,7 @@ public class CodeItem implements Comparable<CodeItem> {
     private final String presentationName;
     private final String level;
     private final DateRange validity;
+    private final String notes;
 
     public CodeItem(CodeItem codeItem, PresentationNameBuilder builder) {
         this.code = codeItem.getCode();
@@ -34,6 +33,7 @@ public class CodeItem implements Comparable<CodeItem> {
         this.validity = codeItem.getValidity();
         this.presentationName = builder.presentationName(codeItem.getCode(), codeItem.getName(), codeItem
                 .getShortName());
+        this.notes = codeItem.getNotes();
     }
 
     public CodeItem(CodeItem codeItem) {
@@ -44,6 +44,7 @@ public class CodeItem implements Comparable<CodeItem> {
         this.level = codeItem.getLevel();
         this.validity = codeItem.getValidity();
         this.presentationName = codeItem.getPresentationName();
+        this.notes = codeItem.getNotes();
     }
 
     public CodeItem(CodeDto code) {
@@ -54,6 +55,7 @@ public class CodeItem implements Comparable<CodeItem> {
         this.level = code.getLevel();
         this.validity = code.getValidity();
         this.presentationName = "";
+        this.notes = code.getNotes();
     }
 
     public String getCode() {
@@ -80,13 +82,15 @@ public class CodeItem implements Comparable<CodeItem> {
         return name;
     }
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
+    public String getNotes() { return notes; }
+
+//    @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonSerialize(using = CustomLocalDateSerializer.class)
     public LocalDate getValidFrom() {
         return validity == null ? null : validity.getFrom();
     }
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
+//    @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonSerialize(using = CustomLocalDateSerializer.class)
     public LocalDate getValidTo() {
         if (validity == null || TimeUtil.isMaxDate(validity.getTo())) {
@@ -115,8 +119,10 @@ public class CodeItem implements Comparable<CodeItem> {
         }
 
         CodeItem other = (CodeItem) obj;
-        return Objects.equals(this.code, other.code) && Objects.equals(this.name, other.name) && Objects.equals(
-                this.level, other.level);
+        return Objects.equals(this.code, other.code) &&
+                Objects.equals(this.name, other.name) &&
+                Objects.equals(this.level, other.level) &&
+                Objects.equals(this.notes, other.notes);
     }
 
     @Override
@@ -131,7 +137,9 @@ public class CodeItem implements Comparable<CodeItem> {
             "validFrom",
             "validTo",
             "validFromInRequestedRange",
-            "validToInRequestedRange" })
+            "validToInRequestedRange",
+            "notes"
+    })
     public static class RangedCodeItem extends CodeItem {
         private final DateRange RequestPeriodRange;
 

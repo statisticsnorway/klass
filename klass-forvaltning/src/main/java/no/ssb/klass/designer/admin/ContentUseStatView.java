@@ -212,7 +212,7 @@ public class ContentUseStatView extends ContentUseStatDesign implements Filterin
             classificationUnitReportView.setVisible(false);
             useStatisticsView.init(statisticsService, this);
             useStatisticsView.showClassificationReport();
-        } else if (tab.getCaption().equals("Statistiske enheter")) {
+        } else if (tab.getCaption().equals("Enhetstyper")) {
             statisticalUnitView.setVisible(true);
             useDetailedUseView.setVisible(false);
             useStatisticsView.setVisible(false);

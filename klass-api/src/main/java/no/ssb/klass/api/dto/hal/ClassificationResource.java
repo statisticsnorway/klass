@@ -1,22 +1,20 @@
 package no.ssb.klass.api.dto.hal;
 
-import static java.util.stream.Collectors.*;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+import no.ssb.klass.api.controllers.ClassificationController;
+import no.ssb.klass.api.util.RestConstants;
+import no.ssb.klass.core.model.ClassificationSeries;
+import no.ssb.klass.core.model.Language;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 
 import java.time.LocalDate;
 import java.util.List;
 
-import org.springframework.hateoas.Link;
-import org.springframework.hateoas.mvc.ControllerLinkBuilder;
-
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
-
-import no.ssb.klass.core.model.ClassificationSeries;
-import no.ssb.klass.core.model.Language;
-import no.ssb.klass.api.controllers.ClassificationController;
-import no.ssb.klass.api.util.RestConstants;
+import static java.util.stream.Collectors.toList;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
 @JacksonXmlRootElement(localName = "classification")
 public class ClassificationResource extends ClassificationSummaryResource {
@@ -130,7 +128,7 @@ public class ClassificationResource extends ClassificationSummaryResource {
 
     private Link createCorrespondsAtRelation(Long id) {
         ControllerLinkBuilder linkBuilder = linkTo(ControllerLinkBuilder.methodOn(ClassificationController.class).correspondsAt(id, 2L,
-                LocalDate.now(), ",",null, Language.getDefault(), null));
+                LocalDate.now(), ",",null, Language.getDefault(), null, null));
         return new Link(createUriTemplate(linkBuilder, "targetClassificationId", date(), "csvSeparator"),
                 "correspondsAt");
     }
