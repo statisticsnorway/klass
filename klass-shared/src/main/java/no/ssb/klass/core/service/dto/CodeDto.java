@@ -30,7 +30,7 @@ public class CodeDto {
         this.level = Integer.toString(level.getLevelNumber());
         this.dateRange = dateRange;
         this.validity = item.getValidFrom() == null ? null : DateRange.create(item.getValidFrom(), item.getValidTo());
-        this.notes = item.getNotes(language);
+        this.notes = item.getNotes(language).replace('\n',' ');
 
     }
 
