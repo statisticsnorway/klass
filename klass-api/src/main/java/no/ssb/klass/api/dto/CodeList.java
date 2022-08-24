@@ -1,6 +1,15 @@
 package no.ssb.klass.api.dto;
 
-import static java.util.stream.Collectors.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+import com.google.common.base.Strings;
+import no.ssb.klass.api.dto.CodeItem.RangedCodeItem;
+import no.ssb.klass.api.util.PresentationNameBuilder;
+import no.ssb.klass.core.service.dto.CodeDto;
+import no.ssb.klass.core.util.DateRange;
+import no.ssb.klass.core.util.TimeUtil;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -13,17 +22,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
-import com.google.common.base.Strings;
-
-import no.ssb.klass.core.service.dto.CodeDto;
-import no.ssb.klass.core.util.DateRange;
-import no.ssb.klass.api.dto.CodeItem.RangedCodeItem;
-import no.ssb.klass.api.util.PresentationNameBuilder;
-import no.ssb.klass.core.util.TimeUtil;
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.toList;
 
 @JacksonXmlRootElement(localName = "codeList")
 public class CodeList {
@@ -147,7 +147,13 @@ public class CodeList {
 
     public CodeList limit(DateRange dateRange) {
         return newCodeList(codeItems.stream()
-                .map(codeItem -> new RangedCodeItem(codeItem, codeItem.getRequestPeriodRange().subRange(dateRange)))
+                .map(codeItem -> new RangedCodeItem(codeItem,
+                        codeItem.getRequestPeriodRange()
+                                .subRange(dateRange)
+                                .subRange(new DateRange(
+                                        codeItem.getValidFrom() != null ? codeItem.getValidFrom() : LocalDate.MIN,
+                                        codeItem.getValidTo() != null ? codeItem.getValidTo() : LocalDate.MAX))
+                ))
                 .collect(toList()));
     }
 
