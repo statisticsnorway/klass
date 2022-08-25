@@ -119,10 +119,10 @@ public class CodeItem implements Comparable<CodeItem> {
         }
 
         CodeItem other = (CodeItem) obj;
-        return Objects.equals(this.code, other.code) &&
-                Objects.equals(this.name, other.name) &&
-                Objects.equals(this.level, other.level) &&
-                Objects.equals(this.notes, other.notes);
+        return Objects.equals(this.code, other.code)
+                && Objects.equals(this.name, other.name)
+                && Objects.equals(this.level, other.level)
+                ;
     }
 
     @Override
