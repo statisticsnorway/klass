@@ -53,7 +53,7 @@
         <guava-version>19.0</guava-version>
         <vaadin-version>7.7.17</vaadin-version>
         <vaadin.plugin.version>7.7.25</vaadin.plugin.version>
-        <vaadin.testbench.api.version>7.7.14</vaadin.testbench.api.version>
+        <vaadin.testbench.api.version>8.16.1</vaadin.testbench.api.version>
         <vaadin.widgetset.mode>local</vaadin.widgetset.mode>
         <woodstox-version>4.4.1</woodstox-version>
         <commons-lang3-version>3.4</commons-lang3-version>
