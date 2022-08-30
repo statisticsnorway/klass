@@ -23,7 +23,10 @@ public class CodeListCsvConverter extends AbstractCsvConverter<CodeList> {
         Charset charset = selectCharsetAndUpdateOutput(outputMessage);
         ObjectWriter writer = createWriter(codeList.codeItemsJavaType(), codeList.getCsvSeparator(), codeList.getCsvFields());
         List<CodeItem> convertedNotes = new ArrayList<>();
-        codeList.getCodes().forEach(ci -> convertedNotes.add(new CodeItem(ci,true)));
+        codeList.getCodes().forEach(orci -> convertedNotes.add(
+                (orci instanceof CodeItem.RangedCodeItem) ?
+                        new CodeItem.RangedCodeItem((CodeItem.RangedCodeItem) orci, true) :
+                        new CodeItem(orci, true)));
         writer.writeValue(new OutputStreamWriter(outputMessage.getBody(), charset), convertedNotes);
     }
 }

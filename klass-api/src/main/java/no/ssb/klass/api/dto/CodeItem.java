@@ -164,6 +164,11 @@ public class CodeItem implements Comparable<CodeItem> {
             this.RequestPeriodRange = newDateRange;
         }
 
+        public RangedCodeItem(RangedCodeItem codeItem, boolean convertNotes) {
+            super(codeItem, convertNotes);
+            this.RequestPeriodRange = codeItem.getRequestPeriodRange();
+        }
+
         public RangedCodeItem(RangedCodeItem codeItem, PresentationNameBuilder builder) {
             super(codeItem, builder);
             this.RequestPeriodRange = codeItem.getRequestPeriodRange();

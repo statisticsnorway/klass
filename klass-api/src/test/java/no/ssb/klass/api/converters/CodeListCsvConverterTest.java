@@ -103,8 +103,8 @@ public class CodeListCsvConverterTest {
 
 
     private CodeList createCodeList(boolean withValidRange, DateRange dateRange) {
-        CodeDto code = new CodeDto(TestUtil.createLevel(1), TestUtil.createClassificationItem("0104", "Sandefjord"), DateRange
-                .create("2008-01-01", "2020-01-01"), Language.getDefault());
+        CodeDto code = new CodeDto(TestUtil.createLevel(1), TestUtil.createClassificationItem("0104", "Sandefjord"),
+                DateRange.create("2008-01-01", "2020-01-01"), Language.getDefault());
         return new CodeList(",", withValidRange, dateRange, null).convert(Arrays.asList(code));
     }
 
