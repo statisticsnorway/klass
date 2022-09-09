@@ -52,7 +52,7 @@
         <objenesis-version>2.4</objenesis-version>
         <guava-version>19.0</guava-version>
         <vaadin-version>7.7.17</vaadin-version>
-        <vaadin.plugin.version>7.7.25</vaadin.plugin.version>
+        <vaadin.plugin.version>23.2.0</vaadin.plugin.version>
         <vaadin.testbench.api.version>7.7.14</vaadin.testbench.api.version>
         <vaadin.widgetset.mode>local</vaadin.widgetset.mode>
         <woodstox-version>4.4.1</woodstox-version>
