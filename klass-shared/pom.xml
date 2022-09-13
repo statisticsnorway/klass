@@ -11,7 +11,7 @@
     <parent>
         <groupId>no.ssb.klass</groupId>
         <artifactId>klass-root</artifactId>
-        <version>2.1.5-SNAPSHOT</version>
+        <version>2.1.6-SNAPSHOT</version>
     </parent>
 
     <properties>
@@ -32,6 +32,7 @@
         <checkstyle-version>2.17</checkstyle-version>
         <spring.version>4.3.7.RELEASE</spring.version>
         <objenesis-version>3.3</objenesis-version>
+        <guava-version>19.0</guava-version>
         <woodstox-version>4.4.1</woodstox-version>
         <commons-lang3-version>3.12.0</commons-lang3-version>
         <rest-assured-version>2.9.0</rest-assured-version>
@@ -319,7 +320,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>2.2</version>
+                <version>3.2.2</version>
                 <executions>
                     <execution>
                         <goals>

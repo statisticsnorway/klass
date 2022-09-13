@@ -17,6 +17,8 @@ import java.util.Arrays;
 import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class CodeListCsvConverterTest {
     private CodeListCsvConverter subject;
@@ -36,8 +38,8 @@ public class CodeListCsvConverterTest {
 
     @Test
     public void supports() {
-        assertEquals(true, subject.supports(CodeList.class));
-        assertEquals(false, subject.supports(CodeListCsvConverterTest.class));
+        assertTrue(subject.supports(CodeList.class));
+        assertFalse(subject.supports(CodeListCsvConverterTest.class));
     }
 
     @Test(expected = UnsupportedOperationException.class)
@@ -81,9 +83,36 @@ public class CodeListCsvConverterTest {
                         .toString());
     }
 
+    @Test
+    public void writeInternalNotesWithQuotas() throws Exception {
+        // given
+        final boolean showValidRange = false;
+        final DateRange dateRange = null;
+        HttpOutputMessage outputMessage = new MockHttpOutputMessage();
+
+        // when
+        subject.writeInternal(createCodeListWithDoubleQuotedNote(showValidRange, dateRange), outputMessage);
+
+        // then
+        assertEquals(
+                "\"code\",\"parentCode\",\"level\",\"name\",\"shortName\",\"presentationName\",\"validFrom\",\"validTo\",\"notes\"\n"
+                        + "\"0104\",,\"1\",\"Sandefjord\",\"\",\"\",,,\"Dette er en 'testnote' for Sandefjord  med ny linje\"\n", outputMessage
+                        .getBody()
+                        .toString());
+    }
+
+
     private CodeList createCodeList(boolean withValidRange, DateRange dateRange) {
-        CodeDto code = new CodeDto(TestUtil.createLevel(1), TestUtil.createClassificationItem("0104", "Sandefjord"), DateRange
-                .create("2008-01-01", "2020-01-01"), Language.getDefault());
+        CodeDto code = new CodeDto(TestUtil.createLevel(1), TestUtil.createClassificationItem("0104", "Sandefjord"),
+                DateRange.create("2008-01-01", "2020-01-01"), Language.getDefault());
         return new CodeList(",", withValidRange, dateRange, null).convert(Arrays.asList(code));
     }
+
+    private CodeList createCodeListWithDoubleQuotedNote(boolean withValidRange, DateRange dateRange) {
+        CodeDto code = new CodeDto(TestUtil.createLevel(1),
+                TestUtil.createClassificationItem("0104", "Sandefjord", "", "Dette er en \"testnote\" for Sandefjord \nmed ny linje"),
+                DateRange.create("2008-01-01", "2020-01-01"), Language.getDefault());
+        return new CodeList(",", withValidRange, dateRange, null).convert(Arrays.asList(code));
+    }
+
 }

@@ -1,22 +1,20 @@
 package no.ssb.klass.api.converters;
 
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.time.LocalDate;
-import java.util.List;
-
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.dataformat.csv.CsvGenerator;
+import com.fasterxml.jackson.dataformat.csv.CsvMapper;
+import com.fasterxml.jackson.dataformat.csv.CsvSchema;
+import no.ssb.klass.api.dto.hal.ClassificationItemResource;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpOutputMessage;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.AbstractHttpMessageConverter;
 
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.dataformat.csv.CsvGenerator;
-import com.fasterxml.jackson.dataformat.csv.CsvMapper;
-import com.fasterxml.jackson.dataformat.csv.CsvSchema;
-
-import no.ssb.klass.api.dto.hal.ClassificationItemResource;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
+import java.util.List;
 
 public abstract class AbstractCsvConverter<T> extends AbstractHttpMessageConverter<T> {
     private static final Charset DEFAULT_CHARACTER_SET = StandardCharsets.ISO_8859_1;
@@ -74,13 +72,15 @@ public abstract class AbstractCsvConverter<T> extends AbstractHttpMessageConvert
     /**
      * Replaces newlines with space from the field notes as they can cause trouble for users trying to open CSV with MS
      * Excel
-     * 
+     *
      * @param item
      *            original item
      * @return new item where notes no longer contains newlines
      */
     ClassificationItemResource replaceNewLines(ClassificationItemResource item) {
-        String notes = item.getNotes() == null ? null : item.getNotes().replaceAll("\\r\\n|\\r|\\n", " ");
+        String notes = item.getNotes() == null ? null : item.getNotes()
+                .replaceAll("\\r\\n|\\r|\\n", " ")
+                .replaceAll("\"", "'");
         String code = item.getCode();
         String level = item.getLevel();
         String name = item.getName();

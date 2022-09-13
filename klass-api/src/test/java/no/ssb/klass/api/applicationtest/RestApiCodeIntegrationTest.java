@@ -52,7 +52,7 @@ public class RestApiCodeIntegrationTest extends AbstractRestApiApplicationTest {
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .contentType(ContentType.JSON)
-                .body("codes.size()", equalTo(8))
+                .body("codes.size()", equalTo(7))
                 //4
                 .body("codes[3].code", equalTo("1739"))
                 .body("codes[3].level", equalTo("1"))
@@ -67,19 +67,19 @@ public class RestApiCodeIntegrationTest extends AbstractRestApiApplicationTest {
                 .body("codes[4].level", equalTo("1"))
                 .body("codes[4].name", equalTo("Røyrvik"))
                 .body("codes[4].shortName", equalTo(""))
-                .body("codes[4].notes", equalTo(""))
+                .body("codes[4].notes", equalTo("Tospråklig navn Raarvihke - Røyrvik innført fra 1. 1. 2015. Før het kommunen Røyrvik."))
                 .body("codes[4].presentationName", equalTo(""))
                 .body("codes[4].validFromInRequestedRange", equalTo("2008-01-01"))
-                .body("codes[4].validToInRequestedRange", equalTo("2012-01-01"))
+                .body("codes[4].validToInRequestedRange", equalTo("2014-01-01"))
                 //6
-                .body("codes[5].code", equalTo("1739"))
+                .body("codes[5].code", equalTo("1939"))
                 .body("codes[5].level", equalTo("1"))
-                .body("codes[5].name", equalTo("Røyrvik"))
+                .body("codes[5].name", equalTo("Omasvuotna Storfjord Omasvuonon"))
                 .body("codes[5].shortName", equalTo(""))
-                .body("codes[5].notes", equalTo("Tospråklig navn Raarvihke - Røyrvik innført fra 1. 1. 2015. Før het kommunen Røyrvik."))
+                .body("codes[5].notes", equalTo(""))
                 .body("codes[5].presentationName", equalTo(""))
-                .body("codes[5].validFromInRequestedRange", equalTo("2012-01-01"))
-                .body("codes[5].validToInRequestedRange", equalTo("2014-01-01"));
+                .body("codes[5].validFromInRequestedRange", equalTo("2014-01-01"))
+                .body("codes[5].validToInRequestedRange", equalTo("2015-01-01"));
         //...
     }
 

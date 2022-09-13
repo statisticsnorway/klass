@@ -47,6 +47,17 @@ public class CodeItem implements Comparable<CodeItem> {
         this.notes = codeItem.getNotes();
     }
 
+    public CodeItem(CodeItem codeItem, boolean convertNotes) {
+        this.code = codeItem.getCode();
+        this.parentCode = codeItem.getParentCode();
+        this.name = codeItem.getName();
+        this.shortName = codeItem.getShortName();
+        this.level = codeItem.getLevel();
+        this.validity = codeItem.getValidity();
+        this.presentationName = codeItem.getPresentationName();
+        this.notes = convertNotes ? codeItem.convertNotesNewlineDoubleQuotes() : codeItem.getNotes();
+    }
+
     public CodeItem(CodeDto code) {
         this.code = code.getCode();
         this.parentCode = code.getParentCode();
@@ -84,6 +95,11 @@ public class CodeItem implements Comparable<CodeItem> {
 
     public String getNotes() { return notes; }
 
+    public String convertNotesNewlineDoubleQuotes() {
+        return this.notes == null ? null :
+                this.notes.replaceAll("\\r\\n|\\r|\\n", " ").replaceAll("\"", "'");
+    }
+
 //    @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonSerialize(using = CustomLocalDateSerializer.class)
     public LocalDate getValidFrom() {
@@ -119,10 +135,10 @@ public class CodeItem implements Comparable<CodeItem> {
         }
 
         CodeItem other = (CodeItem) obj;
-        return Objects.equals(this.code, other.code) &&
-                Objects.equals(this.name, other.name) &&
-                Objects.equals(this.level, other.level) &&
-                Objects.equals(this.notes, other.notes);
+        return Objects.equals(this.code, other.code)
+                && Objects.equals(this.name, other.name)
+                && Objects.equals(this.level, other.level)
+                ;
     }
 
     @Override
@@ -146,6 +162,11 @@ public class CodeItem implements Comparable<CodeItem> {
         public RangedCodeItem(RangedCodeItem codeItem, DateRange newDateRange) {
             super(codeItem);
             this.RequestPeriodRange = newDateRange;
+        }
+
+        public RangedCodeItem(RangedCodeItem codeItem, boolean convertNotes) {
+            super(codeItem, convertNotes);
+            this.RequestPeriodRange = codeItem.getRequestPeriodRange();
         }
 
         public RangedCodeItem(RangedCodeItem codeItem, PresentationNameBuilder builder) {
