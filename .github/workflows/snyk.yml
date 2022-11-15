@@ -1,4 +1,4 @@
-name: Example workflow for Python using Snyk
+name: Scan Maven project using Snyk
 on: push
 jobs:
   security:
@@ -9,3 +9,5 @@ jobs:
         uses: snyk/actions/maven@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --maven-aggregate-project
