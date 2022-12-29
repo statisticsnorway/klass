@@ -38,7 +38,7 @@
         <rest-assured-version>2.9.0</rest-assured-version>
         <apacheds-server-jndi-version>1.5.5</apacheds-server-jndi-version>
         <asciidoctor-version>1.6.0</asciidoctor-version>
-        <maven-jaxb2-plugin-version>0.15.1</maven-jaxb2-plugin-version>
+        <maven-jaxb2-plugin-version>0.15.2</maven-jaxb2-plugin-version>
         <tomcat7-maven-plugin-version>2.2</tomcat7-maven-plugin-version>
 
         <!--IMPORTANT HIBERNATE BUG FIX ( needed for Translatable as lobs)-->
