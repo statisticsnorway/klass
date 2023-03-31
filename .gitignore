@@ -45,3 +45,4 @@ target
 .designer/designer-theme.css
 klass.log*
 /.checkstyle
+.dccache
