@@ -11,9 +11,6 @@
           </repositories>
       </profile>
   </profiles>
-  <activeProfiles>
-      <activeProfile>nexus</activeProfile>
-  </activeProfiles>
   <mirrors>
     <mirror>
       <id>maven-restletMirror</id>
