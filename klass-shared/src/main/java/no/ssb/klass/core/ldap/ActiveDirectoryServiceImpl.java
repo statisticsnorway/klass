@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
-import no.ssb.klass.solr.config.ConfigurationProfiles;
+import no.ssb.klass.core.config.ConfigurationProfiles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.ldap.core.DirContextOperations;
@@ -19,7 +19,7 @@ import no.ssb.klass.core.service.UserService;
  * @author Mads Lundemo, SSB.
  */
 @Service
-@Profile(value = {ConfigurationProfiles.FRONTEND_ONLY})
+@Profile(value = { ConfigurationProfiles.FRONTEND_ONLY })
 public class ActiveDirectoryServiceImpl implements ActiveDirectoryService {
 
     @Autowired

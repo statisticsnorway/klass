@@ -19,7 +19,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import no.ssb.klass.solr.config.ConfigurationProfiles;
+import no.ssb.klass.core.config.ConfigurationProfiles;
 import no.ssb.klass.core.model.ClassificationFamily;
 import no.ssb.klass.core.model.ClassificationSeries;
 import no.ssb.klass.core.model.ClassificationType;

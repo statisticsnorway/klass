@@ -8,7 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import no.ssb.klass.solr.config.ConfigurationProfiles;
+import no.ssb.klass.core.config.ConfigurationProfiles;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
@@ -28,7 +28,6 @@ import no.ssb.klass.core.model.Language;
 @Service
 @Profile(ConfigurationProfiles.FRONTEND_ONLY)
 public class CorrespondenceTableXmlService extends AbstractXmlService<CorrespondenceTable> {
-
 
     public InputStream toXmlStream(CorrespondenceTable correspondenceTable) {
         XmlCorrespondenceExportContainer container = correspondenceTableToDto(correspondenceTable);

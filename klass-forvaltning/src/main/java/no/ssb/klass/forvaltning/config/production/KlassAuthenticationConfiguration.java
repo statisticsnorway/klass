@@ -18,7 +18,7 @@ import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.rememberme.InMemoryTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
 
-import no.ssb.klass.solr.config.ConfigurationProfiles;
+import no.ssb.klass.core.config.ConfigurationProfiles;
 import no.ssb.klass.core.ldap.KlassUserDetailsMapper;
 
 /**
@@ -41,16 +41,14 @@ public class KlassAuthenticationConfiguration extends GlobalAuthenticationConfig
     @Value("${klass.env.security.ldap.search.base}")
     protected String searchBase;
 
-
     @NotEmpty
     @Value("${klass.env.security.ldap.search.filter}")
     protected String searchFilter;
 
-
     @NotEmpty
     @Value("${klass.env.security.ldap.domain}")
     protected String domain;
-    
+
     @NotEmpty
     @Value("${klass.env.security.ldap.url}")
     protected String url;
@@ -63,15 +61,16 @@ public class KlassAuthenticationConfiguration extends GlobalAuthenticationConfig
     @Value("${klass.env.security.ldap.password}")
     private String password;
 
-//    @Autowired
-//    protected KlassUserDetailsMapper userDetailsMapper;
+    // @Autowired
+    // protected KlassUserDetailsMapper userDetailsMapper;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        // just making sure we wont use weak MD5 or SHA encoder for anything (remember me service etc)
+        // just making sure we wont use weak MD5 or SHA encoder for anything (remember
+        // me service etc)
         // as far as i know default behavior for remember me service would be
         // MD5(username + expirationTime + password + salt(rememberMeKey))
-        //TokenBasedRememberMeServices#makeTokenSignature
+        // TokenBasedRememberMeServices#makeTokenSignature
         return new BCryptPasswordEncoder();
     }
 
@@ -107,7 +106,8 @@ public class KlassAuthenticationConfiguration extends GlobalAuthenticationConfig
     @Bean
     public RememberMeServices rememberMeServices(LdapUserDetailsService rememberMeUserDetailsService) {
         // Using in memory tokens for simplicity
-        // (We might want to change this if we start using multiple servers and load balancing)
+        // (We might want to change this if we start using multiple servers and load
+        // balancing)
         InMemoryTokenRepositoryImpl rememberMeTokenRepository = new InMemoryTokenRepositoryImpl();
         PersistentTokenBasedRememberMeServices services = new PersistentTokenBasedRememberMeServices(
                 rememberMeKey, rememberMeUserDetailsService, rememberMeTokenRepository);
@@ -117,8 +117,7 @@ public class KlassAuthenticationConfiguration extends GlobalAuthenticationConfig
 
     @Bean
     public AuthenticationProvider adAuthenticationProvider() {
-        ActiveDirectoryLdapAuthenticationProvider provider =
-                new ActiveDirectoryLdapAuthenticationProvider(domain, url);
+        ActiveDirectoryLdapAuthenticationProvider provider = new ActiveDirectoryLdapAuthenticationProvider(domain, url);
         provider.setUserDetailsContextMapper(userDetailsMapper());
         return provider;
     }

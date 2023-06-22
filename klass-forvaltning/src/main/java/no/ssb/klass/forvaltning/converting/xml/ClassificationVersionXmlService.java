@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import no.ssb.klass.solr.config.ConfigurationProfiles;
+import no.ssb.klass.core.config.ConfigurationProfiles;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
@@ -66,10 +66,9 @@ public class ClassificationVersionXmlService extends XmlCodeHierarchyService<Cla
             checkForMissingShortName(values, version.getPrimaryLanguage());
         }
 
-        Map<ClassificationItem, ClassificationItem> itemMap =
-                createClassificationItems(version, values.stream()
-                        .map(versionItem -> (XmlCodeHierarchy) versionItem)
-                        .collect(Collectors.toList()));
+        Map<ClassificationItem, ClassificationItem> itemMap = createClassificationItems(version, values.stream()
+                .map(versionItem -> (XmlCodeHierarchy) versionItem)
+                .collect(Collectors.toList()));
 
         mergeItemsWithClassification(version, itemMap);
     }
@@ -104,17 +103,17 @@ public class ClassificationVersionXmlService extends XmlCodeHierarchyService<Cla
             }
             String shortName;
             switch (primary) {
-            case NB:
-                shortName = versionItem.getShortNameNB();
-                break;
-            case NN:
-                shortName = versionItem.getShortNameNN();
-                break;
-            case EN:
-                shortName = versionItem.getShortNameEN();
-                break;
-            default:
-                shortName = null;
+                case NB:
+                    shortName = versionItem.getShortNameNB();
+                    break;
+                case NN:
+                    shortName = versionItem.getShortNameNN();
+                    break;
+                case EN:
+                    shortName = versionItem.getShortNameEN();
+                    break;
+                default:
+                    shortName = null;
             }
             if (Strings.isNullOrEmpty(shortName)) {
                 throw new ImportException("Element med kode  '"

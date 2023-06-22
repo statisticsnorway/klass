@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import no.ssb.klass.solr.config.ConfigurationProfiles;
+import no.ssb.klass.core.config.ConfigurationProfiles;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,16 +48,15 @@ public class ClassificationVariantXmlService extends XmlCodeHierarchyService<Cla
 
     @Override
     public void fromXmlStreamAndMerge(InputStream stream, ClassificationVariant variant) throws ImportException {
-        ClassificationVersion version =
-                classificationService.getClassificationVersion(variant.getClassificationVersion().getId());
+        ClassificationVersion version = classificationService
+                .getClassificationVersion(variant.getClassificationVersion().getId());
         List<XmlVariantItem> values = readInputStream(stream, XmlVariantItem.class);
         checkForMissingTitles(values);
         checkForMissingCodes(values);
         checkForDuplicatedCodes(values);
-        Map<ClassificationItem, ClassificationItem> itemMap =
-                createClassificationItems(version, values.stream()
-                        .map(xmlVariantItem -> (XmlCodeHierarchy) xmlVariantItem)
-                        .collect(Collectors.toList()));
+        Map<ClassificationItem, ClassificationItem> itemMap = createClassificationItems(version, values.stream()
+                .map(xmlVariantItem -> (XmlCodeHierarchy) xmlVariantItem)
+                .collect(Collectors.toList()));
         mergeItemsWithClassification(variant, itemMap);
     }
 

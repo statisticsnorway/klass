@@ -1,6 +1,6 @@
 package no.ssb.klass.forvaltning.config.production;
 
-import no.ssb.klass.solr.config.ConfigurationProfiles;
+import no.ssb.klass.core.config.ConfigurationProfiles;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,7 +33,6 @@ public class KlassSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private static final String WILDCARD = "**";
 
-
     @NotEmpty
     @Value("${klass.env.security.ldap.remember.time}")
     private int rememberTime;
@@ -52,18 +51,19 @@ public class KlassSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.exceptionHandling().authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/"+LoginUI.PATH));
+        http.exceptionHandling().authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/" + LoginUI.PATH));
         http.rememberMe()
                 .key(rememberKey)
                 .rememberMeServices(rememberMeServices)
                 .tokenValiditySeconds(rememberTime);
-        // .useSecureCookie(true); TODO enable secure cookie when(or if) we switch to https
+        // .useSecureCookie(true); TODO enable secure cookie when(or if) we switch to
+        // https
 
         http.authorizeRequests()
-                .antMatchers("/"+LoginUI.PATH).permitAll()
+                .antMatchers("/" + LoginUI.PATH).permitAll()
                 .antMatchers("/vaadinServlet/UIDL/" + WILDCARD).permitAll()
                 .antMatchers("/vaadinServlet/HEARTBEAT/" + WILDCARD).authenticated()
-                .antMatchers("/"+ KlassUI.PATH + "/" + WILDCARD).authenticated()
+                .antMatchers("/" + KlassUI.PATH + "/" + WILDCARD).authenticated()
                 .antMatchers("/manage/" + WILDCARD).hasRole("KLASS_ADMINISTRATOR")
                 .antMatchers("/" + WILDCARD).permitAll()
 

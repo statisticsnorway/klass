@@ -10,7 +10,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import com.jayway.restassured.http.ContentType;
 
-import no.ssb.klass.solr.config.ConfigurationProfiles;
+import no.ssb.klass.core.config.ConfigurationProfiles;
 
 /**
  * @author Mads Lundemo, SSB.

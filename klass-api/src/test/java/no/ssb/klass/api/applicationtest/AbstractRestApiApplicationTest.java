@@ -18,7 +18,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import no.ssb.klass.solr.config.ConfigurationProfiles;
+import no.ssb.klass.core.config.ConfigurationProfiles;
 import no.ssb.klass.core.model.ClassificationFamily;
 import no.ssb.klass.core.model.ClassificationSeries;
 import no.ssb.klass.core.model.User;
@@ -53,7 +53,8 @@ public abstract class AbstractRestApiApplicationTest {
     public static final String REQUEST_WITH_ID_AND_CORRESPONDS = REQUEST + "/{classificationId}/corresponds";
     public static final String REQUEST_WITH_ID_AND_CORRESPONDS_AT = REQUEST + "/{classificationId}/correspondsAt";
 
-    public static final String REQUEST_CORRESPONDENCE_TABLES = RestConstants.API_VERSION_V1 + "/correspondencetables/{correspondencetablesId}";
+    public static final String REQUEST_CORRESPONDENCE_TABLES = RestConstants.API_VERSION_V1
+            + "/correspondencetables/{correspondencetablesId}";
 
     public static final String REQUEST_SSB_SECTION = RestConstants.API_VERSION_V1 + "/ssbsections";
 
@@ -94,7 +95,8 @@ public abstract class AbstractRestApiApplicationTest {
     public static final String JSON_CORRESPONDENCES = "correspondenceItems";
 
     public static final String XML_CORRESPONDENCETABLE = "correspondenceTable";
-    public static final String XML_CORRESPONDENCETABLE_MAP = XML_CORRESPONDENCETABLE + ".correspondenceMaps.correspondenceMap";
+    public static final String XML_CORRESPONDENCETABLE_MAP = XML_CORRESPONDENCETABLE
+            + ".correspondenceMaps.correspondenceMap";
 
     public static final int PAGE_SIZE = 20;
 
@@ -132,43 +134,44 @@ public abstract class AbstractRestApiApplicationTest {
         applicationTestUtil.clearDatabase();
         applicationTestUtil.clearSearch();
         // if (!testDataInitialized) {
-            User user = userRepository.save(TestUtil.createUser());
+        User user = userRepository.save(TestUtil.createUser());
         TimeUtil.setClockSource(new ConstantClockSource(parseDate(CHANGED_SINCE_OLD_DATE)));
-            classificationFamily = classificationFamilyRepository.save(TestUtil
-                    .createClassificationFamily("Befolkning"));
-            kommuneinndeling = TestDataProvider.createClassificationKommuneinndeling();
-            kommuneinndeling.setContactPerson(user);
-            classificationFamily.addClassificationSeries(kommuneinndeling);
+        classificationFamily = classificationFamilyRepository.save(TestUtil
+                .createClassificationFamily("Befolkning"));
+        kommuneinndeling = TestDataProvider.createClassificationKommuneinndeling();
+        kommuneinndeling.setContactPerson(user);
+        classificationFamily.addClassificationSeries(kommuneinndeling);
         TimeUtil.setClockSource(new ConstantClockSource(parseDate(CHANGED_SINCE_NEW_DATE)));
-            bydelsinndeling = TestDataProvider.createClassificationBydelsinndeling();
-            bydelsinndeling.setContactPerson(user);
-            classificationFamily.addClassificationSeries(bydelsinndeling);
+        bydelsinndeling = TestDataProvider.createClassificationBydelsinndeling();
+        bydelsinndeling.setContactPerson(user);
+        classificationFamily.addClassificationSeries(bydelsinndeling);
 
-            familieGrupperingCodelist = TestDataProvider.createFamiliegrupperingCodelist(user);
-            classificationFamily.addClassificationSeries(familieGrupperingCodelist);
-            classificationService.saveAndIndexClassification(familieGrupperingCodelist);
+        familieGrupperingCodelist = TestDataProvider.createFamiliegrupperingCodelist(user);
+        classificationFamily.addClassificationSeries(familieGrupperingCodelist);
+        classificationService.saveAndIndexClassification(familieGrupperingCodelist);
 
-            kommuneinndeling = classificationService.saveAndIndexClassification(kommuneinndeling);
-            bydelsinndeling = classificationService.saveAndIndexClassification(bydelsinndeling);
+        kommuneinndeling = classificationService.saveAndIndexClassification(kommuneinndeling);
+        bydelsinndeling = classificationService.saveAndIndexClassification(bydelsinndeling);
 
-            correspondenceTable = TestDataProvider.createAndAddCorrespondenceTable(kommuneinndeling,
-                    bydelsinndeling);
-            correspondenceTableRepository.save(correspondenceTable);
-            correspondenceTableRepository.save(TestDataProvider.createAndAddCorrespondenceTableTableFutureVersion(kommuneinndeling,
-                bydelsinndeling));
-            correspondenceTableRepository.save(TestDataProvider.createAndAddChangeCorrespondenceTable(
-                    kommuneinndeling));
-            correspondenceTableRepository.save(TestDataProvider.createAndAddChangeCorrespondenceTableFutureVersion(
+        correspondenceTable = TestDataProvider.createAndAddCorrespondenceTable(kommuneinndeling,
+                bydelsinndeling);
+        correspondenceTableRepository.save(correspondenceTable);
+        correspondenceTableRepository
+                .save(TestDataProvider.createAndAddCorrespondenceTableTableFutureVersion(kommuneinndeling,
+                        bydelsinndeling));
+        correspondenceTableRepository.save(TestDataProvider.createAndAddChangeCorrespondenceTable(
+                kommuneinndeling));
+        correspondenceTableRepository.save(TestDataProvider.createAndAddChangeCorrespondenceTableFutureVersion(
                 kommuneinndeling));
 
         TimeUtil.setClockSource(new ConstantClockSource(parseDate(CHANGED_SINCE_OLD_DATE)));
-            classificationService.saveAndIndexClassification(kommuneinndeling);
-            TimeUtil.revertClockSource();
+        classificationService.saveAndIndexClassification(kommuneinndeling);
+        TimeUtil.revertClockSource();
 
-            TransactionStatus transaction = template.getTransactionManager().getTransaction(null);
-            seriesRepository.updateClassificationLastModified(bydelsinndeling.getId(), bydelsinndeling
-                    .getLastModified());
-            template.getTransactionManager().commit(transaction);
+        TransactionStatus transaction = template.getTransactionManager().getTransaction(null);
+        seriesRepository.updateClassificationLastModified(bydelsinndeling.getId(), bydelsinndeling
+                .getLastModified());
+        template.getTransactionManager().commit(transaction);
         // testDataInitialized = true;
 
         // }

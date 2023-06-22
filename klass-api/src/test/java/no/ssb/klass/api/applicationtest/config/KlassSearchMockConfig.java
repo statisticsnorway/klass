@@ -1,6 +1,6 @@
 package no.ssb.klass.api.applicationtest.config;
 
-import no.ssb.klass.solr.config.ConfigurationProfiles;
+import no.ssb.klass.core.config.ConfigurationProfiles;
 import org.apache.solr.client.solrj.SolrClient;
 import org.mockito.Mockito;
 import org.springframework.context.annotation.Bean;

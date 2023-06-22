@@ -2,7 +2,7 @@ package no.ssb.klass.forvaltning.converting.xml;
 
 import java.io.InputStream;
 
-import no.ssb.klass.solr.config.ConfigurationProfiles;
+import no.ssb.klass.core.config.ConfigurationProfiles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
@@ -42,8 +42,8 @@ public class FullVersionExportService extends AbstractXmlService<ClassificationV
     private XmlVersionWithChildrenContainer versionToDto(ClassificationVersion version) {
         ClassificationVersion classificationVersion = classificationService.getClassificationVersion(version
                 .getId());
-        XmlVersionWithChildrenBuilder builder =
-                new XmlVersionWithChildrenBuilder(classificationService, classificationVersion);
+        XmlVersionWithChildrenBuilder builder = new XmlVersionWithChildrenBuilder(classificationService,
+                classificationVersion);
         return builder.build();
     }
 
