@@ -17,12 +17,6 @@
       <url>https://maven.restlet.talend.com</url>
       <mirrorOf>maven-restlet</mirrorOf>
     </mirror>
-    <mirror>
-        <id>ssb-nexus-mirror</id>
-        <name>Nexus mirror</name>
-        <url>https://nexus.ssb.no/repository/maven-public</url>
-        <mirrorOf>*</mirrorOf>
-    </mirror>
   </mirrors>
 </settings>
 
