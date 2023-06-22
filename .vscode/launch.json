@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-KlassForvaltningApplication<klass-forvaltning>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "no.ssb.klass.KlassForvaltningApplication",
+            "projectName": "klass-forvaltning",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

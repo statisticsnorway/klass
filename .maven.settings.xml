@@ -1,9 +1,30 @@
 <settings>
+  <profiles>
+      <profile>
+          <id>nexus</id>
+          <repositories>
+              <repository>
+                  <id>ssb-repo</id>
+                  <name>Nexus</name>
+                  <url>https://nexus.ssb.no/repository/maven-public</url>
+              </repository>
+          </repositories>
+      </profile>
+  </profiles>
+  <activeProfiles>
+      <activeProfile>nexus</activeProfile>
+  </activeProfiles>
   <mirrors>
     <mirror>
       <id>maven-restletMirror</id>
       <url>https://maven.restlet.talend.com</url>
       <mirrorOf>maven-restlet</mirrorOf>
+    </mirror>
+    <mirror>
+        <id>ssb-nexus-mirror</id>
+        <name>Nexus mirror</name>
+        <url>https://nexus.ssb.no/repository/maven-public</url>
+        <mirrorOf>*</mirrorOf>
     </mirror>
   </mirrors>
 </settings>
