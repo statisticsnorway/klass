@@ -145,4 +145,17 @@
         </pluginManagement>
     </build>
 
+  <profiles>
+      <profile>
+          <id>nexus</id>
+          <repositories>
+              <repository>
+                  <id>ssb-repo</id>
+                  <name>Nexus</name>
+                  <url>https://nexus.ssb.no/repository/maven-public</url>
+              </repository>
+          </repositories>
+      </profile>
+  </profiles>
+
 </project>

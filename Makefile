@@ -11,4 +11,4 @@ build-all:
 
 .PHONY: run-klass-forvaltning-local
 run-klass-forvaltning-local:
-	pushd klass-forvaltning && mvn spring-boot\:run -Dspring-boot.run.profiles=h2-inmemory,embedded-solr,ad-offline,small-import && popd
+	pushd klass-forvaltning && mvn spring-boot\:run -P nexus -Dspring-boot.run.profiles=h2-inmemory,embedded-solr,ad-offline,small-import && popd

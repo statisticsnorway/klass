@@ -1,16 +1,4 @@
 <settings>
-  <profiles>
-      <profile>
-          <id>nexus</id>
-          <repositories>
-              <repository>
-                  <id>ssb-repo</id>
-                  <name>Nexus</name>
-                  <url>https://nexus.ssb.no/repository/maven-public</url>
-              </repository>
-          </repositories>
-      </profile>
-  </profiles>
   <mirrors>
     <mirror>
       <id>maven-restletMirror</id>
@@ -19,4 +7,3 @@
     </mirror>
   </mirrors>
 </settings>
-
