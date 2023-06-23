@@ -1,0 +1,6 @@
+{
+    "java.compile.nullAnalysis.mode": "automatic",
+    "java.configuration.maven.userSettings": ".maven.settings.xml",
+    "java.maven.downloadSources": true,
+    "java.maven.updateSnapshots": true
+}
