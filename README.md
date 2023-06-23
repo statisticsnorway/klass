@@ -110,11 +110,11 @@ IntelliJ is recommended, it makes it very easy to start spring boot applications
 
 Frontend may be accessed at:
 
-<http://localhost:8080/klassui>
+<http://localhost:8081/klassui>
 
 REST api documentation may be accessed at
 
-<http://localhost:8080/api/klass/v1/api-guide.html>
+<http://localhost:8081/api/klass/v1/api-guide.html>
 
 ## Troubleshooting
 
