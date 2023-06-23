@@ -8,23 +8,24 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.authentication.AuthenticationManagerBeanDefinitionParser;
 
-import no.ssb.klass.solr.config.ConfigurationProfiles;
+import no.ssb.klass.core.config.ConfigurationProfiles;
 import no.ssb.klass.forvaltning.config.production.KlassAuthenticationConfiguration;
 
 /**
  * Configuration for local testing and test environment
- * 
+ *
  * @author Mads Lundemo, SSB.
  */
 @Configuration
-@Profile(value = "!" + ConfigurationProfiles.PRODUCTION +"&" + ConfigurationProfiles.FRONTEND_ONLY)
+@Profile(value = "!" + ConfigurationProfiles.PRODUCTION + "&" + ConfigurationProfiles.FRONTEND_ONLY)
 public class KlassTestAuthenticationConfiguration extends KlassAuthenticationConfiguration {
 
     @Autowired
     protected AuthenticationProvider authenticationProvider;
 
     /**
-     * Dummy authenticator replacing adAuthenticationProvider for offline support<br/>
+     * Dummy authenticator replacing adAuthenticationProvider for offline
+     * support<br/>
      * Init method will configure support for test users from LDIF file
      *
      * @see KlassTestAuthenticationConfiguration#init
@@ -36,7 +37,8 @@ public class KlassTestAuthenticationConfiguration extends KlassAuthenticationCon
     }
 
     /**
-     * Access to SSBs Active Directory server is required for this AuthenticationProvider to work
+     * Access to SSBs Active Directory server is required for this
+     * AuthenticationProvider to work
      */
     @Bean
     @Override

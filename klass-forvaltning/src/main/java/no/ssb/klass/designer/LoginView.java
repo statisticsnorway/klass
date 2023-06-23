@@ -16,7 +16,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 
-import no.ssb.klass.solr.config.ConfigurationProfiles;
+import no.ssb.klass.core.config.ConfigurationProfiles;
 import no.ssb.klass.core.ldap.KlassUserDetailsException;
 import no.ssb.klass.designer.listeners.EnterListener;
 import no.ssb.klass.designer.service.KlassLoginService;

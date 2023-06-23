@@ -22,7 +22,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import no.ssb.klass.solr.config.ConfigurationProfiles;
+import no.ssb.klass.core.config.ConfigurationProfiles;
 import no.ssb.klass.core.model.SearchWords;
 import no.ssb.klass.core.service.dto.StatisticalEntity;
 import no.ssb.klass.core.util.TranslatablePersistenceConverter;

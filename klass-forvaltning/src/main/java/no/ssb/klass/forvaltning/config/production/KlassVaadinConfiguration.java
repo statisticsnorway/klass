@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Profile;
 
 import com.vaadin.ui.declarative.Design;
 
-import no.ssb.klass.solr.config.ConfigurationProfiles;
+import no.ssb.klass.core.config.ConfigurationProfiles;
 import no.ssb.klass.designer.vaadin.VaadinSpringComponentFactory;
 import org.springframework.scheduling.annotation.EnableAsync;
 

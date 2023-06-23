@@ -31,16 +31,17 @@ import com.vaadin.testbench.HasDriver;
 import com.vaadin.testbench.Parameters;
 import com.vaadin.testbench.ScreenshotOnFailureRule;
 
-import no.ssb.klass.solr.config.ConfigurationProfiles;
+import no.ssb.klass.core.config.ConfigurationProfiles;
 import no.ssb.klass.designer.testbench.pages.ClassificationFamilyPage;
 import no.ssb.klass.designer.testbench.pages.LoginPage;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = {AbstractTestBench.Config.class }, webEnvironment = WebEnvironment.RANDOM_PORT)
-@ContextConfiguration(classes = {KlassSearchTestConfiguration.class})
+@SpringBootTest(classes = { AbstractTestBench.Config.class }, webEnvironment = WebEnvironment.RANDOM_PORT)
+@ContextConfiguration(classes = { KlassSearchTestConfiguration.class })
 @ActiveProfiles({ ConfigurationProfiles.H2_INMEMORY, ConfigurationProfiles.AD_AUTHENTICATE_OFFLINE,
         ConfigurationProfiles.SMALL_IMPORT, ConfigurationProfiles.MOCK_MAILSERVER })
-// Need to explicitly set @TestExecutionListeners to get rid of ResetMocksTestExecutionListener which fails in
+// Need to explicitly set @TestExecutionListeners to get rid of
+// ResetMocksTestExecutionListener which fails in
 // combination with Vaadin
 @TestExecutionListeners(listeners = { DependencyInjectionTestExecutionListener.class,
         DirtiesContextTestExecutionListener.class })
@@ -49,8 +50,7 @@ public abstract class AbstractTestBench implements HasDriver {
     protected static final String STANDARD_FOR_POLITIDISTRIKT = "Standard for politidistrikt";
     protected static final String POLITIDISTRIKT_2002 = "Politidistrikt 2002";
     protected static final String POLITIDISTRIKT_2016 = "Politidistrikt 2016";
-    protected static final String POLITIDISTRIKT_2002_KOMMUNEINNDELING_2006 =
-            "Politidistrikt 2002 - Kommuneinndeling 2006";
+    protected static final String POLITIDISTRIKT_2002_KOMMUNEINNDELING_2006 = "Politidistrikt 2002 - Kommuneinndeling 2006";
     protected static final String STANDARD_FOR_KOMMUNEINNDELING = "Standard for kommuneinndeling";
     protected static final String KOMMUNEINNDELING_2002 = "Kommuneinndeling 2002";
     private WebDriver driver;
