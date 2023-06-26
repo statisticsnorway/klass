@@ -11,4 +11,12 @@ build-all:
 
 .PHONY: run-klass-forvaltning-local
 run-klass-forvaltning-local:
-	pushd klass-forvaltning && mvn spring-boot\:run -P nexus -Dspring-boot.run.profiles=h2-inmemory,embedded-solr,ad-offline,small-import && popd
+	pushd klass-forvaltning && mvn spring-boot\:run -P nexus && popd
+
+.PHONY: run-klass-forvaltning-local-mariadb
+# Requires that a MariaDB instance is already running with a database called klass and a user called klass.
+# The environment variable KLASS_ENV_MARIADB_PASSWORD must be specified with the password for the klass user.
+run-klass-forvaltning-local-mariadb:
+	pushd klass-forvaltning && \
+	mvn spring-boot\:run -Dspring.profiles.active=mariadb,embedded-solr,frontend,skip-indexing,small-import,ad-offline -P nexus && \
+	popd
