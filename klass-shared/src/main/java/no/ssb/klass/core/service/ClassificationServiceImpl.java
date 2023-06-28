@@ -540,7 +540,8 @@ public class ClassificationServiceImpl implements ClassificationService {
 
         Set<CorrespondenceMap> allItemsUsed =
                 correspondenceMapRepository.findAllMapsUsingItems(statisticalClassification);
-        result.addAll(allItemsUsed.stream().map(map -> map.getCorrespondenceTable().getNameInPrimaryLanguage())
+        result.addAll(allItemsUsed.stream().map(map -> map.getCorrespondenceTable().getNameInPrimaryLanguage()
+                + " ID=" + map.getCorrespondenceTable().getId()) // Also returns ID for error printing
                 .collect(toSet()));
 
         return result;
