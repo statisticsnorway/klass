@@ -161,7 +161,7 @@ public class ClassificationServiceImpl implements ClassificationService {
     @Override
     public CorrespondenceTable getCorrespondenceTable(long id) {
         CorrespondenceTable correspondenceTable = correspondenceTableRepository.findOne(id);
-        if (correspondenceTable == null || correspondenceTable.isDeleted()) {
+        if (correspondenceTable == null || correspondenceTable.isThisOrSourceOrTargetDeleted()) {
             throw new KlassResourceNotFoundException("Correspondence Table not found with id = " + id);
         }
         Hibernate.initialize(correspondenceTable.getSource().getLevels());
@@ -549,7 +549,7 @@ public class ClassificationServiceImpl implements ClassificationService {
                 .findAllMapsUsingItems(statisticalClassification)
                 .stream()
                 .map(map -> map.getCorrespondenceTable())
-                .filter(table -> !table.isDeleted())
+                .filter(table -> !table.isThisOrSourceOrTargetDeleted())
                 .collect(toSet());
 
         result.addAll(referencingCorrespondenceTables.stream().map(table -> table.getNameInPrimaryLanguage()
@@ -562,19 +562,19 @@ public class ClassificationServiceImpl implements ClassificationService {
     @Override
     public List<CorrespondenceTable> findCorrespondenceTablesWithSource(ClassificationVersion source) {
         return correspondenceTableRepository.findBySource(source).stream().filter(
-                correspondenceTable -> !correspondenceTable.isDeleted()).collect(toList());
+                correspondenceTable -> !correspondenceTable.isThisOrSourceOrTargetDeleted()).collect(toList());
     }
 
     @Override
     public List<CorrespondenceTable> findCorrespondenceTablesWithTarget(ClassificationVersion target) {
         return correspondenceTableRepository.findByTarget(target).stream().filter(
-                correspondenceTable -> !correspondenceTable.isDeleted()).collect(toList());
+                correspondenceTable -> !correspondenceTable.isThisOrSourceOrTargetDeleted()).collect(toList());
     }
 
     @Override
     public List<CorrespondenceTable> findPublicCorrespondenceTablesWithTarget(ClassificationVersion target) {
         return correspondenceTableRepository.findByTarget(target).stream()
-                .filter(correspondenceTable -> !correspondenceTable.isDeleted())
+                .filter(correspondenceTable -> !correspondenceTable.isThisOrSourceOrTargetDeleted())
                 .filter(CorrespondenceTable::isPublishedInAnyLanguage)
                 .collect(toList());
     }
@@ -604,7 +604,7 @@ public class ClassificationServiceImpl implements ClassificationService {
         Optional<Level> targetLevel;
         for (CorrespondenceTable correspondenceTable : correspondenceTableRepository.findBySourceInAndTargetIn(versions,
                 versions)) {
-            if (correspondenceTable.isDeleted()) {
+            if (correspondenceTable.isThisOrSourceOrTargetDeleted()) {
                 continue;
             }
             if (version1.equals(correspondenceTable.getSource())) {
