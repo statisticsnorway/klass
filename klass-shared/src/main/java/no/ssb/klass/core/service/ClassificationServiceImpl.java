@@ -93,14 +93,16 @@ public class ClassificationServiceImpl implements ClassificationService {
 
     @Override
     public Page<ClassificationSeries> findAll(boolean includeCodelists, Date changedSince, Pageable pageable) {
-        // Note deleted ClassificationSeries are not returned. Ensured by ClassificationSeriesSpecification.
+        // Note deleted ClassificationSeries are not returned. Ensured by
+        // ClassificationSeriesSpecification.
         return classificationRepository.findAll(new ClassificationSeriesSpecification(includeCodelists, changedSince),
                 pageable);
     }
 
     @Override
     public Page<ClassificationSeries> findAllPublic(boolean includeCodelists, Date changedSince, Pageable pageable) {
-        // Note deleted ClassificationSeries are not returned. Ensured by ClassificationSeriesSpecification.
+        // Note deleted ClassificationSeries are not returned. Ensured by
+        // ClassificationSeriesSpecification.
         return classificationRepository.findAll(
                 new ClassificationSeriesSpecification(includeCodelists, changedSince, true), pageable);
     }
@@ -225,8 +227,10 @@ public class ClassificationServiceImpl implements ClassificationService {
     }
 
     /**
-     * Checks if there are any references to the deleted classificationItems. If the references are deleted, e.g.
-     * belonging to a deleted ClassificationVersion, the reference is deleted in order to avoid constraint violation.
+     * Checks if there are any references to the deleted classificationItems. If the
+     * references are deleted, e.g.
+     * belonging to a deleted ClassificationVersion, the reference is deleted in
+     * order to avoid constraint violation.
      */
     private void deleteAnyDeletedReferencesToClassificationItems(ClassificationVersion version) {
         Set<CorrespondenceMap> softDeletedMaps = new HashSet<>();
@@ -235,7 +239,8 @@ public class ClassificationServiceImpl implements ClassificationService {
         List<ClassificationItem> deletedClassificationItems = version.getDeletedClassificationItems()
                 .stream().filter(item -> item.getId() != null).collect(toList());
 
-        // Important as SQL query will fail if no items are provided (using where ... IN (collection))
+        // Important as SQL query will fail if no items are provided (using where ... IN
+        // (collection))
         if (!deletedClassificationItems.isEmpty()) {
             softDeletedMaps.addAll(correspondenceMapRepository.findAllMapsUsingDeletedItems(version,
                     deletedClassificationItems));
@@ -266,17 +271,17 @@ public class ClassificationServiceImpl implements ClassificationService {
     public Optional<ClassificationSeries> findOneClassificationSeriesWithName(String name, Language language) {
         ClassificationSeries classification;
         switch (language) {
-        case NB:
-            classification = classificationRepository.findByNameNoIgnoreCase(name);
-            break;
-        case NN:
-            classification = classificationRepository.findByNameNnIgnoreCase(name);
-            break;
-        case EN:
-            classification = classificationRepository.findByNameEnIgnoreCase(name);
-            break;
-        default:
-            throw new IllegalArgumentException("Language not supported: " + language);
+            case NB:
+                classification = classificationRepository.findByNameNoIgnoreCase(name);
+                break;
+            case NN:
+                classification = classificationRepository.findByNameNnIgnoreCase(name);
+                break;
+            case EN:
+                classification = classificationRepository.findByNameEnIgnoreCase(name);
+                break;
+            default:
+                throw new IllegalArgumentException("Language not supported: " + language);
         }
 
         if (classification != null && classification.isDeleted()) {
@@ -287,8 +292,8 @@ public class ClassificationServiceImpl implements ClassificationService {
 
     @Override
     public List<CorrespondenceDto> findCorrespondences(Long sourceClassificationId, Long targetClassificationId,
-                                                       DateRange dateRange, Language language, Boolean includeFuture,
-                                                       Boolean inverted ) {
+            DateRange dateRange, Language language, Boolean includeFuture,
+            Boolean inverted) {
         checkNotNull(dateRange);
         checkNotNull(language);
         ClassificationSeries sourceClassification = getClassificationSeries(sourceClassificationId);
@@ -306,15 +311,16 @@ public class ClassificationServiceImpl implements ClassificationService {
     }
 
     public static String createCorrespondenceNotFoundErrorMessage(ClassificationSeries sourceClassification,
-                                                                  ClassificationSeries targetClassification) {
+            ClassificationSeries targetClassification) {
         return "Classification '" + sourceClassification.getName(Language.getDefault())
                 + "' has no correspondence table with Classification '" + targetClassification.getName(Language
-                .getDefault()) + "'";
+                        .getDefault())
+                + "'";
     }
 
     @Override
     public List<CodeDto> findVariantClassificationCodes(Long id, String variantName, Language language,
-                                                        DateRange dateRange, Boolean includeFuture) {
+            DateRange dateRange, Boolean includeFuture) {
         checkNotNull(variantName);
         checkNotNull(language);
         checkNotNull(dateRange);
@@ -324,7 +330,8 @@ public class ClassificationServiceImpl implements ClassificationService {
     }
 
     @Override
-    public List<CodeDto> findClassificationCodes(Long id, DateRange dateRange, Language language, Boolean includeFuture) {
+    public List<CodeDto> findClassificationCodes(Long id, DateRange dateRange, Language language,
+            Boolean includeFuture) {
         checkNotNull(dateRange);
         checkNotNull(language);
         ClassificationSeries classification = getClassificationSeries(id);
@@ -538,10 +545,15 @@ public class ClassificationServiceImpl implements ClassificationService {
         Set<String> result = items.stream().map(item -> item.getLevel().getStatisticalClassification()
                 .getNameInPrimaryLanguage()).collect(toSet());
 
-        Set<CorrespondenceMap> allItemsUsed =
-                correspondenceMapRepository.findAllMapsUsingItems(statisticalClassification);
-        result.addAll(allItemsUsed.stream().map(map -> map.getCorrespondenceTable().getNameInPrimaryLanguage()
-                + " ID=" + map.getCorrespondenceTable().getId()) // Also returns ID for error printing
+        Set<CorrespondenceTable> referencingCorrespondenceTables = correspondenceMapRepository
+                .findAllMapsUsingItems(statisticalClassification)
+                .stream()
+                .map(map -> map.getCorrespondenceTable())
+                .filter(table -> !table.isDeleted())
+                .collect(toSet());
+
+        result.addAll(referencingCorrespondenceTables.stream().map(table -> table.getNameInPrimaryLanguage()
+                + " ID=" + table.getId()) // Also returns ID for error printing
                 .collect(toSet()));
 
         return result;
