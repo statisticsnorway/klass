@@ -54,7 +54,7 @@ public class CorrespondenceMap extends BaseEntity implements Comparable<Correspo
     }
 
     public boolean isDeleted() {
-        return correspondenceTable.isDeleted();
+        return correspondenceTable.isThisOrSourceOrTargetDeleted();
     }
 
     @Override

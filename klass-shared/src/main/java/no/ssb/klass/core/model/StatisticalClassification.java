@@ -40,9 +40,7 @@ public abstract class StatisticalClassification extends BaseEntity implements Cl
     @OneToMany(mappedBy = "source")
     private final List<CorrespondenceTable> correspondenceTables;
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "statisticalclassification_changelog",
-            joinColumns = @JoinColumn(name = "statisticalclassification_id"),
-            inverseJoinColumns = @JoinColumn(name = "changelog_id"))
+    @JoinTable(name = "statisticalclassification_changelog", joinColumns = @JoinColumn(name = "statisticalclassification_id"), inverseJoinColumns = @JoinColumn(name = "changelog_id"))
     private final List<Changelog> changelogs;
     private transient List<ClassificationItem> deletedClassificationItems;
     @Column(nullable = false)
@@ -126,13 +124,14 @@ public abstract class StatisticalClassification extends BaseEntity implements Cl
     }
 
     public List<CorrespondenceTable> getCorrespondenceTables() {
-        return correspondenceTables.stream().filter(correspondenceTable -> !correspondenceTable.isDeleted()).collect(
-                toList());
+        return correspondenceTables.stream()
+                .filter(correspondenceTable -> !correspondenceTable.isThisOrSourceOrTargetDeleted()).collect(
+                        toList());
     }
 
     public List<CorrespondenceTable> getPublicCorrespondenceTables() {
         return correspondenceTables.stream()
-                .filter(correspondenceTable -> !correspondenceTable.isDeleted())
+                .filter(correspondenceTable -> !correspondenceTable.isThisOrSourceOrTargetDeleted())
                 .filter(correspondenceTable -> !correspondenceTable.isDraft())
                 .filter(correspondenceTable -> !correspondenceTable.getSource().isDraft())
                 .filter(correspondenceTable -> !correspondenceTable.getTarget().isDraft())
@@ -199,7 +198,8 @@ public abstract class StatisticalClassification extends BaseEntity implements Cl
     }
 
     /**
-     * Gets classificationItems for level 1 first, then classificationItems for level 2, and so on
+     * Gets classificationItems for level 1 first, then classificationItems for
+     * level 2, and so on
      */
     public List<ClassificationItem> getAllClassificationItemsLevelForLevel() {
         List<ClassificationItem> items = new ArrayList<>();
@@ -271,9 +271,9 @@ public abstract class StatisticalClassification extends BaseEntity implements Cl
 
     /**
      * Deletes a level. Level must be empty, i.e. not have any classificationItems
-     * 
+     *
      * @param level
-     *            level to delete
+     *              level to delete
      */
     public void deleteLevel(Level level) {
         checkArgument(level.getClassificationItems().isEmpty(),
@@ -322,7 +322,7 @@ public abstract class StatisticalClassification extends BaseEntity implements Cl
 
     /**
      * Delete classificationItem and all its children
-     * 
+     *
      * @param classificationItem
      */
     public void deleteClassificationItem(ClassificationItem classificationItem) {
@@ -383,8 +383,9 @@ public abstract class StatisticalClassification extends BaseEntity implements Cl
     }
 
     /**
-     * Checks if any concrete classificationItem has translation of officialName for given language.
-     * 
+     * Checks if any concrete classificationItem has translation of officialName for
+     * given language.
+     *
      * @param language
      * @return true if has any translation for language, false otherwise
      */
@@ -450,13 +451,14 @@ public abstract class StatisticalClassification extends BaseEntity implements Cl
     }
 
     public Boolean showVersion(Boolean paramIncludeFuture) {
-        if (isFutureVersion() && !paramIncludeFuture ) {
+        if (isFutureVersion() && !paramIncludeFuture) {
             return false;
         }
         return true;
     }
 
     public Boolean isCurrentVersion() {
-        return !isDraft() && (LocalDate.now().isEqual(validFrom)|| LocalDate.now().isAfter(validFrom)) && (LocalDate.now().isBefore(validTo));
+        return !isDraft() && (LocalDate.now().isEqual(validFrom) || LocalDate.now().isAfter(validFrom))
+                && (LocalDate.now().isBefore(validTo));
     }
 }

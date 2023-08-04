@@ -27,8 +27,8 @@ import no.ssb.klass.core.util.TimeUtil;
 import no.ssb.klass.core.util.Translatable;
 
 @Entity
-@Table(indexes = { @Index(columnList = "source_id", name = "ct_source_idx"), @Index(columnList = "target_id",
-        name = "ct_target_idx") })
+@Table(indexes = { @Index(columnList = "source_id", name = "ct_source_idx"),
+        @Index(columnList = "target_id", name = "ct_target_idx") })
 public class CorrespondenceTable extends BaseEntity implements ClassificationEntityOperations, Publishable, Draftable {
     @Lob
     @Column(columnDefinition = "text", nullable = false)
@@ -43,9 +43,7 @@ public class CorrespondenceTable extends BaseEntity implements ClassificationEnt
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "correspondenceTable")
     private final List<CorrespondenceMap> correspondenceMaps;
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "correspondencetable_changelog",
-            joinColumns = @JoinColumn(name = "correspondencetable_id"),
-            inverseJoinColumns = @JoinColumn(name = "changelog_id"))
+    @JoinTable(name = "correspondencetable_changelog", joinColumns = @JoinColumn(name = "correspondencetable_id"), inverseJoinColumns = @JoinColumn(name = "changelog_id"))
     private final List<Changelog> changelogs;
     @Column(nullable = false)
     private boolean deleted;
@@ -54,14 +52,14 @@ public class CorrespondenceTable extends BaseEntity implements ClassificationEnt
 
     /**
      * Creates a CorrespondenceTable
-     * 
+     *
      * @param description
      * @param source
      * @param sourceLevelNumber
-     *            0 means all levels from source version
+     *                          0 means all levels from source version
      * @param target
      * @param targetLevelNumber
-     *            0 means all levels from target version
+     *                          0 means all levels from target version
      */
     public CorrespondenceTable(Translatable description, ClassificationVersion source, int sourceLevelNumber,
             ClassificationVersion target, int targetLevelNumber) {
@@ -193,10 +191,12 @@ public class CorrespondenceTable extends BaseEntity implements ClassificationEnt
     }
 
     /**
-     * Checks if already contains a correspondenceMap with identical source and target mapping.
-     * 
+     * Checks if already contains a correspondenceMap with identical source and
+     * target mapping.
+     *
      * @param map
-     * @return true if already contains a correspondenceMap with identical source and target mapping, false otherwise
+     * @return true if already contains a correspondenceMap with identical source
+     *         and target mapping, false otherwise
      */
     public boolean alreadyContainsIdenticalMap(CorrespondenceMap map) {
         return correspondenceMaps.stream().filter(m -> m.hasSameSourceAndTarget(map)).findAny().map(present -> true)
@@ -228,8 +228,10 @@ public class CorrespondenceTable extends BaseEntity implements ClassificationEnt
             if (!source.getDateRange().overlaps(target.getDateRange())) {
                 throw new IllegalArgumentException("CorrespondenceTable: " + getNameInPrimaryLanguage()
                         + ". dateRanges of source and target classification version does not overlap. Source: " + source
-                                .getNameInPrimaryLanguage() + " " + source.getDateRange() + ". Target: " + target
-                                        .getNameInPrimaryLanguage() + " " + target.getDateRange());
+                                .getNameInPrimaryLanguage()
+                        + " " + source.getDateRange() + ". Target: " + target
+                                .getNameInPrimaryLanguage()
+                        + " " + target.getDateRange());
             }
         }
     }
@@ -287,8 +289,13 @@ public class CorrespondenceTable extends BaseEntity implements ClassificationEnt
         deleted = true;
     }
 
+    @Override
     public boolean isDeleted() {
-        return deleted || source.isDeleted() || target.isDeleted();
+        return deleted;
+    }
+
+    public boolean isThisOrSourceOrTargetDeleted() {
+        return this.isDeleted() || source.isDeleted() || target.isDeleted();
     }
 
     @Override
