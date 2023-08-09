@@ -67,7 +67,10 @@ public interface CorrespondenceMapRepository extends CrudRepository<Corresponden
             + " INNER JOIN source.level slevel"
             + " INNER JOIN target.level tlevel"
             + " INNER JOIN map.correspondenceTable table "
-            + " WHERE table.deleted = true"
+            + " WHERE (table.deleted = true OR slevel.statisticalClassification.deleted = true"
+            + " OR tlevel.statisticalClassification.deleted = true OR"
+            + " slevel.statisticalClassification.classification.deleted = true "
+            + " OR tlevel.statisticalClassification.classification.deleted = true)"
             + " AND((slevel.statisticalClassification = :version  AND source in :deletedClassificationItems)"
             + "  OR (tlevel.statisticalClassification = :version  AND target in :deletedClassificationItems))")
     Set<CorrespondenceMap> findAllMapsUsingDeletedItems(@Param("version") StatisticalClassification classification,

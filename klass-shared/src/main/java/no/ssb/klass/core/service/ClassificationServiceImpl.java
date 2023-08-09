@@ -247,8 +247,8 @@ public class ClassificationServiceImpl implements ClassificationService {
             softDeletedItems.addAll(referencingClassificationItemRepository.findByReferenceInList(
                     deletedClassificationItems, true));
         }
-        softDeletedItems.forEach(item -> item.getLevel().getStatisticalClassification().deleteClassificationItem(item));
         softDeletedMaps.forEach(map -> map.getCorrespondenceTable().removeCorrespondenceMap(map));
+        softDeletedItems.forEach(item -> item.getLevel().getStatisticalClassification().deleteClassificationItem(item));
         classificationRepository.flush();
     }
 
