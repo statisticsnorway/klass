@@ -20,3 +20,9 @@ run-klass-forvaltning-local-mariadb:
 	pushd klass-forvaltning && \
 	mvn spring-boot\:run -Dspring.profiles.active=mariadb,embedded-solr,frontend,skip-indexing,small-import,ad-offline -P nexus && \
 	popd
+
+# The environment variable KLASS_ENV_SECURITY_IGNORED must be set to "/**" in order to skip authentication
+run-klass-api-local-mariadb:
+	pushd klass-api && \
+	mvn spring-boot\:run -Dspring.profiles.active=mariadb,embedded-solr,mock-mailserver,skip-indexing,small-import,ad-offline -P nexus && \
+	popd
