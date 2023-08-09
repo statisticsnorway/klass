@@ -1,4 +1,5 @@
-name: Java CI
+name: Tests
+
 
 on:
   push:
@@ -25,5 +26,15 @@ jobs:
           distribution: 'zulu'
           java-version: '8'
           cache: maven
+
+      # Need to downgrade Maven in order to allow HTTP (not HTTPS) packages to be downloaded.
+      # This is necessary as HTTP repositories were blocked in Maven 3.8.1
+      # HTTP repositories are used in some outdated dependencies
+      # This step can be removed once KLASS packages have been updated to more recent versions
+      - name: Set up Maven
+        uses: stCarolas/setup-maven@v4.5
+        with:
+          maven-version: 3.8.0
+
       - name: Build, test and package with Maven
         run: mvn --batch-mode --update-snapshots package -P nexus
