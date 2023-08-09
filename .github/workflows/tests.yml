@@ -1,0 +1,23 @@
+name: Java CI
+
+on: [push]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        # run 2 copies of the current job in parallel
+        # and they will load balance all specs
+        os: [ 'ubuntu-latest', 'windows-latest', 'macos-latest' ]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK 1.8
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '8'
+          cache: maven
+      - name: Build, test and package with Maven
+        run: mvn --batch-mode --update-snapshots package -P nexus
