@@ -44,7 +44,7 @@ public class ActiveDirectoryServiceTest {
 
     @BeforeEach
     public void configureUserServiceMock() {
-        when(userService.saveUser(any(User.class))).thenAnswer(invocation -> invocation.getArguments()[0]);
+        lenient().when(userService.saveUser(any(User.class))).thenAnswer(invocation -> invocation.getArguments()[0]);
     }
 
     @Test

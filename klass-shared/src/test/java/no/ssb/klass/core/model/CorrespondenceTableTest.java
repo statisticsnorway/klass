@@ -172,8 +172,8 @@ public class CorrespondenceTableTest {
     public void getDateRangeNotOverlaping() {
         final DateRange sourceDateRange = DateRange.create("2010-01-01", "2012-01-01");
         final DateRange targetDateRange = DateRange.create("2012-01-01", "2014-01-01");
-        CorrespondenceTable subject = createCorrespondenceTable(sourceDateRange, targetDateRange);
-        Assertions.assertThrows(IllegalArgumentException.class, subject::getDateRange);
+        Assertions.assertThrows(IllegalArgumentException.class, () ->
+                createCorrespondenceTable(sourceDateRange, targetDateRange));
     }
 
     @Test
