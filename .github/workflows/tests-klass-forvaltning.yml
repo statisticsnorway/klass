@@ -34,8 +34,6 @@ jobs:
         with:
           maven-version: 3.6.3
 
-      - name: Build, test and package with Maven
-        run: mvn --batch-mode --update-snapshots package -P nexus
       # Build only klass-forvaltning with JDK 1.8
       - name: Build, test and package with Maven
         run: mvn --batch-mode --update-snapshots package -pl :klass-forvaltning -P nexus
