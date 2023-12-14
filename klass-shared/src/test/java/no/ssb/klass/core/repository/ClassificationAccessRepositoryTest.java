@@ -1,16 +1,16 @@
 package no.ssb.klass.core.repository;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.transaction.Transactional;
+import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -20,7 +20,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import no.ssb.klass.core.config.ConfigurationProfiles;
 import no.ssb.klass.core.model.ClassificationAccessCounter;
@@ -32,7 +32,7 @@ import no.ssb.klass.core.util.TranslatablePersistenceConverter;
 import no.ssb.klass.testutil.IncrementableClockSource;
 import no.ssb.klass.testutil.TestUtil;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest
 @ActiveProfiles(ConfigurationProfiles.H2_INMEMORY)
 @Transactional
@@ -56,7 +56,7 @@ public class ClassificationAccessRepositoryTest {
     @Autowired
     private EntityManager entityManager;
 
-    @Before
+    @BeforeEach
     public void setup() {
         clockSource = new IncrementableClockSource(new Date().getTime());
         TimeUtil.setClockSource(clockSource);
@@ -77,7 +77,7 @@ public class ClassificationAccessRepositoryTest {
         createClassificationSeries("Test1");
         createClassificationSeries("Test2");
         Page<StatisticalEntity> getClassificationsCount = classificationAccessRepository.getClassificationsCount(
-                SearchWordsRepositoryTest.getFromDate(), SearchWordsRepositoryTest.getToDate(), new PageRequest(0,
+                SearchWordsRepositoryTest.getFromDate(), SearchWordsRepositoryTest.getToDate(), PageRequest.of(0,
                         100));
         assertEquals(2, getClassificationsCount.getTotalElements());
         List<StatisticalEntity> resultList = getClassificationsCount.getContent();

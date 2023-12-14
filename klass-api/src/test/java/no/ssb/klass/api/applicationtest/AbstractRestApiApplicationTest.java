@@ -6,15 +6,15 @@ import java.util.Date;
 
 import no.ssb.klass.core.model.CorrespondenceTable;
 import no.ssb.klass.testutil.TestDataProvider;
-import org.junit.Before;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionTemplate;
 
@@ -35,7 +35,7 @@ import no.ssb.klass.api.util.RestConstants;
 import no.ssb.klass.testutil.ConstantClockSource;
 import no.ssb.klass.testutil.TestUtil;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = { ApplicationTestConfig.class }, webEnvironment = WebEnvironment.RANDOM_PORT)
 @ActiveProfiles(profiles = { ConfigurationProfiles.H2_INMEMORY, ConfigurationProfiles.MOCK_SEARCH })
 @ComponentScan(basePackageClasses = TranslatablePersistenceConverter.class)
@@ -129,7 +129,7 @@ public abstract class AbstractRestApiApplicationTest {
     @Value("${local.server.port}")
     protected int port;
 
-    @Before
+    @BeforeEach
     public void prepareTestData() {
         applicationTestUtil.clearDatabase();
         applicationTestUtil.clearSearch();

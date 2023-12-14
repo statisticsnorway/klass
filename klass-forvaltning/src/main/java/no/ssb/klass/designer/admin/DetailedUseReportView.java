@@ -65,7 +65,7 @@ public class DetailedUseReportView extends DetailedUseReportDesign {
         detailedUseReport.setColumnHeader("Value", "<b>" + header + "</b>");
         pagingButtons.removeAllComponents();
         headingText.setValue(getHeadingText(reportMode, fromSearchDate, toSearchDate));
-        PageRequest pageRequest = new PageRequest(0, LINES_PER_PAGE);
+        PageRequest pageRequest = PageRequest.of(0, LINES_PER_PAGE);
         Page<StatisticalEntity> reportData = showReportPage(pageRequest);
         numberOfRowsHeader.setValue("Totalt antall: " + reportData.getTotalElements());
         if (reportData.getTotalPages() > 1) {
@@ -91,7 +91,7 @@ public class DetailedUseReportView extends DetailedUseReportDesign {
             }
         }
         int pageNumber = (int)e.getButton().getData();
-        showReportPage(new PageRequest(pageNumber, LINES_PER_PAGE));
+        showReportPage(PageRequest.of(pageNumber, LINES_PER_PAGE));
     }
 
     private Page<StatisticalEntity> showReportPage(PageRequest pageRequest) {

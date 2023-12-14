@@ -1,7 +1,7 @@
 package no.ssb.klass.api.dto.hal;
 
 import static java.util.stream.Collectors.*;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 import java.util.Arrays;
 import java.util.Date;

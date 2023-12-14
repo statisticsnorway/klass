@@ -1,9 +1,9 @@
 package no.ssb.klass.api.dto.hal;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -15,7 +15,7 @@ import no.ssb.klass.testutil.TestUtil;
 
 public class ClassificationResourceTest {
 
-    @Before
+    @BeforeEach
     public void setup() {
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(new MockHttpServletRequest()));
     }
@@ -32,8 +32,7 @@ public class ClassificationResourceTest {
 
         // then
         assertEquals(name, subject.getName());
-        assertEquals("http://localhost" + RestConstants.API_VERSION_V1 + "/classifications/" + id, subject.getLink("self")
-                .getHref());
+        assertEquals("http://localhost" + RestConstants.API_VERSION_V1 + "/classifications/" + id, subject.getLink("self"));
         assertEquals(0, subject.getVersions().size());
     }
 

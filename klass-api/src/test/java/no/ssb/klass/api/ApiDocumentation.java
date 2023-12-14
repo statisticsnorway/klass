@@ -27,11 +27,10 @@ import no.ssb.klass.core.util.KlassResourceNotFoundException;
 import no.ssb.klass.core.util.Translatable;
 import no.ssb.klass.core.config.ConfigurationProfiles;
 import no.ssb.klass.testutil.TestUtil;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -43,11 +42,12 @@ import org.springframework.data.solr.core.query.result.HighlightEntry;
 import org.springframework.data.solr.core.query.result.SolrResultPage;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.JUnitRestDocumentation;
+import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.generate.RestDocumentationGenerator;
 import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.restdocs.request.ParameterDescriptor;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -60,9 +60,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyBoolean;
-import static org.mockito.Matchers.anyObject;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.anyBoolean;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.halLinks;
@@ -76,11 +75,11 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.relaxedResponseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith({SpringExtension.class, RestDocumentationExtension.class})
 @SpringBootTest(classes = { TestConfig.class, MockConfig.class }, webEnvironment = WebEnvironment.RANDOM_PORT)
 @ActiveProfiles(ConfigurationProfiles.H2_INMEMORY)
 public class ApiDocumentation {
@@ -92,7 +91,6 @@ public class ApiDocumentation {
         private static final int CLASS_ID_BYDELSINNDELING = 103;
         private static final int CLASS_ID_KOMMUNEINNDELING = 131;
         private static final int CLASS_ID_FYLKEINNDELING = 104;
-        @Rule
         public JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation("target/generated-snippets");
         private RestDocumentationResultHandler documentationHandler;
         @Autowired
@@ -109,7 +107,7 @@ public class ApiDocumentation {
         @Value("${klass.env.api.path}")
         private String contextPath;
 
-        @Before
+        @BeforeEach
         public void setup() {
                 this.documentationHandler = document("{method-name}", preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()));
@@ -122,14 +120,14 @@ public class ApiDocumentation {
                                 .alwaysDo(this.documentationHandler).build();
         }
 
-        @After
+        @AfterEach
         public void teardown() {
                 reset(classificationServiceMock);
         }
 
     @Test
     public void errorExample() throws Exception {
-        when(classificationServiceMock.getClassificationSeries(anyObject())).thenThrow(
+        when(classificationServiceMock.getClassificationSeries(any())).thenThrow(
                 new KlassResourceNotFoundException("Classification not found with id = 99999"));
         // @formatter:off
         this.mockMvc.perform(getWithContext("/classifications/99999"))
@@ -170,7 +168,7 @@ public class ApiDocumentation {
         this.mockMvc.perform(getWithContext("/classificationfamilies?ssbSection=714&includeCodelists=true&language=nb")
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(this.documentationHandler.document(
-                        requestParameters(
+                        queryParameters(
                                 ssbSectionParameterDescription("counting number of"),
                                 includeCodelistsParameterDescription("counting number of"),
                                 languageDescription())))
@@ -204,7 +202,7 @@ public class ApiDocumentation {
         this.mockMvc.perform(getWithContext("/classificationfamilies/" + CLASS_FAMILY_BEFOLKNING + "?ssbSection=714&includeCodelists=true&language=nb")
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(this.documentationHandler.document(
-                        requestParameters(
+                        queryParameters(
                                 ssbSectionParameterDescription("listing"),
                                 includeCodelistsParameterDescription("listing"),
                                 languageDescription())))
@@ -236,7 +234,7 @@ public class ApiDocumentation {
                                 createClassificationBydelsinndeling(),
                                 createClassificationFamiliegruppering(TestUtil.createUser()));
                 when(classificationServiceMock.findAllPublic(anyBoolean(), any(Date.class), any(Pageable.class))).then(
-                                i -> createPage(i.getArgumentAt(2, Pageable.class), classifications));
+                                i -> createPage(i.getArgument(2, Pageable.class), classifications));
         // @formatter:off
         this.mockMvc.perform(getWithContext("/classifications").accept(MediaType.APPLICATION_JSON))
                 .andDo(this.documentationHandler.document(links(
@@ -257,12 +255,12 @@ public class ApiDocumentation {
     @Test
     public void classificationsOptionalParametersExample() throws Exception {
         when(classificationServiceMock.findAllPublic(anyBoolean(), any(Date.class), any(Pageable.class))).then(
-                i -> createPage(i.getArgumentAt(2, Pageable.class), new ArrayList<>()));
+                i -> createPage(i.getArgument(2, Pageable.class), new ArrayList<>()));
         // @formatter:off
         this.mockMvc.perform(getWithContext("/classifications?includeCodelists=true&changedSince=2015-01-01T00:00:00.000-0000")
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(this.documentationHandler.document(
-                        requestParameters(
+                        queryParameters(
                                 includeCodelistsDescription(),
                                 changedSinceDescription())))
                 .andExpect(status().isOk());
@@ -272,7 +270,7 @@ public class ApiDocumentation {
     @Test
     public void searchExample() throws Exception {
         when(searchServiceMock.publicSearch(any(String.class), any(Pageable.class), any(String.class), anyBoolean()))
-                .then(i -> createSearchPage(i.getArgumentAt(2, Pageable.class)));
+                .then(i -> createSearchPage(i.getArgument(2, Pageable.class)));
         // @formatter:off
         this.mockMvc.perform(getWithContext("/classifications/search?query=kommuner").accept(MediaType.APPLICATION_JSON))
                 .andDo(this.documentationHandler.document(
@@ -294,12 +292,12 @@ public class ApiDocumentation {
     @Test
     public void searchOptionalParametersExample() throws Exception {
         when(searchServiceMock.publicSearch(any(String.class), any(Pageable.class), any(String.class), anyBoolean()))
-                .then(i -> createSearchPage(i.getArgumentAt(1, Pageable.class)));
+                .then(i -> createSearchPage(i.getArgument(1, Pageable.class)));
         // @formatter:off
         this.mockMvc.perform(getWithContext("/classifications/search?query=kommuner&includeCodelists=true&ssbSection=370")
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(this.documentationHandler.document(
-                        requestParameters(
+                        queryParameters(
                                 parameterWithName("query").description("[Mandatory] specifies search terms"),
                                 includeCodelistsDescription(),
                                 ssbSectionParameterDescription("searching"))))
@@ -309,7 +307,7 @@ public class ApiDocumentation {
 
     @Test
     public void classificationExample() throws Exception {
-        when(classificationServiceMock.getClassificationSeries(anyObject())).thenReturn(
+        when(classificationServiceMock.getClassificationSeries(any())).thenReturn(
                 createClassificationKommuneinndeling());
         // @formatter:off
         this.mockMvc.perform(getWithContext("/classifications/" + CLASS_ID_KOMMUNEINNDELING).accept(MediaType.APPLICATION_JSON))
@@ -350,14 +348,14 @@ public class ApiDocumentation {
 
     @Test
     public void classificationOptionalParametersExample() throws Exception {
-        when(classificationServiceMock.getClassificationSeries(anyObject())).thenReturn(
+        when(classificationServiceMock.getClassificationSeries(any())).thenReturn(
                 createClassificationKommuneinndeling());
         // @formatter:off
 
         this.mockMvc.perform(getWithContext("/classifications/" + CLASS_ID_KOMMUNEINNDELING + "?language=nb&includeFuture=true")
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(this.documentationHandler.document(
-                        requestParameters(languageDescription(),includeFutureDescription(""))))
+                        queryParameters(languageDescription(),includeFutureDescription(""))))
                 .andExpect(status().isOk());
         // @formatter:on
     }
@@ -402,7 +400,7 @@ public class ApiDocumentation {
         this.mockMvc.perform(getWithContext("/versions/" + CLASS_ID_KOMMUNEINNDELING + "?language=nb&includeFuture=true")
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(this.documentationHandler.document(
-                        requestParameters(languageDescription(),includeFutureDescription(""))))
+                        queryParameters(languageDescription(),includeFutureDescription(""))))
                 .andExpect(status().isOk());
         // @formatter:on
         }
@@ -460,7 +458,7 @@ public class ApiDocumentation {
                 .accept("text/csv"))
                 .andDo(this.documentationHandler
                         .document(
-                        requestParameters(
+                        queryParameters(
                                 fromParameterDescription(),
                                 toParameterDescription(),
                                 csvSeparatorParameterDescription(),
@@ -511,7 +509,7 @@ public class ApiDocumentation {
                 + "/codesAt?date=2021-01-01&csvSeparator=;&csvFields=name,code&selectLevel=1&selectCodes=01*"
                 + "&presentationNamePattern={code}-{name}&language=nb&includeFuture=true").accept("text/csv"))
                 .andDo(this.documentationHandler.document(
-                        requestParameters(
+                        queryParameters(
                                 dateParameterDescription(),
                                 csvSeparatorParameterDescription(),
                                 csvFieldsParameterDescription(),
@@ -574,7 +572,7 @@ public class ApiDocumentation {
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(/*prettyPrint()*/)))
                 .andDo(this.documentationHandler.document(
-                        requestParameters(
+                        queryParameters(
                                 variantNameParameterDescription(),
                                 fromParameterDescription(),
                                 toParameterDescription(),
@@ -637,7 +635,7 @@ public class ApiDocumentation {
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(/*prettyPrint()*/)))
                 .andDo(this.documentationHandler.document(
-                        requestParameters(
+                        queryParameters(
                                 variantNameParameterDescription(),
                                 dateParameterDescription(),
                                 csvSeparatorParameterDescription(),
@@ -689,7 +687,7 @@ public class ApiDocumentation {
         this.mockMvc.perform(getWithContext("/variants/" + 1111L + "?language=nb")
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(this.documentationHandler.document(
-                        requestParameters(languageDescription())))
+                        queryParameters(languageDescription())))
                 .andExpect(status().isOk());
         // @formatter:on
         }
@@ -745,7 +743,7 @@ public class ApiDocumentation {
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(/*prettyPrint()*/)))
                 .andDo(this.documentationHandler.document(
-                        requestParameters(
+                        queryParameters(
                                 targetClassificationIdParameterDescription(),
                                 fromParameterDescription(),
                                 toParameterDescription(),
@@ -790,7 +788,7 @@ public class ApiDocumentation {
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(/*prettyPrint()*/)))
                 .andDo(this.documentationHandler.document(
-                        requestParameters(
+                        queryParameters(
                                 targetClassificationIdParameterDescription(),
                                 dateParameterDescription(),
                                 csvSeparatorParameterDescription(),
@@ -853,14 +851,14 @@ public class ApiDocumentation {
         this.mockMvc.perform(getWithContext("/correspondencetables/" + 1L + "?language=nb")
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(this.documentationHandler.document(
-                        requestParameters(languageDescription())))
+                        queryParameters(languageDescription())))
                 .andExpect(status().isOk());
         // @formatter:on
     }
 
     @Test
     public void changesExample() throws Exception {
-        when(classificationServiceMock.getClassificationSeries(anyObject())).thenReturn(
+        when(classificationServiceMock.getClassificationSeries(any())).thenReturn(
                 createClassificationKommuneinndeling());
         // @formatter:off
         this.mockMvc.perform(
@@ -875,7 +873,7 @@ public class ApiDocumentation {
 
     @Test
     public void changesOptionalParametersExample() throws Exception {
-        when(classificationServiceMock.getClassificationSeries(anyObject())).thenReturn(
+        when(classificationServiceMock.getClassificationSeries(any())).thenReturn(
                 createClassificationKommuneinndeling());
         // @formatter:off
         this.mockMvc.perform(
@@ -886,7 +884,7 @@ public class ApiDocumentation {
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(/*prettyPrint()*/)))
                 .andDo(this.documentationHandler.document(
-                        requestParameters(
+                        queryParameters(
                                 fromParameterDescription(),
                                 toParameterDescription(),
                                 csvSeparatorParameterDescription(),
@@ -986,7 +984,7 @@ public class ApiDocumentation {
                                 createClassificationFamiliegruppering(TestUtil.createUser()));
 
                 when(classificationServiceMock.findAllPublic(anyBoolean(), any(Date.class), any(Pageable.class))).then(
-                                i -> createPage(i.getArgumentAt(2, Pageable.class), classifications));
+                                i -> createPage(i.getArgument(2, Pageable.class), classifications));
 
         // @formatter:off
         this.mockMvc.perform(getWithContext("/classifications?changedSince=2015-03-01T01:30:00.000-0200")
@@ -1109,7 +1107,7 @@ public class ApiDocumentation {
                                 createClassificationFamiliegruppering(TestUtil.createUser()));
                 when(classificationServiceMock.findAllPublic(any(Boolean.class), any(Date.class), any(Pageable.class)))
                                 .then(
-                                                i -> createPage(i.getArgumentAt(2, Pageable.class), classifications));
+                                                i -> createPage(i.getArgument(2, Pageable.class), classifications));
 
         // @formatter:off
         this.mockMvc.perform(getWithContext("/classifications?size=2").accept(MediaType.APPLICATION_JSON))

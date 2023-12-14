@@ -1,12 +1,12 @@
 package no.ssb.klass.api.dto.hal;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -20,7 +20,7 @@ import no.ssb.klass.testutil.TestUtil;
 
 public class ClassificationVersionResourceTest {
 
-    @Before
+    @BeforeEach
     public void before() {
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(new MockHttpServletRequest()));
     }
@@ -36,8 +36,8 @@ public class ClassificationVersionResourceTest {
                 new LinkedList<>(), false);
 
         // then
-        assertEquals(1, subject.getLinks().size());
-        assertEquals("http://localhost" + RestConstants.API_VERSION_V1 + "/versions/1", subject.getLink("self").getHref());
+        assertEquals(1, subject.getLinks().toList().size());
+        assertEquals("http://localhost" + RestConstants.API_VERSION_V1 + "/versions/1", subject.getLink("self").orElseThrow());
         assertEquals(version.getName(Language.getDefault()), subject.getName());
     }
 

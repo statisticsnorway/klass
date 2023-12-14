@@ -1,6 +1,7 @@
 package no.ssb.klass.core.repository;
 
 import java.math.BigInteger;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,9 +13,9 @@ import no.ssb.klass.core.model.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    User findOneByUsername(String username);
+    Optional<User> findOneByUsername(String username);
 
-    User findOneByFullname(String fullname);
+    Optional<User> findOneByFullname(String fullname);
 
     // Hibernate does not support UNION and other HQL alternatives might cause performance issues. [Using Native query]
     @Query(value = "SELECT DISTINCT(u.id) FROM user AS u, classification_series AS c"

@@ -1,13 +1,14 @@
 package no.ssb.klass.core.model;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.URL;
 import java.util.Date;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import no.ssb.klass.core.util.ClientException;
 import no.ssb.klass.core.util.TimeUtil;
@@ -22,14 +23,14 @@ public class SubscriptionTest {
     private Subscription subject;
     private UpdateableClockSource clockSource;
 
-    @Before
+    @BeforeEach
     public void init() throws Exception {
         clockSource = new UpdateableClockSource(new Date().getTime());
         TimeUtil.setClockSource(clockSource);
         subject = new Subscription(TestUtil.createClassification("name"), new URL("http://test.url"));
     }
 
-    @After
+    @AfterEach
     public void teardown() {
         TimeUtil.revertClockSource();
     }
@@ -57,12 +58,12 @@ public class SubscriptionTest {
         assertEquals(Verification.VALID, subject.getVerification());
     }
 
-    @Test(expected = ClientException.class)
+    @Test
     public void verifyExpired() {
         // when
         clockSource.updateTimeMillis(TimeUtil.now().getTime() + EXPIRY_TIME_IN_MINS * ONE_MINUTE_IN_MILLISECS + 1);
-        subject.verify();
         // then exception
+        Assertions.assertThrows(Exception.class, () -> subject.verify());
     }
 
 }

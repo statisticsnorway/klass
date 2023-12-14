@@ -4,8 +4,8 @@ import static com.jayway.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 
 import no.ssb.klass.testutil.TestDataProvider;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
 import com.jayway.restassured.http.ContentType;

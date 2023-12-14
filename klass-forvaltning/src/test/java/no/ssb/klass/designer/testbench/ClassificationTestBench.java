@@ -1,8 +1,8 @@
 package no.ssb.klass.designer.testbench;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import no.ssb.klass.core.model.ClassificationType;
 import no.ssb.klass.core.model.Language;

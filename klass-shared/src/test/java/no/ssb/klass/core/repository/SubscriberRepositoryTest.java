@@ -1,15 +1,15 @@
 package no.ssb.klass.core.repository;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.URL;
 import java.util.List;
 
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -17,7 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import no.ssb.klass.core.config.ConfigurationProfiles;
 import no.ssb.klass.core.model.ClassificationSeries;
@@ -25,7 +25,7 @@ import no.ssb.klass.core.model.Subscriber;
 import no.ssb.klass.core.util.TranslatablePersistenceConverter;
 import no.ssb.klass.testutil.TestUtil;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest
 @ActiveProfiles(ConfigurationProfiles.H2_INMEMORY)
 @Transactional
@@ -48,7 +48,7 @@ public class SubscriberRepositoryTest {
     private Subscriber subscriber;
     private Long subscriberId;
 
-    @Before
+    @BeforeEach
     public void init() {
         subscriber = new Subscriber(EMAIL);
         subject.save(subscriber);
@@ -59,7 +59,7 @@ public class SubscriberRepositoryTest {
     @Test
     public void testEntity() {
         // when
-        Subscriber result = subject.findOne(subscriberId);
+        Subscriber result = subject.findById(subscriberId).orElseThrow();
         // then
         assertEquals(subscriberId, result.getId());
     }

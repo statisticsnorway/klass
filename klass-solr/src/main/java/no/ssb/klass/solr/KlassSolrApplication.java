@@ -2,7 +2,6 @@ package no.ssb.klass.solr;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.SpringBootConfiguration;
-import org.springframework.boot.web.support.SpringBootServletInitializer;
 
 /**
  * Class made for test purposes.

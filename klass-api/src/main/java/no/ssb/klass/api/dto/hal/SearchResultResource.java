@@ -1,13 +1,13 @@
 package no.ssb.klass.api.dto.hal;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 import java.util.List;
 import java.util.StringJoiner;
 
 import org.springframework.data.solr.core.query.result.HighlightEntry;
 import org.springframework.hateoas.Link;
-import org.springframework.hateoas.core.Relation;
+import org.springframework.hateoas.server.core.Relation;
 
 import no.ssb.klass.core.service.search.SolrSearchResult;
 import no.ssb.klass.api.controllers.ClassificationController;

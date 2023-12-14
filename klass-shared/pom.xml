@@ -26,7 +26,7 @@
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>1.8</java.version>
+        <java.version>11</java.version>
 
         <findbugs-version>3.0.5</findbugs-version>
         <checkstyle-version>3.3.0</checkstyle-version>
@@ -38,23 +38,8 @@
         <rest-assured-version>2.9.0</rest-assured-version>
         <apacheds-server-jndi-version>1.5.5</apacheds-server-jndi-version>
         <asciidoctor-version>1.6.0</asciidoctor-version>
-        <maven-jaxb2-plugin-version>0.15.2</maven-jaxb2-plugin-version>
+        <maven-jaxb2-plugin-version>0.15.3</maven-jaxb2-plugin-version>
         <tomcat7-maven-plugin-version>2.2</tomcat7-maven-plugin-version>
-
-        <!--IMPORTANT HIBERNATE BUG FIX ( needed for Translatable as lobs)-->
-        <!--https://hibernate.atlassian.net/browse/HHH-10818-->
-        <hibernate.version>5.2.3.Final</hibernate.version>
-
-
-        <!-- Override Spring Boot managed version. Flyway bug #995 forces us to use version 4.0 or newer.
-             Replacing old search engine with solr search
-             Remove when Spring Boot includes this version or newer -->
-        <flyway.version>4.1.1</flyway.version>
-        <!-- Override Spring Boot managed version. Spring restdocs bug #286 in version 1.1.1 (duplicate query parameters)
-             forces us to downgrade to version 1.1.0. (https://github.com/spring-projects/spring-restdocs/issues/286)
-             Remove when Spring Boot includes version 1.1.2 or newer -->
-        <spring-restdocs.version>1.2.1.RELEASE</spring-restdocs.version>
-
     </properties>
 
     <dependencies>
@@ -93,7 +78,7 @@
         <dependency>
             <groupId>org.apache.solr</groupId>
             <artifactId>solr-dataimporthandler</artifactId>
-            <version>5.5.0</version>
+            <version>8.11.2</version>
             <!--https://github.com/FasterXML/jackson-dataformat-xml/issues/132-->
             <exclusions>
                 <exclusion>
@@ -138,8 +123,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>jstl</artifactId>
+            <groupId>jakarta.servlet.jsp.jstl</groupId>
+            <artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
+            <version>3.0.0</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -220,6 +206,12 @@
             <artifactId>rest-assured</artifactId>
             <version>${rest-assured-version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
+            <version>2.3.3</version>
+            <scope>provided</scope>
         </dependency>
          
     </dependencies>
@@ -304,13 +296,6 @@
                 <groupId>org.jvnet.jaxb2.maven2</groupId>
                 <artifactId>maven-jaxb2-plugin</artifactId>
                 <version>${maven-jaxb2-plugin-version}</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                    </execution>
-                </executions>
                 <configuration>
                     <schemaDirectory>src/main/resources/xsd/ssb</schemaDirectory>
                 </configuration>

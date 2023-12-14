@@ -4,32 +4,33 @@ import no.ssb.klass.core.config.ConfigurationProfiles;
 import no.ssb.klass.api.controllers.MonitorController;
 import no.ssb.klass.api.controllers.PingController;
 import no.ssb.klass.api.util.RestConstants;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.SecurityFilterChain;
 
 /**
  * @author Mads Lundemo, SSB.
  */
 @Configuration
 @Profile(value = { ConfigurationProfiles.API_ONLY }) // makes config disabled for tests
-public class KlassApiConfiguration extends WebSecurityConfigurerAdapter {
+public class KlassApiConfiguration {
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 // block sensitive endpoints (actuator)
-                .antMatchers("/manage**").denyAll() // alt. hasIpAddress("127.0.0.1")
-                .antMatchers("/manage/**").denyAll()
+                .requestMatchers("/manage**").denyAll() // alt. hasIpAddress("127.0.0.1")
+                .requestMatchers("/manage/**").denyAll()
 
                 // MLO: Some endpoints might be useful, consider allowing non sensitive ones.
                 // .antMatchers("/manage/metrics").permitAll()
 
                 // allow rest API and health checks
-                .antMatchers(RestConstants.API_VERSION_V1 + "/**").permitAll()
-                .antMatchers(PingController.PATH).permitAll()
-                .antMatchers(MonitorController.PATH).permitAll()
+                .requestMatchers(RestConstants.API_VERSION_V1 + "/**").permitAll()
+                .requestMatchers(PingController.PATH).permitAll()
+                .requestMatchers(MonitorController.PATH).permitAll()
 
                 .and()
                 .csrf().disable()
@@ -44,6 +45,6 @@ public class KlassApiConfiguration extends WebSecurityConfigurerAdapter {
                     }
                 })
                 .frameOptions().disable();
-
+        return http.build();
     }
 }

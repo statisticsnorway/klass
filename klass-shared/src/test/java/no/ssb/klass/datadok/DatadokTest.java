@@ -15,8 +15,8 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import org.apache.commons.lang3.StringUtils;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
@@ -36,7 +36,7 @@ import no.ssb.klass.core.model.Language;
 
 // This test is used for filtering codelists from datadok. Probably delete after migration from Datadok,
 // if deleted remember to also delete resources datadoc_codes and datadok_metadata
-@Ignore
+@Disabled
 public class DatadokTest {
     private static final Logger log = LoggerFactory.getLogger(DatadokTest.class);
 

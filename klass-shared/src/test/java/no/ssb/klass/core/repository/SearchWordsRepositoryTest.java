@@ -1,16 +1,16 @@
 package no.ssb.klass.core.repository;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -20,14 +20,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import no.ssb.klass.core.config.ConfigurationProfiles;
 import no.ssb.klass.core.model.SearchWords;
 import no.ssb.klass.core.service.dto.StatisticalEntity;
 import no.ssb.klass.core.util.TranslatablePersistenceConverter;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest
 @ActiveProfiles(ConfigurationProfiles.H2_INMEMORY)
 @Transactional
@@ -68,7 +68,7 @@ public class SearchWordsRepositoryTest {
         makeSerarchWord("A", true);
 
         Page<StatisticalEntity> result = searchWordsRepository.getSearchWords(getFromDate(), getToDate(),
-                new PageRequest(0, 100));
+                PageRequest.of(0, 100));
         assertEquals(3, result.getTotalElements());
         List<StatisticalEntity> resultList = result.getContent();
         assertEquals("A", resultList.get(0).getName());
@@ -90,7 +90,7 @@ public class SearchWordsRepositoryTest {
         makeSerarchWord("B", false);
 
         Page<StatisticalEntity> result = searchWordsRepository.getSearchWords(false, getFromDate(), getToDate(),
-                new PageRequest(0, 100));
+                PageRequest.of(0, 100));
         assertEquals(2, result.getTotalElements());
         List<StatisticalEntity> resultList = result.getContent();
         assertEquals("B", resultList.get(0).getName());

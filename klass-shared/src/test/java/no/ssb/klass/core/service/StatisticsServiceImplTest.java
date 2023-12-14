@@ -1,10 +1,10 @@
 package no.ssb.klass.core.service;
 
-import static org.junit.Assert.*;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyBoolean;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.anyBoolean;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.*;
 
 import java.time.LocalDate;
@@ -13,9 +13,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -43,7 +43,7 @@ import org.springframework.data.domain.PageRequest;
 //import no.ssb.klass.designer.admin.util.UsageStatisticsRows.ReportDescription;
 //import no.ssb.klass.designer.admin.util.UsageStatisticsRows.UseStatisticsModeChoice;
 
-@Ignore ("API er omskrevet for å løskoble Vaadin komponenter/logikk  disse restene må splittes i service  og klient")
+@Disabled ("API er omskrevet for å løskoble Vaadin komponenter/logikk  disse restene må splittes i service  og klient")
 public class StatisticsServiceImplTest {
 //    private ClassificationSeriesRepository classificationSeriesRepositoryMock;
 //    private SearchWordsRepository searchWordsRepositoryMock;
@@ -52,7 +52,7 @@ public class StatisticsServiceImplTest {
 //    private SubscriberRepository subscriberRepositoryMock;
 //    private StatisticsServiceImpl subject;
 //
-//    @Before
+//    @BeforeEach
 //    public void setup() {
 //        classificationSeriesRepositoryMock = mock(ClassificationSeriesRepository.class);
 //        searchWordsRepositoryMock = mock(SearchWordsRepository.class);
@@ -163,7 +163,7 @@ public class StatisticsServiceImplTest {
 //                        .thenReturn(makeTestData());
 //        UsageStatisticsData result = subject.getUsageStatistics(getFromDate(), getToDate(),
 //                UseStatisticsModeChoice.TOTAL_CLASSIFIC,
-//                new PageRequest(0, Integer.MAX_VALUE));
+//                PageRequest.of(0, Integer.MAX_VALUE));
 //        checkResult(result);
 //    }
 //
@@ -174,7 +174,7 @@ public class StatisticsServiceImplTest {
 //                        .thenReturn(makeTestData());
 //        UsageStatisticsData result = subject.getUsageStatistics(getFromDate(), getToDate(),
 //                UseStatisticsModeChoice.NUMBEROF_SEARCH_RETURNED_NULL,
-//                new PageRequest(0, Integer.MAX_VALUE));
+//                PageRequest.of(0, Integer.MAX_VALUE));
 //        checkResult(result);
 //    }
 //
@@ -184,7 +184,7 @@ public class StatisticsServiceImplTest {
 //                .thenReturn(makeTestData());
 //        UsageStatisticsData result = subject.getUsageStatistics(getFromDate(), getToDate(),
 //                UseStatisticsModeChoice.TOTAL_SEARCH_WORDS,
-//                new PageRequest(0, Integer.MAX_VALUE));
+//                PageRequest.of(0, Integer.MAX_VALUE));
 //        checkResult(result);
 //    }
 //

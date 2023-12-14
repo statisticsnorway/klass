@@ -154,20 +154,20 @@ public class SubscriberUnitTab extends SubscriberUnitTabDesign {
 
         // subscribers
         Page<StatisticalEntity> subscriberStatisticsData =
-                statisticsService.getSubscriberReport(ChoiceMapper.map(choice), new PageRequest(0, Integer.MAX_VALUE));
+                statisticsService.getSubscriberReport(ChoiceMapper.map(choice), PageRequest.of(0, Integer.MAX_VALUE));
         excelData.append("Brukernavn").append(CSV_SEPARATOR).append("Antall abonnementer").append('\n');
         excelData.append(formatForExcel(subscriberStatisticsData));
 
         // domains
         subscriberStatisticsData =
-                statisticsService.getSubscriberDomainReport(ChoiceMapper.map(choice), new PageRequest(0, Integer.MAX_VALUE));
+                statisticsService.getSubscriberDomainReport(ChoiceMapper.map(choice), PageRequest.of(0, Integer.MAX_VALUE));
         excelData.append('\n');
         excelData.append("Domene").append(CSV_SEPARATOR).append("Antall abonnementer").append('\n');
         excelData.append(formatForExcel(subscriberStatisticsData));
 
         // classifications
         subscriberStatisticsData =
-                statisticsService.getSubscriberClassificationReport(ChoiceMapper.map(choice), new PageRequest(0, Integer.MAX_VALUE));
+                statisticsService.getSubscriberClassificationReport(ChoiceMapper.map(choice), PageRequest.of(0, Integer.MAX_VALUE));
         excelData.append('\n');
         excelData.append("Klassifikasjon").append(CSV_SEPARATOR).append("Antall abonnementer").append('\n');
         excelData.append(formatForExcel(subscriberStatisticsData));
@@ -224,7 +224,7 @@ public class SubscriberUnitTab extends SubscriberUnitTabDesign {
         detailedSubscriberTable.setColumnHeader("Value", "<b>" + "Antall abonnementer" + "</b>");
         pagingButtons.removeAllComponents();
         headingText.setValue(getHeadingText(reportDescription));
-        PageRequest pageRequest = new PageRequest(0, LINES_PER_PAGE);
+        PageRequest pageRequest = PageRequest.of(0, LINES_PER_PAGE);
         Page<StatisticalEntity> reportData = showReportPage(reportDescription, type, pageRequest);
         numberOfRowsHeader.setValue("Totalt antall: " + reportData.getTotalElements());
         if (reportData.getTotalPages() > 1) {
@@ -251,7 +251,7 @@ public class SubscriberUnitTab extends SubscriberUnitTabDesign {
             }
         }
         int pageNumber = (int) e.getButton().getData();
-        showReportPage(choice, type, new PageRequest(pageNumber, LINES_PER_PAGE));
+        showReportPage(choice, type, PageRequest.of(pageNumber, LINES_PER_PAGE));
     }
 
     private Page<StatisticalEntity> showReportPage(SubscriberReportDescription<SubscriberModeChoice> reportDescription,

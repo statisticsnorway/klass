@@ -1,18 +1,19 @@
 package no.ssb.klass.core.repository;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.transaction.Transactional;
+import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -22,7 +23,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import no.ssb.klass.core.config.ConfigurationProfiles;
 import no.ssb.klass.core.model.ClassificationSeries;
@@ -31,15 +32,13 @@ import no.ssb.klass.core.model.ClassificationVersion;
 import no.ssb.klass.core.model.Language;
 import no.ssb.klass.core.model.Level;
 import no.ssb.klass.core.model.User;
-import no.ssb.klass.core.service.dto.ClassificationReportDto;
-import no.ssb.klass.core.service.dto.ClassificationVersionReportDto;
 import no.ssb.klass.core.util.TimeUtil;
 import no.ssb.klass.core.util.Translatable;
 import no.ssb.klass.core.util.TranslatablePersistenceConverter;
 import no.ssb.klass.testutil.IncrementableClockSource;
 import no.ssb.klass.testutil.TestUtil;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest
 @ActiveProfiles(ConfigurationProfiles.H2_INMEMORY)
 @Transactional
@@ -55,14 +54,14 @@ public class ClassificationSeriesRepositoryTest {
         private IncrementableClockSource clockSource;
         private User user;
 
-        @Before
+        @BeforeEach
         public void setup() {
                 clockSource = new IncrementableClockSource(new Date().getTime());
                 TimeUtil.setClockSource(clockSource);
                 user = userRepository.save(TestUtil.createUser());
         }
 
-        @After
+        @AfterEach
         public void teardown() {
                 TimeUtil.revertClockSource();
         }
@@ -79,7 +78,7 @@ public class ClassificationSeriesRepositoryTest {
                 entityManager.detach(classification);
 
                 // when
-                ClassificationSeries result = subject.findOne(classification.getId());
+                ClassificationSeries result = subject.findById(classification.getId()).orElseThrow();
 
                 // then
                 assertEquals(1, result.getClassificationVersions().size());
@@ -274,8 +273,8 @@ public class ClassificationSeriesRepositoryTest {
 
         }
 
-        @Test
-        @Ignore("skrevet om service laget")
+        @Test()
+        @Disabled("skrevet om service laget")
         public void testClassificationsReport() {
                 // ClassificationSeries classification1 =
                 // createClassificationSeriesWithVersion(user, "Duppeditt");
@@ -324,7 +323,7 @@ public class ClassificationSeriesRepositoryTest {
         }
 
         @Test
-        @Ignore("skrevet om service laget")
+        @Disabled("skrevet om service laget")
         public void testPublishedClassificationReport() {
                 // ClassificationSeries classification1 =
                 // createClassificationSeriesWithVersion(user, "Duppeditt");
@@ -371,7 +370,7 @@ public class ClassificationSeriesRepositoryTest {
         }
 
         @Test
-        @Ignore("skrevet om service laget")
+        @Disabled("skrevet om service laget")
         public void testPublishedVersionsAnyLanguages() {
                 // ClassificationSeries classification1 =
                 // createClassificationSeriesWithVersion(user, "Duppeditt");
@@ -418,7 +417,7 @@ public class ClassificationSeriesRepositoryTest {
         }
 
         @Test
-        @Ignore("skrevet om service laget")
+        @Disabled("skrevet om service laget")
         public void testPublishedVersionsAllLanguages() {
                 // ClassificationSeries classification1 =
                 // createClassificationSeriesWithVersion(user, "Duppeditt");
@@ -535,7 +534,7 @@ public class ClassificationSeriesRepositoryTest {
         }
 
         private Pageable createPageable() {
-                return new PageRequest(0, 3);
+                return PageRequest.of(0, 3);
         }
 
         @Configuration

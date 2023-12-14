@@ -3070,7 +3070,7 @@ div.v-layout.v-horizontal.v-widget {
 	text-align: center;
 	top: 50%;
 	line-height: 1;
-	margin-top: -0.47em;
+	margin-top: −0.47em;
 }
 
 .klasstheme .v-filterselect [class$="button"]:hover:before {
@@ -3547,7 +3547,7 @@ div.v-layout.v-horizontal.v-widget {
 	text-align: center;
 	top: 50%;
 	line-height: 1;
-	margin-top: -0.47em;
+	margin-top: −0.47em;
 }
 
 .klasstheme .v-filterselect-tiny [class$="button"]:active:after {
@@ -3674,7 +3674,7 @@ div.v-layout.v-horizontal.v-widget {
 	text-align: center;
 	top: 50%;
 	line-height: 1;
-	margin-top: -0.47em;
+	margin-top: −0.47em;
 }
 
 .klasstheme .v-filterselect-compact [class$="button"]:active:after, .klasstheme .v-filterselect-small [class$="button"]:active:after {
@@ -3806,7 +3806,7 @@ div.v-layout.v-horizontal.v-widget {
 	text-align: center;
 	top: 50%;
 	line-height: 1;
-	margin-top: -0.47em;
+	margin-top: −0.47em;
 }
 
 .klasstheme .v-filterselect-large [class$="button"]:active:after {
@@ -3934,7 +3934,7 @@ div.v-layout.v-horizontal.v-widget {
 	text-align: center;
 	top: 50%;
 	line-height: 1;
-	margin-top: -0.47em;
+	margin-top: −0.47em;
 }
 
 .klasstheme .v-filterselect-huge [class$="button"]:active:after {
@@ -4160,7 +4160,7 @@ div.v-layout.v-horizontal.v-widget {
 	left: 0;
 	right: 0;
 	width: auto !important;
-	margin-top: -0.5em;
+	margin-top: −0.5em;
 	padding-bottom: 0.5em;
 	border-bottom: 1px solid #dfdfdf;
 }
@@ -7516,12 +7516,12 @@ div.v-layout.v-horizontal.v-widget {
 	content: "\f078";
 	font-size: 0.7em;
 	vertical-align: 0.15em;
-	margin: 0 -0.2em 0 0.5em;
+	margin: 0 −0.2em 0 0.5em;
 	opacity: 0.5;
 }
 
 .klasstheme .v-menubar .v-menubar-submenu-indicator  + .v-menubar-menuitem-caption:empty:after {
-	margin-left: -0.2em;
+	margin-left: −0.2em;
 }
 
 .klasstheme .v-menubar-popup {
@@ -8900,7 +8900,7 @@ div.v-layout.v-horizontal.v-widget {
 
 .v-ie8 .klasstheme .v-tree-node:before {
 	position: static;
-	margin-left: -1.9em;
+	margin-left: −1.9em;
 	vertical-align: top;
 	content: "\f0da";
 	font-family: ThemeIcons;
@@ -11394,7 +11394,7 @@ div.v-layout.v-horizontal.v-widget {
 	content: "\2022";
 	color: #197de1;
 	font-size: 22px;
-	margin-left: -0.07em;
+	margin-left: −0.07em;
 }
 
 .klasstheme .v-calendar .v-daterange {
@@ -11652,7 +11652,7 @@ div.v-layout.v-horizontal.v-widget {
 	margin-top: 1.4em;
 	margin-bottom: 1em;
 	
-	letter-spacing: -0.03em;
+	letter-spacing: −0.03em;
 }
 
 .klasstheme h2, .klasstheme .v-label-h2 {
@@ -11660,7 +11660,7 @@ div.v-layout.v-horizontal.v-widget {
 	
 	margin-top: 1.6em;
 	margin-bottom: 0.77em;
-	letter-spacing: -0.02em;
+	letter-spacing: −0.02em;
 }
 
 .klasstheme h3, .klasstheme .v-label-h3 {
@@ -11691,7 +11691,7 @@ div.v-layout.v-horizontal.v-widget {
 }
 
 .klasstheme .v-verticallayout > .v-slot:first-child .v-formlayout-contentcell h1, .klasstheme .v-verticallayout > .v-slot:first-child .v-formlayout-contentcell .v-label-h1, .klasstheme .v-verticallayout > .v-slot:first-child .v-formlayout-contentcell h2, .klasstheme .v-verticallayout > .v-slot:first-child .v-formlayout-contentcell .v-label-h2, .klasstheme .v-verticallayout > .v-slot:first-child .v-formlayout-contentcell h3, .klasstheme .v-verticallayout > .v-slot:first-child .v-formlayout-contentcell .v-label-h3, .klasstheme .v-verticallayout > .v-slot:first-child .v-formlayout-contentcell h4, .klasstheme .v-verticallayout > .v-slot:first-child .v-formlayout-contentcell .v-label-h4, .klasstheme .v-verticallayout > div > .v-slot:first-child .v-formlayout-contentcell h1, .klasstheme .v-verticallayout > div > .v-slot:first-child .v-formlayout-contentcell .v-label-h1, .klasstheme .v-verticallayout > div > .v-slot:first-child .v-formlayout-contentcell h2, .klasstheme .v-verticallayout > div > .v-slot:first-child .v-formlayout-contentcell .v-label-h2, .klasstheme .v-verticallayout > div > .v-slot:first-child .v-formlayout-contentcell h3, .klasstheme .v-verticallayout > div > .v-slot:first-child .v-formlayout-contentcell .v-label-h3, .klasstheme .v-verticallayout > div > .v-slot:first-child .v-formlayout-contentcell h4, .klasstheme .v-verticallayout > div > .v-slot:first-child .v-formlayout-contentcell .v-label-h4 {
-	margin-top: -0.5em;
+	margin-top: −0.5em;
 }
 
 .klasstheme h1.no-margin, .klasstheme .v-label-h1.no-margin, .klasstheme h2.no-margin, .klasstheme .v-label-h2.no-margin, .klasstheme h3.no-margin, .klasstheme .v-label-h3.no-margin, .klasstheme h4.no-margin, .klasstheme .v-label-h4.no-margin {

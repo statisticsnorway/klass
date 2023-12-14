@@ -4,8 +4,8 @@ import static com.google.common.base.Preconditions.*;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 
 import no.ssb.klass.core.util.TimeUtil;
 

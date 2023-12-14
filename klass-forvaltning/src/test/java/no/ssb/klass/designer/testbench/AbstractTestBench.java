@@ -3,9 +3,9 @@ package no.ssb.klass.designer.testbench;
 import java.io.File;
 
 import no.ssb.klass.solr.config.KlassSearchTestConfiguration;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.Rule;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxBinary;
@@ -22,7 +22,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 
@@ -35,7 +35,7 @@ import no.ssb.klass.core.config.ConfigurationProfiles;
 import no.ssb.klass.designer.testbench.pages.ClassificationFamilyPage;
 import no.ssb.klass.designer.testbench.pages.LoginPage;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = { AbstractTestBench.Config.class }, webEnvironment = WebEnvironment.RANDOM_PORT)
 @ContextConfiguration(classes = { KlassSearchTestConfiguration.class })
 @ActiveProfiles({ ConfigurationProfiles.H2_INMEMORY, ConfigurationProfiles.AD_AUTHENTICATE_OFFLINE,
@@ -62,14 +62,16 @@ public abstract class AbstractTestBench implements HasDriver {
     @Rule
     public ScreenshotOnFailureRule screenshotOnFailure = new ScreenshotOnFailureRule(this, true);
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         if (Strings.nullToEmpty(System.getProperty("useHeadless")).equals("true")) {
             driver = new PhantomJSDriver();
         } else {
-            // driver = new FirefoxDriver();
+            driver = new FirefoxDriver();
+            /*
             driver = new FirefoxDriver(new FirefoxBinary(new File(
                     "C:\\Users\\mlo\\Downloads\\FirefoxPortable\\FirefoxPortable.exe")), new FirefoxProfile());
+             */
         }
         driver.manage().window().setSize(new Dimension(1280, 800));
         Parameters.setScreenshotErrorDirectory("target/testbench/errors");

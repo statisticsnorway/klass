@@ -3,12 +3,14 @@ package no.ssb.klass.solr.config;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Path;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.embedded.EmbeddedSolrServer;
 import org.apache.solr.core.CoreContainer;
+import org.apache.solr.core.SolrXmlConfig;
 import org.springframework.context.annotation.*;
 
 /**
@@ -31,7 +33,7 @@ public class KlassSearchTestConfiguration {
             exportResource("solr/embedded/Klass/solrconfig.xml", solrTempWorkspace + "/klass");
             exportResource("solr/embedded/Klass/stoppord.txt", solrTempWorkspace + "/klass");
             exportResource("solr/embedded/Klass/synonymer.txt", solrTempWorkspace + "/klass");
-            coreContainer = new CoreContainer(solrTempWorkspace);
+            coreContainer = new CoreContainer(SolrXmlConfig.fromSolrHome(Path.of(solrTempWorkspace), null));
             coreContainer.load();
         } catch (Exception e) {
             e.printStackTrace(System.err);

@@ -1,6 +1,6 @@
 package no.ssb.klass.api.dto.hal;
 
-import org.springframework.hateoas.core.Relation;
+import org.springframework.hateoas.server.core.Relation;
 
 @Relation(collectionRelation = "ssbSections")
 public class SsbSectionResource extends KlassResource {

@@ -1,9 +1,9 @@
 package no.ssb.klass.api.dto.hal;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 import org.springframework.hateoas.Link;
-import org.springframework.hateoas.core.Relation;
+import org.springframework.hateoas.server.core.Relation;
 
 import no.ssb.klass.core.model.Language;
 import no.ssb.klass.core.repository.ClassificationFamilySummary;

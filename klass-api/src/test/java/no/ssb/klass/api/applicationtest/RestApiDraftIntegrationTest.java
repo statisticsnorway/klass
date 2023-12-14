@@ -4,8 +4,8 @@ import static com.jayway.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 
 import no.ssb.klass.testutil.TestDataProvider;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
 import com.jayway.restassured.http.ContentType;
@@ -24,7 +24,7 @@ public class RestApiDraftIntegrationTest extends AbstractRestApiApplicationTest 
 
     private ClassificationVariant variant;
 
-    @Before
+    @BeforeEach
     public void addDrafts() {
         applicationTestUtil.clearDatabase();
         applicationTestUtil.clearSearch();

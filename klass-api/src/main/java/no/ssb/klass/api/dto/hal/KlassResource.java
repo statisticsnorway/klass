@@ -1,28 +1,28 @@
 package no.ssb.klass.api.dto.hal;
 
-import java.util.List;
-
 import org.springframework.hateoas.Link;
-import org.springframework.hateoas.ResourceSupport;
+import org.springframework.hateoas.Links;
+import org.springframework.hateoas.PagedModel;
+import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.UriTemplate;
-import org.springframework.hateoas.mvc.ControllerLinkBuilder;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
-public abstract class KlassResource extends ResourceSupport {
+public abstract class KlassResource extends PagedModel<RepresentationModel<?>> {
     protected void addLink(Link link) {
-        getLinks().add(link);
+        super.add(link);
     }
 
-    protected UriTemplate createUriTemplate(ControllerLinkBuilder linkBuilder, String... parameters) {
+    protected UriTemplate createUriTemplate(WebMvcLinkBuilder linkBuilder, String... parameters) {
         return ResourceUtil.createUriTemplate(linkBuilder, parameters);
     }
 
     @Override
     @JacksonXmlElementWrapper(localName = "links")
     @JacksonXmlProperty(localName = "link")
-    public List<Link> getLinks() {
+    public Links getLinks() {
         return super.getLinks();
     }
 

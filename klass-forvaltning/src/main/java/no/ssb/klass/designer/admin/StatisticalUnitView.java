@@ -81,7 +81,7 @@ public class StatisticalUnitView extends StatisticalUnitDesign {
     
 
     private UsageStatisticsData getReportData() {
-        Page<StatisticalEntity> overView = statisticsService.getStaticalUnitsOverView(new PageRequest(0, Integer.MAX_VALUE));
+        Page<StatisticalEntity> overView = statisticsService.getStaticalUnitsOverView(PageRequest.of(0, Integer.MAX_VALUE));
         return new UsageStatisticsData(overView);
     }
     

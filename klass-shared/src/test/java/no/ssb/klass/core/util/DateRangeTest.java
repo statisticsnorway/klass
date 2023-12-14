@@ -1,11 +1,11 @@
 package no.ssb.klass.core.util;
 
-import static org.junit.Assert.*;
 
 import java.time.LocalDate;
+import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class DateRangeTest {
 
@@ -137,16 +137,13 @@ public class DateRangeTest {
      *    result        none
      * </pre>
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void subRangeNoOverlapTest() {
-        // given
-        DateRange subject = DateRange.create("2012-01-01", "2014-01-01");
-        DateRange other = DateRange.create("2014-01-01", "2016-01-01");
-
-        // when
-        subject.subRange(other);
-
-        // then expect exception
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            DateRange subject = DateRange.create("2012-01-01", "2014-01-01");
+            DateRange other = DateRange.create("2014-01-01", "2016-01-01");
+            subject.subRange(other);
+        });
     }
 
     @Test
@@ -164,14 +161,18 @@ public class DateRangeTest {
         assertFalse(subject.contains(end));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void fromAfterTo() {
-        DateRange.create("2018-01-01", "2016-01-01");
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            DateRange.create("2018-01-01", "2016-01-01");
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void fromEqualTo() {
-        DateRange.create("2016-01-01", "2016-01-01");
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            DateRange.create("2016-01-01", "2016-01-01");
+        });
     }
 
     /**

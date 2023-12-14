@@ -4,20 +4,20 @@ import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.core.Is.*;
 import static org.hamcrest.core.IsNull.*;
 import static org.hamcrest.core.StringContains.*;
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.ldap.core.DirContextAdapter;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.ldap.search.LdapUserSearch;
@@ -29,7 +29,7 @@ import no.ssb.klass.core.service.UserService;
 /**
  * @author Mads Lundemo, SSB.
  */
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class ActiveDirectoryServiceTest {
 
     @Mock
@@ -42,7 +42,7 @@ public class ActiveDirectoryServiceTest {
     @InjectMocks
     private ActiveDirectoryServiceImpl adService;
 
-    @Before
+    @BeforeEach
     public void configureUserServiceMock() {
         when(userService.saveUser(any(User.class))).thenAnswer(invocation -> invocation.getArguments()[0]);
     }
@@ -159,10 +159,12 @@ public class ActiveDirectoryServiceTest {
 
     }
 
-    @Test(expected = UsernameNotFoundException.class)
+    @Test
     public void shouldThrowExceptionIfUserDoesNotExistsInAd() {
-        when(userSearch.searchForUser("xxx")).thenThrow(new UsernameNotFoundException(""));
-        adService.createAndSaveNewUser("xxx");
+        Assertions.assertThrows(UsernameNotFoundException.class, () -> {
+            when(userSearch.searchForUser("xxx")).thenThrow(new UsernameNotFoundException(""));
+            adService.createAndSaveNewUser("xxx");
+        });
     }
 
     @Test

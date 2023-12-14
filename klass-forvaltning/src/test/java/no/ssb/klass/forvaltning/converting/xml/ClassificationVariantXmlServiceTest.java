@@ -8,11 +8,11 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.commons.io.IOUtils;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import no.ssb.klass.forvaltning.converting.exception.ImportException;
 import no.ssb.klass.core.model.ClassificationVariant;
@@ -28,7 +28,7 @@ import no.ssb.klass.testutil.TestUtil;
 /**
  * @author Mads Lundemo, SSB.
  */
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class ClassificationVariantXmlServiceTest {
 
     @Mock

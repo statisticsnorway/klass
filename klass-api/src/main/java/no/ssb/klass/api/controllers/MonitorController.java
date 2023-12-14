@@ -87,7 +87,7 @@ public class MonitorController {
     private MonitorStatus testSearch() {
         try {
             FacetAndHighlightPage<SolrSearchResult> solrSearchResults = 
-                    searchService.publicSearch("*",new PageRequest(0,10),null,true);
+                    searchService.publicSearch("*",PageRequest.of(0,10),null,true);
             int results = solrSearchResults.getSize();
             if (results>0) {
                 return new MonitorStatus(SOLR_SEARCH, true, "Søk fungerer");

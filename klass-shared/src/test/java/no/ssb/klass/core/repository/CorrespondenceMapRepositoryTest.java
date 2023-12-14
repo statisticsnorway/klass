@@ -1,15 +1,16 @@
 package no.ssb.klass.core.repository;
 
 import static org.hamcrest.core.Is.*;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Set;
 
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
+import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -17,7 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import no.ssb.klass.core.config.ConfigurationProfiles;
 import no.ssb.klass.core.model.ClassificationFamily;
@@ -37,7 +38,7 @@ import no.ssb.klass.testutil.TestUtil;
 /**
  * @author Mads Lundemo, SSB.
  */
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest
 @ActiveProfiles(ConfigurationProfiles.H2_INMEMORY)
 @Transactional
@@ -62,7 +63,7 @@ public class CorrespondenceMapRepositoryTest {
     private CorrespondenceTable secondNormalCorrespondenceTable;
     private CorrespondenceTable secondDeletedCorrespondenceTable;
 
-    @Before
+    @BeforeEach
     public void setup() {
         user = userRepository.save(TestUtil.createUser());
         classificationFamily = classificationFamilyRepository.save(TestUtil.createClassificationFamily("family"));
@@ -84,8 +85,8 @@ public class CorrespondenceMapRepositoryTest {
                 deletedTarget, deletedTarget.getAllClassificationItems());
 
         // then
-        assertThat(sourceMapsUsingDeletedItems.size(), is(10));
-        assertThat(targetMapsUsingDeletedItems.size(), is(10));
+        assertThat(sourceMapsUsingDeletedItems.size()).isEqualTo(10);
+        assertThat(targetMapsUsingDeletedItems.size()).isEqualTo(10);
 
         sourceMapsUsingDeletedItems.forEach(map -> assertTrue(deletedSource.getAllClassificationItems().contains(map
                 .getSource().get())));
@@ -102,8 +103,8 @@ public class CorrespondenceMapRepositoryTest {
         Set<CorrespondenceMap> itemsUsingNormalTarget = correspondenceMapRepository.findAllMapsUsingItems(normalTarget);
 
         // then
-        assertThat(itemsUsingNormalSource.size(), is(12));
-        assertThat(itemsUsingNormalTarget.size(), is(12));
+        assertThat(itemsUsingNormalSource.size()).isEqualTo(12);
+        assertThat(itemsUsingNormalTarget.size()).isEqualTo(12);
         itemsUsingNormalSource.forEach(map -> assertTrue(normalSource.getAllClassificationItems().contains(map
                 .getSource().get())));
         itemsUsingNormalSource.forEach(map -> assertTrue(normalSource.getAllClassificationItems().contains(map
@@ -129,11 +130,11 @@ public class CorrespondenceMapRepositoryTest {
                 deletedClassificationItem, false);
 
         // then
-        assertThat(deletedFromNormal.size(), is(0));
-        assertThat(normalFromNormal.size(), is(1));
+        assertThat(deletedFromNormal.size()).isEqualTo(0);
+        assertThat(normalFromNormal.size()).isEqualTo(1);
 
-        assertThat(deletedFromDeleted.size(), is(1));
-        assertThat(normalFromDeleted.size(), is(0));
+        assertThat(deletedFromDeleted.size()).isEqualTo(1);
+        assertThat(normalFromDeleted.size()).isEqualTo(0);
 
     }
 

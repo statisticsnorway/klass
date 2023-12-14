@@ -1,7 +1,7 @@
 package no.ssb.klass.api.applicationtest;
 
 import com.jayway.restassured.http.ContentType;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
 import static com.jayway.restassured.RestAssured.given;

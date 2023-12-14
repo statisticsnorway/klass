@@ -1,7 +1,7 @@
 package no.ssb.klass.api.dto;
 
-import static org.junit.Assert.*;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import no.ssb.klass.core.model.ClassificationItem;
 import no.ssb.klass.core.model.ConcreteClassificationItem;

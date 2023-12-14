@@ -1,11 +1,11 @@
 package no.ssb.klass.designer.util;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDate;
 import java.util.Optional;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;

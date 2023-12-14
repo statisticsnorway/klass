@@ -47,10 +47,11 @@ import org.springframework.data.solr.core.query.result.FacetAndHighlightPage;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
+import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.Link;
-import org.springframework.hateoas.PagedResources;
-import org.springframework.hateoas.Resources;
-import org.springframework.hateoas.mvc.ControllerLinkBuilder;
+import org.springframework.hateoas.PagedModel;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
@@ -68,7 +69,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.servlet.view.RedirectView;
 
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 import java.beans.PropertyEditorSupport;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -145,7 +146,7 @@ public class ClassificationController {
     }
 
     @RequestMapping(value = "/classificationfamilies", method = RequestMethod.GET)
-    public Resources<ClassificationFamilySummaryResource> classificationFamilies(
+    public CollectionModel<ClassificationFamilySummaryResource> classificationFamilies(
             // @formatter:off
                 @RequestParam(value = "ssbSection", required = false) String ssbSection,
                 @RequestParam(value = "includeCodelists", defaultValue = "false") boolean includeCodelists,
@@ -160,7 +161,7 @@ public class ClassificationController {
                 .map(summary -> new ClassificationFamilySummaryResource(summary, language))
                 .collect(toList());
 
-        return new KlassResources<>(summaryResources, new Link(getCurrentRequest(), Link.REL_SELF));
+        return new KlassResources<>(summaryResources, Link.of(getCurrentRequest(), IanaLinkRelations.SELF));
     }
 
     @RequestMapping(value = "/classificationfamilies/{id}", method = RequestMethod.GET)
@@ -178,11 +179,11 @@ public class ClassificationController {
     }
 
     @RequestMapping(value = "/ssbsections", method = RequestMethod.GET)
-    public Resources<SsbSectionResource> ssbsections() {
+    public CollectionModel<SsbSectionResource> ssbsections() {
         List<SsbSectionResource> ssbSectionResources = classificationService
                 .findResponsibleSectionsWithPublishedVersions().stream()
                 .sorted().map(SsbSectionResource::new).collect(toList());
-        return new KlassResources<>(ssbSectionResources, new Link(getCurrentRequest(), Link.REL_SELF));
+        return new KlassResources<>(ssbSectionResources, Link.of(getCurrentRequest(), IanaLinkRelations.SELF));
     }
 
     @RequestMapping(value = "/classifications", method = RequestMethod.GET)
@@ -196,8 +197,8 @@ public class ClassificationController {
         Page<ClassificationSeries> classifications = classificationService.findAllPublic(
                 includeCodelists, changedSince, pageable);
 
-        Link self = new Link(getCurrentRequest(), Link.REL_SELF);
-        PagedResources<ClassificationSummaryResource> response = assembler.toResource(classifications,
+        Link self = Link.of(getCurrentRequest(), IanaLinkRelations.SELF);
+        PagedModel<ClassificationSummaryResource> response = assembler.toModel(classifications,
                 ClassificationSummaryResource::new, self);
         addSearchLink(response);
         return new KlassPagedResources<>(response);
@@ -211,12 +212,12 @@ public class ClassificationController {
                 @RequestParam(value = "includeCodelists", defaultValue = "false") boolean includeCodelists,
                 Pageable pageable, PagedResourcesAssembler<SolrSearchResult> assembler) {
             // @formatter:on
-        Link self = new Link(getCurrentRequest(), Link.REL_SELF);
+        Link self = Link.of(getCurrentRequest(), IanaLinkRelations.SELF);
         ssbSection = extractSsbSection(ssbSection);
 
         FacetAndHighlightPage<SolrSearchResult> page =
                 searchService.publicSearch(query, pageable, ssbSection, includeCodelists);
-        PagedResources<SearchResultResource> response = assembler.toResource(page,
+        PagedModel<SearchResultResource> response = assembler.toModel(page,
                 searchResult -> new SearchResultResource(searchResult, page.getHighlights(searchResult)),
                 self);
 
@@ -485,12 +486,12 @@ public class ClassificationController {
             if (subscriberService.containsTracking(email, classification)) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(SubscribeResponse.EXISTS);
             } else {
-                URL endSubscriptionUrl = ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(ClassificationController.class)
+                URL endSubscriptionUrl = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(ClassificationController.class)
                         .removeTracking(classificationId, email)).toUri().toURL();
 
                 String token = subscriberService.trackChanges(email, classification, endSubscriptionUrl);
 
-                URL verifySubscriptionUrl = ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(ClassificationController.class)
+                URL verifySubscriptionUrl = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(ClassificationController.class)
                         .verifyTracking(email, token)).toUri().toURL();
 
                 subscriberService.sendVerificationMail(email, verifySubscriptionUrl, classification);
@@ -537,10 +538,10 @@ public class ClassificationController {
         return ResponseEntity.ok("Subscription is verified.");
     }
 
-    private void addSearchLink(PagedResources<ClassificationSummaryResource> response) {
-        ControllerLinkBuilder linkBuilder = ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(ClassificationController.class).search("query", null, true,
+    private void addSearchLink(PagedModel<ClassificationSummaryResource> response) {
+        WebMvcLinkBuilder linkBuilder = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(ClassificationController.class).search("query", null, true,
                 null, null));
-        response.add(new Link(ResourceUtil.createUriTemplate(linkBuilder, "query", "includeCodelists"), "search"));
+        response.add(Link.of(ResourceUtil.createUriTemplate(linkBuilder, "query", "includeCodelists"), "search"));
     }
 
     private String getCurrentRequest() {

@@ -1,13 +1,14 @@
 package no.ssb.klass.core.model;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import com.google.common.base.Strings;
 
@@ -67,7 +68,7 @@ public class ClassificationSeriesTest {
 
     }
 
-    @Test(expected = KlassResourceNotFoundException.class)
+    @Test
     public void getChangeTableNotFound() {
         // given
         LocalDate start = TimeUtil.createDate("2014-01-01");
@@ -79,10 +80,10 @@ public class ClassificationSeriesTest {
         subject.addClassificationVersion(firstVersion);
         subject.addClassificationVersion(secondVersion);
 
-        // when
-        subject.getChangeTables(DateRange.create(start, start.plusYears(4)), null);
+        Assertions.assertThrows(KlassResourceNotFoundException.class, () ->
+                subject.getChangeTables(DateRange.create(start, start.plusYears(4)), null)
+        );
 
-        // then expect exception
     }
 
     @Test
