@@ -1,4 +1,4 @@
-name: Tests
+name: Build (Java 17)
 run-name: "Build, tests and package"
 
 on:

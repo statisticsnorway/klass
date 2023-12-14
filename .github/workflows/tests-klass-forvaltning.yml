@@ -1,4 +1,4 @@
-name: Tests
+name: Build (Java 8)
 run-name: "Build, tests and package"
 
 on:
@@ -38,4 +38,4 @@ jobs:
         run: mvn --batch-mode --update-snapshots package -P nexus
       # Build only klass-forvaltning with JDK 1.8
       - name: Build, test and package with Maven
-        run: mvn --batch-mode --update-snapshots package -pl 'klass-forvaltning' -P nexus
+        run: mvn --batch-mode --update-snapshots package -pl ':klass-forvaltning' -P nexus
