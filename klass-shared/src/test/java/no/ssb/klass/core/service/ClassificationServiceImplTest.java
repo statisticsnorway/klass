@@ -467,7 +467,7 @@ public class ClassificationServiceImplTest {
                 new User("Donald", "Doanld Duck", "Gakk"));
         classificationSeries.addClassificationVersion(classificationVersion);
 
-        when(classificationVersionRepositoryMock.findById(anyLong())).thenReturn(Optional.of(classificationVersion));
+        when(classificationVersionRepositoryMock.findById(any())).thenReturn(Optional.of(classificationVersion));
 
         ClassificationVersion classificationVersionCopy = subject.copyClassificationVersion(classificationVersion,
                 rangeCopy);
