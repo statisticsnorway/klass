@@ -8,6 +8,7 @@ import java.util.List;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
@@ -17,6 +18,7 @@ import org.springframework.util.StringUtils;
 
 import no.ssb.klass.core.util.DateRange;
 import no.ssb.klass.core.util.Translatable;
+import no.ssb.klass.core.util.TranslatablePersistenceConverter;
 
 @Entity
 @DiscriminatorValue("version")
@@ -24,17 +26,20 @@ public class ClassificationVersion extends StatisticalClassification {
     @ManyToOne
     private ClassificationSeries classification;
 
-
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "classificationVersion")
     private List<ClassificationVariant> classificationVariants;
 
     @Column(length = 4000)
+    @Convert(converter = TranslatablePersistenceConverter.class)
     private Translatable legalBase;
     @Column(length = 4000)
+    @Convert(converter = TranslatablePersistenceConverter.class)
     private Translatable publications;
     @Column(length = 4000)
+    @Convert(converter = TranslatablePersistenceConverter.class)
     private Translatable derivedFrom;
     @Column(length = 4000)
+    @Convert(converter = TranslatablePersistenceConverter.class)
     private Translatable alias;
 
     // For Hibernate
@@ -95,8 +100,6 @@ public class ClassificationVersion extends StatisticalClassification {
         return newClassificationVersion;
     }
 
-
-
     public ClassificationSeries getClassification() {
         return classification;
     }
@@ -114,7 +117,6 @@ public class ClassificationVersion extends StatisticalClassification {
         return getClassificationVariants().stream().filter(variant -> variantName.equals(variant.getFullName(language)))
                 .findFirst().orElse(null);
     }
-
 
     @Override
     public Language getPrimaryLanguage() {
@@ -135,10 +137,12 @@ public class ClassificationVersion extends StatisticalClassification {
     }
 
     /**
-     * Use this method for displaying version (formatted output) When more than one given version exists for a given
-     * year, the year is prefixed with the month (Exs: Bydeler 03-2014), note that if given version contains an alias
+     * Use this method for displaying version (formatted output) When more than one
+     * given version exists for a given
+     * year, the year is prefixed with the month (Exs: Bydeler 03-2014), note that
+     * if given version contains an alias
      * value then this will be returned instead.
-     * 
+     *
      * @return Formatted name
      */
     public String getName(Language language) {
@@ -154,8 +158,6 @@ public class ClassificationVersion extends StatisticalClassification {
         String datePostfix = getDatePostfix(validFrom, validTo);
         return StringUtils.capitalize(classification.getNameWithoutPrefix(language)) + ' ' + datePostfix;
     }
-
-
 
     @Override
     public String getNameInPrimaryLanguage() {

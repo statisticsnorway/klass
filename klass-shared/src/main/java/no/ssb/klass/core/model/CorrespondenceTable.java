@@ -10,6 +10,7 @@ import java.util.Optional;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Index;
@@ -25,6 +26,7 @@ import com.google.common.collect.Lists;
 import no.ssb.klass.core.util.DateRange;
 import no.ssb.klass.core.util.TimeUtil;
 import no.ssb.klass.core.util.Translatable;
+import no.ssb.klass.core.util.TranslatablePersistenceConverter;
 
 @Entity
 @Table(indexes = { @Index(columnList = "source_id", name = "ct_source_idx"),
@@ -32,6 +34,7 @@ import no.ssb.klass.core.util.Translatable;
 public class CorrespondenceTable extends BaseEntity implements ClassificationEntityOperations, Publishable, Draftable {
     @Lob
     @Column(columnDefinition = "text", nullable = false)
+    @Convert(converter = TranslatablePersistenceConverter.class)
     private Translatable description;
     private Published published;
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
