@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.PreUpdate;
@@ -15,7 +16,7 @@ import no.ssb.klass.core.util.TimeUtil;
 @MappedSuperclass
 public abstract class BaseEntity {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false)
     private final String uuid;
@@ -71,7 +72,8 @@ public abstract class BaseEntity {
     }
 
     /**
-     * Any initialisation needed after Hibernate has recreated instance. Typically initialise any transient fields.
+     * Any initialisation needed after Hibernate has recreated instance. Typically
+     * initialise any transient fields.
      */
     public void init() {
     }
