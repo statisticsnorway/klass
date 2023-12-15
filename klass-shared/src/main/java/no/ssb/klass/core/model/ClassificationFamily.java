@@ -26,11 +26,14 @@ public class ClassificationFamily extends BaseEntity {
     public static final String BASE_ICON_PATH = "/icons/";
     @Column(nullable = false)
     @Convert(converter = TranslatablePersistenceConverter.class)
-    private final Translatable name;
+    private Translatable name;
     @Column(nullable = false)
-    private final String iconName;
+    private String iconName;
     @OneToMany(mappedBy = "classificationFamily", fetch = FetchType.LAZY)
-    private final List<ClassificationSeries> classificationSeriesList;
+    private List<ClassificationSeries> classificationSeriesList;
+
+    public ClassificationFamily() {
+    }
 
     public ClassificationFamily(Translatable name, String iconName) {
         this.name = checkNotNull(name);
@@ -80,6 +83,7 @@ public class ClassificationFamily extends BaseEntity {
             String section, ClassificationType classificationType) {
         return getClassificationSeriesBySectionAndClassificationType(section, classificationType, false);
     }
+
     public List<ClassificationSeries> getClassificationSeriesBySectionAndClassificationType(String section,
             ClassificationType classificationType, boolean publicOnly) {
         // @formatter:off
