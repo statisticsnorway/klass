@@ -13,7 +13,6 @@ import org.springframework.stereotype.Repository;
 import no.ssb.klass.core.model.ClassificationSeries;
 import no.ssb.klass.core.model.Subscriber;
 
-
 @Repository
 public interface SubscriberRepository extends JpaRepository<Subscriber, Long> {
     Optional<Subscriber> findOneByEmail(String email);
@@ -36,22 +35,24 @@ public interface SubscriberRepository extends JpaRepository<Subscriber, Long> {
     @Query(value = "select new no.ssb.klass.core.service.dto.AccessCounterDto(s.email,count(s.email)) "
             + "from Subscriber s join s.subscriptions as su "
             + "join su.classification as c "
-            + "where c.deleted is false and su.verification = 'VALID' "
+            + "where c.deleted = false and su.verification = 'VALID' "
             + "group by s.email "
             + "order by count(s.email) desc,s.email")
     Page<StatisticalEntity> getSubscriberReportAll(Pageable p);
+
     @Query(value = "select new no.ssb.klass.core.service.dto.AccessCounterDto(s.email,count(s.email)) "
             + "from Subscriber s join s.subscriptions as su "
             + "join su.classification as c "
-            + "where c.deleted is false and su.verification = 'VALID' "
+            + "where c.deleted = false and su.verification = 'VALID' "
             + "and s.email LIKE '%ssb.no%' "
             + "group by s.email "
             + "order by count(s.email) desc,s.email")
     Page<StatisticalEntity> getSubscriberReportInternal(Pageable p);
+
     @Query(value = "select new no.ssb.klass.core.service.dto.AccessCounterDto(s.email, count(s.email)) "
             + "from Subscriber s join s.subscriptions as su "
             + "join su.classification as c "
-            + "where c.deleted is false and su.verification = 'VALID' "
+            + "where c.deleted = false and su.verification = 'VALID' "
             + "and s.email NOT LIKE '%ssb.no%' "
             + "group by s.email "
             + "order by count(s.email) desc,s.email")
@@ -64,10 +65,11 @@ public interface SubscriberRepository extends JpaRepository<Subscriber, Long> {
             + ") "
             + "from Subscriber s join s.subscriptions as su "
             + "join su.classification as c "
-            + "where c.deleted is false and su.verification = 'VALID' "
+            + "where c.deleted = false and su.verification = 'VALID' "
             + "group by substring(s.email, LOCATE('@', s.email)+1) "
             + "order by sub_count desc,name")
     Page<StatisticalEntity> getSubscriberDomainReportAll(Pageable p);
+
     @Query(value = "select  new no.ssb.klass.core.service.dto.SubscriberCounterDto"
             + "("
             + "substring(s.email, LOCATE('@', s.email)+1) as name,"
@@ -75,11 +77,12 @@ public interface SubscriberRepository extends JpaRepository<Subscriber, Long> {
             + ") "
             + "from Subscriber s join s.subscriptions as su "
             + "join su.classification as c "
-            + "where c.deleted is false and su.verification = 'VALID' "
+            + "where c.deleted = false and su.verification = 'VALID' "
             + "and s.email LIKE '%ssb.no%' "
             + "group by substring(s.email, LOCATE('@', s.email)+1) "
             + "order by sub_count desc,name")
     Page<StatisticalEntity> getSubscriberDomainReportInternal(Pageable p);
+
     @Query(value = "select  new no.ssb.klass.core.service.dto.SubscriberCounterDto"
             + "("
             + "substring(s.email, LOCATE('@', s.email)+1) as name,"
@@ -87,7 +90,7 @@ public interface SubscriberRepository extends JpaRepository<Subscriber, Long> {
             + ") "
             + "from Subscriber s join s.subscriptions as su "
             + "join su.classification as c "
-            + "where c.deleted is false and su.verification = 'VALID' "
+            + "where c.deleted = false and su.verification = 'VALID' "
             + "and s.email NOT LIKE '%ssb.no%' "
             + "group by substring(s.email, LOCATE('@', s.email)+1) "
             + "order by sub_count desc,name")
@@ -100,7 +103,7 @@ public interface SubscriberRepository extends JpaRepository<Subscriber, Long> {
             + ") "
             + "from Subscriber s join s.subscriptions as su "
             + "join su.classification as c "
-            + "where c.deleted is false and su.verification = 'VALID' "
+            + "where c.deleted = false and su.verification = 'VALID' "
             + "group by case c.primaryLanguage when 0 then c.nameNo when 1 then c.nameNn when 2 then c.nameEn end "
             + "order by sub_count desc,name")
     Page<StatisticalEntity> getSubscriberClassReportAll(Pageable p);
@@ -112,7 +115,7 @@ public interface SubscriberRepository extends JpaRepository<Subscriber, Long> {
             + ") "
             + "from Subscriber s join s.subscriptions as su "
             + "join su.classification as c "
-            + "where c.deleted is false and su.verification = 'VALID' "
+            + "where c.deleted = false and su.verification = 'VALID' "
             + "and s.email LIKE '%ssb.no%' "
             + "group by case c.primaryLanguage when 0 then c.nameNo when 1 then c.nameNn when 2 then c.nameEn end "
             + "order by sub_count desc,name")
@@ -125,11 +128,10 @@ public interface SubscriberRepository extends JpaRepository<Subscriber, Long> {
             + ") "
             + "from Subscriber s join s.subscriptions as su "
             + "join su.classification as c "
-            + "where c.deleted is false and su.verification = 'VALID' "
+            + "where c.deleted = false and su.verification = 'VALID' "
             + "and s.email NOT LIKE '%ssb.no%' "
             + "group by case c.primaryLanguage when 0 then c.nameNo when 1 then c.nameNn when 2 then c.nameEn end "
             + "order by sub_count desc,name")
     Page<StatisticalEntity> getSubscriberClassReportExternal(Pageable p);
-
 
 }
