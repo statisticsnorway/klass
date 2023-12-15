@@ -166,7 +166,7 @@ CREATE TABLE subscription
      PRIMARY KEY (id)
   );
 
-CREATE TABLE user
+CREATE TABLE "user"
   (
      id            BIGINT NOT NULL auto_increment,
      deleted       BIT NOT NULL,
@@ -205,10 +205,10 @@ CREATE INDEX ct_target_idx ON correspondence_table (target_id);
 ALTER TABLE subscriber
   ADD CONSTRAINT subscriber_email_idx UNIQUE (email);
 
-ALTER TABLE user
+ALTER TABLE "user"
   ADD CONSTRAINT user_username_idx UNIQUE (username);
 
-CREATE INDEX user_fullname_idx ON user (fullname);
+CREATE INDEX user_fullname_idx ON "user" (fullname);
 
 ALTER TABLE user_favorites
   ADD CONSTRAINT uk_dk8ngwbk9dgeuegrx1nuktdv1 UNIQUE (favorites_id);
@@ -231,7 +231,7 @@ ALTER TABLE classification_series
 
 ALTER TABLE classification_series
   ADD CONSTRAINT fk_jefvdo01kn4kq98m64ajli6y5 FOREIGN KEY (contact_person_id)
-  REFERENCES user (id);
+  REFERENCES "user" (id);
 
 ALTER TABLE classification_series_statistical_units
   ADD CONSTRAINT fk_rfx4t7rjg3hykfr39xi8dvrdu FOREIGN KEY (statistical_units_id)
@@ -283,7 +283,7 @@ ALTER TABLE statistical_classification
 
 ALTER TABLE statistical_classification
   ADD CONSTRAINT fk_12hsnu91tsf1c8b4697tv1bts FOREIGN KEY (contact_person_id)
-  REFERENCES user (id);
+  REFERENCES "user" (id);
 
 ALTER TABLE statistical_classification
   ADD CONSTRAINT fk_ie31cb245vkf1vhswws053s29 FOREIGN KEY (classification_id)
@@ -311,4 +311,4 @@ ALTER TABLE user_favorites
 
 ALTER TABLE user_favorites
   ADD CONSTRAINT fk_dx271ymxhckcafibaqijpda8h FOREIGN KEY (user_id) REFERENCES
-  user (id);
+  "user" (id);

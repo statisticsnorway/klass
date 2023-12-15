@@ -7,4 +7,4 @@ ALTER TABLE level DROP COLUMN deleted;
 ALTER TABLE statistical_unit DROP COLUMN deleted;
 ALTER TABLE subscriber DROP COLUMN deleted;
 ALTER TABLE subscription DROP COLUMN deleted;
-ALTER TABLE user DROP COLUMN deleted;
+ALTER TABLE "user" DROP COLUMN deleted;

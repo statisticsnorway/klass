@@ -62,16 +62,6 @@
         <asciidoctor-version>2.2.4</asciidoctor-version>
         <maven-jaxb2-plugin-version>0.15.3</maven-jaxb2-plugin-version>
         <tomcat7-maven-plugin-version>2.2</tomcat7-maven-plugin-version>
-
-        <!--IMPORTANT HIBERNATE BUG FIX ( needed for Translatable as lobs)-->
-        <!--https://hibernate.atlassian.net/browse/HHH-10818-->
-
-
-        <!-- Override Spring Boot managed version. Flyway bug #995 forces us to use version 4.0 or newer.
-             Replacing old search engine with solr search
-             Remove when Spring Boot includes this version or newer -->
-        <flyway.version>4.1.1</flyway.version>
-
         <maven.deploy.skip>true</maven.deploy.skip>
 
     </properties>

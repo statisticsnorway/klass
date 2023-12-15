@@ -35,7 +35,7 @@
         <woodstox-version>4.4.1</woodstox-version>
         <commons-lang3-version>3.12.0</commons-lang3-version>
         <rest-assured-version>2.9.0</rest-assured-version>
-        <apacheds-server-jndi-version>1.5.5</apacheds-server-jndi-version>
+        <apacheds-server-jndi-version>1.5.7</apacheds-server-jndi-version>
         <asciidoctor-version>1.6.0</asciidoctor-version>
         <maven-jaxb2-plugin-version>0.15.3</maven-jaxb2-plugin-version>
         <tomcat7-maven-plugin-version>2.2</tomcat7-maven-plugin-version>
@@ -209,10 +209,9 @@
         <dependency>
             <groupId>jakarta.xml.bind</groupId>
             <artifactId>jakarta.xml.bind-api</artifactId>
-            <version>2.3.3</version>
+            <version>4.0.0</version>
             <scope>provided</scope>
         </dependency>
-         
     </dependencies>
 
     <profiles>
