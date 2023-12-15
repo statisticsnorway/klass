@@ -7,11 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Index;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import no.ssb.klass.core.util.TranslatablePersistenceConverter;
 import org.hibernate.Hibernate;
 
 import no.ssb.klass.core.util.Translatable;
@@ -23,6 +25,7 @@ import no.ssb.klass.core.util.Translatable;
 public class ClassificationFamily extends BaseEntity {
     public static final String BASE_ICON_PATH = "/icons/";
     @Column(nullable = false)
+    @Convert(converter = TranslatablePersistenceConverter.class)
     private final Translatable name;
     @Column(nullable = false)
     private final String iconName;
