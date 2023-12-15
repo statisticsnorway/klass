@@ -37,7 +37,7 @@
         <rest-assured-version>2.9.0</rest-assured-version>
         <apacheds-server-jndi-version>1.5.7</apacheds-server-jndi-version>
         <asciidoctor-version>1.6.0</asciidoctor-version>
-        <maven-jaxb2-plugin-version>0.15.3</maven-jaxb2-plugin-version>
+        <maven-jaxb2-plugin-version>3.1.0</maven-jaxb2-plugin-version>
         <tomcat7-maven-plugin-version>2.2</tomcat7-maven-plugin-version>
     </properties>
 
@@ -284,25 +284,27 @@
                 </plugins>
             </build>
         </profile>
-        
+
 
     </profiles>
 
     <build>
         <plugins>
             <plugin>
-                <groupId>org.jvnet.jaxb2.maven2</groupId>
-                <artifactId>maven-jaxb2-plugin</artifactId>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jaxb2-maven-plugin</artifactId>
                 <version>${maven-jaxb2-plugin-version}</version>
                 <executions>
                     <execution>
                         <goals>
-                            <goal>generate</goal>
+                            <goal>xjc</goal>
                         </goals>
                     </execution>
                 </executions>
                 <configuration>
-                    <schemaDirectory>src/main/resources/xsd/ssb</schemaDirectory>
+                    <sources>
+                        <source>src/main/resources/xsd/ssb</source>
+                    </sources>
                 </configuration>
             </plugin>
 
@@ -319,7 +321,7 @@
                     </execution>
                 </executions>
             </plugin>
-            
+
         </plugins>
         <pluginManagement>
             <plugins>
@@ -341,7 +343,7 @@
                         <arguments>-Pdocumentation -Dmaven.javadoc.skip=true</arguments>
                     </configuration>
                 </plugin>
-                
+
                 <plugin>
                     <groupId>org.apache.tomcat.maven</groupId>
                     <artifactId>tomcat7-maven-plugin</artifactId>
