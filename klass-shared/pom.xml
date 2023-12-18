@@ -34,7 +34,7 @@
         <guava-version>19.0</guava-version>
         <woodstox-version>4.4.1</woodstox-version>
         <commons-lang3-version>3.12.0</commons-lang3-version>
-        <rest-assured-version>2.9.0</rest-assured-version>
+        <rest-assured-version>5.4.0</rest-assured-version>
         <apacheds-server-jndi-version>1.5.7</apacheds-server-jndi-version>
         <asciidoctor-version>1.6.0</asciidoctor-version>
         <maven-jaxb2-plugin-version>3.1.0</maven-jaxb2-plugin-version>
@@ -195,7 +195,7 @@
             <version>${woodstox-version}</version>
         </dependency>
         <dependency>
-            <groupId>com.jayway.restassured</groupId>
+            <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
             <version>${rest-assured-version}</version>
             <scope>test</scope>

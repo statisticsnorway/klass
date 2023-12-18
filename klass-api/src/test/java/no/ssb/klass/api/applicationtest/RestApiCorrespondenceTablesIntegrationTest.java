@@ -1,10 +1,10 @@
 package no.ssb.klass.api.applicationtest;
 
-import com.jayway.restassured.http.ContentType;
+import io.restassured.http.ContentType;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
-import static com.jayway.restassured.RestAssured.given;
+import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 
 public class RestApiCorrespondenceTablesIntegrationTest extends AbstractRestApiApplicationTest {
@@ -79,7 +79,7 @@ public class RestApiCorrespondenceTablesIntegrationTest extends AbstractRestApiA
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .contentType(CONTENT_TYPE_CSV)
-                .content(containsString(
+                .body(containsString(
                         "\"sourceCode\";\"sourceName\";\"targetCode\";\"targetName\"\n" +
                                 "\"0301\";\"Oslo\";\"030101\";\"Gamle Oslo\"\n" +
                                 "\"0301\";\"Oslo\";\"030102\";\"Grünerløkka\"\n" +

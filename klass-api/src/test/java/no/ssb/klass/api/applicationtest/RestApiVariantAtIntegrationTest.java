@@ -1,11 +1,11 @@
 package no.ssb.klass.api.applicationtest;
 
-import com.jayway.restassured.http.ContentType;
+import io.restassured.http.ContentType;
 import no.ssb.klass.testutil.TestDataProvider;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
-import static com.jayway.restassured.RestAssured.given;
+import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -154,7 +154,7 @@ public class RestApiVariantAtIntegrationTest extends AbstractRestApiApplicationT
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .contentType(CONTENT_TYPE_CSV)
-                .content(containsString(
+                .body(containsString(
                         "\"code\",\"parentCode\",\"level\",\"name\",\"shortName\",\"presentationName\",\"validFrom\",\"validTo\",\"notes\"\n"
                                 + "\"A\",,\"1\",\"Enpersonfamilie\",\"\",\"\",,,\"\"\n"
                                 + "\"A_\",\"A\",\"2\",\"Enpersonfamilie\",\"\",\"\",,,\"\"\n"
@@ -174,7 +174,7 @@ public class RestApiVariantAtIntegrationTest extends AbstractRestApiApplicationT
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .contentType(CONTENT_TYPE_CSV)
-                .content(containsString(
+                .body(containsString(
                         "\"code\",\"parentCode\",\"level\",\"name\",\"shortName\",\"presentationName\",\"validFrom\",\"validTo\",\"notes\"\n"
                                 + "\"C\",,\"1\",\"Enslig person med barn\",\"\",\"\",,,\"\"\n"
                                 + "\"CA\",\"C\",\"2\",\"Enslig person med barn 0-5 år\",\"\",\"\",,,\"\"\n"
@@ -194,7 +194,7 @@ public class RestApiVariantAtIntegrationTest extends AbstractRestApiApplicationT
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .contentType(CONTENT_TYPE_CSV)
-                .content(containsString(
+                .body(containsString(
                         "\"code\",\"parentCode\",\"level\",\"name\",\"shortName\",\"presentationName\",\"validFrom\",\"validTo\",\"notes\"\n"
                                 + "\"A\",,\"1\",\"Enpersonfamilie\",\"\",\"\",,,\"\"\n"
                                 + "\"A_\",\"A\",\"2\",\"Enpersonfamilie\",\"\",\"\",,,\"\"\n"
@@ -217,7 +217,7 @@ public class RestApiVariantAtIntegrationTest extends AbstractRestApiApplicationT
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .contentType(CONTENT_TYPE_CSV)
-                .content(containsString(
+                .body(containsString(
                         "\"code\",\"parentCode\",\"level\",\"name\",\"shortName\",\"presentationName\",\"validFrom\",\"validTo\",\"notes\"\n"
                                 + "\"C\",,\"1\",\"Enslig person med barn\",\"\",\"\",,,\"\"\n"
                                 + "\"CA\",\"C\",\"2\",\"Enslig person med barn 0-5 år\",\"\",\"\",,,\"\"\n"

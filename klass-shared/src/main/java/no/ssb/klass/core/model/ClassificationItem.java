@@ -1,5 +1,6 @@
 package no.ssb.klass.core.model;
 
+import jakarta.persistence.Column;
 import no.ssb.klass.core.util.AlphaNumericCompareUtil;
 
 import java.time.LocalDate;
@@ -25,6 +26,7 @@ public abstract class ClassificationItem extends BaseEntity implements Comparabl
     /**
      * @return code, never null
      */
+    @Column(nullable = false)
     public abstract String getCode();
 
     /**

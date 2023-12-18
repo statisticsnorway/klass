@@ -1,6 +1,5 @@
 package no.ssb.klass.core.repository;
 
-import static org.hamcrest.core.Is.*;
 import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
@@ -162,8 +161,7 @@ public class ReferencingClassificationItemRepositoryTest {
                 source.addClassificationVariant(variant);
                 variant.setClassificationVersion(source);
 
-                for (int i = 0; i < itemCount; i++) {
-                        ClassificationItem sourceItem = source.getAllClassificationItems().get(i);
+                for (ClassificationItem sourceItem: source.getAllClassificationItems()) {
                         ClassificationItem item = new ReferencingClassificationItem(sourceItem);
                         variant.addClassificationItem(item, 1, null);
                 }

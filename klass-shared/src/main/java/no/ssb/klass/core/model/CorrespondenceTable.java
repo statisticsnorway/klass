@@ -38,20 +38,23 @@ public class CorrespondenceTable extends BaseEntity implements ClassificationEnt
     private Translatable description;
     private Published published;
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private final ClassificationVersion source;
-    private final int sourceLevelNumber;
+    private ClassificationVersion source;
+    private int sourceLevelNumber;
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private final ClassificationVersion target;
-    private final int targetLevelNumber;
+    private ClassificationVersion target;
+    private int targetLevelNumber;
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "correspondenceTable")
-    private final List<CorrespondenceMap> correspondenceMaps;
+    private List<CorrespondenceMap> correspondenceMaps;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "correspondencetable_changelog", joinColumns = @JoinColumn(name = "correspondencetable_id"), inverseJoinColumns = @JoinColumn(name = "changelog_id"))
-    private final List<Changelog> changelogs;
+    private List<Changelog> changelogs;
     @Column(nullable = false)
     private boolean deleted;
     @Column(nullable = false)
     private boolean draft;
+
+    protected CorrespondenceTable() {
+    }
 
     /**
      * Creates a CorrespondenceTable

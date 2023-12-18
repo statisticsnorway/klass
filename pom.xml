@@ -57,7 +57,7 @@
         <vaadin.widgetset.mode>local</vaadin.widgetset.mode>
         <woodstox-version>4.4.1</woodstox-version>
         <commons-lang3-version>3.4</commons-lang3-version>
-        <rest-assured-version>2.9.0</rest-assured-version>
+        <rest-assured-version>5.4.0</rest-assured-version>
         <apacheds-server-jndi-version>1.5.5</apacheds-server-jndi-version>
         <asciidoctor-version>2.2.4</asciidoctor-version>
         <maven-jaxb2-plugin-version>0.15.3</maven-jaxb2-plugin-version>
@@ -76,7 +76,7 @@
                 <scope>import</scope>
             </dependency>
             <dependency>
-                <groupId>com.jayway.restassured</groupId>
+                <groupId>io.rest-assured</groupId>
                 <artifactId>rest-assured</artifactId>
                 <version>${rest-assured-version}</version>
                 <scope>test</scope>

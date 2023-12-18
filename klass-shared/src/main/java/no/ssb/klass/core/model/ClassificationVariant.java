@@ -37,6 +37,9 @@ public class ClassificationVariant extends StatisticalClassification {
         super.addLevel(new Level(2));
     }
 
+    protected ClassificationVariant() {
+    }
+
     public void setClassificationVersion(ClassificationVersion classificationVersion) {
         this.classificationVersion = classificationVersion;
     }

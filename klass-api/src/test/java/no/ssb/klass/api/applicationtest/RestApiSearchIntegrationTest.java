@@ -1,6 +1,6 @@
 package no.ssb.klass.api.applicationtest;
 
-import static com.jayway.restassured.RestAssured.*;
+import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 
 import no.ssb.klass.testutil.TestDataProvider;
@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 
-import com.jayway.restassured.http.ContentType;
+import io.restassured.http.ContentType;
 
 import no.ssb.klass.core.config.ConfigurationProfiles;
 

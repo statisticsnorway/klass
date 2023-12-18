@@ -18,7 +18,7 @@ import jakarta.persistence.Table;
 })
 public class User extends BaseEntity {
     @Column(nullable = false)
-    private final String username;
+    private String username;
     @Column(nullable = false)
     private String fullname;
     @Column(nullable = false)
@@ -32,7 +32,7 @@ public class User extends BaseEntity {
 
     @ManyToMany
     // Uses Set instead of List, see http://lkumarjain.blogspot.no/2013/07/why-hibernate-does-delete-all-entries.html
-    private final Set<ClassificationSeries> favorites;
+    private Set<ClassificationSeries> favorites;
 
     public User(String username, String fullname, String section) {
         this.username = checkNotNull(username);
@@ -40,6 +40,9 @@ public class User extends BaseEntity {
         this.section = checkNotNull(section);
         this.role = Role.STANDARD;
         this.favorites = new HashSet<>();
+    }
+
+    protected User() {
     }
 
     public String getSection() {
