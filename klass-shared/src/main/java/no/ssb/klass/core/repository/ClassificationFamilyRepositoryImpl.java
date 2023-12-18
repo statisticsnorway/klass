@@ -57,7 +57,7 @@ class ClassificationFamilyRepositoryImpl implements ClassificationFamilyReposito
                        "select family.id, family.name, family.icon_name, count(classification.id) from classification_family family "
                      + "left outer join classification_series classification on classification.classification_family_id=family.id "
                      + "  and classification.deleted = false"
-                     + "  and (:section is null or :section = (select user.section from user user where user.id = classification.contact_person_id)) "
+                     + "  and (:section is null or :section = (select usr.section from user usr where usr.id = classification.contact_person_id)) "
                      + "  and (:classificationType is null or :classificationType = classification.classification_type) "
                      + "group by family.id"
                 // @formatter:on
@@ -65,9 +65,9 @@ class ClassificationFamilyRepositoryImpl implements ClassificationFamilyReposito
                 : classificationType.name()).getResultList();
 
         for (Object[] columns : rows) {
-            result.add(new ClassificationFamilySummary(((BigInteger) columns[0]).longValue(), converter
+            result.add(new ClassificationFamilySummary((Long) columns[0], converter
                     .convertToEntityAttribute((String) columns[1]), (String) columns[2],
-                    ((BigInteger) columns[3]).longValue()));
+                    (Long) columns[3]));
         }
         return result;
     }
@@ -88,7 +88,7 @@ class ClassificationFamilyRepositoryImpl implements ClassificationFamilyReposito
       + "    and classification.copyrighted <> '1' "
       + "    and (:classificationType is null or :classificationType = classification.classification_type) "
       + "    and (:section is null or :section "
-      + "           = (select user.section from user user where user.id = classification.contact_person_id)) "
+      + "           = (select usr.section from user usr where usr.id = classification.contact_person_id)) "
       + "  group by family.id"
     // @formatter:on
         ).setParameter("section", section).setParameter("classificationType", classificationType == null ? null

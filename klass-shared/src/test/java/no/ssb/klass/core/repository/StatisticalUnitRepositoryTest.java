@@ -62,10 +62,10 @@ public class StatisticalUnitRepositoryTest {
                 Integer.MAX_VALUE));
         assertEquals(2, result.getContent().size());
         List<StatisticalEntity> resultList = result.getContent();
-        assertEquals("Duppeditt", resultList.get(0).getName());
-        assertEquals(Long.valueOf(2), resultList.get(0).getCount());
-        assertEquals("Dingseboms", resultList.get(1).getName());
-        assertEquals(Long.valueOf(1), resultList.get(1).getCount());
+        assertEquals("Dingseboms", resultList.get(0).getName());
+        assertEquals(Long.valueOf(1), resultList.get(0).getCount());
+        assertEquals("Duppeditt", resultList.get(1).getName());
+        assertEquals(Long.valueOf(2), resultList.get(1).getCount());
     }
 
     @Test
