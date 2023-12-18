@@ -72,8 +72,12 @@ public class RestApiListClassificationIntegrationTest extends AbstractRestApiApp
 
     @Test
     public void restServiceListClassificationsChangedSinceJSON() {
+        // Spring's DateTimeFormat parser har changed the timezone offset format from ssZ to SSSXXX.
+        given().port(port).accept(ContentType.JSON).param("changedSince", "2015-10-31T01:30:00.000-02:00").get(REQUEST)
+                .then()
+                .statusCode(HttpStatus.OK.value());
+
         given().port(port).accept(ContentType.JSON).param("changedSince", "2015-10-31T01:30:00.000-0200").get(REQUEST)
-//                .prettyPeek()
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .contentType(ContentType.JSON)
@@ -93,6 +97,8 @@ public class RestApiListClassificationIntegrationTest extends AbstractRestApiApp
 
     @Test
     public void restServiceListClassificationsXML() {
+        given().port(port).accept(ContentType.XML).get(REQUEST).prettyPrint();
+
         given().port(port).accept(ContentType.XML).get(REQUEST)
 //                .prettyPeek()
                 .then()

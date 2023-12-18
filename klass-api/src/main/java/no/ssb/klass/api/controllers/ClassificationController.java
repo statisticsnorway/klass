@@ -190,7 +190,8 @@ public class ClassificationController {
     public KlassPagedResources<ClassificationSummaryResource> classifications(
             // @formatter:off
                 @RequestParam(value = "includeCodelists", defaultValue = "false") boolean includeCodelists,
-                @RequestParam(value = "changedSince", required = false) @DateTimeFormat(iso = ISO.DATE_TIME) Date changedSince,
+                @RequestParam(value = "changedSince", required = false)
+                @DateTimeFormat(iso = ISO.DATE_TIME, fallbackPatterns = "yyyy-MM-dd'T'HH:mm:ss.ssZ") Date changedSince,
                 Pageable pageable, PagedResourcesAssembler<ClassificationSeries> assembler) {
             // @formatter:on
 
