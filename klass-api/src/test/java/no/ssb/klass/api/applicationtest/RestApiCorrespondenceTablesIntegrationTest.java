@@ -29,14 +29,17 @@ public class RestApiCorrespondenceTablesIntegrationTest extends AbstractRestApiA
                 .body("sourceLevel", isEmptyOrNullString())
                 .body("targetLevel", isEmptyOrNullString())
                 .body("changelogs", notNullValue())
-                .body("correspondenceMaps.size", is(3))
+                .body("correspondenceMaps.size()", is(3))
                 .body("correspondenceMaps[0].sourceCode", is("0301"))
                 .body("correspondenceMaps[0].sourceName", is("Oslo"))
                 .body("correspondenceMaps[0].targetCode", is("030101"))
                 .body("correspondenceMaps[0].targetName", is("Gamle Oslo"))
-                .body(JSON_LINKS + ".self.href", endsWith("/correspondencetables/" + correspondenceTable.getId().intValue()))
-                .body(JSON_LINKS + ".source.href", endsWith("/versions/" + correspondenceTable.getSource().getId().intValue()))
-                .body(JSON_LINKS + ".target.href", endsWith("/versions/" + correspondenceTable.getTarget().getId().intValue()));
+                .body(JSON_LINKS + ".self.href", endsWith("/correspondencetables/"
+                        + correspondenceTable.getId().intValue() + "{?language}"))
+                .body(JSON_LINKS + ".source.href", endsWith("/versions/"
+                        + correspondenceTable.getSource().getId().intValue() + "{?language,includeFuture}"))
+                .body(JSON_LINKS + ".target.href", endsWith("/versions/"
+                        + correspondenceTable.getTarget().getId().intValue() + "{?language,includeFuture}"));
     }
 
     @Test
@@ -64,12 +67,15 @@ public class RestApiCorrespondenceTablesIntegrationTest extends AbstractRestApiA
                 .body(XML_CORRESPONDENCETABLE_MAP + "[0].sourceName", is("Oslo"))
                 .body(XML_CORRESPONDENCETABLE_MAP + "[0].targetCode", is("030101"))
                 .body(XML_CORRESPONDENCETABLE_MAP + "[0].targetName", is("Gamle Oslo"))
-                .body(XML_CORRESPONDENCETABLE + ".links.link[0].rel", is("self"))
-                .body(XML_CORRESPONDENCETABLE + ".links.link[0].href", endsWith("/correspondencetables/" + correspondenceTable.getId().intValue()))
-                .body(XML_CORRESPONDENCETABLE + ".links.link[1].rel", is("source"))
-                .body(XML_CORRESPONDENCETABLE + ".links.link[1].href", endsWith("/versions/" + correspondenceTable.getSource().getId().intValue()))
-                .body(XML_CORRESPONDENCETABLE + ".links.link[2].rel", is("target"))
-                .body(XML_CORRESPONDENCETABLE + ".links.link[2].href", endsWith("/versions/" + correspondenceTable.getTarget().getId().intValue()));
+                .body(XML_CORRESPONDENCETABLE + ".link[0].rel", is("self"))
+                .body(XML_CORRESPONDENCETABLE + ".link[0].href", endsWith("/correspondencetables/"
+                        + correspondenceTable.getId().intValue() + "{?language}"))
+                .body(XML_CORRESPONDENCETABLE + ".link[1].rel", is("source"))
+                .body(XML_CORRESPONDENCETABLE + ".link[1].href", endsWith("/versions/"
+                        + correspondenceTable.getSource().getId().intValue() + "{?language,includeFuture}"))
+                .body(XML_CORRESPONDENCETABLE + ".link[2].rel", is("target"))
+                .body(XML_CORRESPONDENCETABLE + ".link[2].href", endsWith("/versions/"
+                        + correspondenceTable.getTarget().getId().intValue() + "{?language,includeFuture}"));
     }
 
     @Test

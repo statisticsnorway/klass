@@ -31,7 +31,7 @@ public class RestApiClassificationIntegrationTest extends AbstractRestApiApplica
                 .assertThat().body("lastModified", notNullValue())
                 .assertThat().body(JSON_LINKS + ".self.href", containsString("classifications/" + kommuneinndeling.getId()))
                 // versions
-                .assertThat().body("versions.size", equalTo(3))
+                .assertThat().body("versions.size()", equalTo(3))
                 //
                 .assertThat().body("versions[0].name", equalTo("Kommuneinndeling 2014"))
                 .assertThat().body("versions[0]._links.self.href", containsString("versions/"))
@@ -72,7 +72,7 @@ public class RestApiClassificationIntegrationTest extends AbstractRestApiApplica
                 .assertThat().body("lastModified", notNullValue())
                 .assertThat().body(JSON_LINKS + ".self.href", containsString("classifications/" + kommuneinndeling.getId()))
                 // versions
-                .assertThat().body("versions.size", equalTo(4))
+                .assertThat().body("versions.size()", equalTo(4))
                 //
                 .assertThat().body("versions[0].name", equalTo("Kommuneinndeling "+TestDataProvider.TEN_YEARS_LATER))
                 .assertThat().body("versions[0]._links.self.href", containsString("versions/"))

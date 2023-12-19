@@ -25,7 +25,7 @@ public class RestApiClassificationFamilyIntegrationTest extends AbstractRestApiA
                 // classificationFamily
                 .assertThat().body("name", equalTo(classificationFamily.getName()))
                 // classifications
-                .assertThat().body("classifications.size", equalTo(classificationFamily.getClassificationSeriesBySectionAndClassificationType(null,
+                .assertThat().body("classifications.size()", equalTo(classificationFamily.getClassificationSeriesBySectionAndClassificationType(null,
                 ClassificationType.CLASSIFICATION).size()))
 
                 // links
@@ -46,7 +46,7 @@ public class RestApiClassificationFamilyIntegrationTest extends AbstractRestApiA
                 // classificationFamily
                 .assertThat().body("name", equalTo(classificationFamily.getName()))
                 // classifications
-                .assertThat().body("classifications.size", equalTo(classificationFamily.getClassificationSeriesBySectionAndClassificationType(null,
+                .assertThat().body("classifications.size()", equalTo(classificationFamily.getClassificationSeriesBySectionAndClassificationType(null,
                 null).size()))
 
                 // links
@@ -68,7 +68,7 @@ public class RestApiClassificationFamilyIntegrationTest extends AbstractRestApiA
                 // classificationFamily
                 .assertThat().body("name", equalTo(classificationFamily.getName()))
                 // classifications
-                .assertThat().body("classifications.size", equalTo(0))
+                .assertThat().body("classifications.size()", equalTo(0))
 
                 // links
                 .body(JSON_LINKS + ".self.href", containsString(urlParts));

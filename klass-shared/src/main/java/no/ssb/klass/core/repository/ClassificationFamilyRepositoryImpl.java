@@ -82,10 +82,10 @@ class ClassificationFamilyRepositoryImpl implements ClassificationFamilyReposito
       "select family.id, family.name, family.icon_name, count(DISTINCT(classification.id)) from classification_family family "
       + "  left outer join classification_series classification on classification.classification_family_id=family.id "
       + "  left outer join statistical_classification version on version.classification_id=classification.id "
-      + " where (version.published_en = '1' or version.published_no = '1' or version.published_nn = '1') "
-      + "    and version.deleted <> '1' "
-      + "    and classification.deleted <> '1' "
-      + "    and classification.copyrighted <> '1' "
+      + " where (version.published_en is true or version.published_no is true or version.published_nn is true) "
+      + "    and version.deleted is false "
+      + "    and classification.deleted is false "
+      + "    and classification.copyrighted is false "
       + "    and (:classificationType is null or :classificationType = classification.classification_type) "
       + "    and (:section is null or :section "
       + "           = (select usr.section from user usr where usr.id = classification.contact_person_id)) "
@@ -95,9 +95,9 @@ class ClassificationFamilyRepositoryImpl implements ClassificationFamilyReposito
                 : classificationType.name()).getResultList();
 
         for (Object[] columns : rows) {
-            result.add(new ClassificationFamilySummary(((BigInteger) columns[0]).longValue(), converter
+            result.add(new ClassificationFamilySummary((Long) columns[0], converter
                     .convertToEntityAttribute((String) columns[1]), (String) columns[2],
-                    ((BigInteger) columns[3]).longValue()));
+                    (Long) columns[3]));
         }
         return result;
     }

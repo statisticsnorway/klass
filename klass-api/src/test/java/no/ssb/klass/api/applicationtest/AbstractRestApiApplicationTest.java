@@ -87,6 +87,7 @@ public abstract class AbstractRestApiApplicationTest {
 
     public static final String JSON_LINKS = "_links";
     public static final String XML_LINKS = "PagedResources.links";
+    public static final String XML_ROOT = "PagedResources";
 
     public static final String JSON_CODES = "codes";
     public static final String XML_CODES = "codeList.codeItem";
