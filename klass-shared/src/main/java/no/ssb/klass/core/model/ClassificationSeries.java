@@ -64,7 +64,7 @@ public class ClassificationSeries extends BaseEntity implements ClassificationEn
     @Column(columnDefinition = "text", nullable = false)
     @Convert(converter = TranslatablePersistenceConverter.class)
     private Translatable description;
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "integer")
     private Language primaryLanguage;
     @Column(nullable = false)
     private boolean copyrighted;

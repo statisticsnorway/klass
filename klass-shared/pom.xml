@@ -34,7 +34,7 @@
         <guava-version>19.0</guava-version>
         <woodstox-version>4.4.1</woodstox-version>
         <commons-lang3-version>3.12.0</commons-lang3-version>
-        <rest-assured-version>5.4.0</rest-assured-version>
+        <rest-assured-version>5.3.2</rest-assured-version>
         <apacheds-server-jndi-version>1.5.7</apacheds-server-jndi-version>
         <asciidoctor-version>1.6.0</asciidoctor-version>
         <maven-jaxb2-plugin-version>3.1.0</maven-jaxb2-plugin-version>
@@ -46,36 +46,7 @@
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-solr</artifactId>
-            <version>2.1.0.RELEASE</version>
         </dependency>
-
-        <dependency>
-            <groupId>org.apache.solr</groupId>
-            <artifactId>solr-solrj</artifactId>
-            <version>5.5.5</version>
-            <!--https://github.com/FasterXML/jackson-dataformat-xml/issues/132-->
-            <exclusions>
-                <exclusion>
-                    <groupId>org.codehaus.woodstox</groupId>
-                    <artifactId>wstx-asl</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-<!--        <dependency>-->
-<!--            <groupId>org.apache.solr</groupId>-->
-<!--            <artifactId>solr-core</artifactId>-->
-<!--            <version>5.5.0</version>-->
-<!--            &lt;!&ndash;https://github.com/FasterXML/jackson-dataformat-xml/issues/132&ndash;&gt;-->
-<!--            <exclusions>-->
-<!--                <exclusion>-->
-<!--                    <groupId>org.codehaus.woodstox</groupId>-->
-<!--                    <artifactId>wstx-asl</artifactId>-->
-<!--                </exclusion>-->
-<!--            </exclusions>-->
-<!--        </dependency>-->
-
-
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -89,6 +60,7 @@
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
+            <version>2.1.210</version>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
@@ -205,6 +177,11 @@
             <artifactId>jakarta.xml.bind-api</artifactId>
             <version>4.0.0</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.15.1</version>
         </dependency>
     </dependencies>
 

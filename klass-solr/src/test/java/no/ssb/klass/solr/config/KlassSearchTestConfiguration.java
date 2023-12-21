@@ -33,7 +33,7 @@ public class KlassSearchTestConfiguration {
             exportResource("solr/embedded/Klass/solrconfig.xml", solrTempWorkspace + "/klass");
             exportResource("solr/embedded/Klass/stoppord.txt", solrTempWorkspace + "/klass");
             exportResource("solr/embedded/Klass/synonymer.txt", solrTempWorkspace + "/klass");
-            coreContainer = new CoreContainer(SolrXmlConfig.fromSolrHome(Path.of(solrTempWorkspace), null));
+            coreContainer = new CoreContainer(solrTempWorkspace);
             coreContainer.load();
         } catch (Exception e) {
             e.printStackTrace(System.err);

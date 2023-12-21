@@ -3,7 +3,6 @@ package no.ssb.klass.solr.config;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Path;
 import java.util.concurrent.Executor;
 
 import org.apache.commons.io.FileUtils;
@@ -15,7 +14,6 @@ import org.apache.solr.client.solrj.embedded.EmbeddedSolrServer;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.request.RequestWriter;
 import org.apache.solr.core.CoreContainer;
-import org.apache.solr.core.SolrXmlConfig;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
 import org.springframework.aop.interceptor.SimpleAsyncUncaughtExceptionHandler;
@@ -63,7 +61,7 @@ public class KlassSearchConfiguration implements AsyncConfigurer {
             exportResource("solr/embedded/Klass/solrconfig.xml", solrTempWorkspace + "/klass");
             exportResource("solr/embedded/Klass/stoppord.txt", solrTempWorkspace + "/klass");
             exportResource("solr/embedded/Klass/synonymer.txt", solrTempWorkspace + "/klass");
-            coreContainer = new CoreContainer(SolrXmlConfig.fromSolrHome(Path.of(solrTempWorkspace), null));
+            coreContainer = new CoreContainer(solrTempWorkspace);
             coreContainer.load();
         } catch (Exception e) {
             e.printStackTrace(System.err);
@@ -81,7 +79,7 @@ public class KlassSearchConfiguration implements AsyncConfigurer {
 
     @Bean
     public SolrTemplate solrCore2Template(SolrClient solrClient) {
-        SolrTemplate solrTemplate = new SolrTemplate(solrClient, solrCore);
+        SolrTemplate solrTemplate = new SolrTemplate(solrClient);
         return solrTemplate;
     }
 
@@ -103,7 +101,7 @@ public class KlassSearchConfiguration implements AsyncConfigurer {
     protected static class SolrBackwardsCompatibleHttpClient extends HttpSolrClient {
 
         SolrBackwardsCompatibleHttpClient(String baseURL) {
-            super(baseURL);
+            super(new Builder(baseURL));
         }
 
         /* Removing collection parameter since it causes wrong query URL */
