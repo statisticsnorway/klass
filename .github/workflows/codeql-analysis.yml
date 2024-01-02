@@ -78,6 +78,7 @@ jobs:
       with:
         distribution: 'zulu'
         java-version: '8'
+        cache: maven
 
     # Need to downgrade Maven in order to allow HTTP (not HTTPS) packages to be downloaded.
     # This is necessary as HTTP repositories were blocked in Maven 3.8.1
@@ -90,7 +91,7 @@ jobs:
 
     # Build only klass-forvaltning with JDK 1.8
     - name: Build, test and package with Maven
-      run: mvn --batch-mode --update-snapshots package -pl :klass-forvaltning -P nexus
+      run: mvn --batch-mode --update-snapshots package -pl :klass-forvaltning -am -P nexus
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
