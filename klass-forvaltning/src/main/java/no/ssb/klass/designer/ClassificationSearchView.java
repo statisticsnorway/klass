@@ -82,7 +82,7 @@ public class ClassificationSearchView extends ClassificationSearchDesign impleme
     }
 
     private FacetAndHighlightPage<SolrSearchResult> getPage(String searchQuery, int page) {
-        return searchService.internalSearch(searchQuery, PageRequest.of(page, resultsPerPage),
+        return searchService.internalSearch(searchQuery, new PageRequest(page, resultsPerPage),
                 classificationFilter.getCurrentSection(), classificationFilter.getCurrentClassificationType(), facets);
     }
 

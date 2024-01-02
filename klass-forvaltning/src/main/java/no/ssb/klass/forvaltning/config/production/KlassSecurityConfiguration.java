@@ -1,15 +1,15 @@
 package no.ssb.klass.forvaltning.config.production;
 
+import no.ssb.klass.core.config.ConfigurationProfiles;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
-import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.RememberMeServices;
 import org.vaadin.spring.annotation.EnableVaadinExtensions;
@@ -29,7 +29,7 @@ import no.ssb.klass.designer.ui.LoginUI;
 @EnableVaadinSharedSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true)
 @Import(KlassTestAuthenticationConfiguration.class)
-public class KlassSecurityConfiguration {
+public class KlassSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private static final String WILDCARD = "**";
 
@@ -44,12 +44,13 @@ public class KlassSecurityConfiguration {
     @Autowired
     private RememberMeServices rememberMeServices;
 
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().antMatchers("/VAADIN/" + WILDCARD);
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/VAADIN/" + WILDCARD);
     }
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
         http.exceptionHandling().authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/" + LoginUI.PATH));
         http.rememberMe()
                 .key(rememberKey)
@@ -76,6 +77,6 @@ public class KlassSecurityConfiguration {
                 .csrf().disable()
                 .headers()
                 .frameOptions().disable();
-        return http.build();
+
     }
 }

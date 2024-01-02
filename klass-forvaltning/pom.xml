@@ -5,20 +5,27 @@
     <name>Klass Forvaltning</name>
     <description>Forvaltningsgrensesnitt for Klass</description>
     <artifactId>klass-forvaltning</artifactId>
+    <version>2.1.7-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <properties>
         <maven.deploy.skip>false</maven.deploy.skip>
-        <java.version>8</java.version>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <java.version>1.8</java.version>
+        <vaadin-spring-boot-starter-version>1.0.0</vaadin-spring-boot-starter-version>
+        <vaadin-spring-ext-security-version>0.0.7.RELEASE</vaadin-spring-ext-security-version>
+        <!-- Vaadin 7.7.17 was the last public open-source version of the Vaadin 7 framework.
+             See https://vaadin.com/support/vaadin-7-extended-maintenance  -->
+        <vaadin-version>7.7.17</vaadin-version>
+        <vaadin.plugin.version>7.7.25</vaadin.plugin.version>
+        <vaadin.testbench.api.version>7.7.14</vaadin.testbench.api.version>
+        <vaadin.widgetset.mode>local</vaadin.widgetset.mode>
     </properties>
 
     <parent>
-        <groupId>no.ssb.klass</groupId>
-        <artifactId>klass-root</artifactId>
-        <version>2.1.7-SNAPSHOT</version>
-        <relativePath>../</relativePath>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.4.4.RELEASE</version>
+        <relativePath /> <!-- lookup parent from repository -->
     </parent>
 
     <repositories>
@@ -33,12 +40,17 @@
         <dependency>
             <groupId>no.ssb.klass</groupId>
             <artifactId>klass-shared</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>no.ssb.klass</groupId>
             <artifactId>klass-solr</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-solr</artifactId>
+            <version>4.3.15</version>
         </dependency>
 
         <!--TOMCAT-->
@@ -82,9 +94,10 @@
 
         <!-- JSTL og EL for JSP / monitor page -->
         <dependency>
-            <groupId>jakarta.servlet.jsp.jstl</groupId>
-            <artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
         </dependency>
+
         <dependency>
             <groupId>javax.el</groupId>
             <artifactId>javax.el-api</artifactId>
@@ -104,7 +117,7 @@
             <artifactId>klass-shared</artifactId>
             <type>test-jar</type>
             <scope>test</scope>
-            <version>${project.parent.version}</version>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
@@ -112,12 +125,24 @@
             <artifactId>klass-solr</artifactId>
             <type>test-jar</type>
             <scope>test</scope>
-            <version>${project.parent.version}</version>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.8.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <version>4.5.1</version>
             <scope>test</scope>
         </dependency>
 
@@ -133,6 +158,29 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.vaadin</groupId>
+                <artifactId>vaadin-bom</artifactId>
+                <version>${vaadin-version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    <distributionManagement>
+        <repository>
+            <id>releases</id>
+            <url>https://nexus.ssb.no/repository/maven-releases</url>
+        </repository>
+        <snapshotRepository>
+            <id>snapshots</id>
+            <url>https://nexus.ssb.no/repository/maven-snapshots</url>
+            <uniqueVersion>false</uniqueVersion>
+        </snapshotRepository>
+    </distributionManagement>
 
 
     <build>

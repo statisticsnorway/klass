@@ -125,7 +125,7 @@ public class UseStatisticsView extends UseStatisticsDesign {
             LocalDate fromSearchDate = TimeUtil.toLocalDate(fromDate.getValue());
             LocalDate toSearchDate = TimeUtil.toLocalDate(toDate.getValue());
             usageStatisticsData =  new UsageStatisticsData(statisticsService.getUsageStatistics(fromSearchDate, toSearchDate, 
-                    ChoiceMapper.map(choice),  PageRequest.of(0, Integer.MAX_VALUE)));
+                    ChoiceMapper.map(choice),  new PageRequest(0, Integer.MAX_VALUE)));
             
             reports.put(choice, usageStatisticsData);
         }            
