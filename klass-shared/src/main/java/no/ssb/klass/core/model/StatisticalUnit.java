@@ -2,9 +2,9 @@ package no.ssb.klass.core.model;
 
 import static com.google.common.base.Preconditions.*;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
-import jakarta.persistence.Entity;
+import javax.persistence.Column;
+import javax.persistence.Convert;
+import javax.persistence.Entity;
 
 import no.ssb.klass.core.util.Translatable;
 import no.ssb.klass.core.util.TranslatablePersistenceConverter;

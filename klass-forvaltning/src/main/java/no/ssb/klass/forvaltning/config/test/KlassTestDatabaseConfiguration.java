@@ -1,6 +1,6 @@
 package no.ssb.klass.forvaltning.config.test;
 
-import org.h2.server.web.JakartaWebServlet;
+import org.h2.server.web.WebServlet;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +17,7 @@ public class KlassTestDatabaseConfiguration extends KlassVaadinConfiguration {
     @Profile({ ConfigurationProfiles.H2, ConfigurationProfiles.H2_INMEMORY })
     ServletRegistrationBean h2servletRegistration() {
         // H2 console (database) is reached at http://localhost:8080/console
-        ServletRegistrationBean registrationBean = new ServletRegistrationBean(new JakartaWebServlet());
+        ServletRegistrationBean registrationBean = new ServletRegistrationBean(new WebServlet());
         registrationBean.addUrlMappings("/console/*");
         return registrationBean;
     }

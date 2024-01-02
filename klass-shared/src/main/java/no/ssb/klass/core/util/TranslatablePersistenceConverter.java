@@ -3,8 +3,8 @@ package no.ssb.klass.core.util;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import jakarta.persistence.AttributeConverter;
-import jakarta.persistence.Converter;
+import javax.persistence.AttributeConverter;
+import javax.persistence.Converter;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.stereotype.Component;

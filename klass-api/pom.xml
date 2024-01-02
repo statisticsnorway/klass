@@ -72,12 +72,11 @@
             <artifactId>spring-data-solr</artifactId>
         </dependency>
         <dependency>
-            <groupId>jakarta.xml.bind</groupId>
-            <artifactId>jakarta.xml.bind-api</artifactId>
-            <version>4.0.1</version>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.3.1</version>
             <scope>provided</scope>
         </dependency>
-
 
         <!--TOMCAT-->
         <dependency>
@@ -126,20 +125,9 @@
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-client</artifactId>
-            <version>12.0.3</version>
-        </dependency>
-        <dependency>
             <groupId>jakarta.ws.rs</groupId>
             <artifactId>jakarta.ws.rs-api</artifactId>
             <version>2.1.6</version>
-        </dependency>
-        <dependency>
-            <groupId>org.antlr</groupId>
-            <artifactId>antlr4-runtime</artifactId>
-            <version>4.10.1</version>
-            <scope>runtime</scope>
         </dependency>
 
         <!--Spring TEST-->
@@ -156,16 +144,42 @@
         <dependency>
             <groupId>org.springframework.restdocs</groupId>
             <artifactId>spring-restdocs-mockmvc</artifactId>
+            <version>2.0.8.RELEASE</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.restdocs</groupId>
+                    <artifactId>spring-restdocs-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.restdocs</groupId>
+            <artifactId>spring-restdocs-core</artifactId>
+            <version>2.0.8.RELEASE</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.jayway.jsonpath</groupId>
             <artifactId>json-path</artifactId>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
+            <scope>test</scope>
+            <exclusions>
+                <!-- remove conflicting dependency because declared in 2 differents versions (3 & 4)
+                See: https://github.com/rest-assured/rest-assured/issues/1612 -->
+                <exclusion>
+                    <groupId>org.apache.groovy</groupId>
+                    <artifactId>groovy-xml</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <!-- add this dep which bring back the groovy-xml in a single and last version (4) -->
+            <groupId>io.rest-assured</groupId>
+            <artifactId>xml-path</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>

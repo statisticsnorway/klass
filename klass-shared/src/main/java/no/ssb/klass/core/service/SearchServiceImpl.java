@@ -54,7 +54,7 @@ public class SearchServiceImpl implements SearchService {
     public FacetAndHighlightPage<SolrSearchResult> search(FacetAndHighlightQuery query) {
 
         Date start = TimeUtil.now();
-        FacetAndHighlightPage<SolrSearchResult> searchResults = solrTemplate.queryForFacetAndHighlightPage("search", query,
+        FacetAndHighlightPage<SolrSearchResult> searchResults = solrTemplate.queryForFacetAndHighlightPage(solrCore, query,
                 SolrSearchResult.class);
         log.info("Search for: '" + query + "' resulted in " + searchResults.getTotalElements() + " hits. Took (ms): "
                 + TimeUtil.millisecondsSince(start));

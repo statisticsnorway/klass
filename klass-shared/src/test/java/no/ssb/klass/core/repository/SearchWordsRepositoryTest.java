@@ -7,7 +7,7 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
-import jakarta.transaction.Transactional;
+import javax.transaction.Transactional;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

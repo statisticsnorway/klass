@@ -1,12 +1,12 @@
 package no.ssb.klass.core.model;
 
-import jakarta.persistence.Column;
+import javax.persistence.Column;
 import no.ssb.klass.core.util.AlphaNumericCompareUtil;
 
 import java.time.LocalDate;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 
 @Entity

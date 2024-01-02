@@ -3,7 +3,7 @@ package no.ssb.klass.designer.windows;
 import java.time.LocalDate;
 import java.util.List;
 
-import jakarta.validation.ValidationException;
+import javax.validation.ValidationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.spring.annotation.PrototypeScope;

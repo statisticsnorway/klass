@@ -6,7 +6,7 @@ import static org.hamcrest.MatcherAssert.*;
 import java.math.BigInteger;
 import java.util.Set;
 
-import jakarta.transaction.Transactional;
+import javax.transaction.Transactional;
 
 import no.ssb.klass.testutil.TestDataProvider;
 import org.junit.jupiter.api.BeforeEach;

@@ -69,7 +69,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.servlet.view.RedirectView;
 
-import jakarta.transaction.Transactional;
+import javax.transaction.Transactional;
 import java.beans.PropertyEditorSupport;
 import java.net.MalformedURLException;
 import java.net.URL;

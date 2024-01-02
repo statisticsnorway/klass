@@ -214,8 +214,7 @@
             <analyzer type="query">
                 <tokenizer class="solr.StandardTokenizerFactory"/>
                 <filter class="solr.LowerCaseFilterFactory"/>
-                <filter class="solr.StopFilterFactory" words="stoppord.txt" ignoreCase="true"
-                        enablePositionIncrements="true"/>
+                <filter class="solr.StopFilterFactory" words="stoppord.txt" ignoreCase="true"/>
                 <filter class="solr.SynonymFilterFactory" synonyms="synonymer.txt" ignoreCase="true" expand="true"/>
             </analyzer>
         </fieldType>
@@ -230,8 +229,7 @@
             <analyzer type="query">
                 <tokenizer class="solr.StandardTokenizerFactory"/>
                 <filter class="solr.LowerCaseFilterFactory"/>
-                <filter class="solr.StopFilterFactory" words="stoppord.txt" ignoreCase="true"
-                        enablePositionIncrements="true"/>
+                <filter class="solr.StopFilterFactory" words="stoppord.txt" ignoreCase="true"/>
                 <filter class="solr.SynonymFilterFactory" synonyms="synonymer.txt" ignoreCase="true" expand="true"/>
                 <filter class="solr.SnowballPorterFilterFactory" language="Norwegian"/>
             </analyzer>
@@ -240,7 +238,6 @@
         <fieldType name="tekst_eksakt" class="solr.TextField" positionIncrementGap="100">
             <analyzer>
                 <tokenizer class="solr.StandardTokenizerFactory"/>
-                <filter class="solr.StandardFilterFactory"/>
                 <filter class="solr.LowerCaseFilterFactory"/>
             </analyzer>
         </fieldType>
@@ -307,10 +304,10 @@
     <uniqueKey>uuid</uniqueKey>
 
     <!-- field for the QueryParser to use when an explicit fieldname is absent -->
-    <defaultSearchField>content</defaultSearchField>
+    <df>text</df>
 
     <!-- SolrQueryParser configuration: defaultOperator="AND|OR" -->
-    <solrQueryParser defaultOperator="AND"/>
+    <solrQueryParser q.op="AND"/>
 
     <!-- copyField commands copy one field to another at the time a document
           is added to the index.  It's used either to index the same field differently,

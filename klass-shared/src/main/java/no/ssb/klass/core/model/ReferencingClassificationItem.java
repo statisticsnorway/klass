@@ -4,8 +4,8 @@ import static com.google.common.base.Preconditions.*;
 
 import java.time.LocalDate;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToOne;
+import javax.persistence.Entity;
+import javax.persistence.OneToOne;
 
 @Entity
 public class ReferencingClassificationItem extends ClassificationItem {

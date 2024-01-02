@@ -5,12 +5,11 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.Date;
 import java.util.List;
 
-import jakarta.persistence.EntityManager;
-import jakarta.transaction.Transactional;
+import javax.persistence.EntityManager;
+import javax.transaction.Transactional;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

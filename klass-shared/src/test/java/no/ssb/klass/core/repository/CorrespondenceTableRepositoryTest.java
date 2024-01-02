@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 
-import jakarta.transaction.Transactional;
+import javax.transaction.Transactional;
 
 import com.google.common.collect.Lists;
 import org.junit.jupiter.api.BeforeEach;

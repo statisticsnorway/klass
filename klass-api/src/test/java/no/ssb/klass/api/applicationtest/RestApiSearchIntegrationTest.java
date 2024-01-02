@@ -60,16 +60,16 @@ public class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest
                 .body(XML_SEARCH_RESULT1 + ".name", equalTo(TestDataProvider.KOMMUNEINNDELING_NAVN_NO))
                 .body(XML_SEARCH_RESULT1 + ".snippet", containsString("kommune"))
                 .body(XML_SEARCH_RESULT1 + ".searchScore.toFloat()", greaterThan(0.0f))
-                .body(XML_SEARCH_RESULT1 + ".links.link.rel", equalTo("self"))
-                .body(XML_SEARCH_RESULT1 + ".links.link.href", containsString(REQUEST + "/" + kommuneinndeling.getId()))
+                .body(XML_SEARCH_RESULT1 + ".link.rel", equalTo("self"))
+                .body(XML_SEARCH_RESULT1 + ".link.href", containsString(REQUEST + "/" + kommuneinndeling.getId()))
                 //result 2
                 .body(XML_SEARCH_RESULT2 + ".name", equalTo(TestDataProvider.BYDELSINNDELING_NAVN_NO))
                 .body(XML_SEARCH_RESULT2 + ".snippet", containsString("kommune"))
                 .body(XML_SEARCH_RESULT2 + ".searchScore.toFloat();", greaterThan(0.0f))
-                .body(XML_SEARCH_RESULT2 + ".links.link.rel", equalTo("self"))
-                .body(XML_SEARCH_RESULT2 + ".links.link.href", containsString(REQUEST + "/" + bydelsinndeling.getId()))
+                .body(XML_SEARCH_RESULT2 + ".link.rel", equalTo("self"))
+                .body(XML_SEARCH_RESULT2 + ".link.href", containsString(REQUEST + "/" + bydelsinndeling.getId()))
                 // footer
-                .body(XML_LINKS + ".link.href", containsString(REQUEST_SEARCH))
+                .body(XML_ROOT + ".link.href", containsString(REQUEST_SEARCH))
                 .body(XML_PAGE + ".size.toInteger();", equalTo(PAGE_SIZE))
                 .body(XML_PAGE + ".totalElements.toInteger();", equalTo(2))
                 .body(XML_PAGE + ".totalPages.toInteger();", equalTo(1))
@@ -140,7 +140,7 @@ public class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest
                 .body(XML_SEARCH_RESULT1 + ".name", equalTo(TestDataProvider.FAMILIEGRUPPERING_NAVN_NO))
                 .body(XML_SEARCH_RESULT1 + ".snippet", containsString("familie"))
                 .body(XML_SEARCH_RESULT1 + ".searchScore.toFloat();", greaterThan(0.0f))
-                .body(XML_SEARCH_RESULT1 + ".links.link.href", containsString(REQUEST + "/" + familieGrupperingCodelist.getId()));
+                .body(XML_SEARCH_RESULT1 + ".link.href", containsString(REQUEST + "/" + familieGrupperingCodelist.getId()));
 
     }
 // @formatter:on

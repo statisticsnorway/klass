@@ -6,13 +6,13 @@ import static java.util.stream.Collectors.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.Index;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import javax.persistence.Column;
+import javax.persistence.Convert;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Index;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import no.ssb.klass.core.util.TranslatablePersistenceConverter;
 import org.hibernate.Hibernate;
 

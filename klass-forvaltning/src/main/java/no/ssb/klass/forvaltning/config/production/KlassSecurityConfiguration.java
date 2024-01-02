@@ -46,7 +46,7 @@ public class KlassSecurityConfiguration {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().requestMatchers("/VAADIN/" + WILDCARD);
+        return (web) -> web.ignoring().antMatchers("/VAADIN/" + WILDCARD);
     }
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -59,15 +59,15 @@ public class KlassSecurityConfiguration {
         // https
 
         http.authorizeRequests()
-                .requestMatchers("/" + LoginUI.PATH).permitAll()
-                .requestMatchers("/vaadinServlet/UIDL/" + WILDCARD).permitAll()
-                .requestMatchers("/vaadinServlet/HEARTBEAT/" + WILDCARD).authenticated()
-                .requestMatchers("/" + KlassUI.PATH + "/" + WILDCARD).authenticated()
-                .requestMatchers("/manage/" + WILDCARD).hasRole("KLASS_ADMINISTRATOR")
-                .requestMatchers("/" + WILDCARD).permitAll()
+                .antMatchers("/" + LoginUI.PATH).permitAll()
+                .antMatchers("/vaadinServlet/UIDL/" + WILDCARD).permitAll()
+                .antMatchers("/vaadinServlet/HEARTBEAT/" + WILDCARD).authenticated()
+                .antMatchers("/" + KlassUI.PATH + "/" + WILDCARD).authenticated()
+                .antMatchers("/manage/" + WILDCARD).hasRole("KLASS_ADMINISTRATOR")
+                .antMatchers("/" + WILDCARD).permitAll()
 
-                .requestMatchers(PingController.PATH).permitAll()
-                .requestMatchers(MonitorController.PATH).permitAll()
+                .antMatchers(PingController.PATH).permitAll()
+                .antMatchers(MonitorController.PATH).permitAll()
                 .anyRequest().authenticated().and().sessionManagement()
                 .sessionFixation()
                 .migrateSession()

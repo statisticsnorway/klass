@@ -21,16 +21,16 @@ public class KlassApiConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 // block sensitive endpoints (actuator)
-                .requestMatchers("/manage**").denyAll() // alt. hasIpAddress("127.0.0.1")
-                .requestMatchers("/manage/**").denyAll()
+                .antMatchers("/manage**").denyAll() // alt. hasIpAddress("127.0.0.1")
+                .antMatchers("/manage/**").denyAll()
 
                 // MLO: Some endpoints might be useful, consider allowing non sensitive ones.
                 // .antMatchers("/manage/metrics").permitAll()
 
                 // allow rest API and health checks
-                .requestMatchers(RestConstants.API_VERSION_V1 + "/**").permitAll()
-                .requestMatchers(PingController.PATH).permitAll()
-                .requestMatchers(MonitorController.PATH).permitAll()
+                .antMatchers(RestConstants.API_VERSION_V1 + "/**").permitAll()
+                .antMatchers(PingController.PATH).permitAll()
+                .antMatchers(MonitorController.PATH).permitAll()
 
                 .and()
                 .csrf().disable()

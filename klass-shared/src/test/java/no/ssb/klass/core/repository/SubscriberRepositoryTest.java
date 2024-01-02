@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.net.URL;
 import java.util.List;
 
-import jakarta.transaction.Transactional;
+import javax.transaction.Transactional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

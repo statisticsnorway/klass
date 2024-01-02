@@ -4,8 +4,8 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -65,9 +65,9 @@ class ClassificationFamilyRepositoryImpl implements ClassificationFamilyReposito
                 : classificationType.name()).getResultList();
 
         for (Object[] columns : rows) {
-            result.add(new ClassificationFamilySummary((Long) columns[0], converter
+            result.add(new ClassificationFamilySummary(((BigInteger) columns[0]).longValue(), converter
                     .convertToEntityAttribute((String) columns[1]), (String) columns[2],
-                    (Long) columns[3]));
+                    ((BigInteger) columns[3]).longValue()));
         }
         return result;
     }
@@ -95,9 +95,9 @@ class ClassificationFamilyRepositoryImpl implements ClassificationFamilyReposito
                 : classificationType.name()).getResultList();
 
         for (Object[] columns : rows) {
-            result.add(new ClassificationFamilySummary((Long) columns[0], converter
+            result.add(new ClassificationFamilySummary(((BigInteger) columns[0]).longValue(), converter
                     .convertToEntityAttribute((String) columns[1]), (String) columns[2],
-                    (Long) columns[3]));
+                    ((BigInteger) columns[3]).longValue()));
         }
         return result;
     }

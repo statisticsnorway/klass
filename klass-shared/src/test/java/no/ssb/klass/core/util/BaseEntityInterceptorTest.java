@@ -2,7 +2,7 @@ package no.ssb.klass.core.util;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.hibernate.metamodel.RepresentationMode;
+import org.hibernate.EntityMode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -23,7 +23,7 @@ public class BaseEntityInterceptorTest {
         final Long id = 1L;
 
         // when
-        ClassificationSeries result = (ClassificationSeries) subject.instantiate(entityName, RepresentationMode.POJO, id);
+        ClassificationSeries result = (ClassificationSeries) subject.instantiate(entityName, EntityMode.POJO, id);
 
         // then
         assertEquals(id, result.getId());

@@ -6,7 +6,7 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.hibernate.EmptyInterceptor;
-import org.hibernate.metamodel.RepresentationMode;
+import org.hibernate.EntityMode;
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
 
@@ -28,7 +28,8 @@ public class BaseEntityInterceptor extends EmptyInterceptor {
         clazzCache = new ConcurrentHashMap<String, Optional<Class<BaseEntity>>>();
     }
 
-    public BaseEntity instantiate(String entityName, RepresentationMode entityMode, Serializable id) {
+    @Override
+    public BaseEntity instantiate(String entityName, EntityMode entityMode, Serializable id) {
         Optional<Class<BaseEntity>> clazz = getOrUpdate(entityName);
         if (!clazz.isPresent()) {
             return null;
