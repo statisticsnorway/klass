@@ -417,7 +417,8 @@ public class ClassificationServiceImpl implements ClassificationService {
     public void deleteNotIndexClassification(User user, ClassificationSeries classification)
             throws KlassMessageException {
         classification = reloadToAvoidLazyInitialization(classification);
-        user = userRepository.findById(user.getId()).orElseThrow(); // get attached object
+        user = userRepository.findById(user.getId()).orElseThrow(() ->
+                new RuntimeException("User not found")); // get attached object
         checkAllowedToDelete(user, classification);
         classification.setDeleted();
         saveNotIndexClassification(classification);

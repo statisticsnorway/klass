@@ -60,7 +60,8 @@ public class ClassificationFamilyRepositoryTest {
         entityManager.detach(family);
 
         // when
-        ClassificationFamily result = subject.findById(family.getId()).orElseThrow();
+        ClassificationFamily result = subject.findById(family.getId()).orElseThrow(() ->
+                new RuntimeException("ClassificationFamily not found"));
 
         // then
         assertEquals(1, result.getClassificationSeries().size());

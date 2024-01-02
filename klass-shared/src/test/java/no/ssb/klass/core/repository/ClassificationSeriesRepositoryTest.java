@@ -77,7 +77,8 @@ public class ClassificationSeriesRepositoryTest {
                 entityManager.detach(classification);
 
                 // when
-                ClassificationSeries result = subject.findById(classification.getId()).orElseThrow();
+                ClassificationSeries result = subject.findById(classification.getId()).orElseThrow(() ->
+                        new RuntimeException("ClassificationSeries not found"));
 
                 // then
                 assertEquals(1, result.getClassificationVersions().size());

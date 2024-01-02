@@ -59,7 +59,8 @@ public class SubscriberRepositoryTest {
     @Test
     public void testEntity() {
         // when
-        Subscriber result = subject.findById(subscriberId).orElseThrow();
+        Subscriber result = subject.findById(subscriberId).orElseThrow(() ->
+                new RuntimeException("Subscriber not found"));
         // then
         assertEquals(subscriberId, result.getId());
     }
