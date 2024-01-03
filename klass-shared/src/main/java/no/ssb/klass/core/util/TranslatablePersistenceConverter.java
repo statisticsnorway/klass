@@ -17,7 +17,7 @@ import no.ssb.klass.core.model.Language;
  * Used by Hibernate to persists {@link Translatable}s
  */
 @Component
-@Converter(autoApply = true)
+@Converter
 public class TranslatablePersistenceConverter implements AttributeConverter<Translatable, String> {
     private final Pattern noPattern;
     private final Pattern nnPattern;
