@@ -19,6 +19,9 @@
         <vaadin.plugin.version>7.7.25</vaadin.plugin.version>
         <vaadin.testbench.api.version>7.7.14</vaadin.testbench.api.version>
         <vaadin.widgetset.mode>local</vaadin.widgetset.mode>
+        <!-- Klass dependencies are built with support for Java 8 and Spring Boot 1.4.4.
+             Newer versions are not supported -->
+        <klass-version>2.1.6</klass-version>
     </properties>
 
     <parent>
@@ -40,12 +43,12 @@
         <dependency>
             <groupId>no.ssb.klass</groupId>
             <artifactId>klass-shared</artifactId>
-            <version>${project.version}</version>
+            <version>${klass-version}</version>
         </dependency>
         <dependency>
             <groupId>no.ssb.klass</groupId>
             <artifactId>klass-solr</artifactId>
-            <version>${project.version}</version>
+            <version>${klass-version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.data</groupId>
@@ -117,7 +120,7 @@
             <artifactId>klass-shared</artifactId>
             <type>test-jar</type>
             <scope>test</scope>
-            <version>${project.version}</version>
+            <version>${klass-version}</version>
         </dependency>
 
         <dependency>
@@ -125,7 +128,7 @@
             <artifactId>klass-solr</artifactId>
             <type>test-jar</type>
             <scope>test</scope>
-            <version>${project.version}</version>
+            <version>${klass-version}</version>
         </dependency>
 
         <dependency>

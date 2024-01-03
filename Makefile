@@ -11,7 +11,7 @@ build-all:
 
 .PHONY: run-klass-forvaltning-local
 run-klass-forvaltning-local:
-	pushd klass-forvaltning && mvn spring-boot\:run -P nexus && popd
+	pushd klass-forvaltning && mvn spring-boot\:run --settings=../.maven.settings.xml -P nexus && popd
 
 .PHONY: run-klass-forvaltning-local-mariadb
 # Requires that a MariaDB instance is already running with a database called klass and a user called klass.
