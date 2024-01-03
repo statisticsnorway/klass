@@ -11,17 +11,30 @@
     <properties>
         <maven.deploy.skip>false</maven.deploy.skip>
         <java.version>1.8</java.version>
-        <vaadin-spring-boot-starter-version>1.0.0</vaadin-spring-boot-starter-version>
-        <vaadin-spring-ext-security-version>0.0.7.RELEASE</vaadin-spring-ext-security-version>
+        <!-- Klass dependencies are built with support for Java 8 and Spring Boot 1.4.4.
+             Newer versions are not supported -->
+        <klass-version>2.1.6</klass-version>
         <!-- Vaadin 7.7.17 was the last public open-source version of the Vaadin 7 framework.
              See https://vaadin.com/support/vaadin-7-extended-maintenance  -->
         <vaadin-version>7.7.17</vaadin-version>
         <vaadin.plugin.version>7.7.25</vaadin.plugin.version>
         <vaadin.testbench.api.version>7.7.14</vaadin.testbench.api.version>
         <vaadin.widgetset.mode>local</vaadin.widgetset.mode>
-        <!-- Klass dependencies are built with support for Java 8 and Spring Boot 1.4.4.
-             Newer versions are not supported -->
-        <klass-version>2.1.6</klass-version>
+        <vaadin-spring-boot-starter-version>1.0.0</vaadin-spring-boot-starter-version>
+        <vaadin-spring-ext-security-version>0.0.7.RELEASE</vaadin-spring-ext-security-version>
+        <!--IMPORTANT HIBERNATE BUG FIX ( needed for Translatable as lobs)-->
+        <!--https://hibernate.atlassian.net/browse/HHH-10818-->
+        <hibernate.version>5.2.3.Final</hibernate.version>
+
+        <!-- Override Spring Boot managed version. Flyway bug #995 forces us to use version 4.0 or newer.
+             Replacing old search engine with solr search
+             Remove when Spring Boot includes this version or newer -->
+        <flyway.version>4.1.1</flyway.version>
+        <!-- Override Spring Boot managed version. Spring restdocs bug #286 in version 1.1.1 (duplicate query parameters)
+             forces us to downgrade to version 1.1.0. (https://github.com/spring-projects/spring-restdocs/issues/286)
+             Remove when Spring Boot includes version 1.1.2 or newer -->
+        <spring-restdocs.version>1.2.1.RELEASE</spring-restdocs.version>
+        <solr-version>5.5.5</solr-version>
     </properties>
 
     <parent>
