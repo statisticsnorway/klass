@@ -1,0 +1,35 @@
+### Get all classificationfamilies
+GET {{base_url}}/classificationfamilies
+Accept: application/json
+
+### Get single classificationfamily
+GET {{base_url}}/classificationfamilies/15
+Accept: application/json
+
+### Get all classifications
+GET {{base_url}}/classifications
+Accept: application/json
+
+### Get a single classification
+GET {{base_url}}/classifications/1
+Accept: application/json
+
+### Get classification codes
+GET {{base_url}}/classifications/1/codes?from=2020-01-01&to=2021-01-01
+Accept: application/json
+
+### Search for classifications
+GET {{base_url}}/classifications/search?query=kommune
+Accept: application/json
+
+### Search for classifications within a ssb section
+GET {{base_url}}/classifications/search?query=kommune&includeCodelists=true&ssbSection=320
+Accept: application/json
+
+### Get all classifications with size
+GET {{base_url}}/classifications?size=2
+Accept: application/json
+
+### Get all classifications with size and page
+GET {{base_url}}/classifications?size=2&page=2
+Accept: application/json
