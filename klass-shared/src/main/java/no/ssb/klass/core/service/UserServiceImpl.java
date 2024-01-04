@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -73,7 +72,8 @@ public class UserServiceImpl implements UserService {
     private User initializeFavorites(Optional<User> user) {
         if (user.isPresent()) {
             Hibernate.initialize(user.get().getFavorites());
+            return user.get();
         }
-        return user.get();
+        return null;
     }
 }
