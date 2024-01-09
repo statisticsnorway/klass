@@ -54,7 +54,6 @@
         <maven-jaxb2-plugin-version>0.15.3</maven-jaxb2-plugin-version>
         <tomcat7-maven-plugin-version>2.2</tomcat7-maven-plugin-version>
         <maven.deploy.skip>true</maven.deploy.skip>
-        <mariadb.version>1.4.6</mariadb.version>
     </properties>
 
     <dependencyManagement>
