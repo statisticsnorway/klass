@@ -14,8 +14,7 @@ public final class ResourceUtil {
     }
 
     public static UriTemplateBuilder createUriTemplateBuilder(WebMvcLinkBuilder linkBuilder) {
-        String linkUri = linkBuilder.toUriComponentsBuilder().replaceQuery(null).build().toUriString();
-        return new UriTemplateBuilder(linkUri);
+        return new UriTemplateBuilder(linkBuilder);
     }
 
     public static UriTemplate createUriTemplate(WebMvcLinkBuilder linkBuilder, String... parameters) {
@@ -36,12 +35,12 @@ public final class ResourceUtil {
       * Helper class for building an UriTemplate with optional basePath and variables.
      */
     public static class UriTemplateBuilder {
-        private final String template;
+        private final WebMvcLinkBuilder linkBuilder;
         private String basePath = "";
         private String[] variables;
 
-        public UriTemplateBuilder(String template) {
-            this.template = template;
+        public UriTemplateBuilder(WebMvcLinkBuilder linkBuilder) {
+            this.linkBuilder = linkBuilder;
         }
 
         public UriTemplateBuilder variables(String... variables) {
@@ -58,11 +57,12 @@ public final class ResourceUtil {
             if (basePath.endsWith("/")) {
                 basePath = basePath.substring(0, basePath.length() - 1);
             }
-            if (!template.startsWith("/")) {
-                return UriTemplate.of(basePath + "/" + template, createParameters(variables));
-            } else {
-                return UriTemplate.of(basePath + template, createParameters(variables));
-            }
+            String originalPath = linkBuilder.toUri().getPath();
+            String template = linkBuilder.toUriComponentsBuilder()
+                    .replaceQuery(null)
+                    .replacePath(basePath + originalPath)
+                    .build().toUriString();
+            return UriTemplate.of(template, createParameters(variables));
         }
     }
 }
