@@ -102,7 +102,7 @@ public class SearchServiceImpl implements SearchService {
     }
 
     public void clearIndex() {
-        solrTemplate.delete("delete", new SimpleQuery("*:*"));
+        solrTemplate.delete(solrCore, new SimpleQuery("*:*"));
     }
 
     @Async
