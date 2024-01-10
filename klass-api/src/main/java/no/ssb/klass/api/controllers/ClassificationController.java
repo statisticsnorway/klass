@@ -41,6 +41,7 @@ import no.ssb.klass.core.util.KlassResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.solr.core.query.result.FacetAndHighlightPage;
@@ -91,6 +92,9 @@ public class ClassificationController {
     private final SearchService searchService;
     private final StatisticsService statisticsService;
     private final CsvFieldsValidator csvFieldsValidator;
+
+    @Value("${spring.data.rest.base-path:}")
+    private String basePath;
 
     @Autowired
     public ClassificationController(ClassificationService classificationService,
@@ -542,8 +546,10 @@ public class ClassificationController {
     private void addSearchLink(PagedModel<ClassificationSummaryResource> response) {
         WebMvcLinkBuilder linkBuilder = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(ClassificationController.class).search("query", null, true,
                 null, null));
-        response.add(Link.of(ResourceUtil.createUriTemplate(linkBuilder, "query", "includeCodelists"), "search"));
+        response.add(Link.of(ResourceUtil.createUriTemplateBuilder(linkBuilder)
+                .basePath(basePath).variables("query", "includeCodelists").build(), "search"));
     }
+
 
     private String getCurrentRequest() {
         return ServletUriComponentsBuilder.fromCurrentRequest().build().toString();
