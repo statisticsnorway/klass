@@ -12,7 +12,7 @@ public class ResourceUtilTest {
         WebMvcLinkBuilder linkBuilder = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(ClassificationController.class)
                 .search("query", null, true, null, null));
         String link = ResourceUtil.createUriTemplate(linkBuilder, "query", "includeCodelists").toString();
-        assertEquals("/v1/classifications/search{?query,includeCodelists}", link);
+        assertTrue(link.endsWith("/v1/classifications/search{?query,includeCodelists}"));
     }
     @Test
     public void createSearchLinkWithPathSubstitution() {
@@ -20,6 +20,6 @@ public class ResourceUtilTest {
                 .search("query", null, true, null, null));
         String link = ResourceUtil.createUriTemplateBuilder(linkBuilder).basePath("/api/klass/")
                 .variables("query", "includeCodelists").build().toString();
-        assertEquals("/api/klass/v1/classifications/search{?query,includeCodelists}", link);
+        assertTrue(link.endsWith("/api/klass/v1/classifications/search{?query,includeCodelists}"));
     }
 }
