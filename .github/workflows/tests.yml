@@ -38,6 +38,7 @@ jobs:
         run: mvn --batch-mode --update-snapshots package -P nexus
 
   deploy:
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK 1.8
