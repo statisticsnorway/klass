@@ -16,7 +16,6 @@
     
     <properties>
         <snippetsDirectory>${project.build.directory}/generated-snippets</snippetsDirectory>
-        <maven.deploy.skip>false</maven.deploy.skip>
     </properties>
 
     

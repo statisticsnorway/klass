@@ -6,10 +6,6 @@
     <artifactId>klass-solr</artifactId>
     <packaging>jar</packaging>
 
-    <properties>
-        <maven.deploy.skip>true</maven.deploy.skip>
-    </properties>
-
     <parent>
         <groupId>no.ssb.klass</groupId>
         <artifactId>klass-root</artifactId>
