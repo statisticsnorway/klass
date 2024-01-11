@@ -39,6 +39,8 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name != 'pull_request'
     permissions:
       contents: read
       packages: write
@@ -55,4 +57,3 @@ jobs:
         run: mvn --batch-mode deploy -P github
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        if: github.event_name != 'pull_request'
