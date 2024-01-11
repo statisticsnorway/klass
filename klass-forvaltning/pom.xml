@@ -5,7 +5,7 @@
     <name>Klass Forvaltning</name>
     <description>Forvaltningsgrensesnitt for Klass</description>
     <artifactId>klass-forvaltning</artifactId>
-    <version>2.1.7-SNAPSHOT</version>
+    <version>2.1.8-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <properties>
