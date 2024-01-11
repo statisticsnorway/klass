@@ -27,18 +27,6 @@
         <tag>HEAD</tag>
     </scm>
 
-    <distributionManagement>
-        <repository>
-            <id>releases</id>
-            <url>https://nexus.ssb.no/repository/maven-releases</url>
-        </repository>
-        <snapshotRepository>
-            <id>snapshots</id>
-            <url>https://nexus.ssb.no/repository/maven-snapshots</url>
-            <uniqueVersion>false</uniqueVersion>
-        </snapshotRepository>
-    </distributionManagement>
-
     <properties>
 
         <java.version>1.8</java.version>
@@ -150,6 +138,18 @@
   <profiles>
       <profile>
           <id>nexus</id>
+          <distributionManagement>
+              <repository>
+                  <id>releases</id>
+                  <url>https://nexus.ssb.no/repository/maven-releases</url>
+              </repository>
+              <snapshotRepository>
+                  <id>snapshots</id>
+                  <url>https://nexus.ssb.no/repository/maven-snapshots</url>
+                  <uniqueVersion>false</uniqueVersion>
+              </snapshotRepository>
+          </distributionManagement>
+
           <repositories>
               <repository>
                   <id>ssb-repo</id>
