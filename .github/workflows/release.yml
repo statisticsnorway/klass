@@ -3,12 +3,13 @@ run-name: "Release to github packages"
 
 on:
   release:
-    types: [ published ]
+    types: [ created ]
 
 jobs:
   release:
     runs-on: ubuntu-latest
     permissions:
+      contents: read
       packages: write
 
     steps:
@@ -29,8 +30,7 @@ jobs:
         with:
           maven-version: 3.6.3
 
-      - name: Build, test and package with Maven
-        run: mvn --batch-mode package -P github
-
       - name: Publish to GitHub Packages
-        run: mvn deploy -P github
+        run: mvn --batch-mode deploy -P github
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
