@@ -39,6 +39,8 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
     steps:
       - name: Setup Maven authentication to GitHub packages
         uses: s4u/maven-settings-action@v2.8.0
