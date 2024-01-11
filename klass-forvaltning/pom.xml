@@ -7,10 +7,6 @@
     <artifactId>klass-forvaltning</artifactId>
     <packaging>war</packaging>
 
-    <properties>
-        <maven.deploy.skip>false</maven.deploy.skip>
-    </properties>
-
     <parent>
         <groupId>no.ssb.klass</groupId>
         <artifactId>klass-root</artifactId>

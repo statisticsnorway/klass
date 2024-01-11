@@ -66,9 +66,6 @@
              forces us to downgrade to version 1.1.0. (https://github.com/spring-projects/spring-restdocs/issues/286)
              Remove when Spring Boot includes version 1.1.2 or newer -->
         <spring-restdocs.version>1.2.1.RELEASE</spring-restdocs.version>
-
-        <maven.deploy.skip>true</maven.deploy.skip>
-
     </properties>
 
     <dependencyManagement>
