@@ -165,13 +165,10 @@
                   <id>github</id>
                   <name>GitHub Packages</name>
                   <url>https://maven.pkg.github.com/${github.repository}</url>
+                  <snapshots>
+                      <enabled>true</enabled>
+                  </snapshots>
               </repository>
-              <snapshotRepository>
-                  <id>github</id>
-                  <name>GitHub Packages</name>
-                  <url>https://maven.pkg.github.com/${github.repository}</url>
-                  <uniqueVersion>false</uniqueVersion>
-              </snapshotRepository>
           </distributionManagement>
           <repositories>
               <repository>
