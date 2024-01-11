@@ -13,7 +13,7 @@
         <java.version>1.8</java.version>
         <!-- Klass dependencies are built with support for Java 8 and Spring Boot 1.4.4.
              Newer versions are not supported -->
-        <klass-version>2.1.6</klass-version>
+        <klass-version>2.1.7</klass-version>
         <!-- Vaadin 7.7.17 was the last public open-source version of the Vaadin 7 framework.
              See https://vaadin.com/support/vaadin-7-extended-maintenance  -->
         <vaadin-version>7.7.17</vaadin-version>

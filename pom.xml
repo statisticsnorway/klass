@@ -22,25 +22,16 @@
     </modules>
 
     <scm>
-        <developerConnection>scm:git:https://github.com/statisticsnorway/klass.git</developerConnection>
+        <developerConnection>scm:git:https://github.com/${github.repository}.git</developerConnection>
+        <url>https://github.com/${github.repository}</url>
         <tag>HEAD</tag>
     </scm>
 
-    <distributionManagement>
-        <repository>
-            <id>releases</id>
-            <url>https://nexus.ssb.no/repository/maven-releases</url>
-        </repository>
-        <snapshotRepository>
-            <id>snapshots</id>
-            <url>https://nexus.ssb.no/repository/maven-snapshots</url>
-            <uniqueVersion>false</uniqueVersion>
-        </snapshotRepository>
-    </distributionManagement>
     <properties>
         <java.version>17</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <github.repository>statisticsnorway/klass</github.repository>
         <findbugs-version>3.0.2</findbugs-version>
         <checkstyle-version>2.17</checkstyle-version>
         <solr-version>8.5.2</solr-version>
@@ -53,7 +44,6 @@
         <asciidoctor-version>2.2.4</asciidoctor-version>
         <maven-jaxb2-plugin-version>0.15.3</maven-jaxb2-plugin-version>
         <tomcat7-maven-plugin-version>2.2</tomcat7-maven-plugin-version>
-        <maven.deploy.skip>true</maven.deploy.skip>
         <!-- Override Spring Boot managed version.
              Remove when Spring Boot includes this version or newer -->
         <flyway.version>10.0.1</flyway.version>
@@ -120,12 +110,39 @@
   <profiles>
       <profile>
           <id>nexus</id>
+          <distributionManagement>
+              <repository>
+                  <id>releases</id>
+                  <url>https://nexus.ssb.no/repository/maven-releases</url>
+              </repository>
+              <snapshotRepository>
+                  <id>snapshots</id>
+                  <url>https://nexus.ssb.no/repository/maven-snapshots</url>
+                  <uniqueVersion>false</uniqueVersion>
+              </snapshotRepository>
+          </distributionManagement>
+
           <repositories>
               <repository>
                   <id>ssb-repo</id>
                   <name>Nexus</name>
                   <url>https://nexus.ssb.no/repository/maven-public</url>
               </repository>
+          </repositories>
+      </profile>
+      <profile>
+          <id>github</id>
+          <distributionManagement>
+              <repository>
+                  <id>github</id>
+                  <name>GitHub Packages</name>
+                  <url>https://maven.pkg.github.com/${github.repository}</url>
+                  <snapshots>
+                      <enabled>true</enabled>
+                  </snapshots>
+              </repository>
+          </distributionManagement>
+          <repositories>
               <repository>
                   <id>maven-restlet</id>
                   <name>Public online Restlet repository</name>
