@@ -1,5 +1,6 @@
 package no.ssb.klass.api.controllers;
 
+import no.ssb.klass.api.util.RestConstants;
 import no.ssb.klass.core.service.SearchService;
 import no.ssb.klass.core.service.UserService;
 import no.ssb.klass.core.service.search.SolrSearchResult;
@@ -17,20 +18,11 @@ import java.net.*;
 import java.util.LinkedList;
 import java.util.List;
 
-import static no.ssb.klass.api.controllers.MonitorController.*;
-
 /**
  * @author Mads Lundemo, SSB.
  */
 @Controller
-@RequestMapping(value = {
-        MonitorController.PATH,
-        MonitorController.PATH + "/",
-        REST_URL_PREFIX + MonitorController.PATH,
-        REST_URL_PREFIX + MonitorController.PATH + "/",
-})
 public class MonitorController {
-    public static final String REST_URL_PREFIX = "/api/klass/v1";
     public static final String PATH = "/monitor";
     
     private static final String DATABASE_TILKOBLING = "Database tilkobling";
@@ -39,14 +31,20 @@ public class MonitorController {
 
     @Value("${info.build.version:Unknown}")
     private String version;
-    
+
+    @Value("${spring.data.rest.base-path:}")
+    private String basePath;
+
     @Autowired
     private UserService userService;
 
     @Autowired
     private SearchService searchService;
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @RequestMapping(value = {
+            MonitorController.PATH,
+            MonitorController.PATH + "/"
+    }, method = RequestMethod.GET)
     public String render(HttpServletRequest request, ModelMap model) {
 
         List<MonitorStatus> statusList = new LinkedList<>();
@@ -74,7 +72,7 @@ public class MonitorController {
         try {
             String currentUrl = getCurrentUrl(request);
 
-            String testUrl = currentUrl + REST_URL_PREFIX + "/classifications";
+            String testUrl = currentUrl + basePath + RestConstants.API_VERSION_V1 + "/classifications";
             URL url = new URL(testUrl);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             int responseCode = connection.getResponseCode();

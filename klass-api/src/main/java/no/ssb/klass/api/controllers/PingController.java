@@ -12,12 +12,6 @@ import static no.ssb.klass.api.controllers.MonitorController.*;
  * @author Mads Lundemo, SSB.
  */
 @Controller
-@RequestMapping(value = {
-        PingController.PATH,
-        PingController.PATH + "/",
-        REST_URL_PREFIX + PingController.PATH,
-        REST_URL_PREFIX + PingController.PATH + "/",
-})
 public class PingController {
     public static final String PATH = "/ping";
 
@@ -25,7 +19,9 @@ public class PingController {
     private String version;
 
     @ResponseBody
-    @RequestMapping(value = "/", method = RequestMethod.GET, produces = "application/xml")
+    @RequestMapping(value = {
+            PingController.PATH, PingController.PATH + "/",
+    }, method = RequestMethod.GET, produces = "application/xml")
     public String ping() {
         return "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
                 + "<ping>\n"
