@@ -9,8 +9,8 @@
     <packaging>war</packaging>
 
     <properties>
-        <maven.deploy.skip>false</maven.deploy.skip>
         <java.version>1.8</java.version>
+        <github.repository>statisticsnorway/klass</github.repository>
         <!-- Klass dependencies are built with support for Java 8 and Spring Boot 1.4.4.
              Newer versions are not supported -->
         <klass-version>2.1.7</klass-version>
@@ -186,18 +186,43 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-    <distributionManagement>
-        <repository>
-            <id>releases</id>
-            <url>https://nexus.ssb.no/repository/maven-releases</url>
-        </repository>
-        <snapshotRepository>
-            <id>snapshots</id>
-            <url>https://nexus.ssb.no/repository/maven-snapshots</url>
-            <uniqueVersion>false</uniqueVersion>
-        </snapshotRepository>
-    </distributionManagement>
+    <profiles>
+        <profile>
+            <id>nexus</id>
+            <distributionManagement>
+                <repository>
+                    <id>releases</id>
+                    <url>https://nexus.ssb.no/repository/maven-releases</url>
+                </repository>
+                <snapshotRepository>
+                    <id>snapshots</id>
+                    <url>https://nexus.ssb.no/repository/maven-snapshots</url>
+                    <uniqueVersion>false</uniqueVersion>
+                </snapshotRepository>
+            </distributionManagement>
 
+            <repositories>
+                <repository>
+                    <id>ssb-repo</id>
+                    <name>Nexus</name>
+                    <url>https://nexus.ssb.no/repository/maven-public</url>
+                </repository>
+            </repositories>
+        </profile>
+        <profile>
+            <id>github</id>
+            <distributionManagement>
+                <repository>
+                    <id>github</id>
+                    <name>GitHub Packages</name>
+                    <url>https://maven.pkg.github.com/${github.repository}</url>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                </repository>
+            </distributionManagement>
+        </profile>
+    </profiles>
 
     <build>
         <finalName>klass#admin-${project.version}</finalName>
