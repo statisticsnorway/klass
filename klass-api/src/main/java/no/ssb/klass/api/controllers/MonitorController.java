@@ -4,6 +4,7 @@ import no.ssb.klass.api.util.RestConstants;
 import no.ssb.klass.core.service.SearchService;
 import no.ssb.klass.core.service.UserService;
 import no.ssb.klass.core.service.search.SolrSearchResult;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
@@ -71,8 +72,11 @@ public class MonitorController {
     private MonitorStatus testRestAPI(HttpServletRequest request) {
         try {
             String currentUrl = getCurrentUrl(request);
+            if (StringUtils.isNotBlank(basePath)) {
+                currentUrl = currentUrl + "/" + basePath;
+            }
 
-            String testUrl = currentUrl + basePath + RestConstants.API_VERSION_V1 + "/classifications";
+            String testUrl = currentUrl + RestConstants.API_VERSION_V1 + "/classifications";
             URL url = new URL(testUrl);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             int responseCode = connection.getResponseCode();
