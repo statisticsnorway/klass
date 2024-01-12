@@ -25,15 +25,24 @@ public class ClassificationResourceTest {
         // given
         final long id = 1;
         final String name = "name";
+        final String basePath = "/api/klass";
 
         // when
         ClassificationResource subject = new ClassificationResource(createClassification(id, name), Language
-                .getDefault(), null);
+                .getDefault(), null, basePath);
 
         // then
         assertEquals(name, subject.getName());
         assertEquals("http://localhost" + RestConstants.API_VERSION_V1 + "/classifications/" + id
             + "{?language,includeFuture}", subject.getLink("self").orElseThrow(() ->
+                new RuntimeException("No link found")).getHref());
+        assertEquals("http://localhost" + basePath + RestConstants.API_VERSION_V1 + "/classifications/" + id + "/variant"
+                + "{?variantName,from=<yyyy-MM-dd>,to=<yyyy-MM-dd>,csvSeparator,level,selectCodes,presentationNamePattern}",
+                subject.getLink("variant").orElseThrow(() ->
+                new RuntimeException("No link found")).getHref());
+        assertEquals("http://localhost" + basePath + RestConstants.API_VERSION_V1 + "/classifications/" + id + "/variantAt"
+                + "{?variantName,date=<yyyy-MM-dd>,csvSeparator,level,selectCodes,presentationNamePattern}",
+                subject.getLink("variantAt").orElseThrow(() ->
                 new RuntimeException("No link found")).getHref());
         assertEquals(0, subject.getVersions().size());
     }

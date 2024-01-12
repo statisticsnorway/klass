@@ -6,13 +6,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import static no.ssb.klass.api.controllers.MonitorController.*;
+
 /**
  * @author Mads Lundemo, SSB.
  */
 @Controller
-@RequestMapping(PingController.PATH)
+@RequestMapping(value = {
+        PingController.PATH,
+        PingController.PATH + "/",
+        REST_URL_PREFIX + PingController.PATH,
+        REST_URL_PREFIX + PingController.PATH + "/",
+})
 public class PingController {
-    public static final String PATH = "/ping/";
+    public static final String PATH = "/ping";
 
     @Value("${info.build.version:Unknown}")
     private String version;

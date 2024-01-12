@@ -17,19 +17,25 @@ import java.net.*;
 import java.util.LinkedList;
 import java.util.List;
 
+import static no.ssb.klass.api.controllers.MonitorController.*;
+
 /**
  * @author Mads Lundemo, SSB.
  */
 @Controller
-@RequestMapping(MonitorController.PATH)
+@RequestMapping(value = {
+        MonitorController.PATH,
+        MonitorController.PATH + "/",
+        REST_URL_PREFIX + MonitorController.PATH,
+        REST_URL_PREFIX + MonitorController.PATH + "/",
+})
 public class MonitorController {
-    private static final String REST_URL_PREFIX = "/api/klass/v1";
-    public static final String PATH = "/monitor/";
+    public static final String REST_URL_PREFIX = "/api/klass/v1";
+    public static final String PATH = "/monitor";
     
     private static final String DATABASE_TILKOBLING = "Database tilkobling";
     private static final String REST_API = "Rest API";
     private static final String SOLR_SEARCH = "solr søk";
-    
 
     @Value("${info.build.version:Unknown}")
     private String version;

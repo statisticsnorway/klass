@@ -15,10 +15,6 @@ public abstract class KlassResource extends PagedModel<RepresentationModel<?>> {
         super.add(link);
     }
 
-    protected UriTemplate createUriTemplate(WebMvcLinkBuilder linkBuilder, String... parameters) {
-        return ResourceUtil.createUriTemplate(linkBuilder, parameters);
-    }
-
     @Override
     @JacksonXmlElementWrapper(localName = "links")
     @JacksonXmlProperty(localName = "link")
