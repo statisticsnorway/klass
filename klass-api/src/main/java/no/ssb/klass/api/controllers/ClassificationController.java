@@ -546,7 +546,7 @@ public class ClassificationController {
     private void addSearchLink(PagedModel<ClassificationSummaryResource> response) {
         WebMvcLinkBuilder linkBuilder = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(ClassificationController.class).search("query", null, true,
                 null, null));
-        response.add(Link.of(ResourceUtil.createUriTemplateBuilder(linkBuilder).variables("query", "includeCodelists").build(), "search"));
+        response.add(Link.of(ResourceUtil.createUriTemplate(linkBuilder, "query", "includeCodelists"), "search"));
     }
 
 

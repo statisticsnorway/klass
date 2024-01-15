@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.springframework.hateoas.Link;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -19,6 +20,8 @@ import no.ssb.klass.core.model.CorrespondenceTable;
 import no.ssb.klass.core.model.Language;
 import no.ssb.klass.api.controllers.ClassificationController;
 
+@JsonPropertyOrder({"name", "contactPerson", "owningSection", "source", "sourceId", "target", "targetId", "changeTable",
+        "lastModified", "published", "links"})
 public class CorrespondenceTableSummaryResource extends KlassResource {
     private final String name;
     private final ContactPersonResource contactPerson;

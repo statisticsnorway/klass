@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.springframework.hateoas.Link;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -18,6 +19,7 @@ import no.ssb.klass.core.model.ClassificationVariant;
 import no.ssb.klass.core.model.Language;
 import no.ssb.klass.api.controllers.ClassificationController;
 
+@JsonPropertyOrder({"name", "contactPerson", "owningSection", "lastModified", "published", "links"})
 public class ClassificationVariantSummaryResource extends KlassResource {
     private final String name;
     private final ContactPersonResource contactPerson;

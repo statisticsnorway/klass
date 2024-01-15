@@ -2,6 +2,7 @@ package no.ssb.klass.api.dto.hal;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 import static java.util.stream.Collectors.*;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
+@JsonPropertyOrder({"name", "validFrom", "validTo", "lastModified", "published", "links"})
 public class ClassificationVersionSummaryResource extends KlassResource {
     private final String name;
     private final LocalDate validFrom;
