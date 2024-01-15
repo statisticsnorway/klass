@@ -18,10 +18,10 @@ public class PingController {
 
     @ResponseBody
     @RequestMapping(value = {
-            PingController.PATH,
-            PingController.PATH + "/",
             "/api/klass" + PingController.PATH,
-            "/api/klass" + PingController.PATH + "/"
+            "/api/klass" + PingController.PATH + "/",
+            PingController.PATH,
+            PingController.PATH + "/"
     }, method = RequestMethod.GET, produces = "application/xml")
     public String ping() {
         return "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"

@@ -43,10 +43,10 @@ public class MonitorController {
     private SearchService searchService;
 
     @RequestMapping(value = {
+            "/api/klass" + MonitorController.PATH,
+            "/api/klass" + MonitorController.PATH + "/",
             MonitorController.PATH,
             MonitorController.PATH + "/",
-            "/api/klass" + MonitorController.PATH,
-            "/api/klass" + MonitorController.PATH + "/"
     }, method = RequestMethod.GET)
     public String render(HttpServletRequest request, ModelMap model) {
 

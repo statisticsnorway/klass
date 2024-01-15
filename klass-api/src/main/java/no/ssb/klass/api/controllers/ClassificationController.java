@@ -84,7 +84,7 @@ import static java.util.stream.Collectors.toList;
 @RestController
 // NOTE: CrossOrigin config moved to KlassSecurityConfiguration
 // due to conditional behavior where some requests didn't get CORS headers and cause cache problems
-@RequestMapping(value = { RestConstants.API_VERSION_V1,"/api/klass"+RestConstants.API_VERSION_V1, "/rest/v1" })
+@RequestMapping(value = {"/api/klass"+RestConstants.API_VERSION_V1, RestConstants.API_VERSION_V1, "/rest/v1" })
 public class ClassificationController {
     private static final Logger log = LoggerFactory.getLogger(ClassificationController.class);
     private final ClassificationService classificationService;
