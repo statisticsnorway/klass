@@ -29,11 +29,11 @@ public class ClassificationResourceTest {
 
         // when
         ClassificationResource subject = new ClassificationResource(createClassification(id, name), Language
-                .getDefault(), null, basePath);
+                .getDefault(), null);
 
         // then
         assertEquals(name, subject.getName());
-        assertEquals("http://localhost" + RestConstants.API_VERSION_V1 + "/classifications/" + id
+        assertEquals("http://localhost" + basePath + RestConstants.API_VERSION_V1 + "/classifications/" + id
             + "{?language,includeFuture}", subject.getLink("self").orElseThrow(() ->
                 new RuntimeException("No link found")).getHref());
         assertEquals("http://localhost" + basePath + RestConstants.API_VERSION_V1 + "/classifications/" + id + "/variant"

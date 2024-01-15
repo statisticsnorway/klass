@@ -237,7 +237,7 @@ public class ClassificationController {
                                                  @RequestParam(value = "includeFuture", defaultValue = "false") Boolean includeFuture) {
         ClassificationSeries classification = classificationService.getClassificationSeries(id);
         statisticsService.addUseForClassification(classification);
-        return new ClassificationResource(classification, language, includeFuture, basePath);
+        return new ClassificationResource(classification, language, includeFuture);
     }
 
     @RequestMapping(value = "/versions/{id}", method = RequestMethod.GET)

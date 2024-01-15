@@ -14,7 +14,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
-import static no.ssb.klass.api.dto.hal.ResourceUtil.createUriTemplateBuilder;
+    import static no.ssb.klass.api.dto.hal.ResourceUtil.*;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 @JacksonXmlRootElement(localName = "classification")
@@ -29,12 +29,8 @@ public class ClassificationResource extends ClassificationSummaryResource {
     private final List<String> statisticalUnits;
     private final List<ClassificationVersionSummaryResource> versions;
 
-    private final String basePath;
-
-    public ClassificationResource(ClassificationSeries classification, Language language,
-                                  Boolean includeFuture, String basePath) {
+    public ClassificationResource(ClassificationSeries classification, Language language, Boolean includeFuture) {
         super(language, classification);
-        this.basePath = basePath;
         this.description = classification.getDescription(language);
         this.primaryLanguage = classification.getPrimaryLanguage().getLanguageCode();
         this.copyrighted = classification.isCopyrighted();
@@ -99,49 +95,49 @@ public class ClassificationResource extends ClassificationSummaryResource {
     private Link createVariantAtRelation(Long id) {
         WebMvcLinkBuilder linkBuilder = linkTo(WebMvcLinkBuilder.methodOn(ClassificationController.class).variantAt(id, "name",
                 LocalDate.now(), ",", null, "level", "selectCodes", "presentationNamePattern", Language.getDefault(), null));
-        return Link.of(createUriTemplateBuilder(linkBuilder).basePath(basePath).variables("variantName", date(), "csvSeparator", "level", "selectCodes",
-                "presentationNamePattern").build(), "variantAt");
+        return Link.of(createUriTemplate(linkBuilder, "variantName", date(), "csvSeparator", "level", "selectCodes",
+                "presentationNamePattern"), "variantAt");
     }
 
     private Link createVariantRelation(Long id) {
         WebMvcLinkBuilder linkBuilder = linkTo(WebMvcLinkBuilder.methodOn(ClassificationController.class).variant(id, "name",
                 LocalDate.now(), LocalDate.now(), ",",null, "level", "selectCodes", "presentationNamePattern", Language
                         .getDefault(), null));
-        return Link.of(createUriTemplateBuilder(linkBuilder).basePath(basePath).variables("variantName", from(), to(), "csvSeparator", "level",
-                "selectCodes", "presentationNamePattern").build(), "variant");
+        return Link.of(createUriTemplate(linkBuilder, "variantName", from(), to(), "csvSeparator", "level",
+                "selectCodes", "presentationNamePattern"), "variant");
     }
 
     private Link createCodesAtRelation(Long id) {
         WebMvcLinkBuilder linkBuilder = linkTo(WebMvcLinkBuilder.methodOn(ClassificationController.class).codesAt(id, LocalDate.now(),
                 ",",null, "level", "selectCodes", "presentationNamePattern", Language.getDefault(), null));
-        return Link.of(createUriTemplateBuilder(linkBuilder).basePath(basePath).variables(date(), "csvSeparator", "level", "selectCodes",
-                "presentationNamePattern").build(), "codesAt");
+        return Link.of(createUriTemplate(linkBuilder, date(), "csvSeparator", "level", "selectCodes",
+                "presentationNamePattern"), "codesAt");
     }
 
     private Link createCodesRelation(Long id) {
         WebMvcLinkBuilder linkBuilder = linkTo(WebMvcLinkBuilder.methodOn(ClassificationController.class).codes(id, LocalDate.now(),
                 LocalDate.now(), ",",null, "level", "selectCodes", "presentationNamePattern", Language.getDefault(), null));
-        return Link.of(createUriTemplateBuilder(linkBuilder).basePath(basePath).variables(from(), to(), "csvSeparator", "level", "selectCodes",
-                "presentationNamePattern").build(), "codes");
+        return Link.of(createUriTemplate(linkBuilder, from(), to(), "csvSeparator", "level", "selectCodes",
+                "presentationNamePattern"), "codes");
     }
 
     private Link createChangesRelation(Long id) {
         WebMvcLinkBuilder linkBuilder = linkTo(WebMvcLinkBuilder.methodOn(ClassificationController.class).changes(id, LocalDate.now(),
                 LocalDate.now(), ",",null, Language.getDefault(), null));
-        return Link.of(createUriTemplateBuilder(linkBuilder).basePath(basePath).variables(from(), to(), "csvSeparator").build(), "changes");
+        return Link.of(createUriTemplate(linkBuilder, from(), to(), "csvSeparator"), "changes");
     }
 
     private Link createCorrespondsAtRelation(Long id) {
         WebMvcLinkBuilder linkBuilder = linkTo(WebMvcLinkBuilder.methodOn(ClassificationController.class).correspondsAt(id, 2L,
                 LocalDate.now(), ",",null, Language.getDefault(), null, null));
-        return Link.of(createUriTemplateBuilder(linkBuilder).basePath(basePath).variables("targetClassificationId", date(), "csvSeparator").build(),
+        return Link.of(createUriTemplate(linkBuilder, "targetClassificationId", date(), "csvSeparator"),
                 "correspondsAt");
     }
 
     private Link createCorrespondsRelation(Long id) {
         WebMvcLinkBuilder linkBuilder = linkTo(WebMvcLinkBuilder.methodOn(ClassificationController.class).corresponds(id, 2L,
                 LocalDate.now(), LocalDate.now(), ",",null, Language.getDefault(), null));
-        return Link.of(createUriTemplateBuilder(linkBuilder).basePath(basePath).variables("targetClassificationId", from(), to(), "csvSeparator").build(),
+        return Link.of(createUriTemplate(linkBuilder, "targetClassificationId", from(), to(), "csvSeparator"),
                 "corresponds");
     }
 
