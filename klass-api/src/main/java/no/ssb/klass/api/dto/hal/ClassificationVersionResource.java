@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
@@ -15,6 +16,10 @@ import no.ssb.klass.core.model.Language;
 import no.ssb.klass.core.util.AlphaNumericalComparator;
 
 @JacksonXmlRootElement(localName = "classificationVersion")
+@JsonPropertyOrder({"name", "validFrom", "validTo", "lastModified", "published", "introduction", "contactPerson",
+        "owningSection", "legalBase", "publications", "derivedFrom", "correspondenceTables", "classificationVariants",
+        "changelogs", "levels", "classificationItems", "links"})
+
 public class ClassificationVersionResource extends ClassificationVersionSummaryResource {
     private final String introduction;
     private final ContactPersonResource contactPerson;

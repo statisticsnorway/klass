@@ -1,5 +1,6 @@
 package no.ssb.klass.api.dto.hal;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
@@ -18,6 +19,9 @@ import static java.util.stream.Collectors.toList;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 @JacksonXmlRootElement(localName = "classification")
+@JsonPropertyOrder({"name", "classificationType", "lastModified", "description", "primaryLanguage","copyrighted",
+        "includeShortName", "includeNotes", "contactPerson", "owningSection", "statisticalUnits", "versions",
+        "links"})
 public class ClassificationResource extends ClassificationSummaryResource {
     private final String description;
     private final String primaryLanguage;

@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
@@ -14,6 +15,9 @@ import no.ssb.klass.core.model.Language;
 import no.ssb.klass.api.util.CustomLocalDateSerializer;
 
 @JacksonXmlRootElement(localName = "classificationVariant")
+@JsonPropertyOrder({"name", "contactPerson", "owningSection", "lastModified", "published", "validFrom", "validTo",
+        "introduction", "contactPerson", "owningSection", "correspondenceTables", "changelogs", "levels",
+        "classificationItems", "links"})
 public class ClassificationVariantResource extends ClassificationVariantSummaryResource {
     private final LocalDate validFrom;
     private final LocalDate validTo;
