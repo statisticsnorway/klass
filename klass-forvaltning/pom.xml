@@ -35,6 +35,7 @@
              Remove when Spring Boot includes version 1.1.2 or newer -->
         <spring-restdocs.version>1.2.1.RELEASE</spring-restdocs.version>
         <solr-version>5.5.5</solr-version>
+        <spring-data-solr-version>2.1.0.RELEASE</spring-data-solr-version>
     </properties>
 
     <parent>
@@ -70,7 +71,7 @@
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-solr</artifactId>
-            <version>2.1.0.RELEASE</version>
+            <version>${spring-data-solr-version}</version>
         </dependency>
 
         <!--TOMCAT-->
