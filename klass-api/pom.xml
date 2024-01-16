@@ -124,7 +124,7 @@
         <dependency>
             <groupId>jakarta.ws.rs</groupId>
             <artifactId>jakarta.ws.rs-api</artifactId>
-            <version>2.1.6</version>
+            <version>${jakarta-rs-api-version}</version>
         </dependency>
 
         <!--Spring TEST-->
@@ -141,7 +141,7 @@
         <dependency>
             <groupId>org.springframework.restdocs</groupId>
             <artifactId>spring-restdocs-mockmvc</artifactId>
-            <version>2.0.8.RELEASE</version>
+            <version>${spring-restdocs-version}</version>
             <scope>test</scope>
             <exclusions>
                 <exclusion>
@@ -153,7 +153,7 @@
         <dependency>
             <groupId>org.springframework.restdocs</groupId>
             <artifactId>spring-restdocs-core</artifactId>
-            <version>2.0.8.RELEASE</version>
+            <version>${spring-restdocs-version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
