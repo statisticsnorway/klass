@@ -59,6 +59,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -254,7 +255,7 @@ public class ClassificationController {
         return new ClassificationVersionResource(version, language, corrTableVersionIsTarget, includeFuture);
     }
 
-    @RequestMapping(value = "/correspondencetables/{id}", method = RequestMethod.GET)
+    @GetMapping("/correspondencetables/{id}")
     public CorrespondenceTableResource correspondenceTables(@PathVariable Long id, @RequestParam(value = "language",
             defaultValue = "nb") Language language) {
         CorrespondenceTable table = classificationService.getCorrespondenceTable(id);

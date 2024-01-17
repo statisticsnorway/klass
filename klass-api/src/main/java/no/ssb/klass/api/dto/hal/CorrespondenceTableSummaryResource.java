@@ -21,7 +21,7 @@ import no.ssb.klass.core.model.Language;
 import no.ssb.klass.api.controllers.ClassificationController;
 
 @JsonPropertyOrder({"name", "contactPerson", "owningSection", "source", "sourceId", "target", "targetId", "changeTable",
-        "lastModified", "published", "links"})
+        "lastModified", "published", "sourceLevel", "targetLevel", "links"})
 public class CorrespondenceTableSummaryResource extends KlassResource {
     private final String name;
     private final ContactPersonResource contactPerson;

@@ -33,3 +33,10 @@ Accept: application/json
 ### Get all classifications with size and page
 GET {{base_url}}/classifications?size=2&page=2
 Accept: application/json
+
+### Get a single correspondencetable
+GET {{base_url}}/correspondencetables/1
+Accept: application/json
+
+### Get a single correspondencetable with suffix pattern matching
+GET {{base_url}}/correspondencetables/1.csv

@@ -12,7 +12,8 @@ import no.ssb.klass.core.model.Language;
 
 @JacksonXmlRootElement(localName = "correspondenceTable")
 @JsonPropertyOrder({"name", "contactPerson", "owningSection", "source", "sourceId", "target", "targetId", "changeTable",
-        "lastModified", "published", "links"})
+        "lastModified", "published", "sourceLevel", "targetLevel", "description", "changelogs", "correspondenceMaps",
+        "links"})
 public class CorrespondenceTableResource extends CorrespondenceTableSummaryResource {
     private final String description;
     private final List<ChangelogResource> changelogs;
