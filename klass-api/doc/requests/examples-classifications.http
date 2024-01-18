@@ -15,7 +15,19 @@ GET {{base_url}}/classifications/1
 Accept: application/json
 
 ### Get classification codes
-GET {{base_url}}/classifications/1/codes?from=2020-01-01&to=2021-01-01
+GET {{base_url}}/classifications/1/codes?from=2020-01-01&to=2021-01-01&includeFuture=true
+Accept: application/json
+
+### Get classification codes
+GET {{base_url}}/classifications/1/codes?from=2020-01-01&includeFuture=true
+Accept: application/json
+
+### Get classification codes
+GET {{base_url}}/classifications/1/codesAt?date=2020-06-01
+Accept: application/json
+
+### Get classification changes
+GET {{base_url}}/classifications/1/changes
 Accept: application/json
 
 ### Search for classifications
