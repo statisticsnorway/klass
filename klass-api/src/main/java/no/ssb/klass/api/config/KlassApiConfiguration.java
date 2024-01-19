@@ -36,7 +36,7 @@ public class KlassApiConfiguration {
                 .csrf().disable()
                 .headers()
                 .addHeaderWriter((request, response) -> {
-                    if (request.getServletPath().startsWith(RestConstants.API_VERSION_V1)) {
+                    if (request.getServletPath().startsWith(RestConstants.PREFIX_AND_API_VERSION_V1)) {
                         // Workaround to Force CORS header all the time for API
                         response.addHeader("Access-Control-Allow-Origin", "*");
                         // Header telling cache server what is varying in our responses

@@ -33,7 +33,7 @@
         <guava-version>19.0</guava-version>
         <woodstox-version>4.4.1</woodstox-version>
         <commons-lang3-version>3.12.0</commons-lang3-version>
-        <apacheds-server-jndi-version>1.5.7</apacheds-server-jndi-version>
+        <apacheds-server-jndi-version>2.0.0.AM27</apacheds-server-jndi-version>
         <asciidoctor-version>1.6.0</asciidoctor-version>
         <maven-jaxb2-plugin-version>2.5.0</maven-jaxb2-plugin-version>
         <tomcat7-maven-plugin-version>2.2</tomcat7-maven-plugin-version>
