@@ -102,7 +102,7 @@ public class ApiDocumentation {
     private MockMvc mockMvc;
 
     private String server = "data.ssb.no";
-    private int port = 80;
+    private int port = 443;
     @Value("${klass.env.api.path}")
     private String contextPath;
 
