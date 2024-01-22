@@ -24,7 +24,7 @@ public class ClassificationFamilySummaryResource extends KlassResource {
 
     private Link createSelfLink(Long id) {
         return linkTo(methodOn(ClassificationController.class).classificationFamily(id, null, null, null))
-                .withSelfRel();
+                .withSelfRel().expand();
     }
 
     public String getName() {

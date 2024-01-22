@@ -54,7 +54,7 @@ public class ClassificationVersionSummaryResource extends KlassResource {
     }
 
     private Link createSelfLink(long id) {
-        return linkTo(methodOn(ClassificationController.class).versions(id, null, null)).withSelfRel();
+        return linkTo(methodOn(ClassificationController.class).versions(id, null, null)).withSelfRel().expand();
     }
 
     @JacksonXmlElementWrapper(localName = "publishedLanguages")

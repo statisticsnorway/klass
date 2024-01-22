@@ -61,7 +61,7 @@ public class CorrespondenceTableSummaryResource extends KlassResource {
     }
 
     private Link createSelfLink(long id) {
-        return linkTo(methodOn(ClassificationController.class).correspondenceTables(id, null)).withSelfRel();
+        return linkTo(methodOn(ClassificationController.class).correspondenceTables(id, null)).withSelfRel().expand();
     }
 
     private Link createSourceLink(long id) {

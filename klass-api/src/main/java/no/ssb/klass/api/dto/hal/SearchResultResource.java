@@ -51,7 +51,7 @@ public class SearchResultResource extends KlassResource {
     }
 
     private Link createSelfLink(Long id) {
-        return linkTo(methodOn(ClassificationController.class).classification(id, null, null)).withSelfRel();
+        return linkTo(methodOn(ClassificationController.class).classification(id, null, null)).withSelfRel().expand();
     }
 
     public String getName() {

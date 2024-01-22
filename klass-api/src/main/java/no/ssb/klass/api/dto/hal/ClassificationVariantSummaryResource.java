@@ -40,7 +40,7 @@ public class ClassificationVariantSummaryResource extends KlassResource {
     }
 
     private Link createSelfLink(long id) {
-        return linkTo(methodOn(ClassificationController.class).variants(id, null)).withSelfRel();
+        return linkTo(methodOn(ClassificationController.class).variants(id, null)).withSelfRel().expand();
     }
 
     public String getName() {
