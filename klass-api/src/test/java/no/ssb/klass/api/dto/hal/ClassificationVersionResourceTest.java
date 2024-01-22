@@ -37,7 +37,7 @@ public class ClassificationVersionResourceTest {
 
         // then
         assertEquals(1, subject.getLinks().toList().size());
-        assertEquals("http://localhost/api/klass" + RestConstants.API_VERSION_V1 + "/versions/1{?language,includeFuture}",
+        assertEquals("http://localhost/api/klass" + RestConstants.API_VERSION_V1 + "/versions/1",
                 subject.getLink("self").orElseThrow(() ->new RuntimeException("No link found")).getHref());
         assertEquals(version.getName(Language.getDefault()), subject.getName());
     }
