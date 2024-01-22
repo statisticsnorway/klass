@@ -111,7 +111,7 @@ public class ApiDocumentation {
         this.documentationHandler = document("{method-name}", preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()));
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context)
-                .apply(documentationConfiguration(restDocumentation).uris().withHost(server)
+                .apply(documentationConfiguration(restDocumentation).uris().withHost(server).withScheme("https")
                         .withPort(port))
                 .alwaysDo(this.documentationHandler).build();
     }
