@@ -22,11 +22,6 @@ pipeline {
     }
 
     tools {
-        if (${params.ARTIFACT} == 'klass-api') {
-            jdk 'OpenJDK Java 17'
-        } else {
-            jdk 'Oracle Java 8'
-        }
         maven 'Maven 3.5.2'
         git 'Default'
     }
@@ -34,8 +29,26 @@ pipeline {
     stages {
 
         stage("Build & deploy SNAPSHOT to Nexus") {
+            when {
+                expression { params.ARTIFACT == 'klass-api' }
+            }
+            tools {
+                jdk 'OpenJDK Java 17'
+            }
             steps {
-                sh "mvn -B clean deploy -Pdocumentation -pl :${params.ARTIFACT} -am"
+                sh "mvn -B clean deploy -Pdocumentation -pl :klass-api -am"
+            }
+        }
+
+        stage("Build & deploy SNAPSHOT to Nexus") {
+            when {
+                expression { params.ARTIFACT == 'klass-forvaltning' }
+            }
+            tools {
+                jdk 'Oracle Java 8'
+            }
+            steps {
+                sh "mvn -B clean deploy -Pdocumentation -Djava.version=1.8 -pl :klass-forvaltning -am"
             }
         }
 
