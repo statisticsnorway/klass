@@ -30,7 +30,7 @@ pipeline {
 
         stage("Build & deploy SNAPSHOT of klass-api to Nexus") {
             when {
-                expression { !params.RELEASE && params.ARTIFACT == 'klass-api' }
+                expression { params.ARTIFACT == 'klass-api' }
             }
             tools {
                 jdk 'OpenJDK Java 17'
