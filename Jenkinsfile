@@ -28,7 +28,7 @@ pipeline {
 
     stages {
 
-        stage("Build & deploy SNAPSHOT to Nexus") {
+        stage("Build & deploy SNAPSHOT of klass-api to Nexus") {
             when {
                 expression { params.ARTIFACT == 'klass-api' }
             }
@@ -40,7 +40,7 @@ pipeline {
             }
         }
 
-        stage("Build & deploy SNAPSHOT to Nexus") {
+        stage("Build & deploy SNAPSHOT of klass-forvaltning to Nexus") {
             when {
                 expression { params.ARTIFACT == 'klass-forvaltning' }
             }
