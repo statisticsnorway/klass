@@ -12,6 +12,7 @@ import java.util.Optional;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -30,11 +31,13 @@ import no.ssb.klass.core.util.DateRange;
 import no.ssb.klass.core.util.KlassResourceNotFoundException;
 import no.ssb.klass.core.util.TimeUtil;
 import no.ssb.klass.core.util.Translatable;
+import no.ssb.klass.core.util.TranslatablePersistenceConverter;
 import no.ssb.klass.core.util.AlphaNumericalComparator;
 
 @Entity
 @Table(indexes = {
-        // These must be case insensitive (JPA does not support specifying function based indexes)
+        // These must be case insensitive (JPA does not support specifying function
+        // based indexes)
         @Index(columnList = "name_no", name = "cs_name_no_idx", unique = true),
         @Index(columnList = "name_nn", name = "cs_name_nn_idx", unique = true),
         @Index(columnList = "name_en", name = "cs_name_en_idx", unique = true)
@@ -49,7 +52,8 @@ public class ClassificationSeries extends BaseEntity implements ClassificationEn
     private static final String PREFIX_CODELIST_NN = "Kodeliste for ";
     private static final String PREFIX_CODELIST_EN = "Codelist for ";
 
-    // name is not stored as a Translatable since name is used in db queries for sorting and filtering
+    // name is not stored as a Translatable since name is used in db queries for
+    // sorting and filtering
     @Column(name = "name_no")
     private String nameNo;
     @Column(name = "name_nn")
@@ -58,8 +62,9 @@ public class ClassificationSeries extends BaseEntity implements ClassificationEn
     private String nameEn;
     @Lob
     @Column(columnDefinition = "text", nullable = false)
+    @Convert(converter = TranslatablePersistenceConverter.class)
     private Translatable description;
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "integer")
     private Language primaryLanguage;
     @Column(nullable = false)
     private boolean copyrighted;
@@ -184,9 +189,9 @@ public class ClassificationSeries extends BaseEntity implements ClassificationEn
 
     /**
      * drafts are excluded as they do not have a real date range.
-     * 
+     *
      * @param dateRange
-     *            that versions should overlap
+     *                  that versions should overlap
      * @return list of version that overlap provided DateRange
      */
     public List<ClassificationVersion> getClassificationVersionsInRange(DateRange dateRange) {
@@ -207,10 +212,11 @@ public class ClassificationSeries extends BaseEntity implements ClassificationEn
      * drafts are excluded as they do not have a real date range.
      *
      * @param dateRange
-     *            that versions should overlap
+     *                      that versions should overlap
      * @param includeFuture
-     *            if future version is included
-     * @return list of version that overlap provided DateRange and futured versions if value is true
+     *                      if future version is included
+     * @return list of version that overlap provided DateRange and futured versions
+     *         if value is true
      */
     public List<ClassificationVersion> getClassificationVersionsInRange(DateRange dateRange, Boolean includeFuture) {
         checkNotNull(dateRange);
@@ -219,7 +225,8 @@ public class ClassificationSeries extends BaseEntity implements ClassificationEn
             if (classificationVersion.isDraft()) {
                 continue;
             }
-            if (classificationVersion.getDateRange().overlaps(dateRange) && classificationVersion.showVersion(includeFuture)) {
+            if (classificationVersion.getDateRange().overlaps(dateRange)
+                    && classificationVersion.showVersion(includeFuture)) {
                 results.add(classificationVersion);
             }
         }
@@ -245,9 +252,10 @@ public class ClassificationSeries extends BaseEntity implements ClassificationEn
     }
 
     /**
-     * Find correspondenceTables that describes changes between versions of same classification, referred to as
+     * Find correspondenceTables that describes changes between versions of same
+     * classification, referred to as
      * changeTables. A changeTable list changes between two classification versions.
-     * 
+     *
      * @param dateRange
      * @return
      */
@@ -256,7 +264,8 @@ public class ClassificationSeries extends BaseEntity implements ClassificationEn
         List<CorrespondenceTable> changeTables = new ArrayList<>();
         List<ClassificationVersion> versions = getClassificationVersionsInRange(dateRange, includeFuture);
         if (versions.size() < 2) {
-            // Must have at least 2 versions to have a changeTable describing changes between versions
+            // Must have at least 2 versions to have a changeTable describing changes
+            // between versions
             return changeTables;
         }
         sortVersionsByFromDate(versions);
@@ -307,7 +316,8 @@ public class ClassificationSeries extends BaseEntity implements ClassificationEn
         return versions;
     }
 
-    // dont want to add yet another sort argument for something that is only used for 1 administration view
+    // dont want to add yet another sort argument for something that is only used
+    // for 1 administration view
     // the alphanumerical sort algorithm is all ready a bit slow
     private void moveDraftToTop(List<ClassificationVersion> versions) {
         Optional<ClassificationVersion> find = versions.stream().filter(StatisticalClassification::isDraft).findAny();
@@ -384,17 +394,17 @@ public class ClassificationSeries extends BaseEntity implements ClassificationEn
 
     private void setName(String name, Language language) {
         switch (language) {
-        case NB:
-            nameNo = name;
-            break;
-        case NN:
-            nameNn = name;
-            break;
-        case EN:
-            nameEn = name;
-            break;
-        default:
-            throw new IllegalArgumentException("Unknown language: " + language);
+            case NB:
+                nameNo = name;
+                break;
+            case NN:
+                nameNn = name;
+                break;
+            case EN:
+                nameEn = name;
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown language: " + language);
         }
     }
 
@@ -465,27 +475,27 @@ public class ClassificationSeries extends BaseEntity implements ClassificationEn
 
     public static String getKlassifikasjonPrefix(Language language) {
         switch (language) {
-        case NB:
-            return PREFIX_CLASSIFICATION_NB;
-        case NN:
-            return PREFIX_CLASSIFICATION_NN;
-        case EN:
-            return PREFIX_CLASSIFICATION_EN;
-        default:
-            return "";
+            case NB:
+                return PREFIX_CLASSIFICATION_NB;
+            case NN:
+                return PREFIX_CLASSIFICATION_NN;
+            case EN:
+                return PREFIX_CLASSIFICATION_EN;
+            default:
+                return "";
         }
     }
 
     public static String getKodelistePrefix(Language language) {
         switch (language) {
-        case NB:
-            return PREFIX_CODELIST_NB;
-        case NN:
-            return PREFIX_CODELIST_NN;
-        case EN:
-            return PREFIX_CODELIST_EN;
-        default:
-            return "";
+            case NB:
+                return PREFIX_CODELIST_NB;
+            case NN:
+                return PREFIX_CODELIST_NN;
+            case EN:
+                return PREFIX_CODELIST_EN;
+            default:
+                return "";
         }
     }
 
@@ -495,9 +505,12 @@ public class ClassificationSeries extends BaseEntity implements ClassificationEn
 
     @Override
     public void setDeleted() {
-        // Soft delete (where classification is only marked as deleted and not actually deleted from database) causes
-        // problems with unique constraint on classification name. To ensure that a deleted classification will not
-        // block further use of a classification name, a timestamp is added to the name of the deleted classification
+        // Soft delete (where classification is only marked as deleted and not actually
+        // deleted from database) causes
+        // problems with unique constraint on classification name. To ensure that a
+        // deleted classification will not
+        // block further use of a classification name, a timestamp is added to the name
+        // of the deleted classification
         Date now = TimeUtil.now();
         for (Language language : Language.getAllSupportedLanguages()) {
             String name = getName(language);

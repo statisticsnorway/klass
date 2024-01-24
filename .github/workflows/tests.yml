@@ -18,6 +18,18 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+          cache: maven
+
+      # Build all modules except klass-forvaltning since it is not compatible with JDK 17
+      - name: Build, test and package with Maven
+        run: mvn --batch-mode --update-snapshots package -pl '!:klass-forvaltning' -P nexus
+
+      - uses: actions/checkout@v3
       - name: Set up JDK 1.8
         uses: actions/setup-java@v3
         with:
@@ -34,8 +46,11 @@ jobs:
         with:
           maven-version: 3.6.3
 
+      # Build only klass-forvaltning with JDK 1.8
       - name: Build, test and package with Maven
-        run: mvn --batch-mode --update-snapshots package -P nexus
+        run: mvn --batch-mode --update-snapshots package -Djava.version=1.8 -pl :klass-forvaltning -am -P github
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   deploy:
     runs-on: ubuntu-latest
@@ -46,14 +61,14 @@ jobs:
       packages: write
     steps:
       - uses: actions/checkout@v3
-      - name: Set up JDK 1.8
+      - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
-          java-version: '8'
+          java-version: '17'
           cache: maven
 
       - name: Publish to GitHub Packages
-        run: mvn --batch-mode deploy -P github -DskipTests
+        run: mvn --batch-mode deploy -pl '!:klass-forvaltning' -P github -DskipTests
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

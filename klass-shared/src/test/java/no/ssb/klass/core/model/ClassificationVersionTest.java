@@ -1,13 +1,15 @@
 package no.ssb.klass.core.model;
 
 import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.MatcherAssert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import no.ssb.klass.core.util.DateRange;
 import no.ssb.klass.core.util.Translatable;
@@ -40,13 +42,14 @@ public class ClassificationVersionTest {
         assertEquals(item.getCode(), result.getCode());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void findItemNotFound() {
         // given
         ClassificationVersion subject = createVersionWithLevels();
 
         // when
-        subject.findItem("unknown");
+        Assertions.assertThrows(IllegalArgumentException.class, () ->
+                subject.findItem("unknown"));
 
         // then expect exception
     }
@@ -165,14 +168,15 @@ public class ClassificationVersionTest {
         assertEquals(false, version.hasLevel(3));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void addLevel() {
         // given
         ClassificationVersion version = createVersion();
         version.addNextLevel();
 
         // when
-        version.addLevel(TestUtil.createLevel(1));
+        Assertions.assertThrows(IllegalArgumentException.class, () ->
+                version.addLevel(TestUtil.createLevel(1)));
 
         // then expect exception
     }
@@ -220,7 +224,7 @@ public class ClassificationVersionTest {
         assertEquals(level.getLevelNumber(), classificationItem.getLevel().getLevelNumber());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void addClassificationItemWithParentForFirstLevel() {
         // given
         ClassificationVersion version = createVersion();
@@ -230,12 +234,13 @@ public class ClassificationVersionTest {
         ClassificationItem parent = TestUtil.createClassificationItem("parent", "officialName");
 
         // when
-        version.addClassificationItem(classificationItem, level.getLevelNumber(), parent);
+        Assertions.assertThrows(IllegalArgumentException.class, () ->
+                version.addClassificationItem(classificationItem, level.getLevelNumber(), parent));
 
         // then expect exception
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void addClassificationItemWithNoParentForNotFirstLevel() {
         // given
         ClassificationVersion version = createVersion();
@@ -244,7 +249,8 @@ public class ClassificationVersionTest {
         ClassificationItem classificationItem = TestUtil.createClassificationItem("code", "officialName");
 
         // when
-        version.addClassificationItem(classificationItem, 2, null);
+        Assertions.assertThrows(IllegalArgumentException.class, () ->
+                version.addClassificationItem(classificationItem, 2, null));
 
         // then expect exception
     }
@@ -296,7 +302,7 @@ public class ClassificationVersionTest {
         assertEquals("Test 2016-11", classificationVersion5.getNameInPrimaryLanguage());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void removeLevelWhenNotEmpty() {
         // given
         ClassificationVersion version = createVersion();
@@ -306,7 +312,8 @@ public class ClassificationVersionTest {
         version.addClassificationItem(classificationItem, level.getLevelNumber(), null);
 
         // when
-        version.deleteLevel(level);
+        Assertions.assertThrows(IllegalArgumentException.class, () ->
+                version.deleteLevel(level));
 
         // then expect exception
     }

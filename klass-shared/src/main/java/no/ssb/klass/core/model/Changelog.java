@@ -12,16 +12,19 @@ import no.ssb.klass.core.util.TimeUtil;
 @Entity
 public class Changelog extends BaseEntity {
     @Column(nullable = false)
-    private final Date changeOccured;
+    private Date changeOccured;
     @Column(nullable = false)
-    private final String changedBy;
+    private String changedBy;
     @Column(length = 4096, nullable = false)
-    private final String description;
+    private String description;
 
     public Changelog(String changedBy, String description) {
         this.changeOccured = TimeUtil.now();
         this.changedBy = checkNotNull(changedBy);
         this.description = checkNotNull(description);
+    }
+
+    protected Changelog() {
     }
 
     public Date getChangeOccured() {

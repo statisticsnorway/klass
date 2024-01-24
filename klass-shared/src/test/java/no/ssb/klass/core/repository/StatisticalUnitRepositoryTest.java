@@ -1,14 +1,14 @@
 package no.ssb.klass.core.repository;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 
 import javax.transaction.Transactional;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -18,7 +18,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import no.ssb.klass.core.config.ConfigurationProfiles;
 import no.ssb.klass.core.model.ClassificationSeries;
@@ -30,7 +30,7 @@ import no.ssb.klass.core.util.Translatable;
 import no.ssb.klass.core.util.TranslatablePersistenceConverter;
 import no.ssb.klass.testutil.TestUtil;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest
 @ActiveProfiles(ConfigurationProfiles.H2_INMEMORY)
 @Transactional
@@ -50,7 +50,7 @@ public class StatisticalUnitRepositoryTest {
 
     private User user;
 
-    @Before
+    @BeforeEach
     public void setup() {
         user = userRepository.save(TestUtil.createUser());
     }
@@ -58,14 +58,14 @@ public class StatisticalUnitRepositoryTest {
     @Test
     public void getStaticalUnitsOverViewTest() {
         makeTestData();
-        Page<StatisticalEntity> result = statisticalUnitRepository.getStaticalUnitsOverView(new PageRequest(0,
+        Page<StatisticalEntity> result = statisticalUnitRepository.getStaticalUnitsOverView(PageRequest.of(0,
                 Integer.MAX_VALUE));
         assertEquals(2, result.getContent().size());
         List<StatisticalEntity> resultList = result.getContent();
-        assertEquals("Duppeditt", resultList.get(0).getName());
-        assertEquals(Long.valueOf(2), resultList.get(0).getCount());
-        assertEquals("Dingseboms", resultList.get(1).getName());
-        assertEquals(Long.valueOf(1), resultList.get(1).getCount());
+        assertEquals("Dingseboms", resultList.get(0).getName());
+        assertEquals(Long.valueOf(1), resultList.get(0).getCount());
+        assertEquals("Duppeditt", resultList.get(1).getName());
+        assertEquals(Long.valueOf(2), resultList.get(1).getCount());
     }
 
     @Test

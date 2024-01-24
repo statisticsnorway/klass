@@ -10,14 +10,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
 import no.ssb.klass.core.repository.ClassificationSeriesRepository;
 import no.ssb.klass.core.service.SearchService;
 import no.ssb.klass.core.service.SearchServiceImpl;
 import no.ssb.klass.core.service.UserService;
 import no.ssb.klass.core.service.UserServiceMock;
-import no.ssb.klass.api.applicationtest.utils.ApplicationTestUtil;
+import org.springframework.security.web.SecurityFilterChain;
 
 /**
  * @author Mads Lundemo, SSB.
@@ -43,16 +42,12 @@ public class ApplicationTestConfig {
         return new SearchServiceImpl(seriesRepository);
     }
 
-    @Bean
-    public ApplicationTestUtil applicationTestUtil() {
-        return new ApplicationTestUtil();
-    }
-
     @Configuration
-    static class TestSecurityConfiguration extends WebSecurityConfigurerAdapter {
-        @Override
-        protected void configure(HttpSecurity http) throws Exception {
+    static class TestSecurityConfiguration {
+        @Bean
+        public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
             http.authorizeRequests().antMatchers("/**").permitAll();
+            return http.build();
         }
     }
 }

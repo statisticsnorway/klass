@@ -1,14 +1,14 @@
 package no.ssb.klass.core.util;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class TranslatablePersistenceConverterTest {
     private TranslatablePersistenceConverter subject;
 
-    @Before
+    @BeforeEach
     public void setup() {
         subject = new TranslatablePersistenceConverter();
     }

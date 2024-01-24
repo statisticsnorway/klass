@@ -1,11 +1,12 @@
 package no.ssb.klass.core.model;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDate;
 
-import org.junit.Ignore;
-import org.junit.Test;
+import no.ssb.klass.core.util.ClientException;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import no.ssb.klass.core.util.DateRange;
 import no.ssb.klass.core.util.TimeUtil;
@@ -36,18 +37,20 @@ public class CorrespondenceTableTest {
         assertEquals(true, subject.getTargetLevel().isPresent());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void correspondenceTableWithNotExistingSourceLevel() {
         // given
-        createCorrespondenceTable(NOT_EXISTING_LEVEL, EXISTING_LEVEL);
+        Assertions.assertThrows(IllegalArgumentException.class, () ->
+                createCorrespondenceTable(NOT_EXISTING_LEVEL, EXISTING_LEVEL));
 
         // then expect exception
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void correspondenceTableWithNotExistingTargetLevel() {
         // given
-        createCorrespondenceTable(EXISTING_LEVEL, NOT_EXISTING_LEVEL);
+        Assertions.assertThrows(IllegalArgumentException.class, () ->
+                createCorrespondenceTable(EXISTING_LEVEL, NOT_EXISTING_LEVEL));
 
         // then expect exception
     }
@@ -165,17 +168,12 @@ public class CorrespondenceTableTest {
      *    expected  exception
      * </pre>
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void getDateRangeNotOverlaping() {
-        // given
         final DateRange sourceDateRange = DateRange.create("2010-01-01", "2012-01-01");
         final DateRange targetDateRange = DateRange.create("2012-01-01", "2014-01-01");
-        CorrespondenceTable subject = createCorrespondenceTable(sourceDateRange, targetDateRange);
-
-        // when
-        subject.getDateRange();
-
-        // then expect exception
+        Assertions.assertThrows(IllegalArgumentException.class, () ->
+                createCorrespondenceTable(sourceDateRange, targetDateRange));
     }
 
     @Test
@@ -191,7 +189,7 @@ public class CorrespondenceTableTest {
         assertEquals(1, subject.getChangelogs().size());
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void addChangelogWhenNotPublished() {
         // given
         CorrespondenceTable subject = createCorrespondenceTable();
@@ -200,19 +198,21 @@ public class CorrespondenceTableTest {
         }
 
         // when
-        subject.addChangelog(new Changelog("user", "description"));
+        Assertions.assertThrows(IllegalStateException.class, () ->
+                subject.addChangelog(new Changelog("user", "description")));
 
         // then expect exception
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void addCorrespondenceMapVerifiesNotAlreadyPresent() {
         // given
         CorrespondenceTable subject = createCorrespondenceTable();
         subject.addCorrespondenceMap(createCorrespondenceMap("source", "target"));
 
         // when
-        subject.addCorrespondenceMap(createCorrespondenceMap("source", "target"));
+        Assertions.assertThrows(IllegalArgumentException.class, () ->
+                subject.addCorrespondenceMap(createCorrespondenceMap("source", "target")));
 
         // then expect exception
     }
@@ -232,7 +232,7 @@ public class CorrespondenceTableTest {
         assertEquals("newSource", correspondenceMap.getSource().get().getCode());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void updateCorrespondenceMapSourceVerifiesNotAlreadyPresent() {
         // given
         CorrespondenceTable subject = createCorrespondenceTable();
@@ -242,12 +242,13 @@ public class CorrespondenceTableTest {
         ClassificationItem sourceItem = TestUtil.createClassificationItem("source", "source");
 
         // when
-        subject.updateCorrespondenceMapSource(correspondenceMap, sourceItem);
+        Assertions.assertThrows(IllegalArgumentException.class, () ->
+                subject.updateCorrespondenceMapSource(correspondenceMap, sourceItem));
 
         // then expect exception
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void updateCorrespondenceMapSourceDoesNotAllowBothSourceAndTargetToBeNull() {
         // given
         CorrespondenceTable subject = createCorrespondenceTable();
@@ -256,7 +257,8 @@ public class CorrespondenceTableTest {
         subject.addCorrespondenceMap(correspondenceMap);
 
         // when
-        subject.updateCorrespondenceMapSource(correspondenceMap, null);
+        Assertions.assertThrows(IllegalArgumentException.class, () ->
+                subject.updateCorrespondenceMapSource(correspondenceMap, null));
 
         // then expect exception
     }
@@ -276,7 +278,7 @@ public class CorrespondenceTableTest {
         assertEquals("newTarget", correspondenceMap.getTarget().get().getCode());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void updateCorrespondenceMapTargetVerifiesNotAlreadyPresent() {
         // given
         CorrespondenceTable subject = createCorrespondenceTable();
@@ -286,12 +288,13 @@ public class CorrespondenceTableTest {
         ClassificationItem targetItem = TestUtil.createClassificationItem("target", "target");
 
         // when
-        subject.updateCorrespondenceMapTarget(correspondenceMap, targetItem);
+        Assertions.assertThrows(IllegalArgumentException.class, () ->
+                subject.updateCorrespondenceMapTarget(correspondenceMap, targetItem));
 
         // then expect exception
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void updateCorrespondenceMapTargetDoesNotAllowBothSourceAndTargetToBeNull() {
         // given
         CorrespondenceTable subject = createCorrespondenceTable();
@@ -300,7 +303,8 @@ public class CorrespondenceTableTest {
         subject.addCorrespondenceMap(correspondenceMap);
 
         // when
-        subject.updateCorrespondenceMapTarget(correspondenceMap, null);
+        Assertions.assertThrows(IllegalArgumentException.class, () ->
+                subject.updateCorrespondenceMapTarget(correspondenceMap, null));
 
         // then expect exception
     }

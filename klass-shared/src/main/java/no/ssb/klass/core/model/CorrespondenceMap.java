@@ -27,6 +27,9 @@ public class CorrespondenceMap extends BaseEntity implements Comparable<Correspo
         this.target = target;
     }
 
+    protected CorrespondenceMap() {
+    }
+
     public Optional<ClassificationItem> getSource() {
         return Optional.ofNullable(source);
     }

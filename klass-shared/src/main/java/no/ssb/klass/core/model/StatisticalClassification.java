@@ -14,6 +14,7 @@ import java.util.StringJoiner;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -26,6 +27,7 @@ import no.ssb.klass.core.util.DateRange;
 import no.ssb.klass.core.util.DraftUtil;
 import no.ssb.klass.core.util.TimeUtil;
 import no.ssb.klass.core.util.Translatable;
+import no.ssb.klass.core.util.TranslatablePersistenceConverter;
 
 @Entity
 public abstract class StatisticalClassification extends BaseEntity implements ClassificationEntityOperations,
@@ -33,6 +35,7 @@ public abstract class StatisticalClassification extends BaseEntity implements Cl
     public static final int FIRST_LEVEL_NUMBER = 1;
     @Lob
     @Column(columnDefinition = "text", nullable = false)
+    @Convert(converter = TranslatablePersistenceConverter.class)
     protected Translatable introduction;
     private Published published;
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "statisticalClassification")

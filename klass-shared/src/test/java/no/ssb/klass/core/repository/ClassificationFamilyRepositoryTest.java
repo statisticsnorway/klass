@@ -1,15 +1,15 @@
 package no.ssb.klass.core.repository;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -17,7 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import no.ssb.klass.core.config.ConfigurationProfiles;
 import no.ssb.klass.core.model.ClassificationFamily;
@@ -29,7 +29,7 @@ import no.ssb.klass.core.util.DateRange;
 import no.ssb.klass.core.util.TranslatablePersistenceConverter;
 import no.ssb.klass.testutil.TestUtil;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest
 @ActiveProfiles(ConfigurationProfiles.H2_INMEMORY)
 @Transactional
@@ -46,7 +46,7 @@ public class ClassificationFamilyRepositoryTest {
     private final ClassificationType allClassificationTypes = null;
     private User user;
 
-    @Before
+    @BeforeEach
     public void setup() {
         user = userRepository.save(TestUtil.createUser());
     }
@@ -60,7 +60,8 @@ public class ClassificationFamilyRepositoryTest {
         entityManager.detach(family);
 
         // when
-        ClassificationFamily result = subject.findOne(family.getId());
+        ClassificationFamily result = subject.findById(family.getId()).orElseThrow(() ->
+                new RuntimeException("ClassificationFamily not found"));
 
         // then
         assertEquals(1, result.getClassificationSeries().size());

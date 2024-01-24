@@ -2,6 +2,7 @@ package no.ssb.klass.api.dto.hal;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
@@ -18,8 +19,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.*;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
+@JsonPropertyOrder({"name", "validFrom", "validTo", "lastModified", "published", "links"})
 public class ClassificationVersionSummaryResource extends KlassResource {
     private final String name;
     private final LocalDate validFrom;
@@ -52,7 +54,7 @@ public class ClassificationVersionSummaryResource extends KlassResource {
     }
 
     private Link createSelfLink(long id) {
-        return linkTo(methodOn(ClassificationController.class).versions(id, null, null)).withSelfRel();
+        return linkTo(methodOn(ClassificationController.class).versions(id, null, null)).withSelfRel().expand();
     }
 
     @JacksonXmlElementWrapper(localName = "publishedLanguages")

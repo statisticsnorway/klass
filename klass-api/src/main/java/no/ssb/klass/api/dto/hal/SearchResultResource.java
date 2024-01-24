@@ -1,18 +1,20 @@
 package no.ssb.klass.api.dto.hal;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 import java.util.List;
 import java.util.StringJoiner;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.springframework.data.solr.core.query.result.HighlightEntry;
 import org.springframework.hateoas.Link;
-import org.springframework.hateoas.core.Relation;
+import org.springframework.hateoas.server.core.Relation;
 
 import no.ssb.klass.core.service.search.SolrSearchResult;
 import no.ssb.klass.api.controllers.ClassificationController;
 
 @Relation(collectionRelation = "searchResults")
+@JsonPropertyOrder({"name", "snippet", "searchScore", "links"})
 public class SearchResultResource extends KlassResource {
 
     private String name;
@@ -49,7 +51,7 @@ public class SearchResultResource extends KlassResource {
     }
 
     private Link createSelfLink(Long id) {
-        return linkTo(methodOn(ClassificationController.class).classification(id, null, null)).withSelfRel();
+        return linkTo(methodOn(ClassificationController.class).classification(id, null, null)).withSelfRel().expand();
     }
 
     public String getName() {

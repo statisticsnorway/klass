@@ -1,14 +1,14 @@
 package no.ssb.klass.api.applicationtest;
 
-import static com.jayway.restassured.RestAssured.*;
+import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 
 import no.ssb.klass.testutil.TestDataProvider;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
-import com.jayway.restassured.http.ContentType;
+import io.restassured.http.ContentType;
 
 import no.ssb.klass.core.model.ClassificationFamily;
 import no.ssb.klass.core.model.ClassificationVariant;
@@ -24,7 +24,7 @@ public class RestApiDraftIntegrationTest extends AbstractRestApiApplicationTest 
 
     private ClassificationVariant variant;
 
-    @Before
+    @BeforeEach
     public void addDrafts() {
         applicationTestUtil.clearDatabase();
         applicationTestUtil.clearSearch();

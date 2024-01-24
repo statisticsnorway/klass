@@ -93,4 +93,9 @@ public class KlassUserDetails implements LdapUserDetails {
     public String getDn() {
         return ldapUserDetails.getDn();
     }
+
+    @Override
+    public void eraseCredentials() {
+        ldapUserDetails.eraseCredentials();
+    }
 }

@@ -1,12 +1,12 @@
 package no.ssb.klass.api.applicationtest;
 
-import static com.jayway.restassured.RestAssured.*;
+import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
-import com.jayway.restassured.http.ContentType;
+import io.restassured.http.ContentType;
 
 import no.ssb.klass.core.model.ClassificationType;
 
@@ -25,7 +25,7 @@ public class RestApiClassificationFamilyIntegrationTest extends AbstractRestApiA
                 // classificationFamily
                 .assertThat().body("name", equalTo(classificationFamily.getName()))
                 // classifications
-                .assertThat().body("classifications.size", equalTo(classificationFamily.getClassificationSeriesBySectionAndClassificationType(null,
+                .assertThat().body("classifications.size()", equalTo(classificationFamily.getClassificationSeriesBySectionAndClassificationType(null,
                 ClassificationType.CLASSIFICATION).size()))
 
                 // links
@@ -46,7 +46,7 @@ public class RestApiClassificationFamilyIntegrationTest extends AbstractRestApiA
                 // classificationFamily
                 .assertThat().body("name", equalTo(classificationFamily.getName()))
                 // classifications
-                .assertThat().body("classifications.size", equalTo(classificationFamily.getClassificationSeriesBySectionAndClassificationType(null,
+                .assertThat().body("classifications.size()", equalTo(classificationFamily.getClassificationSeriesBySectionAndClassificationType(null,
                 null).size()))
 
                 // links
@@ -68,7 +68,7 @@ public class RestApiClassificationFamilyIntegrationTest extends AbstractRestApiA
                 // classificationFamily
                 .assertThat().body("name", equalTo(classificationFamily.getName()))
                 // classifications
-                .assertThat().body("classifications.size", equalTo(0))
+                .assertThat().body("classifications.size()", equalTo(0))
 
                 // links
                 .body(JSON_LINKS + ".self.href", containsString(urlParts));

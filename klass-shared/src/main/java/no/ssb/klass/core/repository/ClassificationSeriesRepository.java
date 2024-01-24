@@ -41,42 +41,42 @@ public interface ClassificationSeriesRepository extends JpaRepository<Classifica
     Set<String> findResponsibleSectionsWithPublishedVersions();
 
     @Query(value = "select count(*) from ClassificationSeries classification join classification.contactPerson user where "
-            + "classification.deleted is false" + CHECKPARAMETERS)
+            + "classification.deleted = false" + CHECKPARAMETERS)
     int finNumberOfClassifications(@Param("classificationType") ClassificationType classificationType,
             @Param("section") String section);
 
     @Query(value = "select count(distinct classification.id) from ClassificationVersion version join version.classification classification join "
-            + "classification.contactPerson user where classification.deleted is false and version.deleted is false "
-            + "and (version.published.published_no is true or "
-            + "version.published.published_nn is true or version.published.published_en is true)" + CHECKPARAMETERS)
+            + "classification.contactPerson user where classification.deleted = false and version.deleted = false "
+            + "and (version.published.published_no = true or "
+            + "version.published.published_nn = true or version.published.published_en = true)" + CHECKPARAMETERS)
     int findNumberOfPublishedClassifications(@Param("classificationType") ClassificationType classificationType,
             @Param("section") String section);
 
     @Query(value = "select count(version.id) from ClassificationVersion version join version.classification classification join "
-            + "classification.contactPerson user where classification.deleted is false and version.deleted is false "
-            + "and (version.published.published_no is true "
-            + "or version.published.published_nn is true or version.published.published_en is true)" + CHECKPARAMETERS)
+            + "classification.contactPerson user where classification.deleted = false and version.deleted = false "
+            + "and (version.published.published_no = true "
+            + "or version.published.published_nn = true or version.published.published_en = true)" + CHECKPARAMETERS)
     int findNumberOfPublishedVersionsAnyLanguages(@Param("classificationType") ClassificationType classificationType,
             @Param("section") String section);
 
     @Query(value = "select count(version.id) from ClassificationVersion version join version.classification classification join "
-            + "classification.contactPerson user where classification.deleted is false and version.deleted is false "
-            + "and version.published.published_no is true "
-            + "and version.published.published_nn is true and version.published.published_en is true" + CHECKPARAMETERS)
+            + "classification.contactPerson user where classification.deleted = false and version.deleted = false "
+            + "and version.published.published_no = true "
+            + "and version.published.published_nn = true and version.published.published_en = true" + CHECKPARAMETERS)
     int findNumberOfPublishedVersionsAllLanguages(@Param("classificationType") ClassificationType classificationType,
             @Param("section") String section);
 
     @Query(value = "select new no.ssb.klass.core.service.dto.ClassificationReportDto(classification, user) "
             + "from ClassificationSeries classification join classification.contactPerson user where "
-            + "classification.deleted is false" + CHECKPARAMETERS + " order by classification.id")
+            + "classification.deleted = false" + CHECKPARAMETERS + " order by classification.id")
     List<ClassificationReportDto> getClassificationReport(
             @Param("classificationType") ClassificationType classificationType,
             @Param("section") String section);
 
     @Query(value = "select new no.ssb.klass.core.service.dto.ClassificationReportDto(classification, user) "
             + "from ClassificationVersion version join version.classification classification join "
-            + "classification.contactPerson user where classification.deleted is false and (version.published.published_no is true or "
-            + "version.published.published_nn is true or version.published.published_en is true)" + CHECKPARAMETERS
+            + "classification.contactPerson user where classification.deleted = false and (version.published.published_no = true or "
+            + "version.published.published_nn = true or version.published.published_en = true)" + CHECKPARAMETERS
             + " order by classification.id")
     List<ClassificationReportDto> getPublishedClassificationReport(
             @Param("classificationType") ClassificationType classificationType,
@@ -84,9 +84,9 @@ public interface ClassificationSeriesRepository extends JpaRepository<Classifica
 
     @Query(value = "select new no.ssb.klass.core.service.dto.ClassificationVersionReportDto(version, classification, user) "
             + "from ClassificationVersion version join version.classification classification join "
-            + "classification.contactPerson user where classification.deleted is false and version.deleted is false "
-            + "and (version.published.published_no is true "
-            + "or version.published.published_nn is true or version.published.published_en is true)" + CHECKPARAMETERS
+            + "classification.contactPerson user where classification.deleted = false and version.deleted = false "
+            + "and (version.published.published_no = true "
+            + "or version.published.published_nn = true or version.published.published_en = true)" + CHECKPARAMETERS
             + " order by version.id")
     List<ClassificationVersionReportDto> getPublishedVersionsAnyLanguages(
             @Param("classificationType") ClassificationType classificationType,
@@ -96,20 +96,20 @@ public interface ClassificationSeriesRepository extends JpaRepository<Classifica
             + "from ClassificationVersion version "
             + "  join version.classification classification "
             + "  join classification.contactPerson user "
-            + "where classification.deleted is false and version.deleted is false "
-            + "  and version.published.published_no is true "
-            + "  and version.published.published_nn is true and version.published.published_en is true "
+            + "where classification.deleted = false and version.deleted = false "
+            + "  and version.published.published_no = true "
+            + "  and version.published.published_nn = true and version.published.published_en = true "
             + CHECKPARAMETERS
             + "  order by version.id")
     List<ClassificationVersionReportDto> getPublishedVersionsAllLanguages(
             @Param("classificationType") ClassificationType classificationType,
             @Param("section") String section);
 
-    @Query(value = "select count(id) from ClassificationSeries where deleted is false and :user = contactPerson")
+    @Query(value = "select count(id) from ClassificationSeries where deleted = false and :user = contactPerson")
     int getNumberOfClassificationForUser(@Param("user") User user);
 
     @Modifying
-    @Query("update ClassificationSeries set contactPerson = :newUser where contactPerson = :oldUser and deleted is false")
+    @Query("update ClassificationSeries set contactPerson = :newUser where contactPerson = :oldUser and deleted = false")
     void updateUser(@Param("oldUser") User oldUser, @Param("newUser") User newUser);
 
     ClassificationSeries findByNameNoIgnoreCase(@Param("name") String name);
@@ -130,6 +130,6 @@ public interface ClassificationSeriesRepository extends JpaRepository<Classifica
     void updateClassificationLastModified(@Param("classificationId") Long classificationId,
             @Param("timeStamp") Date timeStamp);
 
-    @Query("select distinct statisticalUnits from ClassificationSeries where deleted is false")
+    @Query("select distinct statisticalUnits from ClassificationSeries where deleted = false")
     List<StatisticalUnit> findAllClassificationStatisticalUnits();
 }

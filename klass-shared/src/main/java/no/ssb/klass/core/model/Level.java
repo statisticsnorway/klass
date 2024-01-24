@@ -7,16 +7,19 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import no.ssb.klass.core.util.Translatable;
+import no.ssb.klass.core.util.TranslatablePersistenceConverter;
 
 @Entity
 public class Level extends BaseEntity {
     @Column(nullable = false, length = 1000)
+    @Convert(converter = TranslatablePersistenceConverter.class)
     private Translatable name;
     @Column(nullable = false)
     private final int levelNumber;
@@ -43,14 +46,16 @@ public class Level extends BaseEntity {
     }
 
     /**
-     * @return name for specified language, if no name an empty string is returned, never null
+     * @return name for specified language, if no name an empty string is returned,
+     *         never null
      */
     public String getName(Language language) {
         return name.getString(language);
     }
 
     /**
-     * Not public since clients should add classificationItems through owning version/variant. This so that
+     * Not public since clients should add classificationItems through owning
+     * version/variant. This so that
      * version/variant can enforce no duplicated codes.
      */
     void addClassificationItem(ClassificationItem classificationItem) {

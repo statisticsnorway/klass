@@ -1,7 +1,7 @@
 package no.ssb.klass.api.dto.hal;
 
 import static java.util.stream.Collectors.*;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.springframework.hateoas.Link;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -19,6 +20,8 @@ import no.ssb.klass.core.model.CorrespondenceTable;
 import no.ssb.klass.core.model.Language;
 import no.ssb.klass.api.controllers.ClassificationController;
 
+@JsonPropertyOrder({"name", "contactPerson", "owningSection", "source", "sourceId", "target", "targetId", "changeTable",
+        "lastModified", "published", "sourceLevel", "targetLevel", "links"})
 public class CorrespondenceTableSummaryResource extends KlassResource {
     private final String name;
     private final ContactPersonResource contactPerson;
@@ -58,7 +61,7 @@ public class CorrespondenceTableSummaryResource extends KlassResource {
     }
 
     private Link createSelfLink(long id) {
-        return linkTo(methodOn(ClassificationController.class).correspondenceTables(id, null)).withSelfRel();
+        return linkTo(methodOn(ClassificationController.class).correspondenceTables(id, null)).withSelfRel().expand();
     }
 
     private Link createSourceLink(long id) {

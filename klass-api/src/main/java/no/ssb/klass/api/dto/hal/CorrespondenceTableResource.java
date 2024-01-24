@@ -2,6 +2,7 @@ package no.ssb.klass.api.dto.hal;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
@@ -10,6 +11,9 @@ import no.ssb.klass.core.model.CorrespondenceTable;
 import no.ssb.klass.core.model.Language;
 
 @JacksonXmlRootElement(localName = "correspondenceTable")
+@JsonPropertyOrder({"name", "contactPerson", "owningSection", "source", "sourceId", "target", "targetId", "changeTable",
+        "lastModified", "published", "sourceLevel", "targetLevel", "description", "changelogs", "correspondenceMaps",
+        "links"})
 public class CorrespondenceTableResource extends CorrespondenceTableSummaryResource {
     private final String description;
     private final List<ChangelogResource> changelogs;

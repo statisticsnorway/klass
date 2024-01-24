@@ -1,8 +1,10 @@
 package no.ssb.klass.api.controllers;
 
+import no.ssb.klass.api.util.RestConstants;
 import no.ssb.klass.core.service.SearchService;
 import no.ssb.klass.core.service.UserService;
 import no.ssb.klass.core.service.search.SolrSearchResult;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
@@ -21,26 +23,31 @@ import java.util.List;
  * @author Mads Lundemo, SSB.
  */
 @Controller
-@RequestMapping(MonitorController.PATH)
 public class MonitorController {
-    private static final String REST_URL_PREFIX = "/api/klass/v1";
-    public static final String PATH = "/monitor/";
+    public static final String PATH = "/monitor";
     
     private static final String DATABASE_TILKOBLING = "Database tilkobling";
     private static final String REST_API = "Rest API";
     private static final String SOLR_SEARCH = "solr søk";
-    
 
     @Value("${info.build.version:Unknown}")
     private String version;
-    
+
+    @Value("${spring.data.rest.base-path:}")
+    private String basePath;
+
     @Autowired
     private UserService userService;
 
     @Autowired
     private SearchService searchService;
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @RequestMapping(value = {
+            "/api/klass" + MonitorController.PATH,
+            "/api/klass" + MonitorController.PATH + "/",
+            MonitorController.PATH,
+            MonitorController.PATH + "/",
+    }, method = RequestMethod.GET)
     public String render(HttpServletRequest request, ModelMap model) {
 
         List<MonitorStatus> statusList = new LinkedList<>();
@@ -67,8 +74,11 @@ public class MonitorController {
     private MonitorStatus testRestAPI(HttpServletRequest request) {
         try {
             String currentUrl = getCurrentUrl(request);
+            if (StringUtils.isNotBlank(basePath)) {
+                currentUrl = currentUrl + "/" + basePath;
+            }
 
-            String testUrl = currentUrl + REST_URL_PREFIX + "/classifications";
+            String testUrl = currentUrl + RestConstants.API_VERSION_V1 + "/classifications";
             URL url = new URL(testUrl);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             int responseCode = connection.getResponseCode();
@@ -87,7 +97,7 @@ public class MonitorController {
     private MonitorStatus testSearch() {
         try {
             FacetAndHighlightPage<SolrSearchResult> solrSearchResults = 
-                    searchService.publicSearch("*",new PageRequest(0,10),null,true);
+                    searchService.publicSearch("*",PageRequest.of(0,10),null,true);
             int results = solrSearchResults.getSize();
             if (results>0) {
                 return new MonitorStatus(SOLR_SEARCH, true, "Søk fungerer");

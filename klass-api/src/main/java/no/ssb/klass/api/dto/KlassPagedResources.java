@@ -4,14 +4,14 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import org.springframework.hateoas.Link;
-import org.springframework.hateoas.PagedResources;
+import org.springframework.hateoas.Links;
+import org.springframework.hateoas.PagedModel;
 
 import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Collection;
-import java.util.List;
 
 /**
  * @author Mads Lundemo, SSB.
@@ -27,9 +27,9 @@ import java.util.List;
  */
 @JacksonXmlRootElement(localName = "pagedEntities")
 @XmlRootElement(name = "pagedEntities")
-public class KlassPagedResources<T> extends PagedResources<T> {
+public class KlassPagedResources<T> extends PagedModel<T> {
 
-    public KlassPagedResources(PagedResources<T> p) {
+    public KlassPagedResources(PagedModel<T> p) {
         super(p.getContent(), p.getMetadata(), p.getLinks());
     }
 
@@ -45,7 +45,7 @@ public class KlassPagedResources<T> extends PagedResources<T> {
     @XmlElement(name = "link", namespace = Link.ATOM_NAMESPACE)
     @JacksonXmlElementWrapper(localName = "links")
     @JacksonXmlProperty(localName = "link")
-    public List<Link> getLinks() {
+    public Links getLinks() {
         return super.getLinks();
     }
 }

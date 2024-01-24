@@ -1,1 +1,1 @@
-ALTER TABLE subscription MODIFY verification VARCHAR(255) NOT NULL;
+ALTER TABLE subscription ALTER COLUMN verification VARCHAR(255) NOT NULL;

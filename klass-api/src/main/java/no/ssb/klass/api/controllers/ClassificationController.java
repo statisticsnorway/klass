@@ -41,16 +41,19 @@ import no.ssb.klass.core.util.KlassResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.solr.core.query.result.FacetAndHighlightPage;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
+import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.Link;
-import org.springframework.hateoas.PagedResources;
-import org.springframework.hateoas.Resources;
-import org.springframework.hateoas.mvc.ControllerLinkBuilder;
+import org.springframework.hateoas.MediaTypes;
+import org.springframework.hateoas.PagedModel;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
@@ -82,7 +85,8 @@ import static java.util.stream.Collectors.toList;
 @RestController
 // NOTE: CrossOrigin config moved to KlassSecurityConfiguration
 // due to conditional behavior where some requests didn't get CORS headers and cause cache problems
-@RequestMapping(value = { RestConstants.API_VERSION_V1,"/api/klass"+RestConstants.API_VERSION_V1, "/rest/v1" })
+@RequestMapping(value = {RestConstants.PREFIX_AND_API_VERSION_V1, RestConstants.API_VERSION_V1, "/rest/v1" },
+    produces = {MediaTypes.HAL_JSON_VALUE, "application/*", "text/csv"})
 public class ClassificationController {
     private static final Logger log = LoggerFactory.getLogger(ClassificationController.class);
     private final ClassificationService classificationService;
@@ -90,6 +94,9 @@ public class ClassificationController {
     private final SearchService searchService;
     private final StatisticsService statisticsService;
     private final CsvFieldsValidator csvFieldsValidator;
+
+    @Value("${spring.data.rest.base-path:}")
+    private String basePath;
 
     @Autowired
     public ClassificationController(ClassificationService classificationService,
@@ -145,7 +152,7 @@ public class ClassificationController {
     }
 
     @RequestMapping(value = "/classificationfamilies", method = RequestMethod.GET)
-    public Resources<ClassificationFamilySummaryResource> classificationFamilies(
+    public CollectionModel<ClassificationFamilySummaryResource> classificationFamilies(
             // @formatter:off
                 @RequestParam(value = "ssbSection", required = false) String ssbSection,
                 @RequestParam(value = "includeCodelists", defaultValue = "false") boolean includeCodelists,
@@ -160,7 +167,7 @@ public class ClassificationController {
                 .map(summary -> new ClassificationFamilySummaryResource(summary, language))
                 .collect(toList());
 
-        return new KlassResources<>(summaryResources, new Link(getCurrentRequest(), Link.REL_SELF));
+        return new KlassResources<>(summaryResources, Link.of(getCurrentRequest(), IanaLinkRelations.SELF));
     }
 
     @RequestMapping(value = "/classificationfamilies/{id}", method = RequestMethod.GET)
@@ -178,26 +185,27 @@ public class ClassificationController {
     }
 
     @RequestMapping(value = "/ssbsections", method = RequestMethod.GET)
-    public Resources<SsbSectionResource> ssbsections() {
+    public CollectionModel<SsbSectionResource> ssbsections() {
         List<SsbSectionResource> ssbSectionResources = classificationService
                 .findResponsibleSectionsWithPublishedVersions().stream()
                 .sorted().map(SsbSectionResource::new).collect(toList());
-        return new KlassResources<>(ssbSectionResources, new Link(getCurrentRequest(), Link.REL_SELF));
+        return new KlassResources<>(ssbSectionResources, Link.of(getCurrentRequest(), IanaLinkRelations.SELF));
     }
 
     @RequestMapping(value = "/classifications", method = RequestMethod.GET)
     public KlassPagedResources<ClassificationSummaryResource> classifications(
             // @formatter:off
                 @RequestParam(value = "includeCodelists", defaultValue = "false") boolean includeCodelists,
-                @RequestParam(value = "changedSince", required = false) @DateTimeFormat(iso = ISO.DATE_TIME) Date changedSince,
+                @RequestParam(value = "changedSince", required = false)
+                @DateTimeFormat(iso = ISO.DATE_TIME, fallbackPatterns = "yyyy-MM-dd'T'HH:mm:ss.ssZ") Date changedSince,
                 Pageable pageable, PagedResourcesAssembler<ClassificationSeries> assembler) {
             // @formatter:on
 
         Page<ClassificationSeries> classifications = classificationService.findAllPublic(
                 includeCodelists, changedSince, pageable);
 
-        Link self = new Link(getCurrentRequest(), Link.REL_SELF);
-        PagedResources<ClassificationSummaryResource> response = assembler.toResource(classifications,
+        Link self = Link.of(getCurrentRequest(), IanaLinkRelations.SELF);
+        PagedModel<ClassificationSummaryResource> response = assembler.toModel(classifications,
                 ClassificationSummaryResource::new, self);
         addSearchLink(response);
         return new KlassPagedResources<>(response);
@@ -211,12 +219,12 @@ public class ClassificationController {
                 @RequestParam(value = "includeCodelists", defaultValue = "false") boolean includeCodelists,
                 Pageable pageable, PagedResourcesAssembler<SolrSearchResult> assembler) {
             // @formatter:on
-        Link self = new Link(getCurrentRequest(), Link.REL_SELF);
+        Link self = Link.of(getCurrentRequest(), IanaLinkRelations.SELF);
         ssbSection = extractSsbSection(ssbSection);
 
         FacetAndHighlightPage<SolrSearchResult> page =
                 searchService.publicSearch(query, pageable, ssbSection, includeCodelists);
-        PagedResources<SearchResultResource> response = assembler.toResource(page,
+        PagedModel<SearchResultResource> response = assembler.toModel(page,
                 searchResult -> new SearchResultResource(searchResult, page.getHighlights(searchResult)),
                 self);
 
@@ -485,12 +493,12 @@ public class ClassificationController {
             if (subscriberService.containsTracking(email, classification)) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(SubscribeResponse.EXISTS);
             } else {
-                URL endSubscriptionUrl = ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(ClassificationController.class)
+                URL endSubscriptionUrl = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(ClassificationController.class)
                         .removeTracking(classificationId, email)).toUri().toURL();
 
                 String token = subscriberService.trackChanges(email, classification, endSubscriptionUrl);
 
-                URL verifySubscriptionUrl = ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(ClassificationController.class)
+                URL verifySubscriptionUrl = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(ClassificationController.class)
                         .verifyTracking(email, token)).toUri().toURL();
 
                 subscriberService.sendVerificationMail(email, verifySubscriptionUrl, classification);
@@ -537,11 +545,12 @@ public class ClassificationController {
         return ResponseEntity.ok("Subscription is verified.");
     }
 
-    private void addSearchLink(PagedResources<ClassificationSummaryResource> response) {
-        ControllerLinkBuilder linkBuilder = ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(ClassificationController.class).search("query", null, true,
+    private void addSearchLink(PagedModel<ClassificationSummaryResource> response) {
+        WebMvcLinkBuilder linkBuilder = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(ClassificationController.class).search("query", null, true,
                 null, null));
-        response.add(new Link(ResourceUtil.createUriTemplate(linkBuilder, "query", "includeCodelists"), "search"));
+        response.add(Link.of(ResourceUtil.createUriTemplate(linkBuilder, "query", "includeCodelists"), "search"));
     }
+
 
     private String getCurrentRequest() {
         return ServletUriComponentsBuilder.fromCurrentRequest().build().toString();

@@ -22,17 +22,20 @@ public class Subscription extends BaseEntity {
     private static final long ONE_MINUTE_IN_MILLISECS = 60000;
 
     @Column(nullable = false)
-    private final Date expiryDate;
+    private Date expiryDate;
     @Column(nullable = false)
-    private final String token;
+    private String token;
     @Column(nullable = false)
-    private final URL endSubscriptionUrl;
+    private URL endSubscriptionUrl;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Verification verification;
 
     @ManyToOne
-    private final ClassificationSeries classification;
+    private ClassificationSeries classification;
+
+    public Subscription() {
+    }
 
     public Subscription(ClassificationSeries classification, URL endSubscriptionUrl) {
         this.classification = checkNotNull(classification);

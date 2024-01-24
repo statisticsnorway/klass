@@ -1,11 +1,11 @@
 package no.ssb.klass.api.applicationtest;
 
-import com.jayway.restassured.http.ContentType;
+import io.restassured.http.ContentType;
 import no.ssb.klass.testutil.TestDataProvider;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
-import static com.jayway.restassured.RestAssured.given;
+import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -205,7 +205,7 @@ public class RestApiCodeAtIntegrationTest extends AbstractRestApiApplicationTest
                 .statusCode(HttpStatus.OK.value())
                 .contentType(CONTENT_TYPE_CSV)
 
-                .content(containsString(
+                .body(containsString(
                         "\"code\",\"parentCode\",\"level\",\"name\",\"shortName\",\"presentationName\",\"validFrom\",\"validTo\",\"notes\"\n"
                                 + "\"0101\",,\"1\",\"Halden\",\"\",\"\",,,\"\"\n"
                                 + "\"0104\",,\"1\",\"Moss\",\"\",\"\",,,\"\"\n"
@@ -225,7 +225,7 @@ public class RestApiCodeAtIntegrationTest extends AbstractRestApiApplicationTest
                 .statusCode(HttpStatus.OK.value())
                 .contentType(CONTENT_TYPE_CSV)
 
-                .content(containsString(
+                .body(containsString(
                         "\"code\",\"parentCode\",\"level\",\"name\",\"shortName\",\"presentationName\",\"validFrom\",\"validTo\",\"notes\"\n"
                                 + "\"0101\",,\"1\",\"Halden\",\"\",\"\",,,\"\"\n"
                                 + "\"0104\",,\"1\",\"Moss\",\"\",\"\",,,\"\"\n"
@@ -250,7 +250,7 @@ public class RestApiCodeAtIntegrationTest extends AbstractRestApiApplicationTest
                 .statusCode(HttpStatus.OK.value())
                 .contentType(CONTENT_TYPE_CSV)
 
-                .content(containsString(
+                .body(containsString(
                         "\"code\",\"parentCode\",\"level\",\"name\",\"shortName\",\"presentationName\",\"validFrom\",\"validTo\",\"notes\"\n"                                + "\"0101\",,\"1\",\"Halden\",\"\",\"\",,,\"\"\n"
                                 + "\"0104\",,\"1\",\"Moss\",\"\",\"\",,,\"\"\n"
                                 + "\"0301\",,\"1\",\"Oslo\",\"\",\"\",,,\"\"\n"
@@ -274,7 +274,7 @@ public class RestApiCodeAtIntegrationTest extends AbstractRestApiApplicationTest
                 .statusCode(HttpStatus.OK.value())
                 .contentType(CONTENT_TYPE_CSV)
 
-                .content(containsString(
+                .body(containsString(
                         "\"code\";\"parentCode\";\"level\";\"name\";\"shortName\";\"presentationName\";\"validFrom\";\"validTo\";\"notes\"\n"
                                 + "\"0101\";;\"1\";\"Halden\";\"\";\"\";;;\"\"\n"
                                 + "\"0104\";;\"1\";\"Moss\";\"\";\"\";;;\"\"\n"

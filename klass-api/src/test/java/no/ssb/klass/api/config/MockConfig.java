@@ -3,53 +3,51 @@ package no.ssb.klass.api.config;
 import no.ssb.klass.api.controllers.validators.CsvFieldsValidator;
 import no.ssb.klass.core.service.*;
 import no.ssb.klass.api.controllers.ClassificationController;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 
+import static org.mockito.Mockito.*;
+
 public class MockConfig {
-    
-    @Autowired
-    private ClassificationService classificationService;
-    
-    @Autowired
-    private SubscriberService subscriberService;
-    
-    @Autowired
-    private SearchService searchService;
-    
-    @Autowired
-    private StatisticsService statisticsService;
 
     @Autowired
-    private UserService userService;
+    private ClassificationService classificationService;
+
+    @Autowired
+    private SubscriberService subscriberService;
+
+    @Autowired
+    private SearchService searchService;
+
+    @Autowired
+    private StatisticsService statisticsService;
 
     @Autowired
     private CsvFieldsValidator csvFieldsValidator;
 
     @Bean
     public ClassificationService classificationService() {
-        return Mockito.mock(ClassificationService.class);
+        return mock(ClassificationService.class);
     }
 
     @Bean
     public SubscriberService subscriberService() {
-        return Mockito.mock(SubscriberService.class);
+        return mock(SubscriberService.class);
     }
 
     @Bean
     public SearchService searchService() {
-        return Mockito.mock(SearchService.class);
+        return mock(SearchService.class);
     }
 
     @Bean
     public StatisticsService statisticsService() {
-        return Mockito.mock(StatisticsService.class);
+        return mock(StatisticsService.class);
     }
     
     @Bean
     public UserService userService() {
-        return Mockito.mock(UserService.class);
+        return mock(UserService.class);
     }
 
     @Bean

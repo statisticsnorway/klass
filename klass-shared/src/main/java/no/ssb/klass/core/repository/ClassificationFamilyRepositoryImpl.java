@@ -13,20 +13,24 @@ import no.ssb.klass.core.model.ClassificationType;
 import no.ssb.klass.core.util.TranslatablePersistenceConverter;
 
 /**
- * Note: this class is only needed due to bug in Hibernate, see https://hibernate.atlassian.net/browse/HHH-7321.
+ * Note: this class is only needed due to bug in Hibernate, see
+ * https://hibernate.atlassian.net/browse/HHH-7321.
  * <p>
- * Because of this bug in hql, we are using native sql instead, and need to do the result mapping to
+ * Because of this bug in hql, we are using native sql instead, and need to do
+ * the result mapping to
  * ClassificationFamilySummary manually.
  * <p>
- * If above bug is fixed then this class and the custom interface should be deleted and an hql query should be used
+ * If above bug is fixed then this class and the custom interface should be
+ * deleted and an hql query should be used
  * instead.
  * <p>
- * Note: Above mentioned bug is fixed in Hibernate and is included in version 5.1. However Spring Boot is not yet using
+ * Note: Above mentioned bug is fixed in Hibernate and is included in version
+ * 5.1. However Spring Boot is not yet using
  * this version (currently 5.0 of Hibernate)
- * 
+ *
  * <pre>
  * A possible HQL that can be included in ClassificationFamilyRepository if bug is fixed, is shown below;
- *  
+ *
  * &#64;Query("select new no.ssb.klass.core.repository.ClassificationFamilySummary(family.name, family.iconName, count(classification)) "
  *         + "from ClassificationFamily family "
  *         + "left join family.classificationSeriesList as classification with classification.deleted <> '1' "
@@ -49,11 +53,11 @@ class ClassificationFamilyRepositoryImpl implements ClassificationFamilyReposito
             ClassificationType classificationType) {
         List<ClassificationFamilySummary> result = new ArrayList<>();
         List<Object[]> rows = em.createNativeQuery(
-                // @formatter:off
+        // @formatter:off
                        "select family.id, family.name, family.icon_name, count(classification.id) from classification_family family "
                      + "left outer join classification_series classification on classification.classification_family_id=family.id "
-                     + "  and classification.deleted <> '1' "
-                     + "  and (:section is null or :section = (select user.section from user user where user.id = classification.contact_person_id)) "
+                     + "  and classification.deleted = false"
+                     + "  and (:section is null or :section = (select usr.section from user usr where usr.id = classification.contact_person_id)) "
                      + "  and (:classificationType is null or :classificationType = classification.classification_type) "
                      + "group by family.id"
                 // @formatter:on
@@ -78,13 +82,13 @@ class ClassificationFamilyRepositoryImpl implements ClassificationFamilyReposito
       "select family.id, family.name, family.icon_name, count(DISTINCT(classification.id)) from classification_family family "
       + "  left outer join classification_series classification on classification.classification_family_id=family.id "
       + "  left outer join statistical_classification version on version.classification_id=classification.id "
-      + " where (version.published_en = '1' or version.published_no = '1' or version.published_nn = '1') "
-      + "    and version.deleted <> '1' "
-      + "    and classification.deleted <> '1' "
-      + "    and classification.copyrighted <> '1' "
+      + " where (version.published_en is true or version.published_no is true or version.published_nn is true) "
+      + "    and version.deleted is false "
+      + "    and classification.deleted is false "
+      + "    and classification.copyrighted is false "
       + "    and (:classificationType is null or :classificationType = classification.classification_type) "
       + "    and (:section is null or :section "
-      + "           = (select user.section from user user where user.id = classification.contact_person_id)) "
+      + "           = (select usr.section from user usr where usr.id = classification.contact_person_id)) "
       + "  group by family.id"
     // @formatter:on
         ).setParameter("section", section).setParameter("classificationType", classificationType == null ? null

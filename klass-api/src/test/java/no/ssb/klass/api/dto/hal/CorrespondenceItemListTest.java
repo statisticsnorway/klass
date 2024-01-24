@@ -1,12 +1,12 @@
 package no.ssb.klass.api.dto.hal;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import no.ssb.klass.api.dto.CorrespondenceItem;
 import no.ssb.klass.api.dto.CorrespondenceItem.RangedCorrespondenceItem;
 import no.ssb.klass.api.dto.CorrespondenceItemList;
 import no.ssb.klass.core.util.DateRange;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;

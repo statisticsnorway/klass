@@ -67,9 +67,11 @@ public abstract class AbstractTestBench implements HasDriver {
         if (Strings.nullToEmpty(System.getProperty("useHeadless")).equals("true")) {
             driver = new PhantomJSDriver();
         } else {
-            // driver = new FirefoxDriver();
+            driver = new FirefoxDriver();
+            /*
             driver = new FirefoxDriver(new FirefoxBinary(new File(
                     "C:\\Users\\mlo\\Downloads\\FirefoxPortable\\FirefoxPortable.exe")), new FirefoxProfile());
+             */
         }
         driver.manage().window().setSize(new Dimension(1280, 800));
         Parameters.setScreenshotErrorDirectory("target/testbench/errors");

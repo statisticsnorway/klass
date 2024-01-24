@@ -7,31 +7,30 @@ import no.ssb.klass.core.util.DateRange;
 import no.ssb.klass.core.util.TimeUtil;
 import no.ssb.klass.testutil.ConstantClockSource;
 import no.ssb.klass.testutil.TestUtil;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpOutputMessage;
 import org.springframework.mock.http.MockHttpOutputMessage;
 
 import java.util.Arrays;
 import java.util.Date;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class CodeListCsvConverterTest {
     private CodeListCsvConverter subject;
     private Date now;
 
-    @Before
+    @BeforeEach
     public void setup() {
         now = new Date();
         TimeUtil.setClockSource(new ConstantClockSource(now));
         subject = new CodeListCsvConverter();
     }
 
-    @After
+    @AfterEach
     public void teardown() {
         TimeUtil.revertClockSource();
     }
@@ -42,9 +41,10 @@ public class CodeListCsvConverterTest {
         assertFalse(subject.supports(CodeListCsvConverterTest.class));
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void readInternal() {
-        subject.readInternal(null, null);
+        Assertions.assertThrows(UnsupportedOperationException.class, () ->
+                subject.readInternal(null, null));
     }
 
     @Test

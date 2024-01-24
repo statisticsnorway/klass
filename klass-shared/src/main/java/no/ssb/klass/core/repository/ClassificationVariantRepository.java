@@ -16,7 +16,7 @@ public interface ClassificationVariantRepository extends JpaRepository<Classific
     List<ClassificationVariant> findByContactPerson(User contactPerson);
 
     @Modifying
-    @Query("update ClassificationVariant set contactPerson = :newUser where contactPerson = :oldUser and deleted is false")
+    @Query("update ClassificationVariant set contactPerson = :newUser where contactPerson = :oldUser and deleted = false")
     void updateUser(@Param("oldUser") User oldUser, @Param("newUser") User newUser);
 
 }

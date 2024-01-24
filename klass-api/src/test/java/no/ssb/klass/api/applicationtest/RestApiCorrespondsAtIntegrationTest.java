@@ -1,11 +1,11 @@
 package no.ssb.klass.api.applicationtest;
 
-import com.jayway.restassured.http.ContentType;
+import io.restassured.http.ContentType;
 import no.ssb.klass.testutil.TestDataProvider;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
-import static com.jayway.restassured.RestAssured.given;
+import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -169,7 +169,7 @@ public class RestApiCorrespondsAtIntegrationTest extends AbstractRestApiApplicat
 //                .prettyPeek()
                 .then()
                 .statusCode(HttpStatus.OK.value())
-                .content(containsString(
+                .body(containsString(
                         "\"sourceCode\",\"sourceName\",\"sourceShortName\",\"targetCode\",\"targetName\",\"targetShortName\"\n"
                                 + "\"0301\",\"Oslo\",\"\",\"030101\",\"Gamle Oslo\",\"\"\n"
                                 + "\"0301\",\"Oslo\",\"\",\"030102\",\"Grünerløkka\",\"\"\n"
@@ -187,7 +187,7 @@ public class RestApiCorrespondsAtIntegrationTest extends AbstractRestApiApplicat
 //                .prettyPeek()
                 .then()
                 .statusCode(HttpStatus.OK.value())
-                .content(containsString(
+                .body(containsString(
                         "\"sourceCode\",\"sourceName\",\"sourceShortName\",\"targetCode\",\"targetName\",\"targetShortName\"\n"
                                 + "\"0301\",\"Oslo\",\"\",\"030101\",\"Gamle Oslo\",\"\"\n"
                                 + "\"0301\",\"Oslo\",\"\",\"030102\",\"Grünerløkka\",\"\"\n"

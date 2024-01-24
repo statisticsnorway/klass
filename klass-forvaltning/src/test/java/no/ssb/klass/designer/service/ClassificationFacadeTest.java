@@ -1,12 +1,12 @@
 package no.ssb.klass.designer.service;
 
-import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.*;
 
 import java.util.Optional;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import no.ssb.klass.core.model.Changelog;
 import no.ssb.klass.core.model.ClassificationSeries;
@@ -25,7 +25,7 @@ public class ClassificationFacadeTest {
     private SubscriberService subscriberServiceMock;
     private ChangeLogService ChangeLogServiceMock;
 
-    @Before
+    @BeforeEach
     public void setup() {
         subscriberServiceMock = mock(SubscriberService.class);
         ChangeLogServiceMock = mock(ChangeLogService.class);

@@ -1,13 +1,14 @@
 package no.ssb.klass.api.dto.hal;
 
 import static java.util.stream.Collectors.*;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.springframework.hateoas.Link;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -18,6 +19,7 @@ import no.ssb.klass.core.model.ClassificationVariant;
 import no.ssb.klass.core.model.Language;
 import no.ssb.klass.api.controllers.ClassificationController;
 
+@JsonPropertyOrder({"name", "contactPerson", "owningSection", "lastModified", "published", "links"})
 public class ClassificationVariantSummaryResource extends KlassResource {
     private final String name;
     private final ContactPersonResource contactPerson;
@@ -38,7 +40,7 @@ public class ClassificationVariantSummaryResource extends KlassResource {
     }
 
     private Link createSelfLink(long id) {
-        return linkTo(methodOn(ClassificationController.class).variants(id, null)).withSelfRel();
+        return linkTo(methodOn(ClassificationController.class).variants(id, null)).withSelfRel().expand();
     }
 
     public String getName() {

@@ -1,6 +1,7 @@
 package no.ssb.klass.core.repository;
 
 import java.math.BigInteger;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,11 +13,12 @@ import no.ssb.klass.core.model.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    User findOneByUsername(String username);
+    Optional<User> findOneByUsername(String username);
 
-    User findOneByFullname(String fullname);
+    Optional<User> findOneByFullname(String fullname);
 
-    // Hibernate does not support UNION and other HQL alternatives might cause performance issues. [Using Native query]
+    // Hibernate does not support UNION and other HQL alternatives might cause
+    // performance issues. [Using Native query]
     @Query(value = "SELECT DISTINCT(u.id) FROM user AS u, classification_series AS c"
             + " WHERE c.deleted = false AND  c.contact_person_id = u.id"
             + " UNION "
@@ -28,11 +30,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
             + " where"
             + "   variant.contact_person_id = u.id"
             + "   AND variant.dtype = 'variant'"
-            + "   And classification.deleted is false"
-            + "   And variant.deleted is false"
-            + "   AND version.deleted is false;",
-            nativeQuery = true)
-    // Native query returns BigInteger a Set<Long> definition wont change that, only confuse the reader.
+            + "   And classification.deleted = false"
+            + "   And variant.deleted = false"
+            + "   AND version.deleted = false;", nativeQuery = true)
+    // Native query returns BigInteger a Set<Long> definition wont change that, only
+    // confuse the reader.
     Set<BigInteger> getUserIdsForUsersWithClassifications();
 
 }

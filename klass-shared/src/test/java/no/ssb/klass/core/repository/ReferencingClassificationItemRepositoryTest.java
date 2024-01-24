@@ -1,15 +1,13 @@
 package no.ssb.klass.core.repository;
 
-import static org.hamcrest.core.Is.*;
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
 
 import javax.transaction.Transactional;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -17,7 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import no.ssb.klass.core.config.ConfigurationProfiles;
 import no.ssb.klass.core.model.ClassificationFamily;
@@ -38,7 +36,7 @@ import no.ssb.klass.testutil.TestUtil;
 /**
  * @author Mads Lundemo, SSB.
  */
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest
 @ActiveProfiles(ConfigurationProfiles.H2_INMEMORY)
 @Transactional
@@ -63,7 +61,7 @@ public class ReferencingClassificationItemRepositoryTest {
         private ClassificationVariant secondNormalVariant;
         private ClassificationVariant secondDeletedVariant;
 
-        @Before
+        @BeforeEach
         public void setup() {
                 user = userRepository.save(TestUtil.createUser());
                 classificationFamily = classificationFamilyRepository
@@ -89,16 +87,16 @@ public class ReferencingClassificationItemRepositoryTest {
                 List<ReferencingClassificationItem> normalItemReferences = referencingItemRepository.findByReference(
                                 classificationItem, false);
 
-                assertThat(deletedItemReferences.size(), is(0));
-                assertThat(normalItemReferences.size(), is(1));
+                assertThat(deletedItemReferences.size()).isEqualTo(0);
+                assertThat(normalItemReferences.size()).isEqualTo(1);
 
                 List<ReferencingClassificationItem> deletedReferencesForDeletedVariant = referencingItemRepository
                                 .findByReference(deletedClassificationItem, true);
                 List<ReferencingClassificationItem> normalReferencesForDeletedVariant = referencingItemRepository
                                 .findByReference(deletedClassificationItem, false);
 
-                assertThat(deletedReferencesForDeletedVariant.size(), is(1));
-                assertThat(normalReferencesForDeletedVariant.size(), is(0));
+                assertThat(deletedReferencesForDeletedVariant.size()).isEqualTo(1);
+                assertThat(normalReferencesForDeletedVariant.size()).isEqualTo(0);
         }
 
         @Test
@@ -114,16 +112,16 @@ public class ReferencingClassificationItemRepositoryTest {
                                 .findByReferenceInList(
                                                 normalVersion.getAllClassificationItems(), false);
 
-                assertThat(deletedItemReferences.size(), is(0));
-                assertThat(normalItemReferences.size(), is(12));
+                assertThat(deletedItemReferences.size()).isEqualTo(0);
+                assertThat(normalItemReferences.size()).isEqualTo(12);
 
                 List<ReferencingClassificationItem> deletedReferencesForDeletedVariant = referencingItemRepository
                                 .findByReferenceInList(deletedDeleted.getAllClassificationItems(), true);
                 List<ReferencingClassificationItem> normalReferencesForDeletedVariant = referencingItemRepository
                                 .findByReferenceInList(deletedDeleted.getAllClassificationItems(), false);
 
-                assertThat(deletedReferencesForDeletedVariant.size(), is(10));
-                assertThat(normalReferencesForDeletedVariant.size(), is(0));
+                assertThat(deletedReferencesForDeletedVariant.size()).isEqualTo(10);
+                assertThat(normalReferencesForDeletedVariant.size()).isEqualTo(0);
 
         }
 
@@ -137,16 +135,16 @@ public class ReferencingClassificationItemRepositoryTest {
                 List<ReferencingClassificationItem> normalReferences = referencingItemRepository.findItemReferences(
                                 versionForNormalVariant, false);
 
-                assertThat(deletedReferences.size(), is(0));
-                assertThat(normalReferences.size(), is(12));
+                assertThat(deletedReferences.size()).isEqualTo(0);
+                assertThat(normalReferences.size()).isEqualTo(12);
 
                 List<ReferencingClassificationItem> deletedReferencesForDeletedVariant = referencingItemRepository
                                 .findItemReferences(versionForDeletedVariant, true);
                 List<ReferencingClassificationItem> normalReferencesForDeletedVariant = referencingItemRepository
                                 .findItemReferences(versionForDeletedVariant, false);
 
-                assertThat(deletedReferencesForDeletedVariant.size(), is(10));
-                assertThat(normalReferencesForDeletedVariant.size(), is(0));
+                assertThat(deletedReferencesForDeletedVariant.size()).isEqualTo(10);
+                assertThat(normalReferencesForDeletedVariant.size()).isEqualTo(0);
 
         }
 
@@ -163,8 +161,7 @@ public class ReferencingClassificationItemRepositoryTest {
                 source.addClassificationVariant(variant);
                 variant.setClassificationVersion(source);
 
-                for (int i = 0; i < itemCount; i++) {
-                        ClassificationItem sourceItem = source.getAllClassificationItems().get(i);
+                for (ClassificationItem sourceItem: source.getAllClassificationItems()) {
                         ClassificationItem item = new ReferencingClassificationItem(sourceItem);
                         variant.addClassificationItem(item, 1, null);
                 }

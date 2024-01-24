@@ -1,10 +1,10 @@
 package no.ssb.klass.designer.util;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.beans.PropertyDescriptor;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.BeanUtils;
 
 public class DomainPropertyTest {
@@ -14,8 +14,8 @@ public class DomainPropertyTest {
         for (DomainProperty domainProperty : DomainProperty.values()) {
             PropertyDescriptor property = BeanUtils.getPropertyDescriptor(domainProperty.getClazz(), domainProperty
                     .getProperty());
-            assertNotNull(createErrorMessage("No property: ", domainProperty), property);
-            assertNotNull(createErrorMessage("No read method for property: ", domainProperty), property.getReadMethod());
+            assertNotNull(property, createErrorMessage("No property: ", domainProperty));
+            assertNotNull(property.getReadMethod(), createErrorMessage("No read method for property: ", domainProperty));
         }
     }
 

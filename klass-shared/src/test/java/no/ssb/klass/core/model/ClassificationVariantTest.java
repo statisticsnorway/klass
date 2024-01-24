@@ -1,8 +1,8 @@
 package no.ssb.klass.core.model;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import no.ssb.klass.core.util.Translatable;
 import no.ssb.klass.testutil.TestUtil;

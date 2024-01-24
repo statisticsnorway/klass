@@ -180,8 +180,10 @@
 
         <useCompoundFile>false</useCompoundFile>
         <ramBufferSizeMB>32</ramBufferSizeMB>
-        <mergeFactor>10</mergeFactor>
-
+        <mergePolicyFactory class="org.apache.solr.index.TieredMergePolicyFactory">
+            <int name="maxMergeAtOnce">10</int>
+            <int name="segmentsPerTier">10</int>
+        </mergePolicyFactory>
         <!-- Unlock On Startup
 
              If true, unlock any held write or commit locks on startup.
@@ -190,8 +192,8 @@
              with care.
 
              This is not needed if lock type is 'none' or 'single'
-           -->
         <unlockOnStartup>false</unlockOnStartup>
+           -->
 
         <!-- If true, IndexReaders will be reopened (often more efficient)
              instead of closed and then opened.
@@ -818,8 +820,8 @@
 
          Admin Handlers - This will register all the standard admin
          RequestHandlers.
-       -->
     <requestHandler name="/admin/" class="solr.admin.AdminHandlers"/>
+       -->
     <!-- This single handler is equivalent to the following... -->
     <!--
        <requestHandler name="/admin/luke"       class="solr.admin.LukeRequestHandler" />

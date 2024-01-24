@@ -10,6 +10,7 @@ import java.util.Optional;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Index;
@@ -25,6 +26,7 @@ import com.google.common.collect.Lists;
 import no.ssb.klass.core.util.DateRange;
 import no.ssb.klass.core.util.TimeUtil;
 import no.ssb.klass.core.util.Translatable;
+import no.ssb.klass.core.util.TranslatablePersistenceConverter;
 
 @Entity
 @Table(indexes = { @Index(columnList = "source_id", name = "ct_source_idx"),
@@ -32,23 +34,27 @@ import no.ssb.klass.core.util.Translatable;
 public class CorrespondenceTable extends BaseEntity implements ClassificationEntityOperations, Publishable, Draftable {
     @Lob
     @Column(columnDefinition = "text", nullable = false)
+    @Convert(converter = TranslatablePersistenceConverter.class)
     private Translatable description;
     private Published published;
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private final ClassificationVersion source;
-    private final int sourceLevelNumber;
+    private ClassificationVersion source;
+    private int sourceLevelNumber;
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private final ClassificationVersion target;
-    private final int targetLevelNumber;
+    private ClassificationVersion target;
+    private int targetLevelNumber;
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "correspondenceTable")
-    private final List<CorrespondenceMap> correspondenceMaps;
+    private List<CorrespondenceMap> correspondenceMaps;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "correspondencetable_changelog", joinColumns = @JoinColumn(name = "correspondencetable_id"), inverseJoinColumns = @JoinColumn(name = "changelog_id"))
-    private final List<Changelog> changelogs;
+    private List<Changelog> changelogs;
     @Column(nullable = false)
     private boolean deleted;
     @Column(nullable = false)
     private boolean draft;
+
+    protected CorrespondenceTable() {
+    }
 
     /**
      * Creates a CorrespondenceTable

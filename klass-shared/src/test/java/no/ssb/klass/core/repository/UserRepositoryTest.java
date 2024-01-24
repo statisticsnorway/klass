@@ -9,9 +9,9 @@ import java.util.Set;
 import javax.transaction.Transactional;
 
 import no.ssb.klass.testutil.TestDataProvider;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -19,7 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import no.ssb.klass.core.config.ConfigurationProfiles;
 import no.ssb.klass.core.model.ClassificationFamily;
@@ -31,7 +31,7 @@ import no.ssb.klass.testutil.TestUtil;
 /**
  * @author Mads Lundemo, SSB.
  */
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest
 @ActiveProfiles(ConfigurationProfiles.H2_INMEMORY)
 @Transactional
@@ -44,7 +44,7 @@ public class UserRepositoryTest {
     @Autowired
     private ClassificationFamilyRepository familyRepository;
 
-    @Before
+    @BeforeEach
     public void init() {
         User owner = new User("owner", "user with classification", "section");
         User nonOwner = new User("non-owner", "user without classification", "section");

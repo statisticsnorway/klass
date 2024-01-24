@@ -5,20 +5,25 @@ import static com.google.common.base.Preconditions.*;
 import java.time.LocalDate;
 
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 
 import com.google.common.base.Strings;
 
 import no.ssb.klass.core.util.Translatable;
+import no.ssb.klass.core.util.TranslatablePersistenceConverter;
 
 @Entity
 public class ConcreteClassificationItem extends ClassificationItem {
     private String code;
     @Column(length = 2048)
+    @Convert(converter = TranslatablePersistenceConverter.class)
     private Translatable officialName;
     @Column(length = 1024)
+    @Convert(converter = TranslatablePersistenceConverter.class)
     private Translatable shortName;
     @Column(length = 6000)
+    @Convert(converter = TranslatablePersistenceConverter.class)
     private Translatable notes;
 
     @Column
@@ -65,7 +70,8 @@ public class ConcreteClassificationItem extends ClassificationItem {
     }
 
     /**
-     * @return official name for specified language, if none empty string is returned, never null
+     * @return official name for specified language, if none empty string is
+     *         returned, never null
      */
     @Override
     public String getOfficialName(Language language) {
@@ -78,7 +84,8 @@ public class ConcreteClassificationItem extends ClassificationItem {
     }
 
     /**
-     * @return short name for specified language, if none empty string is returned, never null
+     * @return short name for specified language, if none empty string is returned,
+     *         never null
      */
     @Override
     public String getShortName(Language language) {

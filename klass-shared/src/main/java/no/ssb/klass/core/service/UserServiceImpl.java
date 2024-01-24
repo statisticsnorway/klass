@@ -2,6 +2,7 @@ package no.ssb.klass.core.service;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -49,7 +50,7 @@ public class UserServiceImpl implements UserService {
         Set<BigInteger> userIds = userRepository.getUserIdsForUsersWithClassifications();
         List<Long> collect = userIds.stream().map(bigInteger -> bigInteger.longValueExact()).collect(Collectors
                 .toList());
-        return userRepository.findAll(collect);
+        return userRepository.findAllById(collect);
 
     }
 
@@ -65,14 +66,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserById(long userId) {
-        return initializeFavorites(userRepository.findOne(userId));
+        return initializeFavorites(userRepository.findById(userId));
     }
 
-    private User initializeFavorites(User user) {
-        if (user == null) {
-            return null;
+    private User initializeFavorites(Optional<User> user) {
+        if (user.isPresent()) {
+            Hibernate.initialize(user.get().getFavorites());
+            return user.get();
         }
-        Hibernate.initialize(user.getFavorites());
-        return user;
+        return null;
     }
 }

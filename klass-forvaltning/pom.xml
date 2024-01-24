@@ -5,19 +5,54 @@
     <name>Klass Forvaltning</name>
     <description>Forvaltningsgrensesnitt for Klass</description>
     <artifactId>klass-forvaltning</artifactId>
+    <version>2.1.8-SNAPSHOT</version>
     <packaging>war</packaging>
 
+    <properties>
+        <java.version>1.8</java.version>
+        <github.repository>statisticsnorway/klass</github.repository>
+        <!-- Klass dependencies are built with support for Java 8 and Spring Boot 1.4.4.
+             Newer versions are not supported -->
+        <klass-version>2.1.7</klass-version>
+        <!-- Vaadin 7.7.17 was the last public open-source version of the Vaadin 7 framework.
+             See https://vaadin.com/support/vaadin-7-extended-maintenance  -->
+        <vaadin-version>7.7.17</vaadin-version>
+        <vaadin.plugin.version>7.7.25</vaadin.plugin.version>
+        <vaadin.testbench.api.version>7.7.14</vaadin.testbench.api.version>
+        <vaadin.widgetset.mode>local</vaadin.widgetset.mode>
+        <vaadin-spring-boot-starter-version>1.0.0</vaadin-spring-boot-starter-version>
+        <vaadin-spring-ext-security-version>0.0.7.RELEASE</vaadin-spring-ext-security-version>
+        <!--IMPORTANT HIBERNATE BUG FIX ( needed for Translatable as lobs)-->
+        <!--https://hibernate.atlassian.net/browse/HHH-10818-->
+        <hibernate.version>5.2.3.Final</hibernate.version>
+
+        <!-- Override Spring Boot managed version. Flyway bug #995 forces us to use version 4.0 or newer.
+             Replacing old search engine with solr search
+             Remove when Spring Boot includes this version or newer -->
+        <flyway.version>4.1.1</flyway.version>
+        <!-- Override Spring Boot managed version. Spring restdocs bug #286 in version 1.1.1 (duplicate query parameters)
+             forces us to downgrade to version 1.1.0. (https://github.com/spring-projects/spring-restdocs/issues/286)
+             Remove when Spring Boot includes version 1.1.2 or newer -->
+        <spring-restdocs.version>1.2.1.RELEASE</spring-restdocs.version>
+        <solr-version>5.5.5</solr-version>
+        <spring-data-solr-version>2.1.0.RELEASE</spring-data-solr-version>
+    </properties>
+
     <parent>
-        <groupId>no.ssb.klass</groupId>
-        <artifactId>klass-root</artifactId>
-        <version>2.1.8-SNAPSHOT</version>
-        <relativePath>../</relativePath>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.4.4.RELEASE</version>
+        <relativePath /> <!-- lookup parent from repository -->
     </parent>
 
     <repositories>
         <repository>
             <id>vaadin-addons</id>
             <url>https://maven.vaadin.com/vaadin-addons</url>
+        </repository>
+        <repository>
+            <id>github</id>
+            <url>https://maven.pkg.github.com/${github.repository}</url>
         </repository>
     </repositories>
 
@@ -26,12 +61,17 @@
         <dependency>
             <groupId>no.ssb.klass</groupId>
             <artifactId>klass-shared</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${klass-version}</version>
         </dependency>
         <dependency>
             <groupId>no.ssb.klass</groupId>
             <artifactId>klass-solr</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${klass-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-solr</artifactId>
+            <version>${spring-data-solr-version}</version>
         </dependency>
 
         <!--TOMCAT-->
@@ -98,7 +138,7 @@
             <artifactId>klass-shared</artifactId>
             <type>test-jar</type>
             <scope>test</scope>
-            <version>${project.parent.version}</version>
+            <version>${klass-version}</version>
         </dependency>
 
         <dependency>
@@ -106,12 +146,24 @@
             <artifactId>klass-solr</artifactId>
             <type>test-jar</type>
             <scope>test</scope>
-            <version>${project.parent.version}</version>
+            <version>${klass-version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.8.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <version>4.5.1</version>
             <scope>test</scope>
         </dependency>
 
@@ -128,6 +180,54 @@
         </dependency>
     </dependencies>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.vaadin</groupId>
+                <artifactId>vaadin-bom</artifactId>
+                <version>${vaadin-version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    <profiles>
+        <profile>
+            <id>nexus</id>
+            <distributionManagement>
+                <repository>
+                    <id>releases</id>
+                    <url>https://nexus.ssb.no/repository/maven-releases</url>
+                </repository>
+                <snapshotRepository>
+                    <id>snapshots</id>
+                    <url>https://nexus.ssb.no/repository/maven-snapshots</url>
+                    <uniqueVersion>false</uniqueVersion>
+                </snapshotRepository>
+            </distributionManagement>
+
+            <repositories>
+                <repository>
+                    <id>ssb-repo</id>
+                    <name>Nexus</name>
+                    <url>https://nexus.ssb.no/repository/maven-public</url>
+                </repository>
+            </repositories>
+        </profile>
+        <profile>
+            <id>github</id>
+            <distributionManagement>
+                <repository>
+                    <id>github</id>
+                    <name>GitHub Packages</name>
+                    <url>https://maven.pkg.github.com/${github.repository}</url>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                </repository>
+            </distributionManagement>
+        </profile>
+    </profiles>
 
     <build>
         <finalName>klass#admin-${project.version}</finalName>

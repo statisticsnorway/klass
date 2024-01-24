@@ -115,8 +115,9 @@ public class ClassificationServiceImpl implements ClassificationService {
 
     @Override
     public ClassificationSeries getClassificationSeries(Long id) {
-        ClassificationSeries classificationSeries = classificationRepository.findOne(id);
-        if (classificationSeries == null || classificationSeries.isDeleted()) {
+        ClassificationSeries classificationSeries = classificationRepository.findById(id).orElseThrow(() -> new
+                KlassResourceNotFoundException("Classification not found with id = " + id));
+        if (classificationSeries.isDeleted()) {
             throw new KlassResourceNotFoundException("Classification not found with id = " + id);
         }
         Hibernate.initialize(classificationSeries.getClassificationVersions());
@@ -136,8 +137,9 @@ public class ClassificationServiceImpl implements ClassificationService {
 
     @Override
     public ClassificationVariant getClassificationVariant(Long id) {
-        ClassificationVariant variant = classificationVariantRepository.findOne(id);
-        if (variant == null || variant.isDeleted()) {
+        ClassificationVariant variant = classificationVariantRepository.findById(id).orElseThrow(() -> new
+                KlassResourceNotFoundException("Classification Variant not found with id = " + id));
+        if (variant.isDeleted()) {
             throw new KlassResourceNotFoundException("Classification Variant not found with id = " + id);
         }
         Hibernate.initialize(variant.getLevels());
@@ -147,8 +149,9 @@ public class ClassificationServiceImpl implements ClassificationService {
 
     @Override
     public ClassificationVersion getClassificationVersion(Long id) {
-        ClassificationVersion version = classificationVersionRepository.findOne(id);
-        if (version == null || version.isDeleted()) {
+        ClassificationVersion version = classificationVersionRepository.findById(id).orElseThrow(() -> new
+                KlassResourceNotFoundException("Classification Version not found with id = " + id));
+        if (version.isDeleted()) {
             throw new KlassResourceNotFoundException("Classification Version not found with id = " + id);
         }
         Hibernate.initialize(version.getLevels());
@@ -160,8 +163,9 @@ public class ClassificationServiceImpl implements ClassificationService {
 
     @Override
     public CorrespondenceTable getCorrespondenceTable(long id) {
-        CorrespondenceTable correspondenceTable = correspondenceTableRepository.findOne(id);
-        if (correspondenceTable == null || correspondenceTable.isThisOrSourceOrTargetDeleted()) {
+        CorrespondenceTable correspondenceTable = correspondenceTableRepository.findById(id).orElseThrow(() -> new
+                KlassResourceNotFoundException("Correspondence Table not found with id = " + id));
+        if (correspondenceTable.isThisOrSourceOrTargetDeleted()) {
             throw new KlassResourceNotFoundException("Correspondence Table not found with id = " + id);
         }
         Hibernate.initialize(correspondenceTable.getSource().getLevels());
@@ -173,10 +177,8 @@ public class ClassificationServiceImpl implements ClassificationService {
 
     @Override
     public ClassificationFamily getClassificationFamily(long id) {
-        ClassificationFamily classificationFamily = classificationFamilyRepository.findOne(id);
-        if (classificationFamily == null) {
-            throw new KlassResourceNotFoundException("ClassificationFamily not found with id = " + id);
-        }
+        ClassificationFamily classificationFamily = classificationFamilyRepository.findById(id).orElseThrow(() -> new
+                KlassResourceNotFoundException("ClassificationFamily not found with id = " + id));
         Hibernate.initialize(classificationFamily.getClassificationSeries());
         return classificationFamily;
     }
@@ -415,7 +417,8 @@ public class ClassificationServiceImpl implements ClassificationService {
     public void deleteNotIndexClassification(User user, ClassificationSeries classification)
             throws KlassMessageException {
         classification = reloadToAvoidLazyInitialization(classification);
-        user = userRepository.findOne(user.getId()); // get attached object
+        user = userRepository.findById(user.getId()).orElseThrow(() ->
+                new RuntimeException("User not found")); // get attached object
         checkAllowedToDelete(user, classification);
         classification.setDeleted();
         saveNotIndexClassification(classification);

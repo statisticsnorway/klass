@@ -10,7 +10,7 @@ import java.nio.charset.StandardCharsets;
 
 import no.ssb.klass.testutil.TestDataProvider;
 import org.apache.commons.io.IOUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import no.ssb.klass.forvaltning.converting.exception.ImportException;
 import no.ssb.klass.core.model.ClassificationSeries;

@@ -1,9 +1,10 @@
 package no.ssb.klass.api.dto.hal;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.springframework.hateoas.Link;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
@@ -17,6 +18,7 @@ import no.ssb.klass.core.model.Language;
 import no.ssb.klass.api.controllers.ClassificationController;
 
 @JacksonXmlRootElement(localName = "classificationFamily")
+@JsonPropertyOrder({"name", "classifications", "links"})
 public class ClassificationFamilyResource extends KlassResource {
     private final String name;
     private final List<ClassificationSummaryResource> classifications;
@@ -42,6 +44,6 @@ public class ClassificationFamilyResource extends KlassResource {
 
     private Link createSelfLink(Long id) {
         return linkTo(methodOn(ClassificationController.class).classificationFamily(id, null, null, null))
-                .withSelfRel();
+                .withSelfRel().expand();
     }
 }

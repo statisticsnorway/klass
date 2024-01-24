@@ -4,20 +4,21 @@ import no.ssb.klass.core.config.ConfigurationProfiles;
 import no.ssb.klass.api.controllers.MonitorController;
 import no.ssb.klass.api.controllers.PingController;
 import no.ssb.klass.api.util.RestConstants;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.SecurityFilterChain;
 
 /**
  * @author Mads Lundemo, SSB.
  */
 @Configuration
 @Profile(value = { ConfigurationProfiles.API_ONLY }) // makes config disabled for tests
-public class KlassApiConfiguration extends WebSecurityConfigurerAdapter {
+public class KlassApiConfiguration {
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 // block sensitive endpoints (actuator)
                 .antMatchers("/manage**").denyAll() // alt. hasIpAddress("127.0.0.1")
@@ -35,7 +36,7 @@ public class KlassApiConfiguration extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .headers()
                 .addHeaderWriter((request, response) -> {
-                    if (request.getServletPath().startsWith(RestConstants.API_VERSION_V1)) {
+                    if (request.getServletPath().startsWith(RestConstants.PREFIX_AND_API_VERSION_V1)) {
                         // Workaround to Force CORS header all the time for API
                         response.addHeader("Access-Control-Allow-Origin", "*");
                         // Header telling cache server what is varying in our responses
@@ -44,6 +45,6 @@ public class KlassApiConfiguration extends WebSecurityConfigurerAdapter {
                     }
                 })
                 .frameOptions().disable();
-
+        return http.build();
     }
 }

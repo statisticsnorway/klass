@@ -9,7 +9,7 @@ CREATE TABLE user_favorites
   PRIMARY KEY (id)
 );
 ALTER TABLE user_favorites ADD CONSTRAINT fk_favorite_id FOREIGN KEY (favorites_id) REFERENCES classification_series (id);
-ALTER TABLE user_favorites ADD CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES user (id);
+ALTER TABLE user_favorites ADD CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES "USER" (id);
 INSERT INTO user_favorites (user_id, favorites_id) SELECT
                                                      user_id,
                                                      favorites_id

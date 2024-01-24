@@ -1,10 +1,10 @@
 package no.ssb.klass.core.model;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.springframework.core.io.ClassPathResource;
 
 import no.ssb.klass.testutil.TestUtil;
@@ -12,7 +12,7 @@ import no.ssb.klass.testutil.TestUtil;
 public class ClassificationFamilyTest {
     private ClassificationFamily subject;
 
-    @Before
+    @BeforeEach
     public void setup() {
         subject = TestUtil.createClassificationFamily("name");
         ClassificationSeries classification = TestUtil.createClassification("classification");
@@ -20,13 +20,13 @@ public class ClassificationFamilyTest {
     }
 
     @Test
-    @Ignore("Icons moved to forvaltning module")
+    @Disabled("Icons moved to forvaltning module")
     public void getIconPath() {
         // when
         String result = subject.getIconPath();
 
         // then
-        assertTrue("icon path does not exist on classpath", new ClassPathResource(result).exists());
+        assertTrue(new ClassPathResource(result).exists(), "icon path does not exist on classpath");
     }
 
     @Test
