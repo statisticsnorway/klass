@@ -30,7 +30,7 @@ pipeline {
 
         stage("Build & deploy SNAPSHOT of klass-api to Nexus") {
             when {
-                expression { params.ARTIFACT == 'klass-api' }
+                expression { !params.RELEASE && params.ARTIFACT == 'klass-api' }
             }
             tools {
                 jdk 'OpenJDK Java 17'
@@ -52,16 +52,29 @@ pipeline {
             }
         }
 
-        stage("Build & deploy RELEASE to Nexus") {
+        stage("Build & deploy RELEASE of klass-api to Nexus") {
             when {
-                expression { params.RELEASE }
+                expression { params.RELEASE && params.ARTIFACT == 'klass-api' }
             }
             steps {
                 sh "mvn -B -DpushChanges=false release:prepare"
                 sshagent(['605c16cc-7c0c-4d39-8c8a-6d190e2f98b1']) {
                     sh('git push --follow-tags') 
                 }
-                sh "mvn -B release:perform -pl :${params.ARTIFACT} -am"
+                sh "mvn -B release:perform -pl :klass-api -am"
+            }
+        }
+
+        stage("Build & deploy RELEASE of klass-forvaltning to Nexus") {
+            when {
+                expression { params.RELEASE && params.ARTIFACT == 'klass-forvaltning' }
+            }
+            steps {
+                sh "mvn -B -DpushChanges=false release:prepare"
+                sshagent(['605c16cc-7c0c-4d39-8c8a-6d190e2f98b1']) {
+                    sh('git push --follow-tags')
+                }
+                sh "mvn -B release:perform -Djava.version=1.8 -pl :klass-forvaltning -am"
             }
         }
 
