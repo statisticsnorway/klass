@@ -51,6 +51,7 @@
         <commons-io-version>2.15.1</commons-io-version>
         <jakarta-rs-api-version>2.1.6</jakarta-rs-api-version>
         <spring-restdocs-version>2.0.8.RELEASE</spring-restdocs-version>
+        <snakeyaml.version>1.31</snakeyaml.version>
     </properties>
 
     <dependencyManagement>
@@ -105,6 +106,11 @@
                         <!--TODO find a solution for the javadoc error on generated sources-->
                         <arguments>-Pdocumentation -Dmaven.javadoc.skip=true</arguments>
                     </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>3.1.1</version>
                 </plugin>
             </plugins>
         </pluginManagement>
