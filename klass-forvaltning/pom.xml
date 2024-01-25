@@ -229,18 +229,6 @@
                 </repository>
             </distributionManagement>
         </profile>
-        <profile>
-            <id>skipInstall</id>
-            <properties>
-                <skip.vaadin.compile>true</skip.vaadin.compile>
-            </properties>
-            <activation>
-                <property>
-                    <name>skip.vaadin.compile</name>
-                    <value>true</value>
-                </property>
-            </activation>
-        </profile>
     </profiles>
 
     <build>
