@@ -104,7 +104,7 @@
                         <autoVersionSubmodules>true</autoVersionSubmodules>
                         <tagNameFormat>v@{project.version}</tagNameFormat>
                         <!--TODO find a solution for the javadoc error on generated sources-->
-                        <arguments>-Pdocumentation -Dmaven.javadoc.skip=true</arguments>
+                        <arguments>-Pdocumentation -Dmaven.javadoc.skip=true -Dskip.vaadin.compile=true</arguments>
                     </configuration>
                 </plugin>
                 <plugin>
