@@ -57,11 +57,11 @@ pipeline {
                 expression { params.RELEASE && params.ARTIFACT == 'klass-api' }
             }
             steps {
-                sh "mvn -B -DpushChanges=false release:prepare"
+                sh "mvn -B -DpushChanges=false release:prepare -P nexus -pl :klass-api -am"
                 sshagent(['605c16cc-7c0c-4d39-8c8a-6d190e2f98b1']) {
                     sh('git push --follow-tags') 
                 }
-                sh "mvn -B release:perform -pl :klass-api -am"
+                sh "mvn -B release:perform -P nexus"
             }
         }
 
@@ -70,7 +70,7 @@ pipeline {
                 expression { params.RELEASE && params.ARTIFACT == 'klass-forvaltning' }
             }
             steps {
-                sh "mvn -B -DpushChanges=false release:prepare"
+                sh "mvn -B -DpushChanges=false release:prepare -P nexus -Djava.version=1.8 -pl :klass-forvaltning -am"
                 sshagent(['605c16cc-7c0c-4d39-8c8a-6d190e2f98b1']) {
                     sh('git push --follow-tags')
                 }
