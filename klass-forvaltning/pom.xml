@@ -11,8 +11,6 @@
     <properties>
         <java.version>1.8</java.version>
         <github.repository>statisticsnorway/klass</github.repository>
-        <!-- Can be overridden by-Dmaven.install.skip=true from the command line -->
-        <skip.vaadin.compile>false</skip.vaadin.compile>
         <!-- Klass dependencies are built with support for Java 8 and Spring Boot 1.4.4.
              Newer versions are not supported -->
         <klass-version>2.1.7</klass-version>
@@ -234,59 +232,47 @@
     <build>
         <finalName>klass#admin-${project.version}</finalName>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>3.4.0</version>
-                <configuration>
-                    <skip>${skip.vaadin.compile}</skip>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <skip>${skip.vaadin.compile}</skip>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>com.vaadin</groupId>
-                <artifactId>vaadin-maven-plugin</artifactId>
-                <version>${vaadin.plugin.version}</version>
-                <configuration>
-                    <extraJvmArgs>-Xmx512M -Xss1024k</extraJvmArgs>
-                    <theme>klasstheme</theme>
-                    <skip>${skip.vaadin.compile}</skip>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>update-theme</goal>
-                            <goal>update-widgetset</goal>
-                            <goal>compile</goal>
-                            <!-- Comment out compile-theme goal to use on-the-fly theme compilation -->
-                            <goal>compile-theme</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-clean-plugin</artifactId>
-                <version>3.2.0</version>
-                <!-- Clean up also any pre-compiled themes -->
-                <configuration>
-                    <filesets>
-                        <fileset>
-                            <directory>src/main/webapp/VAADIN/themes</directory>
-                            <includes>
-                                <include>**/styles.css</include>
-                                <include>**/styles.scss.cache</include>
-                            </includes>
-                        </fileset>
-                    </filesets>
-                </configuration>
-            </plugin>
+        <plugin>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-maven-plugin</artifactId>
+        </plugin>
+        <plugin>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-maven-plugin</artifactId>
+            <version>${vaadin.plugin.version}</version>
+            <configuration>
+                <extraJvmArgs>-Xmx512M -Xss1024k</extraJvmArgs>
+                <theme>klasstheme</theme>
+            </configuration>
+            <executions>
+                <execution>
+                    <goals>
+                        <goal>update-theme</goal>
+                        <goal>update-widgetset</goal>
+                        <goal>compile</goal>
+                        <!-- Comment out compile-theme goal to use on-the-fly theme compilation -->
+                        <goal>compile-theme</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-clean-plugin</artifactId>
+            <version>3.2.0</version>
+            <!-- Clean up also any pre-compiled themes -->
+            <configuration>
+                <filesets>
+                    <fileset>
+                        <directory>src/main/webapp/VAADIN/themes</directory>
+                        <includes>
+                            <include>**/styles.css</include>
+                            <include>**/styles.scss.cache</include>
+                        </includes>
+                    </fileset>
+                </filesets>
+            </configuration>
+        </plugin>
         </plugins>
     </build>
 
