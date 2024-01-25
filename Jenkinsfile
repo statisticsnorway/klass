@@ -56,6 +56,9 @@ pipeline {
             when {
                 expression { params.RELEASE && params.ARTIFACT == 'klass-api' }
             }
+            tools {
+                jdk 'OpenJDK Java 17'
+            }
             steps {
                 sh "mvn -B -DpushChanges=false release:prepare -P nexus -pl :klass-api -am"
                 sshagent(['605c16cc-7c0c-4d39-8c8a-6d190e2f98b1']) {
@@ -68,6 +71,9 @@ pipeline {
         stage("Build & deploy RELEASE of klass-forvaltning to Nexus") {
             when {
                 expression { params.RELEASE && params.ARTIFACT == 'klass-forvaltning' }
+            }
+            tools {
+                jdk 'Oracle Java 8'
             }
             steps {
                 sh "mvn -B -DpushChanges=false release:prepare -P nexus -Djava.version=1.8 -pl :klass-forvaltning -am"
