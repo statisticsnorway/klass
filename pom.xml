@@ -103,6 +103,8 @@
                         <releaseProfiles>documentation</releaseProfiles>
                         <autoVersionSubmodules>true</autoVersionSubmodules>
                         <tagNameFormat>v@{project.version}</tagNameFormat>
+                        <!--TODO find a solution for the javadoc error on generated sources-->
+                        <arguments>-Pdocumentation -Dmaven.javadoc.skip=true -pl :klass-api -am</arguments>
                     </configuration>
                 </plugin>
                 <plugin>
