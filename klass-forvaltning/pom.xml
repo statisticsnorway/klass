@@ -45,6 +45,12 @@
         <relativePath /> <!-- lookup parent from repository -->
     </parent>
 
+    <scm>
+        <developerConnection>scm:git:https://github.com/${github.repository}.git</developerConnection>
+        <url>https://github.com/${github.repository}</url>
+        <tag>HEAD</tag>
+    </scm>
+
     <repositories>
         <repository>
             <id>vaadin-addons</id>
@@ -235,6 +241,16 @@
         <plugin>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-maven-plugin</artifactId>
+        </plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-release-plugin</artifactId>
+            <version>3.0.1</version>
+            <configuration>
+                <releaseProfiles>documentation</releaseProfiles>
+                <autoVersionSubmodules>true</autoVersionSubmodules>
+                <tagNameFormat>v@{project.version}</tagNameFormat>
+            </configuration>
         </plugin>
         <plugin>
             <groupId>com.vaadin</groupId>
