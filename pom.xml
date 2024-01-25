@@ -91,7 +91,7 @@
                         <scmCommentPrefix>[RELEASE]-</scmCommentPrefix>
                         <noDeploy>true</noDeploy>
                         <autoVersionSubmodules>true</autoVersionSubmodules>
-                        <arguments>-Pdocumentation -Dmaven.javadoc.skip=true</arguments>
+                        <arguments>-Pdocumentation -Dmaven.javadoc.skip=true -Dskip.vaadin.compile=true</arguments>
                         <allowSnapshots>true</allowSnapshots>
                     </configuration>
                 </plugin>
