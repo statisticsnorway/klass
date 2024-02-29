@@ -7,6 +7,7 @@ public class SsbSectionResource extends KlassResource {
     private final String name;
 
     public SsbSectionResource(String name) {
+        super(null);
         this.name = name;
     }
 

@@ -15,7 +15,7 @@ import no.ssb.klass.core.model.Language;
 import no.ssb.klass.api.util.CustomLocalDateSerializer;
 
 @JacksonXmlRootElement(localName = "classificationVariant")
-@JsonPropertyOrder({"name", "contactPerson", "owningSection", "lastModified", "published", "validFrom", "validTo",
+@JsonPropertyOrder({"name", "id", "contactPerson", "owningSection", "lastModified", "published", "validFrom", "validTo",
         "introduction", "contactPerson", "owningSection", "correspondenceTables", "changelogs", "levels",
         "classificationItems", "links"})
 public class ClassificationVariantResource extends ClassificationVariantSummaryResource {

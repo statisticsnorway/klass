@@ -19,7 +19,7 @@ import no.ssb.klass.core.model.ClassificationVariant;
 import no.ssb.klass.core.model.Language;
 import no.ssb.klass.api.controllers.ClassificationController;
 
-@JsonPropertyOrder({"name", "contactPerson", "owningSection", "lastModified", "published", "links"})
+@JsonPropertyOrder({"name", "id", "contactPerson", "owningSection", "lastModified", "published", "links"})
 public class ClassificationVariantSummaryResource extends KlassResource {
     private final String name;
     private final ContactPersonResource contactPerson;
@@ -28,6 +28,7 @@ public class ClassificationVariantSummaryResource extends KlassResource {
     private final List<String> published;
 
     protected ClassificationVariantSummaryResource(ClassificationVariant variant, Language language) {
+        super(variant.getId());
         this.name = variant.getFullName(language);
         this.lastModified = variant.getLastModified();
         this.contactPerson = new ContactPersonResource(variant.getContactPerson());

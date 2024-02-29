@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 import static java.util.stream.Collectors.*;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
-@JsonPropertyOrder({"name", "validFrom", "validTo", "lastModified", "published", "links"})
+@JsonPropertyOrder({"name", "id", "validFrom", "validTo", "lastModified", "published", "links"})
 public class ClassificationVersionSummaryResource extends KlassResource {
     private final String name;
     private final LocalDate validFrom;
@@ -30,6 +30,7 @@ public class ClassificationVersionSummaryResource extends KlassResource {
     private final List<String> published;
 
     protected ClassificationVersionSummaryResource(ClassificationVersion version, Language language, Boolean includeFuture) {
+        super(version.getId());
         this.name = version.getName(language);
         this.validFrom = version.getDateRange().getFrom();
         LocalDate to = version.getDateRange().getTo();

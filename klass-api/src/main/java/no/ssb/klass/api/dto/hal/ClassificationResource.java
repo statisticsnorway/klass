@@ -19,7 +19,7 @@ import static java.util.stream.Collectors.toList;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 @JacksonXmlRootElement(localName = "classification")
-@JsonPropertyOrder({"name", "classificationType", "lastModified", "description", "primaryLanguage","copyrighted",
+@JsonPropertyOrder({"name", "id", "classificationType", "lastModified", "description", "primaryLanguage","copyrighted",
         "includeShortName", "includeNotes", "contactPerson", "owningSection", "statisticalUnits", "versions",
         "links"})
 public class ClassificationResource extends ClassificationSummaryResource {

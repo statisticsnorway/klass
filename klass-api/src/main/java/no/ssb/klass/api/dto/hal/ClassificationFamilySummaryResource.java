@@ -11,12 +11,13 @@ import no.ssb.klass.core.repository.ClassificationFamilySummary;
 import no.ssb.klass.api.controllers.ClassificationController;
 
 @Relation(collectionRelation = "classificationFamilies")
-@JsonPropertyOrder({"name", "numberOfClassifications", "links"})
+@JsonPropertyOrder({"name", "id", "numberOfClassifications", "links"})
 public class ClassificationFamilySummaryResource extends KlassResource {
     private String name;
     private int numberOfClassifications;
 
     public ClassificationFamilySummaryResource(ClassificationFamilySummary summary, Language language) {
+        super(summary.getId());
         this.name = summary.getClassificationFamilyName(language);
         this.numberOfClassifications = summary.getNumberOfClassifications();
         addLink(createSelfLink(summary.getId()));

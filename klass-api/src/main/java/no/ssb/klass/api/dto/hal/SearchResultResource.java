@@ -14,7 +14,7 @@ import no.ssb.klass.core.service.search.SolrSearchResult;
 import no.ssb.klass.api.controllers.ClassificationController;
 
 @Relation(collectionRelation = "searchResults")
-@JsonPropertyOrder({"name", "snippet", "searchScore", "links"})
+@JsonPropertyOrder({"name", "id", "snippet", "searchScore", "links"})
 public class SearchResultResource extends KlassResource {
 
     private String name;
@@ -22,6 +22,7 @@ public class SearchResultResource extends KlassResource {
     private Double searchScore;
 
     public SearchResultResource(SolrSearchResult searchResult, List<HighlightEntry.Highlight> highlights) {
+        super(searchResult.getItemid());
         this.name = searchResult.getTitle();
         this.snippet = searchResult.getDescription();
         this.searchScore = searchResult.getScore();

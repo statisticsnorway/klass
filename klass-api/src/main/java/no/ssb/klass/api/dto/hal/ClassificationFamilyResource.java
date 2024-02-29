@@ -18,13 +18,14 @@ import no.ssb.klass.core.model.Language;
 import no.ssb.klass.api.controllers.ClassificationController;
 
 @JacksonXmlRootElement(localName = "classificationFamily")
-@JsonPropertyOrder({"name", "classifications", "links"})
+@JsonPropertyOrder({"name", "id", "classifications", "links"})
 public class ClassificationFamilyResource extends KlassResource {
     private final String name;
     private final List<ClassificationSummaryResource> classifications;
 
     public ClassificationFamilyResource(ClassificationFamily classificationFamily, Language language, String ssbSection,
             ClassificationType classificationType) {
+        super(classificationFamily.getId());
         this.name = classificationFamily.getName(language);
         List<ClassificationSeries> classifications = classificationFamily
                 .getClassificationSeriesBySectionAndClassificationType(ssbSection, classificationType, true);
