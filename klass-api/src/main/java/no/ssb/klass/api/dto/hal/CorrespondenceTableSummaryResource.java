@@ -20,7 +20,7 @@ import no.ssb.klass.core.model.CorrespondenceTable;
 import no.ssb.klass.core.model.Language;
 import no.ssb.klass.api.controllers.ClassificationController;
 
-@JsonPropertyOrder({"name", "contactPerson", "owningSection", "source", "sourceId", "target", "targetId", "changeTable",
+@JsonPropertyOrder({"name", "id", "contactPerson", "owningSection", "source", "sourceId", "target", "targetId", "changeTable",
         "lastModified", "published", "sourceLevel", "targetLevel", "links"})
 public class CorrespondenceTableSummaryResource extends KlassResource {
     private final String name;
@@ -37,6 +37,7 @@ public class CorrespondenceTableSummaryResource extends KlassResource {
     private final LevelResource targetLevel;
 
     protected CorrespondenceTableSummaryResource(CorrespondenceTable correspondenceTable, Language language) {
+        super(correspondenceTable.getId());
         this.name = correspondenceTable.getName(language);
         this.contactPerson = new ContactPersonResource(correspondenceTable.getContactPerson());
         this.owningSection = correspondenceTable.getContactPerson().getSection();

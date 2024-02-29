@@ -16,7 +16,7 @@ import no.ssb.klass.core.model.Language;
 import no.ssb.klass.core.util.AlphaNumericalComparator;
 
 @JacksonXmlRootElement(localName = "classificationVersion")
-@JsonPropertyOrder({"name", "validFrom", "validTo", "lastModified", "published", "introduction", "contactPerson",
+@JsonPropertyOrder({"name", "id", "validFrom", "validTo", "lastModified", "published", "introduction", "contactPerson",
         "owningSection", "legalBase", "publications", "derivedFrom", "correspondenceTables", "classificationVariants",
         "changelogs", "levels", "classificationItems", "links"})
 

@@ -45,7 +45,7 @@ public class RestApiListClassificationIntegrationTest extends AbstractRestApiApp
     @Test
     public void restServiceListClassificationsIncludeCodelistsJSON() {
         given().port(port).accept(ContentType.JSON).param("includeCodelists", "true").get(REQUEST)
-//                .prettyPeek()
+                .prettyPeek()
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .contentType(ContentType.JSON)
@@ -129,7 +129,7 @@ public class RestApiListClassificationIntegrationTest extends AbstractRestApiApp
     @Test
     public void restServiceListClassificationsIncludeCodelistXML() {
         given().port(port).accept(ContentType.XML).param("includeCodelists", "true").get(REQUEST)
-//                .prettyPeek()
+                .prettyPeek()
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .contentType(ContentType.XML)

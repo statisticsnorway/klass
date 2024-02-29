@@ -12,6 +12,14 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import org.springframework.lang.Nullable;
 
 public abstract class KlassResource extends PagedModel<RepresentationModel<?>> {
+
+    @JsonProperty("id")
+    private final Long id;
+
+    public KlassResource(Long id) {
+        this.id = id;
+    }
+
     protected void addLink(Link link) {
         super.add(link);
     }

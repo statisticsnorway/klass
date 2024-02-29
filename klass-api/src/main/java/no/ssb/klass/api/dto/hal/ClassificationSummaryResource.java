@@ -17,13 +17,14 @@ import no.ssb.klass.core.model.Language;
 import no.ssb.klass.api.controllers.ClassificationController;
 
 @Relation(collectionRelation = "classifications")
-@JsonPropertyOrder({"name", "classificationType", "lastModified", "links"})
+@JsonPropertyOrder({"name", "id", "classificationType", "lastModified", "links"})
 public class ClassificationSummaryResource extends KlassResource {
     private final String name;
     private final String classificationType;
     private final Date lastModified;
 
     protected ClassificationSummaryResource(Language language, ClassificationSeries classification) {
+        super(classification.getId());
         this.name = classification.getName(language);
         this.classificationType = classification.getClassificationType().getDisplayName(language);
         this.lastModified = classification.getLastModified();
