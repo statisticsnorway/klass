@@ -3,7 +3,7 @@ kind: Component
 metadata:
   name: klass
   title: KLASS
-  description: |
+  description:
     Spring Boot applications that handles classifications for SSB. Klass provides a REST api that clients can use to read classifications, and a Vaadin frontend for maintaining classifications.
   tags:
     - dapla
