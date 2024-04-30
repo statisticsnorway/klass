@@ -1,0 +1,20 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: klass
+  title: KLASS
+  description: |
+    Spring Boot applications that handles classifications for SSB. Klass provides a REST api that clients can use to read classifications, and a Vaadin frontend for maintaining classifications.
+  tags:
+    - dapla
+    - metadata
+    - java
+    - classification
+    - codelist
+  annotations:
+    github.com/project-slug: statisticsnorway/klass
+spec:
+  type: service
+  owner: dapla-metadata-developers
+  lifecycle: production
+  system: metadata
