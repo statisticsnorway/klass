@@ -18,3 +18,20 @@ spec:
   owner: dapla-metadata-developers
   lifecycle: production
   system: metadata
+  providesApis:
+    - klass-api
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: klass-api
+  description: REST api that clients can use to read classifications
+  links:
+    - url: https://data.ssb.no/api/klass/v1/api-guide.html
+spec:
+  type: openapi
+  lifecycle: production
+  owner: dapla-metadata-developers
+  system: metadata
+  definition: 
+    $text: .
