@@ -524,7 +524,7 @@ public class ClassificationController {
         return ResponseEntity.ok(SubscribeResponse.CREATED);
     }
 
-    @RequestMapping(value = "/classifications/{classificationId}/removeTracking", method = RequestMethod.GET)
+    @RequestMapping(value = "/classifications/{classificationId}/removeTracking", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
     public ResponseEntity<String> removeTracking(@PathVariable Long classificationId, @RequestParam(
             value = "email") String email) {
         try {
