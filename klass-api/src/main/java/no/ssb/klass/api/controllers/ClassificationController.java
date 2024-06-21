@@ -546,9 +546,10 @@ public class ClassificationController {
         return ResponseEntity.ok("""
                             <!DOCTYPE html>
                             <html>
-                                <header><title>Klass subscription</title></header>
+                                <head><title>Klass subscription</title></head>
                                 <body>
-                                    Subscription is verified.
+                                    <h2>Klass subscription</h2>
+                                    <p>Subscription is verified.</p>
                                 </body>
                             </html>
                             """);
