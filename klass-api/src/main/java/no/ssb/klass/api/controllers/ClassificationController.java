@@ -524,7 +524,7 @@ public class ClassificationController {
         return ResponseEntity.ok(SubscribeResponse.CREATED);
     }
 
-    @RequestMapping(value = "/classifications/{classificationId}/removeTracking", method = RequestMethod.GET)
+    @RequestMapping(value = "/classifications/{classificationId}/removeTracking", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
     public ResponseEntity<String> removeTracking(@PathVariable Long classificationId, @RequestParam(
             value = "email") String email) {
         try {
@@ -533,21 +533,36 @@ public class ClassificationController {
         } catch (ClientException e) {
             throw new RestClientException(e.getMessage());
         }
-        return ResponseEntity.ok("Subscription is deleted.");
+        return ResponseEntity.ok("""
+                                <!DOCTYPE html>
+                                <html>
+                                    <head><title>Klass subscription</title></head>
+                                    <body>
+                                        <header>
+                                            <h2>Klass subscription</h2>
+                                        </header>
+                                        <p>Subscription is deleted.</p>
+                                    </body>
+                                </html>
+                                """);
     }
 
-    @RequestMapping(value = "/classifications/verifyTracking/{email}/{token}", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
-    public ResponseEntity<String> verifyTracking(@PathVariable String email, @PathVariable String token) {
-        try {
-            subscriberService.verifyTracking(email, token);
-        } catch (ClientException e) {
-            throw new RestClientException(e.getMessage());
-        }
-        return ResponseEntity.ok("""
+@RequestMapping(value = "/classifications/verifyTracking/{email}/{token}", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
+public ResponseEntity<String> verifyTracking(@PathVariable String email, @PathVariable String token) {
+try {
+subscriberService.verifyTracking(email, token);
+} catch (ClientException e) {
+throw new RestClientException(e.getMessage());
+}
+return ResponseEntity.ok("""
+                            <!DOCTYPE html>
                             <html>
-                                <header><title>Klass subscription</title></header>
+                                <head><title>Klass subscription</title></head>
                                 <body>
-                                    Subscription is verified.
+                                    <header>
+                                        <h2>Klass subscription</h2>
+                                    </header>
+                                    <p>Subscription is verified.</p>
                                 </body>
                             </html>
                             """);
