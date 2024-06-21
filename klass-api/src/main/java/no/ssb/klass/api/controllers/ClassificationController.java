@@ -55,6 +55,7 @@ import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.WebDataBinder;
@@ -535,14 +536,21 @@ public class ClassificationController {
         return ResponseEntity.ok("Subscription is deleted.");
     }
 
-    @RequestMapping(value = "/classifications/verifyTracking/{email}/{token}", method = RequestMethod.GET)
+    @RequestMapping(value = "/classifications/verifyTracking/{email}/{token}", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
     public ResponseEntity<String> verifyTracking(@PathVariable String email, @PathVariable String token) {
         try {
             subscriberService.verifyTracking(email, token);
         } catch (ClientException e) {
             throw new RestClientException(e.getMessage());
         }
-        return ResponseEntity.ok("Subscription is verified.");
+        return ResponseEntity.ok("""
+                            <html>
+                                <header><title>Klass subscription</title></header>
+                                <body>
+                                    Subscription is verified.
+                                </body>
+                            </html>
+                            """);
     }
 
     private void addSearchLink(PagedModel<ClassificationSummaryResource> response) {
