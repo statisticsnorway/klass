@@ -544,6 +544,7 @@ public class ClassificationController {
             throw new RestClientException(e.getMessage());
         }
         return ResponseEntity.ok("""
+                            <!DOCTYPE html>
                             <html>
                                 <header><title>Klass subscription</title></header>
                                 <body>
