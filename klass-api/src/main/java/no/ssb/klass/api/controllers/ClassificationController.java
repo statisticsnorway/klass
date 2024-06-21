@@ -533,22 +533,35 @@ public class ClassificationController {
         } catch (ClientException e) {
             throw new RestClientException(e.getMessage());
         }
-        return ResponseEntity.ok("Subscription is deleted.");
+        return ResponseEntity.ok("""
+                                <!DOCTYPE html>
+                                <html>
+                                    <head><title>Klass subscription</title></head>
+                                    <body>
+                                        <header>
+                                            <h2>Klass subscription</h2>
+                                        </header>
+                                        <p>Subscription is deleted.</p>
+                                    </body>
+                                </html>
+                                """);
     }
 
-    @RequestMapping(value = "/classifications/verifyTracking/{email}/{token}", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
-    public ResponseEntity<String> verifyTracking(@PathVariable String email, @PathVariable String token) {
-        try {
-            subscriberService.verifyTracking(email, token);
-        } catch (ClientException e) {
-            throw new RestClientException(e.getMessage());
-        }
-        return ResponseEntity.ok("""
+@RequestMapping(value = "/classifications/verifyTracking/{email}/{token}", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
+public ResponseEntity<String> verifyTracking(@PathVariable String email, @PathVariable String token) {
+try {
+subscriberService.verifyTracking(email, token);
+} catch (ClientException e) {
+throw new RestClientException(e.getMessage());
+}
+return ResponseEntity.ok("""
                             <!DOCTYPE html>
                             <html>
                                 <head><title>Klass subscription</title></head>
                                 <body>
-                                    <h2>Klass subscription</h2>
+                                    <header>
+                                        <h2>Klass subscription</h2>
+                                    </header>
                                     <p>Subscription is verified.</p>
                                 </body>
                             </html>
