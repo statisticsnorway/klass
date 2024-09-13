@@ -1,8 +1,8 @@
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: Klass API
-  title: klass-api-service
+  title: Klass API Service
+  name: klass-api-service
   description:
     Spring Boot applications that handles classifications for SSB. Klass provides a REST api that clients can use to read classifications.
   tags:
@@ -24,6 +24,7 @@ spec:
 apiVersion: backstage.io/v1alpha1
 kind: API
 metadata:
+  title: Klass API
   name: klass-api
   description: REST api that clients can use to read classifications
   links:
@@ -39,8 +40,8 @@ spec:
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: Klass Forvaltning
-  title: klass-forvaltning
+  title: Klass Forvaltning
+  name: klass-forvaltning
   description:
     A Vaadin frontend for maintaining classifications for Klass.
   tags:
