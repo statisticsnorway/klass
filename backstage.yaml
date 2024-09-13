@@ -21,7 +21,7 @@ spec:
   providesApis:
     - klass-api
   dependsOn:
-    - klass-mariadb
+    - resource:klass-mariadb
 ---
 apiVersion: backstage.io/v1alpha1
 kind: API
@@ -61,7 +61,7 @@ spec:
   lifecycle: production
   system: metadata
   dependsOn:
-    - klass-mariadb
+    - resource:klass-mariadb
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Resource
