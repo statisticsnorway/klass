@@ -20,6 +20,8 @@ spec:
   system: metadata
   providesApis:
     - klass-api
+  dependsOn:
+    - klass-mariadb
 ---
 apiVersion: backstage.io/v1alpha1
 kind: API
@@ -58,3 +60,19 @@ spec:
   owner: dapla-metadata-developers
   lifecycle: production
   system: metadata
+  dependsOn:
+    - klass-mariadb
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: klass-mariadb
+  title: Klass MariaDB
+  description: MariaDB database storing Klass data
+  tags:
+    - database
+spec:
+  type: database
+  system: metadata
+  owner: dapla-metadata-developers
+  lifecycle: production
