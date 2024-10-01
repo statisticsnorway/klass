@@ -20,7 +20,7 @@
         <vaadin.plugin.version>7.7.25</vaadin.plugin.version>
         <vaadin.testbench.api.version>7.7.14</vaadin.testbench.api.version>
         <vaadin.widgetset.mode>local</vaadin.widgetset.mode>
-        <vaadin-spring-boot-starter-version>1.0.0</vaadin-spring-boot-starter-version>
+        <vaadin-spring-boot-starter-version>24.4.13</vaadin-spring-boot-starter-version>
         <vaadin-spring-ext-security-version>0.0.7.RELEASE</vaadin-spring-ext-security-version>
         <!--IMPORTANT HIBERNATE BUG FIX ( needed for Translatable as lobs)-->
         <!--https://hibernate.atlassian.net/browse/HHH-10818-->
@@ -42,7 +42,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>1.4.4.RELEASE</version>
-        <relativePath /> <!-- lookup parent from repository -->
+        <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
     <scm>
