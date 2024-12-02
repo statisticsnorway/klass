@@ -4,9 +4,9 @@ metadata:
   title: Klass API Service
   name: klass-api-service
   description:
-    Spring Boot applications that handles classifications for SSB. Klass provides a REST api that clients can use to read classifications.
+    Spring Boot application that handles classifications for SSB. Klass provides a REST api that clients can use to read classifications.
   tags:
-    - dapla
+    - on-prem
     - metadata
     - java
     - classification
@@ -22,6 +22,7 @@ spec:
     - klass-api
   dependsOn:
     - resource:klass-mariadb
+    - component:ssbno-varnish
 ---
 apiVersion: backstage.io/v1alpha1
 kind: API
@@ -47,7 +48,7 @@ metadata:
   description:
     A Vaadin frontend for maintaining classifications for Klass.
   tags:
-    - dapla
+    - on-prem
     - metadata
     - java
     - vaadin
@@ -70,6 +71,7 @@ metadata:
   title: Klass MariaDB
   description: MariaDB database storing Klass data
   tags:
+    - on-prem
     - database
 spec:
   type: database
