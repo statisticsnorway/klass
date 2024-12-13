@@ -16,7 +16,7 @@
         <klass-version>2.1.7</klass-version>
         <!-- Vaadin 7.7.17 was the last public open-source version of the Vaadin 7 framework.
              See https://vaadin.com/support/vaadin-7-extended-maintenance  -->
-        <vaadin-version>7.7.17</vaadin-version>
+        <vaadin-version>7.7.24</vaadin-version>
         <vaadin.plugin.version>7.7.25</vaadin.plugin.version>
         <vaadin.testbench.api.version>7.7.14</vaadin.testbench.api.version>
         <vaadin.widgetset.mode>local</vaadin.widgetset.mode>
