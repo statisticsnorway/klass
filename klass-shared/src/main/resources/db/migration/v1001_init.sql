@@ -185,3 +185,130 @@ CREATE TABLE user_favorites
     user_id      BIGINT NOT NULL,
     favorites_id BIGINT NOT NULL
 );
+
+ALTER TABLE classification_family
+   ADD CONSTRAINT cf_name_idx UNIQUE (name);
+
+ALTER TABLE classification_series
+    ADD CONSTRAINT cs_name_no_idx UNIQUE (name_no);
+
+ALTER TABLE classification_series
+    ADD CONSTRAINT cs_name_nn_idx UNIQUE (name_nn);
+
+ALTER TABLE classification_series
+    ADD CONSTRAINT cs_name_en_idx UNIQUE (name_en);
+
+CREATE INDEX ct_source_idx ON correspondence_table (source_id);
+
+CREATE INDEX ct_target_idx ON correspondence_table (target_id);
+
+ALTER TABLE subscriber
+    ADD CONSTRAINT subscriber_email_idx UNIQUE (email);
+
+ALTER TABLE "USER"
+    ADD CONSTRAINT user_username_idx UNIQUE (username);
+
+CREATE INDEX user_fullname_idx ON "USER" (fullname);
+
+ALTER TABLE user_favorites
+    ADD CONSTRAINT uk_dk8ngwbk9dgeuegrx1nuktdv1 UNIQUE (favorites_id);
+
+ALTER TABLE classification_item
+    ADD CONSTRAINT fk_g9g8ko4hiflhcdvt7431oofli FOREIGN KEY (level_id) REFERENCES
+        level (id);
+
+ALTER TABLE classification_item
+    ADD CONSTRAINT fk_r370q2nlapshi9qrvswx98vrm FOREIGN KEY (parent_id) REFERENCES
+        classification_item (id);
+
+ALTER TABLE classification_item
+    ADD CONSTRAINT fk_ge0nq2ndexf8l2cmvppl66qh3 FOREIGN KEY (reference_id)
+        REFERENCES classification_item (id);
+
+ALTER TABLE classification_series
+    ADD CONSTRAINT fk_666t6jamu95kshjhawy2co5ej FOREIGN KEY (
+    classification_family_id) REFERENCES classification_family (id);
+
+ALTER TABLE classification_series
+    ADD CONSTRAINT fk_jefvdo01kn4kq98m64ajli6y5 FOREIGN KEY (contact_person_id)
+        REFERENCES "USER" (id);
+
+ALTER TABLE classification_series_statistical_units
+    ADD CONSTRAINT fk_rfx4t7rjg3hykfr39xi8dvrdu FOREIGN KEY (statistical_units_id)
+        REFERENCES statistical_unit (id);
+
+ALTER TABLE classification_series_statistical_units
+    ADD CONSTRAINT fk_6nl7ywwll2hvo9ucndhg1b1xy FOREIGN KEY (
+    classification_series_id) REFERENCES classification_series (id);
+
+ALTER TABLE correspondence_map
+    ADD CONSTRAINT fk_fiq7wlm30w4ixosjqpob2m077 FOREIGN KEY (source_id) REFERENCES
+        classification_item (id);
+
+ALTER TABLE correspondence_map
+    ADD CONSTRAINT fk_polg03jsn36cq2pujlee5k13y FOREIGN KEY (target_id) REFERENCES
+        classification_item (id);
+
+ALTER TABLE correspondence_map
+    ADD CONSTRAINT fk_74gwtjl4rjw3gw4x9idj4ux98 FOREIGN KEY (correspondence_table)
+        REFERENCES correspondence_table (id);
+
+ALTER TABLE correspondence_table
+    ADD CONSTRAINT fk_aoqrb4hktku6syonwjfwd3055 FOREIGN KEY (source_id) REFERENCES
+        statistical_classification (id);
+
+ALTER TABLE correspondence_table
+    ADD CONSTRAINT fk_8bn11tm1gsou84v8kmoug6qyt FOREIGN KEY (source_level_id)
+        REFERENCES level (id);
+
+ALTER TABLE correspondence_table
+    ADD CONSTRAINT fk_76of0l6um26nystb8dqwbj4x1 FOREIGN KEY (target_id) REFERENCES
+        statistical_classification (id);
+
+ALTER TABLE correspondence_table
+    ADD CONSTRAINT fk_cqdqwek3akelq2qqnhuydrkqr FOREIGN KEY (target_level_id)
+        REFERENCES level (id);
+
+ALTER TABLE correspondence_table
+    ADD CONSTRAINT fk_4tx0j45sopr6yj8wcedohj9w3 FOREIGN KEY (
+    statistical_classification) REFERENCES statistical_classification (id);
+
+ALTER TABLE level
+    ADD CONSTRAINT fk_sxgu9ljubog3jnujn8fvohvn4 FOREIGN KEY (
+    statistical_classification) REFERENCES statistical_classification (id);
+
+ALTER TABLE statistical_classification
+    ADD CONSTRAINT fk_e2pju4h6p0pdlbgievunfqrtg FOREIGN KEY (
+    classification_version_id) REFERENCES statistical_classification (id);
+
+ALTER TABLE statistical_classification
+    ADD CONSTRAINT fk_12hsnu91tsf1c8b4697tv1bts FOREIGN KEY (contact_person_id)
+        REFERENCES "USER" (id);
+
+ALTER TABLE statistical_classification
+    ADD CONSTRAINT fk_ie31cb245vkf1vhswws053s29 FOREIGN KEY (classification_id)
+        REFERENCES classification_series (id);
+
+ALTER TABLE statistical_classification
+    ADD CONSTRAINT fk_ije1678rnf2dso2pm83xchu9d FOREIGN KEY (predecessor_id)
+        REFERENCES statistical_classification (id);
+
+ALTER TABLE statistical_classification
+    ADD CONSTRAINT fk_tdivea13yro7vtbon5l0elqtg FOREIGN KEY (successor_id)
+        REFERENCES statistical_classification (id);
+
+ALTER TABLE subscription
+    ADD CONSTRAINT fk_in6dab29f2fdp035fja02e2k3 FOREIGN KEY (classification_id)
+        REFERENCES classification_series (id);
+
+ALTER TABLE subscription
+    ADD CONSTRAINT fk_d9uwbiv0kt50iw4fcfydc7te7 FOREIGN KEY (subscriber)
+        REFERENCES subscriber (id);
+
+ALTER TABLE user_favorites
+    ADD CONSTRAINT fk_dk8ngwbk9dgeuegrx1nuktdv1 FOREIGN KEY (favorites_id)
+        REFERENCES classification_series (id);
+
+ALTER TABLE user_favorites
+    ADD CONSTRAINT fk_dx271ymxhckcafibaqijpda8h FOREIGN KEY (user_id) REFERENCES
+        "USER" (id);
