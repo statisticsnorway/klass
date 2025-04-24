@@ -32,6 +32,7 @@ jobs:
         id: docker-build-push
         with:
           team: dapla-metadata
+          dockerfile: klass-api/Dockerfile
 
       - name: Generate NAIS deploy variables
         id: nais-deploy-vars
