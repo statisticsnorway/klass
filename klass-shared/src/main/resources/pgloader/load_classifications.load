@@ -1,0 +1,7 @@
+LOAD DATABASE
+     FROM mysql://root:secret@localhost:3307/klass
+     INTO postgresql://klass:password@localhost:5432/klass
+
+WITH prefetch rows = 3000
+
+INCLUDING ONLY TABLE NAMES MATCHING 'classification_family', 'classification_series', 'classification_item';

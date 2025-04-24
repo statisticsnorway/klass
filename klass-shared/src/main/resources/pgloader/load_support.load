@@ -1,0 +1,11 @@
+LOAD DATABASE
+     FROM mysql://root:secret@localhost:3307/klass
+     INTO postgresql://klass:password@localhost:5432/klass
+
+WITH prefetch rows = 2000
+
+INCLUDING ONLY TABLE NAMES MATCHING 'changelog',
+                                    'classification_access_counter',
+                                    'schema_version',
+                                    'search_words',
+                                    'level';

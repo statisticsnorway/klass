@@ -2,6 +2,6 @@ LOAD DATABASE
      FROM mysql://root:secret@localhost:3307/klass
      INTO postgresql://klass:password@localhost:5432/klass
 
-INCLUDING ONLY TABLE NAMES MATCHING 'level'
+WITH prefetch rows = 1000
 
-WITH data only;
+INCLUDING ONLY TABLE NAMES MATCHING 'subscriber', 'subscription';
