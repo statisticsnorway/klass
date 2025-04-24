@@ -1,0 +1,40 @@
+# Deploy config for the test cluster
+apiVersion: nais.io/v1alpha1
+kind: Application
+metadata:
+  name: vardef
+  namespace: dapla-metadata
+  labels:
+    team: dapla-metadata
+spec:
+  image: "{{ image }}"  # Injected from the GitHub Action
+  port: 8080
+
+  ingresses:
+    - https://klass.intern.test.ssb.no
+
+  accessPolicy:
+
+
+  replicas:
+    min: 1
+    max: 1
+  resources:
+    requests:
+      cpu: 20m
+      memory: 400Mi
+
+  prometheus:
+    enabled: true
+    path: /prometheus
+    port: "8090"
+
+  liveness:
+    path: /health/liveness
+    port: 8090
+  readiness:
+    path: /health/readiness
+    port: 8090
+  startup:
+    path: /health/liveness
+    port: 8090
