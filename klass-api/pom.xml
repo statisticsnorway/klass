@@ -5,7 +5,7 @@
     <name>Klass API</name>
     <description>API for uthenting av kodeverk</description>
     <artifactId>klass-api</artifactId>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
 
     <parent>
         <groupId>no.ssb.klass</groupId>
@@ -218,6 +218,18 @@
                                         </resource>
                                     </resources>
                                 </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                        <version>3.2.0</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>repackage</goal>
+                                </goals>
                             </execution>
                         </executions>
                     </plugin>
