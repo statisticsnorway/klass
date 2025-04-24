@@ -28,7 +28,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Build JAR
-        run: mvn -f klass-api/pom.xml package
+        run: mvn -f pom.xml package
 
       - name: Build and push
         uses: nais/docker-build-push@v0
