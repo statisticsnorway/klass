@@ -4,4 +4,6 @@ LOAD DATABASE
 
 WITH prefetch rows = 3000
 
-INCLUDING ONLY TABLE NAMES MATCHING 'classification_family', 'classification_series', 'classification_item';
+INCLUDING ONLY TABLE NAMES MATCHING 'classification_family',
+                                    'classification_series',
+                                    'classification_item';
