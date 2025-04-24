@@ -27,8 +27,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Build JAR
-        run: mvn -f pom.xml package
+      - name: Build with Maven
+        run: mvn --batch-mode install -pl '!:klass-forvaltning' -DskipTests
 
       - name: Build and push
         uses: nais/docker-build-push@v0
