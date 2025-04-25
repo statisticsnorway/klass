@@ -1,1 +1,0 @@
---  Rewrite MariaDB to Postgres
