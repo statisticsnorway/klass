@@ -30,11 +30,11 @@ spec:
     port: "8090"
 
   liveness:
-    path: /api/klass/v1/
+    path: /actuator/health/liveness
     port: 8080
   readiness:
-    path: /api/klass/v1/
+    path: /actuator/health/readiness
     port: 8080
   startup:
-    path: /api/klass/v1/
+    path: /actuator/health/liveness
     port: 8080
