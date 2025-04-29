@@ -1,9 +1,0 @@
-LOAD DATABASE
-     FROM mysql://root:secret@localhost:3307/klass
-     INTO postgresql://klass:password@localhost:5432/klass
-
-WITH include no drop,
-     create tables,
-     prefetch rows = 1000
-
-;
