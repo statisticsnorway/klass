@@ -1,0 +1,12 @@
+services:
+  mariadb:
+    image: mariadb:11.3
+    container_name: klass_mariadb
+    ports:
+      - "3306:3306"
+    environment:
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
+      MARIADB_LOCAL_PASSWORD: ${MARIADB_LOCAL_PASSWORD}
+      MARIADB_LOCAL_FILEPATH: ${MARIADB_LOCAL_FILEPATH}
+      MARIADB_DATABASE: "klass"
+
