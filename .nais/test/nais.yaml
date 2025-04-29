@@ -32,9 +32,12 @@ spec:
   liveness:
     path: /actuator/health/liveness
     port: 8080
+    initialDelay: 60
   readiness:
     path: /actuator/health/readiness
     port: 8080
+    initialDelay: 60
   startup:
     path: /actuator/health/liveness
     port: 8080
+    initialDelay: 60
