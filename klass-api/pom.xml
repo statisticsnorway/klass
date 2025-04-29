@@ -5,7 +5,7 @@
     <name>Klass API</name>
     <description>API for uthenting av kodeverk</description>
     <artifactId>klass-api</artifactId>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
 
     <parent>
         <groupId>no.ssb.klass</groupId>
