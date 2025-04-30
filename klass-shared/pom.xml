@@ -24,6 +24,7 @@
         <klass.doc.env.url />
         <klass.doc.env.port />
 
+        <postgresql.version>42.7.5</postgresql.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <findbugs-version>3.0.5</findbugs-version>
@@ -112,6 +113,11 @@
         <dependency>
             <groupId>org.mariadb.jdbc</groupId>
             <artifactId>mariadb-java-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${postgresql.version}</version>
         </dependency>
         <dependency>
             <!--java based ldap server for testing-->
