@@ -2,11 +2,14 @@
 
 # Load variables from .env
 set -a
-source .env
+source ../env
 set +a
 
+# Resolve directory
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+
 # Loop over all template load files
-for template in load*.load; do
+for template in "$SCRIPT_DIR"/load*.load; do
   echo "Processing $template..."
 
   # Expand environment variables and run pgloader
