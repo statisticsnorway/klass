@@ -1,10 +1,5 @@
 #!/bin/bash
 
-# Load variables from .env
-set -a
-source ../env
-set +a
-
 # Resolve directory
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
