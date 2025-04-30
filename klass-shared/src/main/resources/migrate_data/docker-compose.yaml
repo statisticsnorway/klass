@@ -9,4 +9,11 @@ services:
       MARIADB_LOCAL_PASSWORD: ${MARIADB_LOCAL_PASSWORD}
       MARIADB_LOCAL_FILEPATH: ${MARIADB_LOCAL_FILEPATH}
       MARIADB_DATABASE: "klass"
-
+  postgresql:
+    image: postgres:17.4
+    container_name: klass_postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_USER: "klass"
