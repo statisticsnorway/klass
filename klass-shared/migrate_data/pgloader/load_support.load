@@ -1,8 +1,10 @@
 LOAD DATABASE
-     FROM mysql://root:$MARIADB_ROOT_PASSWORD@localhost:3306/klass
-     INTO postgresql://klass:$POSTGRES_PASSWORD@localhost:5432/klass
+    FROM mysql://root:$MARIADB_ROOT_PASSWORD@127.0.0.1:3306/klass
+    INTO postgresql://klass:$POSTGRES_PASSWORD@127.0.0.1:5432/klass
 
 WITH prefetch rows = 2000
+
+CAST type datetime to timestamp
 
 INCLUDING ONLY TABLE NAMES MATCHING 'changelog',
                                     'classification_access_counter',
