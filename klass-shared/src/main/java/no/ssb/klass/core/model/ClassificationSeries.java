@@ -60,7 +60,7 @@ public class ClassificationSeries extends BaseEntity implements ClassificationEn
     private String nameNn;
     @Column(name = "name_en")
     private String nameEn;
-    @Lob
+    //@Lob
     @Column(columnDefinition = "text", nullable = false)
     @Convert(converter = TranslatablePersistenceConverter.class)
     private Translatable description;

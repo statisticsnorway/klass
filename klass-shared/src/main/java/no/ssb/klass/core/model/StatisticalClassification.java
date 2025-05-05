@@ -33,7 +33,7 @@ import no.ssb.klass.core.util.TranslatablePersistenceConverter;
 public abstract class StatisticalClassification extends BaseEntity implements ClassificationEntityOperations,
         Publishable, Draftable {
     public static final int FIRST_LEVEL_NUMBER = 1;
-    @Lob
+    //@Lob
     @Column(columnDefinition = "text", nullable = false)
     @Convert(converter = TranslatablePersistenceConverter.class)
     protected Translatable introduction;
