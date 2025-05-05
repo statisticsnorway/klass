@@ -12,7 +12,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(indexes = {
+@Table(
+        name = "\"user\"",
+        indexes = {
         @Index(columnList = "username", name = "user_username_idx", unique = true),
         @Index(columnList = "fullname", name = "user_fullname_idx")
 })
