@@ -101,6 +101,7 @@ public class StatisticsServiceImpl implements StatisticsService {
     }
 
     @Override
+    @Transactional(readOnly = false)
     public void addUseForClassification(ClassificationSeries classificationSeries) {
         ClassificationAccessCounter loggUse = new ClassificationAccessCounter(classificationSeries);
         classificationAccessRepository.save(loggUse);
