@@ -32,7 +32,6 @@ import no.ssb.klass.core.util.TranslatablePersistenceConverter;
 @Table(indexes = { @Index(columnList = "source_id", name = "ct_source_idx"),
         @Index(columnList = "target_id", name = "ct_target_idx") })
 public class CorrespondenceTable extends BaseEntity implements ClassificationEntityOperations, Publishable, Draftable {
-    //@Lob
     @Column(columnDefinition = "text", nullable = false)
     @Convert(converter = TranslatablePersistenceConverter.class)
     private Translatable description;
