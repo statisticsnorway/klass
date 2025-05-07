@@ -55,7 +55,7 @@ import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional()
 public class ClassificationServiceImpl implements ClassificationService {
 
     private final ClassificationFamilyRepository classificationFamilyRepository;
@@ -92,6 +92,7 @@ public class ClassificationServiceImpl implements ClassificationService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<ClassificationSeries> findAll(boolean includeCodelists, Date changedSince, Pageable pageable) {
         // Note deleted ClassificationSeries are not returned. Ensured by
         // ClassificationSeriesSpecification.
@@ -100,6 +101,7 @@ public class ClassificationServiceImpl implements ClassificationService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<ClassificationSeries> findAllPublic(boolean includeCodelists, Date changedSince, Pageable pageable) {
         // Note deleted ClassificationSeries are not returned. Ensured by
         // ClassificationSeriesSpecification.
@@ -108,12 +110,14 @@ public class ClassificationServiceImpl implements ClassificationService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ClassificationSeries> findAllClassificationSeries() {
         return classificationRepository.findAll().stream().filter(classification -> !classification.isDeleted())
                 .collect(toList());
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ClassificationSeries getClassificationSeries(Long id) {
         ClassificationSeries classificationSeries = classificationRepository.findById(id).orElseThrow(() -> new
                 KlassResourceNotFoundException("Classification not found with id = " + id));
@@ -126,6 +130,7 @@ public class ClassificationServiceImpl implements ClassificationService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ClassificationSeries getClassificationSeriesFullyInitialized(Long id) {
         ClassificationSeries classification = getClassificationSeries(id);
         for (ClassificationVersion version : classification.getClassificationVersions()) {
@@ -136,6 +141,7 @@ public class ClassificationServiceImpl implements ClassificationService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ClassificationVariant getClassificationVariant(Long id) {
         ClassificationVariant variant = classificationVariantRepository.findById(id).orElseThrow(() -> new
                 KlassResourceNotFoundException("Classification Variant not found with id = " + id));
@@ -148,6 +154,7 @@ public class ClassificationServiceImpl implements ClassificationService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ClassificationVersion getClassificationVersion(Long id) {
         ClassificationVersion version = classificationVersionRepository.findById(id).orElseThrow(() -> new
                 KlassResourceNotFoundException("Classification Version not found with id = " + id));
@@ -162,6 +169,7 @@ public class ClassificationServiceImpl implements ClassificationService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public CorrespondenceTable getCorrespondenceTable(long id) {
         CorrespondenceTable correspondenceTable = correspondenceTableRepository.findById(id).orElseThrow(() -> new
                 KlassResourceNotFoundException("Correspondence Table not found with id = " + id));
@@ -176,6 +184,7 @@ public class ClassificationServiceImpl implements ClassificationService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ClassificationFamily getClassificationFamily(long id) {
         ClassificationFamily classificationFamily = classificationFamilyRepository.findById(id).orElseThrow(() -> new
                 KlassResourceNotFoundException("ClassificationFamily not found with id = " + id));
@@ -184,7 +193,6 @@ public class ClassificationServiceImpl implements ClassificationService {
     }
 
     @Override
-    @Transactional(readOnly = false)
     public ClassificationSeries saveNotIndexClassification(ClassificationSeries classification) {
 
         classification = classificationRepository.save(classification);
@@ -192,7 +200,6 @@ public class ClassificationServiceImpl implements ClassificationService {
     }
 
     @Override
-    @Transactional(readOnly = false)
     public ClassificationSeries saveAndIndexClassification(ClassificationSeries classification) {
         classification = classificationRepository.save(classification);
         searchService.indexSync(classification);
@@ -200,7 +207,6 @@ public class ClassificationServiceImpl implements ClassificationService {
     }
 
     @Override
-    @Transactional(readOnly = false)
     public ClassificationVersion saveNotIndexVersion(ClassificationVersion version) {
         deleteAnyDeletedReferencesToClassificationItems(version);
         version.clearDeletedClassificationItems();
@@ -209,7 +215,6 @@ public class ClassificationServiceImpl implements ClassificationService {
     }
 
     @Override
-    @Transactional(readOnly = false)
     public ClassificationVariant saveNotIndexVariant(ClassificationVariant variant) {
         variant = classificationVariantRepository.save(variant);
         updateClassificationLastModified(variant.getOwnerClassification().getId());
@@ -217,7 +222,6 @@ public class ClassificationServiceImpl implements ClassificationService {
     }
 
     @Override
-    @Transactional(readOnly = false)
     public CorrespondenceTable saveNotIndexCorrespondenceTable(CorrespondenceTable correspondenceTable) {
         correspondenceTable = correspondenceTableRepository.save(correspondenceTable);
         updateClassificationLastModified(correspondenceTable.getOwnerClassification().getId());
@@ -270,6 +274,7 @@ public class ClassificationServiceImpl implements ClassificationService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<ClassificationSeries> findOneClassificationSeriesWithName(String name, Language language) {
         ClassificationSeries classification;
         switch (language) {
@@ -293,6 +298,7 @@ public class ClassificationServiceImpl implements ClassificationService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<CorrespondenceDto> findCorrespondences(Long sourceClassificationId, Long targetClassificationId,
             DateRange dateRange, Language language, Boolean includeFuture,
             Boolean inverted) {
@@ -321,6 +327,7 @@ public class ClassificationServiceImpl implements ClassificationService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<CodeDto> findVariantClassificationCodes(Long id, String variantName, Language language,
             DateRange dateRange, Boolean includeFuture) {
         checkNotNull(variantName);
@@ -332,6 +339,7 @@ public class ClassificationServiceImpl implements ClassificationService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<CodeDto> findClassificationCodes(Long id, DateRange dateRange, Language language,
             Boolean includeFuture) {
         checkNotNull(dateRange);
@@ -345,35 +353,35 @@ public class ClassificationServiceImpl implements ClassificationService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ClassificationFamily> findAllClassificationFamilies() {
         return classificationFamilyRepository.findAll();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<StatisticalUnit> findAllStatisticalUnits() {
         return statisticalUnitRepository.findAll();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<StatisticalUnit> findClassificationStatisticalUnit(StatisticalUnit statUnit) {
         return classificationRepository.findAllClassificationStatisticalUnits().stream().filter(
                 statisticalUnit -> statisticalUnit.equals(statUnit)).collect(toList());
     }
 
     @Override
-    @Transactional(readOnly = false)
     public ClassificationFamily saveClassificationFamily(ClassificationFamily classificationFamily) {
         return classificationFamilyRepository.save(classificationFamily);
     }
 
     @Override
-    @Transactional(readOnly = false)
     public StatisticalUnit saveStatisticalUnit(StatisticalUnit unit) {
         return statisticalUnitRepository.save(unit);
     }
 
     @Override
-    @Transactional(readOnly = false)
     public StatisticalUnit createAndSaveNewStatisticalUnit(StatisticalUnit unitDetails) {
         Translatable name = new Translatable(unitDetails.getName(Language.NB), unitDetails.getName(Language.NN),
                 unitDetails.getName(Language.EN));
@@ -382,6 +390,7 @@ public class ClassificationServiceImpl implements ClassificationService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ClassificationFamily findClassificationFamily(String name) {
         ClassificationFamily family = classificationFamilyRepository.findByName(name);
         if (family != null) {
@@ -391,29 +400,32 @@ public class ClassificationServiceImpl implements ClassificationService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ClassificationFamilySummary> findAllClassificationFamilySummaries(String section,
             ClassificationType classificationType) {
         return classificationFamilyRepository.findClassificationFamilySummaries(section, classificationType);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ClassificationFamilySummary> findPublicClassificationFamilySummaries(
             String section, ClassificationType classificationType) {
         return classificationFamilyRepository.findPublicClassificationFamilySummaries(section, classificationType);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Set<String> findAllResponsibleSections() {
         return classificationRepository.findAllResponsibleSections();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Set<String> findResponsibleSectionsWithPublishedVersions() {
         return classificationRepository.findResponsibleSectionsWithPublishedVersions();
     }
 
     @Override
-    @Transactional(readOnly = false)
     public void deleteNotIndexClassification(User user, ClassificationSeries classification)
             throws KlassMessageException {
         classification = reloadToAvoidLazyInitialization(classification);
@@ -426,7 +438,6 @@ public class ClassificationServiceImpl implements ClassificationService {
     }
 
     @Override
-    @Transactional(readOnly = false)
     public void deleteNotIndexVariant(User user, ClassificationVariant variant) throws KlassMessageException {
         checkAllowedToDelete(user, variant);
         variant.setDeleted();
@@ -434,13 +445,11 @@ public class ClassificationServiceImpl implements ClassificationService {
     }
 
     @Override
-    @Transactional(readOnly = false)
     public void deleteStatisticalUnit(StatisticalUnit stat) {
         statisticalUnitRepository.delete(stat);
     }
 
     @Override
-    @Transactional(readOnly = false)
     public void deleteNotIndexVersion(User user, ClassificationVersion version) throws KlassMessageException {
         version = reloadToAvoidLazyInitialization(version);
         checkAllowedToDelete(user, version);
@@ -449,7 +458,6 @@ public class ClassificationServiceImpl implements ClassificationService {
     }
 
     @Override
-    @Transactional(readOnly = false)
     public void deleteNotIndexCorrespondenceTable(User user, CorrespondenceTable correspondenceTable)
             throws KlassMessageException {
         checkAllowedToDelete(user, correspondenceTable);
@@ -492,7 +500,6 @@ public class ClassificationServiceImpl implements ClassificationService {
     }
 
     @Override
-    @Transactional(readOnly = false)
     public ClassificationVersion copyClassificationVersion(ClassificationVersion originalVersion, DateRange dateRange) {
         originalVersion = reloadToAvoidLazyInitialization(originalVersion);
 
@@ -505,11 +512,13 @@ public class ClassificationServiceImpl implements ClassificationService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public long countClassifications() {
         return classificationRepository.count();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public long countClassifications(MigratedFrom migratedFrom) {
         checkNotNull(migratedFrom);
         return classificationRepository.countByMigratedFrom(migratedFrom);
@@ -535,6 +544,7 @@ public class ClassificationServiceImpl implements ClassificationService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Set<String> findReferencesOfClassificationItems(StatisticalClassification statisticalClassification) {
         checkNotNull(statisticalClassification);
         if (statisticalClassification.getId() == null) {
@@ -563,18 +573,21 @@ public class ClassificationServiceImpl implements ClassificationService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<CorrespondenceTable> findCorrespondenceTablesWithSource(ClassificationVersion source) {
         return correspondenceTableRepository.findBySource(source).stream().filter(
                 correspondenceTable -> !correspondenceTable.isThisOrSourceOrTargetDeleted()).collect(toList());
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<CorrespondenceTable> findCorrespondenceTablesWithTarget(ClassificationVersion target) {
         return correspondenceTableRepository.findByTarget(target).stream().filter(
                 correspondenceTable -> !correspondenceTable.isThisOrSourceOrTargetDeleted()).collect(toList());
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<CorrespondenceTable> findPublicCorrespondenceTablesWithTarget(ClassificationVersion target) {
         return correspondenceTableRepository.findByTarget(target).stream()
                 .filter(correspondenceTable -> !correspondenceTable.isThisOrSourceOrTargetDeleted())
@@ -583,16 +596,19 @@ public class ClassificationServiceImpl implements ClassificationService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ClassificationSeries> findClassificationSeriesByContactPerson(User contactPerson) {
         return classificationRepository.findByContactPerson(contactPerson);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ClassificationVariant> findVariantsByContactPerson(User contactPerson) {
         return classificationVariantRepository.findByContactPerson(contactPerson);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<CorrespondenceTable> findCorrespondenceTablesBetween(ClassificationVersion version1, Level level1,
             ClassificationVersion version2, Level level2) {
         if (level1 != null) {
