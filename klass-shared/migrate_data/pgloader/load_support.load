@@ -8,6 +8,5 @@ CAST type datetime to timestamp
 
 INCLUDING ONLY TABLE NAMES MATCHING 'changelog',
                                     'classification_access_counter',
-                                    'schema_version',
                                     'search_words',
                                     'level';
