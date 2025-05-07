@@ -41,7 +41,7 @@
         <commons-lang3-version>3.4</commons-lang3-version>
         <rest-assured-version>5.4.0</rest-assured-version>
         <apacheds-server-jndi-version>1.5.5</apacheds-server-jndi-version>
-        <asciidoctor-version>2.2.4</asciidoctor-version>
+        <asciidoctor-version>3.2.0</asciidoctor-version>
         <maven-jaxb2-plugin-version>0.15.3</maven-jaxb2-plugin-version>
         <tomcat7-maven-plugin-version>2.2</tomcat7-maven-plugin-version>
         <!-- Override Spring Boot managed version.
