@@ -5,7 +5,7 @@ on:
     types: [published]
   push:
     branches:
-      - master
+      - nais-migration
 
 env:
   REGISTRY: europe-north1-docker.pkg.dev/${{ secrets.NAIS_MANAGEMENT_PROJECT_ID }}/dapla-metadata
