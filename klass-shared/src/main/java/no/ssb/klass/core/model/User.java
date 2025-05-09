@@ -13,7 +13,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(
-        name = "user",
+        name = "\"user\"",
         indexes = {
         @Index(columnList = "username", name = "user_username_idx", unique = true),
         @Index(columnList = "fullname", name = "user_fullname_idx")
