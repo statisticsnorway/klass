@@ -2,7 +2,7 @@
 apiVersion: nais.io/v1alpha1
 kind: Application
 metadata:
-  name: klass-api
+  name: klass
   namespace: dapla-metadata
   labels:
     team: dapla-metadata
@@ -11,7 +11,7 @@ spec:
   port: 8080
 
   ingresses:
-    - https://klass-api.intern.test.ssb.no
+    - https://klass.intern.test.ssb.no
 
   accessPolicy:
 
