@@ -28,7 +28,7 @@ spec:
       - type: POSTGRES_17
         tier: db-f1-micro
         databases:
-          - name: klass-db
+          - name: klass
 
   prometheus:
     enabled: true
