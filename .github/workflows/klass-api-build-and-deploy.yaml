@@ -38,8 +38,7 @@ jobs:
           cache: 'maven'
 
       - name: Build with Maven
-        working-directory: klass-api
-        run: mvn -B install -P github -DskipTests
+        run: mvn --batch-mode --update-snapshots install -pl '!:klass-forvaltning' -P github
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
