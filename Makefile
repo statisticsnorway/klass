@@ -38,8 +38,10 @@ build-klass-api:
 .PHONY: run-klass-forvaltning-local
 run-klass-forvaltning-local:
 	pushd klass-forvaltning && \
+	${sdk} env && \
 	mvn spring-boot\:run --settings=../.maven.settings.xml -P nexus; \
-	popd
+	popd; \
+	${sdk} env clear
 
 .PHONY: run-klass-forvaltning-local-mariadb
 # Requires that a MariaDB instance is already running with a database called klass and a user called klass.
