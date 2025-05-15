@@ -21,6 +21,7 @@ jobs:
     permissions:
       contents: "read"
       id-token: "write"
+      packages: "read"
     runs-on: ubuntu-latest
     outputs:
       nais_config_path: ${{ steps.nais-deploy-vars.outputs.nais_config_path }}
