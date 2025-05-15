@@ -199,7 +199,7 @@
                                 <include>**/*Documentation.java</include>
                             </includes>
                             <excludes>
-                                <exclude>**/KlassApiClassificationsTest.java</exclude>
+                                <exclude>**/dataintegrity</exclude>
                             </excludes>
                         </configuration>
                     </plugin>
