@@ -11,10 +11,6 @@ on:
       - "klass-shared/**"
       - ".github/workflows/klass-forvaltning-build-and-deploy.yaml"
 
-env:
-  REGISTRY: europe-north1-docker.pkg.dev/${{ secrets.NAIS_MANAGEMENT_PROJECT_ID }}/dapla-metadata
-  DOCKER_IMAGE: europe-north1-docker.pkg.dev/${{ secrets.NAIS_MANAGEMENT_PROJECT_ID }}/dapla-metadata/klass-forvaltning:${{ github.sha }}
-
 jobs:
   docker-build:
     name: Docker build
@@ -54,6 +50,7 @@ jobs:
         id: docker-build-push
         with:
           team: dapla-metadata
+          image_suffix: forvaltning
           dockerfile: klass-forvaltning/Dockerfile
           docker_context: klass-forvaltning
 
