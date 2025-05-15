@@ -47,11 +47,43 @@ public class KlassApiClassificationsTest {
     }
 
     @Test
-    void getClassificationsResult(){
+    void getClassificationsNamesAreEqual(){
         for (int i = 0; i < mariaDBClassificationsPage0.size(); i++) {
             assertThat(mariaDBClassificationsPage0.get(i).get("name")).isEqualTo(postgresDBClassificationsPage0.get(i).get("name"));
         }
 
+    }
+
+    @Test
+    void getClassificationsIdsAreEqual(){
+        for (int i = 0; i < mariaDBClassificationsPage0.size(); i++) {
+            assertThat(mariaDBClassificationsPage0.get(i).get("id")).isEqualTo(postgresDBClassificationsPage0.get(i).get("id"));
+        }
+
+    }
+
+    @Test
+    void getClassificationsClassificationTypesAreEqual(){
+        for (int i = 0; i < mariaDBClassificationsPage0.size(); i++) {
+            assertThat(mariaDBClassificationsPage0.get(i).get("classificationType")).isEqualTo(postgresDBClassificationsPage0.get(i).get("classificationType"));
+        }
+
+    }
+
+    @Test
+    void getClassificationsLastModifiedAreEqual(){
+        for (int i = 0; i < mariaDBClassificationsPage0.size(); i++) {
+            assertThat(mariaDBClassificationsPage0.get(i).get("lastModified")).isEqualTo(postgresDBClassificationsPage0.get(i).get("lastModified"));
+        }
+
+    }
+
+    @Test
+    void getClassificationsLinksAreNotEqual(){
+        for (int i = 0; i < mariaDBClassificationsPage0.size(); i++) {
+            Map<String, Object> classification = mariaDBClassificationsPage0.get(i);
+            assertThat(classification.get("_links")).isNotEqualTo(postgresDBClassificationsPage0.get(i).get("_links"));
+        }
     }
 
 }
