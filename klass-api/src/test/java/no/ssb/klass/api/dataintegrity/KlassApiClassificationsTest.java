@@ -14,7 +14,6 @@ public class KlassApiClassificationsTest {
     private Response responseKlassApiPostgresDB;
     private final String klassApiMariaDBHost = "http://localhost:8081";
     private final String klassApiPostgresDBHost = "http://localhost:8080";
-    private final String klassApiPath = "https://data.ssb.no/api/klass/v1/classifications";
     public String klassApiMariaDBPath = klassApiMariaDBHost + basePath + RestConstants.API_VERSION_V1 + "/classifications";
     public String klassApiPostgresDBPath = klassApiPostgresDBHost + basePath + RestConstants.API_VERSION_V1 +  "/classifications";
 
