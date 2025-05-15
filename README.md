@@ -15,7 +15,7 @@ Klass consists of 4 maven modules
 - Klass Shared (Classes shared between API and Forvaltning. primary database and search components)
 - Klass Solr (Solr Core configuration  and configuration for embedded solr for test/development)
 
-### Build and Deploy
+## Build and Deploy
 
 Building the project will output  war files for **Klass API** & **Klass Forvaltning** and a zip file (WiP) for **Klass Solr**.
 
@@ -27,7 +27,7 @@ klass-forvaltning/target/klass-forvaltning-{Version}.war
 klass-solr/klass-solr-{Version}.zip (WiP)
 ```
 
-#### Server configuration
+## Server configuration
 
 Klass was made with Tomcat in mind and configuration on servers are done in `tomcat.conf` (usually found in ~tomcat/conf)
 variables in `application properties` will be overridden/replaced with properties found in `tomcat.conf`
@@ -44,7 +44,7 @@ KLASS_ENV_MARIADB_PASSWORD=Password
 KLASS_ENV_LOGGING_PATH=/var/log/tomcat
 ```
 
-### Database
+## Database
 
 Klass is configured to use Flyway for database initialising and  migration.
 You can find the collection of SQL scripts in the Klass-shared module under `src/main/resources/db/migration`
@@ -54,15 +54,30 @@ This process can take quite some time as there is a lot of data and its also sen
 
 Tips: If you are only setting up Klass for testing/development purposes you can use the `small-import` spring profile to reduce the amount of data being imported.
 
-### Development
+## Development
 
-its recommended to build with maven before starting development as some classes are generated as part of the build process.
+### Requirements
 
-```shell
-make build-all
-```
+- Maven: <https://maven.apache.org/install.html>
+- Sdkman: <https://sdkman.io/install>
+- Java 17: `sdk install java 17.0.11-zulu`
+- Java 8 (for Klass Forvaltning): `sdk install java 8.0.372-zulu`
 
-#### Spring profiles
+### Introduction
+
+It's recommended to build with maven before starting development as some classes are generated as part of the build process.
+
+Each app has an `.sdkmanrc` file which may be used to configure the Java version to use. This may be activated by entering the directory and running the `sdk env` command. A `Makefile` is also provided with relevant commands for building each app. See <https://sdkman.io/usage#env-command> for more details
+
+### Klass API
+
+Build the app: `make build-klass-api`
+
+### Klass Forvaltning
+
+Build the app: `make build-klass-forvaltning`
+
+### Spring profiles
 
 Klass API and Klass Forvaltning utilize Spring boot and heavily rely on Spring Profiles to make development and debugging easier.
 below is a quick summary of the profiles available (see _application.properties_ for more details)
@@ -84,7 +99,7 @@ below is a quick summary of the profiles available (see _application.properties_
 #   embedded-solr       = run an instance of solr as part of the application (no need to run a separate solr application)
 ```
 
-#### Build profiles
+### Build profiles
 
 we have created custom profiles for time consuming tests that can be toggled on and off to help speed up compile time during development.
 The profile named `documentation` will generate API documentation with AsciiDoc (default: enabled)
