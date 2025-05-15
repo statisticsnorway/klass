@@ -4,8 +4,8 @@ on:
   release:
     types: [published]
   push:
-    branches:
-      - nais-migration
+#    branches:
+#      - nais-migration
     paths:
       - "klass-forvaltning/**"
       - "klass-shared/**"
