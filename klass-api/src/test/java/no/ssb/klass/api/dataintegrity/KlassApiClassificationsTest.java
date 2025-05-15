@@ -18,11 +18,8 @@ public class KlassApiClassificationsTest {
     private final String klassApiPostgresDBHost = "http://localhost:8080";
     public String klassApiMariaDBPath = klassApiMariaDBHost + basePath + RestConstants.API_VERSION_V1 + "/classifications";
     public String klassApiPostgresDBPath = klassApiPostgresDBHost + basePath + RestConstants.API_VERSION_V1 +  "/classifications";
-
-    List<Map<String, Object>> mariaDBClassificationsPages;
     List<Map<String, Object>> mariaDBClassificationsPage0;
     List<Map<String, Object>> postgresDBClassificationsPage0;
-    List<Map<String, Object>> postgresDBClassificationsPages;
 
     @BeforeEach
     void setUp() {
@@ -84,6 +81,10 @@ public class KlassApiClassificationsTest {
             Map<String, Object> classification = mariaDBClassificationsPage0.get(i);
             assertThat(classification.get("_links")).isNotEqualTo(postgresDBClassificationsPage0.get(i).get("_links"));
         }
+    }
+
+    @Test
+    void getClassificationsChangedSinceAreEqual(){
     }
 
 }
