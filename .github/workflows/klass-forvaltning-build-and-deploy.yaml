@@ -34,9 +34,14 @@ jobs:
           java-version: '8'
           cache: 'maven'
 
+      - name: Set up Maven
+        uses: stCarolas/setup-maven@v5
+
       - name: Build with Maven
         working-directory: klass-forvaltning
-        run: mvn -B install -P nexus -DskipTests
+        run: mvn -B install -P github -DskipTests
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push
         uses: nais/docker-build-push@v0
