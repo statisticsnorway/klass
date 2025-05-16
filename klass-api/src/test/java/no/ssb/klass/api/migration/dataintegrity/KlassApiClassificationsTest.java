@@ -77,8 +77,9 @@ public class KlassApiClassificationsTest {
                             postgresDBClassificationsPage.get(i).get(CLASSIFICATION_TYPE));
 
             Map<String, Object> classification = mariaDBClassificationsPage.get(i);
-            assertThat(classification.get(_LINKS)).isNotEqualTo(
-                    postgresDBClassificationsPage.get(i).get(_LINKS));
+
+            assertThat(classification.get(LINKS)).isNotEqualTo(
+                    postgresDBClassificationsPage.get(i).get(LINKS));
         }
 
     }

@@ -13,7 +13,7 @@ public final class MigrationTestConstants {
     public static final String ID = "id";
     public static final String NAME = "name";
     public static final String CLASSIFICATION_TYPE = "classificationType";
-    public static final String _LINKS = "_links";
+    public static final String LINKS = "_links";
 
 
 
