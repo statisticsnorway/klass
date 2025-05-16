@@ -27,7 +27,7 @@ jobs:
 
       # Build all modules except klass-forvaltning since it is not compatible with JDK 17
       - name: Build, test and package with Maven
-        run: mvn --batch-mode --update-snapshots package -pl '!:klass-forvaltning' -P nexus
+        run: mvn --batch-mode --update-snapshots package -pl '!:klass-forvaltning'
 
       - uses: actions/checkout@v3
       - name: Set up JDK 1.8
