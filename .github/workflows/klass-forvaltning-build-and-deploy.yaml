@@ -2,10 +2,10 @@ name: Klass-forvaltning build and deploy
 
 on:
   release:
-    types: [published]
+    types: [ published ]
   push:
-#    branches:
-#      - nais-migration
+    #    branches:
+    #      - nais-migration
     paths:
       - "klass-forvaltning/**"
       - "klass-shared/**"
@@ -29,15 +29,6 @@ jobs:
           distribution: 'temurin'
           java-version: '8'
           cache: 'maven'
-
-      # Need to downgrade Maven in order to allow HTTP (not HTTPS) packages to be downloaded.
-      # This is necessary as HTTP repositories were blocked in Maven 3.8.1
-      # HTTP repositories are used in some outdated dependenciesns
-      # This step can be removed once KLASS packages have been updated to more recent versions
-      - name: Set up Maven
-        uses: stCarolas/setup-maven@v4.5
-        with:
-          maven-version: 3.6.3
 
       - name: Build with Maven
         working-directory: klass-forvaltning

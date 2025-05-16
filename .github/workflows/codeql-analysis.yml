@@ -80,15 +80,6 @@ jobs:
           java-version: '8'
           cache: maven
 
-      # Need to downgrade Maven in order to allow HTTP (not HTTPS) packages to be downloaded.
-      # This is necessary as HTTP repositories were blocked in Maven 3.8.1
-      # HTTP repositories are used in some outdated dependenciesns
-      # This step can be removed once KLASS packages have been updated to more recent versions
-      - name: Set up Maven
-        uses: stCarolas/setup-maven@v4.5
-        with:
-          maven-version: 3.6.3
-
       # Build only klass-forvaltning with JDK 1.8
       - name: Build, test and package with Maven
         run: mvn --batch-mode --update-snapshots package -Djava.version=1.8 -pl :klass-forvaltning -am -P github
