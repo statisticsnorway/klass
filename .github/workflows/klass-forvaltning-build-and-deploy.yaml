@@ -3,13 +3,19 @@ name: Klass-forvaltning build and deploy
 on:
   release:
     types: [ published ]
-  push:
+    #  push:
     #    branches:
     #      - nais-migration
+  #    paths:
+  #      - "klass-forvaltning/**"
+  #      - "klass-shared/**"
+  #      - ".github/workflows/klass-forvaltning-build-and-deploy.yaml"
+  pull_request:
     paths:
       - "klass-forvaltning/**"
       - "klass-shared/**"
       - ".github/workflows/klass-forvaltning-build-and-deploy.yaml"
+
 
 jobs:
   docker-build:
