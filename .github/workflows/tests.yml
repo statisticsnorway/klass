@@ -39,7 +39,7 @@ jobs:
 
       # Build only klass-forvaltning with JDK 1.8
       - name: Build, test and package with Maven
-        run: mvn --batch-mode --update-snapshots package -Djava.version=1.8 -pl :klass-forvaltning -am -P github
+        run: mvn --batch-mode --update-snapshots package -Djava.version=1.8 -pl :klass-forvaltning -am
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -60,6 +60,6 @@ jobs:
           cache: maven
 
       - name: Publish to GitHub Packages
-        run: mvn --batch-mode deploy -pl '!:klass-forvaltning' -P github -DskipTests
+        run: mvn --batch-mode deploy -pl '!:klass-forvaltning' -DskipTests
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

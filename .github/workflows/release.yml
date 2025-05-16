@@ -23,6 +23,6 @@ jobs:
 
       # Build all modules except klass-forvaltning since it is not compatible with JDK 17
       - name: Publish to GitHub Packages
-        run: mvn --batch-mode deploy -pl '!:klass-forvaltning' -P github -DskipTests
+        run: mvn --batch-mode deploy -pl '!:klass-forvaltning' -DskipTests
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

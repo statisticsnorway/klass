@@ -34,7 +34,7 @@ jobs:
 
       - name: Build with Maven
         working-directory: klass-forvaltning
-        run: mvn -B install -P github -DskipTests
+        run: mvn -B install -DskipTests
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
