@@ -63,6 +63,23 @@ Tips: If you are only setting up Klass for testing/development purposes you can 
 - Java 17: `sdk install java 17.0.15-tem`
 - Java 8 (for Klass Forvaltning): `sdk install java 8.0.452-tem`
 
+### Configuration
+
+In order to download dependencies from GitHub Packages we must authenticate Maven. See the documentation here: <https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-apache-maven-registry#authenticating-with-a-personal-access-token>
+
+This may be done by generating a Personal Access Token (classic) on GitHub with the `packages:read` scope. The following configuration may then be placed in your `~/.m2/settings.xml` file.
+
+```xml
+
+<servers>
+    <server>
+        <id>github</id>
+        <username>USERNAME</username>
+        <password>TOKEN</password>
+    </server>
+</servers>
+```
+
 ### Introduction
 
 It's recommended to build with maven before starting development as some classes are generated as part of the build process.
