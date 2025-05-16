@@ -1,0 +1,34 @@
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
+                      http://maven.apache.org/xsd/settings-1.0.0.xsd">
+
+    <profiles>
+        <profile>
+            <id>github</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <repositories>
+                <repository>
+                    <id>github</id>
+                    <name>GitHub Packages</name>
+                    <url>https://maven.pkg.github.com/${github.repository}</url>
+                </repository>
+                <repository>
+                    <id>maven-restlet</id>
+                    <name>Public online Restlet repository</name>
+                    <url>https://maven.restlet.talend.com</url>
+                </repository>
+            </repositories>
+        </profile>
+    </profiles>
+
+    <mirrors>
+        <mirror>
+            <id>maven-restletMirror</id>
+            <url>https://maven.restlet.talend.com</url>
+            <mirrorOf>maven-restlet</mirrorOf>
+        </mirror>
+    </mirrors>
+</settings>

@@ -25,32 +25,40 @@ help:
 build-klass-forvaltning:
 	pushd klass-forvaltning && \
 	${sdk} env && \
-	mvn -B install -P nexus; \
+	mvn install; \
 	popd; \
 	${sdk} env clear
 
 .PHONY: build-klass-api
 build-klass-api:
 	pushd klass-api && \
-	mvn -B install -P nexus; \
- 	popd
+	${sdk} env && \
+	mvn install; \
+ 	popd; \
+	${sdk} env clear
 
 .PHONY: run-klass-forvaltning-local
 run-klass-forvaltning-local:
 	pushd klass-forvaltning && \
-	mvn spring-boot\:run --settings=../.maven.settings.xml -P nexus; \
-	popd
+	${sdk} env && \
+	mvn spring-boot\:run; \
+	popd; \
+	${sdk} env clear
 
 .PHONY: run-klass-forvaltning-local-mariadb
 # Requires that a MariaDB instance is already running with a database called klass and a user called klass.
 # The environment variable KLASS_ENV_MARIADB_PASSWORD must be specified with the password for the klass user.
 run-klass-forvaltning-local-mariadb:
 	pushd klass-forvaltning && \
-	mvn spring-boot\:run -Dspring.profiles.active=mariadb,embedded-solr,frontend,skip-indexing,small-import,ad-offline -P nexus; \
-	popd
+	${sdk} env && \
+	mvn spring-boot\:run -Dspring.profiles.active=mariadb,embedded-solr,frontend,skip-indexing,small-import,ad-offline; \
+	popd; \
+	${sdk} env clear
 
 # The environment variable KLASS_ENV_SECURITY_IGNORED must be set to "/**" in order to skip authentication
 run-klass-api-local-mariadb:
 	pushd klass-api && \
-	mvn spring-boot\:run -Dspring.profiles.active=mariadb,embedded-solr,mock-mailserver,skip-indexing,small-import,ad-offline -P nexus; \
-	popd
+	${sdk} env && \
+	mvn spring-boot\:run -Dspring.profiles.active=mariadb,embedded-solr,mock-mailserver,skip-indexing,small-import,ad-offline; \
+	popd; \
+	${sdk} env clear
