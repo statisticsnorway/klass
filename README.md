@@ -13,11 +13,11 @@ Klass consists of 4 maven modules
 - Klass API (Standalone application that provides the Klass API)
 - Klass Forvaltning (Frontend for classification maintaining)
 - Klass Shared (Classes shared between API and Forvaltning. primary database and search components)
-- Klass Solr (Solr Core configuration  and configuration for embedded solr for test/development)
+- Klass Solr (Solr Core configuration and configuration for embedded solr for test/development)
 
 ## Build and Deploy
 
-Building the project will output  war files for **Klass API** & **Klass Forvaltning** and a zip file (WiP) for **Klass Solr**.
+Building the project will output war files for **Klass API** & **Klass Forvaltning** and a zip file (WiP) for **Klass Solr**.
 
 You can find these in each maven modules target folder.
 
@@ -31,7 +31,7 @@ klass-solr/klass-solr-{Version}.zip (WiP)
 
 Klass was made with Tomcat in mind and configuration on servers are done in `tomcat.conf` (usually found in ~tomcat/conf)
 variables in `application properties` will be overridden/replaced with properties found in `tomcat.conf`
-ex. the value for `klass.env.mariadb.password` will be  replaced with the value from `KLASS_ENV_MARIADB_PASSWORD`.
+ex. the value for `klass.env.mariadb.password` will be replaced with the value from `KLASS_ENV_MARIADB_PASSWORD`.
 
 please note that `.` is replaced with `_` in the tomcat config.
 
@@ -46,7 +46,7 @@ KLASS_ENV_LOGGING_PATH=/var/log/tomcat
 
 ## Database
 
-Klass is configured to use Flyway for database initialising and  migration.
+Klass is configured to use Flyway for database initialising and migration.
 You can find the collection of SQL scripts in the Klass-shared module under `src/main/resources/db/migration`
 
 If the classification tables are empty Klass will by default attempt to import data from its predecessor.
@@ -60,8 +60,8 @@ Tips: If you are only setting up Klass for testing/development purposes you can 
 
 - Maven: <https://maven.apache.org/install.html>
 - Sdkman: <https://sdkman.io/install>
-- Java 17: `sdk install java 17.0.11-zulu`
-- Java 8 (for Klass Forvaltning): `sdk install java 8.0.372-zulu`
+- Java 17: `sdk install java 17.0.15-tem`
+- Java 8 (for Klass Forvaltning): `sdk install java 8.0.452-tem`
 
 ### Introduction
 
@@ -150,7 +150,7 @@ The current solution to this problem is to add an environment variable `JAVA_TOO
 
 #### Application running in intelliJ wont show monitor page or CSS
 
-_Intellij 2019.1_ and earlier does not seem to detect the correct work directory and files placed in  the webapp directory might not be available to the application.
+_Intellij 2019.1_ and earlier does not seem to detect the correct work directory and files placed in the webapp directory might not be available to the application.
 the solution is to set workdir manually in your run configuration (set it to `$MODULE_WORKING_DIR$`)
 
 [![IntelliJ](docs/troubleshoot_workdir_small.png)](./docs/troubleshoot_workdir.png)
