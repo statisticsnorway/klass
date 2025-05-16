@@ -3,17 +3,13 @@ name: Klass-api build and deploy
 on:
   release:
     types: [ published ]
-  #  push:
-  #    branches:
-  #      - nais-migration
-  #    paths:
-  #      - "klass-api/**"
-  #      - "klass-shared/**"
-  #      - ".github/workflows/klass-api-build-and-deploy.yaml"
-  pull_request:
+  push:
+    branches:
+      - nais-migration
     paths:
       - "klass-api/**"
       - "klass-shared/**"
+      - ".nais/**/klass-api.yaml"
       - ".github/workflows/klass-api-build-and-deploy.yaml"
 
 jobs:
