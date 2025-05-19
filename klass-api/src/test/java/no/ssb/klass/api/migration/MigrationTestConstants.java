@@ -1,10 +1,8 @@
 package no.ssb.klass.api.migration;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.google.gson.internal.$Gson$Types.arrayOf;
 
 public final class MigrationTestConstants {
 
