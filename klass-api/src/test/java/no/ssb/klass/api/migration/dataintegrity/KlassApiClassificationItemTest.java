@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 
-public class KlassApiClassificationTest extends AbstractKlassApiDataIntegrityTest {
+public class KlassApiClassificationItemTest extends AbstractKlassApiDataIntegrityTest {
     Response responseKlassApiSourceHostClassification;
     Response responseKlassApiTargetHostClassification;
 
@@ -30,5 +30,15 @@ public class KlassApiClassificationTest extends AbstractKlassApiDataIntegrityTes
                 assertThat(sourceField).isEqualTo(targetField);
             }
         }
+    }
+
+    @Test
+    void getClassificationVersionsTest(){
+
+    }
+
+    @Test
+    void getClassificationLinksTest(){
+
     }
 }
