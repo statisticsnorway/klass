@@ -7,6 +7,7 @@ import no.ssb.klass.api.util.RestConstants;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -17,9 +18,9 @@ import static no.ssb.klass.api.migration.MigrationTestConstants.EMBEDDED_CLASSIF
 
 public abstract class AbstractKlassApiDataIntegrityTest {
 
-    private final String sourceHost = MigrationTestConfig.getSourceHost();
+    private static final String sourceHost = MigrationTestConfig.getSourceHost();
 
-    private final String targetHost = MigrationTestConfig.getTargetHost();
+    private static final String targetHost = MigrationTestConfig.getTargetHost();
 
     Response responseKlassApiSourceHost;
     Response responseKlassApiTargetHost;
@@ -78,6 +79,18 @@ public abstract class AbstractKlassApiDataIntegrityTest {
 
             // Get next page URL if available
             url = json.get("_links.next.href");
+        }
+    }
+
+    public static boolean isPathEqualIgnoreHost(String sourceHref, String targetHref) {
+        try {
+            URL sourceUrl = new URL(sourceHref);
+            URL targetUrl = new URL(targetHref);
+
+            return sourceUrl.getPath().equals(targetUrl.getPath());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
     }
 

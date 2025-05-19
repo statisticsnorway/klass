@@ -34,6 +34,7 @@ public final class MigrationTestConstants {
     public static final String VALID_FROM = "validFrom";
     public static final String VALID_TO = "validTo";
     public static final String PUBLISHED = "published";
+    public static final String LINKS_SELF_HREF= "_links.self.href";
 
 
     public static List<String> pathNamesClassification = Arrays.asList(
@@ -59,7 +60,8 @@ public final class MigrationTestConstants {
             VALID_FROM,
             VALID_TO,
             LAST_MODIFIED,
-            PUBLISHED
+            PUBLISHED,
+            LINKS
     );
 
 

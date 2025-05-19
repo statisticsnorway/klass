@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static no.ssb.klass.api.migration.MigrationTestConstants.VERSIONS;
+import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 
@@ -39,7 +39,13 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
 
             for(String pathName: MigrationTestConstants.pathNamesVersions){
                 Object sourceField = sourceResponse.path(pathName);
-                assertThat(sourceField).isEqualTo(targetResponse.path(pathName));
+                if(pathName.equals(LINKS)) {
+                    String sourceLinks = sourceResponse.path(LINKS_SELF_HREF);
+                    assertThat( isPathEqualIgnoreHost(sourceLinks, targetResponse.path(LINKS_SELF_HREF))).isTrue();
+                }
+                else{
+                    assertThat(sourceField).isEqualTo(targetResponse.path(pathName));
+                }
             }
         }
 
