@@ -25,6 +25,9 @@ public final class MigrationTestConstants {
     public static final String INCLUDE_SHORTNAME = "includeShortName";
     public static final String INCLUDE_NOTES = "includeNotes";
     public static final String CONTACT_PERSON = "contactPerson";
+    public static final String CONTACT_PERSON_NAME = "contactPerson.name";
+    public static final String CONTACT_PERSON_EMAIL = "contactPerson.email";
+    public static final String CONTACT_PERSON_PHONE = "contactPerson.phone";
     public static final String OWNING_SECTION = "owningSection";
     public static final String STATISTICAL_UNITS = "statisticalUnits";
     public static final String VERSIONS = "versions";
@@ -42,7 +45,9 @@ public final class MigrationTestConstants {
             INCLUDE_NOTES,
             CONTACT_PERSON,
             OWNING_SECTION,
-            STATISTICAL_UNITS
+            CONTACT_PERSON_EMAIL,
+            CONTACT_PERSON_NAME,
+            CONTACT_PERSON_PHONE
     );
 
 
