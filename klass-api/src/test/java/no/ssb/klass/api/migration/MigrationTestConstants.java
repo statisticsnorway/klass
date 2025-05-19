@@ -51,7 +51,8 @@ public final class MigrationTestConstants {
             OWNING_SECTION,
             CONTACT_PERSON_EMAIL,
             CONTACT_PERSON_NAME,
-            CONTACT_PERSON_PHONE
+            CONTACT_PERSON_PHONE,
+            STATISTICAL_UNITS
     );
 
     public static List<String> pathNamesVersions = Arrays.asList(

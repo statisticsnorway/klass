@@ -21,7 +21,10 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
 
             for (String pathName : MigrationTestConstants.pathNamesClassification) {
                 Object sourceField = sourceResponse.path(pathName);
-                assertThat(sourceField).isEqualTo(targetResponse.path(pathName));
+                if(!pathName.equals(STATISTICAL_UNITS)) {
+                    assertThat(sourceField).isEqualTo(targetResponse.path(pathName));
+                }
+
             }
         }
     }
