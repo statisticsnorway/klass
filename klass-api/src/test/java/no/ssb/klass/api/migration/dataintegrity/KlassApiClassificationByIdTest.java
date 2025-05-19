@@ -12,26 +12,16 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 
 public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrityTest {
-    Response responseKlassApiSourceHostClassification;
-    Response responseKlassApiTargetHostClassification;
 
     @Test
     void getClassification(){
         for (int i = 0; i < Math.min(classificationsIdsSourceHost.size(), classificationsIdsTargetHost.size()); i++) {
-            Integer idSourceHost = classificationsIdsSourceHost.get(i);
-            Integer idTargetHost = classificationsIdsTargetHost.get(i);
+            Response sourceResponse = getResponse(klassApSourceHostPath, classificationsIdsSourceHost.get(i));
+            Response targetResponse = getResponse(klassApiTargetHostPath, classificationsIdsTargetHost.get(i));
 
-            responseKlassApiSourceHostClassification = RestAssured.get(klassApSourceHostPath + "/" + idSourceHost);
-            responseKlassApiTargetHostClassification = RestAssured.get(klassApiTargetHostPath + "/" + idTargetHost);
-            responseKlassApiSourceHostClassification.then().assertThat().statusCode(200);
-            responseKlassApiTargetHostClassification.then().assertThat().statusCode(200);
-
-            for(String pathName: MigrationTestConstants.pathNames){
-                Object sourceField = responseKlassApiSourceHostClassification.path(pathName);
-                Object targetField = responseKlassApiTargetHostClassification.path(pathName);
-                System.out.println(sourceField);
-                System.out.println(targetField);
-                assertThat(sourceField).isEqualTo(targetField);
+            for (String pathName : MigrationTestConstants.pathNamesClassification) {
+                Object sourceField = sourceResponse.path(pathName);
+                assertThat(sourceField).isEqualTo(targetResponse.path(pathName));
             }
         }
     }
@@ -40,16 +30,17 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
     void getClassificationVersions(){
 
         for (int i = 0; i < Math.min(classificationsIdsSourceHost.size(), classificationsIdsTargetHost.size()); i++) {
-            Integer idSourceHost = classificationsIdsSourceHost.get(i);
-            Integer idTargetHost = classificationsIdsTargetHost.get(i);
+            Response sourceResponse = getResponse(klassApSourceHostPath, classificationsIdsSourceHost.get(i));
+            Response targetResponse = getResponse(klassApiTargetHostPath, classificationsIdsTargetHost.get(i));
+            List<?> versionsSourceHost = sourceResponse.path(VERSIONS);
+            List<?> versionsTargetHost = targetResponse.path(VERSIONS);
 
-            responseKlassApiSourceHostClassification = RestAssured.get(klassApSourceHostPath + "/" + idSourceHost);
-            responseKlassApiTargetHostClassification = RestAssured.get(klassApiTargetHostPath + "/" + idTargetHost);
-            responseKlassApiSourceHostClassification.then().assertThat().statusCode(200);
-            responseKlassApiTargetHostClassification.then().assertThat().statusCode(200);
-            List<?> versionsSourceHost = responseKlassApiSourceHostClassification.path(VERSIONS);
-            List<?> versionsTargetHost = responseKlassApiTargetHostClassification.path(VERSIONS);
             assertThat(versionsSourceHost.size()).isEqualTo(versionsTargetHost.size());
+
+            for(String pathName: MigrationTestConstants.pathNamesVersions){
+                Object sourceField = sourceResponse.path(pathName);
+                assertThat(sourceField).isEqualTo(targetResponse.path(pathName));
+            }
         }
 
     }
@@ -62,5 +53,11 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
     @Test
     void getClassificationParams(){
 
+    }
+
+    private Response getResponse(String basePath, Integer id) {
+        Response response = RestAssured.get(basePath + "/" + id);
+        response.then().assertThat().statusCode(200);
+        return response;
     }
 }

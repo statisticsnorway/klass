@@ -31,9 +31,12 @@ public final class MigrationTestConstants {
     public static final String OWNING_SECTION = "owningSection";
     public static final String STATISTICAL_UNITS = "statisticalUnits";
     public static final String VERSIONS = "versions";
+    public static final String VALID_FROM = "validFrom";
+    public static final String VALID_TO = "validTo";
+    public static final String PUBLISHED = "published";
 
 
-    public static List<String> pathNames = Arrays.asList(
+    public static List<String> pathNamesClassification = Arrays.asList(
             ID,
             NAME,
             CLASSIFICATION_TYPE,
@@ -48,6 +51,15 @@ public final class MigrationTestConstants {
             CONTACT_PERSON_EMAIL,
             CONTACT_PERSON_NAME,
             CONTACT_PERSON_PHONE
+    );
+
+    public static List<String> pathNamesVersions = Arrays.asList(
+            NAME,
+            ID,
+            VALID_FROM,
+            VALID_TO,
+            LAST_MODIFIED,
+            PUBLISHED
     );
 
 
