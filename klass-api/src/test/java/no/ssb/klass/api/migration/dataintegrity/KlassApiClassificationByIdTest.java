@@ -4,15 +4,19 @@ import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import no.ssb.klass.api.migration.MigrationTestConstants;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
+
+import static no.ssb.klass.api.migration.MigrationTestConstants.VERSIONS;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 
-public class KlassApiClassificationItemTest extends AbstractKlassApiDataIntegrityTest {
+public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrityTest {
     Response responseKlassApiSourceHostClassification;
     Response responseKlassApiTargetHostClassification;
 
     @Test
-    void getClassificationTest(){
+    void getClassification(){
         for (int i = 0; i < Math.min(classificationsIdsSourceHost.size(), classificationsIdsTargetHost.size()); i++) {
             Integer idSourceHost = classificationsIdsSourceHost.get(i);
             Integer idTargetHost = classificationsIdsTargetHost.get(i);
@@ -33,12 +37,30 @@ public class KlassApiClassificationItemTest extends AbstractKlassApiDataIntegrit
     }
 
     @Test
-    void getClassificationVersionsTest(){
+    void getClassificationVersions(){
+
+        for (int i = 0; i < Math.min(classificationsIdsSourceHost.size(), classificationsIdsTargetHost.size()); i++) {
+            Integer idSourceHost = classificationsIdsSourceHost.get(i);
+            Integer idTargetHost = classificationsIdsTargetHost.get(i);
+
+            responseKlassApiSourceHostClassification = RestAssured.get(klassApSourceHostPath + "/" + idSourceHost);
+            responseKlassApiTargetHostClassification = RestAssured.get(klassApiTargetHostPath + "/" + idTargetHost);
+            responseKlassApiSourceHostClassification.then().assertThat().statusCode(200);
+            responseKlassApiTargetHostClassification.then().assertThat().statusCode(200);
+            List<?> versionsSourceHost = responseKlassApiSourceHostClassification.path(VERSIONS);
+            List<?> versionsTargetHost = responseKlassApiTargetHostClassification.path(VERSIONS);
+            assertThat(versionsSourceHost.size()).isEqualTo(versionsTargetHost.size());
+        }
 
     }
 
     @Test
-    void getClassificationLinksTest(){
+    void getClassificationLinks(){
+
+    }
+
+    @Test
+    void getClassificationParams(){
 
     }
 }
