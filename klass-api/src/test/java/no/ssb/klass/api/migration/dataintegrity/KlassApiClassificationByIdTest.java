@@ -40,7 +40,7 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
 
             assertThat(versionsSourceHost.size()).isEqualTo(versionsTargetHost.size());
 
-            for(String pathName: MigrationTestConstants.pathNamesVersions){
+            for(String pathName: MigrationTestConstants.pathNamesVersion){
                 Object sourceField = sourceResponse.path(pathName);
                 if(pathName.equals(LINKS)) {
                     String sourceLinks = sourceResponse.path(LINKS_SELF_HREF);

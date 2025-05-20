@@ -10,26 +10,39 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 public class KlassApiClassificationsTest extends AbstractKlassApiDataIntegrityTest {
 
     @Test
-    void getClassificationsResultIsEqualSize() {
+    void getClassificationsPage(){
         assumeTrue(responseKlassApiSourceHost.getStatusCode() == 200, SOURCE_API_CHECK);
         assumeTrue(responseKlassApiTargetHost.getStatusCode() == 200, TARGET_API_CHECK);
 
-        int klassApiSourceHostTotalElements = responseKlassApiSourceHost.path(TOTAL_ELEMENTS);
-        int klassApiTargetHostTotalElements = responseKlassApiTargetHost.path(TOTAL_ELEMENTS);
-
-        assertThat(klassApiSourceHostTotalElements).isEqualTo(klassApiTargetHostTotalElements);
-        assertThat(klassApiSourceHostTotalElements).isEqualTo(classificationsIdsSourceHost.size());
-    }
-
-    @Test
-    void getClassificationsPageSizeIsEqual(){
-        assumeTrue(responseKlassApiSourceHost.getStatusCode() == 200, SOURCE_API_CHECK);
-        assumeTrue(responseKlassApiTargetHost.getStatusCode() == 200, TARGET_API_CHECK);
-
-        assertThat(sourceHostClassificationsPage.size()).isEqualTo(targetHostClassificationsPage.size());
         String classificationsPageSourceHost = responseKlassApiSourceHost.path(EMBEDDED_PAGE);
         String classificationsPageTargetHost = responseKlassApiTargetHost.path(EMBEDDED_PAGE);
         assertThat(classificationsPageSourceHost).isEqualTo(classificationsPageTargetHost);
+    }
+
+    @Test
+    void getClassificationsLinks(){
+        assumeTrue(responseKlassApiSourceHost.getStatusCode() == 200, SOURCE_API_CHECK);
+        assumeTrue(responseKlassApiTargetHost.getStatusCode() == 200, TARGET_API_CHECK);
+
+        Map<String, Object> sourceLinks = responseKlassApiSourceHost.path(LINKS);
+        Map<String, Object> targetLinks = responseKlassApiTargetHost.path(LINKS);
+
+        assertThat(sourceLinks).isNotNull();
+        assertThat(sourceLinks.size()).isEqualTo(targetLinks.size());
+
+
+        for(String pathName : pathNamesLinks ) {
+            if(pathName.equals(LINKS_SEARCH_TEMPLATED)) {
+                Boolean sourcePath = responseKlassApiSourceHost.path(LINKS_SEARCH_TEMPLATED);
+                assertThat(sourcePath).isEqualTo(responseKlassApiTargetHost.path(LINKS_SEARCH_TEMPLATED));
+            }
+           else {
+                String sourcePath = responseKlassApiSourceHost.path(pathName);
+                assertThat(isPathEqualIgnoreHost(sourcePath, responseKlassApiTargetHost.path(pathName))).isTrue();
+            }
+
+        }
+
     }
 
     @Test
@@ -37,23 +50,20 @@ public class KlassApiClassificationsTest extends AbstractKlassApiDataIntegrityTe
         assumeTrue(responseKlassApiSourceHost.getStatusCode() == 200, SOURCE_API_CHECK);
         assumeTrue(responseKlassApiTargetHost.getStatusCode() == 200, TARGET_API_CHECK);
 
-        for (int i = 0; i < sourceHostClassificationsPage.size(); i++) {
-            assertThat(
-                    sourceHostClassificationsPage.get(i).get(NAME)).isEqualTo(
-                            targetHostClassificationsPage.get(i).get(NAME));
-            assertThat(
-                    sourceHostClassificationsPage.get(i).get(ID)).isEqualTo(
-                            targetHostClassificationsPage.get(i).get(ID));
-            assertThat(
-                    sourceHostClassificationsPage.get(i).get(CLASSIFICATION_TYPE)).isEqualTo(
-                            targetHostClassificationsPage.get(i).get(CLASSIFICATION_TYPE));
-
-            Map<String, Object> classification = sourceHostClassificationsPage.get(i);
-
-            assertThat(classification.get(LINKS)).isNotEqualTo(
-                    targetHostClassificationsPage.get(i).get(LINKS));
+        for(int i = 0; i < sourceHostClassificationsPage.size(); i++){
+           Map<String,Object> sourceItem = sourceHostClassificationsPage.get(i);
+           Map<String, Object> targetItem = targetHostClassificationsPage.get(i);
+           for(String pathName: pathNamesClassificationsPage){
+               if(pathName.equals(LINKS_SELF_HREF)){
+                   String sourceLink = responseKlassApiSourceHost.path(LINKS_SELF_HREF);
+                   String targetLink = responseKlassApiTargetHost.path(pathName);
+                   assertThat(isPathEqualIgnoreHost(sourceLink, targetLink)).isTrue();
+               }
+               else {
+                   assertThat(sourceItem.get(pathName)).isEqualTo(targetItem.get(pathName));
+               }
+           }
         }
-
     }
 
 }
