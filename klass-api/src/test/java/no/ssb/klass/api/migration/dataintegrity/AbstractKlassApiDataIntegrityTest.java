@@ -101,6 +101,20 @@ public abstract class AbstractKlassApiDataIntegrityTest {
         return response;
     }
 
+    public static Object resolvePath(Map<String, Object> map, String path) {
+        String[] parts = path.split("\\.");
+        Object current = map;
+
+        for (String part : parts) {
+            if (!(current instanceof Map)) {
+                return null;
+            }
+            current = ((Map<?, ?>) current).get(part);
+        }
+
+        return current;
+    }
+
     @BeforeEach
     void setUp() {
         responseKlassApiSourceHost = getResponse(klassApSourceHostPath);

@@ -34,7 +34,7 @@ public class KlassApiClassificationsTest extends AbstractKlassApiDataIntegrityTe
         assertThat(sourceLinks.size()).isEqualTo(targetLinks.size());
 
 
-        for(String pathName : pathNamesLinks ) {
+        for(String pathName : pathNamesClassificationsLinks) {
             if(pathName.equals(LINKS_SEARCH_TEMPLATED)) {
                 Boolean sourcePath = responseKlassApiSourceHost.path(LINKS_SEARCH_TEMPLATED);
                 assertThat(sourcePath).isEqualTo(responseKlassApiTargetHost.path(LINKS_SEARCH_TEMPLATED));

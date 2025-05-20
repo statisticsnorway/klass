@@ -45,6 +45,27 @@ public final class MigrationTestConstants {
     public static final String NEXT= "next";
     public static final String NEXT_HREF= "next.href";
     public static final String LINKS_NEXT_HREF= "_links.next.href";
+    public static final String LINKS_CODES_HREF= "_links.codes.href";
+    public static final String LINKS_CODES_TEMPLATED= "_links.codes.templated";
+
+    public static final String LINKS_CODES_AT_HREF= "_links.codesAt.href";
+    public static final String LINKS_CODES_AT_TEMPLATED= "_links.codesAt.templated";
+
+    public static final String LINKS_VARIANT_HREF= "_links.variant.href";
+    public static final String LINKS_VARIANT_TEMPLATED= "_links.variant.templated";
+
+    public static final String LINKS_VARIANT_AT_HREF= "_links.variantAt.href";
+    public static final String LINKS_VARIANT_AT_TEMPLATED= "_links.variantAt.templated";
+
+    public static final String LINKS_CORRESPONDS_HREF= "_links.corresponds.href";
+    public static final String LINKS_CORRESPONDS_TEMPLATED= "_links.correspondsAt.templated";
+
+    public static final String LINKS_CORRESPONDS_AT_HREF= "_links.correspondsAt.href";
+    public static final String LINKS_CORRESPONDS_AT_TEMPLATED= "_links.correspondsAt.templated";
+
+    public static final String LINKS_CHANGES_HREF= "_links.changes.href";
+    public static final String LINKS_CHANGES_TEMPLATED= "_links.changes.templated";
+
     public static final String SEARCH= "search";
     public static final String SEARCH_HREF= "search.href";
     public static final String LINKS_SEARCH_HREF= "_links.search.href";
@@ -87,16 +108,35 @@ public final class MigrationTestConstants {
             VALID_TO,
             LAST_MODIFIED,
             PUBLISHED,
-            LINKS
+            LINKS_SELF_HREF
     );
 
-    public static List<String> pathNamesLinks = Arrays.asList(
+    public static List<String> pathNamesClassificationsLinks = Arrays.asList(
             LINKS_FIRST_HREF,
             LINKS_SELF_HREF,
             LINKS_NEXT_HREF,
             LINKS_LAST_HREF,
             LINKS_SEARCH_HREF,
             LINKS_SEARCH_TEMPLATED
+
+    );
+
+    public static List<String> pathNamesClassificationLinks = Arrays.asList(
+            LINKS_SELF_HREF,
+            LINKS_CODES_HREF,
+            LINKS_CODES_TEMPLATED,
+            LINKS_CODES_AT_HREF,
+            LINKS_CODES_AT_TEMPLATED,
+            LINKS_VARIANT_HREF,
+            LINKS_VARIANT_TEMPLATED,
+            LINKS_VARIANT_AT_HREF,
+            LINKS_VARIANT_AT_TEMPLATED,
+            LINKS_CORRESPONDS_HREF,
+            LINKS_CORRESPONDS_TEMPLATED,
+            LINKS_CORRESPONDS_AT_HREF,
+            LINKS_CORRESPONDS_AT_TEMPLATED,
+            LINKS_CHANGES_HREF,
+            LINKS_CHANGES_TEMPLATED
 
     );
 
