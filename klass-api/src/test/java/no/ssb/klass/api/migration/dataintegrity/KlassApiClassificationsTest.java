@@ -1,4 +1,5 @@
 package no.ssb.klass.api.migration.dataintegrity;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
@@ -9,10 +10,14 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 public class KlassApiClassificationsTest extends AbstractKlassApiDataIntegrityTest {
 
-    @Test
-    void getClassificationsPage(){
+    @BeforeEach
+    void setUpClassifications() {
         assumeTrue(responseKlassApiSourceHost.getStatusCode() == 200, SOURCE_API_CHECK);
         assumeTrue(responseKlassApiTargetHost.getStatusCode() == 200, TARGET_API_CHECK);
+    }
+
+    @Test
+    void getClassificationsPage(){
 
         String classificationsPageSourceHost = responseKlassApiSourceHost.path(EMBEDDED_PAGE);
         String classificationsPageTargetHost = responseKlassApiTargetHost.path(EMBEDDED_PAGE);
@@ -21,8 +26,6 @@ public class KlassApiClassificationsTest extends AbstractKlassApiDataIntegrityTe
 
     @Test
     void getClassificationsLinks(){
-        assumeTrue(responseKlassApiSourceHost.getStatusCode() == 200, SOURCE_API_CHECK);
-        assumeTrue(responseKlassApiTargetHost.getStatusCode() == 200, TARGET_API_CHECK);
 
         Map<String, Object> sourceLinks = responseKlassApiSourceHost.path(LINKS);
         Map<String, Object> targetLinks = responseKlassApiTargetHost.path(LINKS);
@@ -47,8 +50,6 @@ public class KlassApiClassificationsTest extends AbstractKlassApiDataIntegrityTe
 
     @Test
     void getClassificationsItems(){
-        assumeTrue(responseKlassApiSourceHost.getStatusCode() == 200, SOURCE_API_CHECK);
-        assumeTrue(responseKlassApiTargetHost.getStatusCode() == 200, TARGET_API_CHECK);
 
         for(int i = 0; i < sourceHostClassificationsPage.size(); i++){
            Map<String,Object> sourceItem = sourceHostClassificationsPage.get(i);

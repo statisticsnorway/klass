@@ -1,5 +1,6 @@
 package no.ssb.klass.api.migration.dataintegrity;
 
+import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import no.ssb.klass.api.migration.MigrationTestConfig;
@@ -94,10 +95,16 @@ public abstract class AbstractKlassApiDataIntegrityTest {
         }
     }
 
+    public static Response getResponse(String path) {
+        Response response = RestAssured.get(path);
+        response.then().assertThat().statusCode(200);
+        return response;
+    }
+
     @BeforeEach
     void setUp() {
-        responseKlassApiSourceHost = get(klassApSourceHostPath);
-        responseKlassApiTargetHost = get(klassApiTargetHostPath);
+        responseKlassApiSourceHost = getResponse(klassApSourceHostPath);
+        responseKlassApiTargetHost = getResponse(klassApiTargetHostPath);
         sourceHostClassificationsPage = responseKlassApiSourceHost.path(EMBEDDED_CLASSIFICATIONS);
         targetHostClassificationsPage = responseKlassApiTargetHost.path(EMBEDDED_CLASSIFICATIONS);
         getAllSourceHost();
