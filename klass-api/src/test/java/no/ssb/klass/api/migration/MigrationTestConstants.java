@@ -8,9 +8,10 @@ public final class MigrationTestConstants {
 
     public static final String BASE_PATH = "/api/klass";
     public static final String CLASSIFICATIONS_PATH = "/classifications";
-    public static final String TOTAL_ELEMENTS = "page.totalElements";
+
     public static final String EMBEDDED_CLASSIFICATIONS = "_embedded.classifications";
     public static final String EMBEDDED_PAGE = "_embedded.page";
+
     public static final String SOURCE_API_CHECK = "Source API is not ready";
     public static final String TARGET_API_CHECK  = "Target API is not ready";
 
@@ -34,16 +35,10 @@ public final class MigrationTestConstants {
     public static final String VALID_FROM = "validFrom";
     public static final String VALID_TO = "validTo";
     public static final String PUBLISHED = "published";
-    public static final String LINKS_SELF_HREF= "_links.self.href";
 
-    public static final String FIRST= "first";
-    public static final String FIRST_HREF= "first.href";
+    public static final String LINKS_SELF_HREF= "_links.self.href";
     public static final String LINKS_FIRST_HREF= "_links.first.href";
-    public static final String SELF= "self";
-    public static final String SELF_HREF= "self.href";
     public static final String HREF= "href";
-    public static final String NEXT= "next";
-    public static final String NEXT_HREF= "next.href";
     public static final String LINKS_NEXT_HREF= "_links.next.href";
     public static final String LINKS_CODES_HREF= "_links.codes.href";
     public static final String LINKS_CODES_TEMPLATED= "_links.codes.templated";
@@ -66,12 +61,8 @@ public final class MigrationTestConstants {
     public static final String LINKS_CHANGES_HREF= "_links.changes.href";
     public static final String LINKS_CHANGES_TEMPLATED= "_links.changes.templated";
 
-    public static final String SEARCH= "search";
-    public static final String SEARCH_HREF= "search.href";
     public static final String LINKS_SEARCH_HREF= "_links.search.href";
     public static final String LINKS_SEARCH_TEMPLATED= "_links.search.templated";
-    public static final String LAST= "last";
-    public static final String LAST_HREF= "last.href";
     public static final String LINKS_LAST_HREF= "_links.last.href";
 
 
