@@ -37,6 +37,11 @@ public abstract class AbstractKlassApiDataIntegrityTest {
     List<Map<String, Object>> sourceHostClassificationsPage;
     List<Map<String, Object>> targetHostClassificationsPage;
 
+    List<Integer> classificationsIdsSourceHostPart1 = new ArrayList<>();
+    List<Integer> classificationsIdsSourceHostPart2 = new ArrayList<>();
+    List<Integer> classificationsIdsSourceHostPart3 = new ArrayList<>();
+    List<Integer> classificationsIdsSourceHostPart4 = new ArrayList<>();
+
     void getAllSourceHost() {
         String url = klassApSourceHostPath;
 
@@ -115,6 +120,26 @@ public abstract class AbstractKlassApiDataIntegrityTest {
         return current;
     }
 
+    protected void setClassificationLists(){
+        int listLength = classificationsIdsSourceHost.size();
+        int shareLength = listLength / 4;
+        int remainder = listLength % 4;
+
+        int index = 0;
+        for (int i = 0; i < shareLength + (remainder > 0 ? 1 : 0); i++) {
+            classificationsIdsSourceHostPart1.add(classificationsIdsSourceHost.get(index++));
+        }
+        for (int i = 0; i < shareLength + (remainder > 1 ? 1 : 0); i++) {
+            classificationsIdsSourceHostPart2.add(classificationsIdsSourceHost.get(index++));
+        }
+        for (int i = 0; i < shareLength + (remainder > 2 ? 1 : 0); i++) {
+            classificationsIdsSourceHostPart3.add(classificationsIdsSourceHost.get(index++));
+        }
+        while (index < listLength) {
+            classificationsIdsSourceHostPart4.add(classificationsIdsSourceHost.get(index++));
+        }
+    }
+
     @BeforeEach
     void setUp() {
         responseKlassApiSourceHost = getResponse(klassApSourceHostPath);
@@ -123,6 +148,7 @@ public abstract class AbstractKlassApiDataIntegrityTest {
         targetHostClassificationsPage = responseKlassApiTargetHost.path(EMBEDDED_CLASSIFICATIONS);
         getAllSourceHost();
         getAllTargetHost();
+        setClassificationLists();
     }
 
     @AfterEach
