@@ -11,6 +11,7 @@ public final class MigrationTestConstants {
 
     public static final String EMBEDDED_CLASSIFICATIONS = "_embedded.classifications";
     public static final String EMBEDDED_PAGE = "_embedded.page";
+    public static final String PAGE = "page";
 
     public static final String SOURCE_API_CHECK = "Source API is not ready";
     public static final String TARGET_API_CHECK  = "Target API is not ready";
@@ -72,7 +73,8 @@ public final class MigrationTestConstants {
     public static final String LANGUAGE_PARAM_EN= "?language=en";
     public static final String LANGUAGE_PARAM_NN= "?language=nn";
     public static final String INCLUDE_FUTURE_TRUE_PARAM= "?includeFuture=true";
-    //includeFuture
+
+    public static final String SEARCH= "search?";
 
 
     public static List<String> pathNamesClassification = Arrays.asList(
