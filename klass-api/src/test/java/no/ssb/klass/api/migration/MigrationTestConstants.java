@@ -80,6 +80,10 @@ public final class MigrationTestConstants {
     public static final String DATE= "date";
     public static final String RANGE_FROM= "from";
     public static final String RANGE_TO= "to";
+    public static final String INCLUDE_CODE_LISTS= "includeCodeLists";
+
+    public static final String CHANGED_SINCE= "changedSince";
+
 
 
     public static List<String> pathNamesClassification = Arrays.asList(

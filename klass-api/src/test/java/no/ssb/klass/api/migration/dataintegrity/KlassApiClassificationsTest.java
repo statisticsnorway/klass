@@ -1,4 +1,6 @@
 package no.ssb.klass.api.migration.dataintegrity;
+import io.restassured.RestAssured;
+import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -65,6 +67,34 @@ public class KlassApiClassificationsTest extends AbstractKlassApiDataIntegrityTe
                }
            }
         }
+    }
+
+    @Test
+    void getClassificationsIncludeCodeListsPage(){
+        Response sourceResponse = getClassificationsQueryParamResponse(klassApSourceHostPath, INCLUDE_CODE_LISTS, "true");
+        Response targetResponse = getClassificationsQueryParamResponse(klassApiTargetHostPath, INCLUDE_CODE_LISTS, "true");
+
+        String classificationsPageSourceHost = sourceResponse.path(EMBEDDED_PAGE);
+        String classificationsPageTargetHost = targetResponse.path(EMBEDDED_PAGE);
+
+        assertThat(classificationsPageSourceHost).isEqualTo(classificationsPageTargetHost);
+    }
+
+    @Test
+    void getClassificationsChangedSincePage(){
+        Response sourceResponse = getClassificationsQueryParamResponse(klassApSourceHostPath, CHANGED_SINCE, "2015-10-31T01:30:00.000-0200");
+        Response targetResponse = getClassificationsQueryParamResponse(klassApiTargetHostPath, CHANGED_SINCE, "2015-10-31T01:30:00.000-0200");
+
+        String classificationsPageSourceHost = sourceResponse.path(EMBEDDED_PAGE);
+        String classificationsPageTargetHost = targetResponse.path(EMBEDDED_PAGE);
+
+        assertThat(classificationsPageSourceHost).isEqualTo(classificationsPageTargetHost);
+    }
+
+    private Response getClassificationsQueryParamResponse(String basePath, String queryParam, String queryValue) {
+
+        return RestAssured.given().queryParam(queryParam, queryValue).get(basePath);
+
     }
 
 }
