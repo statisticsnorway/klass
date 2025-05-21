@@ -14,7 +14,9 @@ import java.util.stream.Collectors;
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-
+/**
+ * Test class for classification by ID. Compare data from two sources.
+ */
 public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrityTest {
 
     @Test
@@ -28,7 +30,7 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
 
                 if(pathName.equals(STATISTICAL_UNITS)) {
                     ArrayList<String> sourceList = sourceResponse.path(pathName);
-                    ArrayList<String>  targetList = targetResponse.path(pathName);
+                    ArrayList<String> targetList = targetResponse.path(pathName);
                     assertThat(sourceList.size()).isEqualTo(targetList.size());
                     assertThat(sourceList.containsAll(targetList)).isTrue();
                     assertThat(targetList.containsAll(sourceList)).isTrue();
@@ -76,7 +78,6 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
                    }
                    else{
                            assertThat(versionSource.get(pathName)).isEqualTo(versionTarget.get(pathName));
-
                        }
 
                    }
@@ -109,7 +110,75 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
     }
 
     @Test
-    void getClassificationParams(){
+    void getClassificationEnglish(){
+        for(int i=0; i < classificationsIdsSourceHost.size(); i++){
+            Response sourceResponse = RestAssured.get(klassApSourceHostPath + "/" + classificationsIdsSourceHost.get(i) + LANGUAGE_PARAM_EN);
+            Response targetResponse = RestAssured.get(klassApiTargetHostPath + "/" + classificationsIdsTargetHost.get(i) + LANGUAGE_PARAM_EN);
+
+            for (String pathName : pathNamesClassification) {
+                Object sourceField = sourceResponse.path(pathName);
+
+                if(pathName.equals(STATISTICAL_UNITS)) {
+                    ArrayList<String> sourceList = sourceResponse.path(pathName);
+                    ArrayList<String> targetList = targetResponse.path(pathName);
+                    assertThat(sourceList.size()).isEqualTo(targetList.size());
+                    assertThat(sourceList.containsAll(targetList)).isTrue();
+                    assertThat(targetList.containsAll(sourceList)).isTrue();
+                }
+                else{
+                    assertThat(sourceField).isEqualTo(targetResponse.path(pathName));
+                }
+            }
+
+        }
+
+    }
+
+    @Test
+    void getClassificationNewNorwegian(){
+        for(int i=0; i < classificationsIdsSourceHost.size(); i++){
+            Response sourceResponse = RestAssured.get(klassApSourceHostPath + "/" + classificationsIdsSourceHost.get(i) + LANGUAGE_PARAM_NN);
+            Response targetResponse = RestAssured.get(klassApiTargetHostPath + "/" + classificationsIdsTargetHost.get(i) + LANGUAGE_PARAM_NN);
+
+            for (String pathName : pathNamesClassification) {
+                Object sourceField = sourceResponse.path(pathName);
+
+                if(pathName.equals(STATISTICAL_UNITS)) {
+                    ArrayList<String> sourceList = sourceResponse.path(pathName);
+                    ArrayList<String> targetList = targetResponse.path(pathName);
+                    assertThat(sourceList.size()).isEqualTo(targetList.size());
+                    assertThat(sourceList.containsAll(targetList)).isTrue();
+                    assertThat(targetList.containsAll(sourceList)).isTrue();
+                }
+                else{
+                    assertThat(sourceField).isEqualTo(targetResponse.path(pathName));
+                }
+            }
+        }
+
+    }
+
+    @Test
+    void getClassificationIncludeFuture(){
+        for(int i=0; i < classificationsIdsSourceHost.size(); i++){
+            Response sourceResponse = RestAssured.get(klassApSourceHostPath + "/" + classificationsIdsSourceHost.get(i) + INCLUDE_FUTURE_TRUE_PARAM);
+            Response targetResponse = RestAssured.get(klassApiTargetHostPath + "/" + classificationsIdsTargetHost.get(i) + INCLUDE_FUTURE_TRUE_PARAM);
+
+            for (String pathName : pathNamesClassification) {
+                Object sourceField = sourceResponse.path(pathName);
+
+                if(pathName.equals(STATISTICAL_UNITS)) {
+                    ArrayList<String> sourceList = sourceResponse.path(pathName);
+                    ArrayList<String> targetList = targetResponse.path(pathName);
+                    assertThat(sourceList.size()).isEqualTo(targetList.size());
+                    assertThat(sourceList.containsAll(targetList)).isTrue();
+                    assertThat(targetList.containsAll(sourceList)).isTrue();
+                }
+                else{
+                    assertThat(sourceField).isEqualTo(targetResponse.path(pathName));
+                }
+            }
+        }
 
     }
 

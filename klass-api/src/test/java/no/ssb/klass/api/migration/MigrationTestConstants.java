@@ -65,6 +65,15 @@ public final class MigrationTestConstants {
     public static final String LINKS_SEARCH_TEMPLATED= "_links.search.templated";
     public static final String LINKS_LAST_HREF= "_links.last.href";
 
+    public static final String NB= "nb";
+    public static final String NN= "nn";
+    public static final String EN= "en";
+
+    public static final String LANGUAGE_PARAM_EN= "?language=en";
+    public static final String LANGUAGE_PARAM_NN= "?language=nn";
+    public static final String INCLUDE_FUTURE_TRUE_PARAM= "?includeFuture=true";
+    //includeFuture
+
 
     public static List<String> pathNamesClassification = Arrays.asList(
             ID,
@@ -131,5 +140,6 @@ public final class MigrationTestConstants {
 
     );
 
+    public static List<String> languages = Arrays.asList(NB,NN,EN);
 
 }
