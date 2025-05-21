@@ -81,7 +81,6 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
                        }
 
                    }
-
             }
 
         }
