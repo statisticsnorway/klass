@@ -21,9 +21,9 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
 
     @Test
     void getClassification(){
-        for(int i=0; i < classificationsIdsSourceHost.size(); i++){
-            Response sourceResponse = getClassificationResponse(klassApSourceHostPath, classificationsIdsSourceHost.get(i));
-            Response targetResponse = getClassificationResponse(klassApiTargetHostPath, classificationsIdsTargetHost.get(i));
+        for (Integer integer : classificationsIdsSourceHost) {
+            Response sourceResponse = getClassificationResponse(klassApSourceHostPath, integer, null, null);
+            Response targetResponse = getClassificationResponse(klassApiTargetHostPath, integer, null, null);
 
             for (String pathName : pathNamesClassification) {
                 Object sourceField = sourceResponse.path(pathName);
@@ -44,9 +44,9 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
 
     @Test
     void getClassificationVersions(){
-        for(int i=0; i < classificationsIdsSourceHost.size(); i++){
-            Response sourceResponse = getClassificationResponse(klassApSourceHostPath, classificationsIdsSourceHost.get(i));
-            Response targetResponse = getClassificationResponse(klassApiTargetHostPath, classificationsIdsTargetHost.get(i));
+        for (Integer integer : classificationsIdsSourceHost) {
+            Response sourceResponse = getClassificationResponse(klassApSourceHostPath, integer, null, null);
+            Response targetResponse = getClassificationResponse(klassApiTargetHostPath, integer, null, null);
 
             List<Map<String, Object>> versionsSourceHost = sourceResponse.path(VERSIONS);
             List<Map<String, Object>> versionsTargetHost = targetResponse.path(VERSIONS);
@@ -89,9 +89,9 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
 
     @Test
     void getClassificationLinks(){
-        for(int i=0; i < classificationsIdsSourceHost.size(); i++){
-            Response sourceResponse = getClassificationResponse(klassApSourceHostPath, classificationsIdsSourceHost.get(i));
-            Response targetResponse = getClassificationResponse(klassApiTargetHostPath, classificationsIdsTargetHost.get(i));
+        for (Integer integer : classificationsIdsSourceHost) {
+            Response sourceResponse = getClassificationResponse(klassApSourceHostPath, integer, null, null);
+            Response targetResponse = getClassificationResponse(klassApiTargetHostPath, integer, null, null);
 
             for (String pathName : MigrationTestConstants.pathNamesClassificationLinks) {
                 Object sourceField = sourceResponse.path(pathName);
@@ -110,9 +110,9 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
 
     @Test
     void getClassificationEnglish(){
-        for(int i=0; i < classificationsIdsSourceHost.size(); i++){
-            Response sourceResponse = RestAssured.get(klassApSourceHostPath + "/" + classificationsIdsSourceHost.get(i) + LANGUAGE_PARAM_EN);
-            Response targetResponse = RestAssured.get(klassApiTargetHostPath + "/" + classificationsIdsTargetHost.get(i) + LANGUAGE_PARAM_EN);
+        for (Integer integer : classificationsIdsSourceHost) {
+            Response sourceResponse = getClassificationResponse(klassApSourceHostPath, integer, LANGUAGE_PARAM, EN);
+            Response targetResponse = getClassificationResponse(klassApiTargetHostPath, integer, LANGUAGE_PARAM, EN);
 
             for (String pathName : pathNamesClassification) {
                 Object sourceField = sourceResponse.path(pathName);
@@ -135,9 +135,9 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
 
     @Test
     void getClassificationNewNorwegian(){
-        for(int i=0; i < classificationsIdsSourceHost.size(); i++){
-            Response sourceResponse = RestAssured.get(klassApSourceHostPath + "/" + classificationsIdsSourceHost.get(i) + LANGUAGE_PARAM_NN);
-            Response targetResponse = RestAssured.get(klassApiTargetHostPath + "/" + classificationsIdsTargetHost.get(i) + LANGUAGE_PARAM_NN);
+        for (Integer integer : classificationsIdsSourceHost) {
+            Response sourceResponse = getClassificationResponse(klassApSourceHostPath, integer, LANGUAGE_PARAM, NN);
+            Response targetResponse = getClassificationResponse(klassApiTargetHostPath, integer, LANGUAGE_PARAM, NN);
 
             for (String pathName : pathNamesClassification) {
                 Object sourceField = sourceResponse.path(pathName);
@@ -159,9 +159,9 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
 
     @Test
     void getClassificationIncludeFuture(){
-        for(int i=0; i < classificationsIdsSourceHost.size(); i++){
-            Response sourceResponse = RestAssured.get(klassApSourceHostPath + "/" + classificationsIdsSourceHost.get(i) + INCLUDE_FUTURE_TRUE_PARAM);
-            Response targetResponse = RestAssured.get(klassApiTargetHostPath + "/" + classificationsIdsTargetHost.get(i) + INCLUDE_FUTURE_TRUE_PARAM);
+        for (Integer integer : classificationsIdsSourceHost) {
+            Response sourceResponse = getClassificationResponse(klassApSourceHostPath, integer, INCLUDE_FUTURE_TRUE_PARAM, "true");
+            Response targetResponse = getClassificationResponse(klassApiTargetHostPath, integer, INCLUDE_FUTURE_TRUE_PARAM, "true");
 
             for (String pathName : pathNamesClassification) {
                 Object sourceField = sourceResponse.path(pathName);
@@ -181,9 +181,14 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
 
     }
 
-    private Response getClassificationResponse(String basePath, Integer id) {
-        Response response = RestAssured.get(basePath + "/" + id);
-        response.then().assertThat().statusCode(200);
-        return response;
+    private Response getClassificationResponse(String basePath, Integer id, String queryParam, String queryValue) {
+        if (queryParam == null) {
+            return RestAssured.get(basePath + "/" + id);
+
+        }
+
+        else {
+            return RestAssured.given().queryParam(queryParam, queryValue).get(basePath + "/" + id);
+        }
     }
 }
