@@ -76,6 +76,8 @@ public final class MigrationTestConstants {
 
     public static final String SEARCH= "search?";
     public static final String CODES= "codes";
+    public static final String CODES_AT= "codesAt";
+    public static final String DATE= "date";
     public static final String RANGE_FROM= "from";
     public static final String RANGE_TO= "to";
 
