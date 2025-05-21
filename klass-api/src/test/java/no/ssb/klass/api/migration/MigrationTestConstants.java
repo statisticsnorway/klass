@@ -147,6 +147,4 @@ public final class MigrationTestConstants {
 
     );
 
-    public static List<String> languages = Arrays.asList(NB,NN,EN);
-
 }
