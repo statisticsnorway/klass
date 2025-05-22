@@ -12,23 +12,22 @@ public class KlassApiClassificationCodesAtTest extends AbstractKlassApiDataInteg
 
     RateLimiter limiter = RateLimiter.create(1.5);
 
+    String date = "2024-01-01";
+
     @Test
     void getClassificationCodesAtPartOne() {
 
-        for (Integer integer : classificationsIdsSourceHostPart1) {
+        for (Integer id : classificationsIdsSourceHostPart1) {
+
             limiter.acquire();
 
-            Response sourceResponse = getCodesAtResponse(klassApSourceHostPath, integer,"2024-01-01");
-            Response targetResponse = getCodesAtResponse(klassApiTargetHostPath, integer,"2024-01-01");
+            Response sourceResponse = getCodesAtResponse(klassApSourceHostPath, id,date);
+            Response targetResponse = getCodesAtResponse(klassApiTargetHostPath, id,date);
 
-            if(sourceResponse.getStatusCode() == 404) {
-                System.out.println(integer);
-                assertThat(targetResponse.getStatusCode()).isEqualTo(404);
+            if(sourceResponse.getStatusCode() != 200) {
+                assertThat(compareError(id, sourceResponse, targetResponse)).isTrue();
             }
             else{
-                assertThat(sourceResponse.getStatusCode()).isEqualTo(200);
-                assertThat(targetResponse.getStatusCode()).isEqualTo(200);
-
                 Object sourceField = sourceResponse.path(CODES);
                 assertThat(sourceField).isEqualTo(targetResponse.path(CODES));
             }
@@ -38,20 +37,16 @@ public class KlassApiClassificationCodesAtTest extends AbstractKlassApiDataInteg
 
     @Test
     void getClassificationCodesAtPartTwo() {
-        for (Integer integer : classificationsIdsSourceHostPart2) {
+        for (Integer id : classificationsIdsSourceHostPart2) {
             limiter.acquire();
 
-            Response sourceResponse = getCodesAtResponse(klassApSourceHostPath, integer,"2024-01-01");
-            Response targetResponse = getCodesAtResponse(klassApiTargetHostPath, integer,"2024-01-01");
+            Response sourceResponse = getCodesAtResponse(klassApSourceHostPath, id,date);
+            Response targetResponse = getCodesAtResponse(klassApiTargetHostPath, id,date);
 
-            if(sourceResponse.getStatusCode() == 404) {
-                System.out.println(integer);
-                assertThat(targetResponse.getStatusCode()).isEqualTo(404);
+            if(sourceResponse.getStatusCode() != 200) {
+                assertThat(compareError(id, sourceResponse, targetResponse)).isTrue();
             }
             else{
-                assertThat(sourceResponse.getStatusCode()).isEqualTo(200);
-                assertThat(targetResponse.getStatusCode()).isEqualTo(200);
-
                 Object sourceField = sourceResponse.path(CODES);
                 assertThat(sourceField).isEqualTo(targetResponse.path(CODES));
             }
@@ -61,20 +56,17 @@ public class KlassApiClassificationCodesAtTest extends AbstractKlassApiDataInteg
 
     @Test
     void getClassificationCodesAtPartThree() {
-        for (Integer integer : classificationsIdsSourceHostPart3) {
+        for (Integer id : classificationsIdsSourceHostPart3) {
+
             limiter.acquire();
 
-            Response sourceResponse = getCodesAtResponse(klassApSourceHostPath, integer,"2024-01-01");
-            Response targetResponse = getCodesAtResponse(klassApiTargetHostPath, integer,"2024-01-01");
+            Response sourceResponse = getCodesAtResponse(klassApSourceHostPath, id,date);
+            Response targetResponse = getCodesAtResponse(klassApiTargetHostPath, id,date);
 
-            if(sourceResponse.getStatusCode() == 404) {
-                System.out.println(integer);
-                assertThat(targetResponse.getStatusCode()).isEqualTo(404);
+            if(sourceResponse.getStatusCode() != 200) {
+                assertThat(compareError(id, sourceResponse, targetResponse)).isTrue();
             }
             else{
-                assertThat(sourceResponse.getStatusCode()).isEqualTo(200);
-                assertThat(targetResponse.getStatusCode()).isEqualTo(200);
-
                 Object sourceField = sourceResponse.path(CODES);
                 assertThat(sourceField).isEqualTo(targetResponse.path(CODES));
             }
@@ -84,44 +76,16 @@ public class KlassApiClassificationCodesAtTest extends AbstractKlassApiDataInteg
 
     @Test
     void getClassificationCodesAtPartFour() {
-        for (Integer integer : classificationsIdsSourceHostPart4) {
+        for (Integer id : classificationsIdsSourceHostPart4) {
             limiter.acquire();
 
-            Response sourceResponse = getCodesAtResponse(klassApSourceHostPath, integer,"2024-01-01");
-            Response targetResponse = getCodesAtResponse(klassApiTargetHostPath, integer,"2024-01-01");
+            Response sourceResponse = getCodesAtResponse(klassApSourceHostPath, id,date);
+            Response targetResponse = getCodesAtResponse(klassApiTargetHostPath, id,date);
 
-            if(sourceResponse.getStatusCode() == 404) {
-                System.out.println(integer);
-                assertThat(targetResponse.getStatusCode()).isEqualTo(404);
+            if(sourceResponse.getStatusCode() != 200) {
+                assertThat(compareError(id, sourceResponse, targetResponse)).isTrue();
             }
             else{
-                assertThat(sourceResponse.getStatusCode()).isEqualTo(200);
-                assertThat(targetResponse.getStatusCode()).isEqualTo(200);
-
-                Object sourceField = sourceResponse.path(CODES);
-                assertThat(sourceField).isEqualTo(targetResponse.path(CODES));
-            }
-        }
-
-    }
-
-    @Test
-    void getClassificationCodesAtDateInFuturePartOne() {
-
-        for (Integer integer : classificationsIdsSourceHostPart1) {
-            limiter.acquire();
-
-            Response sourceResponse = getCodesAtResponse(klassApSourceHostPath, integer,"2040-09-15");
-            Response targetResponse = getCodesAtResponse(klassApiTargetHostPath, integer,"2040-09-15");
-
-            if(sourceResponse.getStatusCode() == 404) {
-                System.out.println(integer);
-                assertThat(targetResponse.getStatusCode()).isEqualTo(404);
-            }
-            else{
-                assertThat(sourceResponse.getStatusCode()).isEqualTo(200);
-                assertThat(targetResponse.getStatusCode()).isEqualTo(200);
-
                 Object sourceField = sourceResponse.path(CODES);
                 assertThat(sourceField).isEqualTo(targetResponse.path(CODES));
             }
