@@ -88,7 +88,7 @@ public class KlassApiClassificationsTest extends AbstractKlassApiDataIntegrityTe
 
     @Test
     void getClassificationsChangedSincePage(){
-        String queryDate = "2015-10-31T01:30:00.000-0200";
+        String queryDate = generateRandomDateTime();
         Response sourceResponse = getClassificationsQueryParamResponse(klassApSourceHostPath, CHANGED_SINCE, queryDate);
         Response targetResponse = getClassificationsQueryParamResponse(klassApiTargetHostPath, CHANGED_SINCE, queryDate);
 

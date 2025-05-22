@@ -3,6 +3,7 @@ package no.ssb.klass.api.migration.dataintegrity;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.apache.curator.shaded.com.google.common.util.concurrent.RateLimiter;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
@@ -12,7 +13,12 @@ public class KlassApiClassificationCodesAtTest extends AbstractKlassApiDataInteg
 
     RateLimiter limiter = RateLimiter.create(1.5);
 
-    String date = "2024-01-01";
+    static String date;
+
+    @BeforeAll
+    static void beforeAll() {
+        date = generateRandomDate();
+    }
 
     @Test
     void getClassificationCodesAtPartOne() {
@@ -21,8 +27,8 @@ public class KlassApiClassificationCodesAtTest extends AbstractKlassApiDataInteg
 
             limiter.acquire();
 
-            Response sourceResponse = getCodesAtResponse(klassApSourceHostPath, id,date);
-            Response targetResponse = getCodesAtResponse(klassApiTargetHostPath, id,date);
+            Response sourceResponse = getCodesAtResponse(klassApSourceHostPath, id);
+            Response targetResponse = getCodesAtResponse(klassApiTargetHostPath, id);
 
             if(sourceResponse.getStatusCode() != 200) {
                 assertThat(compareError(id, sourceResponse, targetResponse)).isTrue();
@@ -40,8 +46,8 @@ public class KlassApiClassificationCodesAtTest extends AbstractKlassApiDataInteg
         for (Integer id : classificationsIdsSourceHostPart2) {
             limiter.acquire();
 
-            Response sourceResponse = getCodesAtResponse(klassApSourceHostPath, id,date);
-            Response targetResponse = getCodesAtResponse(klassApiTargetHostPath, id,date);
+            Response sourceResponse = getCodesAtResponse(klassApSourceHostPath, id);
+            Response targetResponse = getCodesAtResponse(klassApiTargetHostPath, id);
 
             if(sourceResponse.getStatusCode() != 200) {
                 assertThat(compareError(id, sourceResponse, targetResponse)).isTrue();
@@ -60,8 +66,8 @@ public class KlassApiClassificationCodesAtTest extends AbstractKlassApiDataInteg
 
             limiter.acquire();
 
-            Response sourceResponse = getCodesAtResponse(klassApSourceHostPath, id,date);
-            Response targetResponse = getCodesAtResponse(klassApiTargetHostPath, id,date);
+            Response sourceResponse = getCodesAtResponse(klassApSourceHostPath, id);
+            Response targetResponse = getCodesAtResponse(klassApiTargetHostPath, id);
 
             if(sourceResponse.getStatusCode() != 200) {
                 assertThat(compareError(id, sourceResponse, targetResponse)).isTrue();
@@ -79,8 +85,8 @@ public class KlassApiClassificationCodesAtTest extends AbstractKlassApiDataInteg
         for (Integer id : classificationsIdsSourceHostPart4) {
             limiter.acquire();
 
-            Response sourceResponse = getCodesAtResponse(klassApSourceHostPath, id,date);
-            Response targetResponse = getCodesAtResponse(klassApiTargetHostPath, id,date);
+            Response sourceResponse = getCodesAtResponse(klassApSourceHostPath, id);
+            Response targetResponse = getCodesAtResponse(klassApiTargetHostPath, id);
 
             if(sourceResponse.getStatusCode() != 200) {
                 assertThat(compareError(id, sourceResponse, targetResponse)).isTrue();
@@ -93,7 +99,7 @@ public class KlassApiClassificationCodesAtTest extends AbstractKlassApiDataInteg
 
     }
 
-    private Response getCodesAtResponse(String basePath, Integer id, String date) {
+    private Response getCodesAtResponse(String basePath, Integer id) {
 
         return RestAssured.given().queryParam(DATE, date).get(basePath + "/" + id + "/" + CODES_AT);
 

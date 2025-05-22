@@ -3,6 +3,7 @@ package no.ssb.klass.api.migration.dataintegrity;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.apache.curator.shaded.com.google.common.util.concurrent.RateLimiter;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
@@ -12,9 +13,16 @@ public class KlassApiClassificationCodesTest extends AbstractKlassApiDataIntegri
 
     RateLimiter limiter = RateLimiter.create(1.5);
 
-    String dateFromToMax = "2019-01-01";
-    String dateFromInRange = "1994-11-23";
-    String dateToInRange = "2002-05-20";
+    static String dateFromToMax;
+    static String dateFromInRange ;
+    static String dateToInRange;
+
+    @BeforeAll
+    static void beforeAll() {
+         dateFromToMax = generateRandomDate();
+         dateFromInRange = generateRandomDate();
+         dateToInRange = generateRandomDate();
+    }
 
     @Test
     void getClassificationCodesFromDatePartOneTest() {
