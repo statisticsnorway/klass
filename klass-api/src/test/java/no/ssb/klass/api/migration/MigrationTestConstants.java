@@ -87,6 +87,11 @@ public final class MigrationTestConstants {
 
     public static final String CHANGED_SINCE= "changedSince";
 
+    public static final String VARIANT_NAME= "variantName";
+
+    public static final String SSB_SECTIONS= "ssbsections";
+    public static final String EMBEDDED_SSB_SECTIONS= "_embedded.ssbsections";
+
 
 
     public static List<String> pathNamesClassification = Arrays.asList(
