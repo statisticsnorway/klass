@@ -140,21 +140,18 @@ public abstract class AbstractKlassApiDataIntegrityTest {
         }
     }
 
-    public static boolean compareError(int ID, Response sourceResponse, Response targetResponse) {
+    public static boolean compareError(Integer ID, Response sourceResponse, Response targetResponse) {
         Object sourceBody = sourceResponse.getBody().asString();
         Object targetBody = targetResponse.getBody().asString();
 
-        List<String> sourceErrors = new ArrayList<>();
-        List<String> targetErrors = new ArrayList<>();
-
-        sourceErrors.add("Source: ID: " + ID + ", Code: " + sourceResponse.getStatusCode() + ", " + sourceBody);
-        targetErrors.add("Target: ID: " + ID + ", Code: " + targetResponse.getStatusCode() + ", " + targetBody);
-
         if (sourceResponse.getStatusCode() != targetResponse.getStatusCode() || !sourceBody.equals(targetBody)){
-            System.out.println(String.join(", ", sourceErrors) + "\n" + String.join(", ", targetErrors));
+            String sourceError = (ID != null)? ("Source: ID: " + ID + ", Code: " + sourceResponse.getStatusCode() + ", " + sourceBody) : ("Source: " +  "Code: " + sourceResponse.getStatusCode() + ", " + sourceBody);
+            String targetError = (ID != null)? ("Target: ID: " + ID + ", Code: " + targetResponse.getStatusCode() + ", " + targetBody) : ("Target: " + "Code: " + targetResponse.getStatusCode() + ", " + targetBody);
+
+            System.out.println(String.join(", ", sourceError) + "\n" + String.join(", ", targetError));
             return false;
         }
-        return true;
+       return true;
     }
 
     @BeforeEach

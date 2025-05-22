@@ -13,6 +13,9 @@ public final class MigrationTestConstants {
     public static final String EMBEDDED_PAGE = "_embedded.page";
     public static final String PAGE = "page";
 
+    public static final String TRUE= "true";
+    public static final String FALSE = "false";
+
     public static final String SOURCE_API_CHECK = "Source API is not ready";
     public static final String TARGET_API_CHECK  = "Target API is not ready";
 
