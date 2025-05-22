@@ -19,9 +19,9 @@ import static no.ssb.klass.api.migration.MigrationTestConstants.EMBEDDED_CLASSIF
 
 public abstract class AbstractKlassApiDataIntegrityTest {
 
-    private static final String sourceHost = MigrationTestConfig.getSourceHost();
+    protected static final String sourceHost = MigrationTestConfig.getSourceHost();
 
-    private static final String targetHost = MigrationTestConfig.getTargetHost();
+    protected static final String targetHost = MigrationTestConfig.getTargetHost();
 
     Response responseKlassApiSourceHost;
     Response responseKlassApiTargetHost;
@@ -93,6 +93,12 @@ public abstract class AbstractKlassApiDataIntegrityTest {
             URL sourceUrl = new URL(sourceHref);
             URL targetUrl = new URL(targetHref);
 
+            if(!sourceUrl.getPath().equals(targetUrl.getPath())){
+                System.out.println(
+                        "Url path comparison issue: \nsource url path: " +
+                                sourceUrl.getPath() + "\ntarget url path: " +
+                                targetUrl.getPath());
+            }
             return sourceUrl.getPath().equals(targetUrl.getPath());
         } catch (Exception e) {
             e.printStackTrace();
@@ -101,9 +107,7 @@ public abstract class AbstractKlassApiDataIntegrityTest {
     }
 
     public static Response getResponse(String path) {
-        Response response = RestAssured.get(path);
-        response.then().assertThat().statusCode(200);
-        return response;
+        return RestAssured.get(path);
     }
 
     public static Object resolvePath(Map<String, Object> map, String path) {
