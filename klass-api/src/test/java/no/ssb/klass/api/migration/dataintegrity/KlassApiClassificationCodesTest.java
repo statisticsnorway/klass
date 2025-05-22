@@ -12,22 +12,23 @@ public class KlassApiClassificationCodesTest extends AbstractKlassApiDataIntegri
 
     RateLimiter limiter = RateLimiter.create(1.5);
 
+    String dateFromToMax = "2019-01-01";
+    String dateFromInRange = "1994-11-23";
+    String dateToInRange = "2002-05-20";
+
     @Test
     void getClassificationCodesFromDatePartOneTest() {
-        for (Integer integer : classificationsIdsSourceHostPart1) {
+        for (Integer id : classificationsIdsSourceHostPart1) {
+
             limiter.acquire();
 
-            Response sourceResponse = getCodesResponse(klassApSourceHostPath, integer,"2019-01-01", null );
-            Response targetResponse = getCodesResponse(klassApiTargetHostPath, integer,"2019-01-01", null );
+            Response sourceResponse = getCodesResponse(klassApSourceHostPath, id, dateFromToMax, null );
+            Response targetResponse = getCodesResponse(klassApiTargetHostPath, id, dateFromToMax, null );
 
-            if(sourceResponse.getStatusCode() == 404) {
-                System.out.println(integer);
-                assertThat(targetResponse.getStatusCode()).isEqualTo(404);
+            if(sourceResponse.getStatusCode() != 200) {
+                assertThat(compareError(id, sourceResponse, targetResponse)).isTrue();
             }
             else{
-                assertThat(sourceResponse.getStatusCode()).isEqualTo(200);
-                assertThat(targetResponse.getStatusCode()).isEqualTo(200);
-
                 Object sourceField = sourceResponse.path(CODES);
                 assertThat(sourceField).isEqualTo(targetResponse.path(CODES));
             }
@@ -36,19 +37,17 @@ public class KlassApiClassificationCodesTest extends AbstractKlassApiDataIntegri
 
     @Test
     void getClassificationCodesFromDatePartTwoTest() {
-        for (Integer integer : classificationsIdsSourceHostPart2) {
-            limiter.acquire();
-            Response sourceResponse = getCodesResponse(klassApSourceHostPath, integer,"2019-01-01", null );
-            Response targetResponse = getCodesResponse(klassApiTargetHostPath, integer,"2019-01-01", null );
+        for (Integer id : classificationsIdsSourceHostPart2) {
 
-            if(sourceResponse.getStatusCode() == 404) {
-                System.out.println(integer);
-                assertThat(targetResponse.getStatusCode()).isEqualTo(404);
+            limiter.acquire();
+
+            Response sourceResponse = getCodesResponse(klassApSourceHostPath, id, dateFromToMax, null );
+            Response targetResponse = getCodesResponse(klassApiTargetHostPath, id, dateFromToMax, null );
+
+            if(sourceResponse.getStatusCode() != 200) {
+                assertThat(compareError(id, sourceResponse, targetResponse)).isTrue();
             }
             else{
-                assertThat(sourceResponse.getStatusCode()).isEqualTo(200);
-                assertThat(targetResponse.getStatusCode()).isEqualTo(200);
-
                 Object sourceField = sourceResponse.path(CODES);
                 assertThat(sourceField).isEqualTo(targetResponse.path(CODES));
             }
@@ -59,19 +58,17 @@ public class KlassApiClassificationCodesTest extends AbstractKlassApiDataIntegri
     @Test
     void getClassificationCodesFromDatePartThreeTest() {
 
-        for (Integer integer : classificationsIdsSourceHostPart3) {
-            limiter.acquire();
-            Response sourceResponse = getCodesResponse(klassApSourceHostPath, integer,"2019-01-01", null );
-            Response targetResponse = getCodesResponse(klassApiTargetHostPath, integer,"2019-01-01", null );
+        for (Integer id : classificationsIdsSourceHostPart3) {
 
-            if(sourceResponse.getStatusCode() == 404) {
-                System.out.println(integer);
-                assertThat(targetResponse.getStatusCode()).isEqualTo(404);
+            limiter.acquire();
+
+            Response sourceResponse = getCodesResponse(klassApSourceHostPath, id, dateFromToMax, null );
+            Response targetResponse = getCodesResponse(klassApiTargetHostPath, id, dateFromToMax, null );
+
+            if(sourceResponse.getStatusCode() != 200) {
+                assertThat(compareError(id, sourceResponse, targetResponse)).isTrue();
             }
             else{
-                assertThat(sourceResponse.getStatusCode()).isEqualTo(200);
-                assertThat(targetResponse.getStatusCode()).isEqualTo(200);
-
                 Object sourceField = sourceResponse.path(CODES);
                 assertThat(sourceField).isEqualTo(targetResponse.path(CODES));
             }
@@ -81,19 +78,17 @@ public class KlassApiClassificationCodesTest extends AbstractKlassApiDataIntegri
 
     @Test
     void getClassificationCodesFromDatePartFourTest() {
-        for (Integer integer : classificationsIdsSourceHostPart4) {
-            limiter.acquire();
-            Response sourceResponse = getCodesResponse(klassApSourceHostPath, integer,"2019-01-01", null );
-            Response targetResponse = getCodesResponse(klassApiTargetHostPath, integer,"2019-01-01", null );
+        for (Integer id : classificationsIdsSourceHostPart4) {
 
-            if(sourceResponse.getStatusCode() == 404) {
-                System.out.println(integer);
-                assertThat(targetResponse.getStatusCode()).isEqualTo(404);
+            limiter.acquire();
+
+            Response sourceResponse = getCodesResponse(klassApSourceHostPath, id, dateFromToMax, null );
+            Response targetResponse = getCodesResponse(klassApiTargetHostPath, id, dateFromToMax, null );
+
+            if(sourceResponse.getStatusCode() != 200) {
+                assertThat(compareError(id, sourceResponse, targetResponse)).isTrue();
             }
             else{
-                assertThat(sourceResponse.getStatusCode()).isEqualTo(200);
-                assertThat(targetResponse.getStatusCode()).isEqualTo(200);
-
                 Object sourceField = sourceResponse.path(CODES);
                 assertThat(sourceField).isEqualTo(targetResponse.path(CODES));
             }
@@ -103,20 +98,17 @@ public class KlassApiClassificationCodesTest extends AbstractKlassApiDataIntegri
 
     @Test
     void getClassificationCodesInRangeDatePartOneTest() {
-        for (Integer integer : classificationsIdsSourceHostPart1) {
+        for (Integer id : classificationsIdsSourceHostPart1) {
+
             limiter.acquire();
 
-            Response sourceResponse = getCodesResponse(klassApSourceHostPath, integer,"1994-11-23", "2002-05-20");
-            Response targetResponse = getCodesResponse(klassApiTargetHostPath, integer,"1994-11-23", "2002-05-20");
+            Response sourceResponse = getCodesResponse(klassApSourceHostPath, id,dateFromInRange, dateToInRange);
+            Response targetResponse = getCodesResponse(klassApiTargetHostPath, id,dateFromInRange, dateToInRange);
 
-            if(sourceResponse.getStatusCode() == 404) {
-                System.out.println(integer);
-                assertThat(targetResponse.getStatusCode()).isEqualTo(404);
+            if(sourceResponse.getStatusCode() != 200) {
+                assertThat(compareError(id, sourceResponse, targetResponse)).isTrue();
             }
             else{
-                assertThat(sourceResponse.getStatusCode()).isEqualTo(200);
-                assertThat(targetResponse.getStatusCode()).isEqualTo(200);
-
                 Object sourceField = sourceResponse.path(CODES);
                 assertThat(sourceField).isEqualTo(targetResponse.path(CODES));
             }
@@ -125,23 +117,17 @@ public class KlassApiClassificationCodesTest extends AbstractKlassApiDataIntegri
 
     @Test
     void getClassificationCodesInRangeDatePartTwoTest() {
-        for (Integer integer : classificationsIdsSourceHostPart2) {
-            limiter.acquire();
-            Response sourceResponse = getCodesResponse(klassApSourceHostPath, integer,"1994-11-23", "2002-05-20");
-            Response targetResponse = getCodesResponse(klassApiTargetHostPath, integer,"1994-11-23", "2002-05-20");
+        for (Integer id : classificationsIdsSourceHostPart2) {
 
-            if(sourceResponse.getStatusCode() == 404) {
-                System.out.println(integer);
-                assertThat(targetResponse.getStatusCode()).isEqualTo(404);
-            }
-            if(sourceResponse.getStatusCode() == 400) {
-                System.out.println(integer);
-                assertThat(targetResponse.getStatusCode()).isEqualTo(400);
+            limiter.acquire();
+
+            Response sourceResponse = getCodesResponse(klassApSourceHostPath, id,dateFromInRange, dateToInRange);
+            Response targetResponse = getCodesResponse(klassApiTargetHostPath, id,dateFromInRange, dateToInRange);
+
+            if(sourceResponse.getStatusCode() != 200) {
+                assertThat(compareError(id, sourceResponse, targetResponse)).isTrue();
             }
             else{
-                assertThat(sourceResponse.getStatusCode()).isEqualTo(200);
-                assertThat(targetResponse.getStatusCode()).isEqualTo(200);
-
                 Object sourceField = sourceResponse.path(CODES);
                 assertThat(sourceField).isEqualTo(targetResponse.path(CODES));
             }
@@ -151,20 +137,17 @@ public class KlassApiClassificationCodesTest extends AbstractKlassApiDataIntegri
     }
     @Test
     void getClassificationCodesInRangeDatePartThreeTest() {
+        for (Integer id : classificationsIdsSourceHostPart3) {
 
-        for (Integer integer : classificationsIdsSourceHostPart3) {
             limiter.acquire();
-            Response sourceResponse = getCodesResponse(klassApSourceHostPath, integer,"1994-11-23", "2002-05-20");
-            Response targetResponse = getCodesResponse(klassApiTargetHostPath, integer,"1994-11-23", "2002-05-20");
 
-            if(sourceResponse.getStatusCode() == 404) {
-                System.out.println(integer);
-                assertThat(targetResponse.getStatusCode()).isEqualTo(404);
+            Response sourceResponse = getCodesResponse(klassApSourceHostPath, id,dateFromInRange, dateToInRange);
+            Response targetResponse = getCodesResponse(klassApiTargetHostPath, id,dateFromInRange, dateToInRange);
+
+            if(sourceResponse.getStatusCode() != 200) {
+                assertThat(compareError(id, sourceResponse, targetResponse)).isTrue();
             }
             else{
-                assertThat(sourceResponse.getStatusCode()).isEqualTo(200);
-                assertThat(targetResponse.getStatusCode()).isEqualTo(200);
-
                 Object sourceField = sourceResponse.path(CODES);
                 assertThat(sourceField).isEqualTo(targetResponse.path(CODES));
             }
@@ -174,18 +157,17 @@ public class KlassApiClassificationCodesTest extends AbstractKlassApiDataIntegri
 
     @Test
     void getClassificationCodesInRangeDatePartFourTest() {
-        for (Integer integer : classificationsIdsSourceHostPart4) {
-            limiter.acquire();
-            Response sourceResponse = getCodesResponse(klassApSourceHostPath, integer,"1994-11-23", "2002-05-20");
-            Response targetResponse = getCodesResponse(klassApiTargetHostPath, integer,"1994-11-23", "2002-05-20");
+        for (Integer id : classificationsIdsSourceHostPart4) {
 
-            if(sourceResponse.getStatusCode() == 404) {
-                System.out.println(integer);
-                assertThat(targetResponse.getStatusCode()).isEqualTo(404);
+            limiter.acquire();
+
+            Response sourceResponse = getCodesResponse(klassApSourceHostPath, id,dateFromInRange, dateToInRange);
+            Response targetResponse = getCodesResponse(klassApiTargetHostPath, id,dateFromInRange, dateToInRange);
+
+            if(sourceResponse.getStatusCode() != 200) {
+                assertThat(compareError(id, sourceResponse, targetResponse)).isTrue();
             }
             else{
-                assertThat(sourceResponse.getStatusCode()).isEqualTo(200);
-                assertThat(targetResponse.getStatusCode()).isEqualTo(200);
                 Object sourceField = sourceResponse.path(CODES);
                 assertThat(sourceField).isEqualTo(targetResponse.path(CODES));
             }
@@ -195,14 +177,20 @@ public class KlassApiClassificationCodesTest extends AbstractKlassApiDataIntegri
 
     @Test
     void getClassificationCodesInWrongDateOrderPartOneTest() {
-        for (Integer integer : classificationsIdsSourceHostPart1) {
+        for (Integer id : classificationsIdsSourceHostPart1) {
+
             limiter.acquire();
 
-            Response sourceResponse = getCodesResponse(klassApSourceHostPath, integer,"2025-10-23", "1970-04-02");
-            Response targetResponse = getCodesResponse(klassApiTargetHostPath, integer,"2025-10-23", "1970-04-02");
+            Response sourceResponse = getCodesResponse(klassApSourceHostPath, id,dateFromInRange, dateToInRange);
+            Response targetResponse = getCodesResponse(klassApiTargetHostPath, id,dateFromInRange, dateToInRange);
 
-            assertThat(sourceResponse.getStatusCode()).isEqualTo(400);
-            assertThat(targetResponse.getStatusCode()).isEqualTo(400);
+            if(sourceResponse.getStatusCode() != 200) {
+                assertThat(compareError(id, sourceResponse, targetResponse)).isTrue();
+            }
+            else{
+                Object sourceField = sourceResponse.path(CODES);
+                assertThat(sourceField).isEqualTo(targetResponse.path(CODES));
+            }
         }
     }
 

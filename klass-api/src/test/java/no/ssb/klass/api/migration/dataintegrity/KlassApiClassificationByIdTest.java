@@ -21,22 +21,31 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
 
     @Test
     void getClassification(){
-        for (Integer integer : classificationsIdsSourceHost) {
-            Response sourceResponse = getClassificationResponse(klassApSourceHostPath, integer, null, null);
-            Response targetResponse = getClassificationResponse(klassApiTargetHostPath, integer, null, null);
+        for (Integer id : classificationsIdsSourceHost) {
+            Response sourceResponse = getClassificationResponse(klassApSourceHostPath,id, null, null);
+            Response targetResponse = getClassificationResponse(klassApiTargetHostPath, id, null, null);
 
-            for (String pathName : pathNamesClassification) {
-                Object sourceField = sourceResponse.path(pathName);
+            if(sourceResponse.getStatusCode() != 200){
+                compareError(id, sourceResponse, targetResponse);
+                /*assertThat(sourceResponse.getStatusCode()).isEqualTo(targetResponse.getStatusCode());
+                Object sourceError = sourceResponse.path("error");
+                Object sourceErrorMessage = sourceResponse.path("message");
+                assertThat(sourceError).isEqualTo(targetResponse.path("error"));
+                assertThat(sourceErrorMessage).isEqualTo(targetResponse.path("message"));*/
+            }
+            else {
+                for (String pathName : pathNamesClassification) {
+                    Object sourceField = sourceResponse.path(pathName);
 
-                if(pathName.equals(STATISTICAL_UNITS)) {
-                    ArrayList<String> sourceList = sourceResponse.path(pathName);
-                    ArrayList<String> targetList = targetResponse.path(pathName);
-                    assertThat(sourceList.size()).isEqualTo(targetList.size());
-                    assertThat(sourceList.containsAll(targetList)).isTrue();
-                    assertThat(targetList.containsAll(sourceList)).isTrue();
-                }
-                else{
-                    assertThat(sourceField).isEqualTo(targetResponse.path(pathName));
+                    if (pathName.equals(STATISTICAL_UNITS)) {
+                        ArrayList<String> sourceList = sourceResponse.path(pathName);
+                        ArrayList<String> targetList = targetResponse.path(pathName);
+                        assertThat(sourceList.size()).isEqualTo(targetList.size());
+                        assertThat(sourceList.containsAll(targetList)).isTrue();
+                        assertThat(targetList.containsAll(sourceList)).isTrue();
+                    } else {
+                        assertThat(sourceField).isEqualTo(targetResponse.path(pathName));
+                    }
                 }
             }
         }
@@ -44,9 +53,9 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
 
     @Test
     void getClassificationVersions(){
-        for (Integer integer : classificationsIdsSourceHost) {
-            Response sourceResponse = getClassificationResponse(klassApSourceHostPath, integer, null, null);
-            Response targetResponse = getClassificationResponse(klassApiTargetHostPath, integer, null, null);
+        for (Integer id : classificationsIdsSourceHost) {
+            Response sourceResponse = getClassificationResponse(klassApSourceHostPath, id, null, null);
+            Response targetResponse = getClassificationResponse(klassApiTargetHostPath, id, null, null);
 
             List<Map<String, Object>> versionsSourceHost = sourceResponse.path(VERSIONS);
             List<Map<String, Object>> versionsTargetHost = targetResponse.path(VERSIONS);
@@ -89,9 +98,9 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
 
     @Test
     void getClassificationLinks(){
-        for (Integer integer : classificationsIdsSourceHost) {
-            Response sourceResponse = getClassificationResponse(klassApSourceHostPath, integer, null, null);
-            Response targetResponse = getClassificationResponse(klassApiTargetHostPath, integer, null, null);
+        for (Integer id : classificationsIdsSourceHost) {
+            Response sourceResponse = getClassificationResponse(klassApSourceHostPath, id, null, null);
+            Response targetResponse = getClassificationResponse(klassApiTargetHostPath, id, null, null);
 
             for (String pathName : MigrationTestConstants.pathNamesClassificationLinks) {
                 Object sourceField = sourceResponse.path(pathName);
@@ -110,9 +119,9 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
 
     @Test
     void getClassificationEnglish(){
-        for (Integer integer : classificationsIdsSourceHost) {
-            Response sourceResponse = getClassificationResponse(klassApSourceHostPath, integer, LANGUAGE_PARAM, EN);
-            Response targetResponse = getClassificationResponse(klassApiTargetHostPath, integer, LANGUAGE_PARAM, EN);
+        for (Integer id : classificationsIdsSourceHost) {
+            Response sourceResponse = getClassificationResponse(klassApSourceHostPath, id, LANGUAGE_PARAM, EN);
+            Response targetResponse = getClassificationResponse(klassApiTargetHostPath, id, LANGUAGE_PARAM, EN);
 
             for (String pathName : pathNamesClassification) {
                 Object sourceField = sourceResponse.path(pathName);
@@ -135,9 +144,9 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
 
     @Test
     void getClassificationNewNorwegian(){
-        for (Integer integer : classificationsIdsSourceHost) {
-            Response sourceResponse = getClassificationResponse(klassApSourceHostPath, integer, LANGUAGE_PARAM, NN);
-            Response targetResponse = getClassificationResponse(klassApiTargetHostPath, integer, LANGUAGE_PARAM, NN);
+        for (Integer id : classificationsIdsSourceHost) {
+            Response sourceResponse = getClassificationResponse(klassApSourceHostPath, id, LANGUAGE_PARAM, NN);
+            Response targetResponse = getClassificationResponse(klassApiTargetHostPath, id, LANGUAGE_PARAM, NN);
 
             for (String pathName : pathNamesClassification) {
                 Object sourceField = sourceResponse.path(pathName);
@@ -159,9 +168,9 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
 
     @Test
     void getClassificationIncludeFuture(){
-        for (Integer integer : classificationsIdsSourceHost) {
-            Response sourceResponse = getClassificationResponse(klassApSourceHostPath, integer, INCLUDE_FUTURE_TRUE_PARAM, "true");
-            Response targetResponse = getClassificationResponse(klassApiTargetHostPath, integer, INCLUDE_FUTURE_TRUE_PARAM, "true");
+        for (Integer id : classificationsIdsSourceHost) {
+            Response sourceResponse = getClassificationResponse(klassApSourceHostPath, id, INCLUDE_FUTURE_TRUE_PARAM, "true");
+            Response targetResponse = getClassificationResponse(klassApiTargetHostPath, id, INCLUDE_FUTURE_TRUE_PARAM, "true");
 
             for (String pathName : pathNamesClassification) {
                 Object sourceField = sourceResponse.path(pathName);

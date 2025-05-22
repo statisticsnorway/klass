@@ -10,12 +10,14 @@ import org.junit.jupiter.api.BeforeEach;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 import static io.restassured.RestAssured.get;
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 import static no.ssb.klass.api.migration.MigrationTestConstants.EMBEDDED_CLASSIFICATIONS;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public abstract class AbstractKlassApiDataIntegrityTest {
 
@@ -138,6 +140,23 @@ public abstract class AbstractKlassApiDataIntegrityTest {
         while (index < listLength) {
             classificationsIdsSourceHostPart4.add(classificationsIdsSourceHost.get(index++));
         }
+    }
+
+    public static boolean compareError(int ID, Response sourceResponse, Response targetResponse) {
+        Object sourceBody = sourceResponse.getBody().asString();
+        Object targetBody = targetResponse.getBody().asString();
+
+        List<String> sourceErrors = new ArrayList<>();
+        List<String> targetErrors = new ArrayList<>();
+
+        sourceErrors.add("Source: ID: " + ID + ", Code: " + sourceResponse.getStatusCode() + ", " + sourceBody);
+        targetErrors.add("Target: ID: " + ID + ", Code: " + targetResponse.getStatusCode() + ", " + targetBody);
+
+        if (sourceResponse.getStatusCode() != targetResponse.getStatusCode() || !sourceBody.equals(targetBody)){
+            System.out.println(String.join(", ", sourceErrors) + "\n" + String.join(", ", targetErrors));
+            return false;
+        }
+        return true;
     }
 
     @BeforeEach
