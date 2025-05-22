@@ -76,6 +76,7 @@ public final class MigrationTestConstants {
     public static final String LANGUAGE_PARAM= "language";
 
     public static final String INCLUDE_FUTURE_TRUE_PARAM= "?includeFuture=true";
+    public static final String INCLUDE_FUTURE= "includeFuture";
 
     public static final String SEARCH= "search?";
     public static final String CODES= "codes";
@@ -91,6 +92,16 @@ public final class MigrationTestConstants {
 
     public static final String SSB_SECTIONS= "ssbsections";
     public static final String EMBEDDED_SSB_SECTIONS= "_embedded.ssbsections";
+
+    public static final String INTRODUCTION= "introduction";
+    public static final String LEGAL_BASE= "legalBase";
+    public static final String PUBLICATIONS= "publications";
+    public static final String DERIVED_FROM= "derivedFrom";
+    public static final String CORRESPONDENCE_TABLES= "correspondenceTables";
+    public static final String CLASSIFICATION_VARIANTS= "classificationVariants";
+    public static final String CHANGELOGS= "changelogs";
+    public static final String LEVELS= "levels";
+    public static final String CLASSIFICATION_ITEMS=    "classificationItems";
 
 
 
@@ -128,6 +139,18 @@ public final class MigrationTestConstants {
             LAST_MODIFIED,
             PUBLISHED,
             LINKS_SELF_HREF
+    );
+
+    public static List<String> pathNamesVersionsById = Arrays.asList(
+            NAME,
+            ID,
+            VALID_FROM,
+            VALID_TO,
+            LAST_MODIFIED,
+            INTRODUCTION,
+            LEGAL_BASE,
+            PUBLICATIONS,
+            DERIVED_FROM
     );
 
     public static List<String> pathNamesClassificationsLinks = Arrays.asList(
