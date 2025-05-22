@@ -183,25 +183,6 @@ public class KlassApiClassificationCodesTest extends AbstractKlassApiDataIntegri
 
     }
 
-    @Test
-    void getClassificationCodesInWrongDateOrderPartOneTest() {
-        for (Integer id : classificationsIdsSourceHostPart1) {
-
-            limiter.acquire();
-
-            Response sourceResponse = getCodesResponse(klassApSourceHostPath, id,dateFromInRange, dateToInRange);
-            Response targetResponse = getCodesResponse(klassApiTargetHostPath, id,dateFromInRange, dateToInRange);
-
-            if(sourceResponse.getStatusCode() != 200) {
-                assertThat(compareError(id, sourceResponse, targetResponse)).isTrue();
-            }
-            else{
-                Object sourceField = sourceResponse.path(CODES);
-                assertThat(sourceField).isEqualTo(targetResponse.path(CODES));
-            }
-        }
-    }
-
     private Response getCodesResponse(String basePath, Integer id, String dateFrom, String dateTo) {
 
         if (dateTo == null) {
