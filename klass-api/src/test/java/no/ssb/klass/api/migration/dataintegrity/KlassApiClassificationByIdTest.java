@@ -3,7 +3,6 @@ package no.ssb.klass.api.migration.dataintegrity;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import no.ssb.klass.api.migration.MigrationTestConstants;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
