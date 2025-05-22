@@ -9,9 +9,13 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
 import java.net.URL;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static io.restassured.RestAssured.get;
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
@@ -19,20 +23,23 @@ import static no.ssb.klass.api.migration.MigrationTestConstants.EMBEDDED_CLASSIF
 
 public abstract class AbstractKlassApiDataIntegrityTest {
 
-    protected static final String sourceHost = MigrationTestConfig.getSourceHost();
+    static final String sourceHost = MigrationTestConfig.getSourceHost();
 
-    protected static final String targetHost = MigrationTestConfig.getTargetHost();
+    static final String targetHost = MigrationTestConfig.getTargetHost();
 
     Response responseKlassApiSourceHost;
     Response responseKlassApiTargetHost;
 
-    public String klassApSourceHostPath = sourceHost + BASE_PATH + RestConstants.API_VERSION_V1 + CLASSIFICATIONS_PATH;
-    public String klassApiTargetHostPath = targetHost + BASE_PATH + RestConstants.API_VERSION_V1 + CLASSIFICATIONS_PATH;
+    String sourceBasePath = sourceHost + BASE_PATH + RestConstants.API_VERSION_V1;
+    String targetBasePath = targetHost + BASE_PATH + RestConstants.API_VERSION_V1;
 
-    public List<Integer> classificationsIdsSourceHost = new ArrayList<>();
-    public List<Integer> classificationsIdsTargetHost = new ArrayList<>();
-    public List<Map<String, Object>> allClassificationsSourceHost = new ArrayList<>();
-    public List<Map<String, Object>> allClassificationsTargetHost = new ArrayList<>();
+    String klassApSourceHostPath = sourceHost + BASE_PATH + RestConstants.API_VERSION_V1 + CLASSIFICATIONS_PATH;
+    String klassApiTargetHostPath = targetHost + BASE_PATH + RestConstants.API_VERSION_V1 + CLASSIFICATIONS_PATH;
+
+    List<Integer> classificationsIdsSourceHost = new ArrayList<>();
+    List<Integer> classificationsIdsTargetHost = new ArrayList<>();
+    List<Map<String, Object>> allClassificationsSourceHost = new ArrayList<>();
+    List<Map<String, Object>> allClassificationsTargetHost = new ArrayList<>();
 
     List<Map<String, Object>> sourceHostClassificationsPage;
     List<Map<String, Object>> targetHostClassificationsPage;
@@ -88,7 +95,7 @@ public abstract class AbstractKlassApiDataIntegrityTest {
         }
     }
 
-    public static boolean isPathEqualIgnoreHost(String sourceHref, String targetHref) {
+    static boolean isPathEqualIgnoreHost(String sourceHref, String targetHref) {
         try {
             URL sourceUrl = new URL(sourceHref);
             URL targetUrl = new URL(targetHref);
@@ -106,11 +113,11 @@ public abstract class AbstractKlassApiDataIntegrityTest {
         }
     }
 
-    public static Response getResponse(String path) {
+    static Response getResponse(String path) {
         return RestAssured.get(path);
     }
 
-    public static Object resolvePath(Map<String, Object> map, String path) {
+    static Object resolvePath(Map<String, Object> map, String path) {
         String[] parts = path.split("\\.");
         Object current = map;
 
@@ -124,7 +131,7 @@ public abstract class AbstractKlassApiDataIntegrityTest {
         return current;
     }
 
-    protected void setClassificationLists(){
+    void setClassificationLists(){
         int listLength = classificationsIdsSourceHost.size();
         int shareLength = listLength / 4;
         int remainder = listLength % 4;
@@ -144,7 +151,7 @@ public abstract class AbstractKlassApiDataIntegrityTest {
         }
     }
 
-    public static boolean compareError(Integer ID, Response sourceResponse, Response targetResponse) {
+    static boolean compareError(Integer ID, Response sourceResponse, Response targetResponse) {
         Object sourceBody = sourceResponse.getBody().asString();
         Object targetBody = targetResponse.getBody().asString();
 
@@ -156,6 +163,45 @@ public abstract class AbstractKlassApiDataIntegrityTest {
             return false;
         }
        return true;
+    }
+
+    static String generateRandomDate() {
+        LocalDate startDate = LocalDate.of(1800, 1, 1);
+        LocalDate endDate = LocalDate.of(2030, 12, 31);
+        long daysBetween = ChronoUnit.DAYS.between(startDate, endDate);
+        long randomDays = ThreadLocalRandom.current().nextLong(daysBetween + 1);
+        LocalDate randomDate = startDate.plusDays(randomDays);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return randomDate.format(formatter);
+    }
+
+    static String generateRandomDateTime() {
+        LocalDate startDate = LocalDate.of(1800, 1, 1);
+        LocalDate endDate = LocalDate.of(2030, 12, 31);
+        long days = startDate.until(endDate).getDays();
+        long randomDay = ThreadLocalRandom.current().nextLong(days + 1);
+        LocalDate randomDate = startDate.plusDays(randomDay);
+
+        int hour = ThreadLocalRandom.current().nextInt(0, 24);
+        int minute = ThreadLocalRandom.current().nextInt(0, 60);
+        int second = ThreadLocalRandom.current().nextInt(0, 60);
+        int millis = ThreadLocalRandom.current().nextInt(0, 1000);
+
+        LocalDateTime localDateTime = randomDate.atTime(hour, minute, second, millis * 1_000_000);
+
+        // Step 2: Assign random fixed offset between -12:00 and +14:00
+        int offsetHours = ThreadLocalRandom.current().nextInt(-12, 15); // inclusive
+        ZoneOffset offset = ZoneOffset.ofHours(offsetHours);
+        OffsetDateTime offsetDateTime = localDateTime.atOffset(offset);
+
+        // Step 3: Format in required format: 2015-10-31T01:30:00.000-0200
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        return offsetDateTime.format(formatter);
+    }
+
+    static Integer generateRandomId() {
+        return ThreadLocalRandom.current().nextInt(0, 10000);
     }
 
     @BeforeEach
