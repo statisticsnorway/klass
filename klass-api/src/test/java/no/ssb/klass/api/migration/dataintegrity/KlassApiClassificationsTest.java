@@ -1,14 +1,32 @@
 package no.ssb.klass.api.migration.dataintegrity;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.Map;
 
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class KlassApiClassificationsTest extends AbstractKlassApiDataIntegrityTest {
+
+    static Response responseKlassApiSourceHost;
+    static Response responseKlassApiTargetHost;
+
+    static List<Map<String, Object>> sourceHostClassificationsPage;
+    static List<Map<String, Object>> targetHostClassificationsPage;
+
+    @BeforeAll
+    static void setUpClassifications() {
+        responseKlassApiSourceHost = getResponse(klassApSourceHostPath);
+        responseKlassApiTargetHost = getResponse(klassApiTargetHostPath);
+        sourceHostClassificationsPage = responseKlassApiSourceHost.path(EMBEDDED_CLASSIFICATIONS);
+        targetHostClassificationsPage = responseKlassApiTargetHost.path(EMBEDDED_CLASSIFICATIONS);
+        getAllSourceHost();
+        getAllTargetHost();
+    }
 
     @Test
     void getClassificationsPage(){

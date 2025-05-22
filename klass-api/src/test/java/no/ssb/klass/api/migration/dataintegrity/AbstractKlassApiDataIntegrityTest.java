@@ -6,7 +6,7 @@ import io.restassured.response.Response;
 import no.ssb.klass.api.migration.MigrationTestConfig;
 import no.ssb.klass.api.util.RestConstants;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 
 import java.net.URL;
 import java.time.*;
@@ -19,7 +19,6 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import static io.restassured.RestAssured.get;
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
-import static no.ssb.klass.api.migration.MigrationTestConstants.EMBEDDED_CLASSIFICATIONS;
 
 public abstract class AbstractKlassApiDataIntegrityTest {
 
@@ -27,29 +26,24 @@ public abstract class AbstractKlassApiDataIntegrityTest {
 
     static final String targetHost = MigrationTestConfig.getTargetHost();
 
-    Response responseKlassApiSourceHost;
-    Response responseKlassApiTargetHost;
-
     String sourceBasePath = sourceHost + BASE_PATH + RestConstants.API_VERSION_V1;
     String targetBasePath = targetHost + BASE_PATH + RestConstants.API_VERSION_V1;
 
-    String klassApSourceHostPath = sourceHost + BASE_PATH + RestConstants.API_VERSION_V1 + CLASSIFICATIONS_PATH;
-    String klassApiTargetHostPath = targetHost + BASE_PATH + RestConstants.API_VERSION_V1 + CLASSIFICATIONS_PATH;
+    static String klassApSourceHostPath = sourceHost + BASE_PATH + RestConstants.API_VERSION_V1 + CLASSIFICATIONS_PATH;
+    static String klassApiTargetHostPath = targetHost + BASE_PATH + RestConstants.API_VERSION_V1 + CLASSIFICATIONS_PATH;
 
-    List<Integer> classificationsIdsSourceHost = new ArrayList<>();
-    List<Integer> classificationsIdsTargetHost = new ArrayList<>();
-    List<Map<String, Object>> allClassificationsSourceHost = new ArrayList<>();
-    List<Map<String, Object>> allClassificationsTargetHost = new ArrayList<>();
+    static List<Integer> classificationsIdsSourceHost = new ArrayList<>();
+    static List<Integer> classificationsIdsTargetHost = new ArrayList<>();
+    static List<Map<String, Object>> allClassificationsSourceHost = new ArrayList<>();
+    static List<Map<String, Object>> allClassificationsTargetHost = new ArrayList<>();
 
-    List<Map<String, Object>> sourceHostClassificationsPage;
-    List<Map<String, Object>> targetHostClassificationsPage;
 
-    List<Integer> classificationsIdsSourceHostPart1 = new ArrayList<>();
-    List<Integer> classificationsIdsSourceHostPart2 = new ArrayList<>();
-    List<Integer> classificationsIdsSourceHostPart3 = new ArrayList<>();
-    List<Integer> classificationsIdsSourceHostPart4 = new ArrayList<>();
+    static List<Integer> classificationsIdsSourceHostPart1 = new ArrayList<>();
+    static List<Integer> classificationsIdsSourceHostPart2 = new ArrayList<>();
+    static List<Integer> classificationsIdsSourceHostPart3 = new ArrayList<>();
+    static List<Integer> classificationsIdsSourceHostPart4 = new ArrayList<>();
 
-    void getAllSourceHost() {
+    static void getAllSourceHost() {
         String url = klassApSourceHostPath;
 
         while (url != null) {
@@ -72,7 +66,7 @@ public abstract class AbstractKlassApiDataIntegrityTest {
         }
     }
 
-    void getAllTargetHost() {
+    static void getAllTargetHost() {
         String url = klassApiTargetHostPath;
 
         while (url != null) {
@@ -131,7 +125,7 @@ public abstract class AbstractKlassApiDataIntegrityTest {
         return current;
     }
 
-    void setClassificationLists(){
+    static void setClassificationLists(){
         int listLength = classificationsIdsSourceHost.size();
         int shareLength = listLength / 4;
         int remainder = listLength % 4;
@@ -204,14 +198,8 @@ public abstract class AbstractKlassApiDataIntegrityTest {
         return ThreadLocalRandom.current().nextInt(0, 10000);
     }
 
-    @BeforeEach
-    void setUp() {
-        responseKlassApiSourceHost = getResponse(klassApSourceHostPath);
-        responseKlassApiTargetHost = getResponse(klassApiTargetHostPath);
-        sourceHostClassificationsPage = responseKlassApiSourceHost.path(EMBEDDED_CLASSIFICATIONS);
-        targetHostClassificationsPage = responseKlassApiTargetHost.path(EMBEDDED_CLASSIFICATIONS);
-        getAllSourceHost();
-        getAllTargetHost();
+    @BeforeAll
+    static void beforeAll() {
         setClassificationLists();
     }
 
