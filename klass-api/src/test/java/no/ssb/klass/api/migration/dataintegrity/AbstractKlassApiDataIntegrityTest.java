@@ -10,14 +10,12 @@ import org.junit.jupiter.api.BeforeEach;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 import static io.restassured.RestAssured.get;
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 import static no.ssb.klass.api.migration.MigrationTestConstants.EMBEDDED_CLASSIFICATIONS;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public abstract class AbstractKlassApiDataIntegrityTest {
 
