@@ -1,9 +1,10 @@
 package no.ssb.klass.api.migration.dataintegrity;
-import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import no.ssb.klass.api.migration.KlassApiMigrationClient;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,43 +13,68 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class KlassApiClassificationsTest extends AbstractKlassApiDataIntegrityTest {
 
-    static Response responseKlassApiSourceHost;
-    static Response responseKlassApiTargetHost;
+    static List<Map<String, Object>> sourceHostClassifications;
+    static List<Map<String, Object>> targetHostClassifications;
 
-    static List<Map<String, Object>> sourceHostClassificationsPage;
-    static List<Map<String, Object>> targetHostClassificationsPage;
+    static KlassApiMigrationClient klassApiMigrationClient;
+
+    static Response sourceResponse;
+    static Response targetResponse;
+
+    static Response sourceResponseCodeLists;
+    static Response targetResponseCodeLists;
+
+    static Response sourceResponseChangedSince;
+    static Response targetResponseChangedSince;
+
+    static Map<String, Object> paramsIncludeCodeLists = new HashMap<>();
+    static Map<String, Object> paramsChangedSince = new HashMap<>();
+
+    static String queryDate;
 
     @BeforeAll
     static void setUpClassifications() {
-        responseKlassApiSourceHost = getResponse(klassApSourceHostPath);
-        responseKlassApiTargetHost = getResponse(klassApiTargetHostPath);
-        sourceHostClassificationsPage = responseKlassApiSourceHost.path(EMBEDDED_CLASSIFICATIONS);
-        targetHostClassificationsPage = responseKlassApiTargetHost.path(EMBEDDED_CLASSIFICATIONS);
-        getAllSourceHost();
-        getAllTargetHost();
+        klassApiMigrationClient = new KlassApiMigrationClient();
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(CLASSIFICATIONS_PATH, null);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(CLASSIFICATIONS_PATH, null);
+
+        sourceHostClassifications = sourceResponse.path(EMBEDDED_CLASSIFICATIONS);
+        targetHostClassifications = targetResponse.path(EMBEDDED_CLASSIFICATIONS);
+
+        queryDate = generateRandomDateTime();
+        paramsIncludeCodeLists.put(INCLUDE_CODE_LISTS, TRUE);
+        paramsChangedSince.put(CHANGED_SINCE, queryDate);
+
+        sourceResponseCodeLists = klassApiMigrationClient.getFromSourceApi(CLASSIFICATIONS_PATH, paramsIncludeCodeLists);
+        targetResponseCodeLists = klassApiMigrationClient.getFromTargetApi(CLASSIFICATIONS_PATH, paramsIncludeCodeLists);
+
+        sourceResponseChangedSince = klassApiMigrationClient.getFromSourceApi(CLASSIFICATIONS_PATH, paramsChangedSince);
+        targetResponseChangedSince = klassApiMigrationClient.getFromTargetApi(CLASSIFICATIONS_PATH, paramsChangedSince);
     }
 
     @Test
     void getClassificationsPage(){
-        if(responseKlassApiSourceHost.getStatusCode() != 200) {
-            assertThat(compareError(null, responseKlassApiSourceHost, responseKlassApiTargetHost)).isTrue();
+
+        if(sourceResponse.getStatusCode() != 200) {
+            assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         }
         else {
-            String classificationsPageSourceHost = responseKlassApiSourceHost.path(EMBEDDED_PAGE);
-            String classificationsPageTargetHost = responseKlassApiTargetHost.path(EMBEDDED_PAGE);
+            Object classificationsPageSource = sourceResponse.path(PAGE);
+            Object classificationsPageTarget = targetResponse.path(PAGE);
 
-            assertThat(classificationsPageSourceHost).isEqualTo(classificationsPageTargetHost);
+            assertThat(classificationsPageSource).isNotNull();
+            assertThat(classificationsPageSource).isEqualTo(classificationsPageTarget);
         }
     }
 
     @Test
     void getClassificationsLinks(){
-        if(responseKlassApiSourceHost.getStatusCode() != 200) {
-            assertThat(compareError(null, responseKlassApiSourceHost, responseKlassApiTargetHost)).isTrue();
+        if(sourceResponse.getStatusCode() != 200) {
+            assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         }
         else {
-            Map<String, Object> sourceLinks = responseKlassApiSourceHost.path(LINKS);
-            Map<String, Object> targetLinks = responseKlassApiTargetHost.path(LINKS);
+            Map<String, Object> sourceLinks = sourceResponse.path(LINKS);
+            Map<String, Object> targetLinks = targetResponse.path(LINKS);
 
             assertThat(sourceLinks).isNotNull();
             assertThat(sourceLinks.size()).isEqualTo(targetLinks.size());
@@ -56,11 +82,11 @@ public class KlassApiClassificationsTest extends AbstractKlassApiDataIntegrityTe
 
             for(String pathName : pathNamesClassificationsLinks) {
                 if (pathName.equals(LINKS_SEARCH_TEMPLATED)) {
-                    Boolean sourcePath = responseKlassApiSourceHost.path(LINKS_SEARCH_TEMPLATED);
-                    assertThat(sourcePath).isEqualTo(responseKlassApiTargetHost.path(LINKS_SEARCH_TEMPLATED));
+                    Boolean sourcePath = sourceResponse.path(LINKS_SEARCH_TEMPLATED);
+                    assertThat(sourcePath).isEqualTo(targetResponse.path(LINKS_SEARCH_TEMPLATED));
                 } else {
-                    String sourcePath = responseKlassApiSourceHost.path(pathName);
-                    assertThat(isPathEqualIgnoreHost(sourcePath, responseKlassApiTargetHost.path(pathName))).isTrue();
+                    String sourcePath = sourceResponse.path(pathName);
+                    assertThat(isPathEqualIgnoreHost(sourcePath, targetResponse.path(pathName))).isTrue();
                 }
             }
         }
@@ -69,17 +95,17 @@ public class KlassApiClassificationsTest extends AbstractKlassApiDataIntegrityTe
 
     @Test
     void getClassificationsItems(){
-        if(responseKlassApiSourceHost.getStatusCode() != 200) {
-            assertThat(compareError(null, responseKlassApiSourceHost, responseKlassApiTargetHost)).isTrue();
+        if(sourceResponse.getStatusCode() != 200) {
+            assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         }
         else {
-            for (int i = 0; i < sourceHostClassificationsPage.size(); i++) {
-                Map<String, Object> sourceItem = sourceHostClassificationsPage.get(i);
-                Map<String, Object> targetItem = targetHostClassificationsPage.get(i);
+            for (int i = 0; i < sourceHostClassifications.size(); i++) {
+                Map<String, Object> sourceItem = sourceHostClassifications.get(i);
+                Map<String, Object> targetItem = targetHostClassifications.get(i);
                 for (String pathName : pathNamesClassificationsPage) {
                     if (pathName.equals(LINKS_SELF_HREF)) {
-                        String sourceLink = responseKlassApiSourceHost.path(LINKS_SELF_HREF);
-                        String targetLink = responseKlassApiTargetHost.path(pathName);
+                        String sourceLink = sourceResponse.path(LINKS_SELF_HREF);
+                        String targetLink = targetResponse.path(pathName);
                         assertThat(isPathEqualIgnoreHost(sourceLink, targetLink)).isTrue();
                     } else {
                         assertThat(sourceItem.get(pathName)).isEqualTo(targetItem.get(pathName));
@@ -91,14 +117,14 @@ public class KlassApiClassificationsTest extends AbstractKlassApiDataIntegrityTe
 
     @Test
     void getClassificationsIncludeCodeListsPage() {
-        Response sourceResponse = getClassificationsQueryParamResponse(klassApSourceHostPath, INCLUDE_CODE_LISTS, TRUE);
-        Response targetResponse = getClassificationsQueryParamResponse(klassApiTargetHostPath, INCLUDE_CODE_LISTS, TRUE);
-
-        if (sourceResponse.getStatusCode() != 200) {
-            assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
+        assertThat(sourceResponseCodeLists).isNotNull();
+        if (sourceResponseCodeLists.getStatusCode() != 200) {
+            assertThat(compareError(null, sourceResponseCodeLists, targetResponseCodeLists)).isTrue();
         } else {
-            String classificationsPageSourceHost = sourceResponse.path(EMBEDDED_PAGE);
-            String classificationsPageTargetHost = targetResponse.path(EMBEDDED_PAGE);
+            Object classificationsPageSourceHost = sourceResponseCodeLists.path(PAGE);
+            Object classificationsPageTargetHost = targetResponseCodeLists.path(PAGE);
+
+            assertThat(classificationsPageTargetHost).isNotNull();
 
             assertThat(classificationsPageSourceHost).isEqualTo(classificationsPageTargetHost);
         }
@@ -106,23 +132,16 @@ public class KlassApiClassificationsTest extends AbstractKlassApiDataIntegrityTe
 
     @Test
     void getClassificationsChangedSincePage(){
-        String queryDate = generateRandomDateTime();
-        Response sourceResponse = getClassificationsQueryParamResponse(klassApSourceHostPath, CHANGED_SINCE, queryDate);
-        Response targetResponse = getClassificationsQueryParamResponse(klassApiTargetHostPath, CHANGED_SINCE, queryDate);
-
-        if (sourceResponse.getStatusCode() != 200) {
-            assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
+        if (sourceResponseChangedSince.getStatusCode() != 200) {
+            assertThat(compareError(null, sourceResponseChangedSince, targetResponseChangedSince)).isTrue();
         } else {
-            String classificationsPageSourceHost = sourceResponse.path(EMBEDDED_PAGE);
-            String classificationsPageTargetHost = targetResponse.path(EMBEDDED_PAGE);
+            Object classificationsPageSourceHost = sourceResponseCodeLists.path(PAGE);
+            Object classificationsPageTargetHost = targetResponseCodeLists.path(PAGE);
+
+            assertThat(classificationsPageSourceHost).isNotNull();
+
             assertThat(classificationsPageSourceHost).isEqualTo(classificationsPageTargetHost);
         }
-    }
-
-    private Response getClassificationsQueryParamResponse(String basePath, String queryParam, String queryValue) {
-
-        return RestAssured.given().queryParam(queryParam, queryValue).get(basePath);
-
     }
 
 }
