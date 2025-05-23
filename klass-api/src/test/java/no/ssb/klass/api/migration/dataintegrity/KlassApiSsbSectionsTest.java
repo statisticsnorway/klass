@@ -10,8 +10,6 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class KlassApiSsbSectionsTest extends AbstractKlassApiDataIntegrityTest {
 
-    static KlassApiMigrationClient klassApiMigrationClient;
-
     @BeforeAll
     static void beforeAllSections() {
         klassApiMigrationClient = new KlassApiMigrationClient();
