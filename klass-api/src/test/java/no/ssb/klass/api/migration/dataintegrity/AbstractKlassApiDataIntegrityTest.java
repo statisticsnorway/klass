@@ -3,6 +3,7 @@ package no.ssb.klass.api.migration.dataintegrity;
 import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
+import no.ssb.klass.api.migration.KlassApiMigrationClient;
 import no.ssb.klass.api.migration.MigrationTestConfig;
 import no.ssb.klass.api.util.RestConstants;
 import org.junit.jupiter.api.AfterEach;
@@ -13,6 +14,7 @@ import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
@@ -22,12 +24,14 @@ import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 
 public abstract class AbstractKlassApiDataIntegrityTest {
 
-    static final String sourceHost = MigrationTestConfig.getSourceHost();
+    static KlassApiMigrationClient klassApiMigrationClient;
 
-    static final String targetHost = MigrationTestConfig.getTargetHost();
+    public static final String sourceHost = MigrationTestConfig.getSourceHost();
 
-    String sourceBasePath = sourceHost + BASE_PATH + RestConstants.API_VERSION_V1;
-    String targetBasePath = targetHost + BASE_PATH + RestConstants.API_VERSION_V1;
+    public static final String targetHost = MigrationTestConfig.getTargetHost();
+
+    static Response sourceResponseClassifications;
+    static Response targetResponseClassifications;
 
     static String klassApSourceHostPath = sourceHost + BASE_PATH + RestConstants.API_VERSION_V1 + CLASSIFICATIONS_PATH;
     static String klassApiTargetHostPath = targetHost + BASE_PATH + RestConstants.API_VERSION_V1 + CLASSIFICATIONS_PATH;
@@ -42,6 +46,21 @@ public abstract class AbstractKlassApiDataIntegrityTest {
     static List<Integer> classificationsIdsSourceHostPart2 = new ArrayList<>();
     static List<Integer> classificationsIdsSourceHostPart3 = new ArrayList<>();
     static List<Integer> classificationsIdsSourceHostPart4 = new ArrayList<>();
+    static List<Integer> classificationsIdsSourceHostPart5 = new ArrayList<>();
+    static List<Integer> classificationsIdsSourceHostPart6 = new ArrayList<>();
+    static List<Integer> classificationsIdsSourceHostPart7 = new ArrayList<>();
+    static List<Integer> classificationsIdsSourceHostPart8 = new ArrayList<>();
+    static List<Integer> classificationsIdsSourceHostPart9 = new ArrayList<>();
+    static List<Integer> classificationsIdsSourceHostPart10 = new ArrayList<>();
+    static List<Integer> classificationsIdsSourceHostPart11 = new ArrayList<>();
+    static List<Integer> classificationsIdsSourceHostPart12 = new ArrayList<>();
+    static List<Integer> classificationsIdsSourceHostPart13= new ArrayList<>();
+    static List<Integer> classificationsIdsSourceHostPart14 = new ArrayList<>();
+    static List<Integer> classificationsIdsSourceHostPart15 = new ArrayList<>();
+    static List<Integer> classificationsIdsSourceHostPart16 = new ArrayList<>();
+
+
+    static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     static void getAllSourceHost() {
         String url = klassApSourceHostPath;
@@ -127,22 +146,48 @@ public abstract class AbstractKlassApiDataIntegrityTest {
 
     static void setClassificationLists(){
         int listLength = classificationsIdsSourceHost.size();
-        int shareLength = listLength / 4;
-        int remainder = listLength % 4;
+        int shareLength = listLength / 16;
+        int remainder = listLength % 16;
 
         int index = 0;
-        for (int i = 0; i < shareLength + (remainder > 0 ? 1 : 0); i++) {
-            classificationsIdsSourceHostPart1.add(classificationsIdsSourceHost.get(index++));
+        List<List<Integer>> parts = Arrays.asList(
+                classificationsIdsSourceHostPart1,
+                classificationsIdsSourceHostPart2,
+                classificationsIdsSourceHostPart3,
+                classificationsIdsSourceHostPart4,
+                classificationsIdsSourceHostPart5,
+                classificationsIdsSourceHostPart6,
+                classificationsIdsSourceHostPart7,
+                classificationsIdsSourceHostPart8,
+                classificationsIdsSourceHostPart9,
+                classificationsIdsSourceHostPart10,
+                classificationsIdsSourceHostPart11,
+                classificationsIdsSourceHostPart12,
+                classificationsIdsSourceHostPart13,
+                classificationsIdsSourceHostPart14,
+                classificationsIdsSourceHostPart15,
+                classificationsIdsSourceHostPart16
+        );
+        for (int i = 0; i < 16; i++) {
+            int currentPartSize = shareLength + (remainder > i ? 1 : 0);
+            for (int j = 0; j < currentPartSize; j++) {
+                parts.get(i).add(classificationsIdsSourceHost.get(index++));
+            }
         }
-        for (int i = 0; i < shareLength + (remainder > 1 ? 1 : 0); i++) {
-            classificationsIdsSourceHostPart2.add(classificationsIdsSourceHost.get(index++));
+    }
+
+    static boolean compareErrorJsonResponse(Integer ID, Response sourceResponse, Response targetResponse) {
+        Object sourceBody = sourceResponse.getBody().jsonPath().get("error");
+        Object targetBody = targetResponse.getBody().jsonPath().get("error");
+
+        if (sourceResponse.getStatusCode() != targetResponse.getStatusCode() || !sourceBody.equals(targetBody)){
+           String sourceError = (ID != null)? ("Source: ID: " + ID + ", Code: " + sourceResponse.getStatusCode() + ", " + sourceBody) : ("Source: " +  "Code: " + sourceResponse.getStatusCode() + ", " + sourceBody);
+            String targetError = (ID != null)? ("Target: ID: " + ID + ", Code: " + targetResponse.getStatusCode() + ", " + targetBody) : ("Target: " + "Code: " + targetResponse.getStatusCode() + ", " + targetBody);
+
+            System.out.println(String.join(", ", sourceError) + "\n" + String.join(", ", targetError));
+            return false;
         }
-        for (int i = 0; i < shareLength + (remainder > 2 ? 1 : 0); i++) {
-            classificationsIdsSourceHostPart3.add(classificationsIdsSourceHost.get(index++));
-        }
-        while (index < listLength) {
-            classificationsIdsSourceHostPart4.add(classificationsIdsSourceHost.get(index++));
-        }
+        return true;
     }
 
     static boolean compareError(Integer ID, Response sourceResponse, Response targetResponse) {
@@ -150,7 +195,7 @@ public abstract class AbstractKlassApiDataIntegrityTest {
         Object targetBody = targetResponse.getBody().asString();
 
         if (sourceResponse.getStatusCode() != targetResponse.getStatusCode() || !sourceBody.equals(targetBody)){
-            String sourceError = (ID != null)? ("Source: ID: " + ID + ", Code: " + sourceResponse.getStatusCode() + ", " + sourceBody) : ("Source: " +  "Code: " + sourceResponse.getStatusCode() + ", " + sourceBody);
+           String sourceError = (ID != null)? ("Source: ID: " + ID + ", Code: " + sourceResponse.getStatusCode() + ", " + sourceBody) : ("Source: " +  "Code: " + sourceResponse.getStatusCode() + ", " + sourceBody);
             String targetError = (ID != null)? ("Target: ID: " + ID + ", Code: " + targetResponse.getStatusCode() + ", " + targetBody) : ("Target: " + "Code: " + targetResponse.getStatusCode() + ", " + targetBody);
 
             System.out.println(String.join(", ", sourceError) + "\n" + String.join(", ", targetError));
@@ -159,15 +204,12 @@ public abstract class AbstractKlassApiDataIntegrityTest {
        return true;
     }
 
-    static String generateRandomDate() {
+    static LocalDate generateRandomDate() {
         LocalDate startDate = LocalDate.of(1800, 1, 1);
         LocalDate endDate = LocalDate.of(2030, 12, 31);
         long daysBetween = ChronoUnit.DAYS.between(startDate, endDate);
         long randomDays = ThreadLocalRandom.current().nextLong(daysBetween + 1);
-        LocalDate randomDate = startDate.plusDays(randomDays);
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        return randomDate.format(formatter);
+        return startDate.plusDays(randomDays);
     }
 
     static String generateRandomDateTime() {
@@ -194,12 +236,17 @@ public abstract class AbstractKlassApiDataIntegrityTest {
         return offsetDateTime.format(formatter);
     }
 
-    static Integer generateRandomId() {
-        return ThreadLocalRandom.current().nextInt(0, 10000);
+    static Integer generateRandomId(int to) {
+        return ThreadLocalRandom.current().nextInt(0, to);
     }
 
     @BeforeAll
     static void beforeAll() {
+        klassApiMigrationClient = new KlassApiMigrationClient();
+        getAllSourceHost();
+        getAllTargetHost();
+        sourceResponseClassifications = klassApiMigrationClient.getFromSourceApi(CLASSIFICATIONS_PATH, null);
+        targetResponseClassifications = klassApiMigrationClient.getFromTargetApi(CLASSIFICATIONS_PATH, null);
         setClassificationLists();
     }
 

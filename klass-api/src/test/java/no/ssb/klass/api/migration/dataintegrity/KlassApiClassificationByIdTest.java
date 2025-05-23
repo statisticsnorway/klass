@@ -1,15 +1,18 @@
 package no.ssb.klass.api.migration.dataintegrity;
 
-import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import no.ssb.klass.api.migration.MigrationTestConstants;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -19,99 +22,100 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
  */
 public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrityTest {
 
-    @Test
-    void getClassification(){
-        for (Integer id : classificationsIdsSourceHost) {
+    static Map<String, Object> paramsLanguageEn = new HashMap<>();
+    static Map<String, Object> paramsLanguageNn = new HashMap<>();
+    static Map<String, Object> paramsIncludeFuture = new HashMap<>();
 
-            Response sourceResponse = getClassificationResponse(klassApSourceHostPath,id, null, null);
-            Response targetResponse = getClassificationResponse(klassApiTargetHostPath, id, null, null);
+    @BeforeAll
+    static void setUpClassification() {
+        paramsLanguageEn.put(LANGUAGE, EN);
+        paramsLanguageNn.put(LANGUAGE, NN);
+        paramsIncludeFuture.put(INCLUDE_FUTURE, TRUE);
+    }
+    @ParameterizedTest
+    @MethodSource("provideClassificationIds")
+    void getClassification(Integer classificationId) {
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(CLASSIFICATIONS_PATH + "/" + classificationId, null);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(CLASSIFICATIONS_PATH + "/" + classificationId, null);
 
-            if(sourceResponse.getStatusCode() != 200) {
-                assertThat(compareError(id, sourceResponse, targetResponse)).isTrue();
-            }
-            else {
-                for (String pathName : pathNamesClassification) {
-                    Object sourceField = sourceResponse.path(pathName);
+        if(sourceResponse.getStatusCode() != 200) {
+                assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
+        }
+        else {
+            for (String pathName : pathNamesClassification) {
+                Object sourceField = sourceResponse.path(pathName);
 
-                    if (pathName.equals(STATISTICAL_UNITS)) {
-                        ArrayList<String> sourceList = sourceResponse.path(pathName);
-                        ArrayList<String> targetList = targetResponse.path(pathName);
+                if (pathName.equals(STATISTICAL_UNITS)) {
+                    ArrayList<String> sourceList = sourceResponse.path(pathName);
+                    ArrayList<String> targetList = targetResponse.path(pathName);
 
-                        assertThat(sourceList.size()).isEqualTo(targetList.size());
+                    assertThat(sourceList.size()).isEqualTo(targetList.size());
 
-                        assertThat(sourceList.containsAll(targetList)).isTrue();
-                        assertThat(targetList.containsAll(sourceList)).isTrue();
-                    } else {
-                        assertThat(sourceField).isEqualTo(targetResponse.path(pathName));
-                    }
+                    assertThat(sourceList.containsAll(targetList)).isTrue();
+                    assertThat(targetList.containsAll(sourceList)).isTrue();
+                } else {
+                    assertThat(sourceField).isEqualTo(targetResponse.path(pathName));
                 }
             }
         }
     }
 
-    @Test
-    void getClassificationVersions(){
-        for (Integer id : classificationsIdsSourceHost) {
+    @ParameterizedTest
+    @MethodSource("provideClassificationIds")
+    void getClassificationVersions(Integer classificationId){
 
-            Response sourceResponse = getClassificationResponse(klassApSourceHostPath, id, null, null);
-            Response targetResponse = getClassificationResponse(klassApiTargetHostPath, id, null, null);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(CLASSIFICATIONS_PATH + "/" + classificationId, null);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(CLASSIFICATIONS_PATH + "/" + classificationId, null);
 
-            if(sourceResponse.getStatusCode() != 200) {
-                assertThat(compareError(id, sourceResponse, targetResponse)).isTrue();
-            }
-            else {
-                List<Map<String, Object>> versionsSourceHost = sourceResponse.path(VERSIONS);
-                List<Map<String, Object>> versionsTargetHost = targetResponse.path(VERSIONS);
+        if(sourceResponse.getStatusCode() != 200) {
+                assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
+        } else {
+            List<Map<String, Object>> versionsSourceHost = sourceResponse.path(VERSIONS);
+            List<Map<String, Object>> versionsTargetHost = targetResponse.path(VERSIONS);
 
-                assertThat(versionsSourceHost.size()).isEqualTo(versionsTargetHost.size());
+            assertThat(versionsSourceHost.size()).isEqualTo(versionsTargetHost.size());
 
-                Map<Object, Map<String, Object>> sourceMap = versionsSourceHost.stream()
-                        .collect(Collectors.toMap(v -> v.get("id"), Function.identity()));
+            Map<Object, Map<String, Object>> sourceMap = versionsSourceHost.stream()
+                    .collect(Collectors.toMap(v -> v.get("id"), Function.identity()));
 
-                Map<Object, Map<String, Object>> targetMap = versionsTargetHost.stream()
-                        .collect(Collectors.toMap(v -> v.get("id"), Function.identity()));
+            Map<Object, Map<String, Object>> targetMap = versionsTargetHost.stream()
+                    .collect(Collectors.toMap(v -> v.get("id"), Function.identity()));
 
-                for (Object versionId : sourceMap.keySet()) {
-                    Map<String, Object> versionSource = sourceMap.get(versionId);
-                    Map<String, Object> versionTarget = targetMap.get(versionId);
+            for (Object versionId : sourceMap.keySet()) {
+                Map<String, Object> versionSource = sourceMap.get(versionId);
+                Map<String, Object> versionTarget = targetMap.get(versionId);
 
-                    for(String pathName: MigrationTestConstants.pathNamesVersion) {
+                for(String pathName: MigrationTestConstants.pathNamesVersion) {
 
-                        Object sourceField = resolvePath(versionSource, pathName);
-                        Object targetField = resolvePath(versionTarget, pathName);
+                    Object sourceField = resolvePath(versionSource, pathName);
+                    Object targetField = resolvePath(versionTarget, pathName);
 
-                        if (pathName.endsWith(HREF)) {
-                            if (sourceField == null) {
-                                assertThat(targetField).isNull();
-                            }
-                            assert sourceField != null;
-                            assert targetField != null;
-
-                            assertThat(isPathEqualIgnoreHost(sourceField.toString(), targetField.toString())).isTrue();
+                    if (pathName.endsWith(HREF)) {
+                        if (sourceField == null) {
+                            assertThat(targetField).isNull();
                         }
-                        else{
-                            assertThat(versionSource.get(pathName)).isEqualTo(versionTarget.get(pathName));
-                        }
+                        assert sourceField != null;
+                        assert targetField != null;
 
+                        assertThat(isPathEqualIgnoreHost(sourceField.toString(), targetField.toString())).isTrue();
+                    } else{
+                        assertThat(versionSource.get(pathName)).isEqualTo(versionTarget.get(pathName));
                     }
                 }
-
-
             }
 
         }
-
     }
 
-    @Test
-    void getClassificationLinks(){
-        for (Integer id : classificationsIdsSourceHost) {
+    @ParameterizedTest
+    @MethodSource("provideClassificationIds")
+    void getClassificationLinks(Integer classificationId) {
 
-            Response sourceResponse = getClassificationResponse(klassApSourceHostPath, id, null, null);
-            Response targetResponse = getClassificationResponse(klassApiTargetHostPath, id, null, null);
+            Response sourceResponse = klassApiMigrationClient.getFromSourceApi(CLASSIFICATIONS_PATH + "/" + classificationId, null);
+            Response targetResponse = klassApiMigrationClient.getFromTargetApi(CLASSIFICATIONS_PATH + "/" + classificationId, null);
 
             if(sourceResponse.getStatusCode() != 200) {
-                assertThat(compareError(id, sourceResponse, targetResponse)).isTrue();
+                assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
             }
             else {
                 for (String pathName : MigrationTestConstants.pathNamesClassificationLinks) {
@@ -125,23 +129,24 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
                     }
                 }
             }
-        }
 
     }
 
-    @Test
-    void getClassificationEnglish(){
-        for (Integer id : classificationsIdsSourceHost) {
+    @ParameterizedTest
+    @MethodSource("provideClassificationIds")
+    void getClassificationEnglish(Integer classificationId) {
 
-            Response sourceResponse = getClassificationResponse(klassApSourceHostPath, id, LANGUAGE_PARAM, EN);
-            Response targetResponse = getClassificationResponse(klassApiTargetHostPath, id, LANGUAGE_PARAM, EN);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(CLASSIFICATIONS_PATH + "/" + classificationId, paramsLanguageEn);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(CLASSIFICATIONS_PATH + "/" + classificationId, paramsLanguageEn);
 
-            if(sourceResponse.getStatusCode() != 200) {
-                assertThat(compareError(id, sourceResponse, targetResponse)).isTrue();
+        if(sourceResponse.getStatusCode() != 200) {
+                assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
             }
             else {
                 for (String pathName : pathNamesClassification) {
                     Object sourceField = sourceResponse.path(pathName);
+
+                    assertThat(sourceField).isNotNull();
 
                     if (pathName.equals(STATISTICAL_UNITS)) {
                         ArrayList<String> sourceList = sourceResponse.path(pathName);
@@ -154,22 +159,53 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
                     }
                 }
             }
-        }
-
     }
 
-    @Test
-    void getClassificationNewNorwegian(){
+    @ParameterizedTest
+    @MethodSource("provideClassificationIds")
+    void getClassificationNewNorwegian(Integer classificationId) {
+
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(CLASSIFICATIONS_PATH + "/" + classificationId, paramsLanguageNn);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(CLASSIFICATIONS_PATH + "/" + classificationId, paramsLanguageNn);
+
+
+        if(sourceResponse.getStatusCode() != 200) {
+                assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
+            }
+            else {
+
+                for (String pathName : pathNamesClassification) {
+                    Object sourceField = sourceResponse.path(pathName);
+                    assertThat(sourceField).isNotNull();
+
+                    if(pathName.equals(STATISTICAL_UNITS)) {
+                        ArrayList<String> sourceList = sourceResponse.path(pathName);
+                        ArrayList<String> targetList = targetResponse.path(pathName);
+
+                        assertThat(sourceList.size()).isEqualTo(targetList.size());
+                        assertThat(sourceList.containsAll(targetList)).isTrue();
+                        assertThat(targetList.containsAll(sourceList)).isTrue();
+                    }
+                    else{
+                        assertThat(sourceField).isEqualTo(targetResponse.path(pathName));
+                    }
+                }
+            }
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideClassificationIds")
+    void getClassificationIncludeFuture(Integer classificationId) {
         for (Integer id : classificationsIdsSourceHost) {
 
-            Response sourceResponse = getClassificationResponse(klassApSourceHostPath, id, LANGUAGE_PARAM, NN);
-            Response targetResponse = getClassificationResponse(klassApiTargetHostPath, id, LANGUAGE_PARAM, NN);
+            Response sourceResponse = klassApiMigrationClient.getFromSourceApi(CLASSIFICATIONS_PATH + "/" + classificationId, paramsIncludeFuture);
+            Response targetResponse = klassApiMigrationClient.getFromTargetApi(CLASSIFICATIONS_PATH + "/" + classificationId, paramsIncludeFuture);
+
 
             if(sourceResponse.getStatusCode() != 200) {
                 assertThat(compareError(id, sourceResponse, targetResponse)).isTrue();
             }
             else {
-
                 for (String pathName : pathNamesClassification) {
                     Object sourceField = sourceResponse.path(pathName);
 
@@ -190,45 +226,7 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
 
     }
 
-    @Test
-    void getClassificationIncludeFuture(){
-        for (Integer id : classificationsIdsSourceHost) {
-
-            Response sourceResponse = getClassificationResponse(klassApSourceHostPath, id, INCLUDE_FUTURE_TRUE_PARAM, "true");
-            Response targetResponse = getClassificationResponse(klassApiTargetHostPath, id, INCLUDE_FUTURE_TRUE_PARAM, "true");
-
-            if(sourceResponse.getStatusCode() != 200) {
-                assertThat(compareError(id, sourceResponse, targetResponse)).isTrue();
-            }
-            else {
-                for (String pathName : pathNamesClassification) {
-                    Object sourceField = sourceResponse.path(pathName);
-
-                    if(pathName.equals(STATISTICAL_UNITS)) {
-                        ArrayList<String> sourceList = sourceResponse.path(pathName);
-                        ArrayList<String> targetList = targetResponse.path(pathName);
-
-                        assertThat(sourceList.size()).isEqualTo(targetList.size());
-                        assertThat(sourceList.containsAll(targetList)).isTrue();
-                        assertThat(targetList.containsAll(sourceList)).isTrue();
-                    }
-                    else{
-                        assertThat(sourceField).isEqualTo(targetResponse.path(pathName));
-                    }
-                }
-            }
-        }
-
-    }
-
-    private Response getClassificationResponse(String basePath, Integer id, String queryParam, String queryValue) {
-        if (queryParam == null) {
-            return RestAssured.get(basePath + "/" + id);
-
-        }
-
-        else {
-            return RestAssured.given().queryParam(queryParam, queryValue).get(basePath + "/" + id);
-        }
+    static Stream<Integer> provideClassificationIds() {
+        return classificationsIdsSourceHost.stream();
     }
 }
