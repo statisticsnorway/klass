@@ -10,16 +10,20 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class KlassApiSsbSectionsTest extends AbstractKlassApiDataIntegrityTest {
 
+    static KlassApiMigrationClient klassApiMigrationClient;
+
     @BeforeAll
     static void beforeAllSections() {
         getAllSourceHost();
         getAllTargetHost();
+
+        klassApiMigrationClient = new KlassApiMigrationClient();
     }
 
     @Test
     void getSsbSections(){
-        Response sourceResponse = new KlassApiMigrationClient().getFromSourceApi("/" + SSB_SECTIONS);
-        Response targetResponse = new KlassApiMigrationClient().getFromTargetApi("/" + SSB_SECTIONS);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi("/" + SSB_SECTIONS);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi("/" + SSB_SECTIONS);
         assertThat(targetResponse).isNotNull();
         assertThat(sourceResponse).isNotNull();
 
