@@ -120,8 +120,7 @@ public final class MigrationTestConstants {
             OWNING_SECTION,
             CONTACT_PERSON_EMAIL,
             CONTACT_PERSON_NAME,
-            CONTACT_PERSON_PHONE,
-            STATISTICAL_UNITS
+            CONTACT_PERSON_PHONE
     );
 
     public static List<String> pathNamesClassificationsPage = Arrays.asList(
