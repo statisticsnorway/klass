@@ -1,9 +1,12 @@
 package no.ssb.klass.api.migration.dataintegrity;
 
-import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import no.ssb.klass.api.migration.KlassApiMigrationClient;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -11,19 +14,63 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 public class KlassApiVersionByIdTest extends AbstractKlassApiDataIntegrityTest{
 
     static Integer randomId;
+    static KlassApiMigrationClient klassApiMigrationClient;
 
     @BeforeAll
-    static void beforeAll() {
-        randomId = generateRandomId();
+    static void beforeAllVersions() {
+        randomId = generateRandomId(2000);
+        klassApiMigrationClient = new KlassApiMigrationClient();
     }
 
     @Test
     void getVersionById() {
-        Response sourceResponse = getVersionByIdResponse(sourceBasePath, randomId);
-        Response targetResponse = getVersionByIdResponse(targetBasePath, randomId);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi( "/versions/" + randomId, null);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi( "/versions/" + randomId, null);
 
         if(sourceResponse.getStatusCode() != 200) {
             assertThat(compareError(randomId, sourceResponse, targetResponse)).isTrue();
+        }
+        else{
+            for (String pathName : pathNamesVersionsById) {
+                Object sourceField = sourceResponse.path(pathName);
+
+                assertThat(sourceField).isEqualTo(targetResponse.path(pathName));
+            }
+        }
+    }
+
+    @Test
+    void getVersionByIdEnglishLanguage() {
+
+        Map<String, Object> params = new HashMap<>();
+        params.put(LANGUAGE_PARAM, EN);
+
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi( VERSIONS + "/" + randomId, params);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi( VERSIONS + "/" + randomId, params);
+
+        if(sourceResponse.getStatusCode() != 200) {
+            assertThat(compareErrorJsonResponse(randomId, sourceResponse, targetResponse)).isTrue();
+        }
+        else{
+            for (String pathName : pathNamesVersionsById) {
+                Object sourceField = sourceResponse.path(pathName);
+
+                assertThat(sourceField).isEqualTo(targetResponse.path(pathName));
+            }
+        }
+    }
+
+    @Test
+    void getVersionByIdNewNorwegianLanguage() {
+
+        Map<String, Object> params = new HashMap<>();
+        params.put(LANGUAGE_PARAM, NN);
+
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi( VERSIONS + "/" + randomId, params);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi( VERSIONS + "/" + randomId, params);
+
+        if(sourceResponse.getStatusCode() != 200) {
+            assertThat(compareErrorJsonResponse(randomId, sourceResponse, targetResponse)).isTrue();
         }
         else{
             for (String pathName : pathNamesVersionsById) {
@@ -34,55 +81,21 @@ public class KlassApiVersionByIdTest extends AbstractKlassApiDataIntegrityTest{
     }
 
     @Test
-    void getVersionByIdEnglishLanguage() {
-        Response sourceResponse = getVersionByIdLanguageResponse(sourceBasePath, randomId, EN);
-        Response targetResponse = getVersionByIdLanguageResponse(targetBasePath, randomId, EN);
-
-        if(sourceResponse.getStatusCode() != 200) {
-            assertThat(compareError(randomId, sourceResponse, targetResponse)).isTrue();
-        }
-        else{
-            System.out.println("tested");
-        }
-    }
-
-    @Test
-    void getVersionByIdNewNorwegianLanguage() {
-        Response sourceResponse = getVersionByIdLanguageResponse(sourceBasePath, randomId, NN);
-        Response targetResponse = getVersionByIdLanguageResponse(targetBasePath, randomId, NN);
-
-        if(sourceResponse.getStatusCode() != 200) {
-            assertThat(compareError(randomId, sourceResponse, targetResponse)).isTrue();
-        }
-        else{
-            System.out.println("tested");
-        }
-    }
-
-    @Test
     void getVersionByIdIncludingFuture() {
-        Response sourceResponse = getVersionByIdIncludeFutureResponse(sourceBasePath, randomId);
-        Response targetResponse = getVersionByIdIncludeFutureResponse(targetBasePath, randomId);
+        Map<String, Object> params = new HashMap<>();
+        params.put(INCLUDE_FUTURE, TRUE);
+
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi( VERSIONS + "/" + randomId, params);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi( VERSIONS + "/" + randomId, params);
 
         if(sourceResponse.getStatusCode() != 200) {
-            assertThat(compareError(randomId, sourceResponse, targetResponse)).isTrue();
+            assertThat(compareErrorJsonResponse(randomId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            System.out.println("tested");
+            for (String pathName : pathNamesVersionsById) {
+                Object sourceField = sourceResponse.path(pathName);
+                assertThat(sourceField).isEqualTo(targetResponse.path(pathName));
+            }
         }
     }
-
-
-    private Response getVersionByIdResponse(String basePath, Integer id) {
-        return RestAssured.get(basePath + "/" + id);
-    }
-
-    private Response getVersionByIdLanguageResponse(String basePath, Integer id, String language) {
-        return RestAssured.given().queryParam("language", language).get(basePath + "/" + id);
-    }
-
-    private Response getVersionByIdIncludeFutureResponse(String basePath, Integer id) {
-        return RestAssured.given().queryParam(INCLUDE_FUTURE, TRUE).get(basePath + "/" + id);
-    }
-
 }
