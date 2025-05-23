@@ -1,6 +1,5 @@
 package no.ssb.klass.api.migration.dataintegrity;
 import io.restassured.response.Response;
-import no.ssb.klass.api.migration.KlassApiMigrationClient;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -15,8 +14,6 @@ public class KlassApiClassificationsTest extends AbstractKlassApiDataIntegrityTe
 
     static List<Map<String, Object>> sourceHostClassifications;
     static List<Map<String, Object>> targetHostClassifications;
-
-    static KlassApiMigrationClient klassApiMigrationClient;
 
     static Response sourceResponse;
     static Response targetResponse;
@@ -34,9 +31,8 @@ public class KlassApiClassificationsTest extends AbstractKlassApiDataIntegrityTe
 
     @BeforeAll
     static void setUpClassifications() {
-        klassApiMigrationClient = new KlassApiMigrationClient();
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(CLASSIFICATIONS_PATH, null);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(CLASSIFICATIONS_PATH, null);
+        sourceResponse = sourceResponseClassifications;
+        targetResponse = targetResponseClassifications;
 
         sourceHostClassifications = sourceResponse.path(EMBEDDED_CLASSIFICATIONS);
         targetHostClassifications = targetResponse.path(EMBEDDED_CLASSIFICATIONS);
