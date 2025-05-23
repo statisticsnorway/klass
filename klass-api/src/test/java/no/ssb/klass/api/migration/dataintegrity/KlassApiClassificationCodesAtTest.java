@@ -6,6 +6,8 @@ import org.apache.curator.shaded.com.google.common.util.concurrent.RateLimiter;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
+
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -13,11 +15,14 @@ public class KlassApiClassificationCodesAtTest extends AbstractKlassApiDataInteg
 
     RateLimiter limiter = RateLimiter.create(1.5);
 
-    static String date;
+    static LocalDate date;
 
     @BeforeAll
-    static void beforeAll() {
+    static void beforeAllCodesAt() {
         date = generateRandomDate();
+        getAllSourceHost();
+        getAllTargetHost();
+        setClassificationLists();
     }
 
     @Test
@@ -101,7 +106,8 @@ public class KlassApiClassificationCodesAtTest extends AbstractKlassApiDataInteg
 
     private Response getCodesAtResponse(String basePath, Integer id) {
 
-        return RestAssured.given().queryParam(DATE, date).get(basePath + "/" + id + "/" + CODES_AT);
+        String dateAsString = date.format(formatter);
+        return RestAssured.given().queryParam(DATE, dateAsString).get(basePath + "/" + id + "/" + CODES_AT);
 
     }
 }
