@@ -14,7 +14,6 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 public class KlassApiVersionByIdTest extends AbstractKlassApiDataIntegrityTest{
 
     static Integer randomId;
-    static KlassApiMigrationClient klassApiMigrationClient;
 
     @BeforeAll
     static void beforeAllVersions() {
@@ -43,7 +42,7 @@ public class KlassApiVersionByIdTest extends AbstractKlassApiDataIntegrityTest{
     void getVersionByIdEnglishLanguage() {
 
         Map<String, Object> params = new HashMap<>();
-        params.put(LANGUAGE_PARAM, EN);
+        params.put(LANGUAGE, EN);
 
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi( VERSIONS + "/" + randomId, params);
         Response targetResponse = klassApiMigrationClient.getFromTargetApi( VERSIONS + "/" + randomId, params);
@@ -64,7 +63,7 @@ public class KlassApiVersionByIdTest extends AbstractKlassApiDataIntegrityTest{
     void getVersionByIdNewNorwegianLanguage() {
 
         Map<String, Object> params = new HashMap<>();
-        params.put(LANGUAGE_PARAM, NN);
+        params.put(LANGUAGE, NN);
 
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi( VERSIONS + "/" + randomId, params);
         Response targetResponse = klassApiMigrationClient.getFromTargetApi( VERSIONS + "/" + randomId, params);
