@@ -14,16 +14,13 @@ public class KlassApiSsbSectionsTest extends AbstractKlassApiDataIntegrityTest {
 
     @BeforeAll
     static void beforeAllSections() {
-        getAllSourceHost();
-        getAllTargetHost();
-
         klassApiMigrationClient = new KlassApiMigrationClient();
     }
 
     @Test
     void getSsbSections(){
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi("/" + SSB_SECTIONS);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi("/" + SSB_SECTIONS);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi("/" + SSB_SECTIONS, null);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi("/" + SSB_SECTIONS, null);
         assertThat(targetResponse).isNotNull();
         assertThat(sourceResponse).isNotNull();
 
