@@ -126,10 +126,6 @@ public abstract class AbstractKlassApiDataIntegrityTest {
         }
     }
 
-    static Response getResponse(String path) {
-        return RestAssured.get(path);
-    }
-
     static Object resolvePath(Map<String, Object> map, String path) {
         String[] parts = path.split("\\.");
         Object current = map;
