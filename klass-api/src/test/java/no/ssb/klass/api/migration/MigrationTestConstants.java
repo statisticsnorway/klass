@@ -91,7 +91,7 @@ public final class MigrationTestConstants {
     public static final String VARIANT_NAME= "variantName";
 
     public static final String SSB_SECTIONS= "ssbsections";
-    public static final String EMBEDDED_SSB_SECTIONS= "_embedded.ssbsections";
+    public static final String EMBEDDED_SSB_SECTIONS= "_embedded.ssbSections";
 
     public static final String INTRODUCTION= "introduction";
     public static final String LEGAL_BASE= "legalBase";
