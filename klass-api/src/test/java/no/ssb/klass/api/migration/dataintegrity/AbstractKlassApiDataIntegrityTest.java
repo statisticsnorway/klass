@@ -142,8 +142,8 @@ public abstract class AbstractKlassApiDataIntegrityTest {
 
     static void setClassificationLists(){
         int listLength = classificationsIdsSourceHost.size();
-        int shareLength = listLength / 16;
-        int remainder = listLength % 16;
+        int shareLength = listLength / 8;
+        int remainder = listLength % 8;
 
         int index = 0;
         List<List<Integer>> parts = Arrays.asList(
@@ -154,17 +154,9 @@ public abstract class AbstractKlassApiDataIntegrityTest {
                 classificationsIdsSourceHostPart5,
                 classificationsIdsSourceHostPart6,
                 classificationsIdsSourceHostPart7,
-                classificationsIdsSourceHostPart8,
-                classificationsIdsSourceHostPart9,
-                classificationsIdsSourceHostPart10,
-                classificationsIdsSourceHostPart11,
-                classificationsIdsSourceHostPart12,
-                classificationsIdsSourceHostPart13,
-                classificationsIdsSourceHostPart14,
-                classificationsIdsSourceHostPart15,
-                classificationsIdsSourceHostPart16
+                classificationsIdsSourceHostPart8
         );
-        for (int i = 0; i < 16; i++) {
+        for (int i = 0; i < 8; i++) {
             int currentPartSize = shareLength + (remainder > i ? 1 : 0);
             for (int j = 0; j < currentPartSize; j++) {
                 parts.get(i).add(classificationsIdsSourceHost.get(index++));
