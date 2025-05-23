@@ -74,7 +74,7 @@ public final class MigrationTestConstants {
     public static final String NN= "nn";
     public static final String EN= "en";
 
-    public static final String LANGUAGE_PARAM= "language";
+    public static final String LANGUAGE ="language";
 
     public static final String INCLUDE_FUTURE_TRUE_PARAM= "?includeFuture=true";
     public static final String INCLUDE_FUTURE= "includeFuture";
