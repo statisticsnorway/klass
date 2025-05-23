@@ -10,11 +10,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
+import static no.ssb.klass.api.migration.MigrationTestUtils.mapById;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 /**
@@ -42,95 +41,19 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
                 assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else {
-            for (String pathName : pathNamesClassification) {
-                Object sourceField = sourceResponse.path(pathName);
+            // General fields
+            validateClassification(sourceResponse, targetResponse);
+            // check links
+            validateClassificationLinks(sourceResponse, targetResponse);
 
-                if (pathName.equals(STATISTICAL_UNITS)) {
-                    ArrayList<String> sourceList = sourceResponse.path(pathName);
-                    ArrayList<String> targetList = targetResponse.path(pathName);
+            // check statistical units list
+            validateStatisticalUnits(sourceResponse, targetResponse);
 
-                    assertThat(sourceList.size()).isEqualTo(targetList.size());
-
-                    assertThat(sourceList.containsAll(targetList)).isTrue();
-                    assertThat(targetList.containsAll(sourceList)).isTrue();
-                } else {
-                    assertThat(sourceField).isEqualTo(targetResponse.path(pathName));
-                }
-            }
+            // check versions list
+            validateClassificationVersions(sourceResponse, targetResponse);
         }
     }
 
-    @ParameterizedTest
-    @MethodSource("provideClassificationIds")
-    void getClassificationVersions(Integer classificationId){
-
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(CLASSIFICATIONS_PATH + "/" + classificationId, null);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi(CLASSIFICATIONS_PATH + "/" + classificationId, null);
-
-        if(sourceResponse.getStatusCode() != 200) {
-                assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
-        } else {
-            List<Map<String, Object>> versionsSourceHost = sourceResponse.path(VERSIONS);
-            List<Map<String, Object>> versionsTargetHost = targetResponse.path(VERSIONS);
-
-            assertThat(versionsSourceHost.size()).isEqualTo(versionsTargetHost.size());
-
-            Map<Object, Map<String, Object>> sourceMap = versionsSourceHost.stream()
-                    .collect(Collectors.toMap(v -> v.get("id"), Function.identity()));
-
-            Map<Object, Map<String, Object>> targetMap = versionsTargetHost.stream()
-                    .collect(Collectors.toMap(v -> v.get("id"), Function.identity()));
-
-            for (Object versionId : sourceMap.keySet()) {
-                Map<String, Object> versionSource = sourceMap.get(versionId);
-                Map<String, Object> versionTarget = targetMap.get(versionId);
-
-                for(String pathName: MigrationTestConstants.pathNamesVersion) {
-
-                    Object sourceField = resolvePath(versionSource, pathName);
-                    Object targetField = resolvePath(versionTarget, pathName);
-
-                    if (pathName.endsWith(HREF)) {
-                        if (sourceField == null) {
-                            assertThat(targetField).isNull();
-                        }
-                        assert sourceField != null;
-                        assert targetField != null;
-
-                        assertThat(isPathEqualIgnoreHost(sourceField.toString(), targetField.toString())).isTrue();
-                    } else{
-                        assertThat(versionSource.get(pathName)).isEqualTo(versionTarget.get(pathName));
-                    }
-                }
-            }
-
-        }
-    }
-
-    @ParameterizedTest
-    @MethodSource("provideClassificationIds")
-    void getClassificationLinks(Integer classificationId) {
-
-            Response sourceResponse = klassApiMigrationClient.getFromSourceApi(CLASSIFICATIONS_PATH + "/" + classificationId, null);
-            Response targetResponse = klassApiMigrationClient.getFromTargetApi(CLASSIFICATIONS_PATH + "/" + classificationId, null);
-
-            if(sourceResponse.getStatusCode() != 200) {
-                assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
-            }
-            else {
-                for (String pathName : MigrationTestConstants.pathNamesClassificationLinks) {
-                    Object sourceField = sourceResponse.path(pathName);
-
-                    if (pathName.endsWith(HREF)) {
-                        String sourceLinkSelf = sourceResponse.path(pathName);
-                        assertThat(isPathEqualIgnoreHost(sourceLinkSelf, targetResponse.path(pathName))).isTrue();
-                    } else {
-                        assertThat(sourceField).isEqualTo(targetResponse.path(pathName));
-                    }
-                }
-            }
-
-    }
 
     @ParameterizedTest
     @MethodSource("provideClassificationIds")
@@ -143,21 +66,16 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
                 assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
             }
             else {
-                for (String pathName : pathNamesClassification) {
-                    Object sourceField = sourceResponse.path(pathName);
+                // General fields
+                validateClassification(sourceResponse, targetResponse);
+                // check links
+                validateClassificationLinks(sourceResponse, targetResponse);
 
-                    assertThat(sourceField).isNotNull();
+                // check statistical units list
+                validateStatisticalUnits(sourceResponse, targetResponse);
 
-                    if (pathName.equals(STATISTICAL_UNITS)) {
-                        ArrayList<String> sourceList = sourceResponse.path(pathName);
-                        ArrayList<String> targetList = targetResponse.path(pathName);
-                        assertThat(sourceList.size()).isEqualTo(targetList.size());
-                        assertThat(sourceList.containsAll(targetList)).isTrue();
-                        assertThat(targetList.containsAll(sourceList)).isTrue();
-                    } else {
-                        assertThat(sourceField).isEqualTo(targetResponse.path(pathName));
-                    }
-                }
+                // check versions list
+                validateClassificationVersions(sourceResponse, targetResponse);
             }
     }
 
@@ -172,25 +90,18 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
         if(sourceResponse.getStatusCode() != 200) {
                 assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
             }
-            else {
+        else {
+            // General fields
+            validateClassification(sourceResponse, targetResponse);
+            // check links
+            validateClassificationLinks(sourceResponse, targetResponse);
 
-                for (String pathName : pathNamesClassification) {
-                    Object sourceField = sourceResponse.path(pathName);
-                    assertThat(sourceField).isNotNull();
+            // check statistical units list
+            validateStatisticalUnits(sourceResponse, targetResponse);
 
-                    if(pathName.equals(STATISTICAL_UNITS)) {
-                        ArrayList<String> sourceList = sourceResponse.path(pathName);
-                        ArrayList<String> targetList = targetResponse.path(pathName);
-
-                        assertThat(sourceList.size()).isEqualTo(targetList.size());
-                        assertThat(sourceList.containsAll(targetList)).isTrue();
-                        assertThat(targetList.containsAll(sourceList)).isTrue();
-                    }
-                    else{
-                        assertThat(sourceField).isEqualTo(targetResponse.path(pathName));
-                    }
-                }
-            }
+            // check versions list
+            validateClassificationVersions(sourceResponse, targetResponse);
+        }
     }
 
     @ParameterizedTest
@@ -206,21 +117,16 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
                 assertThat(compareError(id, sourceResponse, targetResponse)).isTrue();
             }
             else {
-                for (String pathName : pathNamesClassification) {
-                    Object sourceField = sourceResponse.path(pathName);
+                // General fields
+                validateClassification(sourceResponse, targetResponse);
+                // check links
+                validateClassificationLinks(sourceResponse, targetResponse);
 
-                    if(pathName.equals(STATISTICAL_UNITS)) {
-                        ArrayList<String> sourceList = sourceResponse.path(pathName);
-                        ArrayList<String> targetList = targetResponse.path(pathName);
+                // check statistical units list
+                validateStatisticalUnits(sourceResponse, targetResponse);
 
-                        assertThat(sourceList.size()).isEqualTo(targetList.size());
-                        assertThat(sourceList.containsAll(targetList)).isTrue();
-                        assertThat(targetList.containsAll(sourceList)).isTrue();
-                    }
-                    else{
-                        assertThat(sourceField).isEqualTo(targetResponse.path(pathName));
-                    }
-                }
+                // check versions list
+                validateClassificationVersions(sourceResponse, targetResponse);
             }
         }
 
@@ -228,5 +134,92 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
 
     static Stream<Integer> provideClassificationIds() {
         return classificationsIdsSourceHost.stream();
+    }
+
+    void validateClassification(Response sourceResponse, Response targetResponse) {
+
+        for (String pathName : pathNamesClassification) {
+            Object sourceField = sourceResponse.path(pathName);
+            Object targetField = targetResponse.path(pathName);
+
+            assertThat(sourceField)
+                    .withFailMessage("Mismatch at path '%s':\n  Source: %s\n  Target: %s",
+                            pathName, sourceField, targetField)
+                    .isEqualTo(targetField);
+        }
+
+    }
+
+    void validateStatisticalUnits(Response sourceResponse, Response targetResponse) {
+
+        ArrayList<String> sourceList = sourceResponse.path(STATISTICAL_UNITS);
+        ArrayList<String> targetList = targetResponse.path(STATISTICAL_UNITS);
+
+        assertThat(sourceList.size())
+                .withFailMessage("Expected source and target lists to be the same size, but got %s vs %s",
+                        sourceList.size(), targetList.size())
+                .isEqualTo(targetList.size());
+
+        assertThat(sourceList.containsAll(targetList))
+                .withFailMessage("Source list is missing some elements from the target list.\nSource: %s\nTarget: %s",
+                        sourceList, targetList)
+                .isTrue();
+
+        assertThat(targetList.containsAll(sourceList))
+                .withFailMessage("Target list is missing some elements from the source list.\nSource: %s\nTarget: %s",
+                        sourceList, targetList)
+                .isTrue();
+    }
+
+    void validateClassificationLinks(Response sourceResponse, Response targetResponse) {
+        for (String pathName : MigrationTestConstants.pathNamesClassificationLinks) {
+            Object sourceField = sourceResponse.path(pathName);
+            Object targetField = targetResponse.path(pathName);
+
+            if (pathName.endsWith(HREF)) {
+                String sourceHref = sourceField != null ? sourceField.toString() : null;
+                String targetHref = targetField != null ? targetField.toString() : null;
+
+                assertThat(isPathEqualIgnoreHost(sourceHref, targetHref))
+                        .withFailMessage("Mismatch in href path '%s':\n  Source: %s\n  Target: %s", pathName, sourceHref, targetHref)
+                        .isTrue();
+            } else {
+                assertThat(sourceField)
+                        .withFailMessage("Mismatch in field '%s':\n  Source: %s\n  Target: %s", pathName, sourceField, targetField)
+                        .isEqualTo(targetField);
+            }
+        }
+    }
+
+    void validateClassificationVersions(Response sourceResponse, Response targetResponse) {
+        List<Map<String, Object>> versionsSourceHost = sourceResponse.path(VERSIONS);
+        List<Map<String, Object>> versionsTargetHost = targetResponse.path(VERSIONS);
+
+        assertThat(versionsSourceHost.size()).isEqualTo(versionsTargetHost.size());
+
+        Map<Object, Map<String, Object>> sourceById = mapById(versionsSourceHost);
+        Map<Object, Map<String, Object>> targetById = mapById(versionsTargetHost);
+
+        for (Object versionId : sourceById.keySet()) {
+            Map<String, Object> versionSource = sourceById.get(versionId);
+            Map<String, Object> versionTarget = targetById.get(versionId);
+
+            for (String pathName : MigrationTestConstants.pathNamesVersion) {
+
+                Object sourceField = resolvePath(versionSource, pathName);
+                Object targetField = resolvePath(versionTarget, pathName);
+
+                if (pathName.endsWith(HREF)) {
+                    assertThat(sourceField == null && targetField == null ||
+                            sourceField != null && targetField != null && isPathEqualIgnoreHost(sourceField.toString(), targetField.toString()))
+                            .withFailMessage("Mismatch on href field %s for version ID %s", pathName, versionId)
+                            .isTrue();
+                } else {
+                    assertThat(versionSource.get(pathName))
+                            .withFailMessage("Mismatch on field %s for version ID %s", pathName, versionId)
+                            .isEqualTo(versionTarget.get(pathName));
+                }
+            }
+        }
     }
 }
