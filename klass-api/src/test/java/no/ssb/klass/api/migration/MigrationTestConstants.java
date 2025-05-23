@@ -9,6 +9,7 @@ public final class MigrationTestConstants {
     public static final String BASE_PATH = "/api/klass";
     public static final String CLASSIFICATIONS_PATH = "/classifications";
 
+    public static final String EMBEDDED = "_embedded";
     public static final String EMBEDDED_CLASSIFICATIONS = "_embedded.classifications";
     public static final String EMBEDDED_PAGE = "_embedded.page";
     public static final String PAGE = "page";
