@@ -203,23 +203,23 @@ public abstract class AbstractKlassApiDataIntegrityTest {
     static String generateRandomDateTime() {
         LocalDate startDate = LocalDate.of(1800, 1, 1);
         LocalDate endDate = LocalDate.of(2030, 12, 31);
-        long days = startDate.until(endDate).getDays();
-        long randomDay = ThreadLocalRandom.current().nextLong(days + 1);
-        LocalDate randomDate = startDate.plusDays(randomDay);
 
-        int hour = ThreadLocalRandom.current().nextInt(0, 24);
-        int minute = ThreadLocalRandom.current().nextInt(0, 60);
-        int second = ThreadLocalRandom.current().nextInt(0, 60);
-        int millis = ThreadLocalRandom.current().nextInt(0, 1000);
+        long totalDays = ChronoUnit.DAYS.between(startDate, endDate);
+        LocalDate randomDate = startDate.plusDays(ThreadLocalRandom.current().nextLong(totalDays + 1));
 
-        LocalDateTime localDateTime = randomDate.atTime(hour, minute, second, millis * 1_000_000);
+        LocalTime randomTime = LocalTime.of(
+                ThreadLocalRandom.current().nextInt(0, 24),
+                ThreadLocalRandom.current().nextInt(0, 60),
+                ThreadLocalRandom.current().nextInt(0, 60),
+                ThreadLocalRandom.current().nextInt(0, 1_000_000_000)
+        );
 
-        // Step 2: Assign random fixed offset between -12:00 and +14:00
-        int offsetHours = ThreadLocalRandom.current().nextInt(-12, 15); // inclusive
+        LocalDateTime localDateTime = LocalDateTime.of(randomDate, randomTime);
+
+        int offsetHours = ThreadLocalRandom.current().nextInt(-12, 15);
         ZoneOffset offset = ZoneOffset.ofHours(offsetHours);
         OffsetDateTime offsetDateTime = localDateTime.atOffset(offset);
 
-        // Step 3: Format in required format: 2015-10-31T01:30:00.000-0200
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
         return offsetDateTime.format(formatter);
     }
@@ -235,7 +235,6 @@ public abstract class AbstractKlassApiDataIntegrityTest {
         getAllTargetHost();
         sourceResponseClassifications = klassApiMigrationClient.getFromSourceApi(CLASSIFICATIONS_PATH, null);
         targetResponseClassifications = klassApiMigrationClient.getFromTargetApi(CLASSIFICATIONS_PATH, null);
-        setClassificationLists();
     }
 
     @AfterEach
