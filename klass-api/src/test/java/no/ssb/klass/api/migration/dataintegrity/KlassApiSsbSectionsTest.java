@@ -1,19 +1,12 @@
 package no.ssb.klass.api.migration.dataintegrity;
 
 import io.restassured.response.Response;
-import no.ssb.klass.api.migration.KlassApiMigrationClient;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class KlassApiSsbSectionsTest extends AbstractKlassApiDataIntegrityTest {
-
-    @BeforeAll
-    static void beforeAllSections() {
-        klassApiMigrationClient = new KlassApiMigrationClient();
-    }
 
     @Test
     void getSsbSections(){

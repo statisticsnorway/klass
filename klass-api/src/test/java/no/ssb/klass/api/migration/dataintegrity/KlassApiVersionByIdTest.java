@@ -1,7 +1,6 @@
 package no.ssb.klass.api.migration.dataintegrity;
 
 import io.restassured.response.Response;
-import no.ssb.klass.api.migration.KlassApiMigrationClient;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -18,7 +17,6 @@ public class KlassApiVersionByIdTest extends AbstractKlassApiDataIntegrityTest{
     @BeforeAll
     static void beforeAllVersions() {
         randomId = generateRandomId(2000);
-        klassApiMigrationClient = new KlassApiMigrationClient();
     }
 
     @Test
