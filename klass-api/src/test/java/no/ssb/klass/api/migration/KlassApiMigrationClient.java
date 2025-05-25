@@ -38,8 +38,8 @@ public class KlassApiMigrationClient {
         if (queryParams != null && !queryParams.isEmpty()) {
             request.queryParams(queryParams);
         }
-        System.out.println("Request URI: " + request.log().all().get().then().extract().response().getDetailedCookies());
 
+        request.log().all();
         return request.get(path);
     }
 
@@ -48,7 +48,8 @@ public class KlassApiMigrationClient {
         if (queryParams != null && !queryParams.isEmpty()) {
             request.queryParams(queryParams);
         }
-        System.out.println("Request URI: " + request.log().all().get().then().extract().response().getDetailedCookies());
+
+        request.log().all();
         return request.get(path);
     }
 
