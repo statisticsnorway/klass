@@ -6,7 +6,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,8 +24,6 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
     static Map<String, Object> paramsLanguageNn = new HashMap<>();
     static Map<String, Object> paramsIncludeFuture = new HashMap<>();
 
-    Object sourceField;
-    Object targetField;
     Response sourceResponse;
     Response targetResponse;
 
@@ -36,6 +33,7 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
         paramsLanguageNn.put(LANGUAGE, NN);
         paramsIncludeFuture.put(INCLUDE_FUTURE, TRUE);
     }
+
     @ParameterizedTest
     @MethodSource("provideClassificationIds")
     void getClassification(Integer classificationId) {
@@ -43,18 +41,18 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
         targetResponse = klassApiMigrationClient.getFromTargetApi(CLASSIFICATIONS_PATH + "/" + classificationId, null);
 
         if(sourceResponse.getStatusCode() != 200) {
-                assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
+            System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
+            assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else {
+            System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
             // General fields
-            validateClassification(sourceResponse, targetResponse);
-            // check links
-            validateClassificationLinks(sourceResponse, targetResponse);
-
-            // check statistical units list
-            validateStatisticalUnits(sourceResponse, targetResponse);
-
-            // check versions list
+            validateItem(sourceResponse, targetResponse, pathNamesClassification);
+            // Links
+            validateLinks(sourceResponse, targetResponse, pathNamesClassificationLinks);
+            // Statistical units list
+            validateList(sourceResponse, targetResponse, STATISTICAL_UNITS);
+            // Versions list
             validateClassificationVersions(sourceResponse, targetResponse);
         }
     }
@@ -68,16 +66,18 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
         targetResponse = klassApiMigrationClient.getFromTargetApi(CLASSIFICATIONS_PATH + "/" + classificationId, paramsLanguageEn);
 
         if(sourceResponse.getStatusCode() != 200) {
-                assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
+            System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
+            assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
             }
             else {
+                System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
                 // General fields
-                validateClassification(sourceResponse, targetResponse);
+                validateItem(sourceResponse, targetResponse, pathNamesClassification);
                 // check links
-                validateClassificationLinks(sourceResponse, targetResponse);
+                validateLinks(sourceResponse, targetResponse, pathNamesClassificationLinks);
 
                 // check statistical units list
-                validateStatisticalUnits(sourceResponse, targetResponse);
+                validateList(sourceResponse, targetResponse, STATISTICAL_UNITS);
 
                 // check versions list
                 validateClassificationVersions(sourceResponse, targetResponse);
@@ -93,16 +93,18 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
 
 
         if(sourceResponse.getStatusCode() != 200) {
-                assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
+            System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
+            assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
             }
         else {
+            System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
             // General fields
-            validateClassification(sourceResponse, targetResponse);
+            validateItem(sourceResponse, targetResponse, pathNamesClassification);
             // check links
-            validateClassificationLinks(sourceResponse, targetResponse);
+            validateLinks(sourceResponse, targetResponse, pathNamesClassificationLinks);
 
             // check statistical units list
-            validateStatisticalUnits(sourceResponse, targetResponse);
+            validateList(sourceResponse, targetResponse, STATISTICAL_UNITS);
 
             // check versions list
             validateClassificationVersions(sourceResponse, targetResponse);
@@ -112,28 +114,26 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
     @ParameterizedTest
     @MethodSource("provideClassificationIds")
     void getClassificationIncludeFuture(Integer classificationId) {
-        for (Integer id : classificationsIdsSourceHost) {
 
             sourceResponse = klassApiMigrationClient.getFromSourceApi(CLASSIFICATIONS_PATH + "/" + classificationId, paramsIncludeFuture);
             targetResponse = klassApiMigrationClient.getFromTargetApi(CLASSIFICATIONS_PATH + "/" + classificationId, paramsIncludeFuture);
 
 
             if(sourceResponse.getStatusCode() != 200) {
-                assertThat(compareError(id, sourceResponse, targetResponse)).isTrue();
+                assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
             }
             else {
                 // General fields
-                validateClassification(sourceResponse, targetResponse);
+                validateItem(sourceResponse, targetResponse, pathNamesClassification);
                 // check links
-                validateClassificationLinks(sourceResponse, targetResponse);
+                validateLinks(sourceResponse, targetResponse, pathNamesClassificationLinks);
 
                 // check statistical units list
-                validateStatisticalUnits(sourceResponse, targetResponse);
+                validateList(sourceResponse, targetResponse, STATISTICAL_UNITS);
 
                 // check versions list
                 validateClassificationVersions(sourceResponse, targetResponse);
             }
-        }
 
     }
 
@@ -141,61 +141,11 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
         return classificationsIdsSourceHost.stream();
     }
 
-    void validateClassification(Response sourceResponse, Response targetResponse) {
-
-        for (String pathName : pathNamesClassification) {
-            sourceField = sourceResponse.path(pathName);
-            targetField = targetResponse.path(pathName);
-
-            assertThat(sourceField)
-                    .withFailMessage(FAIL_MESSAGE,
-                            pathName, sourceField, targetField)
-                    .isEqualTo(targetField);
-        }
-
-    }
-
-    void validateStatisticalUnits(Response sourceResponse, Response targetResponse) {
-
-        ArrayList<String> sourceList = sourceResponse.path(STATISTICAL_UNITS);
-        ArrayList<String> targetList = targetResponse.path(STATISTICAL_UNITS);
-
-        assertThat(sourceList.size())
-                .withFailMessage(FAIL_MESSAGE,
-                        STATISTICAL_UNITS, sourceList.size(), targetList.size())
-                .isEqualTo(targetList.size());
-
-        assertThat(sourceList.containsAll(targetList))
-                .withFailMessage(FAIL_MESSAGE,
-                        STATISTICAL_UNITS, sourceList, targetList)
-                .isTrue();
-
-        assertThat(targetList.containsAll(sourceList))
-                .withFailMessage(FAIL_MESSAGE,
-                        STATISTICAL_UNITS, sourceList, targetList)
-                .isTrue();
-    }
-
-    void validateClassificationLinks(Response sourceResponse, Response targetResponse) {
-        for (String pathName : MigrationTestConstants.pathNamesClassificationLinks) {
-            sourceField = sourceResponse.path(pathName);
-            targetField = targetResponse.path(pathName);
-
-            if (pathName.endsWith(HREF)) {
-                String sourceHref = sourceField != null ? sourceField.toString() : null;
-                String targetHref = targetField != null ? targetField.toString() : null;
-
-                assertThat(isPathEqualIgnoreHost(sourceHref, targetHref))
-                        .withFailMessage(FAIL_MESSAGE, pathName, sourceHref, targetHref)
-                        .isTrue();
-            } else {
-                assertThat(sourceField)
-                        .withFailMessage(FAIL_MESSAGE, pathName, sourceField, targetField)
-                        .isEqualTo(targetField);
-            }
-        }
-    }
-
+    /**
+     *
+     * @param sourceResponse Response object from source Api
+     * @param targetResponse Response object from target Api
+     */
     void validateClassificationVersions(Response sourceResponse, Response targetResponse) {
         List<Map<String, Object>> versionsSourceHost = sourceResponse.path(VERSIONS);
         List<Map<String, Object>> versionsTargetHost = targetResponse.path(VERSIONS);
@@ -210,6 +160,9 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
             Map<String, Object> versionTarget = targetById.get(versionId);
 
             for (String pathName : MigrationTestConstants.pathNamesVersion) {
+
+                Object sourceField;
+                Object targetField;
 
                 sourceField = resolvePath(versionSource, pathName);
                 targetField = resolvePath(versionTarget, pathName);
@@ -227,4 +180,6 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
             }
         }
     }
+
+
 }
