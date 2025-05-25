@@ -46,15 +46,15 @@ public final class MigrationTestConstants {
 
     public static final String SSB_SECTIONS= "ssbsections";
 
-    private static final String SOURCE_ID = "sourceId";
-    private static final String TARGET = "target";
+    public static final String SOURCE_ID = "sourceId";
+    public static final String TARGET = "target";
 
-    private static final String TARGET_ID ="targetId" ;
-    private static final String CHANGE_TABLE = "changeTable";
-    private static final String SOURCE_LEVEL = "sourceLevel";
-    private static final String TARGET_LEVEL = "targetLevel";
+    public static final String TARGET_ID ="targetId" ;
+    public  static final String CHANGE_TABLE = "changeTable";
+    public  static final String SOURCE_LEVEL = "sourceLevel";
+    public  static final String TARGET_LEVEL = "targetLevel";
 
-    private static final String CORRESPONDENCE_MAPS = "correspondenceMaps";
+    public static final String CORRESPONDENCE_MAPS = "correspondenceMaps";
     public static final String EMBEDDED = "_embedded";
     public static final String EMBEDDED_PAGE = "_embedded.page";
 
@@ -65,6 +65,7 @@ public final class MigrationTestConstants {
     public static final String EMBEDDED_SSB_SECTIONS= "_embedded.ssbSections";
 
     public static final String HREF= "href";
+
     public static final String LINKS_SELF_HREF= "_links.self.href";
     public static final String LINKS_FIRST_HREF= "_links.first.href";
 
@@ -98,6 +99,14 @@ public final class MigrationTestConstants {
     public static final String LINKS_SOURCE_TEMPLATED= "_links.source.templated";
     public static final String LINKS_TARGET_TEMPLATED= "_links.target.templated";
     public static final String LINKS_TARGET_HREF= "_links.target.href";
+
+    public static final String VERSIONS_NAME= "versions.name";
+    public static final String VERSIONS_ID= "versions.id";
+    public static final String VERSIONS_VALID_FROM= "versions.validFrom";
+    public static final String VERSIONS_VALID_TO=  "versions.validTo";
+    public static final String VERSIONS_LAST_MODIFIED= "versions.lastModified";
+    public static final String VERSIONS_PUBLISHED= "versions.published";
+    public static final String VERSIONS_LINKS_SELF_HREF= "versions._links.self.href";
 
     // Params
     public static final String NB= "nb";
@@ -154,6 +163,14 @@ public final class MigrationTestConstants {
             LAST_MODIFIED,
             PUBLISHED,
             LINKS_SELF_HREF
+    );
+
+    public static List<String> pathNamesClassificationVersions = Arrays.asList(
+            VERSIONS_NAME,
+            VERSIONS_ID,
+            VERSIONS_VALID_FROM,
+            VERSIONS_VALID_TO,
+            VERSIONS_LAST_MODIFIED
     );
 
     public static List<String> pathNamesVersionsById = Arrays.asList(
