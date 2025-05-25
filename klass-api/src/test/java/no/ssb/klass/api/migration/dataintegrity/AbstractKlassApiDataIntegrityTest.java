@@ -22,6 +22,11 @@ public abstract class AbstractKlassApiDataIntegrityTest {
 
     static KlassApiMigrationClient klassApiMigrationClient;
 
+    static Response sourceResponseClassifications;
+    static Response targetResponseClassifications;
+
+    static int numClassifications;
+
     public static final String sourceHost = MigrationTestConfig.getSourceHost();
 
     public static final String targetHost = MigrationTestConfig.getTargetHost();
@@ -137,6 +142,10 @@ public abstract class AbstractKlassApiDataIntegrityTest {
         boolean targetUp = klassApiMigrationClient.isApiAvailable(targetHost);
 
         Assumptions.assumeTrue(sourceUp && targetUp, "One or both APIs are not available, skipping tests.");
+        sourceResponseClassifications = klassApiMigrationClient.getFromSourceApi(CLASSIFICATIONS_PATH, null);
+        targetResponseClassifications = klassApiMigrationClient.getFromTargetApi(CLASSIFICATIONS_PATH, null);
+
+        numClassifications = sourceResponseClassifications.path(PAGE_TOTAL_ELEMENTS);
     }
 
     @AfterAll

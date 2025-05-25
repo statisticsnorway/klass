@@ -59,6 +59,7 @@ public final class MigrationTestConstants {
     public static final String EMBEDDED_PAGE = "_embedded.page";
 
     public static final String PAGE = "page";
+    public static final String PAGE_TOTAL_ELEMENTS = "page.totalElements";
 
     public static final String EMBEDDED_CLASSIFICATIONS = "_embedded.classifications";
 

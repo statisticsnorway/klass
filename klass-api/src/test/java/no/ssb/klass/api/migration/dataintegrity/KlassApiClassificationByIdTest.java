@@ -139,7 +139,7 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
     }
 
     static Stream<Integer> rangeProviderClassificationIds() {
-        return IntStream.rangeClosed(0, 150).boxed();
+        return IntStream.rangeClosed(0, numClassifications + 5).boxed();
     }
 
     /**
