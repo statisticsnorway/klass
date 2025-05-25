@@ -33,6 +33,15 @@ public class KlassApiMigrationClient {
                 .build();
     }
 
+    public boolean isApiAvailable(String host) {
+        try {
+            Response response = RestAssured.get(host + "/ping");
+            return response.getStatusCode() == 200;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     public Response getFromSourceApi(String path, Map<String, ?> queryParams) {
         RequestSpecification request = RestAssured.given().spec(sourceApi);
         if (queryParams != null && !queryParams.isEmpty()) {

@@ -8,6 +8,7 @@ import no.ssb.klass.api.migration.MigrationTestConfig;
 import no.ssb.klass.api.util.RestConstants;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeAll;
 
 import java.net.URL;
@@ -226,20 +227,26 @@ public abstract class AbstractKlassApiDataIntegrityTest {
     static Integer generateRandomId(int to) {
         Random random = new Random();
         return random.nextInt(to);
-        //return ThreadLocalRandom.current().nextInt(0, to);
     }
 
     @BeforeAll
     static void beforeAll() {
         klassApiMigrationClient = new KlassApiMigrationClient();
+
+        boolean sourceUp = klassApiMigrationClient.isApiAvailable(sourceHost);
+        boolean targetUp = klassApiMigrationClient.isApiAvailable(targetHost);
+
+        Assumptions.assumeTrue(sourceUp && targetUp, "One or both APIs are not available, skipping tests.");
+
         getAllSourceHost();
         getAllTargetHost();
+
         sourceResponseClassifications = klassApiMigrationClient.getFromSourceApi(CLASSIFICATIONS_PATH, null);
         targetResponseClassifications = klassApiMigrationClient.getFromTargetApi(CLASSIFICATIONS_PATH, null);
     }
 
     @AfterAll
-    public static void cleanUpEach(){
+    public static void cleanUp(){
         System.out.println("Cleanup after tests");
     }
 }
