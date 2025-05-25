@@ -96,9 +96,7 @@ public abstract class AbstractKlassApiDataIntegrityTest {
        return true;
     }
 
-    static LocalDate generateRandomDate() {
-        LocalDate startDate = LocalDate.of(1800, 1, 1);
-        LocalDate endDate = LocalDate.of(2030, 12, 31);
+    static LocalDate generateRandomDate(LocalDate startDate, LocalDate endDate) {
         long daysBetween = ChronoUnit.DAYS.between(startDate, endDate);
         Random random = new Random();
         long randomDay = random.nextLong(daysBetween + 1);

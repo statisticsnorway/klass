@@ -40,9 +40,17 @@ public class KlassApiClassificationCodesTest extends AbstractKlassApiDataIntegri
 
     @BeforeAll
     static void beforeAllCodes() {
-         dateFromToMax = generateRandomDate().format(formatter);
-         dateFromInRange = generateRandomDate();
-         dateToInRange = generateRandomDate();
+         dateFromToMax = generateRandomDate(
+                 LocalDate.of(1800, 1, 1),
+                 LocalDate.of(2030, 12, 31)).format(formatter);
+         dateFromInRange = generateRandomDate(
+                 LocalDate.of(1800, 1, 1),
+                 LocalDate.of(2030, 12, 31)
+         );
+         dateToInRange = generateRandomDate(
+                 LocalDate.of(1800, 1, 1),
+                 LocalDate.of(2030, 12, 31)
+         );
 
          dateToInRangeString = dateFromInRange.format(formatter);
          dateToInRangeString = dateToInRange.format(formatter);
@@ -79,9 +87,11 @@ public class KlassApiClassificationCodesTest extends AbstractKlassApiDataIntegri
         targetResponse = klassApiMigrationClient.getFromTargetApi(CLASSIFICATIONS_PATH + "/"+ classificationId + "/" + CODES, paramsDate);
 
         if(sourceResponse.getStatusCode() != 200) {
+            System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
+            System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
             sourceFields = sourceResponse.path(CODES);
             assertThat(sourceFields).withFailMessage(FAIL_MESSAGE, CODES, sourceFields, targetFields).isEqualTo(targetResponse.path(CODES));
         }
@@ -102,11 +112,11 @@ public class KlassApiClassificationCodesTest extends AbstractKlassApiDataIntegri
         targetResponse = klassApiMigrationClient.getFromTargetApi(CLASSIFICATIONS_PATH + "/"+ classificationId + "/" + CODES, paramsDate);
 
         if(sourceResponse.getStatusCode() != 200) {
-            System.out.println("Entering error");
+            System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            System.out.println("Entering 200");
+            System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
             sourceFields = sourceResponse.path(CODES);
             targetFields = targetResponse.path(CODES);
             assertThat(sourceFields).withFailMessage(FAIL_MESSAGE, CODES, sourceFields, targetFields).isEqualTo(targetFields);
@@ -125,9 +135,11 @@ public class KlassApiClassificationCodesTest extends AbstractKlassApiDataIntegri
         targetResponse = klassApiMigrationClient.getFromTargetApi(CLASSIFICATIONS_PATH + "/"+ classificationId + "/" + CODES, paramsDateInRange);
 
         if(sourceResponse.getStatusCode() != 200) {
+            System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
+            System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
             sourceFields = sourceResponse.path(CODES);
             assertThat(sourceFields).withFailMessage(FAIL_MESSAGE, CODES, sourceFields, targetFields).isEqualTo(targetResponse.path(CODES));
         }
@@ -148,15 +160,17 @@ public class KlassApiClassificationCodesTest extends AbstractKlassApiDataIntegri
         targetResponse = klassApiMigrationClient.getFromTargetApi(CLASSIFICATIONS_PATH + "/"+ classificationId + "/" + CODES, paramsDateInRange);
 
         if (sourceResponse.getStatusCode() != 200) {
-                assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
+            System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
+            assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         } else {
-                sourceFields = sourceResponse.path(CODES);
-                assertThat(sourceFields).withFailMessage(FAIL_MESSAGE, CODES, sourceFields, targetFields).isEqualTo(targetResponse.path(CODES));
+            System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
+            sourceFields = sourceResponse.path(CODES);
+            assertThat(sourceFields).withFailMessage(FAIL_MESSAGE, CODES, sourceFields, targetFields).isEqualTo(targetResponse.path(CODES));
         }
 
     }
 
     static Stream<Integer> rangeProviderClassificationIds() {
-        return IntStream.rangeClosed(0, numClassifications + 2).boxed();
+        return IntStream.rangeClosed(0, 200).boxed();
     }
 }

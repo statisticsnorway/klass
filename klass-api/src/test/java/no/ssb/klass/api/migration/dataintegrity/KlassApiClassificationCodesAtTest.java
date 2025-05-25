@@ -1,113 +1,99 @@
 package no.ssb.klass.api.migration.dataintegrity;
 
-import io.restassured.RestAssured;
+
 import io.restassured.response.Response;
-import org.apache.curator.shaded.com.google.common.util.concurrent.RateLimiter;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
+import java.time.Instant;
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class KlassApiClassificationCodesAtTest extends AbstractKlassApiDataIntegrityTest{
 
-    RateLimiter limiter = RateLimiter.create(1.5);
+    static Map<String, Object> paramsDate = new HashMap<>();
 
-    static LocalDate date;
+    List<?> sourceCodes;
+    List<?> targetCodes;
+
+    Response sourceResponse;
+    Response targetResponse;
+
+    static String date;
 
     @BeforeAll
     static void beforeAllCodesAt() {
-        date = generateRandomDate();
-        /*getAllSourceHost();
-        getAllTargetHost();
-        setClassificationLists();*/
+        date = generateRandomDate(
+                LocalDate.of(1980, 1, 1),
+                LocalDate.of(2020, 12, 31)).format(formatter);
+        paramsDate.put(DATE, date);
     }
 
     @Test
-    void getClassificationCodesAtPartOne() {
+    void getOneClassificationCodesAt(){
+        Integer classificationId = 2;
+        date = "2001-01-01";
 
-        /*for (Integer id : classificationsIdsSourceHostPart1) {
+        Map<String, Object> paramDate = new HashMap<>();
+        paramDate.put(DATE, date);
 
-            limiter.acquire();
+        System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
 
-            Response sourceResponse = getCodesAtResponse(klassApSourceHostPath, id);
-            Response targetResponse = getCodesAtResponse(klassApiTargetHostPath, id);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(CLASSIFICATIONS_PATH + "/"+ classificationId + "/" + CODES_AT, paramDate);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(CLASSIFICATIONS_PATH + "/"+ classificationId + "/" + CODES_AT, paramDate);
 
-            if(sourceResponse.getStatusCode() != 200) {
-                assertThat(compareError(id, sourceResponse, targetResponse)).isTrue();
-            }
-            else{
-                Object sourceField = sourceResponse.path(CODES);
-                assertThat(sourceField).isEqualTo(targetResponse.path(CODES));
-            }
-        }*/
+        if(sourceResponse.getStatusCode() != 200) {
+            System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
+            assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
+        }
+        else{
+            System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
+            sourceCodes = sourceResponse.path(CODES);
+            targetCodes = targetResponse.path(CODES);
+            System.out.println(sourceCodes.size() + "->" + targetCodes.size());
+            assertThat(sourceCodes).withFailMessage(FAIL_MESSAGE, CODES, sourceCodes, targetCodes).isEqualTo(targetCodes);
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource("rangeProviderClassificationIds")
+    void getClassificationCodesAt(Integer classificationId) {
+
+        System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
+
+        System.out.println("Fetch from source api");
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(CLASSIFICATIONS_PATH + "/"+ classificationId + "/" + CODES_AT, paramsDate);
+
+        System.out.println("Fetch from target api");
+        targetResponse = klassApiMigrationClient.getFromTargetApi(CLASSIFICATIONS_PATH + "/"+ classificationId + "/" + CODES_AT, paramsDate);
+
+        if(sourceResponse.getStatusCode() != 200) {
+            System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
+            assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
+        }
+        else{
+            System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
+            sourceCodes = sourceResponse.path(CODES);
+            targetCodes = targetResponse.path(CODES);
+            System.out.println(sourceCodes.size() + "->" + targetCodes.size());
+            assertThat(sourceCodes).withFailMessage(FAIL_MESSAGE, CODES, sourceCodes, targetCodes).isEqualTo(targetCodes);
+        }
+
+        System.out.println("End test for ID " + classificationId + " at " + Instant.now());
 
     }
 
-    @Test
-    void getClassificationCodesAtPartTwo() {
-        /*for (Integer id : classificationsIdsSourceHostPart2) {
-            limiter.acquire();
-
-            Response sourceResponse = getCodesAtResponse(klassApSourceHostPath, id);
-            Response targetResponse = getCodesAtResponse(klassApiTargetHostPath, id);
-
-            if(sourceResponse.getStatusCode() != 200) {
-                assertThat(compareError(id, sourceResponse, targetResponse)).isTrue();
-            }
-            else{
-                Object sourceField = sourceResponse.path(CODES);
-                assertThat(sourceField).isEqualTo(targetResponse.path(CODES));
-            }
-        }*/
-
+    static Stream<Integer> rangeProviderClassificationIds() {
+        return IntStream.rangeClosed(0, 200).boxed();
     }
 
-    @Test
-    void getClassificationCodesAtPartThree() {
-       /* for (Integer id : classificationsIdsSourceHostPart3) {
-
-            limiter.acquire();
-
-            Response sourceResponse = getCodesAtResponse(klassApSourceHostPath, id);
-            Response targetResponse = getCodesAtResponse(klassApiTargetHostPath, id);
-
-            if(sourceResponse.getStatusCode() != 200) {
-                assertThat(compareError(id, sourceResponse, targetResponse)).isTrue();
-            }
-            else{
-                Object sourceField = sourceResponse.path(CODES);
-                assertThat(sourceField).isEqualTo(targetResponse.path(CODES));
-            }
-        }*/
-
-    }
-
-    @Test
-    void getClassificationCodesAtPartFour() {
-        /*for (Integer id : classificationsIdsSourceHostPart4) {
-            limiter.acquire();
-
-            Response sourceResponse = getCodesAtResponse(klassApSourceHostPath, id);
-            Response targetResponse = getCodesAtResponse(klassApiTargetHostPath, id);
-
-            if(sourceResponse.getStatusCode() != 200) {
-                assertThat(compareError(id, sourceResponse, targetResponse)).isTrue();
-            }
-            else{
-                Object sourceField = sourceResponse.path(CODES);
-                assertThat(sourceField).isEqualTo(targetResponse.path(CODES));
-            }
-        }*/
-
-    }
-
-    private Response getCodesAtResponse(String basePath, Integer id) {
-
-        String dateAsString = date.format(formatter);
-        return RestAssured.given().queryParam(DATE, dateAsString).get(basePath + "/" + id + "/" + CODES_AT);
-
-    }
 }
