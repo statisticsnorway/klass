@@ -9,6 +9,7 @@ public final class MigrationTestConstants {
     public static final String BASE_PATH = "/api/klass";
     public static final String CLASSIFICATIONS_PATH = "/classifications";
     public static final String CHANGES = "changes";
+    public static final String CLASSIFICATION_FAMILIES = "classificationfamilies";
 
     public static final String TRUE= "true";
     public static final String FALSE = "false";
@@ -58,6 +59,7 @@ public final class MigrationTestConstants {
     public static final String CORRESPONDENCE_MAPS = "correspondenceMaps";
     public static final String EMBEDDED = "_embedded";
     public static final String EMBEDDED_PAGE = "_embedded.page";
+    public static final String EMBEDDED_CLASSIFICATION_FAMILIES = "_embedded.classificationfamilies";
 
     public static final String PAGE = "page";
     public static final String PAGE_TOTAL_ELEMENTS = "page.totalElements";
@@ -109,7 +111,9 @@ public final class MigrationTestConstants {
     public static final String VERSIONS_LAST_MODIFIED= "versions.lastModified";
     public static final String VERSIONS_PUBLISHED= "versions.published";
     public static final String VERSIONS_LINKS_SELF_HREF= "versions._links.self.href";
-
+    public static final String CLASSIFICATION_FAMILIES_LINKS_SELF_HREF= "classificationFamilies._links.self.href";
+    public static final String EMBEDDED_CLASSIFICATION_FAMILIES_NAME= "_embedded.classificationFamilies.name";
+    public static final String EMBEDDED_CLASSIFICATION_FAMILIES_LINKS_SELF_HREF= "_embedded.classificationFamilies._links.self.href";
     // Params
     public static final String NB= "nb";
     public static final String NN= "nn";
@@ -126,6 +130,7 @@ public final class MigrationTestConstants {
     public static final String CHANGED_SINCE= "changedSince";
     public static final String VARIANT_NAME= "variantName";
 
+    public static final String NUMBER_OF_CLASSIFICATIONS= "numberOfClassifications";
     // Messages
     public static final String FAIL_MESSAGE= "Mismatch at path '%s':\n  Source: %s\n  Target: %s";
     public static final String LOG_MESSAGE_STATUS_CODE= "Status code: ";
@@ -173,6 +178,11 @@ public final class MigrationTestConstants {
             VERSIONS_VALID_FROM,
             VERSIONS_VALID_TO,
             VERSIONS_LAST_MODIFIED
+    );
+
+    public static List<String> pathNamesClassificationFamilies = Arrays.asList(
+            LINKS_SELF_HREF
+
     );
 
     public static List<String> pathNamesVersionsById = Arrays.asList(
