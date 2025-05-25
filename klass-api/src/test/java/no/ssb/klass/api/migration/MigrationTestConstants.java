@@ -9,16 +9,8 @@ public final class MigrationTestConstants {
     public static final String BASE_PATH = "/api/klass";
     public static final String CLASSIFICATIONS_PATH = "/classifications";
 
-    public static final String EMBEDDED = "_embedded";
-    public static final String EMBEDDED_CLASSIFICATIONS = "_embedded.classifications";
-    public static final String EMBEDDED_PAGE = "_embedded.page";
-    public static final String PAGE = "page";
-
     public static final String TRUE= "true";
     public static final String FALSE = "false";
-
-    public static final String SOURCE_API_CHECK = "Source API is not ready";
-    public static final String TARGET_API_CHECK  = "Target API is not ready";
 
     public static final String ID = "id";
     public static final String NAME = "name";
@@ -41,9 +33,41 @@ public final class MigrationTestConstants {
     public static final String VALID_TO = "validTo";
     public static final String PUBLISHED = "published";
 
+    public static final String INTRODUCTION= "introduction";
+    public static final String LEGAL_BASE= "legalBase";
+    public static final String PUBLICATIONS= "publications";
+    public static final String DERIVED_FROM= "derivedFrom";
+    public static final String CORRESPONDENCE_TABLES= "correspondencetables";
+    public static final String CLASSIFICATION_VARIANTS= "classificationVariants";
+    public static final String CHANGELOGS= "changelogs";
+    public static final String LEVELS= "levels";
+    public static final String CLASSIFICATION_ITEMS= "classificationItems";
+    public  static final String SOURCE = "source";
+
+    public static final String SSB_SECTIONS= "ssbsections";
+
+    private static final String SOURCE_ID = "sourceId";
+    private static final String TARGET = "target";
+
+    private static final String TARGET_ID ="targetId" ;
+    private static final String CHANGE_TABLE = "changeTable";
+    private static final String SOURCE_LEVEL = "sourceLevel";
+    private static final String TARGET_LEVEL = "targetLevel";
+
+    private static final String CORRESPONDENCE_MAPS = "correspondenceMaps";
+    public static final String EMBEDDED = "_embedded";
+    public static final String EMBEDDED_PAGE = "_embedded.page";
+
+    public static final String PAGE = "page";
+
+    public static final String EMBEDDED_CLASSIFICATIONS = "_embedded.classifications";
+
+    public static final String EMBEDDED_SSB_SECTIONS= "_embedded.ssbSections";
+
+    public static final String HREF= "href";
     public static final String LINKS_SELF_HREF= "_links.self.href";
     public static final String LINKS_FIRST_HREF= "_links.first.href";
-    public static final String HREF= "href";
+
     public static final String LINKS_NEXT_HREF= "_links.next.href";
     public static final String LINKS_CODES_HREF= "_links.codes.href";
     public static final String LINKS_CODES_TEMPLATED= "_links.codes.templated";
@@ -70,42 +94,33 @@ public final class MigrationTestConstants {
     public static final String LINKS_SEARCH_TEMPLATED= "_links.search.templated";
     public static final String LINKS_LAST_HREF= "_links.last.href";
 
+    public static final String LINKS_SOURCE_HREF= "_links.source.href";
+    public static final String LINKS_SOURCE_TEMPLATED= "_links.source.templated";
+    public static final String LINKS_TARGET_TEMPLATED= "_links.target.templated";
+    public static final String LINKS_TARGET_HREF= "_links.target.href";
+
+    // Params
     public static final String NB= "nb";
     public static final String NN= "nn";
     public static final String EN= "en";
 
     public static final String LANGUAGE ="language";
-
-    public static final String INCLUDE_FUTURE_TRUE_PARAM= "?includeFuture=true";
     public static final String INCLUDE_FUTURE= "includeFuture";
-
-    public static final String SEARCH= "search?";
     public static final String CODES= "codes";
     public static final String CODES_AT= "codesAt";
     public static final String DATE= "date";
     public static final String RANGE_FROM= "from";
     public static final String RANGE_TO= "to";
     public static final String INCLUDE_CODE_LISTS= "includeCodeLists";
-
     public static final String CHANGED_SINCE= "changedSince";
-
     public static final String VARIANT_NAME= "variantName";
 
-    public static final String SSB_SECTIONS= "ssbsections";
-    public static final String EMBEDDED_SSB_SECTIONS= "_embedded.ssbSections";
-
-    public static final String INTRODUCTION= "introduction";
-    public static final String LEGAL_BASE= "legalBase";
-    public static final String PUBLICATIONS= "publications";
-    public static final String DERIVED_FROM= "derivedFrom";
-    public static final String CORRESPONDENCE_TABLES= "correspondenceTables";
-    public static final String CLASSIFICATION_VARIANTS= "classificationVariants";
-    public static final String CHANGELOGS= "changelogs";
-    public static final String LEVELS= "levels";
-    public static final String CLASSIFICATION_ITEMS=    "classificationItems";
+    // Messages
     public static final String FAIL_MESSAGE= "Mismatch at path '%s':\n  Source: %s\n  Target: %s";
+    public static final String LOG_MESSAGE_STATUS_CODE= "Status code: ";
 
 
+    // Lists
     public static List<String> pathNamesClassification = Arrays.asList(
             ID,
             NAME,
@@ -153,6 +168,22 @@ public final class MigrationTestConstants {
             DERIVED_FROM
     );
 
+    public static List<String> pathNamesCorrespondenceTableById = Arrays.asList(
+            NAME,
+            ID,
+            CONTACT_PERSON,
+            OWNING_SECTION,
+            SOURCE,
+            SOURCE_ID,
+            TARGET,
+            TARGET_ID,
+            CHANGE_TABLE,
+            LAST_MODIFIED,
+            SOURCE_LEVEL,
+            TARGET_LEVEL,
+            DESCRIPTION
+    );
+
     public static List<String> pathNamesClassificationsLinks = Arrays.asList(
             LINKS_FIRST_HREF,
             LINKS_SELF_HREF,
@@ -180,6 +211,14 @@ public final class MigrationTestConstants {
             LINKS_CHANGES_HREF,
             LINKS_CHANGES_TEMPLATED
 
+    );
+
+    public static List<String> pathNamesCorrespondencesLinks = Arrays.asList(
+            LINKS_SELF_HREF,
+            LINKS_SOURCE_HREF,
+            LINKS_SOURCE_TEMPLATED,
+            LINKS_TARGET_HREF,
+            LINKS_TARGET_TEMPLATED
     );
 
 }
