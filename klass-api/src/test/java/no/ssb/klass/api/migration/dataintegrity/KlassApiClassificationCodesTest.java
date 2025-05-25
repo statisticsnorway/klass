@@ -66,8 +66,6 @@ public class KlassApiClassificationCodesTest extends AbstractKlassApiDataIntegri
 
     @Test
     void testOne(){
-
-        long start = System.currentTimeMillis();
         System.out.println("Start test for ID " + 6 + " at " + Instant.now());
 
         sourceResponse = klassApiMigrationClient.getFromSourceApi(CLASSIFICATIONS_PATH + "/"+ 6 + "/" + CODES, paramsDate);
@@ -87,7 +85,6 @@ public class KlassApiClassificationCodesTest extends AbstractKlassApiDataIntegri
     @Test
     void testOne1(){
 
-        long start = System.currentTimeMillis();
         System.out.println("Start test for ID " + 1 + " at " + Instant.now());
 
         sourceResponse = klassApiMigrationClient.getFromSourceApi(CLASSIFICATIONS_PATH + "/"+ 1 + "/" + CODES, paramsDate);
