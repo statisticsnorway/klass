@@ -103,7 +103,7 @@ public final class MigrationTestConstants {
     public static final String CHANGELOGS= "changelogs";
     public static final String LEVELS= "levels";
     public static final String CLASSIFICATION_ITEMS=    "classificationItems";
-
+    public static final String FAIL_MESSAGE= "Mismatch at path '%s':\n  Source: %s\n  Target: %s";
 
 
     public static List<String> pathNamesClassification = Arrays.asList(
