@@ -8,6 +8,7 @@ public final class MigrationTestConstants {
 
     public static final String BASE_PATH = "/api/klass";
     public static final String CLASSIFICATIONS_PATH = "/classifications";
+    public static final String CHANGES = "changes";
 
     public static final String TRUE= "true";
     public static final String FALSE = "false";
@@ -43,7 +44,7 @@ public final class MigrationTestConstants {
     public static final String LEVELS= "levels";
     public static final String CLASSIFICATION_ITEMS= "classificationItems";
     public  static final String SOURCE = "source";
-
+    public static final String CODE_CHANGES= "codeChanges";
     public static final String SSB_SECTIONS= "ssbsections";
 
     public static final String SOURCE_ID = "sourceId";
