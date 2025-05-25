@@ -45,8 +45,8 @@ public class KlassApiClassificationVariantTest extends AbstractKlassApiDataInteg
     // list of queries?
 
     @BeforeAll
-    static void beforeAll() {
-        randomId = generateRandomId();
+    static void beforeAllVariant() {
+        randomId = generateRandomId(5000);
     }
 
     @Test
