@@ -9,6 +9,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
@@ -35,7 +36,7 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
     }
 
     @ParameterizedTest
-    @MethodSource("provideClassificationIds")
+    @MethodSource("rangeProviderClassificationIds")
     void getClassification(Integer classificationId) {
         sourceResponse = klassApiMigrationClient.getFromSourceApi(CLASSIFICATIONS_PATH + "/" + classificationId, null);
         targetResponse = klassApiMigrationClient.getFromTargetApi(CLASSIFICATIONS_PATH + "/" + classificationId, null);
@@ -59,7 +60,7 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
 
 
     @ParameterizedTest
-    @MethodSource("provideClassificationIds")
+    @MethodSource("rangeProviderClassificationIds")
     void getClassificationEnglish(Integer classificationId) {
 
         sourceResponse = klassApiMigrationClient.getFromSourceApi(CLASSIFICATIONS_PATH + "/" + classificationId, paramsLanguageEn);
@@ -85,7 +86,7 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
     }
 
     @ParameterizedTest
-    @MethodSource("provideClassificationIds")
+    @MethodSource("rangeProviderClassificationIds")
     void getClassificationNewNorwegian(Integer classificationId) {
 
         sourceResponse = klassApiMigrationClient.getFromSourceApi(CLASSIFICATIONS_PATH + "/" + classificationId, paramsLanguageNn);
@@ -112,7 +113,7 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
     }
 
     @ParameterizedTest
-    @MethodSource("provideClassificationIds")
+    @MethodSource("rangeProviderClassificationIds")
     void getClassificationIncludeFuture(Integer classificationId) {
 
             sourceResponse = klassApiMigrationClient.getFromSourceApi(CLASSIFICATIONS_PATH + "/" + classificationId, paramsIncludeFuture);
@@ -137,8 +138,8 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
 
     }
 
-    static Stream<Integer> provideClassificationIds() {
-        return classificationsIdsSourceHost.stream();
+    static Stream<Integer> rangeProviderClassificationIds() {
+        return IntStream.rangeClosed(0, 150).boxed();
     }
 
     /**

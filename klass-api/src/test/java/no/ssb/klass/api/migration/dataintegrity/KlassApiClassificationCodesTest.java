@@ -11,6 +11,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
@@ -46,8 +47,7 @@ public class KlassApiClassificationCodesTest extends AbstractKlassApiDataIntegri
          dateToInRangeString = dateFromInRange.format(formatter);
          dateToInRangeString = dateToInRange.format(formatter);
 
-         int classificationsRange = classificationsIdsSourceHost.size();
-         randomId = generateRandomId(classificationsRange+1);
+         randomId = generateRandomId(150);
 
          paramsDate.put(RANGE_FROM, dateFromToMax);
          paramsDateInRange.put(RANGE_FROM, dateFromInRangeString);
@@ -89,7 +89,7 @@ public class KlassApiClassificationCodesTest extends AbstractKlassApiDataIntegri
 
 
     @ParameterizedTest
-    @MethodSource("provideClassificationIds")
+    @MethodSource("rangeProviderClassificationIds")
     void getClassificationCodesFromDate(Integer classificationId) {
         assumeTrue(classificationId > 6);
 
@@ -116,7 +116,7 @@ public class KlassApiClassificationCodesTest extends AbstractKlassApiDataIntegri
     }
 
     @ParameterizedTest
-    @MethodSource("provideClassificationIds")
+    @MethodSource("rangeProviderClassificationIds")
     void getClassificationCodesInRangeDate(Integer classificationId) {
 
         System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
@@ -156,7 +156,7 @@ public class KlassApiClassificationCodesTest extends AbstractKlassApiDataIntegri
 
     }
 
-    static Stream<Integer> provideClassificationIds() {
-        return classificationsIdsSourceHost.stream();
+    static Stream<Integer> rangeProviderClassificationIds() {
+        return IntStream.rangeClosed(0, 150).boxed();
     }
 }

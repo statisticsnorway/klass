@@ -31,8 +31,9 @@ public class KlassApiClassificationsTest extends AbstractKlassApiDataIntegrityTe
 
     @BeforeAll
     static void setUpClassifications() {
-        sourceResponse = sourceResponseClassifications;
-        targetResponse = targetResponseClassifications;
+
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(CLASSIFICATIONS_PATH, null);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(CLASSIFICATIONS_PATH, null);
 
         sourceHostClassifications = sourceResponse.path(EMBEDDED_CLASSIFICATIONS);
         targetHostClassifications = targetResponse.path(EMBEDDED_CLASSIFICATIONS);

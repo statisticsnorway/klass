@@ -1,6 +1,5 @@
 package no.ssb.klass.api.migration.dataintegrity;
 
-import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import no.ssb.klass.api.migration.KlassApiMigrationClient;
 import no.ssb.klass.api.migration.MigrationTestConfig;
@@ -16,7 +15,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static io.restassured.RestAssured.get;
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -28,83 +26,10 @@ public abstract class AbstractKlassApiDataIntegrityTest {
 
     public static final String targetHost = MigrationTestConfig.getTargetHost();
 
-    static Response sourceResponseClassifications;
-    static Response targetResponseClassifications;
-
     static String klassApSourceHostPath = sourceHost + BASE_PATH + RestConstants.API_VERSION_V1 + CLASSIFICATIONS_PATH;
     static String klassApiTargetHostPath = targetHost + BASE_PATH + RestConstants.API_VERSION_V1 + CLASSIFICATIONS_PATH;
 
-    static List<Integer> classificationsIdsSourceHost = new ArrayList<>();
-    static List<Integer> classificationsIdsTargetHost = new ArrayList<>();
-    static List<Map<String, Object>> allClassificationsSourceHost = new ArrayList<>();
-    static List<Map<String, Object>> allClassificationsTargetHost = new ArrayList<>();
-
-
-    static List<Integer> classificationsIdsSourceHostPart1 = new ArrayList<>();
-    static List<Integer> classificationsIdsSourceHostPart2 = new ArrayList<>();
-    static List<Integer> classificationsIdsSourceHostPart3 = new ArrayList<>();
-    static List<Integer> classificationsIdsSourceHostPart4 = new ArrayList<>();
-    static List<Integer> classificationsIdsSourceHostPart5 = new ArrayList<>();
-    static List<Integer> classificationsIdsSourceHostPart6 = new ArrayList<>();
-    static List<Integer> classificationsIdsSourceHostPart7 = new ArrayList<>();
-    static List<Integer> classificationsIdsSourceHostPart8 = new ArrayList<>();
-    static List<Integer> classificationsIdsSourceHostPart9 = new ArrayList<>();
-    static List<Integer> classificationsIdsSourceHostPart10 = new ArrayList<>();
-    static List<Integer> classificationsIdsSourceHostPart11 = new ArrayList<>();
-    static List<Integer> classificationsIdsSourceHostPart12 = new ArrayList<>();
-    static List<Integer> classificationsIdsSourceHostPart13= new ArrayList<>();
-    static List<Integer> classificationsIdsSourceHostPart14 = new ArrayList<>();
-    static List<Integer> classificationsIdsSourceHostPart15 = new ArrayList<>();
-    static List<Integer> classificationsIdsSourceHostPart16 = new ArrayList<>();
-
-
     static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
-    static void getAllSourceHost() {
-        String url = klassApSourceHostPath;
-
-        while (url != null) {
-            JsonPath json = get(url)
-                    .then().statusCode(200)
-                    .extract().jsonPath();
-
-            // Extract IDs from this page
-            List<Integer> ids = json.getList("_embedded.classifications.id");
-            classificationsIdsSourceHost.addAll(ids);
-
-            // Extract ClassificationItems
-            List<Map<String, Object>> classifications =
-                    json.getList("_embedded.classifications");
-
-            allClassificationsSourceHost.addAll(classifications);
-
-            // Get next page URL if available
-            url = json.get("_links.next.href");
-        }
-    }
-
-    static void getAllTargetHost() {
-        String url = klassApiTargetHostPath;
-
-        while (url != null) {
-            JsonPath json = get(url)
-                    .then().statusCode(200)
-                    .extract().jsonPath();
-
-            // Extract IDs from this page
-            List<Integer> ids = json.getList("_embedded.classifications.id");
-            classificationsIdsTargetHost.addAll(ids);
-
-            // Extract ClassificationItems
-            List<Map<String, Object>> classifications =
-                    json.getList("_embedded.classifications");
-
-            allClassificationsTargetHost.addAll(classifications);
-
-            // Get next page URL if available
-            url = json.get("_links.next.href");
-        }
-    }
 
     static boolean isPathEqualIgnoreHost(String sourceHref, String targetHref) {
         try {
@@ -136,30 +61,6 @@ public abstract class AbstractKlassApiDataIntegrityTest {
         }
 
         return current;
-    }
-
-    static void setClassificationLists(){
-        int listLength = classificationsIdsSourceHost.size();
-        int shareLength = listLength / 8;
-        int remainder = listLength % 8;
-
-        int index = 0;
-        List<List<Integer>> parts = Arrays.asList(
-                classificationsIdsSourceHostPart1,
-                classificationsIdsSourceHostPart2,
-                classificationsIdsSourceHostPart3,
-                classificationsIdsSourceHostPart4,
-                classificationsIdsSourceHostPart5,
-                classificationsIdsSourceHostPart6,
-                classificationsIdsSourceHostPart7,
-                classificationsIdsSourceHostPart8
-        );
-        for (int i = 0; i < 8; i++) {
-            int currentPartSize = shareLength + (remainder > i ? 1 : 0);
-            for (int j = 0; j < currentPartSize; j++) {
-                parts.get(i).add(classificationsIdsSourceHost.get(index++));
-            }
-        }
     }
 
     static boolean compareErrorJsonResponse(Integer ID, Response sourceResponse, Response targetResponse) {
@@ -236,12 +137,6 @@ public abstract class AbstractKlassApiDataIntegrityTest {
         boolean targetUp = klassApiMigrationClient.isApiAvailable(targetHost);
 
         Assumptions.assumeTrue(sourceUp && targetUp, "One or both APIs are not available, skipping tests.");
-
-        getAllSourceHost();
-        getAllTargetHost();
-
-        sourceResponseClassifications = klassApiMigrationClient.getFromSourceApi(CLASSIFICATIONS_PATH, null);
-        targetResponseClassifications = klassApiMigrationClient.getFromTargetApi(CLASSIFICATIONS_PATH, null);
     }
 
     @AfterAll
