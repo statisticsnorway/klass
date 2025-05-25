@@ -6,6 +6,7 @@ import io.restassured.response.Response;
 import no.ssb.klass.api.migration.KlassApiMigrationClient;
 import no.ssb.klass.api.migration.MigrationTestConfig;
 import no.ssb.klass.api.util.RestConstants;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 
@@ -13,10 +14,7 @@ import java.net.URL;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static io.restassured.RestAssured.get;
@@ -196,8 +194,9 @@ public abstract class AbstractKlassApiDataIntegrityTest {
         LocalDate startDate = LocalDate.of(1800, 1, 1);
         LocalDate endDate = LocalDate.of(2030, 12, 31);
         long daysBetween = ChronoUnit.DAYS.between(startDate, endDate);
-        long randomDays = ThreadLocalRandom.current().nextLong(daysBetween + 1);
-        return startDate.plusDays(randomDays);
+        Random random = new Random();
+        long randomDay = random.nextLong(daysBetween + 1);
+        return startDate.plusDays(randomDay);
     }
 
     static String generateRandomDateTime() {
@@ -225,7 +224,9 @@ public abstract class AbstractKlassApiDataIntegrityTest {
     }
 
     static Integer generateRandomId(int to) {
-        return ThreadLocalRandom.current().nextInt(0, to);
+        Random random = new Random();
+        return random.nextInt(to);
+        //return ThreadLocalRandom.current().nextInt(0, to);
     }
 
     @BeforeAll
@@ -237,8 +238,8 @@ public abstract class AbstractKlassApiDataIntegrityTest {
         targetResponseClassifications = klassApiMigrationClient.getFromTargetApi(CLASSIFICATIONS_PATH, null);
     }
 
-    @AfterEach
-    public void cleanUpEach(){
-        System.out.println("Cleanup after test");
+    @AfterAll
+    public static void cleanUpEach(){
+        System.out.println("Cleanup after tests");
     }
 }
