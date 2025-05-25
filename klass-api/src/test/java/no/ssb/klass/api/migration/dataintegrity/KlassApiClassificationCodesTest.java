@@ -171,6 +171,6 @@ public class KlassApiClassificationCodesTest extends AbstractKlassApiDataIntegri
     }
 
     static Stream<Integer> rangeProviderClassificationIds() {
-        return IntStream.rangeClosed(0, 200).boxed();
+        return IntStream.rangeClosed(0, 652).boxed();
     }
 }
