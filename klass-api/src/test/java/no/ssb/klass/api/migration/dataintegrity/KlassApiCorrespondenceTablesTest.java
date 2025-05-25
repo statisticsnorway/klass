@@ -19,9 +19,6 @@ public class KlassApiCorrespondenceTablesTest extends AbstractKlassApiDataIntegr
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi("/" + CORRESPONDENCE_TABLES + "/" + correspondenceTableId, null);
         Response targetResponse = klassApiMigrationClient.getFromTargetApi("/" + CORRESPONDENCE_TABLES + "/" + correspondenceTableId, null);
 
-        assertThat(targetResponse).isNotNull();
-        assertThat(sourceResponse).isNotNull();
-
         if(sourceResponse.getStatusCode() != 200) {
             System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
             assertThat(compareError(correspondenceTableId, sourceResponse, targetResponse)).isTrue();
@@ -31,6 +28,8 @@ public class KlassApiCorrespondenceTablesTest extends AbstractKlassApiDataIntegr
 
             validateItem(sourceResponse, targetResponse, pathNamesCorrespondenceTableById);
             validateLinks(sourceResponse, targetResponse, pathNamesCorrespondencesLinks);
+            validateList(sourceResponse, targetResponse, CORRESPONDENCE_MAPS);
+            validateList(sourceResponse, targetResponse, CHANGELOGS);
         }
     }
 

@@ -1,13 +1,11 @@
 package no.ssb.klass.api.migration.dataintegrity;
 
-import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import no.ssb.klass.api.migration.KlassApiMigrationClient;
 import no.ssb.klass.api.migration.MigrationTestConfig;
 import no.ssb.klass.api.util.RestConstants;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeAll;
 
@@ -20,6 +18,8 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import static io.restassured.RestAssured.get;
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
+import static no.ssb.klass.api.migration.MigrationTestUtils.*;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public abstract class AbstractKlassApiDataIntegrityTest {
 
@@ -248,5 +248,85 @@ public abstract class AbstractKlassApiDataIntegrityTest {
     @AfterAll
     public static void cleanUp(){
         System.out.println("Cleanup after tests");
+    }
+
+    /**
+     *
+     * @param sourceResponse Response object from source Api
+     * @param targetResponse Response object from target Api
+     * @param pathNames List of path names in Response object
+     */
+    static void validateItem(Response sourceResponse, Response targetResponse, List<String> pathNames) {
+
+        Object sourceField;
+        Object targetField;
+
+        for (String pathName : pathNames) {
+            sourceField = sourceResponse.path(pathName);
+            targetField = targetResponse.path(pathName);
+
+            assertThat(sourceField)
+                    .withFailMessage(FAIL_MESSAGE,
+                            pathName, sourceField, targetField)
+                    .isEqualTo(targetField);
+        }
+
+    }
+
+    /**
+     *
+     * @param sourceResponse Response object from source Api
+     * @param targetResponse Response object from target Api
+     * @param pathListName List of path names in nested list
+     */
+    static void validateList(Response sourceResponse, Response targetResponse, String pathListName) {
+
+        ArrayList<String> sourceList = sourceResponse.path(pathListName);
+        ArrayList<String> targetList = targetResponse.path(pathListName);
+        System.out.println("List sizes: " + sourceList.size() + " -> " + targetList.size());
+        assertThat(sourceList.size())
+                .withFailMessage(FAIL_MESSAGE,
+                        pathListName, sourceList.size(), targetList.size())
+                .isEqualTo(targetList.size());
+
+        assertThat(sourceList.containsAll(targetList))
+                .withFailMessage(FAIL_MESSAGE,
+                        pathListName, sourceList, targetList)
+                .isTrue();
+
+        assertThat(targetList.containsAll(sourceList))
+                .withFailMessage(FAIL_MESSAGE,
+                        pathListName, sourceList, targetList)
+                .isTrue();
+    }
+
+    /**
+     *
+     * @param sourceResponse Response object from source Api
+     * @param targetResponse Response object from target Api
+     * @param pathNamesLinks List of path names in _links object
+     */
+    static void validateLinks(Response sourceResponse, Response targetResponse, List<String> pathNamesLinks) {
+
+        Object sourceField;
+        Object targetField;
+
+        for (String pathName : pathNamesLinks) {
+            sourceField = sourceResponse.path(pathName);
+            targetField = targetResponse.path(pathName);
+
+            if (pathName.endsWith(HREF)) {
+                String sourceHref = sourceField != null ? sourceField.toString() : null;
+                String targetHref = targetField != null ? targetField.toString() : null;
+
+                assertThat(isPathEqualIgnoreHost(sourceHref, targetHref))
+                        .withFailMessage(FAIL_MESSAGE, pathName, sourceHref, targetHref)
+                        .isTrue();
+            } else {
+                assertThat(sourceField)
+                        .withFailMessage(FAIL_MESSAGE, pathName, sourceField, targetField)
+                        .isEqualTo(targetField);
+            }
+        }
     }
 }
