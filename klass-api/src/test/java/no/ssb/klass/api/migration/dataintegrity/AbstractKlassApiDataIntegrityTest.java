@@ -18,7 +18,6 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import static io.restassured.RestAssured.get;
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
-import static no.ssb.klass.api.migration.MigrationTestUtils.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public abstract class AbstractKlassApiDataIntegrityTest {
@@ -323,6 +322,7 @@ public abstract class AbstractKlassApiDataIntegrityTest {
                         .withFailMessage(FAIL_MESSAGE, pathName, sourceHref, targetHref)
                         .isTrue();
             } else {
+                System.out.println(sourceField + " -> " + targetField);
                 assertThat(sourceField)
                         .withFailMessage(FAIL_MESSAGE, pathName, sourceField, targetField)
                         .isEqualTo(targetField);
