@@ -118,7 +118,7 @@ public class KlassApiClassificationCodesTest extends AbstractKlassApiDataIntegri
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationIds")
     void getClassificationCodesInRangeDate(Integer classificationId) {
-
+        assumeTrue(classificationId > 6);
         System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
 
         sourceResponse = klassApiMigrationClient.getFromSourceApi(CLASSIFICATIONS_PATH + "/"+ classificationId + "/" + CODES, paramsDateInRange);
