@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
@@ -19,9 +18,6 @@ public class KlassApiClassificationVariantTest extends AbstractKlassApiDataInteg
     static String variantDateId84 = "2015-01-01";
 
     static Map<String, Object> paramsVariantDateFrom = new HashMap<>();
-
-    List<?> sourceFields;
-    List<?> targetFields;
 
     Response sourceResponse;
     Response targetResponse;
@@ -47,18 +43,13 @@ public class KlassApiClassificationVariantTest extends AbstractKlassApiDataInteg
 
         assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
-        assertThat(sourceResponse.getStatusCode()).withFailMessage(
-                FAIL_MESSAGE, path, sourceResponse.getStatusCode(), targetResponse.getStatusCode()).isEqualTo(targetResponse.getStatusCode());
 
         if(sourceResponse.getStatusCode() != 200) {
             System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            sourceFields = sourceResponse.path(CODES);
-            targetFields = targetResponse.path(CODES);
-            System.out.println(sourceFields.size() + "->" + targetFields.size());
-            assertThat(sourceFields).withFailMessage(FAIL_MESSAGE, CODES, sourceFields, targetFields).isEqualTo(targetFields);
+            validateList(sourceResponse, targetResponse, CODES);
         }
     }
 
