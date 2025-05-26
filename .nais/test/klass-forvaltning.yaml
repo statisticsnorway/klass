@@ -22,7 +22,8 @@ spec:
     limits:
       memory: 768Mi
   env:
-    SPRING_PROFILES_ACTIVE: frontend, postgres, small-import, skip-indexing, ad-offline, embedded-solr
+    name: SPRING_PROFILES_ACTIVE
+    value: frontend, postgres, small-import, skip-indexing, ad-offline, embedded-solr
   envFrom:
     - secret: sqluser-password-klass-forvaltning
     - secret: google-sql-klass
@@ -30,7 +31,7 @@ spec:
     - mountPath: /var/run/secrets/nais.io/sqlcertificate
       secret: sqeletor-klass-827ec8ec
     - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
-      configMap: kube-root-ca.crt
+      configmap: kube-root-ca.crt
 ---
 apiVersion: sql.cnrm.cloud.google.com/v1beta1
 kind: SQLUser
