@@ -10,8 +10,6 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 public class KlassApiVariantByIdTest extends AbstractKlassApiDataIntegrityTest {
 
     static Integer randomId;
-    Object sourceField;
-    Object targetField;
 
     @BeforeAll
     static void beforeAllVersions() {
@@ -38,7 +36,7 @@ public class KlassApiVariantByIdTest extends AbstractKlassApiDataIntegrityTest {
             validateList(sourceResponse, targetResponse, CHANGELOGS);
             validateList(sourceResponse, targetResponse, LEVELS);
             validateList(sourceResponse, targetResponse, CLASSIFICATION_ITEMS);
-            validateOneLink(sourceResponse, targetResponse, LINKS_SELF_HREF);
+            validateSelfLink(sourceResponse, targetResponse);
         }
     }
 

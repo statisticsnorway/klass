@@ -22,7 +22,7 @@ public class KlassApiClassificationFamiliesTest extends KlassApiClassificationCo
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateOneLink(sourceResponse, targetResponse, LINKS_SELF_HREF);
+            validateSelfLink(sourceResponse, targetResponse);
             validatePathListWithLinks(sourceResponse, targetResponse, EMBEDDED_CLASSIFICATION_FAMILIES, pathNamesClassificationFamilies);
         }
     }

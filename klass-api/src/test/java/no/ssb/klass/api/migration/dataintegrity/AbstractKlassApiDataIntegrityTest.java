@@ -214,14 +214,13 @@ public abstract class AbstractKlassApiDataIntegrityTest {
      *
      * @param sourceResponse Response object from source Api
      * @param targetResponse Response object from target Api
-     * @param pathName Path name to url
      */
-    static void validateOneLink(Response sourceResponse, Response targetResponse, String pathName) {
+    static void validateSelfLink(Response sourceResponse, Response targetResponse) {
         String sourceLink;
         String targetLink;
 
-        sourceLink = sourceResponse.path(pathName);
-        targetLink = targetResponse.path(pathName);
+        sourceLink = sourceResponse.path(LINKS_SELF_HREF);
+        targetLink = targetResponse.path(LINKS_SELF_HREF);
 
         System.out.println(sourceLink + " -> " + targetLink);
 

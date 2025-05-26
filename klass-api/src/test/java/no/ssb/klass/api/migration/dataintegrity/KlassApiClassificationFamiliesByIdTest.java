@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 
 
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
-import static no.ssb.klass.api.migration.MigrationTestConstants.LINKS_SELF_HREF;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class KlassApiClassificationFamiliesByIdTest extends KlassApiClassificationCorrespondsAtTest {
@@ -25,7 +24,7 @@ public class KlassApiClassificationFamiliesByIdTest extends KlassApiClassificati
         }
         else{
             validateItems(sourceResponse, targetResponse, pathNamesClassificationFamilyById);
-            validateOneLink(sourceResponse, targetResponse, LINKS_SELF_HREF);
+            validateSelfLink(sourceResponse, targetResponse);
             validatePathListWithLinks(sourceResponse, targetResponse, CLASSIFICATIONS, pathNamesClassificationsPage);
         }
     }

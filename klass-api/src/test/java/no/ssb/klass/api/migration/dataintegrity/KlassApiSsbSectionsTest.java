@@ -22,7 +22,7 @@ public class KlassApiSsbSectionsTest extends AbstractKlassApiDataIntegrityTest {
         }
         else{
             validateList(sourceResponse, targetResponse, EMBEDDED_SSB_SECTIONS);
-            validateOneLink(sourceResponse, targetResponse, LINKS_SELF_HREF);
+            validateSelfLink(sourceResponse, targetResponse);
         }
     }
 
