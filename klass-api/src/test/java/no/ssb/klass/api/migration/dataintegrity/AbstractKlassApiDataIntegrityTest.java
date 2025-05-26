@@ -4,7 +4,6 @@ import io.restassured.response.Response;
 import no.ssb.klass.api.migration.KlassApiMigrationClient;
 import no.ssb.klass.api.migration.MigrationTestConfig;
 import no.ssb.klass.api.util.RestConstants;
-import org.assertj.core.api.AbstractIntegerAssert;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeAll;
@@ -17,6 +16,7 @@ import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
+import static no.ssb.klass.api.migration.MigrationTestUtils.mapById;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public abstract class AbstractKlassApiDataIntegrityTest {
@@ -32,11 +32,15 @@ public abstract class AbstractKlassApiDataIntegrityTest {
 
     public static final String targetHost = MigrationTestConfig.getTargetHost();
 
-    static String klassApSourceHostPath = sourceHost + BASE_PATH + RestConstants.API_VERSION_V1 + CLASSIFICATIONS_PATH;
-    static String klassApiTargetHostPath = targetHost + BASE_PATH + RestConstants.API_VERSION_V1 + CLASSIFICATIONS_PATH;
-
     static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
+    /**
+     * Compare two href and ignore host
+     *
+     * @param sourceHref String path
+     * @param targetHref String path
+     * @return True if the two paths are the same, False otherwise
+     */
     static boolean isPathEqualIgnoreHost(String sourceHref, String targetHref) {
         try {
             URL sourceUrl = new URL(sourceHref);
@@ -55,6 +59,12 @@ public abstract class AbstractKlassApiDataIntegrityTest {
         }
     }
 
+    /**
+     *
+     * @param map
+     * @param path
+     * @return
+     */
     static Object resolvePath(Map<String, Object> map, String path) {
         String[] parts = path.split("\\.");
         Object current = map;
@@ -69,6 +79,13 @@ public abstract class AbstractKlassApiDataIntegrityTest {
         return current;
     }
 
+    /**
+     *
+     * @param ID
+     * @param sourceResponse Response object from source Api
+     * @param targetResponse Response object from target Api
+     * @return
+     */
     static boolean compareErrorJsonResponse(Integer ID, Response sourceResponse, Response targetResponse) {
         Object sourceBody = sourceResponse.getBody().jsonPath().get("error");
         Object targetBody = targetResponse.getBody().jsonPath().get("error");
@@ -83,6 +100,13 @@ public abstract class AbstractKlassApiDataIntegrityTest {
         return true;
     }
 
+    /**
+     *
+     * @param ID
+     * @param sourceResponse Response object from source Api
+     * @param targetResponse Response object from target Api
+     * @return
+     */
     static boolean compareError(Integer ID, Response sourceResponse, Response targetResponse) {
         Object sourceBody = sourceResponse.getBody().asString();
         Object targetBody = targetResponse.getBody().asString();
@@ -97,6 +121,12 @@ public abstract class AbstractKlassApiDataIntegrityTest {
        return true;
     }
 
+    /**
+     *
+     * @param startDate
+     * @param endDate
+     * @return
+     */
     static LocalDate generateRandomDate(LocalDate startDate, LocalDate endDate) {
         long daysBetween = ChronoUnit.DAYS.between(startDate, endDate);
         Random random = new Random();
@@ -104,6 +134,10 @@ public abstract class AbstractKlassApiDataIntegrityTest {
         return startDate.plusDays(randomDay);
     }
 
+    /**
+     *
+     * @return
+     */
     static String generateRandomDateTime() {
         LocalDate startDate = LocalDate.of(1800, 1, 1);
         LocalDate endDate = LocalDate.of(2030, 12, 31);
@@ -128,33 +162,28 @@ public abstract class AbstractKlassApiDataIntegrityTest {
         return offsetDateTime.format(formatter);
     }
 
+    /**
+     *
+     * @param to
+     * @return
+     */
     static Integer generateRandomId(int to) {
         Random random = new Random();
         return random.nextInt(to);
     }
 
-    static AbstractIntegerAssert<?> assertStatusCodesEqual(Response sourceResponse, Response targetResponse, String path, int id){
-        return assertThat(sourceResponse.getStatusCode()).withFailMessage(
-                FAIL_MESSAGE, path, sourceResponse.getStatusCode(), targetResponse.getStatusCode()).isEqualTo(targetResponse.getStatusCode());
-    }
+    /**
+     * Assert that source and target returns the same status code
+     *
+     * @param sourceStatusCode Status code value of request to sourceHost
+     * @param targetStatusCode Status code value of request to targetHost
+     * @param path Path to the request
+     */
+    static void assertStatusCodesEqual(int sourceStatusCode, int targetStatusCode, String path){
 
-    @BeforeAll
-    static void beforeAll() {
-        klassApiMigrationClient = new KlassApiMigrationClient();
-
-        boolean sourceUp = klassApiMigrationClient.isApiAvailable(sourceHost);
-        boolean targetUp = klassApiMigrationClient.isApiAvailable(targetHost);
-
-        Assumptions.assumeTrue(sourceUp && targetUp, "One or both APIs are not available, skipping tests.");
-        sourceResponseClassifications = klassApiMigrationClient.getFromSourceApi(CLASSIFICATIONS_PATH, null);
-        targetResponseClassifications = klassApiMigrationClient.getFromTargetApi(CLASSIFICATIONS_PATH, null);
-
-        numClassifications = sourceResponseClassifications.path(PAGE_TOTAL_ELEMENTS);
-    }
-
-    @AfterAll
-    public static void cleanUp(){
-        System.out.println("Cleanup after tests");
+        assertThat(sourceStatusCode)
+                .withFailMessage(FAIL_MESSAGE, path, sourceStatusCode, targetStatusCode)
+                .isEqualTo(targetStatusCode);
     }
 
     /**
@@ -163,7 +192,7 @@ public abstract class AbstractKlassApiDataIntegrityTest {
      * @param targetResponse Response object from target Api
      * @param pathNames List of path names in Response object
      */
-    static void validateItem(Response sourceResponse, Response targetResponse, List<String> pathNames) {
+    static void validateItems(Response sourceResponse, Response targetResponse, List<String> pathNames) {
 
         Object sourceField;
         Object targetField;
@@ -172,11 +201,32 @@ public abstract class AbstractKlassApiDataIntegrityTest {
             sourceField = sourceResponse.path(pathName);
             targetField = targetResponse.path(pathName);
 
+            System.out.println(sourceField + " -> " + targetField);
+
             assertThat(sourceField)
                     .withFailMessage(FAIL_MESSAGE,
                             pathName, sourceField, targetField)
                     .isEqualTo(targetField);
         }
+
+    }
+
+    /**
+     *
+     * @param sourceResponse Response object from source Api
+     * @param targetResponse Response object from target Api
+     * @param pathName
+     */
+    static void validateLink(Response sourceResponse, Response targetResponse, String pathName) {
+        String sourceLink;
+        String targetLink;
+
+        sourceLink = sourceResponse.path(pathName);
+        targetLink = targetResponse.path(pathName);
+
+        System.out.println(sourceLink + " -> " + targetLink);
+
+        assertThat(isPathEqualIgnoreHost(sourceLink, targetLink)).withFailMessage(FAIL_MESSAGE, LINKS_SELF_HREF, sourceLink, targetLink).isTrue();
 
     }
 
@@ -213,7 +263,7 @@ public abstract class AbstractKlassApiDataIntegrityTest {
      * @param targetResponse Response object from target Api
      * @param pathNamesLinks List of path names in _links object
      */
-    static void validateLinks(Response sourceResponse, Response targetResponse, List<String> pathNamesLinks) {
+    static void validateListWithLinks(Response sourceResponse, Response targetResponse, List<String> pathNamesLinks) {
 
         Object sourceField;
         Object targetField;
@@ -236,5 +286,67 @@ public abstract class AbstractKlassApiDataIntegrityTest {
                         .isEqualTo(targetField);
             }
         }
+    }
+
+    /**
+     *
+     * @param sourceResponse Response object from source Api
+     * @param targetResponse Response object from target Api
+     * @param listName Name of list element in path
+     * @param pathNames List of fields in listName list
+     */
+    static void validatePathListWithLinks(Response sourceResponse, Response targetResponse, String listName, List<String> pathNames) {
+        List<Map<String, Object>> sourceList = sourceResponse.path(listName);
+        List<Map<String, Object>> targetList = targetResponse.path(listName);
+
+        assertThat(sourceList.size()).isEqualTo(targetList.size());
+        System.out.println("List sizes: " + sourceList.size() + " -> " + targetList.size());
+
+        Map<Object, Map<String, Object>> sourceById = mapById(sourceList);
+        Map<Object, Map<String, Object>> targetById = mapById(targetList);
+
+        for (Object versionId : sourceById.keySet()) {
+            Map<String, Object> versionSource = sourceById.get(versionId);
+            Map<String, Object> versionTarget = targetById.get(versionId);
+
+            for (String pathName : pathNames) {
+
+                Object sourceField;
+                Object targetField;
+
+                sourceField = resolvePath(versionSource, pathName);
+                targetField = resolvePath(versionTarget, pathName);
+
+                if (pathName.endsWith(HREF)) {
+                    assertThat(sourceField == null && targetField == null ||
+                            sourceField != null && targetField != null && isPathEqualIgnoreHost(sourceField.toString(), targetField.toString()))
+                            .withFailMessage(FAIL_MESSAGE, pathName, sourceField, targetField)
+                            .isTrue();
+                } else {
+                    assertThat(versionSource.get(pathName))
+                            .withFailMessage(FAIL_MESSAGE, pathName, sourceField, targetField)
+                            .isEqualTo(versionTarget.get(pathName));
+                }
+            }
+        }
+    }
+
+    @BeforeAll
+    static void beforeAll() {
+        klassApiMigrationClient = new KlassApiMigrationClient();
+
+        boolean sourceUp = klassApiMigrationClient.isApiAvailable(sourceHost);
+        boolean targetUp = klassApiMigrationClient.isApiAvailable(targetHost);
+
+        Assumptions.assumeTrue(sourceUp && targetUp, "One or both APIs are not available, skipping tests.");
+        sourceResponseClassifications = klassApiMigrationClient.getFromSourceApi(CLASSIFICATIONS_PATH, null);
+        targetResponseClassifications = klassApiMigrationClient.getFromTargetApi(CLASSIFICATIONS_PATH, null);
+
+        numClassifications = sourceResponseClassifications.path(PAGE_TOTAL_ELEMENTS);
+    }
+
+    @AfterAll
+    public static void cleanUp(){
+        System.out.println("Cleanup after tests");
     }
 }
