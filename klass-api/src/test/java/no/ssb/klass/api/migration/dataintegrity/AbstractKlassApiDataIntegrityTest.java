@@ -238,6 +238,16 @@ public abstract class AbstractKlassApiDataIntegrityTest {
 
         ArrayList<String> sourceList = sourceResponse.path(pathListName);
         ArrayList<String> targetList = targetResponse.path(pathListName);
+        if (sourceList == null) {
+            assertThat(targetList)
+                    .withFailMessage(FAIL_MESSAGE, pathListName, null, targetList)
+                    .isNull();
+            return;
+        }
+
+        assertThat(targetList)
+                .withFailMessage(FAIL_MESSAGE, pathListName, sourceList, targetList)
+                .isNotNull();
         System.out.println("List sizes: " + sourceList.size() + " -> " + targetList.size());
         assertThat(sourceList.size())
                 .withFailMessage(FAIL_MESSAGE,
@@ -296,6 +306,16 @@ public abstract class AbstractKlassApiDataIntegrityTest {
     static void validatePathListWithLinks(Response sourceResponse, Response targetResponse, String listName, List<String> pathNames) {
         List<Map<String, Object>> sourceList = sourceResponse.path(listName);
         List<Map<String, Object>> targetList = targetResponse.path(listName);
+        if (sourceList == null) {
+            assertThat(targetList)
+                    .withFailMessage(FAIL_MESSAGE, listName, null, targetList)
+                    .isNull();
+            return;
+        }
+
+        assertThat(targetList)
+                .withFailMessage(FAIL_MESSAGE, listName, sourceList, targetList)
+                .isNotNull();
 
         assertThat(sourceList.size()).isEqualTo(targetList.size());
         System.out.println("List sizes: " + sourceList.size() + " -> " + targetList.size());
