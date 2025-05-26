@@ -185,8 +185,10 @@ public final class MigrationTestConstants {
     );
 
     public static List<String> pathNamesClassificationFamilies = Arrays.asList(
-            LINKS_SELF_HREF,
-            EMBEDDED
+            NAME,
+            ID,
+            NUMBER_OF_CLASSIFICATIONS,
+            LINKS_SELF_HREF
     );
 
     public static List<String> pathNamesClassificationFamilyById = Arrays.asList(
