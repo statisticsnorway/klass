@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
@@ -19,9 +18,6 @@ public class KlassApiClassificationVariantAtTest extends AbstractKlassApiDataInt
     static String variantDateId84 = "2015-01-01";
 
     static Map<String, Object> paramsVariantDate = new HashMap<>();
-
-    List<?> sourceFields;
-    List<?> targetFields;
 
     Response sourceResponse;
     Response targetResponse;
@@ -40,23 +36,22 @@ public class KlassApiClassificationVariantAtTest extends AbstractKlassApiDataInt
         Integer classificationId = 84;
         System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
 
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(CLASSIFICATIONS_PATH + "/"+ classificationId + "/" + VARIANT_AT, paramsVariantDate);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(CLASSIFICATIONS_PATH + "/"+ classificationId + "/" + VARIANT_AT, paramsVariantDate);
+        String path = getVariantAtPath(classificationId);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsVariantDate);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsVariantDate);
+
+        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(),path);
 
         if(sourceResponse.getStatusCode() != 200) {
             System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
-            sourceFields = sourceResponse.path(CODES);
-            targetFields = targetResponse.path(CODES);
-            System.out.println(sourceFields.size() + "->" + targetFields.size());
-            assertThat(sourceFields).withFailMessage(FAIL_MESSAGE, CODES, sourceFields, targetFields).isEqualTo(targetFields);
+            validateList(sourceResponse, targetResponse, CODES);
         }
     }
 
     String getVariantAtPath(Integer id) {
-        return CLASSIFICATIONS_PATH + "/" + id;
+        return CLASSIFICATIONS_PATH + "/"+ id + "/" + VARIANT_AT;
     }
 }
