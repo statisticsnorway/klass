@@ -6,7 +6,7 @@ metadata:
   labels:
     team: dapla-metadata
 spec:
-  image: "{{ image }}"  # Injected from the GitHub Action
+  image: "{{ image }}" # Injected from the GitHub Action
   port: 8081
 
   ingresses:
@@ -22,8 +22,8 @@ spec:
     limits:
       memory: 768Mi
   env:
-    name: SPRING_PROFILES_ACTIVE
-    value: frontend, postgres, small-import, skip-indexing, ad-offline, embedded-solr
+    - name: SPRING_PROFILES_ACTIVE
+      value: frontend, postgres, small-import, skip-indexing, ad-offline, embedded-solr
   envFrom:
     - secret: sqluser-password-klass-forvaltning
     - secret: google-sql-klass
