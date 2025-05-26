@@ -146,11 +146,11 @@ public class KlassApiClassificationCodesTest extends AbstractKlassApiDataIntegri
 
     @Test
     void getClassificationCodesInvalidOrderDate() {
-        Integer classificationId = randomId;
+        Integer classificationId = 11;
         System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
 
-        String firstDate = (dateFromInRange.isAfter(dateToInRange) ? dateFromInRangeString : dateToInRangeString);
-        String secondDate = (dateFromInRange.isBefore(dateToInRange) ? dateFromInRangeString : dateToInRangeString);
+        String firstDate = "2025-01-01";
+        String secondDate = "1995-11-12";
 
         paramsDateInRange.put(RANGE_FROM, firstDate);
         paramsDateInRange.put(RANGE_TO, secondDate);
@@ -160,14 +160,8 @@ public class KlassApiClassificationCodesTest extends AbstractKlassApiDataIntegri
         targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDateInRange);
 
         assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
-
-        if (sourceResponse.getStatusCode() != 200) {
-            System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
-            assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
-        } else {
-            validateList(sourceResponse, targetResponse, CODES);
-        }
-
+        assertThat(sourceResponse.getStatusCode()).isEqualTo(400);
+        assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
     }
 
     static Stream<Integer> rangeProviderClassificationIds() {
