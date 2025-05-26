@@ -13,6 +13,7 @@ public final class MigrationTestConstants {
     public static final String VARIANT = "variant";
     public static final String VARIANT_AT = "variantAt";
     public static final String VARIANTS = "variants";
+    public static final String CORRESPONDS = "corresponds";
 
     public static final String TRUE= "true";
     public static final String FALSE = "false";
@@ -43,6 +44,7 @@ public final class MigrationTestConstants {
     public static final String PUBLICATIONS= "publications";
     public static final String DERIVED_FROM= "derivedFrom";
     public static final String CORRESPONDENCE_TABLES= "correspondencetables";
+    public static final String CORRESPONDENCE_ITEMS = "correspondenceItems";
     public static final String CLASSIFICATION_VARIANTS= "classificationVariants";
     public static final String CHANGELOGS= "changelogs";
     public static final String LEVELS= "levels";
@@ -132,6 +134,8 @@ public final class MigrationTestConstants {
     public static final String INCLUDE_CODE_LISTS= "includeCodeLists";
     public static final String CHANGED_SINCE= "changedSince";
     public static final String VARIANT_NAME= "variantName";
+
+    public static final String TARGET_CLASSIFICATION_ID= "targetClassificationId";
 
     public static final String NUMBER_OF_CLASSIFICATIONS= "numberOfClassifications";
     // Messages
