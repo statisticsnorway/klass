@@ -17,8 +17,6 @@ public class KlassApiClassificationVariantTest extends AbstractKlassApiDataInteg
 
     static String variantNameId84 = "Klimagasser";
     static String variantDateId84 = "2015-01-01";
-    static String variantNameId7 = "Gruppering av lønnstakere med høyere utdanning (2 grupper)";
-    static String variantDateId7 = "2000-04-01";
 
     static Map<String, Object> paramsVariantDateFrom = new HashMap<>();
 
