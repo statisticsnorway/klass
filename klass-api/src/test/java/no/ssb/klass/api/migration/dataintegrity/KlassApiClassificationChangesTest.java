@@ -17,7 +17,6 @@ import java.util.stream.Stream;
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 import static no.ssb.klass.api.migration.MigrationTestConstants.CODES;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 public class KlassApiClassificationChangesTest extends AbstractKlassApiDataIntegrityTest {
 
@@ -36,7 +35,7 @@ public class KlassApiClassificationChangesTest extends AbstractKlassApiDataInteg
     static void beforeAllCodes() {
         dateFromToMax = generateRandomDate(
                 LocalDate.of(1951, 1, 1),
-                LocalDate.of(2026, 12, 31)).format(formatter);
+                LocalDate.of(2024, 12, 31)).format(formatter);
 
 
         paramsDate.put(RANGE_FROM, dateFromToMax);
@@ -46,47 +45,61 @@ public class KlassApiClassificationChangesTest extends AbstractKlassApiDataInteg
     @Test
     void getOneClassificationWithChanges(){
         Integer classificationId = 6;
+
         System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
 
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(CLASSIFICATIONS_PATH + "/"+ classificationId + "/" + CHANGES, paramsDate);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(CLASSIFICATIONS_PATH + "/"+ classificationId + "/" + CHANGES, paramsDate);
+        String path = getChangesPath(classificationId);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDate);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDate);
+
+
+        assertThat(sourceResponse.getStatusCode()).withFailMessage(
+                FAIL_MESSAGE, path, sourceResponse.getStatusCode(),
+                targetResponse.getStatusCode()).isEqualTo(targetResponse.getStatusCode());
+
 
         if(sourceResponse.getStatusCode() != 200) {
             System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
             sourceCodeChanges = sourceResponse.path(CODE_CHANGES);
             targetCodeChanges = targetResponse.path(CODE_CHANGES);
+
             System.out.println(sourceCodeChanges.size() + "->" + targetCodeChanges.size());
-            assertThat(sourceCodeChanges).withFailMessage(FAIL_MESSAGE, CODES, sourceCodeChanges, targetCodeChanges).isEqualTo(targetCodeChanges);
+
+            assertThat(sourceCodeChanges).withFailMessage(
+                    FAIL_MESSAGE, CODES, sourceCodeChanges, targetCodeChanges).isEqualTo(targetCodeChanges);
         }
     }
 
 
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationIds")
-    void getClassificationCodesFromDate(Integer classificationId) {
-        assumeTrue(classificationId > 6);
+    void getClassificationChangesFromDate(Integer classificationId) {
 
         System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
 
-        System.out.println("Fetch from source api");
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(CLASSIFICATIONS_PATH + "/"+ classificationId + "/" + CODES, paramsDate);
+        String path= getChangesPath(classificationId);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDate);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDate);
 
-        System.out.println("Fetch from target api");
-        targetResponse = klassApiMigrationClient.getFromTargetApi(CLASSIFICATIONS_PATH + "/"+ classificationId + "/" + CODES, paramsDate);
+        assertThat(sourceResponse.getStatusCode()).withFailMessage(
+                FAIL_MESSAGE, path, sourceResponse.getStatusCode(),
+                targetResponse.getStatusCode()).isEqualTo(targetResponse.getStatusCode());
 
         if(sourceResponse.getStatusCode() != 200) {
             System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
             sourceCodeChanges = sourceResponse.path(CODE_CHANGES);
             targetCodeChanges = targetResponse.path(CODE_CHANGES);
-            assertThat(sourceCodeChanges).withFailMessage(FAIL_MESSAGE, CODES, sourceCodeChanges, targetCodeChanges).isEqualTo(targetCodeChanges);
+
+            System.out.println(sourceCodeChanges.size() + "->" + targetCodeChanges.size());
+
+            assertThat(sourceCodeChanges).withFailMessage(
+                    FAIL_MESSAGE, CODES, sourceCodeChanges, targetCodeChanges).isEqualTo(targetCodeChanges);
         }
 
         System.out.println("End test for ID " + classificationId + " at " + Instant.now());
@@ -94,5 +107,9 @@ public class KlassApiClassificationChangesTest extends AbstractKlassApiDataInteg
 
     static Stream<Integer> rangeProviderClassificationIds() {
         return IntStream.rangeClosed(0, 652).boxed();
+    }
+
+    String getChangesPath(Integer id) {
+        return CLASSIFICATIONS_PATH + "/"+ id + "/" + CHANGES;
     }
 }
