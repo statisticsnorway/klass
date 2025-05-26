@@ -21,30 +21,16 @@ public final class MigrationTestConstants {
     public static final String TRUE= "true";
     public static final String NN= "nn";
     public static final String EN= "en";
-    public static final String NB= "nb";
 
 
     // Top level
-    public static final String EMBEDDED = "_embedded";
     public static final String PAGE = "page";
 
     // Combinations
-    public static final String VERSIONS_NAME= "versions.name";
-    public static final String VERSIONS_ID= "versions.id";
-    public static final String VERSIONS_VALID_FROM= "versions.validFrom";
-    public static final String VERSIONS_VALID_TO=  "versions.validTo";
-    public static final String VERSIONS_LAST_MODIFIED= "versions.lastModified";
     public static final String PAGE_TOTAL_ELEMENTS = "page.totalElements";
     public static final String EMBEDDED_CLASSIFICATIONS = "_embedded.classifications";
     public static final String EMBEDDED_SSB_SECTIONS= "_embedded.ssbSections";
-
-    public static final String EMBEDDED_PAGE = "_embedded.page";
     public static final String EMBEDDED_CLASSIFICATION_FAMILIES = "_embedded.classificationfamilies";
-    public static final String VERSIONS_PUBLISHED= "versions.published";
-    public static final String VERSIONS_LINKS_SELF_HREF= "versions._links.self.href";
-    public static final String CLASSIFICATION_FAMILIES_LINKS_SELF_HREF= "classificationFamilies._links.self.href";
-    public static final String EMBEDDED_CLASSIFICATION_FAMILIES_NAME= "_embedded.classificationFamilies.name";
-    public static final String EMBEDDED_CLASSIFICATION_FAMILIES_LINKS_SELF_HREF= "_embedded.classificationFamilies._links.self.href";
 
     // Fields
     public static final String ID = "id";
@@ -58,9 +44,6 @@ public final class MigrationTestConstants {
     public static final String INCLUDE_SHORTNAME = "includeShortName";
     public static final String INCLUDE_NOTES = "includeNotes";
     public static final String CONTACT_PERSON = "contactPerson";
-    public static final String CONTACT_PERSON_NAME = "contactPerson.name";
-    public static final String CONTACT_PERSON_EMAIL = "contactPerson.email";
-    public static final String CONTACT_PERSON_PHONE = "contactPerson.phone";
     public static final String OWNING_SECTION = "owningSection";
     public static final String VALID_FROM = "validFrom";
     public static final String VALID_TO = "validTo";
@@ -90,8 +73,6 @@ public final class MigrationTestConstants {
     public static final String CODE_CHANGES= "codeChanges";
     public static final String SSB_SECTIONS= "ssbsections";
     public static final String CORRESPONDENCE_MAPS = "correspondenceMaps";
-
-    public static final String CLASSIFICATION_VARIANTS= "classificationVariants";
     public static final String LEVELS= "levels";
     public static final String CLASSIFICATION_ITEMS= "classificationItems";
 
@@ -140,8 +121,6 @@ public final class MigrationTestConstants {
     public static final String FAIL_MESSAGE= "Mismatch at path '%s':\n  Source: %s\n  Target: %s";
     public static final String LOG_MESSAGE_STATUS_CODE= "Status code: ";
 
-    public static final String FAIL_MESSAGE_STATUS_CODE= "Mismatch for '%s':\n  Source: %s\n  Target: %s";
-
 
     // Lists
     public static List<String> pathNamesClassification = Arrays.asList(
@@ -174,14 +153,6 @@ public final class MigrationTestConstants {
             LAST_MODIFIED,
             PUBLISHED,
             LINKS_SELF_HREF
-    );
-
-    public static List<String> pathNamesClassificationVersions = Arrays.asList(
-            VERSIONS_NAME,
-            VERSIONS_ID,
-            VERSIONS_VALID_FROM,
-            VERSIONS_VALID_TO,
-            VERSIONS_LAST_MODIFIED
     );
 
     public static List<String> pathNamesClassificationFamilies = Arrays.asList(
@@ -225,7 +196,6 @@ public final class MigrationTestConstants {
             DESCRIPTION
     );
 
-    // lists published, changeLogs, levels, classificationItems, correspondenceTables
     public static List<String> pathNamesVariantById = Arrays.asList(
             NAME,
             ID,
