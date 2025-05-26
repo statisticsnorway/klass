@@ -25,20 +25,20 @@ public class KlassApiVariantByIdTest extends AbstractKlassApiDataIntegrityTest {
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi( path, null);
         Response targetResponse = klassApiMigrationClient.getFromTargetApi( path, null);
 
-        assertThat(sourceResponse.getStatusCode()).withFailMessage(
-                FAIL_MESSAGE, path, sourceResponse.getStatusCode(), targetResponse.getStatusCode()).isEqualTo(targetResponse.getStatusCode());
+        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
         if(sourceResponse.getStatusCode() != 200) {
             System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
             assertThat(compareError(variantId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            for (String pathName : pathNamesVariantById) {
-                sourceField = sourceResponse.path(pathName);
-                targetField = targetResponse.path(pathName);
-                System.out.println(sourceField + "->" + targetField);
-                assertThat(sourceField).withFailMessage(FAIL_MESSAGE, pathName, sourceField, targetField).isEqualTo(targetField);
-            }
+            validateItems(sourceResponse, targetResponse, pathNamesVariantById);
+            validateList(sourceResponse, targetResponse, PUBLISHED);
+            validateList(sourceResponse, targetResponse, CORRESPONDENCE_TABLES);
+            validateList(sourceResponse, targetResponse, CHANGELOGS);
+            validateList(sourceResponse, targetResponse, LEVELS);
+            validateList(sourceResponse, targetResponse, CLASSIFICATION_ITEMS);
+            validateOneLink(sourceResponse, targetResponse, LINKS_SELF_HREF);
         }
     }
 
