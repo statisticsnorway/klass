@@ -11,17 +11,25 @@ public class KlassApiClassificationFamiliesTest extends KlassApiClassificationCo
 
     @Test
     void getClassificationFamilies() {
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi("/" + CLASSIFICATION_FAMILIES, null);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi("/" + CLASSIFICATION_FAMILIES, null);
+        String path = "/" + CLASSIFICATION_FAMILIES;
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, null);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, null);
 
-        if(sourceResponse.getStatusCode() != 200 || targetResponse.getStatusCode() != 200) {
+        assertThat(sourceResponse.getStatusCode()).withFailMessage(
+                FAIL_MESSAGE, CLASSIFICATION_FAMILIES, sourceResponse.getStatusCode(), targetResponse.getStatusCode()).isEqualTo(targetResponse.getStatusCode());
+
+        if(sourceResponse.getStatusCode() != 200) {
             System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         }
         else{
             Object sourceLinks = sourceResponse.path(LINKS_SELF_HREF);
             Object targetLinks = targetResponse.path(LINKS_SELF_HREF);
-            assertThat(sourceLinks).withFailMessage("h").isEqualTo(targetLinks);
+            assertThat(sourceLinks).withFailMessage(FAIL_MESSAGE, LINKS_SELF_HREF, sourceLinks, targetLinks).isEqualTo(targetLinks);
         }
+    }
+
+    String getClassificationFamiliesPath(Integer id) {
+        return CLASSIFICATIONS_PATH + "/" + id;
     }
 }

@@ -56,4 +56,8 @@ public class KlassApiClassificationCorrespondsTest extends AbstractKlassApiDataI
             assertThat(sourceFields).withFailMessage(FAIL_MESSAGE, CODES, sourceFields, targetFields).isEqualTo(targetFields);
         }
     }
+
+    String getCorrespondsPath(Integer id) {
+        return CLASSIFICATIONS_PATH + "/" + id;
+    }
 }

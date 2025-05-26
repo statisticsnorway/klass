@@ -96,4 +96,8 @@ public class KlassApiClassificationCodesAtTest extends AbstractKlassApiDataInteg
         return IntStream.rangeClosed(0, 652).boxed();
     }
 
+    String getCodesAtPath(Integer id) {
+        return CLASSIFICATIONS_PATH + "/" + id;
+    }
+
 }

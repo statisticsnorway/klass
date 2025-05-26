@@ -162,6 +162,10 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
         return IntStream.rangeClosed(0, 652).boxed();
     }
 
+    String getClassificationByIdPath(Integer id) {
+        return CLASSIFICATIONS_PATH + "/" + id;
+    }
+
     /**
      *
      * @param sourceResponse Response object from source Api
@@ -200,10 +204,6 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
                 }
             }
         }
-    }
-
-    String getClassificationByIdPath(Integer id) {
-        return CLASSIFICATIONS_PATH + "/" + id;
     }
 
 }

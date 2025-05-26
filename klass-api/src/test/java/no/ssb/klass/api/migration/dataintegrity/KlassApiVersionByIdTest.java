@@ -21,8 +21,14 @@ public class KlassApiVersionByIdTest extends AbstractKlassApiDataIntegrityTest{
 
     @Test
     void getVersionById() {
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi( "/" + VERSIONS + randomId, null);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi( "/" + VERSIONS + randomId, null);
+
+        String path = getVersionByIdPath(randomId);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, null);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, null);
+
+
+        assertThat(sourceResponse.getStatusCode()).withFailMessage(
+                FAIL_MESSAGE, path, sourceResponse.getStatusCode(), targetResponse.getStatusCode()).isEqualTo(targetResponse.getStatusCode());
 
         if(sourceResponse.getStatusCode() != 200) {
             assertThat(compareError(randomId, sourceResponse, targetResponse)).isTrue();
@@ -42,11 +48,16 @@ public class KlassApiVersionByIdTest extends AbstractKlassApiDataIntegrityTest{
         Map<String, Object> params = new HashMap<>();
         params.put(LANGUAGE, EN);
 
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi( VERSIONS + "/" + randomId, params);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi( VERSIONS + "/" + randomId, params);
+        String path = getVersionByIdPath(randomId);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi( path, params);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi( path, params);
+
+        assertThat(sourceResponse.getStatusCode()).withFailMessage(
+                FAIL_MESSAGE, path, sourceResponse.getStatusCode(), targetResponse.getStatusCode()).isEqualTo(targetResponse.getStatusCode());
 
         if(sourceResponse.getStatusCode() != 200) {
-            assertThat(compareErrorJsonResponse(randomId, sourceResponse, targetResponse)).isTrue();
+            System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
+            assertThat(compareError(randomId, sourceResponse, targetResponse)).isTrue();
         }
         else{
             for (String pathName : pathNamesVersionsById) {
@@ -63,8 +74,9 @@ public class KlassApiVersionByIdTest extends AbstractKlassApiDataIntegrityTest{
         Map<String, Object> params = new HashMap<>();
         params.put(LANGUAGE, NN);
 
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi( VERSIONS + "/" + randomId, params);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi( VERSIONS + "/" + randomId, params);
+        String path = getVersionByIdPath(randomId);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, params);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, params);
 
         if(sourceResponse.getStatusCode() != 200) {
             assertThat(compareErrorJsonResponse(randomId, sourceResponse, targetResponse)).isTrue();
@@ -82,11 +94,13 @@ public class KlassApiVersionByIdTest extends AbstractKlassApiDataIntegrityTest{
         Map<String, Object> params = new HashMap<>();
         params.put(INCLUDE_FUTURE, TRUE);
 
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi( VERSIONS + "/" + randomId, params);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi( VERSIONS + "/" + randomId, params);
+        String path = getVersionByIdPath(randomId);
+
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi( path, params);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi( path, params);
 
         if(sourceResponse.getStatusCode() != 200) {
-            assertThat(compareErrorJsonResponse(randomId, sourceResponse, targetResponse)).isTrue();
+            assertThat(compareError(randomId, sourceResponse, targetResponse)).isTrue();
         }
         else{
             for (String pathName : pathNamesVersionsById) {
@@ -94,5 +108,9 @@ public class KlassApiVersionByIdTest extends AbstractKlassApiDataIntegrityTest{
                 assertThat(sourceField).isEqualTo(targetResponse.path(pathName));
             }
         }
+    }
+
+    String getVersionByIdPath(Integer id) {
+        return "/" + VERSIONS + "/" + id;
     }
 }

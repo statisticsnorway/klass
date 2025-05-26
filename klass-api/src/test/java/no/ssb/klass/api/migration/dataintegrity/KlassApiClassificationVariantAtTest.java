@@ -55,4 +55,8 @@ public class KlassApiClassificationVariantAtTest extends AbstractKlassApiDataInt
             assertThat(sourceFields).withFailMessage(FAIL_MESSAGE, CODES, sourceFields, targetFields).isEqualTo(targetFields);
         }
     }
+
+    String getVariantAtPath(Integer id) {
+        return CLASSIFICATIONS_PATH + "/" + id;
+    }
 }

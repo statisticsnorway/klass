@@ -4,6 +4,7 @@ import io.restassured.response.Response;
 import no.ssb.klass.api.migration.KlassApiMigrationClient;
 import no.ssb.klass.api.migration.MigrationTestConfig;
 import no.ssb.klass.api.util.RestConstants;
+import org.assertj.core.api.AbstractIntegerAssert;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeAll;
@@ -130,6 +131,11 @@ public abstract class AbstractKlassApiDataIntegrityTest {
     static Integer generateRandomId(int to) {
         Random random = new Random();
         return random.nextInt(to);
+    }
+
+    static AbstractIntegerAssert<?> assertStatusCodesEqual(Response sourceResponse, Response targetResponse, String path, int id){
+        return assertThat(sourceResponse.getStatusCode()).withFailMessage(
+                FAIL_MESSAGE, path, sourceResponse.getStatusCode(), targetResponse.getStatusCode()).isEqualTo(targetResponse.getStatusCode());
     }
 
     @BeforeAll

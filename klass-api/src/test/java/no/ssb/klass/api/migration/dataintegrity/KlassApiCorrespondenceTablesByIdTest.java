@@ -66,4 +66,8 @@ public class KlassApiCorrespondenceTablesByIdTest extends AbstractKlassApiDataIn
     static Stream<Integer> rangeProvider() {
         return IntStream.rangeClosed(0, 1500).boxed();
     }
+
+    String getCorrespondenceTableByIdPath(Integer id) {
+        return CLASSIFICATIONS_PATH + "/" + id;
+    }
 }

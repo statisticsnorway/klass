@@ -21,8 +21,12 @@ public class KlassApiVariantByIdTest extends AbstractKlassApiDataIntegrityTest {
     @Test
     void getOneVariantById() {
         int variantId = 1111;
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi( "/" + VARIANTS + "/" + variantId, null);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi( "/" +  VARIANTS + "/" + variantId, null);
+        String path = getVariantByIdPath(variantId);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi( path, null);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi( path, null);
+
+        assertThat(sourceResponse.getStatusCode()).withFailMessage(
+                FAIL_MESSAGE, path, sourceResponse.getStatusCode(), targetResponse.getStatusCode()).isEqualTo(targetResponse.getStatusCode());
 
         if(sourceResponse.getStatusCode() != 200) {
             System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
@@ -38,6 +42,8 @@ public class KlassApiVariantByIdTest extends AbstractKlassApiDataIntegrityTest {
         }
     }
 
-
+    String getVariantByIdPath(Integer id) {
+        return "/" + VARIANTS + "/" + id;
+    }
 
 }

@@ -178,4 +178,8 @@ public class KlassApiClassificationCodesTest extends AbstractKlassApiDataIntegri
     static Stream<Integer> rangeProviderClassificationIds() {
         return IntStream.rangeClosed(0, 652).boxed();
     }
+
+    String getCodesPath(Integer id) {
+        return CLASSIFICATIONS_PATH + "/" + id;
+    }
 }

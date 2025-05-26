@@ -56,4 +56,8 @@ public class KlassApiClassificationVariantTest extends AbstractKlassApiDataInteg
         }
     }
 
+    String getVariantPath(Integer id) {
+        return CLASSIFICATIONS_PATH + "/" + id;
+    }
+
 }
