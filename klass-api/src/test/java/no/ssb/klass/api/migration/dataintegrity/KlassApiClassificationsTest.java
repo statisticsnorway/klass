@@ -1,6 +1,5 @@
 package no.ssb.klass.api.migration.dataintegrity;
 import io.restassured.response.Response;
-import no.ssb.klass.api.migration.KlassApiMigrationClient;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -19,9 +18,6 @@ public class KlassApiClassificationsTest extends AbstractKlassApiDataIntegrityTe
 
     static Response sourceResponse;
     static Response targetResponse;
-
-    Response nextSourcePageResponse;
-    Response nextTargetPageResponse;
 
     static Map<String, Object> paramsIncludeCodeLists = new HashMap<>();
     static Map<String, Object> paramsChangedSince = new HashMap<>();
