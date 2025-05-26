@@ -18,7 +18,6 @@ public class KlassApiClassificationCorrespondsAtTest extends KlassApiClassificat
     static Map<String, Object> paramsTargetIdAndDate = new HashMap<>();
 
     static Integer targetClassificationIdValue;
-    static String fromDate;
     static String date;
 
     Response sourceResponse;
