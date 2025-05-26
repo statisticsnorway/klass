@@ -2,7 +2,6 @@ package no.ssb.klass.api.migration.dataintegrity;
 
 
 import io.restassured.response.Response;
-import no.ssb.klass.api.migration.MigrationTestUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -16,6 +15,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
+import static no.ssb.klass.api.migration.MigrationTestUtils.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class KlassApiClassificationCodesAtTest extends AbstractKlassApiDataIntegrityTest{
@@ -29,7 +29,7 @@ public class KlassApiClassificationCodesAtTest extends AbstractKlassApiDataInteg
 
     @BeforeAll
     static void beforeAllCodesAt() {
-        date = MigrationTestUtils.generateRandomDate(
+        date = generateRandomDate(
                 LocalDate.of(1980, 1, 1),
                 LocalDate.of(2020, 12, 31)).format(formatter);
         paramsDate.put(DATE, date);
@@ -49,11 +49,11 @@ public class KlassApiClassificationCodesAtTest extends AbstractKlassApiDataInteg
         sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramDate);
         targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramDate);
 
-        MigrationTestUtils.assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
         if(sourceResponse.getStatusCode() != 200) {
             System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
-            assertThat(MigrationTestUtils.compareError(classificationId, sourceResponse, targetResponse)).isTrue();
+            assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
             validateList(sourceResponse, targetResponse, CODES);
@@ -70,11 +70,11 @@ public class KlassApiClassificationCodesAtTest extends AbstractKlassApiDataInteg
         sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDate);
         targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDate);
 
-        MigrationTestUtils.assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
         if(sourceResponse.getStatusCode() != 200) {
             System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
-            assertThat(MigrationTestUtils.compareError(classificationId, sourceResponse, targetResponse)).isTrue();
+            assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
             validateList(sourceResponse, targetResponse, CODES);

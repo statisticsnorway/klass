@@ -1,7 +1,6 @@
 package no.ssb.klass.api.migration.dataintegrity;
 
 import io.restassured.response.Response;
-import no.ssb.klass.api.migration.MigrationTestUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -9,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
+import static no.ssb.klass.api.migration.MigrationTestUtils.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class KlassApiVersionByIdTest extends AbstractKlassApiDataIntegrityTest{
@@ -17,7 +17,7 @@ public class KlassApiVersionByIdTest extends AbstractKlassApiDataIntegrityTest{
 
     @BeforeAll
     static void beforeAllVersions() {
-        randomId = MigrationTestUtils.generateRandomId(2000);
+        randomId = generateRandomId(2000);
     }
 
     @Test
@@ -28,10 +28,10 @@ public class KlassApiVersionByIdTest extends AbstractKlassApiDataIntegrityTest{
         Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, null);
 
 
-        MigrationTestUtils.assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
         if(sourceResponse.getStatusCode() != 200) {
-            assertThat(MigrationTestUtils.compareError(randomId, sourceResponse, targetResponse)).isTrue();
+            assertThat(compareError(randomId, sourceResponse, targetResponse)).isTrue();
         }
         else{
             validateItems(sourceResponse, targetResponse, pathNamesVersionsById);
@@ -48,11 +48,11 @@ public class KlassApiVersionByIdTest extends AbstractKlassApiDataIntegrityTest{
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi( path, params);
         Response targetResponse = klassApiMigrationClient.getFromTargetApi( path, params);
 
-        MigrationTestUtils.assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
         if(sourceResponse.getStatusCode() != 200) {
             System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
-            assertThat(MigrationTestUtils.compareError(randomId, sourceResponse, targetResponse)).isTrue();
+            assertThat(compareError(randomId, sourceResponse, targetResponse)).isTrue();
         }
         else{
             validateItems(sourceResponse, targetResponse, pathNamesVersionsById);
@@ -69,11 +69,11 @@ public class KlassApiVersionByIdTest extends AbstractKlassApiDataIntegrityTest{
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, params);
         Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, params);
 
-        MigrationTestUtils.assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
         if(sourceResponse.getStatusCode() != 200) {
             System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
-            assertThat(MigrationTestUtils.compareErrorJsonResponse(randomId, sourceResponse, targetResponse)).isTrue();
+            assertThat(compareErrorJsonResponse(randomId, sourceResponse, targetResponse)).isTrue();
         }
         else{
             validateItems(sourceResponse, targetResponse, pathNamesVersionsById);
@@ -90,11 +90,11 @@ public class KlassApiVersionByIdTest extends AbstractKlassApiDataIntegrityTest{
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi( path, params);
         Response targetResponse = klassApiMigrationClient.getFromTargetApi( path, params);
 
-        MigrationTestUtils.assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
         if(sourceResponse.getStatusCode() != 200) {
             System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
-            assertThat(MigrationTestUtils.compareError(randomId, sourceResponse, targetResponse)).isTrue();
+            assertThat(compareError(randomId, sourceResponse, targetResponse)).isTrue();
         }
         else{
             validateItems(sourceResponse, targetResponse, pathNamesVersionsById);

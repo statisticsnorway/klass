@@ -1,11 +1,11 @@
 package no.ssb.klass.api.migration.dataintegrity;
 
 import io.restassured.response.Response;
-import no.ssb.klass.api.migration.MigrationTestUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
+import static no.ssb.klass.api.migration.MigrationTestUtils.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class KlassApiVariantByIdTest extends AbstractKlassApiDataIntegrityTest {
@@ -14,7 +14,7 @@ public class KlassApiVariantByIdTest extends AbstractKlassApiDataIntegrityTest {
 
     @BeforeAll
     static void beforeAllVersions() {
-        randomId = MigrationTestUtils.generateRandomId(2000);
+        randomId = generateRandomId(2000);
     }
 
     @Test
@@ -24,11 +24,11 @@ public class KlassApiVariantByIdTest extends AbstractKlassApiDataIntegrityTest {
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi( path, null);
         Response targetResponse = klassApiMigrationClient.getFromTargetApi( path, null);
 
-        MigrationTestUtils.assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
         if(sourceResponse.getStatusCode() != 200) {
             System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
-            assertThat(MigrationTestUtils.compareError(variantId, sourceResponse, targetResponse)).isTrue();
+            assertThat(compareError(variantId, sourceResponse, targetResponse)).isTrue();
         }
         else{
             validateItems(sourceResponse, targetResponse, pathNamesVariantById);

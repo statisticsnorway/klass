@@ -1,7 +1,6 @@
 package no.ssb.klass.api.migration.dataintegrity;
 
 import io.restassured.response.Response;
-import no.ssb.klass.api.migration.MigrationTestUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -10,6 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
+import static no.ssb.klass.api.migration.MigrationTestUtils.assertStatusCodesEqual;
+import static no.ssb.klass.api.migration.MigrationTestUtils.compareError;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class KlassApiClassificationCorrespondsTest extends AbstractKlassApiDataIntegrityTest {
@@ -41,11 +42,11 @@ public class KlassApiClassificationCorrespondsTest extends AbstractKlassApiDataI
         sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsTargetIdAndDateFrom);
         targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsTargetIdAndDateFrom);
 
-        MigrationTestUtils.assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
         if(sourceResponse.getStatusCode() != 200) {
             System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
-            assertThat(MigrationTestUtils.compareError(classificationId, sourceResponse, targetResponse)).isTrue();
+            assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
             validateList(sourceResponse, targetResponse, CORRESPONDENCE_ITEMS);

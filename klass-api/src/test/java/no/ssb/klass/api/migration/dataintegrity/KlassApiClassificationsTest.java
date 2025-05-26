@@ -1,6 +1,5 @@
 package no.ssb.klass.api.migration.dataintegrity;
 import io.restassured.response.Response;
-import no.ssb.klass.api.migration.MigrationTestUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -9,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
+import static no.ssb.klass.api.migration.MigrationTestUtils.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class KlassApiClassificationsTest extends AbstractKlassApiDataIntegrityTest {
@@ -39,7 +39,7 @@ public class KlassApiClassificationsTest extends AbstractKlassApiDataIntegrityTe
         sourceHostClassifications = sourceResponse.path(EMBEDDED_CLASSIFICATIONS);
         targetHostClassifications = targetResponse.path(EMBEDDED_CLASSIFICATIONS);
 
-        queryDate = MigrationTestUtils.generateRandomDateTime();
+        queryDate = generateRandomDateTime();
         paramsIncludeCodeLists.put(INCLUDE_CODE_LISTS, TRUE);
         paramsChangedSince.put(CHANGED_SINCE, queryDate);
 
@@ -54,7 +54,7 @@ public class KlassApiClassificationsTest extends AbstractKlassApiDataIntegrityTe
     void getClassificationsPage(){
 
         if(sourceResponse.getStatusCode() != 200) {
-            assertThat(MigrationTestUtils.compareError(null, sourceResponse, targetResponse)).isTrue();
+            assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         }
         else {
             Object classificationsPageSource = sourceResponse.path(PAGE);
@@ -68,7 +68,7 @@ public class KlassApiClassificationsTest extends AbstractKlassApiDataIntegrityTe
     @Test
     void getClassificationsLinks(){
         if(sourceResponse.getStatusCode() != 200) {
-            assertThat(MigrationTestUtils.compareError(null, sourceResponse, targetResponse)).isTrue();
+            assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         }
         else {
             Map<String, Object> sourceLinks = sourceResponse.path(LINKS);
@@ -84,7 +84,7 @@ public class KlassApiClassificationsTest extends AbstractKlassApiDataIntegrityTe
                     assertThat(sourcePath).isEqualTo(targetResponse.path(LINKS_SEARCH_TEMPLATED));
                 } else {
                     String sourcePath = sourceResponse.path(pathName);
-                    assertThat(MigrationTestUtils.isPathEqualIgnoreHost(sourcePath, targetResponse.path(pathName))).isTrue();
+                    assertThat(isPathEqualIgnoreHost(sourcePath, targetResponse.path(pathName))).isTrue();
                 }
             }
         }
@@ -94,7 +94,7 @@ public class KlassApiClassificationsTest extends AbstractKlassApiDataIntegrityTe
     @Test
     void getClassificationsItems(){
         if(sourceResponse.getStatusCode() != 200) {
-            assertThat(MigrationTestUtils.compareError(null, sourceResponse, targetResponse)).isTrue();
+            assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         }
         else {
             for (int i = 0; i < sourceHostClassifications.size(); i++) {
@@ -104,7 +104,7 @@ public class KlassApiClassificationsTest extends AbstractKlassApiDataIntegrityTe
                     if (pathName.equals(LINKS_SELF_HREF)) {
                         String sourceLink = sourceResponse.path(LINKS_SELF_HREF);
                         String targetLink = targetResponse.path(pathName);
-                        assertThat(MigrationTestUtils.isPathEqualIgnoreHost(sourceLink, targetLink)).isTrue();
+                        assertThat(isPathEqualIgnoreHost(sourceLink, targetLink)).isTrue();
                     } else {
                         assertThat(sourceItem.get(pathName)).isEqualTo(targetItem.get(pathName));
                     }
@@ -117,7 +117,7 @@ public class KlassApiClassificationsTest extends AbstractKlassApiDataIntegrityTe
     void getClassificationsIncludeCodeListsPage() {
         assertThat(sourceResponseCodeLists).isNotNull();
         if (sourceResponseCodeLists.getStatusCode() != 200) {
-            assertThat(MigrationTestUtils.compareError(null, sourceResponseCodeLists, targetResponseCodeLists)).isTrue();
+            assertThat(compareError(null, sourceResponseCodeLists, targetResponseCodeLists)).isTrue();
         } else {
             Object classificationsPageSourceHost = sourceResponseCodeLists.path(PAGE);
             Object classificationsPageTargetHost = targetResponseCodeLists.path(PAGE);
@@ -131,7 +131,7 @@ public class KlassApiClassificationsTest extends AbstractKlassApiDataIntegrityTe
     @Test
     void getClassificationsChangedSincePage(){
         if (sourceResponseChangedSince.getStatusCode() != 200) {
-            assertThat(MigrationTestUtils.compareError(null, sourceResponseChangedSince, targetResponseChangedSince)).isTrue();
+            assertThat(compareError(null, sourceResponseChangedSince, targetResponseChangedSince)).isTrue();
         } else {
             Object classificationsPageSourceHost = sourceResponseCodeLists.path(PAGE);
             Object classificationsPageTargetHost = targetResponseCodeLists.path(PAGE);
