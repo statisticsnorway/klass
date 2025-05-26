@@ -9,13 +9,11 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
-import static no.ssb.klass.api.migration.MigrationTestConstants.CODES;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class KlassApiClassificationChangesTest extends AbstractKlassApiDataIntegrityTest {
@@ -24,9 +22,6 @@ public class KlassApiClassificationChangesTest extends AbstractKlassApiDataInteg
     static String dateFromToMax;
 
     static Map<String, Object> paramsDate = new HashMap<>();
-
-    List<?> sourceCodeChanges;
-    List<?> targetCodeChanges;
 
     Response sourceResponse;
     Response targetResponse;
@@ -43,7 +38,7 @@ public class KlassApiClassificationChangesTest extends AbstractKlassApiDataInteg
     }
 
     @Test
-    void getOneClassificationWithChanges(){
+    void getOneClassificationChanges(){
         Integer classificationId = 6;
 
         System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
@@ -52,31 +47,21 @@ public class KlassApiClassificationChangesTest extends AbstractKlassApiDataInteg
         sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDate);
         targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDate);
 
-
-        assertThat(sourceResponse.getStatusCode()).withFailMessage(
-                FAIL_MESSAGE, path, sourceResponse.getStatusCode(),
-                targetResponse.getStatusCode()).isEqualTo(targetResponse.getStatusCode());
-
+        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
         if(sourceResponse.getStatusCode() != 200) {
             System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            sourceCodeChanges = sourceResponse.path(CODE_CHANGES);
-            targetCodeChanges = targetResponse.path(CODE_CHANGES);
-
-            System.out.println(sourceCodeChanges.size() + "->" + targetCodeChanges.size());
-
-            assertThat(sourceCodeChanges).withFailMessage(
-                    FAIL_MESSAGE, CODES, sourceCodeChanges, targetCodeChanges).isEqualTo(targetCodeChanges);
+            validateList(sourceResponse, targetResponse, CODE_CHANGES);
         }
     }
 
 
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationIds")
-    void getClassificationChangesFromDate(Integer classificationId) {
+    void getManyClassificationChanges(Integer classificationId) {
 
         System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
 
@@ -84,22 +69,14 @@ public class KlassApiClassificationChangesTest extends AbstractKlassApiDataInteg
         sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDate);
         targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDate);
 
-        assertThat(sourceResponse.getStatusCode()).withFailMessage(
-                FAIL_MESSAGE, path, sourceResponse.getStatusCode(),
-                targetResponse.getStatusCode()).isEqualTo(targetResponse.getStatusCode());
+        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
         if(sourceResponse.getStatusCode() != 200) {
             System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            sourceCodeChanges = sourceResponse.path(CODE_CHANGES);
-            targetCodeChanges = targetResponse.path(CODE_CHANGES);
-
-            System.out.println(sourceCodeChanges.size() + "->" + targetCodeChanges.size());
-
-            assertThat(sourceCodeChanges).withFailMessage(
-                    FAIL_MESSAGE, CODES, sourceCodeChanges, targetCodeChanges).isEqualTo(targetCodeChanges);
+            validateList(sourceResponse, targetResponse, CODE_CHANGES);
         }
 
         System.out.println("End test for ID " + classificationId + " at " + Instant.now());
