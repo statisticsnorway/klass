@@ -179,7 +179,6 @@ public final class MigrationTestConstants {
             DERIVED_FROM
     );
 
-    // Lists?
     public static List<String> pathNamesCorrespondenceTableById = Arrays.asList(
             NAME,
             ID,

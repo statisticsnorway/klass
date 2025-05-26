@@ -30,6 +30,23 @@ public abstract class AbstractKlassApiDataIntegrityTest {
 
     static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
+    static void validateObject(Response sourceResponse, Response targetResponse, String pathName) {
+        Object sourceField = sourceResponse.path(pathName);
+        Object targetField = targetResponse.path(pathName);
+
+        if (sourceField == null) {
+            assertThat(targetField)
+                    .withFailMessage(FAIL_MESSAGE, pathName, null, targetField)
+                    .isNull();
+            return;
+        }
+        assertThat(targetField)
+                .withFailMessage(FAIL_MESSAGE, pathName, sourceField, targetField)
+                .isNotNull();
+
+        assertThat(sourceField).withFailMessage(FAIL_MESSAGE,pathName, sourceField, targetField).isEqualTo(targetField);
+
+    }
 
     /**
      *
@@ -45,6 +62,17 @@ public abstract class AbstractKlassApiDataIntegrityTest {
         for (String pathName : pathNames) {
             sourceField = sourceResponse.path(pathName);
             targetField = targetResponse.path(pathName);
+
+            if (sourceField == null) {
+                assertThat(targetField)
+                        .withFailMessage(FAIL_MESSAGE, pathName, null, targetField)
+                        .isNull();
+                return;
+            }
+
+            assertThat(targetField)
+                    .withFailMessage(FAIL_MESSAGE, pathName, sourceField, targetField)
+                    .isNotNull();
 
             System.out.println(sourceField + " -> " + targetField);
 
@@ -62,11 +90,19 @@ public abstract class AbstractKlassApiDataIntegrityTest {
      * @param targetResponse Response object from target Api
      */
     static void validateSelfLink(Response sourceResponse, Response targetResponse) {
-        String sourceLink;
-        String targetLink;
+        String sourceLink = sourceResponse.path(LINKS_SELF_HREF);
+        String targetLink = targetResponse.path(LINKS_SELF_HREF);
 
-        sourceLink = sourceResponse.path(LINKS_SELF_HREF);
-        targetLink = targetResponse.path(LINKS_SELF_HREF);
+        if (sourceLink == null) {
+            assertThat(targetLink)
+                    .withFailMessage(FAIL_MESSAGE, LINKS_SELF_HREF, null, targetLink)
+                    .isNull();
+            return;
+        }
+
+        assertThat(targetLink)
+                .withFailMessage(FAIL_MESSAGE, LINKS_SELF_HREF, sourceLink, targetLink)
+                .isNotNull();
 
         System.out.println(sourceLink + " -> " + targetLink);
 
@@ -83,6 +119,7 @@ public abstract class AbstractKlassApiDataIntegrityTest {
 
         ArrayList<String> sourceList = sourceResponse.path(pathListName);
         ArrayList<String> targetList = targetResponse.path(pathListName);
+
         if (sourceList == null) {
             assertThat(targetList)
                     .withFailMessage(FAIL_MESSAGE, pathListName, null, targetList)
@@ -93,6 +130,7 @@ public abstract class AbstractKlassApiDataIntegrityTest {
         assertThat(targetList)
                 .withFailMessage(FAIL_MESSAGE, pathListName, sourceList, targetList)
                 .isNotNull();
+
         System.out.println("List sizes: " + sourceList.size() + " -> " + targetList.size());
         assertThat(sourceList.size())
                 .withFailMessage(FAIL_MESSAGE,
@@ -118,16 +156,24 @@ public abstract class AbstractKlassApiDataIntegrityTest {
      */
     static void validateLinks(Response sourceResponse, Response targetResponse, List<String> pathNamesLinks) {
 
-        Object sourceField;
-        Object targetField;
-
         for (String pathName : pathNamesLinks) {
-            sourceField = sourceResponse.path(pathName);
-            targetField = targetResponse.path(pathName);
+            Object sourceField = sourceResponse.path(pathName);
+            Object targetField = targetResponse.path(pathName);
+
+            if (sourceField == null) {
+                assertThat(targetField)
+                        .withFailMessage(FAIL_MESSAGE, pathName, null, targetField)
+                        .isNull();
+                return;
+            }
+
+            assertThat(targetField)
+                    .withFailMessage(FAIL_MESSAGE, pathName, sourceField, targetField)
+                    .isNotNull();
 
             if (pathName.endsWith(HREF)) {
-                String sourceHref = sourceField != null ? sourceField.toString() : null;
-                String targetHref = targetField != null ? targetField.toString() : null;
+                String sourceHref = sourceField.toString();
+                String targetHref = targetField.toString();
 
                 assertThat(MigrationTestUtils.isPathEqualIgnoreHost(sourceHref, targetHref))
                         .withFailMessage(FAIL_MESSAGE, pathName, sourceHref, targetHref)
