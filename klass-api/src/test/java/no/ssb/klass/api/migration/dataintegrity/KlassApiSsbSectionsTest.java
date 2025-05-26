@@ -14,24 +14,15 @@ public class KlassApiSsbSectionsTest extends AbstractKlassApiDataIntegrityTest {
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, null);
         Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, null);
 
-        assertThat(sourceResponse.getStatusCode()).withFailMessage(
-                FAIL_MESSAGE, path, sourceResponse.getStatusCode(), targetResponse.getStatusCode()).isEqualTo(targetResponse.getStatusCode());
+        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
         if(sourceResponse.getStatusCode() != 200) {
             System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
             assertThat(compareErrorJsonResponse(null, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            Object sourceSections = sourceResponse.path(EMBEDDED_SSB_SECTIONS);
-            Object targetSections = targetResponse.path(EMBEDDED_SSB_SECTIONS);
-            assertThat(sourceSections).isNotNull();
-
-            String sourceSectionsLinkSelf = sourceResponse.path(LINKS_SELF_HREF);
-            String targetSectionsLinkSelf = targetResponse.path(LINKS_SELF_HREF);
-            assertThat(sourceSectionsLinkSelf).isNotNull();
-
-            assertThat(sourceSections).withFailMessage(FAIL_MESSAGE, EMBEDDED_SSB_SECTIONS, sourceSections, targetSections).isEqualTo(targetSections);
-            assertThat(isPathEqualIgnoreHost(sourceSectionsLinkSelf, targetResponse.path(LINKS_SELF_HREF))).withFailMessage(FAIL_MESSAGE, LINKS_SELF_HREF, sourceSectionsLinkSelf, targetSectionsLinkSelf).isTrue();
+            validateList(sourceResponse, targetResponse, EMBEDDED_SSB_SECTIONS);
+            validateOneLink(sourceResponse, targetResponse, LINKS_SELF_HREF);
         }
     }
 
