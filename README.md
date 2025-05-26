@@ -67,7 +67,7 @@ Tips: If you are only setting up Klass for testing/development purposes you can 
 
 In order to download dependencies from GitHub Packages we must authenticate Maven. See the documentation here: <https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-apache-maven-registry#authenticating-with-a-personal-access-token>
 
-This may be done by generating a Personal Access Token (classic) on GitHub with the `packages:read` scope. The following configuration may then be placed in your `~/.m2/settings.xml` file.
+This may be done by generating a Personal Access Token (classic) on GitHub with the `read:packages` scope. Remember to configure SSO. The following configuration may then be placed in your `~/.m2/settings.xml` file.
 
 ```xml
 
