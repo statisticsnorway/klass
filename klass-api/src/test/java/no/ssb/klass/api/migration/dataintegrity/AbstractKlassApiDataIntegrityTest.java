@@ -58,12 +58,7 @@ public abstract class AbstractKlassApiDataIntegrityTest {
         }
     }
 
-    /**
-     *
-     * @param map
-     * @param path
-     * @return
-     */
+
     static Object resolvePath(Map<String, Object> map, String path) {
         String[] parts = path.split("\\.");
         Object current = map;
@@ -80,10 +75,8 @@ public abstract class AbstractKlassApiDataIntegrityTest {
 
     /**
      *
-     * @param ID
      * @param sourceResponse Response object from source Api
      * @param targetResponse Response object from target Api
-     * @return
      */
     static boolean compareErrorJsonResponse(Integer ID, Response sourceResponse, Response targetResponse) {
         Object sourceBody = sourceResponse.getBody().jsonPath().get("error");
@@ -101,10 +94,8 @@ public abstract class AbstractKlassApiDataIntegrityTest {
 
     /**
      *
-     * @param ID
      * @param sourceResponse Response object from source Api
      * @param targetResponse Response object from target Api
-     * @return
      */
     static boolean compareError(Integer ID, Response sourceResponse, Response targetResponse) {
         Object sourceBody = sourceResponse.getBody().asString();
@@ -120,12 +111,7 @@ public abstract class AbstractKlassApiDataIntegrityTest {
        return true;
     }
 
-    /**
-     *
-     * @param startDate
-     * @param endDate
-     * @return
-     */
+
     static LocalDate generateRandomDate(LocalDate startDate, LocalDate endDate) {
         long daysBetween = ChronoUnit.DAYS.between(startDate, endDate);
         Random random = new Random();
@@ -133,10 +119,7 @@ public abstract class AbstractKlassApiDataIntegrityTest {
         return startDate.plusDays(randomDay);
     }
 
-    /**
-     *
-     * @return
-     */
+
     static String generateRandomDateTime() {
         LocalDate startDate = LocalDate.of(1800, 1, 1);
         LocalDate endDate = LocalDate.of(2030, 12, 31);
@@ -161,11 +144,7 @@ public abstract class AbstractKlassApiDataIntegrityTest {
         return offsetDateTime.format(formatter);
     }
 
-    /**
-     *
-     * @param to
-     * @return
-     */
+
     static Integer generateRandomId(int to) {
         Random random = new Random();
         return random.nextInt(to);
