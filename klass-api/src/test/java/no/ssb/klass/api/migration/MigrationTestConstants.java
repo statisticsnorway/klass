@@ -14,6 +14,7 @@ public final class MigrationTestConstants {
     public static final String VARIANT_AT = "variantAt";
     public static final String VARIANTS = "variants";
     public static final String CORRESPONDS = "corresponds";
+    public static final String CORRESPONDS_AT = "correspondsAt";
 
     public static final String TRUE= "true";
     public static final String FALSE = "false";
