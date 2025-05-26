@@ -3,7 +3,6 @@ package no.ssb.klass.api.migration.dataintegrity;
 import io.restassured.response.Response;
 import no.ssb.klass.api.migration.KlassApiMigrationClient;
 import no.ssb.klass.api.migration.MigrationTestConfig;
-import no.ssb.klass.api.util.RestConstants;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeAll;
@@ -215,9 +214,9 @@ public abstract class AbstractKlassApiDataIntegrityTest {
      *
      * @param sourceResponse Response object from source Api
      * @param targetResponse Response object from target Api
-     * @param pathName
+     * @param pathName Path name to url
      */
-    static void validateLink(Response sourceResponse, Response targetResponse, String pathName) {
+    static void validateOneLink(Response sourceResponse, Response targetResponse, String pathName) {
         String sourceLink;
         String targetLink;
 
@@ -227,7 +226,6 @@ public abstract class AbstractKlassApiDataIntegrityTest {
         System.out.println(sourceLink + " -> " + targetLink);
 
         assertThat(isPathEqualIgnoreHost(sourceLink, targetLink)).withFailMessage(FAIL_MESSAGE, LINKS_SELF_HREF, sourceLink, targetLink).isTrue();
-
     }
 
     /**
@@ -263,7 +261,7 @@ public abstract class AbstractKlassApiDataIntegrityTest {
      * @param targetResponse Response object from target Api
      * @param pathNamesLinks List of path names in _links object
      */
-    static void validateListWithLinks(Response sourceResponse, Response targetResponse, List<String> pathNamesLinks) {
+    static void validateLinks(Response sourceResponse, Response targetResponse, List<String> pathNamesLinks) {
 
         Object sourceField;
         Object targetField;
