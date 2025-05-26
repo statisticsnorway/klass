@@ -21,18 +21,18 @@ public class KlassApiCorrespondenceTablesByIdTest extends AbstractKlassApiDataIn
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi( path, null);
         Response targetResponse = klassApiMigrationClient.getFromTargetApi( path, null);
 
-        assertThat(sourceResponse.getStatusCode()).withFailMessage(
-                FAIL_MESSAGE, path, sourceResponse.getStatusCode(), targetResponse.getStatusCode()).isEqualTo(targetResponse.getStatusCode());
+        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
         if(sourceResponse.getStatusCode() != 200) {
             System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
             assertThat(compareError(correspondenceTableId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateItem(sourceResponse, targetResponse, pathNamesCorrespondenceTableById);
+            validateItems(sourceResponse, targetResponse, pathNamesCorrespondenceTableById);
             validateLinks(sourceResponse, targetResponse, pathNamesCorrespondencesLinks);
             validateList(sourceResponse, targetResponse, CORRESPONDENCE_MAPS);
             validateList(sourceResponse, targetResponse, CHANGELOGS);
+            validateList(sourceResponse, targetResponse, PUBLISHED);
         }
     }
 
@@ -44,20 +44,18 @@ public class KlassApiCorrespondenceTablesByIdTest extends AbstractKlassApiDataIn
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, null);
         Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, null);
 
-        assertThat(sourceResponse.getStatusCode()).withFailMessage(
-                FAIL_MESSAGE, path, sourceResponse.getStatusCode(), targetResponse.getStatusCode()).isEqualTo(targetResponse.getStatusCode());
+        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
         if(sourceResponse.getStatusCode() != 200) {
             System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
             assertThat(compareError(correspondenceTableId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
-
-            validateItem(sourceResponse, targetResponse, pathNamesCorrespondenceTableById);
+            validateItems(sourceResponse, targetResponse, pathNamesCorrespondenceTableById);
             validateLinks(sourceResponse, targetResponse, pathNamesCorrespondencesLinks);
             validateList(sourceResponse, targetResponse, CORRESPONDENCE_MAPS);
             validateList(sourceResponse, targetResponse, CHANGELOGS);
+            validateList(sourceResponse, targetResponse, PUBLISHED);
         }
     }
 
