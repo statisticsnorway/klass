@@ -38,15 +38,20 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationIds")
     void getClassification(Integer classificationId) {
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(CLASSIFICATIONS_PATH + "/" + classificationId, null);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(CLASSIFICATIONS_PATH + "/" + classificationId, null);
+
+        String path = getClassificationByIdPath(classificationId);
+
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, null);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, null);
+
+        assertThat(sourceResponse.getStatusCode()).withFailMessage(
+                FAIL_MESSAGE, path, sourceResponse.getStatusCode(), targetResponse.getStatusCode()).isEqualTo(targetResponse.getStatusCode());
 
         if(sourceResponse.getStatusCode() != 200) {
             System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else {
-            System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
             // General fields
             validateItem(sourceResponse, targetResponse, pathNamesClassification);
             // Links
@@ -63,15 +68,19 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
     @MethodSource("rangeProviderClassificationIds")
     void getClassificationEnglish(Integer classificationId) {
 
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(CLASSIFICATIONS_PATH + "/" + classificationId, paramsLanguageEn);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(CLASSIFICATIONS_PATH + "/" + classificationId, paramsLanguageEn);
+        String path = getClassificationByIdPath(classificationId);
+
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageEn);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageEn);
+
+        assertThat(sourceResponse.getStatusCode()).withFailMessage(
+                FAIL_MESSAGE, CLASSIFICATION_FAMILIES, sourceResponse.getStatusCode(), targetResponse.getStatusCode()).isEqualTo(targetResponse.getStatusCode());
 
         if(sourceResponse.getStatusCode() != 200) {
             System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
             }
             else {
-                System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
                 // General fields
                 validateItem(sourceResponse, targetResponse, pathNamesClassification);
                 // check links
@@ -89,8 +98,13 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
     @MethodSource("rangeProviderClassificationIds")
     void getClassificationNewNorwegian(Integer classificationId) {
 
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(CLASSIFICATIONS_PATH + "/" + classificationId, paramsLanguageNn);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(CLASSIFICATIONS_PATH + "/" + classificationId, paramsLanguageNn);
+        String path = CLASSIFICATIONS_PATH + "/" + classificationId;
+
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageNn);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageNn);
+
+        assertThat(sourceResponse.getStatusCode()).withFailMessage(
+                FAIL_MESSAGE, CLASSIFICATIONS_PATH + classificationId, sourceResponse.getStatusCode(), targetResponse.getStatusCode()).isEqualTo(targetResponse.getStatusCode());
 
 
         if(sourceResponse.getStatusCode() != 200) {
@@ -98,7 +112,6 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
             }
         else {
-            System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
             // General fields
             validateItem(sourceResponse, targetResponse, pathNamesClassification);
             // check links
@@ -116,12 +129,19 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
     @MethodSource("rangeProviderClassificationIds")
     void getClassificationIncludeFuture(Integer classificationId) {
 
-            sourceResponse = klassApiMigrationClient.getFromSourceApi(CLASSIFICATIONS_PATH + "/" + classificationId, paramsIncludeFuture);
-            targetResponse = klassApiMigrationClient.getFromTargetApi(CLASSIFICATIONS_PATH + "/" + classificationId, paramsIncludeFuture);
+        String path = getClassificationByIdPath(classificationId);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsIncludeFuture);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsIncludeFuture);
 
 
-            if(sourceResponse.getStatusCode() != 200) {
-                assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
+        assertThat(sourceResponse.getStatusCode()).withFailMessage(
+                FAIL_MESSAGE, CLASSIFICATIONS_PATH + classificationId, sourceResponse.getStatusCode(),
+                targetResponse.getStatusCode()).isEqualTo(targetResponse.getStatusCode());
+
+
+        if(sourceResponse.getStatusCode() != 200) {
+            System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
+            assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
             }
             else {
                 // General fields
@@ -182,5 +202,8 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
         }
     }
 
+    String getClassificationByIdPath(Integer id) {
+        return CLASSIFICATIONS_PATH + "/" + id;
+    }
 
 }
