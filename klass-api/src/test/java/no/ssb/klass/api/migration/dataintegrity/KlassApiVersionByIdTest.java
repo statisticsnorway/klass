@@ -21,8 +21,8 @@ public class KlassApiVersionByIdTest extends AbstractKlassApiDataIntegrityTest{
 
     @Test
     void getVersionById() {
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi( "/versions/" + randomId, null);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi( "/versions/" + randomId, null);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi( "/" + VERSIONS + randomId, null);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi( "/" + VERSIONS + randomId, null);
 
         if(sourceResponse.getStatusCode() != 200) {
             assertThat(compareError(randomId, sourceResponse, targetResponse)).isTrue();

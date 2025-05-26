@@ -12,6 +12,7 @@ public final class MigrationTestConstants {
     public static final String CLASSIFICATION_FAMILIES = "classificationfamilies";
     public static final String VARIANT = "variant";
     public static final String VARIANT_AT = "variantAt";
+    public static final String VARIANTS = "variants";
 
     public static final String TRUE= "true";
     public static final String FALSE = "false";
@@ -199,6 +200,7 @@ public final class MigrationTestConstants {
             DERIVED_FROM
     );
 
+    // Lists?
     public static List<String> pathNamesCorrespondenceTableById = Arrays.asList(
             NAME,
             ID,
@@ -213,6 +215,18 @@ public final class MigrationTestConstants {
             SOURCE_LEVEL,
             TARGET_LEVEL,
             DESCRIPTION
+    );
+
+    // lists published, changeLogs, levels, classificationItems, correspondenceTables
+    public static List<String> pathNamesVariantById = Arrays.asList(
+            NAME,
+            ID,
+            CONTACT_PERSON,
+            OWNING_SECTION,
+            LAST_MODIFIED,
+            VALID_FROM,
+            VALID_TO,
+            INTRODUCTION
     );
 
     public static List<String> pathNamesClassificationsLinks = Arrays.asList(
