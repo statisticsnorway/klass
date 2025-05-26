@@ -1,6 +1,7 @@
 package no.ssb.klass.api.migration.dataintegrity;
 
 import io.restassured.response.Response;
+import no.ssb.klass.api.migration.MigrationTestUtils;
 import org.junit.jupiter.api.Test;
 
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
@@ -14,11 +15,11 @@ public class KlassApiSsbSectionsTest extends AbstractKlassApiDataIntegrityTest {
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, null);
         Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, null);
 
-        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+        MigrationTestUtils.assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
         if(sourceResponse.getStatusCode() != 200) {
             System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
-            assertThat(compareErrorJsonResponse(null, sourceResponse, targetResponse)).isTrue();
+            assertThat(MigrationTestUtils.compareErrorJsonResponse(null, sourceResponse, targetResponse)).isTrue();
         }
         else{
             validateList(sourceResponse, targetResponse, EMBEDDED_SSB_SECTIONS);

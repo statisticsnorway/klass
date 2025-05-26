@@ -3,16 +3,13 @@ package no.ssb.klass.api.migration.dataintegrity;
 import io.restassured.response.Response;
 import no.ssb.klass.api.migration.KlassApiMigrationClient;
 import no.ssb.klass.api.migration.MigrationTestConfig;
+import no.ssb.klass.api.migration.MigrationTestUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeAll;
 
-import java.net.URL;
-import java.time.*;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
 
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 import static no.ssb.klass.api.migration.MigrationTestUtils.mapById;
@@ -33,136 +30,6 @@ public abstract class AbstractKlassApiDataIntegrityTest {
 
     static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-    /**
-     * Compare two href and ignore host
-     *
-     * @param sourceHref String path
-     * @param targetHref String path
-     * @return True if the two paths are the same, False otherwise
-     */
-    static boolean isPathEqualIgnoreHost(String sourceHref, String targetHref) {
-        try {
-            URL sourceUrl = new URL(sourceHref);
-            URL targetUrl = new URL(targetHref);
-
-            if(!sourceUrl.getPath().equals(targetUrl.getPath())){
-                System.out.println(
-                        "Url path comparison issue: \nsource url path: " +
-                                sourceUrl.getPath() + "\ntarget url path: " +
-                                targetUrl.getPath());
-            }
-            return sourceUrl.getPath().equals(targetUrl.getPath());
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-
-    static Object resolvePath(Map<String, Object> map, String path) {
-        String[] parts = path.split("\\.");
-        Object current = map;
-
-        for (String part : parts) {
-            if (!(current instanceof Map)) {
-                return null;
-            }
-            current = ((Map<?, ?>) current).get(part);
-        }
-
-        return current;
-    }
-
-    /**
-     *
-     * @param sourceResponse Response object from source Api
-     * @param targetResponse Response object from target Api
-     */
-    static boolean compareErrorJsonResponse(Integer ID, Response sourceResponse, Response targetResponse) {
-        Object sourceBody = sourceResponse.getBody().jsonPath().get("error");
-        Object targetBody = targetResponse.getBody().jsonPath().get("error");
-
-        if (sourceResponse.getStatusCode() != targetResponse.getStatusCode() || !sourceBody.equals(targetBody)){
-           String sourceError = (ID != null)? ("Source: ID: " + ID + ", Code: " + sourceResponse.getStatusCode() + ", " + sourceBody) : ("Source: " +  "Code: " + sourceResponse.getStatusCode() + ", " + sourceBody);
-            String targetError = (ID != null)? ("Target: ID: " + ID + ", Code: " + targetResponse.getStatusCode() + ", " + targetBody) : ("Target: " + "Code: " + targetResponse.getStatusCode() + ", " + targetBody);
-
-            System.out.println(String.join(", ", sourceError) + "\n" + String.join(", ", targetError));
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     *
-     * @param sourceResponse Response object from source Api
-     * @param targetResponse Response object from target Api
-     */
-    static boolean compareError(Integer ID, Response sourceResponse, Response targetResponse) {
-        Object sourceBody = sourceResponse.getBody().asString();
-        Object targetBody = targetResponse.getBody().asString();
-
-        if (sourceResponse.getStatusCode() != targetResponse.getStatusCode() || !sourceBody.equals(targetBody)){
-           String sourceError = (ID != null)? ("Source: ID: " + ID + ", Code: " + sourceResponse.getStatusCode() + ", " + sourceBody) : ("Source: " +  "Code: " + sourceResponse.getStatusCode() + ", " + sourceBody);
-            String targetError = (ID != null)? ("Target: ID: " + ID + ", Code: " + targetResponse.getStatusCode() + ", " + targetBody) : ("Target: " + "Code: " + targetResponse.getStatusCode() + ", " + targetBody);
-
-            System.out.println(String.join(", ", sourceError) + "\n" + String.join(", ", targetError));
-            return false;
-        }
-       return true;
-    }
-
-
-    static LocalDate generateRandomDate(LocalDate startDate, LocalDate endDate) {
-        long daysBetween = ChronoUnit.DAYS.between(startDate, endDate);
-        Random random = new Random();
-        long randomDay = random.nextLong(daysBetween + 1);
-        return startDate.plusDays(randomDay);
-    }
-
-
-    static String generateRandomDateTime() {
-        LocalDate startDate = LocalDate.of(1800, 1, 1);
-        LocalDate endDate = LocalDate.of(2030, 12, 31);
-
-        long totalDays = ChronoUnit.DAYS.between(startDate, endDate);
-        LocalDate randomDate = startDate.plusDays(ThreadLocalRandom.current().nextLong(totalDays + 1));
-
-        LocalTime randomTime = LocalTime.of(
-                ThreadLocalRandom.current().nextInt(0, 24),
-                ThreadLocalRandom.current().nextInt(0, 60),
-                ThreadLocalRandom.current().nextInt(0, 60),
-                ThreadLocalRandom.current().nextInt(0, 1_000_000_000)
-        );
-
-        LocalDateTime localDateTime = LocalDateTime.of(randomDate, randomTime);
-
-        int offsetHours = ThreadLocalRandom.current().nextInt(-12, 15);
-        ZoneOffset offset = ZoneOffset.ofHours(offsetHours);
-        OffsetDateTime offsetDateTime = localDateTime.atOffset(offset);
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-        return offsetDateTime.format(formatter);
-    }
-
-
-    static Integer generateRandomId(int to) {
-        Random random = new Random();
-        return random.nextInt(to);
-    }
-
-    /**
-     * Assert that source and target returns the same status code
-     *
-     * @param sourceStatusCode Status code value of request to sourceHost
-     * @param targetStatusCode Status code value of request to targetHost
-     * @param path Path to the request
-     */
-    static void assertStatusCodesEqual(int sourceStatusCode, int targetStatusCode, String path){
-
-        assertThat(sourceStatusCode)
-                .withFailMessage(FAIL_MESSAGE, path, sourceStatusCode, targetStatusCode)
-                .isEqualTo(targetStatusCode);
-    }
 
     /**
      *
@@ -203,7 +70,7 @@ public abstract class AbstractKlassApiDataIntegrityTest {
 
         System.out.println(sourceLink + " -> " + targetLink);
 
-        assertThat(isPathEqualIgnoreHost(sourceLink, targetLink)).withFailMessage(FAIL_MESSAGE, LINKS_SELF_HREF, sourceLink, targetLink).isTrue();
+        assertThat(MigrationTestUtils.isPathEqualIgnoreHost(sourceLink, targetLink)).withFailMessage(FAIL_MESSAGE, LINKS_SELF_HREF, sourceLink, targetLink).isTrue();
     }
 
     /**
@@ -262,7 +129,7 @@ public abstract class AbstractKlassApiDataIntegrityTest {
                 String sourceHref = sourceField != null ? sourceField.toString() : null;
                 String targetHref = targetField != null ? targetField.toString() : null;
 
-                assertThat(isPathEqualIgnoreHost(sourceHref, targetHref))
+                assertThat(MigrationTestUtils.isPathEqualIgnoreHost(sourceHref, targetHref))
                         .withFailMessage(FAIL_MESSAGE, pathName, sourceHref, targetHref)
                         .isTrue();
             } else {
@@ -310,12 +177,12 @@ public abstract class AbstractKlassApiDataIntegrityTest {
                 Object sourceField;
                 Object targetField;
 
-                sourceField = resolvePath(versionSource, pathName);
-                targetField = resolvePath(versionTarget, pathName);
+                sourceField = MigrationTestUtils.resolvePath(versionSource, pathName);
+                targetField = MigrationTestUtils.resolvePath(versionTarget, pathName);
 
                 if (pathName.endsWith(HREF)) {
                     assertThat(sourceField == null && targetField == null ||
-                            sourceField != null && targetField != null && isPathEqualIgnoreHost(sourceField.toString(), targetField.toString()))
+                            sourceField != null && targetField != null && MigrationTestUtils.isPathEqualIgnoreHost(sourceField.toString(), targetField.toString()))
                             .withFailMessage(FAIL_MESSAGE, pathName, sourceField, targetField)
                             .isTrue();
                 } else {

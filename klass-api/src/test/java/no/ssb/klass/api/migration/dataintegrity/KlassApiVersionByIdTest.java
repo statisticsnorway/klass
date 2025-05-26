@@ -1,6 +1,7 @@
 package no.ssb.klass.api.migration.dataintegrity;
 
 import io.restassured.response.Response;
+import no.ssb.klass.api.migration.MigrationTestUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -16,7 +17,7 @@ public class KlassApiVersionByIdTest extends AbstractKlassApiDataIntegrityTest{
 
     @BeforeAll
     static void beforeAllVersions() {
-        randomId = generateRandomId(2000);
+        randomId = MigrationTestUtils.generateRandomId(2000);
     }
 
     @Test
@@ -27,10 +28,10 @@ public class KlassApiVersionByIdTest extends AbstractKlassApiDataIntegrityTest{
         Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, null);
 
 
-        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+        MigrationTestUtils.assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
         if(sourceResponse.getStatusCode() != 200) {
-            assertThat(compareError(randomId, sourceResponse, targetResponse)).isTrue();
+            assertThat(MigrationTestUtils.compareError(randomId, sourceResponse, targetResponse)).isTrue();
         }
         else{
             validateItems(sourceResponse, targetResponse, pathNamesVersionsById);
@@ -47,11 +48,11 @@ public class KlassApiVersionByIdTest extends AbstractKlassApiDataIntegrityTest{
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi( path, params);
         Response targetResponse = klassApiMigrationClient.getFromTargetApi( path, params);
 
-        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+        MigrationTestUtils.assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
         if(sourceResponse.getStatusCode() != 200) {
             System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
-            assertThat(compareError(randomId, sourceResponse, targetResponse)).isTrue();
+            assertThat(MigrationTestUtils.compareError(randomId, sourceResponse, targetResponse)).isTrue();
         }
         else{
             validateItems(sourceResponse, targetResponse, pathNamesVersionsById);
@@ -68,11 +69,11 @@ public class KlassApiVersionByIdTest extends AbstractKlassApiDataIntegrityTest{
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, params);
         Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, params);
 
-        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+        MigrationTestUtils.assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
         if(sourceResponse.getStatusCode() != 200) {
             System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
-            assertThat(compareErrorJsonResponse(randomId, sourceResponse, targetResponse)).isTrue();
+            assertThat(MigrationTestUtils.compareErrorJsonResponse(randomId, sourceResponse, targetResponse)).isTrue();
         }
         else{
             validateItems(sourceResponse, targetResponse, pathNamesVersionsById);
@@ -89,11 +90,11 @@ public class KlassApiVersionByIdTest extends AbstractKlassApiDataIntegrityTest{
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi( path, params);
         Response targetResponse = klassApiMigrationClient.getFromTargetApi( path, params);
 
-        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+        MigrationTestUtils.assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
         if(sourceResponse.getStatusCode() != 200) {
             System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
-            assertThat(compareError(randomId, sourceResponse, targetResponse)).isTrue();
+            assertThat(MigrationTestUtils.compareError(randomId, sourceResponse, targetResponse)).isTrue();
         }
         else{
             validateItems(sourceResponse, targetResponse, pathNamesVersionsById);

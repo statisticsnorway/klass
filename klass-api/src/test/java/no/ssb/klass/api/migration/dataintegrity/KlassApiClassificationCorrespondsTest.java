@@ -1,6 +1,7 @@
 package no.ssb.klass.api.migration.dataintegrity;
 
 import io.restassured.response.Response;
+import no.ssb.klass.api.migration.MigrationTestUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -40,11 +41,11 @@ public class KlassApiClassificationCorrespondsTest extends AbstractKlassApiDataI
         sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsTargetIdAndDateFrom);
         targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsTargetIdAndDateFrom);
 
-        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+        MigrationTestUtils.assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
         if(sourceResponse.getStatusCode() != 200) {
             System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
-            assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
+            assertThat(MigrationTestUtils.compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
             validateList(sourceResponse, targetResponse, CORRESPONDENCE_ITEMS);
