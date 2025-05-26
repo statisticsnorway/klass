@@ -22,8 +22,8 @@ public class KlassApiClassificationCodesAtTest extends AbstractKlassApiDataInteg
 
     static Map<String, Object> paramsDate = new HashMap<>();
 
-    List<?> sourceCodes;
-    List<?> targetCodes;
+    List<?> sourceFields;
+    List<?> targetFields;
 
     Response sourceResponse;
     Response targetResponse;
@@ -57,10 +57,10 @@ public class KlassApiClassificationCodesAtTest extends AbstractKlassApiDataInteg
         }
         else{
             System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
-            sourceCodes = sourceResponse.path(CODES);
-            targetCodes = targetResponse.path(CODES);
-            System.out.println(sourceCodes.size() + "->" + targetCodes.size());
-            assertThat(sourceCodes).withFailMessage(FAIL_MESSAGE, CODES, sourceCodes, targetCodes).isEqualTo(targetCodes);
+            sourceFields = sourceResponse.path(CODES);
+            targetFields = targetResponse.path(CODES);
+            System.out.println(sourceFields.size() + "->" + targetFields.size());
+            assertThat(sourceFields).withFailMessage(FAIL_MESSAGE, CODES, sourceFields, targetFields).isEqualTo(targetFields);
         }
     }
 
@@ -82,10 +82,10 @@ public class KlassApiClassificationCodesAtTest extends AbstractKlassApiDataInteg
         }
         else{
             System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
-            sourceCodes = sourceResponse.path(CODES);
-            targetCodes = targetResponse.path(CODES);
-            System.out.println(sourceCodes.size() + "->" + targetCodes.size());
-            assertThat(sourceCodes).withFailMessage(FAIL_MESSAGE, CODES, sourceCodes, targetCodes).isEqualTo(targetCodes);
+            sourceFields = sourceResponse.path(CODES);
+            targetFields = targetResponse.path(CODES);
+            System.out.println(sourceFields.size() + "->" + targetFields.size());
+            assertThat(sourceFields).withFailMessage(FAIL_MESSAGE, CODES, sourceFields, targetFields).isEqualTo(targetFields);
         }
 
         System.out.println("End test for ID " + classificationId + " at " + Instant.now());

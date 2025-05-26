@@ -10,6 +10,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -32,8 +33,8 @@ public class KlassApiClassificationCodesTest extends AbstractKlassApiDataIntegri
     static Map<String, Object> paramsDate = new HashMap<>();
     static Map<String, Object> paramsDateInRange = new HashMap<>();
 
-    Object sourceFields;
-    Object targetFields;
+    List<?> sourceFields;
+    List<?> targetFields;
 
     Response sourceResponse;
     Response targetResponse;
@@ -93,7 +94,9 @@ public class KlassApiClassificationCodesTest extends AbstractKlassApiDataIntegri
         else{
             System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
             sourceFields = sourceResponse.path(CODES);
-            assertThat(sourceFields).withFailMessage(FAIL_MESSAGE, CODES, sourceFields, targetFields).isEqualTo(targetResponse.path(CODES));
+            targetFields = targetResponse.path(CODES);
+            System.out.println(sourceFields.size() + "->" + targetFields.size());
+            assertThat(sourceFields).withFailMessage(FAIL_MESSAGE, CODES, sourceFields, targetFields).isEqualTo(targetFields);
         }
     }
 
@@ -141,7 +144,8 @@ public class KlassApiClassificationCodesTest extends AbstractKlassApiDataIntegri
         else{
             System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
             sourceFields = sourceResponse.path(CODES);
-            assertThat(sourceFields).withFailMessage(FAIL_MESSAGE, CODES, sourceFields, targetFields).isEqualTo(targetResponse.path(CODES));
+            targetFields = targetResponse.path(CODES);
+            assertThat(sourceFields).withFailMessage(FAIL_MESSAGE, CODES, sourceFields, targetFields).isEqualTo(targetFields);
         }
     }
 
@@ -165,7 +169,8 @@ public class KlassApiClassificationCodesTest extends AbstractKlassApiDataIntegri
         } else {
             System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
             sourceFields = sourceResponse.path(CODES);
-            assertThat(sourceFields).withFailMessage(FAIL_MESSAGE, CODES, sourceFields, targetFields).isEqualTo(targetResponse.path(CODES));
+            targetFields = targetResponse.path(CODES);
+            assertThat(sourceFields).withFailMessage(FAIL_MESSAGE, CODES, sourceFields, targetFields).isEqualTo(targetFields);
         }
 
     }

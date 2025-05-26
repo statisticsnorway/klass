@@ -10,6 +10,7 @@ public final class MigrationTestConstants {
     public static final String CLASSIFICATIONS_PATH = "/classifications";
     public static final String CHANGES = "changes";
     public static final String CLASSIFICATION_FAMILIES = "classificationfamilies";
+    public static final String VARIANT = "variant";
 
     public static final String TRUE= "true";
     public static final String FALSE = "false";

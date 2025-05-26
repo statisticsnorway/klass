@@ -1,91 +1,61 @@
 package no.ssb.klass.api.migration.dataintegrity;
 
-import io.restassured.RestAssured;
 import io.restassured.response.Response;
-import org.apache.curator.shaded.com.google.common.util.concurrent.RateLimiter;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+
+import java.time.Instant;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class KlassApiClassificationVariantTest extends AbstractKlassApiDataIntegrityTest {
 
+    static String variantNameId84 = "Klimagasser";
+    static String variantDateId84 = "2015-01-01";
+    static String variantNameId7 = "Gruppering av lønnstakere med høyere utdanning (2 grupper)";
+    static String variantDateId7 = "2000-04-01";
 
-    RateLimiter limiter = RateLimiter.create(1.5);
+    static Map<String, Object> paramsVariantDateFrom = new HashMap<>();
 
-    static Integer randomId;
+    List<?> sourceFields;
+    List<?> targetFields;
 
-    /*
-    optional
-        to
-        selectCodes
-        selectLevel
-        presentationNamePattern
+    Response sourceResponse;
+    Response targetResponse;
 
-        csv
-            csvSeparator
-            csvFields
-
-    random ids
-    different queryParams
-    valid values
-    invalid values
-    */
-
-    String variantNameId84 = "Klimagasser";
-    String variantDateId84 = "2015-01-01";
-    String variantNameId7 = "Gruppering av lønnstakere med høyere utdanning (2 grupper)";
-    String variantDateId7 = "2000-04-01";
-
-    // Test 1 mandatory
-    // Test 2 all but csv
-    // Test 3 all
-    // list of queries?
 
     @BeforeAll
     static void beforeAllVariant() {
-        randomId = generateRandomId(5000);
+        paramsVariantDateFrom.put(VARIANT_NAME, variantNameId84);
+        paramsVariantDateFrom.put(RANGE_FROM, variantDateId84);
+
     }
 
-    @Test
-    void getClassificationVariantPartOneTest() {
-
-            limiter.acquire();
-
-            Response sourceResponse = getCodesResponse(klassApSourceHostPath, randomId, variantNameId84, variantDateId84);
-            Response targetResponse = getCodesResponse(klassApiTargetHostPath, randomId, variantNameId84, variantDateId84);
-
-            if(sourceResponse.getStatusCode() != 200) {
-                assertThat(compareError(randomId, sourceResponse, targetResponse)).isTrue();
-            }
-            else{
-                Object sourceField = sourceResponse.path(CODES);
-                assertThat(sourceField).isEqualTo(targetResponse.path(CODES));
-            }
-    }
 
     @Test
-    void getClassificationVariantPartTest() {
+    void getOneClassificationVariant(){
+        Integer classificationId = 84;
+        System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
 
-        limiter.acquire();
-
-        Response sourceResponse = getCodesResponse(klassApSourceHostPath, 7, variantNameId7, variantDateId7);
-        Response targetResponse = getCodesResponse(klassApiTargetHostPath, 7, variantNameId7, variantDateId7);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(CLASSIFICATIONS_PATH + "/"+ classificationId + "/" + VARIANT, paramsVariantDateFrom);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(CLASSIFICATIONS_PATH + "/"+ classificationId + "/" + VARIANT, paramsVariantDateFrom);
 
         if(sourceResponse.getStatusCode() != 200) {
-            assertThat(compareError(7, sourceResponse, targetResponse)).isTrue();
+            System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
+            assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            Object sourceField = sourceResponse.path(CODES);
-            assertThat(sourceField).isEqualTo(targetResponse.path(CODES));
+            System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
+            sourceFields = sourceResponse.path(CODES);
+            targetFields = targetResponse.path(CODES);
+            System.out.println(sourceFields.size() + "->" + targetFields.size());
+            assertThat(sourceFields).withFailMessage(FAIL_MESSAGE, CODES, sourceFields, targetFields).isEqualTo(targetFields);
         }
     }
 
-    private Response getCodesResponse(String basePath, Integer id, String name, String date) {
-
-        return RestAssured.given().queryParam(VARIANT_NAME, name).queryParam(RANGE_FROM, date).get(basePath + "/" + id + "/" + "variant");
-
-    }
 }
