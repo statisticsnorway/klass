@@ -25,7 +25,7 @@ public class KlassApiClassificationFamiliesByIdTest extends KlassApiClassificati
         }
         else{
             validateItems(sourceResponse, targetResponse, pathNamesClassificationFamilyById);
-            validateLink(sourceResponse, targetResponse, LINKS_SELF_HREF);
+            validateOneLink(sourceResponse, targetResponse, LINKS_SELF_HREF);
             validatePathListWithLinks(sourceResponse, targetResponse, CLASSIFICATIONS, pathNamesClassificationsPage);
         }
     }

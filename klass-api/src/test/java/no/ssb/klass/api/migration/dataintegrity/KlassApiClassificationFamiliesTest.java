@@ -22,9 +22,8 @@ public class KlassApiClassificationFamiliesTest extends KlassApiClassificationCo
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            String sourceLink = sourceResponse.path(LINKS_SELF_HREF);
-            String targetLink = targetResponse.path(LINKS_SELF_HREF);
-            assertThat(isPathEqualIgnoreHost(sourceLink, targetLink)).withFailMessage(FAIL_MESSAGE, LINKS_SELF_HREF, sourceLink, targetLink).isTrue();
+            validateOneLink(sourceResponse, targetResponse, LINKS_SELF_HREF);
+            validatePathListWithLinks(sourceResponse, targetResponse, EMBEDDED_CLASSIFICATION_FAMILIES, pathNamesClassificationFamilies);
         }
     }
 
