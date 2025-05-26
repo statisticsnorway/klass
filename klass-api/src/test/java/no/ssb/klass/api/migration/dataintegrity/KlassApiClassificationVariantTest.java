@@ -40,15 +40,21 @@ public class KlassApiClassificationVariantTest extends AbstractKlassApiDataInteg
         Integer classificationId = 84;
         System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
 
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(CLASSIFICATIONS_PATH + "/"+ classificationId + "/" + VARIANT, paramsVariantDateFrom);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(CLASSIFICATIONS_PATH + "/"+ classificationId + "/" + VARIANT, paramsVariantDateFrom);
+        String path = getVariantPath(classificationId);
+
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsVariantDateFrom);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsVariantDateFrom);
+
+        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+
+        assertThat(sourceResponse.getStatusCode()).withFailMessage(
+                FAIL_MESSAGE, path, sourceResponse.getStatusCode(), targetResponse.getStatusCode()).isEqualTo(targetResponse.getStatusCode());
 
         if(sourceResponse.getStatusCode() != 200) {
             System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
             sourceFields = sourceResponse.path(CODES);
             targetFields = targetResponse.path(CODES);
             System.out.println(sourceFields.size() + "->" + targetFields.size());
@@ -57,7 +63,7 @@ public class KlassApiClassificationVariantTest extends AbstractKlassApiDataInteg
     }
 
     String getVariantPath(Integer id) {
-        return CLASSIFICATIONS_PATH + "/" + id;
+        return CLASSIFICATIONS_PATH + "/"+ id + "/" + VARIANT;
     }
 
 }
