@@ -1,36 +1,15 @@
 package no.ssb.klass.core.model;
 
-import static com.google.common.base.Preconditions.*;
-import static java.util.stream.Collectors.*;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Index;
-import javax.persistence.Lob;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
+import com.google.common.base.Strings;
+import no.ssb.klass.core.util.*;
 import org.apache.commons.lang.StringUtils;
 
-import com.google.common.base.Strings;
+import javax.persistence.*;
+import java.util.*;
 
-import no.ssb.klass.core.util.DateRange;
-import no.ssb.klass.core.util.KlassResourceNotFoundException;
-import no.ssb.klass.core.util.TimeUtil;
-import no.ssb.klass.core.util.Translatable;
-import no.ssb.klass.core.util.AlphaNumericalComparator;
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
+import static java.util.stream.Collectors.toList;
 
 @Entity
 @Table(indexes = {
@@ -56,7 +35,6 @@ public class ClassificationSeries extends BaseEntity implements ClassificationEn
     private String nameNn;
     @Column(name = "name_en")
     private String nameEn;
-    @Lob
     @Column(columnDefinition = "text", nullable = false)
     private Translatable description;
     @Column(nullable = false)
@@ -88,7 +66,7 @@ public class ClassificationSeries extends BaseEntity implements ClassificationEn
     private Long migratedFromId;
 
     public ClassificationSeries(Translatable name, Translatable description, boolean copyrighted,
-            Language primaryLanguage, ClassificationType classificationType, User contactPerson) {
+                                Language primaryLanguage, ClassificationType classificationType, User contactPerson) {
         this.primaryLanguage = checkNotNull(primaryLanguage);
         this.description = checkNotNull(description);
         checkArgument(!description.isEmpty(), "Description is empty");
@@ -184,9 +162,8 @@ public class ClassificationSeries extends BaseEntity implements ClassificationEn
 
     /**
      * drafts are excluded as they do not have a real date range.
-     * 
-     * @param dateRange
-     *            that versions should overlap
+     *
+     * @param dateRange that versions should overlap
      * @return list of version that overlap provided DateRange
      */
     public List<ClassificationVersion> getClassificationVersionsInRange(DateRange dateRange) {
@@ -206,10 +183,8 @@ public class ClassificationSeries extends BaseEntity implements ClassificationEn
     /**
      * drafts are excluded as they do not have a real date range.
      *
-     * @param dateRange
-     *            that versions should overlap
-     * @param includeFuture
-     *            if future version is included
+     * @param dateRange     that versions should overlap
+     * @param includeFuture if future version is included
      * @return list of version that overlap provided DateRange and futured versions if value is true
      */
     public List<ClassificationVersion> getClassificationVersionsInRange(DateRange dateRange, Boolean includeFuture) {
@@ -247,7 +222,7 @@ public class ClassificationSeries extends BaseEntity implements ClassificationEn
     /**
      * Find correspondenceTables that describes changes between versions of same classification, referred to as
      * changeTables. A changeTable list changes between two classification versions.
-     * 
+     *
      * @param dateRange
      * @return
      */
@@ -267,7 +242,7 @@ public class ClassificationSeries extends BaseEntity implements ClassificationEn
     }
 
     private CorrespondenceTable getChangeTableBetween(ClassificationVersion first,
-            ClassificationVersion second) {
+                                                      ClassificationVersion second) {
         List<CorrespondenceTable> changeTables = new ArrayList<>();
         changeTables.addAll(first.getCorrespondenceTablesWithTargetVersion(second));
         changeTables.addAll(second.getCorrespondenceTablesWithTargetVersion(first));
@@ -281,13 +256,13 @@ public class ClassificationSeries extends BaseEntity implements ClassificationEn
     }
 
     private String createMultipleChangeTablesFoundErrorMessage(ClassificationVersion first,
-            ClassificationVersion second) {
+                                                               ClassificationVersion second) {
         return first.getNameInPrimaryLanguage() + " has multiple change tables (correspondenceTables) with: " + second
                 .getNameInPrimaryLanguage();
     }
 
     private String createCorrespondenceNotFoundErrorMessage(ClassificationVersion first,
-            ClassificationVersion second) {
+                                                            ClassificationVersion second) {
         return first.getNameInPrimaryLanguage() + " has no change table (correspondenceTable) with: " + second
                 .getNameInPrimaryLanguage();
     }
@@ -384,17 +359,17 @@ public class ClassificationSeries extends BaseEntity implements ClassificationEn
 
     private void setName(String name, Language language) {
         switch (language) {
-        case NB:
-            nameNo = name;
-            break;
-        case NN:
-            nameNn = name;
-            break;
-        case EN:
-            nameEn = name;
-            break;
-        default:
-            throw new IllegalArgumentException("Unknown language: " + language);
+            case NB:
+                nameNo = name;
+                break;
+            case NN:
+                nameNn = name;
+                break;
+            case EN:
+                nameEn = name;
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown language: " + language);
         }
     }
 
@@ -442,7 +417,7 @@ public class ClassificationSeries extends BaseEntity implements ClassificationEn
     }
 
     public static String getNameWithoutPrefix(String prefixedName, Language language,
-            ClassificationType classificationType) {
+                                              ClassificationType classificationType) {
         String prefix = ClassificationSeries.getNamePrefix(language, classificationType);
         if (prefixedName.matches("^" + prefix + ".*")) {
             return prefixedName.substring(prefix.length());
@@ -465,27 +440,27 @@ public class ClassificationSeries extends BaseEntity implements ClassificationEn
 
     public static String getKlassifikasjonPrefix(Language language) {
         switch (language) {
-        case NB:
-            return PREFIX_CLASSIFICATION_NB;
-        case NN:
-            return PREFIX_CLASSIFICATION_NN;
-        case EN:
-            return PREFIX_CLASSIFICATION_EN;
-        default:
-            return "";
+            case NB:
+                return PREFIX_CLASSIFICATION_NB;
+            case NN:
+                return PREFIX_CLASSIFICATION_NN;
+            case EN:
+                return PREFIX_CLASSIFICATION_EN;
+            default:
+                return "";
         }
     }
 
     public static String getKodelistePrefix(Language language) {
         switch (language) {
-        case NB:
-            return PREFIX_CODELIST_NB;
-        case NN:
-            return PREFIX_CODELIST_NN;
-        case EN:
-            return PREFIX_CODELIST_EN;
-        default:
-            return "";
+            case NB:
+                return PREFIX_CODELIST_NB;
+            case NN:
+                return PREFIX_CODELIST_NN;
+            case EN:
+                return PREFIX_CODELIST_EN;
+            default:
+                return "";
         }
     }
 
