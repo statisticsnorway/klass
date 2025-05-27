@@ -6,6 +6,7 @@ import java.net.URL;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -19,7 +20,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 public class MigrationTestUtils {
 
     /**
-     * Compare two href and ignore host
+     * Compare url from two sources ignoring host.
      *
      * @param sourceHref String path
      * @param targetHref String path
@@ -43,7 +44,8 @@ public class MigrationTestUtils {
         }
     }
 
-    public static Object resolvePath(Map<String, Object> map, String path) {
+
+    private static Object resolvePath(Map<String, Object> map, String path) {
         String[] parts = path.split("\\.");
         Object current = map;
 
@@ -58,7 +60,9 @@ public class MigrationTestUtils {
     }
 
     /**
-     *
+     * Compare error response from source and target API.
+     * <p>
+     * Print the status code.
      * @param sourceResponse Response object from source Api
      * @param targetResponse Response object from target Api
      */
@@ -113,7 +117,7 @@ public class MigrationTestUtils {
     }
 
     /**
-     * Assert that source and target returns the same status code
+     * Assert that source and target returns the same status code.
      *
      * @param sourceStatusCode Status code value of request to sourceHost
      * @param targetStatusCode Status code value of request to targetHost
@@ -126,7 +130,7 @@ public class MigrationTestUtils {
                 .isEqualTo(targetStatusCode);
     }
 
-    public static Map<Object, Map<String, Object>> mapByField(List<Map<String, Object>> list, String field) {
+    private static Map<Object, Map<String, Object>> mapByField(List<Map<String, Object>> list, String field) {
         return list.stream()
                 .filter(item -> item.containsKey(field) && item.get(field) != null)
                 .collect(Collectors.toMap(
@@ -135,7 +139,166 @@ public class MigrationTestUtils {
                 ));
     }
 
+    /**
+     * Assert response is not null.
+     * @param response Response object from Api
+     */
     public static void assertApiResponseIsNotNull(Response response) {
         assertThat(response).withFailMessage(API_EMPTY_RESPONSE_MESSAGE).isNotNull();
+    }
+
+    /**
+     * Validate one single path object.
+     * @param sourceResponse Response object from source Api
+     * @param targetResponse Response object from target Api
+     * @param pathName Name for single path
+     */
+    public static void validateObject(Response sourceResponse, Response targetResponse, String pathName) {
+        Object sourceField = sourceResponse.path(pathName);
+        Object targetField = targetResponse.path(pathName);
+
+        if (sourceField == null) {
+            assertThat(targetField)
+                    .withFailMessage(FAIL_MESSAGE, pathName, null, targetField)
+                    .isNull();
+        }
+
+        if (pathName.endsWith(HREF)) {
+            String sourceHref = sourceField != null ? sourceField.toString() : "";
+            String targetHref = targetField != null ? targetField.toString(): "";
+            System.out.println(sourceHref + " -> " + targetHref);
+            assertThat(isPathEqualIgnoreHost(sourceHref, targetHref))
+                    .withFailMessage(FAIL_MESSAGE, pathName, sourceHref, targetHref)
+                    .isTrue();
+        } else {
+            assertThat(sourceField).withFailMessage(FAIL_MESSAGE, pathName, sourceField, targetField).isEqualTo(targetField);
+        }
+
+    }
+
+    /**
+     * Validates that the lists at the specified path in both API response bodies contain the same elements, regardless of order.
+     * @param sourceResponse Response object from source Api
+     * @param targetResponse Response object from target Api
+     * @param pathListName List of path names in nested list
+     */
+    public static void validateList(Response sourceResponse, Response targetResponse, String pathListName) {
+
+        ArrayList<String> sourceList = sourceResponse.path(pathListName);
+        ArrayList<String> targetList = targetResponse.path(pathListName);
+
+        if (sourceList == null) {
+            assertThat(targetList)
+                    .withFailMessage(FAIL_MESSAGE, pathListName, null, targetList)
+                    .isNull();
+            return;
+        }
+
+        assertThat(targetList)
+                .withFailMessage(FAIL_MESSAGE, pathListName, sourceList, targetList)
+                .isNotNull();
+
+        System.out.println("List sizes: " + sourceList.size() + " -> " + targetList.size());
+        assertThat(sourceList.size())
+                .withFailMessage(FAIL_MESSAGE,
+                        pathListName, sourceList.size(), targetList.size())
+                .isEqualTo(targetList.size());
+
+        assertThat(sourceList.containsAll(targetList))
+                .withFailMessage(FAIL_MESSAGE,
+                        pathListName, sourceList, targetList)
+                .isTrue();
+
+        assertThat(targetList.containsAll(sourceList))
+                .withFailMessage(FAIL_MESSAGE,
+                        pathListName, sourceList, targetList)
+                .isTrue();
+    }
+
+    /**
+     *  Validates that the values at specified path names in two API response bodies are equal.
+     *  Handles url paths.
+     * @param sourceResponse Response object from source Api
+     * @param targetResponse Response object from target Api
+     * @param pathNames List of path names
+     */
+    public static void validateItems(Response sourceResponse, Response targetResponse, List<String> pathNames) {
+
+        for (String pathName : pathNames) {
+            System.out.println("Checking pathname: " + pathName);
+            Object sourceField = sourceResponse.path(pathName);
+            Object targetField = targetResponse.path(pathName);
+
+
+            if (sourceField == null) {
+                assertThat(targetField)
+                        .withFailMessage(FAIL_MESSAGE, pathName, null, targetField)
+                        .isNull();
+            }
+
+            if (pathName.endsWith(HREF)) {
+                String sourceHref = sourceField != null ? sourceField.toString() : "";
+                String targetHref = targetField != null ? targetField.toString(): "";
+                System.out.println(sourceHref + " -> " + targetHref);
+                assertThat(isPathEqualIgnoreHost(sourceHref, targetHref))
+                        .withFailMessage(FAIL_MESSAGE, pathName, sourceHref, targetHref)
+                        .isTrue();
+            } else {
+                System.out.println(sourceField + " -> " + targetField);
+                assertThat(sourceField)
+                        .withFailMessage(FAIL_MESSAGE, pathName, sourceField, targetField)
+                        .isEqualTo(targetField);
+            }
+        }
+    }
+
+    /**
+     * Validates that fields specified in pathNames in the specified path list from two API response bodies are equal.
+     * @param sourceResponse Response object from source Api
+     * @param targetResponse Response object from target Api
+     * @param listName Name of list element in path
+     * @param pathNames List of fields in listName list
+     */
+    public static void validatePathListWithObjects(Response sourceResponse, Response targetResponse, String listName, List<String> pathNames, String idField) {
+        List<Map<String, Object>> sourceList = sourceResponse.path(listName);
+        List<Map<String, Object>> targetList = targetResponse.path(listName);
+        if (sourceList == null) {
+            assertThat(targetList)
+                    .withFailMessage(FAIL_MESSAGE, listName, null, targetList)
+                    .isNull();
+            return;
+        }
+
+        assertThat(targetList)
+                .withFailMessage(FAIL_MESSAGE, listName, sourceList, targetList)
+                .isNotNull();
+
+        assertThat(sourceList.size()).isEqualTo(targetList.size());
+        System.out.println("List sizes: " + sourceList.size() + " -> " + targetList.size());
+
+        Map<Object, Map<String, Object>> sourceById = mapByField(sourceList, idField);
+        Map<Object, Map<String, Object>> targetById = mapByField(targetList, idField);
+
+        for (Object versionId : sourceById.keySet()) {
+            Map<String, Object> versionSource = sourceById.get(versionId);
+            Map<String, Object> versionTarget = targetById.get(versionId);
+
+            for (String pathName : pathNames) {
+
+                Object sourceField = resolvePath(versionSource, pathName);
+                Object targetField = resolvePath(versionTarget, pathName);
+
+                if (pathName.endsWith(HREF)) {
+                    assertThat(sourceField == null && targetField == null ||
+                            sourceField != null && targetField != null && isPathEqualIgnoreHost(sourceField.toString(), targetField.toString()))
+                            .withFailMessage(FAIL_MESSAGE, pathName, sourceField, targetField)
+                            .isTrue();
+                } else {
+                    assertThat(versionSource.get(pathName))
+                            .withFailMessage(FAIL_MESSAGE, pathName, sourceField, targetField)
+                            .isEqualTo(versionTarget.get(pathName));
+                }
+            }
+        }
     }
 }
