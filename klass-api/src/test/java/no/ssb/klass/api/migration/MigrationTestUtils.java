@@ -18,11 +18,6 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class MigrationTestUtils {
 
-    public static Map<Object, Map<String, Object>> mapById(List<Map<String, Object>> versions) {
-        return versions.stream()
-                .collect(Collectors.toMap(v -> v.get("id"), Function.identity()));
-    }
-
     /**
      * Compare two href and ignore host
      *
@@ -60,25 +55,6 @@ public class MigrationTestUtils {
         }
 
         return current;
-    }
-
-    /**
-     *
-     * @param sourceResponse Response object from source Api
-     * @param targetResponse Response object from target Api
-     */
-    public static boolean compareErrorJsonResponse(Integer ID, Response sourceResponse, Response targetResponse) {
-        Object sourceBody = sourceResponse.getBody().jsonPath().get("error");
-        Object targetBody = targetResponse.getBody().jsonPath().get("error");
-        System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
-        if (sourceResponse.getStatusCode() != targetResponse.getStatusCode() || !sourceBody.equals(targetBody)){
-           String sourceError = (ID != null)? ("Source: ID: " + ID + ", Code: " + sourceResponse.getStatusCode() + ", " + sourceBody) : ("Source: " +  "Code: " + sourceResponse.getStatusCode() + ", " + sourceBody);
-            String targetError = (ID != null)? ("Target: ID: " + ID + ", Code: " + targetResponse.getStatusCode() + ", " + targetBody) : ("Target: " + "Code: " + targetResponse.getStatusCode() + ", " + targetBody);
-
-            System.out.println(String.join(", ", sourceError) + "\n" + String.join(", ", targetError));
-            return false;
-        }
-        return true;
     }
 
     /**
