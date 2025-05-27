@@ -9,7 +9,7 @@ set +a
 docker compose up -d
 
 echo "Wait for mariadb to be ready"
-sleep 10
+sleep 20
 
 echo "Load data from file to mariadb database"
 docker compose exec -T mariadb mariadb -u root -p"$MARIADB_ROOT_PASSWORD" --host=127.0.0.1 klass < "$MARIADB_LOCAL_FILEPATH"
