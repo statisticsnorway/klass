@@ -1,6 +1,5 @@
 package no.ssb.klass.api.migration.dataintegrity;
 
-import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -58,22 +57,6 @@ public class KlassApiClassificationCodesTest extends AbstractKlassApiDataIntegri
          paramsDate.put(RANGE_FROM, dateFromToMax);
          paramsDateInRange.put(RANGE_FROM, dateFromInRangeString);
          paramsDateInRange.put(RANGE_TO, dateToInRangeString);
-
-        RestAssured
-                .given()
-                .baseUri("http://localhost:8081")
-                .basePath("/api/klass/v1")
-                .get("/classifications")
-                .then()
-                .statusCode(200);
-
-        RestAssured
-                .given()
-                .baseUri("http://localhost:8080")
-                .basePath("/api/klass/v1")
-                .get("/classifications")
-                .then()
-                .statusCode(200);
     }
 
     @Test
