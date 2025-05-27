@@ -31,6 +31,9 @@ public final class MigrationTestConstants {
     public static final String EMBEDDED_CLASSIFICATIONS = "_embedded.classifications";
     public static final String EMBEDDED_SSB_SECTIONS= "_embedded.ssbSections";
     public static final String EMBEDDED_CLASSIFICATION_FAMILIES = "_embedded.classificationfamilies";
+    public static final String PUBLISHED_NB="published.nb";
+    public static final String PUBLISHED_EN="published.en";
+    public static final String PUBLISHED_NN="published.nn";
 
     // Fields
     public static final String ID = "id";
@@ -57,6 +60,11 @@ public final class MigrationTestConstants {
     public  static final String SOURCE_LEVEL = "sourceLevel";
     public  static final String TARGET_LEVEL = "targetLevel";
     public static final String TARGET_CLASSIFICATION_ID= "targetClassificationId";
+    public static final String CODE= "code";
+    public static final String PARENT_CODE= "parentCode";
+    public static final String LEVEL = "level";
+    public static final String SHORT_NAME = "shortName";
+    public static final String NOTES = "notes";
 
     public static final String NUMBER_OF_CLASSIFICATIONS= "numberOfClassifications";
 
@@ -74,6 +82,7 @@ public final class MigrationTestConstants {
     public static final String CORRESPONDENCE_MAPS = "correspondenceMaps";
     public static final String LEVELS= "levels";
     public static final String CLASSIFICATION_ITEMS= "classificationItems";
+    public static final String CLASSIFICATIONS_VARIANTS= "classificationVariants";
 
 
     // Link fields
@@ -175,7 +184,18 @@ public final class MigrationTestConstants {
             INTRODUCTION,
             LEGAL_BASE,
             PUBLICATIONS,
-            DERIVED_FROM
+            DERIVED_FROM,
+            CONTACT_PERSON,
+            LINKS_SELF_HREF
+    );
+
+    public static List<String> pathNamesVersionsClassificationItems = Arrays.asList(
+            CODE,
+            PARENT_CODE,
+            LEVEL,
+            NAME,
+            SHORT_NAME,
+            NOTES
     );
 
     public static List<String> pathNamesCorrespondenceTableById = Arrays.asList(
@@ -191,7 +211,15 @@ public final class MigrationTestConstants {
             LAST_MODIFIED,
             SOURCE_LEVEL,
             TARGET_LEVEL,
-            DESCRIPTION
+            DESCRIPTION,
+            PUBLISHED_NB,
+            PUBLISHED_NN,
+            PUBLISHED_EN,
+            LINKS_SELF_HREF,
+            LINKS_SOURCE_HREF,
+            LINKS_SOURCE_TEMPLATED,
+            LINKS_TARGET_HREF,
+            LINKS_TARGET_TEMPLATED
     );
 
     public static List<String> pathNamesVariantById = Arrays.asList(

@@ -3,16 +3,17 @@ package no.ssb.klass.api.migration.dataintegrity;
 import io.restassured.response.Response;
 import no.ssb.klass.api.migration.KlassApiMigrationClient;
 import no.ssb.klass.api.migration.MigrationTestConfig;
-import no.ssb.klass.api.migration.MigrationTestUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeAll;
 
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
-import static no.ssb.klass.api.migration.MigrationTestUtils.mapById;
+import static no.ssb.klass.api.migration.MigrationTestUtils.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public abstract class AbstractKlassApiDataIntegrityTest {
@@ -29,6 +30,7 @@ public abstract class AbstractKlassApiDataIntegrityTest {
     public static final String targetHost = MigrationTestConfig.getTargetHost();
 
     static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
 
     static void validateObject(Response sourceResponse, Response targetResponse, String pathName) {
         Object sourceField = sourceResponse.path(pathName);
@@ -49,19 +51,22 @@ public abstract class AbstractKlassApiDataIntegrityTest {
     }
 
     /**
-     *
-     * @param sourceResponse Response object from source Api
-     * @param targetResponse Response object from target Api
-     * @param pathNames List of path names in Response object
+     * Validates that the values at specified path names in two API response bodies are equal.
+     * <p>
+     *  For each given path name, the corresponding values from the source and target responses
+     *  are retrieved and printed to stdout. If the value in the source response is {@code null},
+     *  the target value is expected to be {@code null} as well. If the values differ, a failure
+     *  message is printed to clearly document the discrepancy, making failed tests easier to trace.
+     *</p>
+     * @param sourceResponse Response object from the source Api
+     * @param targetResponse Response object from the target Api
+     * @param pathNames a list of path names to extract and compare from the response bodies
      */
-    static void validateItems(Response sourceResponse, Response targetResponse, List<String> pathNames) {
-
-        Object sourceField;
-        Object targetField;
+    static void validateItemsLegacy(Response sourceResponse, Response targetResponse, List<String> pathNames) {
 
         for (String pathName : pathNames) {
-            sourceField = sourceResponse.path(pathName);
-            targetField = targetResponse.path(pathName);
+            Object sourceField = sourceResponse.path(pathName);
+            Object targetField = targetResponse.path(pathName);
 
             if (sourceField == null) {
                 assertThat(targetField)
@@ -85,7 +90,13 @@ public abstract class AbstractKlassApiDataIntegrityTest {
     }
 
     /**
-     *
+     * Validates that the value at the path {@code "_links.self.href"} in two API response bodies are equal.
+     * <p>
+     *      The corresponding value from the source and target response
+     *      are retrieved and printed to stdout. If the value in the source response is {@code null},
+     *      the target value is expected to be {@code null} as well. If the value differ, a failure
+     *      message is printed to clearly document the discrepancy, making failed tests easier to trace.
+     * </p>
      * @param sourceResponse Response object from source Api
      * @param targetResponse Response object from target Api
      */
@@ -106,11 +117,17 @@ public abstract class AbstractKlassApiDataIntegrityTest {
 
         System.out.println(sourceLink + " -> " + targetLink);
 
-        assertThat(MigrationTestUtils.isPathEqualIgnoreHost(sourceLink, targetLink)).withFailMessage(FAIL_MESSAGE, LINKS_SELF_HREF, sourceLink, targetLink).isTrue();
+        assertThat(isPathEqualIgnoreHost(sourceLink, targetLink)).withFailMessage(FAIL_MESSAGE, LINKS_SELF_HREF, sourceLink, targetLink).isTrue();
     }
 
     /**
-     *
+     * Validates that the lists at the specified path in both API response bodies contain the same elements, regardless of order.
+     *  <P>
+     *     For each given path, the corresponding values from the source and target responses
+     *      are retrieved and printed to stdout. If the value in the source response is {@code null},
+     *      the target value is expected to be {@code null} as well. If the values differ, a failure
+     *      message is printed to clearly document the discrepancy, making failed tests easier to trace.
+     *  </P>
      * @param sourceResponse Response object from source Api
      * @param targetResponse Response object from target Api
      * @param pathListName List of path names in nested list
@@ -149,12 +166,12 @@ public abstract class AbstractKlassApiDataIntegrityTest {
     }
 
     /**
-     *
+     * Validates that the values retrieved by path names in
      * @param sourceResponse Response object from source Api
      * @param targetResponse Response object from target Api
-     * @param pathNamesLinks List of path names in _links object
+     * @param pathNamesLinks List of path names
      */
-    static void validateLinks(Response sourceResponse, Response targetResponse, List<String> pathNamesLinks) {
+    static void validateItems(Response sourceResponse, Response targetResponse, List<String> pathNamesLinks) {
 
         for (String pathName : pathNamesLinks) {
             Object sourceField = sourceResponse.path(pathName);
@@ -174,8 +191,8 @@ public abstract class AbstractKlassApiDataIntegrityTest {
             if (pathName.endsWith(HREF)) {
                 String sourceHref = sourceField.toString();
                 String targetHref = targetField.toString();
-
-                assertThat(MigrationTestUtils.isPathEqualIgnoreHost(sourceHref, targetHref))
+                System.out.println(sourceHref + " -> " + targetHref);
+                assertThat(isPathEqualIgnoreHost(sourceHref, targetHref))
                         .withFailMessage(FAIL_MESSAGE, pathName, sourceHref, targetHref)
                         .isTrue();
             } else {
@@ -194,7 +211,7 @@ public abstract class AbstractKlassApiDataIntegrityTest {
      * @param listName Name of list element in path
      * @param pathNames List of fields in listName list
      */
-    static void validatePathListWithLinks(Response sourceResponse, Response targetResponse, String listName, List<String> pathNames) {
+    static void validatePathListWithLinks(Response sourceResponse, Response targetResponse, String listName, List<String> pathNames, String idField) {
         List<Map<String, Object>> sourceList = sourceResponse.path(listName);
         List<Map<String, Object>> targetList = targetResponse.path(listName);
         if (sourceList == null) {
@@ -211,8 +228,8 @@ public abstract class AbstractKlassApiDataIntegrityTest {
         assertThat(sourceList.size()).isEqualTo(targetList.size());
         System.out.println("List sizes: " + sourceList.size() + " -> " + targetList.size());
 
-        Map<Object, Map<String, Object>> sourceById = mapById(sourceList);
-        Map<Object, Map<String, Object>> targetById = mapById(targetList);
+        Map<Object, Map<String, Object>> sourceById = mapByField(sourceList, idField);
+        Map<Object, Map<String, Object>> targetById = mapByField(targetList, idField);
 
         for (Object versionId : sourceById.keySet()) {
             Map<String, Object> versionSource = sourceById.get(versionId);
@@ -220,15 +237,12 @@ public abstract class AbstractKlassApiDataIntegrityTest {
 
             for (String pathName : pathNames) {
 
-                Object sourceField;
-                Object targetField;
-
-                sourceField = MigrationTestUtils.resolvePath(versionSource, pathName);
-                targetField = MigrationTestUtils.resolvePath(versionTarget, pathName);
+                Object sourceField = resolvePath(versionSource, pathName);
+                Object targetField = resolvePath(versionTarget, pathName);
 
                 if (pathName.endsWith(HREF)) {
                     assertThat(sourceField == null && targetField == null ||
-                            sourceField != null && targetField != null && MigrationTestUtils.isPathEqualIgnoreHost(sourceField.toString(), targetField.toString()))
+                            sourceField != null && targetField != null && isPathEqualIgnoreHost(sourceField.toString(), targetField.toString()))
                             .withFailMessage(FAIL_MESSAGE, pathName, sourceField, targetField)
                             .isTrue();
                 } else {
@@ -238,6 +252,15 @@ public abstract class AbstractKlassApiDataIntegrityTest {
                 }
             }
         }
+    }
+
+    private static Map<Object, Map<String, Object>> mapByField(List<Map<String, Object>> list, String field) {
+        return list.stream()
+                .filter(item -> item.containsKey(field) && item.get(field) != null)
+                .collect(Collectors.toMap(
+                        item -> item.get(field),
+                        Function.identity()
+                ));
     }
 
     @BeforeAll

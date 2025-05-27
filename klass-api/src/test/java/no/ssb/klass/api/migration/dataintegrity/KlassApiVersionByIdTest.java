@@ -27,14 +27,22 @@ public class KlassApiVersionByIdTest extends AbstractKlassApiDataIntegrityTest{
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, null);
         Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, null);
 
+        assertThat(sourceResponse).withFailMessage("source api returned no content").isNotNull();
 
         assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
         if(sourceResponse.getStatusCode() != 200) {
+            System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
             assertThat(compareError(randomId, sourceResponse, targetResponse)).isTrue();
         }
         else{
             validateItems(sourceResponse, targetResponse, pathNamesVersionsById);
+            validateList(sourceResponse, targetResponse, PUBLISHED);
+            validateList(sourceResponse, targetResponse, CHANGELOGS);
+            validateList(sourceResponse, targetResponse, LEVELS);
+            validateList(sourceResponse, targetResponse, CLASSIFICATIONS_VARIANTS);
+            validatePathListWithLinks(sourceResponse, targetResponse, CORRESPONDENCE_TABLES, pathNamesCorrespondenceTableById,ID);
+            validatePathListWithLinks(sourceResponse, targetResponse, CLASSIFICATION_ITEMS, pathNamesVersionsClassificationItems, CODE);
         }
     }
 
@@ -48,6 +56,8 @@ public class KlassApiVersionByIdTest extends AbstractKlassApiDataIntegrityTest{
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi( path, params);
         Response targetResponse = klassApiMigrationClient.getFromTargetApi( path, params);
 
+        assertThat(sourceResponse).withFailMessage("source api returned no content").isNotNull();
+
         assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
         if(sourceResponse.getStatusCode() != 200) {
@@ -56,6 +66,12 @@ public class KlassApiVersionByIdTest extends AbstractKlassApiDataIntegrityTest{
         }
         else{
             validateItems(sourceResponse, targetResponse, pathNamesVersionsById);
+            validateList(sourceResponse, targetResponse, PUBLISHED);
+            validateList(sourceResponse, targetResponse, CHANGELOGS);
+            validateList(sourceResponse, targetResponse, LEVELS);
+            validateList(sourceResponse, targetResponse, CLASSIFICATIONS_VARIANTS);
+            validatePathListWithLinks(sourceResponse, targetResponse, CORRESPONDENCE_TABLES, pathNamesCorrespondenceTableById,ID);
+            validatePathListWithLinks(sourceResponse, targetResponse, CLASSIFICATION_ITEMS, pathNamesVersionsClassificationItems, CODE);
         }
     }
 
@@ -69,6 +85,8 @@ public class KlassApiVersionByIdTest extends AbstractKlassApiDataIntegrityTest{
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, params);
         Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, params);
 
+        assertThat(sourceResponse).withFailMessage("source api returned no content").isNotNull();
+
         assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
         if(sourceResponse.getStatusCode() != 200) {
@@ -77,6 +95,12 @@ public class KlassApiVersionByIdTest extends AbstractKlassApiDataIntegrityTest{
         }
         else{
             validateItems(sourceResponse, targetResponse, pathNamesVersionsById);
+            validateList(sourceResponse, targetResponse, PUBLISHED);
+            validateList(sourceResponse, targetResponse, CHANGELOGS);
+            validateList(sourceResponse, targetResponse, LEVELS);
+            validateList(sourceResponse, targetResponse, CLASSIFICATIONS_VARIANTS);
+            validatePathListWithLinks(sourceResponse, targetResponse, CORRESPONDENCE_TABLES, pathNamesCorrespondenceTableById,ID);
+            validatePathListWithLinks(sourceResponse, targetResponse, CLASSIFICATION_ITEMS, pathNamesVersionsClassificationItems, CODE);
         }
     }
 
@@ -90,6 +114,8 @@ public class KlassApiVersionByIdTest extends AbstractKlassApiDataIntegrityTest{
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi( path, params);
         Response targetResponse = klassApiMigrationClient.getFromTargetApi( path, params);
 
+        assertThat(sourceResponse).withFailMessage("source api returned no content").isNotNull();
+
         assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
         if(sourceResponse.getStatusCode() != 200) {
@@ -98,6 +124,12 @@ public class KlassApiVersionByIdTest extends AbstractKlassApiDataIntegrityTest{
         }
         else{
             validateItems(sourceResponse, targetResponse, pathNamesVersionsById);
+            validateList(sourceResponse, targetResponse, PUBLISHED);
+            validateList(sourceResponse, targetResponse, CHANGELOGS);
+            validateList(sourceResponse, targetResponse, LEVELS);
+            validateList(sourceResponse, targetResponse, CLASSIFICATIONS_VARIANTS);
+            validatePathListWithLinks(sourceResponse, targetResponse, CORRESPONDENCE_TABLES, pathNamesCorrespondenceTableById,ID);
+            validatePathListWithLinks(sourceResponse, targetResponse, CLASSIFICATION_ITEMS, pathNamesVersionsClassificationItems, CODE);
         }
     }
 
