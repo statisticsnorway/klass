@@ -33,9 +33,9 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     @Autowired
     public StatisticsServiceImpl(ClassificationSeriesRepository classificationRepository,
-            ClassificationAccessRepository statisticalClassificationAccessCounterRepository,
-            SearchWordsRepository searchWordsRepository, StatisticalUnitRepository statisticalUnitRepository,
-            SubscriberRepository subscriberRepository) {
+                                 ClassificationAccessRepository statisticalClassificationAccessCounterRepository,
+                                 SearchWordsRepository searchWordsRepository, StatisticalUnitRepository statisticalUnitRepository,
+                                 SubscriberRepository subscriberRepository) {
 
         this.classificationRepository = classificationRepository;
         this.classificationAccessRepository = statisticalClassificationAccessCounterRepository;
@@ -69,11 +69,12 @@ public class StatisticsServiceImpl implements StatisticsService {
                 return classificationRepository.getClassificationReport(classificationType, section);
             case PUBLISHED:
                 return classificationRepository.getPublishedClassificationReport(classificationType, section);
-                
+
             default:
                 throw new IllegalStateException("Gitt operasjon ikke implementert: " + operation);
         }
     }
+
     @Override
     public List<ClassificationVersionReportDto> getPublishedVersionReport(String section, ClassificationType classificationType, ReportMode operation) {
 
@@ -101,7 +102,6 @@ public class StatisticsServiceImpl implements StatisticsService {
     }
 
     @Override
-    @Transactional(readOnly = false)
     public void addUseForClassification(ClassificationSeries classificationSeries) {
         ClassificationAccessCounter loggUse = new ClassificationAccessCounter(classificationSeries);
         classificationAccessRepository.save(loggUse);
@@ -115,20 +115,20 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     @Override
     public Page<StatisticalEntity> getUsageStatistics(LocalDate fromSearchDate, LocalDate toSearchDate,
-                                                 UseStatisticsMode operation, Pageable pageable) {
-        
+                                                      UseStatisticsMode operation, Pageable pageable) {
+
         Instant fromDate = fromSearchDate.atStartOfDay(ZoneId.systemDefault()).toInstant();
         Instant toDate = toSearchDate.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant();
-        
+
         switch (operation) {
-        case TOTAL_CLASSIFIC:
-            return classificationAccessRepository.getClassificationsCount(Date.from(fromDate), Date.from(toDate), pageable);
-        case NUMBEROF_SEARCH_RETURNED_NULL:
-            return searchWordsRepository.getSearchWords(MISSED, Date.from(fromDate), Date.from(toDate), pageable);
-        case TOTAL_SEARCH_WORDS:
-            return searchWordsRepository.getSearchWords(Date.from(fromDate), Date.from(toDate), pageable);
-        default:
-            return null;
+            case TOTAL_CLASSIFIC:
+                return classificationAccessRepository.getClassificationsCount(Date.from(fromDate), Date.from(toDate), pageable);
+            case NUMBEROF_SEARCH_RETURNED_NULL:
+                return searchWordsRepository.getSearchWords(MISSED, Date.from(fromDate), Date.from(toDate), pageable);
+            case TOTAL_SEARCH_WORDS:
+                return searchWordsRepository.getSearchWords(Date.from(fromDate), Date.from(toDate), pageable);
+            default:
+                return null;
         }
     }
 
@@ -140,7 +140,7 @@ public class StatisticsServiceImpl implements StatisticsService {
     @Override
     public List<ClassificationReportDto> getAllClassificationSeriesForStaticalUnit(
             StatisticalUnit statisticalUnit) {
-        return  statisticalUnitRepository.getAllClassificationSeriesForStaticalUnit(statisticalUnit);
+        return statisticalUnitRepository.getAllClassificationSeriesForStaticalUnit(statisticalUnit);
     }
 
     @Override
@@ -155,28 +155,28 @@ public class StatisticsServiceImpl implements StatisticsService {
     @Override
     public Page<StatisticalEntity> getSubscriberReport(SubscriberMode operation, Pageable p) {
         switch (operation) {
-        case TOTAL:
-            return subscriberRepository.getSubscriberReportAll(p);
-        case INTERNAL:
-            return subscriberRepository.getSubscriberReportInternal(p);
-        case EXTERNAL:
-            return subscriberRepository.getSubscriberReportExternal(p);
-        default:
-            throw new IllegalStateException("Gitt operasjon ikke implementert: " + operation);
+            case TOTAL:
+                return subscriberRepository.getSubscriberReportAll(p);
+            case INTERNAL:
+                return subscriberRepository.getSubscriberReportInternal(p);
+            case EXTERNAL:
+                return subscriberRepository.getSubscriberReportExternal(p);
+            default:
+                throw new IllegalStateException("Gitt operasjon ikke implementert: " + operation);
         }
     }
 
     @Override
     public Page<StatisticalEntity> getSubscriberDomainReport(SubscriberMode operation, Pageable p) {
         switch (operation) {
-        case TOTAL:
-            return subscriberRepository.getSubscriberDomainReportAll(p);
-        case INTERNAL:
-            return subscriberRepository.getSubscriberDomainReportInternal(p);
-        case EXTERNAL:
-            return subscriberRepository.getSubscriberDomainReportExternal(p);
-        default:
-            throw new IllegalStateException("Gitt operasjon ikke implementert: " + operation);
+            case TOTAL:
+                return subscriberRepository.getSubscriberDomainReportAll(p);
+            case INTERNAL:
+                return subscriberRepository.getSubscriberDomainReportInternal(p);
+            case EXTERNAL:
+                return subscriberRepository.getSubscriberDomainReportExternal(p);
+            default:
+                throw new IllegalStateException("Gitt operasjon ikke implementert: " + operation);
 
         }
 
@@ -185,14 +185,14 @@ public class StatisticsServiceImpl implements StatisticsService {
     @Override
     public Page<StatisticalEntity> getSubscriberClassificationReport(SubscriberMode operation, Pageable p) {
         switch (operation) {
-        case TOTAL:
-            return subscriberRepository.getSubscriberClassReportAll(p);
-        case INTERNAL:
-            return subscriberRepository.getSubscriberClassReportInternal(p);
-        case EXTERNAL:
-            return subscriberRepository.getSubscriberClassReportExternal(p);
-        default:
-            throw new IllegalStateException("Gitt operasjon ikke implementert: " + operation);
+            case TOTAL:
+                return subscriberRepository.getSubscriberClassReportAll(p);
+            case INTERNAL:
+                return subscriberRepository.getSubscriberClassReportInternal(p);
+            case EXTERNAL:
+                return subscriberRepository.getSubscriberClassReportExternal(p);
+            default:
+                throw new IllegalStateException("Gitt operasjon ikke implementert: " + operation);
         }
     }
 }
