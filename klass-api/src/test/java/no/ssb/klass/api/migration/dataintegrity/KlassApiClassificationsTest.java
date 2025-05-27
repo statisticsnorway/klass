@@ -70,7 +70,7 @@ public class KlassApiClassificationsTest extends AbstractKlassApiDataIntegrityTe
     }
 
     @Test
-    void getClassificationsIncludeCodeListsPage() {
+    void getClassificationsIncludeCodeLists() {
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(CLASSIFICATIONS_PATH, paramsIncludeCodeLists);
         Response targetResponse = klassApiMigrationClient.getFromTargetApi(CLASSIFICATIONS_PATH, paramsIncludeCodeLists);
 
@@ -91,8 +91,7 @@ public class KlassApiClassificationsTest extends AbstractKlassApiDataIntegrityTe
     }
 
     @Test
-    void getClassificationsChangedSincePage(){
-        //?
+    void getClassificationsChangedSince(){
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(CLASSIFICATIONS_PATH, paramsChangedSince);
         Response targetResponse = klassApiMigrationClient.getFromTargetApi(CLASSIFICATIONS_PATH, paramsChangedSince);
 

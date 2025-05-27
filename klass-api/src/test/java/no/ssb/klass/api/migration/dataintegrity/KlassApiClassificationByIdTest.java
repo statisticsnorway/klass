@@ -14,9 +14,6 @@ import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 import static no.ssb.klass.api.migration.MigrationTestUtils.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-/**
- * Test class for classification by ID. Compare data from two sources.
- */
 public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrityTest {
 
     static Map<String, Object> paramsLanguageEn = new HashMap<>();
