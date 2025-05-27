@@ -1,23 +1,18 @@
 package no.ssb.klass.core.model;
 
-import static com.google.common.base.Preconditions.*;
-
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Index;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 @Entity
 @Table(
-        name = "user",
+        name = "\"user\"",
         indexes = {
-        @Index(columnList = "username", name = "user_username_idx", unique = true),
-        @Index(columnList = "fullname", name = "user_fullname_idx")
-})
+                @Index(columnList = "username", name = "user_username_idx", unique = true),
+                @Index(columnList = "fullname", name = "user_fullname_idx")
+        })
 public class User extends BaseEntity {
     @Column(nullable = false)
     private final String username;
