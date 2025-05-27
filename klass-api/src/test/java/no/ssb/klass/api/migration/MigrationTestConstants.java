@@ -124,6 +124,7 @@ public final class MigrationTestConstants {
     public static final String INCLUDE_CODE_LISTS= "includeCodeLists";
     public static final String CHANGED_SINCE= "changedSince";
     public static final String VARIANT_NAME= "variantName";
+    public static final String SSB_SECTION= "ssbSection";
 
     // Messages
     public static final String FAIL_MESSAGE= "Mismatch at path '%s':\n  Source: %s\n  Target: %s";
