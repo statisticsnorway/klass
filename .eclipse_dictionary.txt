@@ -1,4 +1,0 @@
-searchable
-vaadin
-enum
-refactored

@@ -1,15 +1,17 @@
-name: App build and deploy
+name: Klass-forvaltning build and deploy
 
 on:
   release:
-    types: [published]
+    types: [ published ]
   push:
     branches:
       - nais-migration
+    paths:
+      - "klass-forvaltning/**"
+      - "klass-shared/**"
+      - ".nais/**/klass-forvaltning.yaml"
+      - ".github/workflows/klass-forvaltning-build-and-deploy.yaml"
 
-env:
-  REGISTRY: europe-north1-docker.pkg.dev/${{ secrets.NAIS_MANAGEMENT_PROJECT_ID }}/dapla-metadata
-  DOCKER_IMAGE: europe-north1-docker.pkg.dev/${{ secrets.NAIS_MANAGEMENT_PROJECT_ID }}/dapla-metadata/klass-api:${{ github.sha }}
 
 jobs:
   docker-build:
@@ -17,35 +19,43 @@ jobs:
     permissions:
       contents: "read"
       id-token: "write"
+      packages: "read"
     runs-on: ubuntu-latest
-    outputs:
-      nais_config_path: ${{ steps.nais-deploy-vars.outputs.nais_config_path }}
-      nais_cluster: ${{ steps.nais-deploy-vars.outputs.nais_cluster }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '8'
+          cache: 'maven'
+
       - name: Build with Maven
-        run: mvn --batch-mode install -pl '!:klass-forvaltning' -DskipTests
+        working-directory: klass-forvaltning
+        run: mvn -B install -DskipTests
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push
         uses: nais/docker-build-push@v0
         id: docker-build-push
         with:
           team: dapla-metadata
-          dockerfile: klass-api/Dockerfile
-          docker_context: klass-api
+          image_suffix: forvaltning
+          dockerfile: klass-forvaltning/Dockerfile
+          docker_context: klass-forvaltning
 
       - name: Generate NAIS deploy variables
         id: nais-deploy-vars
         run: |
           if [[ ${{ github.event_name }} == "release" ]]; then
             echo "nais_cluster=prod" >> "$GITHUB_OUTPUT"
-            echo "nais_config_path=.nais/prod/nais.yaml" >> "$GITHUB_OUTPUT"
+            echo "nais_config_path=.nais/prod/klass-forvaltning.yaml" >> "$GITHUB_OUTPUT"
           else
             echo "nais_cluster=test" >> "$GITHUB_OUTPUT"
-            echo "nais_config_path=.nais/test/nais.yaml" >> "$GITHUB_OUTPUT"
+            echo "nais_config_path=.nais/test/klass-forvaltning.yaml" >> "$GITHUB_OUTPUT"
           fi
 
       - uses: nais/deploy/actions/deploy@v2

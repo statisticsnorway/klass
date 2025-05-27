@@ -32,7 +32,7 @@ public class KlassApiClassificationsTest extends AbstractKlassApiDataIntegrityTe
         sourceHostClassifications = sourceResponse.path(EMBEDDED_CLASSIFICATIONS);
         targetHostClassifications = targetResponse.path(EMBEDDED_CLASSIFICATIONS);
 
-        queryDate = generateRandomDateTime();
+        queryDate = "2015-03-01T01:30:00.000-0200";
         paramsIncludeCodeLists.put(INCLUDE_CODE_LISTS, TRUE);
         paramsChangedSince.put(CHANGED_SINCE, queryDate);
     }

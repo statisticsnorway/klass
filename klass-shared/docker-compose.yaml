@@ -63,3 +63,13 @@ services:
       MARIADB_DATABASE: "klass"
       SPRING_PROFILES_ACTIVE: "mariadb-local"
       MARIADB_INSTANCE: ${MARIADB_INSTANCE}
+
+  klass-forvaltning:
+    build:
+      context: ../klass-forvaltning
+      dockerfile: ../klass-forvaltning/Dockerfile
+    container_name: klass-forvaltning
+    ports:
+      - "8082:8081"
+    environment:
+      SPRING_PROFILES_ACTIVE: frontend, h2-inmemory, small-import, skip-indexing, embedded-solr

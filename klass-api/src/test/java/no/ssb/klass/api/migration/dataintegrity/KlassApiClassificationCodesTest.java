@@ -23,8 +23,8 @@ public class KlassApiClassificationCodesTest extends AbstractKlassApiDataIntegri
 
     static String dateFromToMax;
 
-    static LocalDate dateFromInRange ;
-    static LocalDate dateToInRange;
+    static LocalDate dateOne;
+    static LocalDate dateTwo;
     static String dateFromInRangeString ;
     static String dateToInRangeString;
 
@@ -39,19 +39,19 @@ public class KlassApiClassificationCodesTest extends AbstractKlassApiDataIntegri
     @BeforeAll
     static void beforeAllCodes() {
          dateFromToMax = generateRandomDate(
-                 LocalDate.of(1800, 1, 1),
+                 LocalDate.of(1900, 1, 1),
                  LocalDate.of(2030, 12, 31)).format(formatter);
-         dateFromInRange = generateRandomDate(
-                 LocalDate.of(1800, 1, 1),
+         dateOne = generateRandomDate(
+                 LocalDate.of(1900, 1, 1),
                  LocalDate.of(2030, 12, 31)
          );
-         dateToInRange = generateRandomDate(
-                 LocalDate.of(1800, 1, 1),
+         dateTwo = generateRandomDate(
+                 LocalDate.of(1900, 1, 1),
                  LocalDate.of(2030, 12, 31)
          );
 
-         dateToInRangeString = dateFromInRange.format(formatter);
-         dateToInRangeString = dateToInRange.format(formatter);
+         dateFromInRangeString = dateOne.isBefore(dateTwo) ? dateOne.format(formatter) : dateTwo.format(formatter);
+         dateToInRangeString = dateOne.isAfter(dateTwo) ? dateOne.format(formatter) : dateTwo.format(formatter);
 
          randomId = generateRandomId(150);
 

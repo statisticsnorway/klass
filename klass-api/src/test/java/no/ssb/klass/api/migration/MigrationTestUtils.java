@@ -6,10 +6,7 @@ import java.net.URL;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -87,30 +84,6 @@ public class MigrationTestUtils {
         return startDate.plusDays(randomDay);
     }
 
-    public static String generateRandomDateTime() {
-        LocalDate startDate = LocalDate.of(1800, 1, 1);
-        LocalDate endDate = LocalDate.of(2030, 12, 31);
-
-        long totalDays = ChronoUnit.DAYS.between(startDate, endDate);
-        LocalDate randomDate = startDate.plusDays(ThreadLocalRandom.current().nextLong(totalDays + 1));
-
-        LocalTime randomTime = LocalTime.of(
-                ThreadLocalRandom.current().nextInt(0, 24),
-                ThreadLocalRandom.current().nextInt(0, 60),
-                ThreadLocalRandom.current().nextInt(0, 60),
-                ThreadLocalRandom.current().nextInt(0, 1_000_000_000)
-        );
-
-        LocalDateTime localDateTime = LocalDateTime.of(randomDate, randomTime);
-
-        int offsetHours = ThreadLocalRandom.current().nextInt(-12, 15);
-        ZoneOffset offset = ZoneOffset.ofHours(offsetHours);
-        OffsetDateTime offsetDateTime = localDateTime.atOffset(offset);
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-        return offsetDateTime.format(formatter);
-    }
-
     public static Integer generateRandomId(int to) {
         Random random = new Random();
         return random.nextInt(to);
@@ -164,8 +137,12 @@ public class MigrationTestUtils {
         }
 
         if (pathName.endsWith(HREF)) {
-            String sourceHref = sourceField != null ? sourceField.toString() : "";
-            String targetHref = targetField != null ? targetField.toString(): "";
+            String sourceHref = Objects.toString(sourceField, "");
+            String targetHref = Objects.toString(targetField, "");
+            if (sourceHref.isEmpty()) {
+                assertThat(sourceHref).withFailMessage(FAIL_MESSAGE, pathName, null, targetField).isEqualTo(targetHref);
+                return;
+            }
             System.out.println(sourceHref + " -> " + targetHref);
             assertThat(isPathEqualIgnoreHost(sourceHref, targetHref))
                     .withFailMessage(FAIL_MESSAGE, pathName, sourceHref, targetHref)
@@ -237,8 +214,12 @@ public class MigrationTestUtils {
             }
 
             if (pathName.endsWith(HREF)) {
-                String sourceHref = sourceField != null ? sourceField.toString() : "";
-                String targetHref = targetField != null ? targetField.toString(): "";
+                String sourceHref = Objects.toString(sourceField, "");
+                String targetHref = Objects.toString(targetField, "");
+                if (sourceHref.isEmpty()) {
+                    assertThat(sourceHref).withFailMessage(FAIL_MESSAGE, pathName, null, targetField).isEqualTo(targetHref);
+                    return;
+                }
                 System.out.println(sourceHref + " -> " + targetHref);
                 assertThat(isPathEqualIgnoreHost(sourceHref, targetHref))
                         .withFailMessage(FAIL_MESSAGE, pathName, sourceHref, targetHref)
