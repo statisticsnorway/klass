@@ -281,24 +281,4 @@ public final class MigrationTestConstants {
             LINKS_SEARCH_TEMPLATED
 
     );
-
-    public static List<String> pathNamesClassificationItemLinks = Arrays.asList(
-            LINKS_SELF_HREF,
-            LINKS_CODES_HREF,
-            LINKS_CODES_TEMPLATED,
-            LINKS_CODES_AT_HREF,
-            LINKS_CODES_AT_TEMPLATED,
-            LINKS_VARIANT_HREF,
-            LINKS_VARIANT_TEMPLATED,
-            LINKS_VARIANT_AT_HREF,
-            LINKS_VARIANT_AT_TEMPLATED,
-            LINKS_CORRESPONDS_HREF,
-            LINKS_CORRESPONDS_TEMPLATED,
-            LINKS_CORRESPONDS_AT_HREF,
-            LINKS_CORRESPONDS_AT_TEMPLATED,
-            LINKS_CHANGES_HREF,
-            LINKS_CHANGES_TEMPLATED
-
-    );
-
 }

@@ -85,12 +85,11 @@ public class KlassApiClassificationCodesTest extends AbstractKlassApiDataIntegri
         sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDate);
         targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDate);
 
-        validateApiResponse(sourceResponse);
+        assertApiResponseIsNotNull(sourceResponse);
 
         assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
         if(sourceResponse.getStatusCode() != 200) {
-            System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
@@ -111,12 +110,11 @@ public class KlassApiClassificationCodesTest extends AbstractKlassApiDataIntegri
         sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDate);
         targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDate);
 
-        validateApiResponse(sourceResponse);
+        assertApiResponseIsNotNull(sourceResponse);
 
         assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
         if(sourceResponse.getStatusCode() != 200) {
-            System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
@@ -138,12 +136,11 @@ public class KlassApiClassificationCodesTest extends AbstractKlassApiDataIntegri
         sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDateInRange);
         targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDateInRange);
 
-        validateApiResponse(sourceResponse);
+        assertApiResponseIsNotNull(sourceResponse);
 
         assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
         if(sourceResponse.getStatusCode() != 200) {
-            System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
@@ -166,7 +163,7 @@ public class KlassApiClassificationCodesTest extends AbstractKlassApiDataIntegri
         sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDateInRange);
         targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDateInRange);
 
-        validateApiResponse(sourceResponse);
+        assertApiResponseIsNotNull(sourceResponse);
 
         assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
         assertThat(sourceResponse.getStatusCode()).isEqualTo(400);

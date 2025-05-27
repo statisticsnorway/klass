@@ -32,7 +32,6 @@ public class KlassApiVersionByIdTest extends AbstractKlassApiDataIntegrityTest{
         assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
         if(sourceResponse.getStatusCode() != 200) {
-            System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
             assertThat(compareError(randomId, sourceResponse, targetResponse)).isTrue();
         }
         else{
@@ -61,7 +60,6 @@ public class KlassApiVersionByIdTest extends AbstractKlassApiDataIntegrityTest{
         assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
         if(sourceResponse.getStatusCode() != 200) {
-            System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
             assertThat(compareError(randomId, sourceResponse, targetResponse)).isTrue();
         }
         else{
@@ -85,13 +83,12 @@ public class KlassApiVersionByIdTest extends AbstractKlassApiDataIntegrityTest{
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, params);
         Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, params);
 
-        validateApiResponse(sourceResponse);
+        assertApiResponseIsNotNull(sourceResponse);
 
         assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
         if(sourceResponse.getStatusCode() != 200) {
-            System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
-            assertThat(compareErrorJsonResponse(randomId, sourceResponse, targetResponse)).isTrue();
+            assertThat(compareError(randomId, sourceResponse, targetResponse)).isTrue();
         }
         else{
             validateItems(sourceResponse, targetResponse, pathNamesVersionsById);
@@ -114,12 +111,11 @@ public class KlassApiVersionByIdTest extends AbstractKlassApiDataIntegrityTest{
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi( path, params);
         Response targetResponse = klassApiMigrationClient.getFromTargetApi( path, params);
 
-        validateApiResponse(sourceResponse);
+        assertApiResponseIsNotNull(sourceResponse);
 
         assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
         if(sourceResponse.getStatusCode() != 200) {
-            System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
             assertThat(compareError(randomId, sourceResponse, targetResponse)).isTrue();
         }
         else{

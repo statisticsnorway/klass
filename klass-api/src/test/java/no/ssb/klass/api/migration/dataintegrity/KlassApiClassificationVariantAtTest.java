@@ -41,12 +41,11 @@ public class KlassApiClassificationVariantAtTest extends AbstractKlassApiDataInt
         sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsVariantDate);
         targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsVariantDate);
 
-        validateApiResponse(sourceResponse);
+        assertApiResponseIsNotNull(sourceResponse);
 
         assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(),path);
 
         if(sourceResponse.getStatusCode() != 200) {
-            System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{

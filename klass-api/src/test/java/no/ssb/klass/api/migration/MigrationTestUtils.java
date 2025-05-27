@@ -13,8 +13,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static no.ssb.klass.api.migration.MigrationTestConstants.FAIL_MESSAGE;
-import static no.ssb.klass.api.migration.MigrationTestConstants.API_EMPTY_RESPONSE_MESSAGE;
+import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class MigrationTestUtils {
@@ -71,7 +70,7 @@ public class MigrationTestUtils {
     public static boolean compareErrorJsonResponse(Integer ID, Response sourceResponse, Response targetResponse) {
         Object sourceBody = sourceResponse.getBody().jsonPath().get("error");
         Object targetBody = targetResponse.getBody().jsonPath().get("error");
-
+        System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
         if (sourceResponse.getStatusCode() != targetResponse.getStatusCode() || !sourceBody.equals(targetBody)){
            String sourceError = (ID != null)? ("Source: ID: " + ID + ", Code: " + sourceResponse.getStatusCode() + ", " + sourceBody) : ("Source: " +  "Code: " + sourceResponse.getStatusCode() + ", " + sourceBody);
             String targetError = (ID != null)? ("Target: ID: " + ID + ", Code: " + targetResponse.getStatusCode() + ", " + targetBody) : ("Target: " + "Code: " + targetResponse.getStatusCode() + ", " + targetBody);
@@ -90,7 +89,7 @@ public class MigrationTestUtils {
     public static boolean compareError(Integer ID, Response sourceResponse, Response targetResponse) {
         Object sourceBody = sourceResponse.getBody().asString();
         Object targetBody = targetResponse.getBody().asString();
-
+        System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
         if (sourceResponse.getStatusCode() != targetResponse.getStatusCode() || !sourceBody.equals(targetBody)){
            String sourceError = (ID != null)? ("Source: ID: " + ID + ", Code: " + sourceResponse.getStatusCode() + ", " + sourceBody) : ("Source: " +  "Code: " + sourceResponse.getStatusCode() + ", " + sourceBody);
             String targetError = (ID != null)? ("Target: ID: " + ID + ", Code: " + targetResponse.getStatusCode() + ", " + targetBody) : ("Target: " + "Code: " + targetResponse.getStatusCode() + ", " + targetBody);
@@ -160,7 +159,7 @@ public class MigrationTestUtils {
                 ));
     }
 
-    public static void validateApiResponse(Response response) {
+    public static void assertApiResponseIsNotNull(Response response) {
         assertThat(response).withFailMessage(API_EMPTY_RESPONSE_MESSAGE).isNotNull();
     }
 }
