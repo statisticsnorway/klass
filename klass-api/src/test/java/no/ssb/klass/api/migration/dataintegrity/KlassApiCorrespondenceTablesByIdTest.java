@@ -30,8 +30,7 @@ public class KlassApiCorrespondenceTablesByIdTest extends AbstractKlassApiDataIn
             assertThat(compareError(correspondenceTableId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateItems(sourceResponse, targetResponse, pathNamesCorrespondenceTableById);
-            validateLinks(sourceResponse, targetResponse, pathNamesCorrespondencesLinks);
+            validateItems(sourceResponse, targetResponse, pathNamesCorrespondenceTable);
             validateList(sourceResponse, targetResponse, CORRESPONDENCE_MAPS);
             validateList(sourceResponse, targetResponse, CHANGELOGS);
             validateList(sourceResponse, targetResponse, PUBLISHED);
@@ -53,8 +52,7 @@ public class KlassApiCorrespondenceTablesByIdTest extends AbstractKlassApiDataIn
             assertThat(compareError(correspondenceTableId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateItems(sourceResponse, targetResponse, pathNamesCorrespondenceTableById);
-            validateLinks(sourceResponse, targetResponse, pathNamesCorrespondencesLinks);
+            validateItems(sourceResponse, targetResponse, pathNamesCorrespondenceTable);
             validateList(sourceResponse, targetResponse, CORRESPONDENCE_MAPS);
             validateList(sourceResponse, targetResponse, CHANGELOGS);
             validateList(sourceResponse, targetResponse, PUBLISHED);

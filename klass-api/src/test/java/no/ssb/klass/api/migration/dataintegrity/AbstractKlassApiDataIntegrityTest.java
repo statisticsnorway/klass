@@ -9,8 +9,6 @@ import org.junit.jupiter.api.BeforeAll;
 
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 import static no.ssb.klass.api.migration.MigrationTestUtils.*;
@@ -65,6 +63,7 @@ public abstract class AbstractKlassApiDataIntegrityTest {
     static void validateItemsLegacy(Response sourceResponse, Response targetResponse, List<String> pathNames) {
 
         for (String pathName : pathNames) {
+            System.out.println("Checking pathname: " +pathName);
             Object sourceField = sourceResponse.path(pathName);
             Object targetField = targetResponse.path(pathName);
 
@@ -72,12 +71,7 @@ public abstract class AbstractKlassApiDataIntegrityTest {
                 assertThat(targetField)
                         .withFailMessage(FAIL_MESSAGE, pathName, null, targetField)
                         .isNull();
-                return;
             }
-
-            assertThat(targetField)
-                    .withFailMessage(FAIL_MESSAGE, pathName, sourceField, targetField)
-                    .isNotNull();
 
             System.out.println(sourceField + " -> " + targetField);
 
@@ -174,23 +168,20 @@ public abstract class AbstractKlassApiDataIntegrityTest {
     static void validateItems(Response sourceResponse, Response targetResponse, List<String> pathNamesLinks) {
 
         for (String pathName : pathNamesLinks) {
+            System.out.println("Checking pathname: " +pathName);
             Object sourceField = sourceResponse.path(pathName);
             Object targetField = targetResponse.path(pathName);
+
 
             if (sourceField == null) {
                 assertThat(targetField)
                         .withFailMessage(FAIL_MESSAGE, pathName, null, targetField)
                         .isNull();
-                return;
             }
 
-            assertThat(targetField)
-                    .withFailMessage(FAIL_MESSAGE, pathName, sourceField, targetField)
-                    .isNotNull();
-
             if (pathName.endsWith(HREF)) {
-                String sourceHref = sourceField.toString();
-                String targetHref = targetField.toString();
+                String sourceHref = sourceField != null ? sourceField.toString() : "";
+                String targetHref = targetField != null ? targetField.toString(): "";
                 System.out.println(sourceHref + " -> " + targetHref);
                 assertThat(isPathEqualIgnoreHost(sourceHref, targetHref))
                         .withFailMessage(FAIL_MESSAGE, pathName, sourceHref, targetHref)
@@ -252,15 +243,6 @@ public abstract class AbstractKlassApiDataIntegrityTest {
                 }
             }
         }
-    }
-
-    private static Map<Object, Map<String, Object>> mapByField(List<Map<String, Object>> list, String field) {
-        return list.stream()
-                .filter(item -> item.containsKey(field) && item.get(field) != null)
-                .collect(Collectors.toMap(
-                        item -> item.get(field),
-                        Function.identity()
-                ));
     }
 
     @BeforeAll

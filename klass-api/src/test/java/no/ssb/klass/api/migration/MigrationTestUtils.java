@@ -149,4 +149,13 @@ public class MigrationTestUtils {
                 .withFailMessage(FAIL_MESSAGE, path, sourceStatusCode, targetStatusCode)
                 .isEqualTo(targetStatusCode);
     }
+
+    public static Map<Object, Map<String, Object>> mapByField(List<Map<String, Object>> list, String field) {
+        return list.stream()
+                .filter(item -> item.containsKey(field) && item.get(field) != null)
+                .collect(Collectors.toMap(
+                        item -> item.get(field),
+                        Function.identity()
+                ));
+    }
 }

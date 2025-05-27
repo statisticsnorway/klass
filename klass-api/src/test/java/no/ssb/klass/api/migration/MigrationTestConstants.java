@@ -142,7 +142,22 @@ public final class MigrationTestConstants {
             INCLUDE_SHORTNAME,
             INCLUDE_NOTES,
             CONTACT_PERSON,
-            OWNING_SECTION
+            OWNING_SECTION,
+            LINKS_SELF_HREF,
+            LINKS_CODES_HREF,
+            LINKS_CODES_TEMPLATED,
+            LINKS_CODES_AT_HREF,
+            LINKS_CODES_AT_TEMPLATED,
+            LINKS_VARIANT_HREF,
+            LINKS_VARIANT_TEMPLATED,
+            LINKS_VARIANT_AT_HREF,
+            LINKS_VARIANT_AT_TEMPLATED,
+            LINKS_CORRESPONDS_HREF,
+            LINKS_CORRESPONDS_TEMPLATED,
+            LINKS_CORRESPONDS_AT_HREF,
+            LINKS_CORRESPONDS_AT_TEMPLATED,
+            LINKS_CHANGES_HREF,
+            LINKS_CHANGES_TEMPLATED
     );
 
     public static List<String> pathNamesClassificationsPage = Arrays.asList(
@@ -172,7 +187,8 @@ public final class MigrationTestConstants {
 
     public static List<String> pathNamesClassificationFamilyById = Arrays.asList(
             NAME,
-            ID
+            ID,
+            LINKS_SELF_HREF
     );
 
     public static List<String> pathNamesVersionsById = Arrays.asList(
@@ -198,7 +214,7 @@ public final class MigrationTestConstants {
             NOTES
     );
 
-    public static List<String> pathNamesCorrespondenceTableById = Arrays.asList(
+    public static List<String> pathNamesCorrespondenceTableVersions = Arrays.asList(
             NAME,
             ID,
             CONTACT_PERSON,
@@ -215,6 +231,27 @@ public final class MigrationTestConstants {
             PUBLISHED_NB,
             PUBLISHED_NN,
             PUBLISHED_EN,
+            LINKS_SELF_HREF,
+            LINKS_SOURCE_HREF,
+            LINKS_SOURCE_TEMPLATED,
+            LINKS_TARGET_HREF,
+            LINKS_TARGET_TEMPLATED
+    );
+
+    public static List<String> pathNamesCorrespondenceTable = Arrays.asList(
+            NAME,
+            ID,
+            CONTACT_PERSON,
+            OWNING_SECTION,
+            SOURCE,
+            SOURCE_ID,
+            TARGET,
+            TARGET_ID,
+            CHANGE_TABLE,
+            LAST_MODIFIED,
+            SOURCE_LEVEL,
+            TARGET_LEVEL,
+            DESCRIPTION,
             LINKS_SELF_HREF,
             LINKS_SOURCE_HREF,
             LINKS_SOURCE_TEMPLATED,
@@ -260,14 +297,6 @@ public final class MigrationTestConstants {
             LINKS_CHANGES_HREF,
             LINKS_CHANGES_TEMPLATED
 
-    );
-
-    public static List<String> pathNamesCorrespondencesLinks = Arrays.asList(
-            LINKS_SELF_HREF,
-            LINKS_SOURCE_HREF,
-            LINKS_SOURCE_TEMPLATED,
-            LINKS_TARGET_HREF,
-            LINKS_TARGET_TEMPLATED
     );
 
 }
