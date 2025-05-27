@@ -154,7 +154,7 @@ public class MigrationTestUtils {
     }
 
     /**
-     * Validates that the lists at the specified path in both API response bodies contain the same elements, regardless of order.
+     * Validates that the list specified by [pathListName] from both API responses contains the same elements, regardless of order.
      * @param sourceResponse Response object from source Api
      * @param targetResponse Response object from target Api
      * @param pathListName List of path names in nested list
@@ -193,7 +193,7 @@ public class MigrationTestUtils {
     }
 
     /**
-     *  Validates that the values at specified path names in two API response bodies are equal.
+     *  Validates that the values of fields specified in [pathNames] from two API response bodies are equal.
      *  Handles url paths.
      * @param sourceResponse Response object from source Api
      * @param targetResponse Response object from target Api
@@ -234,11 +234,12 @@ public class MigrationTestUtils {
     }
 
     /**
-     * Validates that fields specified in pathNames in the specified path list from two API response bodies are equal.
+     * Validates that path list [listName] with fields specified in [pathNames] from two API response bodies are equal.
      * @param sourceResponse Response object from source Api
      * @param targetResponse Response object from target Api
      * @param listName Name of list element in path
      * @param pathNames List of fields in listName list
+     * @param idField A unique key for list objects
      */
     public static void validatePathListWithObjects(Response sourceResponse, Response targetResponse, String listName, List<String> pathNames, String idField) {
         List<Map<String, Object>> sourceList = sourceResponse.path(listName);
