@@ -51,12 +51,8 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
         }
         else {
             validateItems(sourceResponse, targetResponse, pathNamesClassification);
-            // Link section
-            validateLinks(sourceResponse, targetResponse, pathNamesClassificationItemLinks);
-            // Statistical units list
             validateList(sourceResponse, targetResponse, STATISTICAL_UNITS);
-            // Versions
-            validatePathListWithLinks(sourceResponse, targetResponse, VERSIONS, pathNamesVersion);
+            validatePathListWithLinks(sourceResponse, targetResponse, VERSIONS, pathNamesVersion, ID);
         }
     }
 
@@ -77,12 +73,8 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         } else {
             validateItems(sourceResponse, targetResponse, pathNamesClassification);
-            // Link section
-            validateLinks(sourceResponse, targetResponse, pathNamesClassificationItemLinks);
-            // Statistical units list
             validateList(sourceResponse, targetResponse, STATISTICAL_UNITS);
-            // Versions
-            validatePathListWithLinks(sourceResponse, targetResponse, VERSIONS, pathNamesVersion);
+            validatePathListWithLinks(sourceResponse, targetResponse, VERSIONS, pathNamesVersion, ID);
         }
     }
 
@@ -103,12 +95,8 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
             }
         else {
             validateItems(sourceResponse, targetResponse, pathNamesClassification);
-            // Link section
-            validateLinks(sourceResponse, targetResponse, pathNamesClassificationItemLinks);
-            // Statistical units list
             validateList(sourceResponse, targetResponse, STATISTICAL_UNITS);
-            // Versions
-            validatePathListWithLinks(sourceResponse, targetResponse, VERSIONS, pathNamesVersion);
+            validatePathListWithLinks(sourceResponse, targetResponse, VERSIONS, pathNamesVersion, ID);
         }
     }
 
@@ -127,12 +115,8 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }else {
             validateItems(sourceResponse, targetResponse, pathNamesClassification);
-            // Link section
-            validateLinks(sourceResponse, targetResponse, pathNamesClassificationItemLinks);
-            // Statistical units list
             validateList(sourceResponse, targetResponse, STATISTICAL_UNITS);
-            // Versions
-            validatePathListWithLinks(sourceResponse, targetResponse, VERSIONS, pathNamesVersion);
+            validatePathListWithLinks(sourceResponse, targetResponse, VERSIONS, pathNamesVersion, ID);
         }
     }
 
