@@ -4,8 +4,7 @@ import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
 
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
-import static no.ssb.klass.api.migration.MigrationTestUtils.assertStatusCodesEqual;
-import static no.ssb.klass.api.migration.MigrationTestUtils.compareErrorJsonResponse;
+import static no.ssb.klass.api.migration.MigrationTestUtils.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class KlassApiSsbSectionsTest extends AbstractKlassApiDataIntegrityTest {
@@ -16,6 +15,8 @@ public class KlassApiSsbSectionsTest extends AbstractKlassApiDataIntegrityTest {
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, null);
         Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, null);
 
+        validateApiResponse(sourceResponse);
+
         assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
         if(sourceResponse.getStatusCode() != 200) {
@@ -24,7 +25,7 @@ public class KlassApiSsbSectionsTest extends AbstractKlassApiDataIntegrityTest {
         }
         else{
             validateList(sourceResponse, targetResponse, EMBEDDED_SSB_SECTIONS);
-            validateSelfLink(sourceResponse, targetResponse);
+            validateObject(sourceResponse, targetResponse, LINKS_SELF_HREF);
         }
     }
 

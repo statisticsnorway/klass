@@ -9,8 +9,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
-import static no.ssb.klass.api.migration.MigrationTestUtils.assertStatusCodesEqual;
-import static no.ssb.klass.api.migration.MigrationTestUtils.compareError;
+import static no.ssb.klass.api.migration.MigrationTestUtils.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class KlassApiCorrespondenceTablesByIdTest extends AbstractKlassApiDataIntegrityTest {
@@ -22,6 +21,8 @@ public class KlassApiCorrespondenceTablesByIdTest extends AbstractKlassApiDataIn
         String path = getCorrespondenceTableByIdPath(correspondenceTableId);
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi( path, null);
         Response targetResponse = klassApiMigrationClient.getFromTargetApi( path, null);
+
+        assertThat(sourceResponse).withFailMessage("source api returned no content").isNotNull();
 
         assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
@@ -44,6 +45,8 @@ public class KlassApiCorrespondenceTablesByIdTest extends AbstractKlassApiDataIn
         String path = getCorrespondenceTableByIdPath(correspondenceTableId);
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, null);
         Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, null);
+
+        validateApiResponse(sourceResponse);
 
         assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 

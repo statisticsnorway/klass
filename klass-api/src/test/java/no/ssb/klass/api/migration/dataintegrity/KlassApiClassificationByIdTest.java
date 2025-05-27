@@ -11,8 +11,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
-import static no.ssb.klass.api.migration.MigrationTestUtils.assertStatusCodesEqual;
-import static no.ssb.klass.api.migration.MigrationTestUtils.compareError;
+import static no.ssb.klass.api.migration.MigrationTestUtils.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 /**
@@ -43,6 +42,8 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
         sourceResponse = klassApiMigrationClient.getFromSourceApi(path, null);
         targetResponse = klassApiMigrationClient.getFromTargetApi(path, null);
 
+        validateApiResponse(sourceResponse);
+
         assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
         if(sourceResponse.getStatusCode() != 200) {
@@ -52,7 +53,7 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
         else {
             validateItems(sourceResponse, targetResponse, pathNamesClassification);
             validateList(sourceResponse, targetResponse, STATISTICAL_UNITS);
-            validatePathListWithLinks(sourceResponse, targetResponse, VERSIONS, pathNamesVersion, ID);
+            validatePathListWithObjects(sourceResponse, targetResponse, VERSIONS, pathNamesVersion, ID);
         }
     }
 
@@ -66,6 +67,8 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
         sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageEn);
         targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageEn);
 
+        validateApiResponse(sourceResponse);
+
         assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
         if(sourceResponse.getStatusCode() != 200) {
@@ -74,7 +77,7 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
         } else {
             validateItems(sourceResponse, targetResponse, pathNamesClassification);
             validateList(sourceResponse, targetResponse, STATISTICAL_UNITS);
-            validatePathListWithLinks(sourceResponse, targetResponse, VERSIONS, pathNamesVersion, ID);
+            validatePathListWithObjects(sourceResponse, targetResponse, VERSIONS, pathNamesVersion, ID);
         }
     }
 
@@ -87,6 +90,8 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
         sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageNn);
         targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageNn);
 
+        validateApiResponse(sourceResponse);
+
         assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
         if(sourceResponse.getStatusCode() != 200) {
@@ -96,7 +101,7 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
         else {
             validateItems(sourceResponse, targetResponse, pathNamesClassification);
             validateList(sourceResponse, targetResponse, STATISTICAL_UNITS);
-            validatePathListWithLinks(sourceResponse, targetResponse, VERSIONS, pathNamesVersion, ID);
+            validatePathListWithObjects(sourceResponse, targetResponse, VERSIONS, pathNamesVersion, ID);
         }
     }
 
@@ -108,6 +113,8 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
         sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsIncludeFuture);
         targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsIncludeFuture);
 
+        validateApiResponse(sourceResponse);
+
         assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
         if(sourceResponse.getStatusCode() != 200) {
@@ -116,7 +123,7 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
         }else {
             validateItems(sourceResponse, targetResponse, pathNamesClassification);
             validateList(sourceResponse, targetResponse, STATISTICAL_UNITS);
-            validatePathListWithLinks(sourceResponse, targetResponse, VERSIONS, pathNamesVersion, ID);
+            validatePathListWithObjects(sourceResponse, targetResponse, VERSIONS, pathNamesVersion, ID);
         }
     }
 

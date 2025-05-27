@@ -42,6 +42,8 @@ public class KlassApiClassificationsTest extends AbstractKlassApiDataIntegrityTe
         sourceResponse = sourceResponseClassifications;
         targetResponse = targetResponseClassifications;
 
+        validateApiResponse(sourceResponse);
+
         assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), CLASSIFICATIONS_PATH);
 
         if(sourceResponse.getStatusCode() != 200) {
@@ -52,9 +54,9 @@ public class KlassApiClassificationsTest extends AbstractKlassApiDataIntegrityTe
             validateObject(sourceResponse, targetResponse, PAGE);
             int totalPages = sourceResponse.path(PAGE_TOTAL_ELEMENTS);
             for(int i=0; i < totalPages; i++) {
-                validatePathListWithLinks(
-                        sourceResponse, targetResponse, EMBEDDED_CLASSIFICATIONS, pathNamesClassificationsPage);
-                validateLinks(sourceResponse, targetResponse, pathNamesClassificationsLinks);
+                validatePathListWithObjects(
+                        sourceResponse, targetResponse, EMBEDDED_CLASSIFICATIONS, pathNamesClassificationsPage, ID);
+                validateItems(sourceResponse, targetResponse, pathNamesClassificationsLinks);
 
                 if(sourceResponse.path(LINKS_NEXT_HREF) == null) {
                     return;
@@ -73,6 +75,8 @@ public class KlassApiClassificationsTest extends AbstractKlassApiDataIntegrityTe
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(CLASSIFICATIONS_PATH, paramsIncludeCodeLists);
         Response targetResponse = klassApiMigrationClient.getFromTargetApi(CLASSIFICATIONS_PATH, paramsIncludeCodeLists);
 
+        validateApiResponse(sourceResponse);
+
         assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), CLASSIFICATIONS_PATH);
 
         if (sourceResponse.getStatusCode() != 200) {
@@ -80,18 +84,20 @@ public class KlassApiClassificationsTest extends AbstractKlassApiDataIntegrityTe
         } else {
 
             validateObject(sourceResponse, targetResponse, PAGE);
-            validatePathListWithLinks(
-                    sourceResponse, targetResponse, EMBEDDED_CLASSIFICATIONS, pathNamesClassificationsPage);
-            validateLinks(sourceResponse, targetResponse, pathNamesClassificationsLinks);
+            validatePathListWithObjects(
+                    sourceResponse, targetResponse, EMBEDDED_CLASSIFICATIONS, pathNamesClassificationsPage, ID);
+            validateItems(sourceResponse, targetResponse, pathNamesClassificationsLinks);
 
         }
     }
 
     @Test
     void getClassificationsChangedSincePage(){
-
+        //?
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(CLASSIFICATIONS_PATH, paramsChangedSince);
         Response targetResponse = klassApiMigrationClient.getFromTargetApi(CLASSIFICATIONS_PATH, paramsChangedSince);
+
+        validateApiResponse(sourceResponse);
 
         assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), CLASSIFICATIONS_PATH);
 
@@ -100,9 +106,9 @@ public class KlassApiClassificationsTest extends AbstractKlassApiDataIntegrityTe
         } else {
 
             validateObject(sourceResponse, targetResponse, PAGE);
-            validatePathListWithLinks(
-                    sourceResponse, targetResponse, EMBEDDED_CLASSIFICATIONS, pathNamesClassificationsPage);
-            validateLinks(sourceResponse, targetResponse, pathNamesClassificationsLinks);
+            validatePathListWithObjects(
+                    sourceResponse, targetResponse, EMBEDDED_CLASSIFICATIONS, pathNamesClassificationsPage, ID);
+            validateItems(sourceResponse, targetResponse, pathNamesClassificationsLinks);
 
         }
     }

@@ -11,8 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
-import static no.ssb.klass.api.migration.MigrationTestUtils.assertStatusCodesEqual;
-import static no.ssb.klass.api.migration.MigrationTestUtils.compareError;
+import static no.ssb.klass.api.migration.MigrationTestUtils.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class KlassApiClassificationVariantTest extends AbstractKlassApiDataIntegrityTest {
@@ -43,6 +42,8 @@ public class KlassApiClassificationVariantTest extends AbstractKlassApiDataInteg
 
         sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsVariantDateFrom);
         targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsVariantDateFrom);
+
+        validateApiResponse(sourceResponse);
 
         assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 

@@ -5,8 +5,7 @@ import org.junit.jupiter.api.Test;
 
 
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
-import static no.ssb.klass.api.migration.MigrationTestUtils.assertStatusCodesEqual;
-import static no.ssb.klass.api.migration.MigrationTestUtils.compareError;
+import static no.ssb.klass.api.migration.MigrationTestUtils.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class KlassApiClassificationFamiliesByIdTest extends KlassApiClassificationCorrespondsAtTest {
@@ -18,6 +17,8 @@ public class KlassApiClassificationFamiliesByIdTest extends KlassApiClassificati
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, null);
         Response targetResponse = klassApiMigrationClient.getFromTargetApi(path , null);
 
+        validateApiResponse(sourceResponse);
+
         assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
         if(sourceResponse.getStatusCode() != 200) {
@@ -26,8 +27,7 @@ public class KlassApiClassificationFamiliesByIdTest extends KlassApiClassificati
         }
         else{
             validateItems(sourceResponse, targetResponse, pathNamesClassificationFamilyById);
-            validateSelfLink(sourceResponse, targetResponse);
-            validatePathListWithLinks(sourceResponse, targetResponse, CLASSIFICATIONS, pathNamesClassificationsPage);
+            validatePathListWithObjects(sourceResponse, targetResponse, CLASSIFICATIONS, pathNamesClassificationsPage, ID);
         }
     }
 

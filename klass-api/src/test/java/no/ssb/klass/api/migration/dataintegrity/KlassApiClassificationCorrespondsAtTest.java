@@ -9,8 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
-import static no.ssb.klass.api.migration.MigrationTestUtils.assertStatusCodesEqual;
-import static no.ssb.klass.api.migration.MigrationTestUtils.compareError;
+import static no.ssb.klass.api.migration.MigrationTestUtils.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class KlassApiClassificationCorrespondsAtTest extends KlassApiClassificationCorrespondsTest {
@@ -40,6 +39,8 @@ public class KlassApiClassificationCorrespondsAtTest extends KlassApiClassificat
         String path = getCorrespondsAtPath(classificationId);
         sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsTargetIdAndDate);
         targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsTargetIdAndDate);
+
+        validateApiResponse(sourceResponse);
 
         assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 

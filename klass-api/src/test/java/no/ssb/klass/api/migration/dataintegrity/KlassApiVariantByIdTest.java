@@ -24,6 +24,8 @@ public class KlassApiVariantByIdTest extends AbstractKlassApiDataIntegrityTest {
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi( path, null);
         Response targetResponse = klassApiMigrationClient.getFromTargetApi( path, null);
 
+        validateApiResponse(sourceResponse);
+
         assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
         if(sourceResponse.getStatusCode() != 200) {
@@ -37,7 +39,6 @@ public class KlassApiVariantByIdTest extends AbstractKlassApiDataIntegrityTest {
             validateList(sourceResponse, targetResponse, CHANGELOGS);
             validateList(sourceResponse, targetResponse, LEVELS);
             validateList(sourceResponse, targetResponse, CLASSIFICATION_ITEMS);
-            validateSelfLink(sourceResponse, targetResponse);
         }
     }
 

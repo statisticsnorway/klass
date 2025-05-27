@@ -10,8 +10,7 @@ import java.util.Map;
 
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 import static no.ssb.klass.api.migration.MigrationTestConstants.CODES;
-import static no.ssb.klass.api.migration.MigrationTestUtils.assertStatusCodesEqual;
-import static no.ssb.klass.api.migration.MigrationTestUtils.compareError;
+import static no.ssb.klass.api.migration.MigrationTestUtils.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class KlassApiClassificationVariantAtTest extends AbstractKlassApiDataIntegrityTest{
@@ -41,6 +40,8 @@ public class KlassApiClassificationVariantAtTest extends AbstractKlassApiDataInt
         String path = getVariantAtPath(classificationId);
         sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsVariantDate);
         targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsVariantDate);
+
+        validateApiResponse(sourceResponse);
 
         assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(),path);
 

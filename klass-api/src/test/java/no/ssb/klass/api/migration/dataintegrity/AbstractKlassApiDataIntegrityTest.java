@@ -38,80 +38,19 @@ public abstract class AbstractKlassApiDataIntegrityTest {
             assertThat(targetField)
                     .withFailMessage(FAIL_MESSAGE, pathName, null, targetField)
                     .isNull();
-            return;
-        }
-        assertThat(targetField)
-                .withFailMessage(FAIL_MESSAGE, pathName, sourceField, targetField)
-                .isNotNull();
-
-        assertThat(sourceField).withFailMessage(FAIL_MESSAGE,pathName, sourceField, targetField).isEqualTo(targetField);
-
-    }
-
-    /**
-     * Validates that the values at specified path names in two API response bodies are equal.
-     * <p>
-     *  For each given path name, the corresponding values from the source and target responses
-     *  are retrieved and printed to stdout. If the value in the source response is {@code null},
-     *  the target value is expected to be {@code null} as well. If the values differ, a failure
-     *  message is printed to clearly document the discrepancy, making failed tests easier to trace.
-     *</p>
-     * @param sourceResponse Response object from the source Api
-     * @param targetResponse Response object from the target Api
-     * @param pathNames a list of path names to extract and compare from the response bodies
-     */
-    static void validateItemsLegacy(Response sourceResponse, Response targetResponse, List<String> pathNames) {
-
-        for (String pathName : pathNames) {
-            System.out.println("Checking pathname: " +pathName);
-            Object sourceField = sourceResponse.path(pathName);
-            Object targetField = targetResponse.path(pathName);
-
-            if (sourceField == null) {
-                assertThat(targetField)
-                        .withFailMessage(FAIL_MESSAGE, pathName, null, targetField)
-                        .isNull();
-            }
-
-            System.out.println(sourceField + " -> " + targetField);
-
-            assertThat(sourceField)
-                    .withFailMessage(FAIL_MESSAGE,
-                            pathName, sourceField, targetField)
-                    .isEqualTo(targetField);
         }
 
-    }
-
-    /**
-     * Validates that the value at the path {@code "_links.self.href"} in two API response bodies are equal.
-     * <p>
-     *      The corresponding value from the source and target response
-     *      are retrieved and printed to stdout. If the value in the source response is {@code null},
-     *      the target value is expected to be {@code null} as well. If the value differ, a failure
-     *      message is printed to clearly document the discrepancy, making failed tests easier to trace.
-     * </p>
-     * @param sourceResponse Response object from source Api
-     * @param targetResponse Response object from target Api
-     */
-    static void validateSelfLink(Response sourceResponse, Response targetResponse) {
-        String sourceLink = sourceResponse.path(LINKS_SELF_HREF);
-        String targetLink = targetResponse.path(LINKS_SELF_HREF);
-
-        if (sourceLink == null) {
-            assertThat(targetLink)
-                    .withFailMessage(FAIL_MESSAGE, LINKS_SELF_HREF, null, targetLink)
-                    .isNull();
-            return;
+        if (pathName.endsWith(HREF)) {
+            String sourceHref = sourceField != null ? sourceField.toString() : "";
+            String targetHref = targetField != null ? targetField.toString(): "";
+            System.out.println(sourceHref + " -> " + targetHref);
+            assertThat(isPathEqualIgnoreHost(sourceHref, targetHref))
+                    .withFailMessage(FAIL_MESSAGE, pathName, sourceHref, targetHref)
+                    .isTrue();
+        } else {
+            assertThat(sourceField).withFailMessage(FAIL_MESSAGE, pathName, sourceField, targetField).isEqualTo(targetField);
         }
 
-        assertThat(targetLink)
-                .withFailMessage(FAIL_MESSAGE, LINKS_SELF_HREF, sourceLink, targetLink)
-                .isNotNull();
-
-        System.out.println(sourceLink + " -> " + targetLink);
-
-        assertThat(isPathEqualIgnoreHost(sourceLink, targetLink)).withFailMessage(FAIL_MESSAGE, LINKS_SELF_HREF, sourceLink, targetLink).isTrue();
     }
 
     /**
@@ -160,6 +99,16 @@ public abstract class AbstractKlassApiDataIntegrityTest {
     }
 
     /**
+     *  * Validates that the values at specified path names in two API response bodies are equal.
+     *      * <p>
+     *      *  For each given path name, the corresponding values from the source and target responses
+     *      *  are retrieved and printed to stdout. If the value in the source response is {@code null},
+     *      *  the target value is expected to be {@code null} as well. If the values differ, a failure
+     *      *  message is printed to clearly document the discrepancy, making failed tests easier to trace.
+     *      *</p>
+     *      * @param sourceResponse Response object from the source Api
+     *      * @param targetResponse Response object from the target Api
+     *      * @param pathNames a list of path names to extract and compare from the response bodies
      * Validates that the values retrieved by path names in
      * @param sourceResponse Response object from source Api
      * @param targetResponse Response object from target Api
@@ -202,7 +151,7 @@ public abstract class AbstractKlassApiDataIntegrityTest {
      * @param listName Name of list element in path
      * @param pathNames List of fields in listName list
      */
-    static void validatePathListWithLinks(Response sourceResponse, Response targetResponse, String listName, List<String> pathNames, String idField) {
+    static void validatePathListWithObjects(Response sourceResponse, Response targetResponse, String listName, List<String> pathNames, String idField) {
         List<Map<String, Object>> sourceList = sourceResponse.path(listName);
         List<Map<String, Object>> targetList = targetResponse.path(listName);
         if (sourceList == null) {

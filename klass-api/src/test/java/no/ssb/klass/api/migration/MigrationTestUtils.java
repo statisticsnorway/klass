@@ -14,6 +14,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static no.ssb.klass.api.migration.MigrationTestConstants.FAIL_MESSAGE;
+import static no.ssb.klass.api.migration.MigrationTestConstants.API_EMPTY_RESPONSE_MESSAGE;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class MigrationTestUtils {
@@ -157,5 +158,9 @@ public class MigrationTestUtils {
                         item -> item.get(field),
                         Function.identity()
                 ));
+    }
+
+    public static void validateApiResponse(Response response) {
+        assertThat(response).withFailMessage(API_EMPTY_RESPONSE_MESSAGE).isNotNull();
     }
 }

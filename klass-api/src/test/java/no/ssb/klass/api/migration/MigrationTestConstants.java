@@ -128,6 +128,7 @@ public final class MigrationTestConstants {
     // Messages
     public static final String FAIL_MESSAGE= "Mismatch at path '%s':\n  Source: %s\n  Target: %s";
     public static final String LOG_MESSAGE_STATUS_CODE= "Status code: ";
+    public static final String API_EMPTY_RESPONSE_MESSAGE ="Source api returned no content";
 
 
     // Lists
@@ -267,7 +268,8 @@ public final class MigrationTestConstants {
             LAST_MODIFIED,
             VALID_FROM,
             VALID_TO,
-            INTRODUCTION
+            INTRODUCTION,
+            LINKS_SELF_HREF
     );
 
     public static List<String> pathNamesClassificationsLinks = Arrays.asList(

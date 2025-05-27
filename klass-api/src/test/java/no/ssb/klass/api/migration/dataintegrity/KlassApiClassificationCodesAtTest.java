@@ -49,6 +49,8 @@ public class KlassApiClassificationCodesAtTest extends AbstractKlassApiDataInteg
         sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramDate);
         targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramDate);
 
+        validateApiResponse(sourceResponse);
+
         assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
         if(sourceResponse.getStatusCode() != 200) {
@@ -69,6 +71,8 @@ public class KlassApiClassificationCodesAtTest extends AbstractKlassApiDataInteg
         String path = getCodesAtPath(classificationId);
         sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDate);
         targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDate);
+
+        validateApiResponse(sourceResponse);
 
         assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 

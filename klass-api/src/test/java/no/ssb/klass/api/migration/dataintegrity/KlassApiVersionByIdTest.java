@@ -41,8 +41,8 @@ public class KlassApiVersionByIdTest extends AbstractKlassApiDataIntegrityTest{
             validateList(sourceResponse, targetResponse, CHANGELOGS);
             validateList(sourceResponse, targetResponse, LEVELS);
             validateList(sourceResponse, targetResponse, CLASSIFICATIONS_VARIANTS);
-            validatePathListWithLinks(sourceResponse, targetResponse, CORRESPONDENCE_TABLES, pathNamesCorrespondenceTableById,ID);
-            validatePathListWithLinks(sourceResponse, targetResponse, CLASSIFICATION_ITEMS, pathNamesVersionsClassificationItems, CODE);
+            validatePathListWithObjects(sourceResponse, targetResponse, CORRESPONDENCE_TABLES, pathNamesCorrespondenceTableVersions,ID);
+            validatePathListWithObjects(sourceResponse, targetResponse, CLASSIFICATION_ITEMS, pathNamesVersionsClassificationItems, CODE);
         }
     }
 
@@ -70,8 +70,8 @@ public class KlassApiVersionByIdTest extends AbstractKlassApiDataIntegrityTest{
             validateList(sourceResponse, targetResponse, CHANGELOGS);
             validateList(sourceResponse, targetResponse, LEVELS);
             validateList(sourceResponse, targetResponse, CLASSIFICATIONS_VARIANTS);
-            validatePathListWithLinks(sourceResponse, targetResponse, CORRESPONDENCE_TABLES, pathNamesCorrespondenceTableById,ID);
-            validatePathListWithLinks(sourceResponse, targetResponse, CLASSIFICATION_ITEMS, pathNamesVersionsClassificationItems, CODE);
+            validatePathListWithObjects(sourceResponse, targetResponse, CORRESPONDENCE_TABLES, pathNamesCorrespondenceTableVersions,ID);
+            validatePathListWithObjects(sourceResponse, targetResponse, CLASSIFICATION_ITEMS, pathNamesVersionsClassificationItems, CODE);
         }
     }
 
@@ -85,7 +85,7 @@ public class KlassApiVersionByIdTest extends AbstractKlassApiDataIntegrityTest{
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, params);
         Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, params);
 
-        assertThat(sourceResponse).withFailMessage("source api returned no content").isNotNull();
+        validateApiResponse(sourceResponse);
 
         assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
@@ -99,8 +99,8 @@ public class KlassApiVersionByIdTest extends AbstractKlassApiDataIntegrityTest{
             validateList(sourceResponse, targetResponse, CHANGELOGS);
             validateList(sourceResponse, targetResponse, LEVELS);
             validateList(sourceResponse, targetResponse, CLASSIFICATIONS_VARIANTS);
-            validatePathListWithLinks(sourceResponse, targetResponse, CORRESPONDENCE_TABLES, pathNamesCorrespondenceTableById,ID);
-            validatePathListWithLinks(sourceResponse, targetResponse, CLASSIFICATION_ITEMS, pathNamesVersionsClassificationItems, CODE);
+            validatePathListWithObjects(sourceResponse, targetResponse, CORRESPONDENCE_TABLES, pathNamesCorrespondenceTableVersions,ID);
+            validatePathListWithObjects(sourceResponse, targetResponse, CLASSIFICATION_ITEMS, pathNamesVersionsClassificationItems, CODE);
         }
     }
 
@@ -114,7 +114,7 @@ public class KlassApiVersionByIdTest extends AbstractKlassApiDataIntegrityTest{
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi( path, params);
         Response targetResponse = klassApiMigrationClient.getFromTargetApi( path, params);
 
-        assertThat(sourceResponse).withFailMessage("source api returned no content").isNotNull();
+        validateApiResponse(sourceResponse);
 
         assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
@@ -128,8 +128,8 @@ public class KlassApiVersionByIdTest extends AbstractKlassApiDataIntegrityTest{
             validateList(sourceResponse, targetResponse, CHANGELOGS);
             validateList(sourceResponse, targetResponse, LEVELS);
             validateList(sourceResponse, targetResponse, CLASSIFICATIONS_VARIANTS);
-            validatePathListWithLinks(sourceResponse, targetResponse, CORRESPONDENCE_TABLES, pathNamesCorrespondenceTableById,ID);
-            validatePathListWithLinks(sourceResponse, targetResponse, CLASSIFICATION_ITEMS, pathNamesVersionsClassificationItems, CODE);
+            validatePathListWithObjects(sourceResponse, targetResponse, CORRESPONDENCE_TABLES, pathNamesCorrespondenceTableVersions,ID);
+            validatePathListWithObjects(sourceResponse, targetResponse, CLASSIFICATION_ITEMS, pathNamesVersionsClassificationItems, CODE);
         }
     }
 
