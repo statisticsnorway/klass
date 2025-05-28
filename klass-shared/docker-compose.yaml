@@ -1,6 +1,7 @@
 services:
   mariadb:
     image: mariadb:11.7
+    profiles: [migration-testing, migrate-data]
     container_name: klass_mariadb
     ports:
       - "3306:3306"
@@ -12,6 +13,7 @@ services:
       MARIADB_DATABASE: "klass"
   postgresql:
     image: postgres:17.4
+    profiles: [migration-testing, migrate-data]
     container_name: klass_postgres
     ports:
       - "5432:5432"
@@ -26,6 +28,7 @@ services:
       dockerfile: ../klass-api/Dockerfile
     command: ["java", "-jar", "app.war", "--spring.profiles.active=api, postgres-local, skip-indexing, embedded-solr"]
     container_name: klass-api
+    profiles: [migration-testing]
     depends_on:
       - postgresql
     ports:
@@ -46,6 +49,7 @@ services:
       dockerfile: ../klass-api/Dockerfile
     command: ["java", "-jar", "app.war", "--spring.profiles.active=api, mariadb-local, skip-indexing, embedded-solr"]
     container_name: klass-api-mariadb
+    profiles: [migration-testing]
     depends_on:
       - mariadb
     ports:
@@ -69,6 +73,7 @@ services:
       context: ../klass-forvaltning
       dockerfile: ../klass-forvaltning/Dockerfile
     container_name: klass-forvaltning
+    profiles: [klass-forvaltning]
     ports:
       - "8082:8081"
     environment:
