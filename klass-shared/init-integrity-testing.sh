@@ -6,7 +6,7 @@ source .env
 set +a
 
 # Start containers
-docker compose up -d
+docker compose --profile migration-testing up -d
 
 echo "Wait for mariadb to be ready"
 sleep 20
