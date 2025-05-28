@@ -198,6 +198,9 @@
                                 <include>**/*Test.java</include>
                                 <include>**/*Documentation.java</include>
                             </includes>
+                            <excludes>
+                                <exclude>migration/**</exclude>
+                            </excludes>
                         </configuration>
                     </plugin>
                     <plugin>
@@ -273,7 +276,6 @@
 
     <build>
         <finalName>api#klass-${project.version}</finalName>
-
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
