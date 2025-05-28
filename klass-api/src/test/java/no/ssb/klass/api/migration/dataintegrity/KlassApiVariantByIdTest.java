@@ -21,8 +21,8 @@ public class KlassApiVariantByIdTest extends AbstractKlassApiDataIntegrityTest {
     void getOneVariantById() {
         int variantId = 1111;
         String path = getVariantByIdPath(variantId);
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi( path, null);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi( path, null);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi( path, null,null);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi( path, null,null);
 
         assertApiResponseIsNotNull(sourceResponse);
 

@@ -38,8 +38,8 @@ public class KlassApiClassificationVariantAtTest extends AbstractKlassApiDataInt
         System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
 
         String path = getVariantAtPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsVariantDate);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsVariantDate);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsVariantDate,null);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsVariantDate,null);
 
         assertApiResponseIsNotNull(sourceResponse);
 

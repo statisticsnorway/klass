@@ -65,8 +65,8 @@ public class KlassApiClassificationCodesTest extends AbstractKlassApiDataIntegri
         System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
 
         String path = getCodesPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDate);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDate);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDate,null);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDate,null);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -90,8 +90,8 @@ public class KlassApiClassificationCodesTest extends AbstractKlassApiDataIntegri
         System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
 
         String path = getCodesPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDate);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDate);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDate,null);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDate,null);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -116,8 +116,8 @@ public class KlassApiClassificationCodesTest extends AbstractKlassApiDataIntegri
         System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
 
         String path = getCodesPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDateInRange);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDateInRange);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDateInRange,null);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDateInRange,null);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -143,8 +143,8 @@ public class KlassApiClassificationCodesTest extends AbstractKlassApiDataIntegri
         paramsDateInRange.put(RANGE_TO, secondDate);
 
         String path = getCodesPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDateInRange);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDateInRange);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDateInRange,null);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDateInRange,null);
 
         assertApiResponseIsNotNull(sourceResponse);
 

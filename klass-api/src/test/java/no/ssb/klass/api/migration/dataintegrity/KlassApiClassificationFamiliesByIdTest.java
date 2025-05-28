@@ -14,8 +14,8 @@ public class KlassApiClassificationFamiliesByIdTest extends KlassApiClassificati
     void getOneClassificationFamilyBy() {
         int classificationFamilyId = 11;
         String path = getClassificationFamilyByIdPath(classificationFamilyId);
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, null);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path , null);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, null,null);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path , null,null);
 
         assertApiResponseIsNotNull(sourceResponse);
 

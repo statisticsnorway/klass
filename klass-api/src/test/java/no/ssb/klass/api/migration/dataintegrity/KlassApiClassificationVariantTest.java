@@ -40,8 +40,8 @@ public class KlassApiClassificationVariantTest extends AbstractKlassApiDataInteg
 
         String path = getVariantPath(classificationId);
 
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsVariantDateFrom);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsVariantDateFrom);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsVariantDateFrom,null);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsVariantDateFrom,null);
 
         assertApiResponseIsNotNull(sourceResponse);
 

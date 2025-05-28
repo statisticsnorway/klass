@@ -37,8 +37,8 @@ public class KlassApiClassificationCorrespondsAtTest extends KlassApiClassificat
         System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
 
         String path = getCorrespondsAtPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsTargetIdAndDate);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsTargetIdAndDate);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsTargetIdAndDate,null);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsTargetIdAndDate,null);
 
         assertApiResponseIsNotNull(sourceResponse);
 

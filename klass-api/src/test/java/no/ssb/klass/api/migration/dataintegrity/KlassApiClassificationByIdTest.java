@@ -36,8 +36,8 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
 
         String path = getClassificationByIdPath(classificationId);
 
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, null);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, null);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, null, null);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, null, null);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -60,8 +60,8 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
 
         String path = getClassificationByIdPath(classificationId);
 
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageEn);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageEn);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageEn, null);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageEn, null);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -82,8 +82,8 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
 
         String path = CLASSIFICATIONS_PATH + "/" + classificationId;
 
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageNn);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageNn);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageNn, null);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageNn, null);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -104,8 +104,8 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
     void getClassificationIncludeFuture(Integer classificationId) {
 
         String path = getClassificationByIdPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsIncludeFuture);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsIncludeFuture);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsIncludeFuture, null);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsIncludeFuture, null);
 
         assertApiResponseIsNotNull(sourceResponse);
 
