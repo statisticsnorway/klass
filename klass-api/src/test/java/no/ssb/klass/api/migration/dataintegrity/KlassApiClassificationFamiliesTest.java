@@ -22,8 +22,8 @@ public class KlassApiClassificationFamiliesTest extends KlassApiClassificationCo
     @Test
     void getClassificationFamilies() {
         String path = getClassificationFamiliesPath();
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, null);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, null);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, null,null);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, null,null);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -40,8 +40,8 @@ public class KlassApiClassificationFamiliesTest extends KlassApiClassificationCo
     @Test
     void getClassificationFamiliesBySsbSection() {
         String path = getClassificationFamiliesPath();
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsSsbSection);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsSsbSection);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsSsbSection,null);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsSsbSection,null);
 
         assertApiResponseIsNotNull(sourceResponse);
 

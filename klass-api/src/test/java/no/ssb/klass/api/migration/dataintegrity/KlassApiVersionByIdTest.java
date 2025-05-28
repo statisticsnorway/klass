@@ -24,8 +24,33 @@ public class KlassApiVersionByIdTest extends AbstractKlassApiDataIntegrityTest{
     void getVersionById() {
 
         String path = getVersionByIdPath(randomId);
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, null);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, null);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, null,null);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, null,null);
+
+        assertThat(sourceResponse).withFailMessage("source api returned no content").isNotNull();
+
+        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+
+        if(sourceResponse.getStatusCode() != 200) {
+            assertThat(compareError(randomId, sourceResponse, targetResponse)).isTrue();
+        }
+        else{
+            validateItems(sourceResponse, targetResponse, pathNamesVersionsById);
+            validateList(sourceResponse, targetResponse, PUBLISHED);
+            validateList(sourceResponse, targetResponse, CHANGELOGS);
+            validateList(sourceResponse, targetResponse, LEVELS);
+            validateList(sourceResponse, targetResponse, CLASSIFICATIONS_VARIANTS);
+            validatePathListWithObjects(sourceResponse, targetResponse, CORRESPONDENCE_TABLES, pathNamesCorrespondenceTableVersions,ID);
+            validatePathListWithObjects(sourceResponse, targetResponse, CLASSIFICATION_ITEMS, pathNamesVersionsClassificationItems, CODE);
+        }
+    }
+
+    @Test
+    void getVersionByIdXML() {
+
+        String path = getVersionByIdPath(randomId);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, null,TEXT_XML);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, null,TEXT_XML);
 
         assertThat(sourceResponse).withFailMessage("source api returned no content").isNotNull();
 
@@ -52,8 +77,8 @@ public class KlassApiVersionByIdTest extends AbstractKlassApiDataIntegrityTest{
         params.put(LANGUAGE, EN);
 
         String path = getVersionByIdPath(randomId);
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi( path, params);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi( path, params);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi( path, params,null);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi( path, params,null);
 
         assertThat(sourceResponse).withFailMessage("source api returned no content").isNotNull();
 
@@ -80,8 +105,8 @@ public class KlassApiVersionByIdTest extends AbstractKlassApiDataIntegrityTest{
         params.put(LANGUAGE, NN);
 
         String path = getVersionByIdPath(randomId);
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, params);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, params);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, params,null);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, params,null);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -108,8 +133,8 @@ public class KlassApiVersionByIdTest extends AbstractKlassApiDataIntegrityTest{
 
         String path = getVersionByIdPath(randomId);
 
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi( path, params);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi( path, params);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi( path, params,null);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi( path, params,null);
 
         assertApiResponseIsNotNull(sourceResponse);
 

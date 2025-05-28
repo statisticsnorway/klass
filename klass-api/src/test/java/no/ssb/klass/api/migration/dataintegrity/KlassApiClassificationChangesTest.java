@@ -45,8 +45,8 @@ public class KlassApiClassificationChangesTest extends AbstractKlassApiDataInteg
         System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
 
         String path = getChangesPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDate);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDate);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDate,null);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDate,null);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -68,8 +68,8 @@ public class KlassApiClassificationChangesTest extends AbstractKlassApiDataInteg
         System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
 
         String path= getChangesPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDate);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDate);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDate,null);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDate,null);
 
         assertApiResponseIsNotNull(sourceResponse);
 

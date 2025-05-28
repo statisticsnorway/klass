@@ -19,8 +19,8 @@ public class KlassApiCorrespondenceTablesByIdTest extends AbstractKlassApiDataIn
         int correspondenceTableId = 1111;
 
         String path = getCorrespondenceTableByIdPath(correspondenceTableId);
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi( path, null);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi( path, null);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi( path, null,null);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi( path, null,null);
 
         assertThat(sourceResponse).withFailMessage("source api returned no content").isNotNull();
 
@@ -43,8 +43,8 @@ public class KlassApiCorrespondenceTablesByIdTest extends AbstractKlassApiDataIn
     void getCorrespondenceTable(Integer correspondenceTableId) {
 
         String path = getCorrespondenceTableByIdPath(correspondenceTableId);
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, null);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, null);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, null,null);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, null,null);
 
         assertApiResponseIsNotNull(sourceResponse);
 

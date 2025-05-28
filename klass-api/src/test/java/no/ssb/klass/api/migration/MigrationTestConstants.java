@@ -126,6 +126,10 @@ public final class MigrationTestConstants {
     public static final String VARIANT_NAME= "variantName";
     public static final String SSB_SECTION= "ssbSection";
 
+    // header
+    public static final String CONTENT_TYPE= "Content-Type";
+    public static final String TEXT_XML= "text/xml";
+
     // Messages
     public static final String FAIL_MESSAGE= "Mismatch at path '%s':\n  Source: %s\n  Target: %s";
     public static final String LOG_MESSAGE_STATUS_CODE= "Status code: ";

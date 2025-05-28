@@ -7,8 +7,9 @@ import io.restassured.specification.RequestSpecification;
 import no.ssb.klass.api.util.RestConstants;
 
 import java.util.Map;
+import java.util.Objects;
 
-import static no.ssb.klass.api.migration.MigrationTestConstants.BASE_PATH;
+import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 import static no.ssb.klass.api.migration.dataintegrity.AbstractKlassApiDataIntegrityTest.sourceHost;
 import static no.ssb.klass.api.migration.dataintegrity.AbstractKlassApiDataIntegrityTest.targetHost;
 
@@ -42,24 +43,26 @@ public class KlassApiMigrationClient {
         }
     }
 
-    public Response getFromSourceApi(String path, Map<String, ?> queryParams) {
+    public Response getFromSourceApi(String path, Map<String, ?> queryParams, String headerContentType) {
         RequestSpecification request = RestAssured.given().spec(sourceApi);
         if (queryParams != null && !queryParams.isEmpty()) {
             request.queryParams(queryParams);
         }
-
+        String contentTypeValue;
+        contentTypeValue = Objects.requireNonNullElse(headerContentType, "application/json");
         request.log().all();
-        return request.get(path);
+        return request.header(CONTENT_TYPE, contentTypeValue).get(path);
     }
 
-    public Response getFromTargetApi(String path, Map<String, ?> queryParams) {
+    public Response getFromTargetApi(String path, Map<String, ?> queryParams, String headerContentType) {
         RequestSpecification request = RestAssured.given().spec(targetApi);
         if (queryParams != null && !queryParams.isEmpty()) {
             request.queryParams(queryParams);
         }
-
+        String contentTypeValue;
+        contentTypeValue = Objects.requireNonNullElse(headerContentType, "application/json");
         request.log().all();
-        return request.get(path);
+        return request.header(CONTENT_TYPE, contentTypeValue).get(path);
     }
 
 }

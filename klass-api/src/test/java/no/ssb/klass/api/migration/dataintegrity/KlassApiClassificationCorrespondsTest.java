@@ -38,8 +38,8 @@ public class KlassApiClassificationCorrespondsTest extends AbstractKlassApiDataI
         System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
 
         String path = getCorrespondsPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsTargetIdAndDateFrom);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsTargetIdAndDateFrom);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsTargetIdAndDateFrom,null);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsTargetIdAndDateFrom,null);
 
         assertApiResponseIsNotNull(sourceResponse);
 
