@@ -13,7 +13,6 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class KlassApiClassificationFamiliesTest extends KlassApiClassificationCodesTest{
 
-    //ssbSection
     static Map<String, Object> paramsSsbSection = new HashMap<>();
 
     @BeforeAll
