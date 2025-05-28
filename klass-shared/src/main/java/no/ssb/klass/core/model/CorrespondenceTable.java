@@ -1,36 +1,24 @@
 package no.ssb.klass.core.model;
 
-import static com.google.common.base.Preconditions.*;
-import static java.util.stream.Collectors.*;
+import com.google.common.collect.Lists;
+import no.ssb.klass.core.util.DateRange;
+import no.ssb.klass.core.util.TimeUtil;
+import no.ssb.klass.core.util.Translatable;
 
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Index;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
-import com.google.common.collect.Lists;
-
-import no.ssb.klass.core.util.DateRange;
-import no.ssb.klass.core.util.TimeUtil;
-import no.ssb.klass.core.util.Translatable;
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
+import static java.util.stream.Collectors.toList;
 
 @Entity
-@Table(indexes = { @Index(columnList = "source_id", name = "ct_source_idx"),
-        @Index(columnList = "target_id", name = "ct_target_idx") })
+@Table(indexes = {@Index(columnList = "source_id", name = "ct_source_idx"),
+        @Index(columnList = "target_id", name = "ct_target_idx")})
 public class CorrespondenceTable extends BaseEntity implements ClassificationEntityOperations, Publishable, Draftable {
-    @Lob
     @Column(columnDefinition = "text", nullable = false)
     private Translatable description;
     private Published published;
@@ -55,14 +43,12 @@ public class CorrespondenceTable extends BaseEntity implements ClassificationEnt
      *
      * @param description
      * @param source
-     * @param sourceLevelNumber
-     *                          0 means all levels from source version
+     * @param sourceLevelNumber 0 means all levels from source version
      * @param target
-     * @param targetLevelNumber
-     *                          0 means all levels from target version
+     * @param targetLevelNumber 0 means all levels from target version
      */
     public CorrespondenceTable(Translatable description, ClassificationVersion source, int sourceLevelNumber,
-            ClassificationVersion target, int targetLevelNumber) {
+                               ClassificationVersion target, int targetLevelNumber) {
         this.description = checkNotNull(description);
         this.published = Published.none();
         this.source = checkNotNull(source);
@@ -196,7 +182,7 @@ public class CorrespondenceTable extends BaseEntity implements ClassificationEnt
      *
      * @param map
      * @return true if already contains a correspondenceMap with identical source
-     *         and target mapping, false otherwise
+     * and target mapping, false otherwise
      */
     public boolean alreadyContainsIdenticalMap(CorrespondenceMap map) {
         return correspondenceMaps.stream().filter(m -> m.hasSameSourceAndTarget(map)).findAny().map(present -> true)
@@ -228,9 +214,9 @@ public class CorrespondenceTable extends BaseEntity implements ClassificationEnt
             if (!source.getDateRange().overlaps(target.getDateRange())) {
                 throw new IllegalArgumentException("CorrespondenceTable: " + getNameInPrimaryLanguage()
                         + ". dateRanges of source and target classification version does not overlap. Source: " + source
-                                .getNameInPrimaryLanguage()
+                        .getNameInPrimaryLanguage()
                         + " " + source.getDateRange() + ". Target: " + target
-                                .getNameInPrimaryLanguage()
+                        .getNameInPrimaryLanguage()
                         + " " + target.getDateRange());
             }
         }

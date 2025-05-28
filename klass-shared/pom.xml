@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <artifactId>klass-shared</artifactId>
     <packaging>jar</packaging>
-<!--    <packaging>pom</packaging>-->
 
     <name>Klass Shared</name>
     <description>Felles klasser og resurser for Klass komponentene</description>
@@ -11,7 +11,7 @@
     <parent>
         <groupId>no.ssb.klass</groupId>
         <artifactId>klass-root</artifactId>
-        <version>2.1.7</version>
+        <version>2.1.8-SNAPSHOT</version>
     </parent>
 
     <properties>
@@ -20,9 +20,9 @@
         ja disse skal være her og skal være tomme,de er  nødvendig siden jgitflow plugin ikke plukker opp at  local profilen er activateByDefault
         (på server defaulter disse til applications.properties)
         -->
-        <klass.env.name />
-        <klass.doc.env.url />
-        <klass.doc.env.port />
+        <klass.env.name/>
+        <klass.doc.env.url/>
+        <klass.doc.env.port/>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -40,6 +40,7 @@
         <asciidoctor-version>1.6.0</asciidoctor-version>
         <maven-jaxb2-plugin-version>0.15.2</maven-jaxb2-plugin-version>
         <tomcat7-maven-plugin-version>2.2</tomcat7-maven-plugin-version>
+        <postgresql.version>42.7.5</postgresql.version>
 
         <!--IMPORTANT HIBERNATE BUG FIX ( needed for Translatable as lobs)-->
         <!--https://hibernate.atlassian.net/browse/HHH-10818-->
@@ -78,18 +79,18 @@
             </exclusions>
         </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>org.apache.solr</groupId>-->
-<!--            <artifactId>solr-core</artifactId>-->
-<!--            <version>5.5.0</version>-->
-<!--            &lt;!&ndash;https://github.com/FasterXML/jackson-dataformat-xml/issues/132&ndash;&gt;-->
-<!--            <exclusions>-->
-<!--                <exclusion>-->
-<!--                    <groupId>org.codehaus.woodstox</groupId>-->
-<!--                    <artifactId>wstx-asl</artifactId>-->
-<!--                </exclusion>-->
-<!--            </exclusions>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.apache.solr</groupId>-->
+        <!--            <artifactId>solr-core</artifactId>-->
+        <!--            <version>5.5.0</version>-->
+        <!--            &lt;!&ndash;https://github.com/FasterXML/jackson-dataformat-xml/issues/132&ndash;&gt;-->
+        <!--            <exclusions>-->
+        <!--                <exclusion>-->
+        <!--                    <groupId>org.codehaus.woodstox</groupId>-->
+        <!--                    <artifactId>wstx-asl</artifactId>-->
+        <!--                </exclusion>-->
+        <!--            </exclusions>-->
+        <!--        </dependency>-->
         <dependency>
             <groupId>org.apache.solr</groupId>
             <artifactId>solr-dataimporthandler</artifactId>
@@ -102,7 +103,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
 
 
         <dependency>
@@ -167,6 +167,11 @@
             <artifactId>mariadb-java-client</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${postgresql.version}</version>
+        </dependency>
+        <dependency>
             <!--java based ldap server for testing-->
             <groupId>org.apache.directory.server</groupId>
             <artifactId>apacheds-server-jndi</artifactId>
@@ -221,7 +226,7 @@
             <version>${rest-assured-version}</version>
             <scope>test</scope>
         </dependency>
-         
+
     </dependencies>
 
     <profiles>
@@ -294,7 +299,7 @@
                 </plugins>
             </build>
         </profile>
-        
+
 
     </profiles>
 
@@ -329,7 +334,7 @@
                     </execution>
                 </executions>
             </plugin>
-            
+
         </plugins>
         <pluginManagement>
             <plugins>
@@ -351,7 +356,7 @@
                         <arguments>-Pdocumentation -Dmaven.javadoc.skip=true</arguments>
                     </configuration>
                 </plugin>
-                
+
                 <plugin>
                     <groupId>org.apache.tomcat.maven</groupId>
                     <artifactId>tomcat7-maven-plugin</artifactId>

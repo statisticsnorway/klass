@@ -1,37 +1,24 @@
 package no.ssb.klass.core.model;
 
-import static com.google.common.base.Preconditions.*;
-import static java.util.stream.Collectors.*;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.StringJoiner;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.Lob;
-import javax.persistence.OneToMany;
-
 import com.google.common.base.Strings;
-
 import no.ssb.klass.core.util.DateRange;
 import no.ssb.klass.core.util.DraftUtil;
 import no.ssb.klass.core.util.TimeUtil;
 import no.ssb.klass.core.util.Translatable;
 
+import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
+import static java.util.stream.Collectors.toList;
+
 @Entity
 public abstract class StatisticalClassification extends BaseEntity implements ClassificationEntityOperations,
         Publishable, Draftable {
     public static final int FIRST_LEVEL_NUMBER = 1;
-    @Lob
     @Column(columnDefinition = "text", nullable = false)
     protected Translatable introduction;
     private Published published;
@@ -272,8 +259,7 @@ public abstract class StatisticalClassification extends BaseEntity implements Cl
     /**
      * Deletes a level. Level must be empty, i.e. not have any classificationItems
      *
-     * @param level
-     *              level to delete
+     * @param level level to delete
      */
     public void deleteLevel(Level level) {
         checkArgument(level.getClassificationItems().isEmpty(),
@@ -297,7 +283,7 @@ public abstract class StatisticalClassification extends BaseEntity implements Cl
     }
 
     public void addClassificationItem(ClassificationItem classificationItem, int levelNumber,
-            ClassificationItem parent) {
+                                      ClassificationItem parent) {
         if (hasClassificationItem(classificationItem.getCode())) {
             throw new IllegalArgumentException("ClassificationItem already exist with code: " + classificationItem
                     .getCode());
