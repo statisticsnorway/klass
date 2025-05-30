@@ -28,7 +28,7 @@ public class KlassApiClassificationCorrespondsTest extends AbstractKlassApiDataI
         fromDate = "2020-01-01";
         targetClassificationIdValue = 103;
         paramsTargetIdAndDateFrom.put(TARGET_CLASSIFICATION_ID, targetClassificationIdValue);
-        paramsTargetIdAndDateFrom.put(RANGE_FROM, fromDate);
+        paramsTargetIdAndDateFrom.put(FROM, fromDate);
 
     }
 

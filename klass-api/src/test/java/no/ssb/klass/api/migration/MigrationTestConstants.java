@@ -117,10 +117,11 @@ public final class MigrationTestConstants {
     public static final String LANGUAGE ="language";
     public static final String INCLUDE_FUTURE= "includeFuture";
     public static final String CODES= "codes";
+    public static final String SELECT_CODES= "selectCodes";
     public static final String CODES_AT= "codesAt";
     public static final String DATE= "date";
-    public static final String RANGE_FROM= "from";
-    public static final String RANGE_TO= "to";
+    public static final String FROM = "from";
+    public static final String TO = "to";
     public static final String INCLUDE_CODE_LISTS= "includeCodeLists";
     public static final String CHANGED_SINCE= "changedSince";
     public static final String VARIANT_NAME= "variantName";

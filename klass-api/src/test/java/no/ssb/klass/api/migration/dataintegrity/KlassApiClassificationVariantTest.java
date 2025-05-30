@@ -28,7 +28,7 @@ public class KlassApiClassificationVariantTest extends AbstractKlassApiDataInteg
     @BeforeAll
     static void beforeAllVariant() {
         paramsVariantDateFrom.put(VARIANT_NAME, variantNameId84);
-        paramsVariantDateFrom.put(RANGE_FROM, variantDateId84);
+        paramsVariantDateFrom.put(FROM, variantDateId84);
 
     }
 

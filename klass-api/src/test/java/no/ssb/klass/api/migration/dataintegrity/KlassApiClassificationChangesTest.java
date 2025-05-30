@@ -34,7 +34,7 @@ public class KlassApiClassificationChangesTest extends AbstractKlassApiDataInteg
                 LocalDate.of(2024, 12, 31)).format(formatter);
 
 
-        paramsDate.put(RANGE_FROM, dateFromToMax);
+        paramsDate.put(FROM, dateFromToMax);
 
     }
 

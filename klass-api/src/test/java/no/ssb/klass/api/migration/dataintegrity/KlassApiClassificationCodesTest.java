@@ -54,9 +54,9 @@ public class KlassApiClassificationCodesTest extends AbstractKlassApiDataIntegri
 
          randomId = generateRandomId(150);
 
-         paramsDate.put(RANGE_FROM, dateFromToMax);
-         paramsDateInRange.put(RANGE_FROM, dateFromInRangeString);
-         paramsDateInRange.put(RANGE_TO, dateToInRangeString);
+         paramsDate.put(FROM, dateFromToMax);
+         paramsDateInRange.put(FROM, dateFromInRangeString);
+         paramsDateInRange.put(TO, dateToInRangeString);
     }
 
     @Test
@@ -139,8 +139,8 @@ public class KlassApiClassificationCodesTest extends AbstractKlassApiDataIntegri
         String firstDate = "2025-01-01";
         String secondDate = "1995-11-12";
 
-        paramsDateInRange.put(RANGE_FROM, firstDate);
-        paramsDateInRange.put(RANGE_TO, secondDate);
+        paramsDateInRange.put(FROM, firstDate);
+        paramsDateInRange.put(TO, secondDate);
 
         String path = getCodesPath(classificationId);
         sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDateInRange,null);
