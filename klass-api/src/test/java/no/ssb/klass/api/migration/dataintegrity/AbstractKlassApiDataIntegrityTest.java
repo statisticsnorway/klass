@@ -8,8 +8,11 @@ import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeAll;
 
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
+import static no.ssb.klass.api.migration.MigrationTestUtils.*;
 
 public abstract class AbstractKlassApiDataIntegrityTest {
 
@@ -17,6 +20,9 @@ public abstract class AbstractKlassApiDataIntegrityTest {
 
     static Response sourceResponseClassifications;
     static Response targetResponseClassifications;
+
+    static List<Integer> sourceResponseIdentifiers = new ArrayList<>();
+    static List<Integer> targetResponseIdentifiers = new ArrayList<>();
 
     static int numClassifications;
 
@@ -26,6 +32,20 @@ public abstract class AbstractKlassApiDataIntegrityTest {
 
     static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
+    private static void setSourceResponseIdentifiers() {
+        int totalPages = sourceResponseClassifications.path(PAGE_TOTAL_ELEMENTS);
+        for(int i = 0; i < totalPages; i++) {
+            List<Integer> pageIdentifiers = new ArrayList<>(sourceResponseClassifications.path(EMBEDDED_CLASSIFICATIONS_ID));
+            sourceResponseIdentifiers.addAll(pageIdentifiers);
+
+            if(sourceResponseClassifications.path(LINKS_NEXT_HREF) == null) {
+                return;
+            }
+            sourceResponseClassifications =
+                    klassApiMigrationClient.getFromSourceApi(sourceResponseClassifications.path(LINKS_NEXT_HREF), null,null);
+
+        }
+    }
 
     @BeforeAll
     static void beforeAll() {
@@ -35,10 +55,12 @@ public abstract class AbstractKlassApiDataIntegrityTest {
         boolean targetUp = klassApiMigrationClient.isApiAvailable(targetHost);
 
         Assumptions.assumeTrue(sourceUp && targetUp, "One or both APIs are not available, skipping tests.");
+
         sourceResponseClassifications = klassApiMigrationClient.getFromSourceApi(CLASSIFICATIONS_PATH, null, null);
         targetResponseClassifications = klassApiMigrationClient.getFromTargetApi(CLASSIFICATIONS_PATH, null, null);
 
         numClassifications = sourceResponseClassifications.path(PAGE_TOTAL_ELEMENTS);
+        setSourceResponseIdentifiers();
     }
 
     @AfterAll
