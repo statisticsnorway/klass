@@ -20,6 +20,8 @@ public abstract class AbstractKlassApiDataIntegrityTest {
     static Response sourceResponseClassifications;
     static Response targetResponseClassifications;
 
+    static Response ssbSectionResponse;
+
     static List<Integer> sourceResponseIdentifiers = new ArrayList<>();
 
     static int numClassifications;
@@ -30,6 +32,8 @@ public abstract class AbstractKlassApiDataIntegrityTest {
     public static final String targetHost = MigrationTestConfig.getTargetHost();
 
     static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+    static List<String> ssbSectionNames = new ArrayList<>();
 
     private static void setSourceResponseIdentifiers() {
         int totalPages = sourceResponseClassifications.path(PAGE_TOTAL_ELEMENTS);
@@ -43,6 +47,14 @@ public abstract class AbstractKlassApiDataIntegrityTest {
             sourceResponseClassifications =
                     klassApiMigrationClient.getFromSourceApi(sourceResponseClassifications.path(LINKS_NEXT_HREF), null,null);
 
+        }
+    }
+
+    private static void setSsbSectionNames() {
+        List<?> ssbSections = ssbSectionResponse.path(EMBEDDED_SSB_SECTIONS);
+        for(int i = 0; i < ssbSections.size(); i++) {
+            List <String> names = new ArrayList<>(ssbSectionResponse.path(EMBEDDED_SSB_SECTIONS_NAME));
+            ssbSectionNames.addAll(names);
         }
     }
 
@@ -61,6 +73,8 @@ public abstract class AbstractKlassApiDataIntegrityTest {
         numClassifications = sourceResponseClassifications.path(PAGE_TOTAL_ELEMENTS);
         setSourceResponseIdentifiers();
         lastClassificationId = sourceResponseIdentifiers.get(sourceResponseIdentifiers.size() - 1);
+        ssbSectionResponse = klassApiMigrationClient.getFromSourceApi("/" + SSB_SECTIONS,null, null);
+        setSsbSectionNames();
     }
 
     @AfterAll
