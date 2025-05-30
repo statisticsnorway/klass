@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
-import static no.ssb.klass.api.migration.MigrationTestUtils.*;
 
 public abstract class AbstractKlassApiDataIntegrityTest {
 
@@ -22,7 +21,6 @@ public abstract class AbstractKlassApiDataIntegrityTest {
     static Response targetResponseClassifications;
 
     static List<Integer> sourceResponseIdentifiers = new ArrayList<>();
-    static List<Integer> targetResponseIdentifiers = new ArrayList<>();
 
     static int numClassifications;
 
