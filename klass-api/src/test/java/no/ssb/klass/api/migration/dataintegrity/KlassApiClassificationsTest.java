@@ -107,14 +107,33 @@ public class KlassApiClassificationsTest extends AbstractKlassApiDataIntegrityTe
         if (sourceResponse.getStatusCode() != 200) {
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         } else {
-
             validateObject(sourceResponse, targetResponse, PAGE);
-            validatePathListWithObjects(
-                    sourceResponse, targetResponse, EMBEDDED_CLASSIFICATIONS, pathNamesClassificationsPage, ID);
-            validateItems(sourceResponse, targetResponse, pathNamesClassificationsLinks);
+            int totalPages = sourceResponse.path(PAGE_TOTAL_ELEMENTS);
+            iteratePages(totalPages);
 
         }
     }
+
+    @Test
+    void getClassificationsIncludeCodeListsXml() {
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(CLASSIFICATIONS_PATH, paramsIncludeCodeLists,TEXT_XML);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(CLASSIFICATIONS_PATH, paramsIncludeCodeLists,TEXT_XML);
+
+        assertApiResponseIsNotNull(sourceResponse);
+
+        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), CLASSIFICATIONS_PATH);
+
+        if (sourceResponse.getStatusCode() != 200) {
+            assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
+        } else {
+            validateObject(sourceResponse, targetResponse, PAGE);
+            int totalPages = sourceResponse.path(PAGE_TOTAL_ELEMENTS);
+            iteratePages(totalPages);
+
+        }
+    }
+
+
 
     @Test
     void getClassificationsChangedSince(){
@@ -130,9 +149,28 @@ public class KlassApiClassificationsTest extends AbstractKlassApiDataIntegrityTe
         } else {
 
             validateObject(sourceResponse, targetResponse, PAGE);
-            validatePathListWithObjects(
-                    sourceResponse, targetResponse, EMBEDDED_CLASSIFICATIONS, pathNamesClassificationsPage, ID);
-            validateItems(sourceResponse, targetResponse, pathNamesClassificationsLinks);
+            int totalPages = sourceResponse.path(PAGE_TOTAL_ELEMENTS);
+            iteratePages(totalPages);
+
+        }
+    }
+
+    @Test
+    void getClassificationsChangedSinceXml(){
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(CLASSIFICATIONS_PATH, paramsChangedSince,TEXT_XML);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(CLASSIFICATIONS_PATH, paramsChangedSince,TEXT_XML);
+
+        assertApiResponseIsNotNull(sourceResponse);
+
+        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), CLASSIFICATIONS_PATH);
+
+        if (sourceResponse.getStatusCode() != 200) {
+            assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
+        } else {
+
+            validateObject(sourceResponse, targetResponse, PAGE);
+            int totalPages = sourceResponse.path(PAGE_TOTAL_ELEMENTS);
+            iteratePages(totalPages);
 
         }
     }
