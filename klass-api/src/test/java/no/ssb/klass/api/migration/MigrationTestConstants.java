@@ -128,10 +128,12 @@ public final class MigrationTestConstants {
     public static final String CHANGED_SINCE= "changedSince";
     public static final String VARIANT_NAME= "variantName";
     public static final String SSB_SECTION= "ssbSection";
+    public static final String CSV_SEPARATOR= "csvSeparator";
 
     // header
     public static final String CONTENT_TYPE= "Content-Type";
     public static final String TEXT_XML= "text/xml";
+    public static final String TEXT_CSV= "text/csv";
 
     // Messages
     public static final String FAIL_MESSAGE= "Mismatch at path '%s':\n  Source: %s\n  Target: %s";
