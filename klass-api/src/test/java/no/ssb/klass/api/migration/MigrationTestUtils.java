@@ -146,6 +146,7 @@ public class MigrationTestUtils {
                     .withFailMessage(FAIL_MESSAGE, pathName, sourceHref, targetHref)
                     .isTrue();
         } else {
+            System.out.println(sourceField + "-> " + targetField);
             assertThat(sourceField).withFailMessage(FAIL_MESSAGE, pathName, sourceField, targetField).isEqualTo(targetField);
         }
 
