@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
@@ -13,12 +12,6 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class KlassApiClassificationsTest extends AbstractKlassApiDataIntegrityTest {
 
-    static List<Map<String, Object>> sourceHostClassifications;
-    static List<Map<String, Object>> targetHostClassifications;
-
-    static Response sourceResponse;
-    static Response targetResponse;
-
     static Map<String, Object> paramsIncludeCodeLists = new HashMap<>();
     static Map<String, Object> paramsChangedSince = new HashMap<>();
 
@@ -26,12 +19,6 @@ public class KlassApiClassificationsTest extends AbstractKlassApiDataIntegrityTe
 
     @BeforeAll
     static void setUpClassifications() {
-        sourceResponse = sourceResponseClassifications;
-        targetResponse = targetResponseClassifications;
-
-        sourceHostClassifications = sourceResponse.path(EMBEDDED_CLASSIFICATIONS);
-        targetHostClassifications = targetResponse.path(EMBEDDED_CLASSIFICATIONS);
-
         queryDate = "2015-03-01T01:30:00.000-0200";
         paramsIncludeCodeLists.put(INCLUDE_CODE_LISTS, TRUE);
         paramsChangedSince.put(CHANGED_SINCE, queryDate);
@@ -39,8 +26,8 @@ public class KlassApiClassificationsTest extends AbstractKlassApiDataIntegrityTe
 
     @Test
     void getClassifications(){
-        sourceResponse = sourceResponseClassifications;
-        targetResponse = targetResponseClassifications;
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(CLASSIFICATIONS_PATH, null,null);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(CLASSIFICATIONS_PATH, null,null);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -52,32 +39,16 @@ public class KlassApiClassificationsTest extends AbstractKlassApiDataIntegrityTe
         else {
             validateObject(sourceResponse, targetResponse, PAGE);
             int totalPages = sourceResponse.path(PAGE_TOTAL_ELEMENTS);
-            iteratePages(totalPages);
-
-        }
-    }
-
-    private static void iteratePages(int totalPages) {
-        for(int i = 0; i < totalPages; i++) {
-            validatePathListWithObjects(
-                    sourceResponse, targetResponse, EMBEDDED_CLASSIFICATIONS, pathNamesClassificationsPage, ID);
-            validateItems(sourceResponse, targetResponse, pathNamesClassificationsLinks);
-
-            if(sourceResponse.path(LINKS_NEXT_HREF) == null) {
-                return;
-            }
-                sourceResponse =
-                        klassApiMigrationClient.getFromSourceApi(sourceResponse.path(LINKS_NEXT_HREF), null,null);
-                targetResponse = klassApiMigrationClient.getFromTargetApi(targetResponse.path(LINKS_NEXT_HREF), null,null);
+            iteratePages(totalPages, sourceResponse, targetResponse, null, null);
 
         }
     }
 
     @Test
     void getClassificationsXML(){
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(
                 CLASSIFICATIONS_PATH, null, TEXT_XML);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(
                 CLASSIFICATIONS_PATH, null, TEXT_XML);
 
         assertApiResponseIsNotNull(sourceResponse);
@@ -90,7 +61,7 @@ public class KlassApiClassificationsTest extends AbstractKlassApiDataIntegrityTe
         else {
             validateObject(sourceResponse, targetResponse, PAGE);
             int totalPages = sourceResponse.path(PAGE_TOTAL_ELEMENTS);
-            iteratePages(totalPages);
+            iteratePages(totalPages, sourceResponse, targetResponse, null, null);
 
         }
     }
@@ -109,7 +80,7 @@ public class KlassApiClassificationsTest extends AbstractKlassApiDataIntegrityTe
         } else {
             validateObject(sourceResponse, targetResponse, PAGE);
             int totalPages = sourceResponse.path(PAGE_TOTAL_ELEMENTS);
-            iteratePages(totalPages);
+            iteratePages(totalPages, sourceResponse, targetResponse, paramsIncludeCodeLists, null);
 
         }
     }
@@ -128,11 +99,10 @@ public class KlassApiClassificationsTest extends AbstractKlassApiDataIntegrityTe
         } else {
             validateObject(sourceResponse, targetResponse, PAGE);
             int totalPages = sourceResponse.path(PAGE_TOTAL_ELEMENTS);
-            iteratePages(totalPages);
+            iteratePages(totalPages, sourceResponse, targetResponse, paramsIncludeCodeLists, TEXT_XML);
 
         }
     }
-
 
 
     @Test
@@ -150,7 +120,7 @@ public class KlassApiClassificationsTest extends AbstractKlassApiDataIntegrityTe
 
             validateObject(sourceResponse, targetResponse, PAGE);
             int totalPages = sourceResponse.path(PAGE_TOTAL_ELEMENTS);
-            iteratePages(totalPages);
+            iteratePages(totalPages, sourceResponse, targetResponse, paramsChangedSince, null);
 
         }
     }
@@ -170,9 +140,27 @@ public class KlassApiClassificationsTest extends AbstractKlassApiDataIntegrityTe
 
             validateObject(sourceResponse, targetResponse, PAGE);
             int totalPages = sourceResponse.path(PAGE_TOTAL_ELEMENTS);
-            iteratePages(totalPages);
+            iteratePages(totalPages, sourceResponse, targetResponse, paramsChangedSince, TEXT_XML);
 
         }
     }
+
+    private static void iteratePages(int totalPages, Response sourceResponse, Response targetResponse, Map<String, Object> queryParams, String contentType) {
+        for(int i = 0; i < totalPages; i++) {
+            validatePathListWithObjects(
+                    sourceResponse, targetResponse, EMBEDDED_CLASSIFICATIONS, pathNamesClassificationsPage, ID);
+            validateItems(sourceResponse, targetResponse, pathNamesClassificationsLinks);
+
+            if(sourceResponse.path(LINKS_NEXT_HREF) == null) {
+                return;
+            }
+            sourceResponse =
+                    klassApiMigrationClient.getFromSourceApi(sourceResponse.path(LINKS_NEXT_HREF),queryParams ,contentType);
+            targetResponse = klassApiMigrationClient.getFromTargetApi(targetResponse.path(LINKS_NEXT_HREF), queryParams,contentType);
+
+        }
+    }
+
+
 
 }
