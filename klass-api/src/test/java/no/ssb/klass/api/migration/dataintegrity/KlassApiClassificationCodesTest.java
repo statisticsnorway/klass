@@ -80,6 +80,48 @@ public class KlassApiClassificationCodesTest extends AbstractKlassApiDataIntegri
         }
     }
 
+    @Test
+    void getOneClassificationWithCodesXml(){
+        Integer classificationId = 6;
+        System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
+
+        String path = getCodesPath(classificationId);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDate,TEXT_XML);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDate,TEXT_XML);
+
+        assertApiResponseIsNotNull(sourceResponse);
+
+        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+
+        if(sourceResponse.getStatusCode() != 200) {
+            assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
+        }
+        else{
+            validateList(sourceResponse, targetResponse, CODES);
+        }
+    }
+
+    @Test
+    void getOneClassificationWithCodesCsv(){
+        Integer classificationId = 6;
+        System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
+
+        String path = getCodesPath(classificationId);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDate,TEXT_CSV);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDate,TEXT_CSV);
+
+        assertApiResponseIsNotNull(sourceResponse);
+
+        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+
+        if(sourceResponse.getStatusCode() != 200) {
+            assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
+        }
+        else{
+            validateList(sourceResponse, targetResponse, CODES);
+        }
+    }
+
 
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationIds")
@@ -92,6 +134,58 @@ public class KlassApiClassificationCodesTest extends AbstractKlassApiDataIntegri
         String path = getCodesPath(classificationId);
         sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDate,null);
         targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDate,null);
+
+        assertApiResponseIsNotNull(sourceResponse);
+
+        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+
+        if(sourceResponse.getStatusCode() != 200) {
+            assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
+        }
+        else{
+            validateList(sourceResponse, targetResponse, CODES);
+        }
+
+        System.out.println("End test for ID " + classificationId + " at " + Instant.now());
+    }
+
+    @ParameterizedTest
+    @MethodSource("rangeProviderClassificationIds")
+    void getClassificationCodesFromDateXml(Integer classificationId) {
+        // For now skipping because of some items size
+        assumeTrue(classificationId > 6);
+
+        System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
+
+        String path = getCodesPath(classificationId);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDate,TEXT_XML);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDate,TEXT_XML);
+
+        assertApiResponseIsNotNull(sourceResponse);
+
+        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+
+        if(sourceResponse.getStatusCode() != 200) {
+            assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
+        }
+        else{
+            validateList(sourceResponse, targetResponse, CODES);
+        }
+
+        System.out.println("End test for ID " + classificationId + " at " + Instant.now());
+    }
+
+    @ParameterizedTest
+    @MethodSource("rangeProviderClassificationIds")
+    void getClassificationCodesFromDateCsv(Integer classificationId) {
+        // For now skipping because of some items size
+        assumeTrue(classificationId > 6);
+
+        System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
+
+        String path = getCodesPath(classificationId);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDate,TEXT_CSV);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDate,TEXT_CSV);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -152,6 +246,52 @@ public class KlassApiClassificationCodesTest extends AbstractKlassApiDataIntegri
         assertThat(sourceResponse.getStatusCode()).isEqualTo(400);
         assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
     }
+
+    @Test
+    void getClassificationCodesInvalidOrderDateXml() {
+        Integer classificationId = 11;
+        System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
+
+        String firstDate = "2025-01-01";
+        String secondDate = "1995-11-12";
+
+        paramsDateInRange.put(FROM, firstDate);
+        paramsDateInRange.put(TO, secondDate);
+
+        String path = getCodesPath(classificationId);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDateInRange,TEXT_XML);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDateInRange,TEXT_XML);
+
+        assertApiResponseIsNotNull(sourceResponse);
+
+        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+        assertThat(sourceResponse.getStatusCode()).isEqualTo(400);
+        assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
+    }
+
+    @Test
+    void getClassificationCodesInvalidOrderDateCsv() {
+        Integer classificationId = 11;
+        System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
+
+        String firstDate = "2025-01-01";
+        String secondDate = "1995-11-12";
+
+        paramsDateInRange.put(FROM, firstDate);
+        paramsDateInRange.put(TO, secondDate);
+
+        String path = getCodesPath(classificationId);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDateInRange,TEXT_CSV);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDateInRange,TEXT_CSV);
+
+        assertApiResponseIsNotNull(sourceResponse);
+
+        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+        assertThat(sourceResponse.getStatusCode()).isEqualTo(400);
+        assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
+    }
+
+
 
     static Stream<Integer> rangeProviderClassificationIds() {
         return IntStream.rangeClosed(0, 652).boxed();
