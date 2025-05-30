@@ -29,6 +29,7 @@ public final class MigrationTestConstants {
     // Combinations
     public static final String PAGE_TOTAL_ELEMENTS = "page.totalElements";
     public static final String EMBEDDED_CLASSIFICATIONS = "_embedded.classifications";
+    public static final String EMBEDDED_CLASSIFICATIONS_ID = "_embedded.classifications.id";
     public static final String EMBEDDED_SSB_SECTIONS= "_embedded.ssbSections";
     public static final String EMBEDDED_CLASSIFICATION_FAMILIES = "_embedded.classificationfamilies";
     public static final String PUBLISHED_NB="published.nb";
