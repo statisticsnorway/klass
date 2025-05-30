@@ -31,6 +31,7 @@ public final class MigrationTestConstants {
     public static final String EMBEDDED_CLASSIFICATIONS = "_embedded.classifications";
     public static final String EMBEDDED_CLASSIFICATIONS_ID = "_embedded.classifications.id";
     public static final String EMBEDDED_SSB_SECTIONS= "_embedded.ssbSections";
+    public static final String EMBEDDED_SSB_SECTIONS_NAME= "_embedded.ssbSections.name";
     public static final String EMBEDDED_CLASSIFICATION_FAMILIES = "_embedded.classificationfamilies";
     public static final String PUBLISHED_NB="published.nb";
     public static final String PUBLISHED_EN="published.en";
