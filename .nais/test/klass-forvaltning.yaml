@@ -25,7 +25,7 @@ spec:
     - name: SPRING_PROFILES_ACTIVE
       value: frontend, postgres, small-import, skip-indexing, ad-offline, embedded-solr
   envFrom:
-    - secret: google-sql-klass-klass-klass-forvaltning-2cf28af1
+    - secret: google-sql-klass
   filesFrom:
     - mountPath: /var/run/secrets/nais.io/sqlcertificate
       secret: sqeletor-klass-827ec8ec
