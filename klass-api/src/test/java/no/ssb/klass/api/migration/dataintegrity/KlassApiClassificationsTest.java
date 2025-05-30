@@ -52,19 +52,23 @@ public class KlassApiClassificationsTest extends AbstractKlassApiDataIntegrityTe
         else {
             validateObject(sourceResponse, targetResponse, PAGE);
             int totalPages = sourceResponse.path(PAGE_TOTAL_ELEMENTS);
-            for(int i=0; i < totalPages; i++) {
-                validatePathListWithObjects(
-                        sourceResponse, targetResponse, EMBEDDED_CLASSIFICATIONS, pathNamesClassificationsPage, ID);
-                validateItems(sourceResponse, targetResponse, pathNamesClassificationsLinks);
+            iteratePages(totalPages);
 
-                if(sourceResponse.path(LINKS_NEXT_HREF) == null) {
-                    return;
-                }
-                    sourceResponse =
-                            klassApiMigrationClient.getFromSourceApi(sourceResponse.path(LINKS_NEXT_HREF), null,null);
-                    targetResponse = klassApiMigrationClient.getFromTargetApi(targetResponse.path(LINKS_NEXT_HREF), null,null);
+        }
+    }
 
+    private static void iteratePages(int totalPages) {
+        for(int i = 0; i < totalPages; i++) {
+            validatePathListWithObjects(
+                    sourceResponse, targetResponse, EMBEDDED_CLASSIFICATIONS, pathNamesClassificationsPage, ID);
+            validateItems(sourceResponse, targetResponse, pathNamesClassificationsLinks);
+
+            if(sourceResponse.path(LINKS_NEXT_HREF) == null) {
+                return;
             }
+                sourceResponse =
+                        klassApiMigrationClient.getFromSourceApi(sourceResponse.path(LINKS_NEXT_HREF), null,null);
+                targetResponse = klassApiMigrationClient.getFromTargetApi(targetResponse.path(LINKS_NEXT_HREF), null,null);
 
         }
     }
@@ -86,19 +90,7 @@ public class KlassApiClassificationsTest extends AbstractKlassApiDataIntegrityTe
         else {
             validateObject(sourceResponse, targetResponse, PAGE);
             int totalPages = sourceResponse.path(PAGE_TOTAL_ELEMENTS);
-            for(int i=0; i < totalPages; i++) {
-                validatePathListWithObjects(
-                        sourceResponse, targetResponse, EMBEDDED_CLASSIFICATIONS, pathNamesClassificationsPage, ID);
-                validateItems(sourceResponse, targetResponse, pathNamesClassificationsLinks);
-
-                if(sourceResponse.path(LINKS_NEXT_HREF) == null) {
-                    return;
-                }
-                sourceResponse =
-                        klassApiMigrationClient.getFromSourceApi(sourceResponse.path(LINKS_NEXT_HREF), null,null);
-                targetResponse = klassApiMigrationClient.getFromTargetApi(targetResponse.path(LINKS_NEXT_HREF), null,null);
-
-            }
+            iteratePages(totalPages);
 
         }
     }
