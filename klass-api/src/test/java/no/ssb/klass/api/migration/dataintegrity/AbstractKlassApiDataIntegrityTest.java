@@ -23,6 +23,7 @@ public abstract class AbstractKlassApiDataIntegrityTest {
     static List<Integer> sourceResponseIdentifiers = new ArrayList<>();
 
     static int numClassifications;
+    static int lastClassificationId;
 
     public static final String sourceHost = MigrationTestConfig.getSourceHost();
 
@@ -59,6 +60,7 @@ public abstract class AbstractKlassApiDataIntegrityTest {
 
         numClassifications = sourceResponseClassifications.path(PAGE_TOTAL_ELEMENTS);
         setSourceResponseIdentifiers();
+        lastClassificationId = sourceResponseIdentifiers.get(sourceResponseIdentifiers.size() - 1);
     }
 
     @AfterAll
