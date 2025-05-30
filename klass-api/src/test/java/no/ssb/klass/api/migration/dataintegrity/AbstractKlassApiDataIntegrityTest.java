@@ -24,7 +24,6 @@ public abstract class AbstractKlassApiDataIntegrityTest {
 
     static List<Integer> sourceResponseIdentifiers = new ArrayList<>();
 
-    static int numClassifications;
     static int lastClassificationId;
 
     public static final String sourceHost = MigrationTestConfig.getSourceHost();
@@ -70,7 +69,6 @@ public abstract class AbstractKlassApiDataIntegrityTest {
         sourceResponseClassifications = klassApiMigrationClient.getFromSourceApi(CLASSIFICATIONS_PATH, null, null);
         targetResponseClassifications = klassApiMigrationClient.getFromTargetApi(CLASSIFICATIONS_PATH, null, null);
 
-        numClassifications = sourceResponseClassifications.path(PAGE_TOTAL_ELEMENTS);
         setSourceResponseIdentifiers();
         lastClassificationId = sourceResponseIdentifiers.get(sourceResponseIdentifiers.size() - 1);
         ssbSectionResponse = klassApiMigrationClient.getFromSourceApi("/" + SSB_SECTIONS,null, null);
