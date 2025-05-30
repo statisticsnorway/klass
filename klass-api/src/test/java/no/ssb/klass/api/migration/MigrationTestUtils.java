@@ -204,7 +204,6 @@ public class MigrationTestUtils {
             Object sourceField = sourceResponse.path(pathName);
             Object targetField = targetResponse.path(pathName);
 
-
             if (sourceField == null) {
                 assertThat(targetField)
                         .withFailMessage(FAIL_MESSAGE, pathName, null, targetField)
@@ -274,9 +273,9 @@ public class MigrationTestUtils {
                             .withFailMessage(FAIL_MESSAGE, pathName, sourceField, targetField)
                             .isTrue();
                 } else {
-                    assertThat(versionSource.get(pathName))
+                    assertThat(sourceField)
                             .withFailMessage(FAIL_MESSAGE, pathName, sourceField, targetField)
-                            .isEqualTo(versionTarget.get(pathName));
+                            .isEqualTo(targetField);
                 }
             }
         }
