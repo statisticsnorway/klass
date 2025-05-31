@@ -77,8 +77,8 @@ public class KlassApiClassificationFamiliesByIdTest extends KlassApiClassificati
     @MethodSource("rangeProviderClassificationFamilyIds")
     void getClassificationFamilyByIdXml(int classificationFamilyId) {
         String path = getClassificationFamilyByIdPath(classificationFamilyId);
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, null,TEXT_XML);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path , null,TEXT_XML);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, null, APPLICATION_XML);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path , null, APPLICATION_XML);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -88,8 +88,7 @@ public class KlassApiClassificationFamiliesByIdTest extends KlassApiClassificati
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateItems(sourceResponse, targetResponse, pathNamesClassificationFamilyById);
-            validatePathListWithObjects(sourceResponse, targetResponse, CLASSIFICATIONS, pathNamesClassificationsPage, ID);
+           validateXml(sourceResponse, targetResponse);
         }
     }
 
@@ -117,8 +116,8 @@ public class KlassApiClassificationFamiliesByIdTest extends KlassApiClassificati
     @MethodSource("rangeProviderClassificationFamilyIds")
     void getClassificationFamilyIncludeCodeListsXml(int classificationFamilyId) {
         String path = getClassificationFamilyByIdPath(classificationFamilyId);
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsIncludeCodeLists,TEXT_XML);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path , paramsIncludeCodeLists,TEXT_XML);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsIncludeCodeLists, APPLICATION_XML);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path , paramsIncludeCodeLists, APPLICATION_XML);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -128,8 +127,7 @@ public class KlassApiClassificationFamiliesByIdTest extends KlassApiClassificati
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateItems(sourceResponse, targetResponse, pathNamesClassificationFamilyById);
-            validatePathListWithObjects(sourceResponse, targetResponse, CLASSIFICATIONS, pathNamesClassificationsPage, ID);
+           validateXml(sourceResponse, targetResponse);
         }
     }
 
@@ -157,8 +155,8 @@ public class KlassApiClassificationFamiliesByIdTest extends KlassApiClassificati
     @MethodSource("rangeProviderClassificationFamilyIds")
     void getClassificationFamilyEnglishXml(int classificationFamilyId) {
         String path = getClassificationFamilyByIdPath(classificationFamilyId);
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageEn,TEXT_XML);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path , paramsLanguageEn,TEXT_XML);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageEn, APPLICATION_XML);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path , paramsLanguageEn, APPLICATION_XML);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -168,8 +166,7 @@ public class KlassApiClassificationFamiliesByIdTest extends KlassApiClassificati
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateItems(sourceResponse, targetResponse, pathNamesClassificationFamilyById);
-            validatePathListWithObjects(sourceResponse, targetResponse, CLASSIFICATIONS, pathNamesClassificationsPage, ID);
+            validateXml(sourceResponse, targetResponse);
         }
     }
 
@@ -197,8 +194,8 @@ public class KlassApiClassificationFamiliesByIdTest extends KlassApiClassificati
     @MethodSource("rangeProviderClassificationFamilyIds")
     void getClassificationFamilyNewNorwegianXml(int classificationFamilyId) {
         String path = getClassificationFamilyByIdPath(classificationFamilyId);
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageNn,TEXT_XML);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path , paramsLanguageNn,TEXT_XML);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageNn, APPLICATION_XML);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path , paramsLanguageNn, APPLICATION_XML);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -208,8 +205,7 @@ public class KlassApiClassificationFamiliesByIdTest extends KlassApiClassificati
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateItems(sourceResponse, targetResponse, pathNamesClassificationFamilyById);
-            validatePathListWithObjects(sourceResponse, targetResponse, CLASSIFICATIONS, pathNamesClassificationsPage, ID);
+            validateXml(sourceResponse, targetResponse);
         }
     }
 
@@ -241,8 +237,8 @@ public class KlassApiClassificationFamiliesByIdTest extends KlassApiClassificati
         paramsSsbSection.put(SSB_SECTION, ssbSectionNames.get(randomSsbSectionId));
 
         String path = getClassificationFamilyByIdPath(classificationFamilyId);
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsSsbSection,TEXT_XML);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path , paramsSsbSection,TEXT_XML);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsSsbSection, APPLICATION_XML);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path , paramsSsbSection, APPLICATION_XML);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -252,8 +248,7 @@ public class KlassApiClassificationFamiliesByIdTest extends KlassApiClassificati
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateItems(sourceResponse, targetResponse, pathNamesClassificationFamilyById);
-            validatePathListWithObjects(sourceResponse, targetResponse, CLASSIFICATIONS, pathNamesClassificationsPage, ID);
+           validateXml(sourceResponse, targetResponse);
         }
     }
 

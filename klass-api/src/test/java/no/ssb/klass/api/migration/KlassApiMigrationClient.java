@@ -22,7 +22,6 @@ public class KlassApiMigrationClient {
         this.sourceApi = new RequestSpecBuilder()
                 .setBaseUri(sourceHost)
                 .setBasePath(BASE_PATH + RestConstants.API_VERSION_V1)
-                .setContentType("application/json")
                 .build();
 
 
@@ -30,7 +29,6 @@ public class KlassApiMigrationClient {
         this.targetApi = new RequestSpecBuilder()
                 .setBaseUri(targetHost)
                 .setBasePath(BASE_PATH + RestConstants.API_VERSION_V1)
-                .setContentType("application/json")
                 .build();
     }
 
@@ -43,26 +41,26 @@ public class KlassApiMigrationClient {
         }
     }
 
-    public Response getFromSourceApi(String path, Map<String, ?> queryParams, String headerContentType) {
+    public Response getFromSourceApi(String path, Map<String, ?> queryParams, String headerAcceptType) {
         RequestSpecification request = RestAssured.given().spec(sourceApi);
         if (queryParams != null && !queryParams.isEmpty()) {
             request.queryParams(queryParams);
         }
         String contentTypeValue;
-        contentTypeValue = Objects.requireNonNullElse(headerContentType, "application/json");
+        contentTypeValue = Objects.requireNonNullElse(headerAcceptType, "application/json");
         request.log().all();
-        return request.header(CONTENT_TYPE, contentTypeValue).get(path);
+        return request.header(ACCEPT, contentTypeValue).get(path);
     }
 
-    public Response getFromTargetApi(String path, Map<String, ?> queryParams, String headerContentType) {
+    public Response getFromTargetApi(String path, Map<String, ?> queryParams, String headerAcceptType) {
         RequestSpecification request = RestAssured.given().spec(targetApi);
         if (queryParams != null && !queryParams.isEmpty()) {
             request.queryParams(queryParams);
         }
         String contentTypeValue;
-        contentTypeValue = Objects.requireNonNullElse(headerContentType, "application/json");
+        contentTypeValue = Objects.requireNonNullElse(headerAcceptType, "application/json");
         request.log().all();
-        return request.header(CONTENT_TYPE, contentTypeValue).get(path);
+        return request.header(ACCEPT, contentTypeValue).get(path);
     }
 
 }

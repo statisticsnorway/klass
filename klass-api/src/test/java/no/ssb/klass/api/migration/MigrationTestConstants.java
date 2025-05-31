@@ -131,8 +131,9 @@ public final class MigrationTestConstants {
     public static final String CSV_SEPARATOR= "csvSeparator";
 
     // header
+    public static final String ACCEPT= "Accept";
     public static final String CONTENT_TYPE= "Content-Type";
-    public static final String TEXT_XML= "text/xml";
+    public static final String APPLICATION_XML = "application/xml";
     public static final String TEXT_CSV= "text/csv";
 
     // Messages

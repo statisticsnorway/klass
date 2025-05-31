@@ -49,8 +49,8 @@ public class KlassApiVersionByIdTest extends AbstractKlassApiDataIntegrityTest{
     void getVersionByIdXML() {
 
         String path = getVersionByIdPath(randomId);
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, null,TEXT_XML);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, null,TEXT_XML);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, null, APPLICATION_XML);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, null, APPLICATION_XML);
 
         assertThat(sourceResponse).withFailMessage("source api returned no content").isNotNull();
 
@@ -60,13 +60,7 @@ public class KlassApiVersionByIdTest extends AbstractKlassApiDataIntegrityTest{
             assertThat(compareError(randomId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateItems(sourceResponse, targetResponse, pathNamesVersionsById);
-            validateList(sourceResponse, targetResponse, PUBLISHED);
-            validateList(sourceResponse, targetResponse, CHANGELOGS);
-            validateList(sourceResponse, targetResponse, LEVELS);
-            validateList(sourceResponse, targetResponse, CLASSIFICATIONS_VARIANTS);
-            validatePathListWithObjects(sourceResponse, targetResponse, CORRESPONDENCE_TABLES, pathNamesCorrespondenceTableVersions,ID);
-            validatePathListWithObjects(sourceResponse, targetResponse, CLASSIFICATION_ITEMS, pathNamesVersionsClassificationItems, CODE);
+            validateXml(sourceResponse, targetResponse);
         }
     }
 

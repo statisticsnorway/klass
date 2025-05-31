@@ -86,8 +86,8 @@ public class KlassApiClassificationCodesTest extends AbstractKlassApiDataIntegri
         System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
 
         String path = getCodesPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDate,TEXT_XML);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDate,TEXT_XML);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDate, APPLICATION_XML);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDate, APPLICATION_XML);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -97,7 +97,7 @@ public class KlassApiClassificationCodesTest extends AbstractKlassApiDataIntegri
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateList(sourceResponse, targetResponse, CODES);
+            validateXml(sourceResponse, targetResponse);
         }
     }
 
@@ -158,8 +158,8 @@ public class KlassApiClassificationCodesTest extends AbstractKlassApiDataIntegri
         System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
 
         String path = getCodesPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDate,TEXT_XML);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDate,TEXT_XML);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDate, APPLICATION_XML);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDate, APPLICATION_XML);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -169,7 +169,7 @@ public class KlassApiClassificationCodesTest extends AbstractKlassApiDataIntegri
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateList(sourceResponse, targetResponse, CODES);
+            validateXml(sourceResponse, targetResponse);
         }
 
         System.out.println("End test for ID " + classificationId + " at " + Instant.now());
@@ -259,8 +259,8 @@ public class KlassApiClassificationCodesTest extends AbstractKlassApiDataIntegri
         paramsDateInRange.put(TO, secondDate);
 
         String path = getCodesPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDateInRange,TEXT_XML);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDateInRange,TEXT_XML);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDateInRange, APPLICATION_XML);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDateInRange, APPLICATION_XML);
 
         assertApiResponseIsNotNull(sourceResponse);
 

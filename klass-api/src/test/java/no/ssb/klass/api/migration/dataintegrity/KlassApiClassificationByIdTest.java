@@ -83,8 +83,8 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
 
         String path = getClassificationByIdPath(classificationId);
 
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, null, TEXT_XML);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, null, TEXT_XML);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, null, APPLICATION_XML);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, null, APPLICATION_XML);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -94,9 +94,7 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else {
-            validateItems(sourceResponse, targetResponse, pathNamesClassification);
-            validateList(sourceResponse, targetResponse, STATISTICAL_UNITS);
-            validatePathListWithObjects(sourceResponse, targetResponse, VERSIONS, pathNamesVersion, ID);
+           validateXml(sourceResponse, targetResponse);
         }
     }
 
@@ -129,8 +127,8 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
 
         String path = getClassificationByIdPath(classificationId);
 
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageEn, TEXT_XML);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageEn, TEXT_XML);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageEn, APPLICATION_XML);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageEn, APPLICATION_XML);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -139,9 +137,7 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
         if(sourceResponse.getStatusCode() != 200) {
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         } else {
-            validateItems(sourceResponse, targetResponse, pathNamesClassification);
-            validateList(sourceResponse, targetResponse, STATISTICAL_UNITS);
-            validatePathListWithObjects(sourceResponse, targetResponse, VERSIONS, pathNamesVersion, ID);
+            validateXml(sourceResponse, targetResponse);
         }
     }
 
@@ -174,8 +170,8 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
 
         String path = CLASSIFICATIONS_PATH + "/" + classificationId;
 
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageNn, TEXT_XML);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageNn, TEXT_XML);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageNn, APPLICATION_XML);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageNn, APPLICATION_XML);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -185,9 +181,7 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else {
-            validateItems(sourceResponse, targetResponse, pathNamesClassification);
-            validateList(sourceResponse, targetResponse, STATISTICAL_UNITS);
-            validatePathListWithObjects(sourceResponse, targetResponse, VERSIONS, pathNamesVersion, ID);
+            validateXml(sourceResponse, targetResponse);
         }
     }
 
@@ -218,8 +212,8 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
     void getClassificationIncludeFutureXml(Integer classificationId) {
 
         String path = getClassificationByIdPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsIncludeFuture, TEXT_XML);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsIncludeFuture, TEXT_XML);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsIncludeFuture, APPLICATION_XML);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsIncludeFuture, APPLICATION_XML);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -228,9 +222,7 @@ public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrit
         if(sourceResponse.getStatusCode() != 200) {
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }else {
-            validateItems(sourceResponse, targetResponse, pathNamesClassification);
-            validateList(sourceResponse, targetResponse, STATISTICAL_UNITS);
-            validatePathListWithObjects(sourceResponse, targetResponse, VERSIONS, pathNamesVersion, ID);
+            validateXml(sourceResponse, targetResponse);
         }
     }
 

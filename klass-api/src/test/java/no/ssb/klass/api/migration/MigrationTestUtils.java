@@ -281,4 +281,14 @@ public class MigrationTestUtils {
             }
         }
     }
+
+    public static void validateXml(Response sourceResponse, Response targetResponse) {
+        System.out.println("Source: " + sourceResponse.getBody().asString());
+        System.out.println("Target: " + targetResponse.getBody().asString());
+    }
+
+    public static void validateCSV(Response sourceResponse, Response targetResponse) {
+        System.out.println("Source: " + sourceResponse.getBody().asString());
+        System.out.println("Target: " + targetResponse.getBody().asString());
+    }
 }

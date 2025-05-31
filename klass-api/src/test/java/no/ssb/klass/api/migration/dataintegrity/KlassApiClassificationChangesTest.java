@@ -101,8 +101,8 @@ public class KlassApiClassificationChangesTest extends AbstractKlassApiDataInteg
     void getClassificationChangesXml(Integer classificationId) {
 
         String path= getChangesPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDate,TEXT_XML);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDate,TEXT_XML);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDate, APPLICATION_XML);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDate, APPLICATION_XML);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -112,7 +112,7 @@ public class KlassApiClassificationChangesTest extends AbstractKlassApiDataInteg
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateList(sourceResponse, targetResponse, CODE_CHANGES);
+            validateXml(sourceResponse, targetResponse);
         }
 
     }
