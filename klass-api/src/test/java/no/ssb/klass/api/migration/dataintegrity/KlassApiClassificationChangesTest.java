@@ -71,6 +71,28 @@ public class KlassApiClassificationChangesTest extends AbstractKlassApiDataInteg
         }
     }
 
+    @Test
+    void getOneClassificationChangesCsv(){
+        Integer classificationId = 6;
+
+        System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
+
+        String path = getChangesPath(classificationId);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDate,TEXT_CSV);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDate,TEXT_CSV);
+
+        assertApiResponseIsNotNull(sourceResponse);
+
+        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+
+        if(sourceResponse.getStatusCode() != 200) {
+            assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
+        }
+        else{
+            validateCSV(sourceResponse, targetResponse);
+        }
+    }
+
 
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationIds")
@@ -133,7 +155,7 @@ public class KlassApiClassificationChangesTest extends AbstractKlassApiDataInteg
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateList(sourceResponse, targetResponse, CODE_CHANGES);
+            validateCSV(sourceResponse, targetResponse);
         }
 
     }
@@ -154,7 +176,7 @@ public class KlassApiClassificationChangesTest extends AbstractKlassApiDataInteg
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateList(sourceResponse, targetResponse, CODE_CHANGES);
+            validateCSV(sourceResponse, targetResponse);
         }
 
     }

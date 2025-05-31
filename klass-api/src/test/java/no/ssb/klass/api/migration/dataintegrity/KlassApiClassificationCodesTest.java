@@ -118,7 +118,7 @@ public class KlassApiClassificationCodesTest extends AbstractKlassApiDataIntegri
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateList(sourceResponse, targetResponse, CODES);
+            validateCSV(sourceResponse, targetResponse);
         }
     }
 
@@ -195,7 +195,7 @@ public class KlassApiClassificationCodesTest extends AbstractKlassApiDataIntegri
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateList(sourceResponse, targetResponse, CODES);
+            validateCSV(sourceResponse, targetResponse);
         }
 
         System.out.println("End test for ID " + classificationId + " at " + Instant.now());
