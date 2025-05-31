@@ -291,4 +291,10 @@ public class MigrationTestUtils {
         System.out.println("Source: " + sourceResponse.getBody().asString());
         System.out.println("Target: " + targetResponse.getBody().asString());
     }
+
+    public static void validateCSVDocument(String path, Response sourceResponse, Response targetResponse) {
+        assertThat(sourceResponse.getBody().asString()).withFailMessage(
+                FAIL_MESSAGE, path, sourceResponse.getBody().asString(),
+                targetResponse.getBody().asString()).isEqualTo(targetResponse.getBody().asString());
+    }
 }

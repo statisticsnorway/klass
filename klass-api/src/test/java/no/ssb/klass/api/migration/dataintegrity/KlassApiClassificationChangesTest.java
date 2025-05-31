@@ -89,7 +89,7 @@ public class KlassApiClassificationChangesTest extends AbstractKlassApiDataInteg
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateCSV(sourceResponse, targetResponse);
+            validateCSVDocument(path, sourceResponse, targetResponse);
         }
     }
 
@@ -155,7 +155,7 @@ public class KlassApiClassificationChangesTest extends AbstractKlassApiDataInteg
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateCSV(sourceResponse, targetResponse);
+            validateCSVDocument(path, sourceResponse, targetResponse);
         }
 
     }
@@ -176,7 +176,7 @@ public class KlassApiClassificationChangesTest extends AbstractKlassApiDataInteg
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateCSV(sourceResponse, targetResponse);
+            validateCSVDocument(path, sourceResponse, targetResponse);
         }
 
     }
