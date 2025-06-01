@@ -21,7 +21,7 @@ public abstract class AbstractKlassApiDataIntegrityTest {
 
     static Response ssbSectionResponse;
 
-    static List<Integer> sourceResponseIdentifiers = new ArrayList<>();
+    protected static List<Integer> sourceResponseIdentifiers = new ArrayList<>();
 
     protected static int lastClassificationId;
 
