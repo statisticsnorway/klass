@@ -85,6 +85,9 @@ public abstract class AbstractKlassApiCodesTest extends AbstractKlassApiDataInte
         paramsSelectCodes.putAll(Map.of(FROM, dateFromToMax, SELECT_CODES, selectedCodes));
         paramsSelectLevel.putAll(Map.of(FROM, dateFromToMax, SELECT_LEVEL, 3));
 
+        paramsCsvSeparator.putAll(Map.of(FROM, dateFromToMax, CSV_SEPARATOR, ";"));
+        paramsCsvFields.putAll(Map.of(FROM, dateFromToMax, CSV_FIELDS, "name,code"));
+
         paramsPresentationCodePattern.putAll(Map.of(FROM, dateFromInRangeString, PRESENTATION_NAME_PATTERN, presentationNamePattern));
 
     }

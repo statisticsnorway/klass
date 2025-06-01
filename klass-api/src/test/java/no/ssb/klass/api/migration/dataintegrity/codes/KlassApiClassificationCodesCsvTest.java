@@ -65,8 +65,8 @@ public class KlassApiClassificationCodesCsvTest extends AbstractKlassApiCodesTes
         int classificationId = 6;
 
         String path = getCodesPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDate,TEXT_CSV);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDate,TEXT_CSV);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsCsvSeparator,TEXT_CSV);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsCsvSeparator,TEXT_CSV);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -86,8 +86,8 @@ public class KlassApiClassificationCodesCsvTest extends AbstractKlassApiCodesTes
         int classificationId = 6;
 
         String path = getCodesPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDate,TEXT_CSV);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDate,TEXT_CSV);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsCsvFields,TEXT_CSV);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsCsvFields,TEXT_CSV);
 
         assertApiResponseIsNotNull(sourceResponse);
 

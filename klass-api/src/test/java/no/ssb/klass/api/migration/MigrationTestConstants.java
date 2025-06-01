@@ -148,6 +148,7 @@ public final class MigrationTestConstants {
     public static final String VARIANT_NAME= "variantName";
     public static final String SSB_SECTION= "ssbSection";
     public static final String CSV_SEPARATOR= "csvSeparator";
+    public static final String CSV_FIELDS = "csvFields";
     public static final String PRESENTATION_NAME_PATTERN= "presentationNamePattern";
 
     // header
