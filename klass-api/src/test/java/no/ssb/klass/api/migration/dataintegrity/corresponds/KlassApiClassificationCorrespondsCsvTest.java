@@ -2,8 +2,6 @@ package no.ssb.klass.api.migration.dataintegrity.corresponds;
 
 import org.junit.jupiter.api.Test;
 
-import java.time.Instant;
-
 import static no.ssb.klass.api.migration.MigrationTestConstants.TEXT_CSV;
 import static no.ssb.klass.api.migration.MigrationTestUtils.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;

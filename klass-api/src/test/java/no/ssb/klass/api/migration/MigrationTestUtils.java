@@ -301,22 +301,6 @@ public class MigrationTestUtils {
         System.out.println("Target: " + targetResponse.getBody().asString());
     }
 
-
-    // ?
-    public static void validateXmlItems(Response sourceResponse, Response targetResponse, List<String> pathNames) {
-        for(String pathName: pathNames) {
-            Object sourceField = sourceResponse.path(pathName);
-            Object targetField = targetResponse.path(pathName);
-            System.out.println(sourceField + " -> " + targetField);
-            assertThat(sourceField).withFailMessage(
-                    FAIL_MESSAGE,
-                    pathName,
-                    sourceField,
-                    targetField).isEqualTo(targetField);
-        }
-
-    }
-
     public static void validateObjectXml(String path, Response sourceResponse, Response targetResponse) {
         String sourceXml = sourceResponse.getBody().asString();
         String targetXml = targetResponse.getBody().asString();

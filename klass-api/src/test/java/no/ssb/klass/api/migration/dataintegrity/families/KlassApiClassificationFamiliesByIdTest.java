@@ -9,8 +9,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 import static no.ssb.klass.api.migration.MigrationTestUtils.*;
