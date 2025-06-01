@@ -1,18 +1,16 @@
-package no.ssb.klass.api.migration.dataintegrity;
+package no.ssb.klass.api.migration.dataintegrity.corresponds;
 
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 import static no.ssb.klass.api.migration.MigrationTestUtils.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class KlassApiCorrespondenceTablesByIdTest extends AbstractKlassApiDataIntegrityTest {
+public class KlassApiCorrespondenceTablesByIdTest extends AbstractKlassApiCorrespondsTest {
 
     @Test
     void getOneCorrespondenceTableById() {
@@ -59,13 +57,5 @@ public class KlassApiCorrespondenceTablesByIdTest extends AbstractKlassApiDataIn
             validateList(sourceResponse, targetResponse, CHANGELOGS);
             validateList(sourceResponse, targetResponse, PUBLISHED);
         }
-    }
-
-    static Stream<Integer> rangeProvider() {
-        return IntStream.rangeClosed(0, 1500).boxed();
-    }
-
-    String getCorrespondenceTableByIdPath(Integer id) {
-        return "/" + CORRESPONDENCE_TABLES + "/"  + id;
     }
 }

@@ -1,37 +1,15 @@
-package no.ssb.klass.api.migration.dataintegrity;
+package no.ssb.klass.api.migration.dataintegrity.variant;
 
-import io.restassured.response.Response;
-
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 
 import java.time.Instant;
-import java.util.HashMap;
-import java.util.Map;
 
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 import static no.ssb.klass.api.migration.MigrationTestUtils.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class KlassApiClassificationVariantTest extends AbstractKlassApiDataIntegrityTest {
-
-    static String variantNameId84 = "Klimagasser";
-    static String variantDateId84 = "2015-01-01";
-
-    static Map<String, Object> paramsVariantDateFrom = new HashMap<>();
-
-    Response sourceResponse;
-    Response targetResponse;
-
-
-    @BeforeAll
-    static void beforeAllVariant() {
-        paramsVariantDateFrom.put(VARIANT_NAME, variantNameId84);
-        paramsVariantDateFrom.put(FROM, variantDateId84);
-
-    }
-
+public class KlassApiClassificationVariantTest extends AbstractKlassApiVariantTest {
 
     @Test
     void getOneClassificationVariant(){
@@ -54,10 +32,6 @@ public class KlassApiClassificationVariantTest extends AbstractKlassApiDataInteg
         else{
             validateList(sourceResponse, targetResponse, CODES);
         }
-    }
-
-    String getVariantPath(Integer id) {
-        return CLASSIFICATIONS_PATH + "/"+ id + "/" + VARIANT;
     }
 
 }

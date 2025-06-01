@@ -29,7 +29,7 @@ public abstract class AbstractKlassApiDataIntegrityTest {
 
     public static final String targetHost = MigrationTestConfig.getTargetHost();
 
-    static List<String> ssbSectionNames = new ArrayList<>();
+    protected static List<String> ssbSectionNames = new ArrayList<>();
 
     private static void setSourceResponseIdentifiers() {
         int totalPages = sourceResponseClassifications.path(PAGE_TOTAL_ELEMENTS);

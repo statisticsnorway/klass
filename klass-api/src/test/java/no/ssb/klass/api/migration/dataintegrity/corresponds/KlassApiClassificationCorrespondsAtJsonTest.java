@@ -1,35 +1,15 @@
-package no.ssb.klass.api.migration.dataintegrity;
+package no.ssb.klass.api.migration.dataintegrity.corresponds;
 
-import io.restassured.response.Response;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
-import java.util.HashMap;
-import java.util.Map;
+
 
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 import static no.ssb.klass.api.migration.MigrationTestUtils.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class KlassApiClassificationCorrespondsAtTest extends KlassApiClassificationCorrespondsTest {
-
-    static Map<String, Object> paramsTargetIdAndDate = new HashMap<>();
-
-    static Integer targetClassificationIdValue;
-    static String date;
-
-    Response sourceResponse;
-    Response targetResponse;
-
-    @BeforeAll
-    static void beforeAllCorrespondence() {
-        date = "2018-01-01";
-        targetClassificationIdValue = 103;
-        paramsTargetIdAndDate.put(TARGET_CLASSIFICATION_ID, targetClassificationIdValue);
-        paramsTargetIdAndDate.put(DATE, date);
-
-    }
+public class KlassApiClassificationCorrespondsAtJsonTest extends AbstractKlassApiCorrespondsTest {
 
     @Test
     void getOneClassificationCorrespondenceAt(){
@@ -50,9 +30,5 @@ public class KlassApiClassificationCorrespondsAtTest extends KlassApiClassificat
         else{
             validateList(sourceResponse, targetResponse, CORRESPONDENCE_ITEMS);
         }
-    }
-
-    String getCorrespondsAtPath(Integer id) {
-        return CLASSIFICATIONS_PATH + "/"+ id + "/" + CORRESPONDS_AT;
     }
 }

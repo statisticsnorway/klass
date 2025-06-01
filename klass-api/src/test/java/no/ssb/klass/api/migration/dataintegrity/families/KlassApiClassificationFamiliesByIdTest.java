@@ -1,4 +1,4 @@
-package no.ssb.klass.api.migration.dataintegrity;
+package no.ssb.klass.api.migration.dataintegrity.families;
 
 import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeAll;
@@ -16,7 +16,7 @@ import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 import static no.ssb.klass.api.migration.MigrationTestUtils.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class KlassApiClassificationFamiliesByIdTest extends KlassApiClassificationCorrespondsAtTest {
+public class KlassApiClassificationFamiliesByIdTest extends AbstractKlassApiFamiliesTest {
 
     static Map<String, Object> paramsIncludeCodeLists= new HashMap<>();
     static Map<String, Object> paramsLanguageEn = new HashMap<>();
@@ -252,13 +252,5 @@ public class KlassApiClassificationFamiliesByIdTest extends KlassApiClassificati
             validateObjectXml(path, sourceResponse, targetResponse);
             validateLinksXml(CLASSIFICATIONS_PATH,sourceResponse, targetResponse);
         }
-    }
-
-    static Stream<Integer> rangeProviderClassificationFamilyIds() {
-        return IntStream.rangeClosed(0, 30).boxed();
-    }
-
-    String getClassificationFamilyByIdPath(Integer id) {
-        return "/" + CLASSIFICATION_FAMILIES + "/" + id;
     }
 }
