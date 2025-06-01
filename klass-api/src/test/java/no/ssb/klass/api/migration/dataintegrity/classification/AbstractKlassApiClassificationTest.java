@@ -13,8 +13,6 @@ public abstract class AbstractKlassApiClassificationTest extends AbstractKlassAp
     Response sourceResponse;
     Response targetResponse;
 
-    static Map<String, Object> paramsLanguageNn = new HashMap<>();
-    static Map<String, Object> paramsLanguageEn = new HashMap<>();
     static Map<String, Object> paramsIncludeFuture = new HashMap<>();
 
     String getClassificationByIdPath(Integer id) {
@@ -23,8 +21,6 @@ public abstract class AbstractKlassApiClassificationTest extends AbstractKlassAp
 
     @BeforeAll
     static void beforeAllClassification() {
-        paramsLanguageEn.put(LANGUAGE, EN);
-        paramsLanguageNn.put(LANGUAGE, NN);
         paramsIncludeFuture.put(INCLUDE_FUTURE, TRUE);
     }
 }

@@ -22,8 +22,21 @@ public class AbstractKlassApiCorrespondsTest extends AbstractKlassApiDataIntegri
     }
 
     static Map<String, Object> paramsTargetIdAndDate = new HashMap<>();
+    static Map<String, Object> paramsTargetIdAndDateLanguageEn = new HashMap<>();
+    static Map<String, Object> paramsTargetIdAndDateLanguageNn = new HashMap<>();
+    static Map<String, Object> paramsTargetIdAndDateIncludeFuture = new HashMap<>();
+    static Map<String, Object> paramsTargetIdAndDateCsvFields = new HashMap<>();
+    static Map<String, Object> paramsTargetIdAndDateCsvSeparator = new HashMap<>();
 
     static Map<String, Object> paramsTargetIdAndDateFrom = new HashMap<>();
+
+    static Map<String, Object> paramsTargetIdAndDateFromTo = new HashMap<>();
+
+    static Map<String, Object> paramsTargetIdAndDateFromLanguageEn = new HashMap<>();
+    static Map<String, Object> paramsTargetIdAndDateFromLanguageNn = new HashMap<>();
+    static Map<String, Object> paramsTargetIdAndDateFromIncludeFuture = new HashMap<>();
+    static Map<String, Object> paramsTargetIdAndDateFromCsvFields = new HashMap<>();
+    static Map<String, Object> paramsTargetIdAndDateFromCsvSeparator = new HashMap<>();
 
     static Integer targetClassificationIdValue;
     static String fromDate;
@@ -33,7 +46,7 @@ public class AbstractKlassApiCorrespondsTest extends AbstractKlassApiDataIntegri
     Response sourceResponse;
     Response targetResponse;
 
-    static Stream<Integer> rangeProvider() {
+    static Stream<Integer> correspondenceIdRangeProvider() {
         return IntStream.rangeClosed(0, 1500).boxed();
     }
 
@@ -44,14 +57,104 @@ public class AbstractKlassApiCorrespondsTest extends AbstractKlassApiDataIntegri
     @BeforeAll
     static void beforeAllCorrespondence() {
         date = "2018-01-01";
-        targetClassificationIdValue = 103;
-        paramsTargetIdAndDate.put(TARGET_CLASSIFICATION_ID, targetClassificationIdValue);
-        paramsTargetIdAndDate.put(DATE, date);
-
         fromDate = "2020-01-01";
         targetClassificationIdValue = 103;
-        paramsTargetIdAndDateFrom.put(TARGET_CLASSIFICATION_ID, targetClassificationIdValue);
-        paramsTargetIdAndDateFrom.put(FROM, fromDate);
 
+        paramsTargetIdAndDate.putAll(
+                Map.of(
+                        DATE, date,
+                        TARGET_CLASSIFICATION_ID, targetClassificationIdValue
+                )
+        );
+        paramsTargetIdAndDateLanguageEn.putAll(
+                Map.of(
+                      DATE, date,
+                      TARGET_CLASSIFICATION_ID, targetClassificationIdValue,
+                      LANGUAGE, EN
+                )
+        );
+        paramsTargetIdAndDateLanguageNn.putAll(
+                Map.of(
+                        DATE, date,
+                        TARGET_CLASSIFICATION_ID, targetClassificationIdValue,
+                        LANGUAGE, NN
+                )
+        );
+        paramsTargetIdAndDateCsvSeparator.putAll(
+                Map.of(
+                        DATE, date,
+                        TARGET_CLASSIFICATION_ID, targetClassificationIdValue,
+                        CSV_SEPARATOR, ";"
+
+                )
+        );
+        paramsTargetIdAndDateCsvFields.putAll(
+                Map.of(
+                        DATE, date,
+                        TARGET_CLASSIFICATION_ID, targetClassificationIdValue,
+                        CSV_FIELDS, "sourceName,targetName"
+
+                )
+        );
+        paramsTargetIdAndDateIncludeFuture.putAll(
+                Map.of(
+                        DATE, date,
+                        TARGET_CLASSIFICATION_ID, targetClassificationIdValue,
+                        INCLUDE_FUTURE, TRUE
+                )
+        );
+
+        paramsTargetIdAndDateFrom.putAll(
+                Map.of(
+                        FROM, fromDate,
+                        TARGET_CLASSIFICATION_ID, targetClassificationIdValue
+                )
+        );
+
+        paramsTargetIdAndDateFromTo.putAll(
+                Map.of(
+                        FROM, fromDate,
+                        TARGET_CLASSIFICATION_ID, targetClassificationIdValue,
+                        TO, "2024-11-03"
+                )
+        );
+
+        paramsTargetIdAndDateFromIncludeFuture.putAll(
+                Map.of(
+                        FROM, fromDate,
+                        TARGET_CLASSIFICATION_ID, targetClassificationIdValue,
+                        INCLUDE_FUTURE, TRUE
+                )
+        );
+
+        paramsTargetIdAndDateFromLanguageEn.putAll(
+                Map.of(
+                        FROM, fromDate,
+                        TARGET_CLASSIFICATION_ID, targetClassificationIdValue,
+                        LANGUAGE, EN
+                )
+        );
+        paramsTargetIdAndDateFromLanguageNn.putAll(
+                Map.of(
+                        FROM, fromDate,
+                        TARGET_CLASSIFICATION_ID, targetClassificationIdValue,
+                        LANGUAGE, NN
+                )
+        );
+
+        paramsTargetIdAndDateFromCsvSeparator.putAll(
+                Map.of(
+                        FROM, fromDate,
+                        TARGET_CLASSIFICATION_ID, targetClassificationIdValue,
+                        CSV_SEPARATOR, "*"
+                )
+        );
+        paramsTargetIdAndDateFromCsvFields.putAll(
+                Map.of(
+                        FROM, fromDate,
+                        TARGET_CLASSIFICATION_ID, targetClassificationIdValue,
+                        CSV_FIELDS,"sourceName,targetName"
+                )
+        );
     }
 }

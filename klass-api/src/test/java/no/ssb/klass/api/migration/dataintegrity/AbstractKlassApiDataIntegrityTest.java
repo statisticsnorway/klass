@@ -8,7 +8,9 @@ import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeAll;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -32,6 +34,9 @@ public abstract class AbstractKlassApiDataIntegrityTest {
     public static final String targetHost = MigrationTestConfig.getTargetHost();
 
     protected static List<String> ssbSectionNames = new ArrayList<>();
+
+    protected static Map<String, Object> paramsLanguageNn = new HashMap<>();
+    protected static Map<String, Object> paramsLanguageEn = new HashMap<>();
 
     private static void setSourceResponseIdentifiers() {
         int totalPages = sourceResponseClassifications.path(PAGE_TOTAL_ELEMENTS);
@@ -63,6 +68,9 @@ public abstract class AbstractKlassApiDataIntegrityTest {
     @BeforeAll
     static void beforeAll() {
         klassApiMigrationClient = new KlassApiMigrationClient();
+
+        paramsLanguageEn.put(LANGUAGE, EN);
+        paramsLanguageNn.put(LANGUAGE, NN);
 
         boolean sourceUp = klassApiMigrationClient.isApiAvailable(sourceHost);
         boolean targetUp = klassApiMigrationClient.isApiAvailable(targetHost);

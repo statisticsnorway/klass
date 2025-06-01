@@ -27,4 +27,84 @@ public class KlassApiClassificationCorrespondsXmlTest extends AbstractKlassApiCo
             validateObjectXml(path, sourceResponse, targetResponse);
         }
     }
+
+    @Test
+    void getClassificationCorrespondenceTo(){
+        int classificationId = 131;
+
+        String path = getCorrespondsPath(classificationId);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsTargetIdAndDateFromTo,APPLICATION_XML);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsTargetIdAndDateFromTo,APPLICATION_XML);
+
+        assertApiResponseIsNotNull(sourceResponse);
+
+        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+
+        if(sourceResponse.getStatusCode() != 200) {
+            assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
+        }
+        else{
+            validateObjectXml(path, sourceResponse, targetResponse);
+        }
+    }
+
+    @Test
+    void getClassificationCorrespondsLanguageEn() {
+        int classificationId = 131;
+
+        String path = getCorrespondsPath(classificationId);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsTargetIdAndDateFromLanguageEn,APPLICATION_XML);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsTargetIdAndDateFromLanguageEn,APPLICATION_XML);
+
+        assertApiResponseIsNotNull(sourceResponse);
+
+        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+
+        if(sourceResponse.getStatusCode() != 200) {
+            assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
+        }
+        else{
+            validateObjectXml(path, sourceResponse, targetResponse);
+        }
+    }
+
+    @Test
+    void getClassificationCorrespondsLanguageNn() {
+        int classificationId = 131;
+
+        String path = getCorrespondsPath(classificationId);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsTargetIdAndDateFromLanguageNn,APPLICATION_XML);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsTargetIdAndDateFromLanguageNn,APPLICATION_XML);
+
+        assertApiResponseIsNotNull(sourceResponse);
+
+        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+
+        if(sourceResponse.getStatusCode() != 200) {
+            assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
+        }
+        else{
+            validateObjectXml(path, sourceResponse, targetResponse);
+        }
+    }
+
+    @Test
+    void getClassificationCorrespondsIncludeFuture() {
+        int classificationId = 131;
+
+        String path = getCorrespondsPath(classificationId);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsTargetIdAndDateFromIncludeFuture,APPLICATION_XML);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsTargetIdAndDateFromIncludeFuture,APPLICATION_XML);
+
+        assertApiResponseIsNotNull(sourceResponse);
+
+        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+
+        if(sourceResponse.getStatusCode() != 200) {
+            assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
+        }
+        else{
+            validateObjectXml(path, sourceResponse, targetResponse);
+        }
+    }
 }
