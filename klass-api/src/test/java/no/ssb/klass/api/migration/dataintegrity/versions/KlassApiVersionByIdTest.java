@@ -1,8 +1,6 @@
 package no.ssb.klass.api.migration.dataintegrity.versions;
 
 import io.restassured.response.Response;
-import no.ssb.klass.api.migration.dataintegrity.AbstractKlassApiDataIntegrityTest;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;

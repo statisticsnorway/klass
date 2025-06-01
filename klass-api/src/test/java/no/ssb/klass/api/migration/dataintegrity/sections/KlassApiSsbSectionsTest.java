@@ -1,7 +1,6 @@
 package no.ssb.klass.api.migration.dataintegrity.sections;
 
 import io.restassured.response.Response;
-import no.ssb.klass.api.migration.dataintegrity.AbstractKlassApiDataIntegrityTest;
 import org.junit.jupiter.api.Test;
 
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
