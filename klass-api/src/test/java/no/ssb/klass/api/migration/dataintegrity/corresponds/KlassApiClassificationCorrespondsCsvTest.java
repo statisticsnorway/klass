@@ -4,19 +4,19 @@ import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
 
-import static no.ssb.klass.api.migration.MigrationTestConstants.*;
+import static no.ssb.klass.api.migration.MigrationTestConstants.TEXT_CSV;
 import static no.ssb.klass.api.migration.MigrationTestUtils.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class KlassApiClassificationCorrespondsJsonTest extends AbstractKlassApiCorrespondsTest {
+public class KlassApiClassificationCorrespondsCsvTest extends AbstractKlassApiCorrespondsTest {
 
     @Test
     void getOneClassificationCorrespondence(){
         int classificationId = 131;
 
         String path = getCorrespondsPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsTargetIdAndDateFrom,null);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsTargetIdAndDateFrom,null);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsTargetIdAndDateFrom,TEXT_CSV);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsTargetIdAndDateFrom,TEXT_CSV);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -26,7 +26,7 @@ public class KlassApiClassificationCorrespondsJsonTest extends AbstractKlassApiC
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateList(sourceResponse, targetResponse, CORRESPONDENCE_ITEMS);
+            validateCSVDocument(path, sourceResponse, targetResponse);
         }
     }
 }

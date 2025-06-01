@@ -63,10 +63,6 @@ public abstract class AbstractKlassApiCodesTest extends AbstractKlassApiDataInte
     Response sourceResponse;
     Response targetResponse;
 
-    static Stream<Integer> rangeProviderClassificationIds() {
-        return IntStream.rangeClosed(0, lastClassificationId).boxed();
-    }
-
     String getCodesPath(Integer id) {
         return CLASSIFICATIONS_PATH + "/"+ id + "/" + CODES;
     }

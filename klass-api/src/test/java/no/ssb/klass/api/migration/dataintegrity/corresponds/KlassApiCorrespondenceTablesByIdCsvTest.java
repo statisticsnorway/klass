@@ -5,20 +5,19 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 import static no.ssb.klass.api.migration.MigrationTestUtils.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class KlassApiCorrespondenceTablesByIdTest extends AbstractKlassApiCorrespondsTest {
+public class KlassApiCorrespondenceTablesByIdCsvTest extends AbstractKlassApiCorrespondsTest {
 
     @Test
     void getOneCorrespondenceTableById() {
         int correspondenceTableId = 1111;
 
         String path = getCorrespondenceTableByIdPath(correspondenceTableId);
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi( path, null,null);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi( path, null,null);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi( path, null,TEXT_CSV);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi( path, null,TEXT_CSV);
 
         assertThat(sourceResponse).withFailMessage("source api returned no content").isNotNull();
 
@@ -29,10 +28,7 @@ public class KlassApiCorrespondenceTablesByIdTest extends AbstractKlassApiCorres
             assertThat(compareError(correspondenceTableId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateItems(sourceResponse, targetResponse, pathNamesCorrespondenceTable);
-            validateList(sourceResponse, targetResponse, CORRESPONDENCE_MAPS);
-            validateList(sourceResponse, targetResponse, CHANGELOGS);
-            validateList(sourceResponse, targetResponse, PUBLISHED);
+            validateCSVDocument(path, sourceResponse, targetResponse);
         }
     }
 
@@ -41,8 +37,8 @@ public class KlassApiCorrespondenceTablesByIdTest extends AbstractKlassApiCorres
     void getCorrespondenceTable(Integer correspondenceTableId) {
 
         String path = getCorrespondenceTableByIdPath(correspondenceTableId);
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, null,null);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, null,null);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, null,TEXT_CSV);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, null,TEXT_CSV);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -52,10 +48,7 @@ public class KlassApiCorrespondenceTablesByIdTest extends AbstractKlassApiCorres
             assertThat(compareError(correspondenceTableId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateItems(sourceResponse, targetResponse, pathNamesCorrespondenceTable);
-            validateList(sourceResponse, targetResponse, CORRESPONDENCE_MAPS);
-            validateList(sourceResponse, targetResponse, CHANGELOGS);
-            validateList(sourceResponse, targetResponse, PUBLISHED);
+            validateCSVDocument(path, sourceResponse, targetResponse);
         }
     }
 }

@@ -2,21 +2,19 @@ package no.ssb.klass.api.migration.dataintegrity.corresponds;
 
 import org.junit.jupiter.api.Test;
 
-import java.time.Instant;
-
-import static no.ssb.klass.api.migration.MigrationTestConstants.*;
+import static no.ssb.klass.api.migration.MigrationTestConstants.APPLICATION_XML;
 import static no.ssb.klass.api.migration.MigrationTestUtils.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class KlassApiClassificationCorrespondsJsonTest extends AbstractKlassApiCorrespondsTest {
+public class KlassApiClassificationCorrespondsAtXmlTest extends AbstractKlassApiCorrespondsTest {
 
     @Test
-    void getOneClassificationCorrespondence(){
+    void getOneClassificationCorrespondenceAt(){
         int classificationId = 131;
 
-        String path = getCorrespondsPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsTargetIdAndDateFrom,null);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsTargetIdAndDateFrom,null);
+        String path = getCorrespondsAtPath(classificationId);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsTargetIdAndDate,APPLICATION_XML);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsTargetIdAndDate,APPLICATION_XML);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -26,7 +24,7 @@ public class KlassApiClassificationCorrespondsJsonTest extends AbstractKlassApiC
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateList(sourceResponse, targetResponse, CORRESPONDENCE_ITEMS);
+            validateObjectXml(path, sourceResponse, targetResponse);
         }
     }
 }

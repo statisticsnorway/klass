@@ -320,7 +320,7 @@ public class MigrationTestUtils {
     public static void validateObjectXml(String path, Response sourceResponse, Response targetResponse) {
         String sourceXml = sourceResponse.getBody().asString();
         String targetXml = targetResponse.getBody().asString();
-
+        System.out.println(sourceXml.length() + " -> " + targetXml.length());
         Diff diff = DiffBuilder.compare(sourceXml)
                 .withTest(targetXml)
                 .ignoreWhitespace()
@@ -414,7 +414,7 @@ public class MigrationTestUtils {
     }
 
     public static void validateCSVDocument(String path, Response sourceResponse, Response targetResponse) {
-        System.out.println(sourceResponse.getBody().asString() + "-> " + targetResponse.getBody().asString());
+        System.out.println(sourceResponse.getBody().asString().length() + "-> " + targetResponse.getBody().asString().length());
         assertThat(sourceResponse.getBody().asString()).withFailMessage(
                 FAIL_MESSAGE, path, sourceResponse.getBody().asString(),
                 targetResponse.getBody().asString()).isEqualTo(targetResponse.getBody().asString());
