@@ -299,6 +299,7 @@ public class MigrationTestUtils {
     }
 
 
+    // ?
     public static void validateXmlItems(Response sourceResponse, Response targetResponse, List<String> pathNames) {
         for(String pathName: pathNames) {
             Object sourceField = sourceResponse.path(pathName);
@@ -326,6 +327,7 @@ public class MigrationTestUtils {
                 .withNodeFilter(node -> !isLinkElement(node))
                 .build();
 
+        // with fail message if true
         if (diff.hasDifferences()) {
             throw new AssertionError("XML differences at path " +  path +  "found:\n" + diff);
         }
@@ -342,9 +344,15 @@ public class MigrationTestUtils {
         Set<String> targetLinks = extractNormalizedLinks(targetResponse.getBody().asString());
 
         System.out.println(sourceLinks + " -> " + targetLinks);
-        if (!sourceLinks.equals(targetLinks)) {
+        // with fail message
+        assertThat(sourceLinks).withFailMessage(
+                FAIL_MESSAGE,
+                path,
+                sourceLinks,
+                targetLinks).isEqualTo(targetLinks);
+        /*if (!sourceLinks.equals(targetLinks)) {
             throw new AssertionError("Link differences at path " + path + ":\nSource: " + sourceLinks + "\nTarget: " + targetLinks);
-        }
+        }*/
     }
 
     private static String extractSafePath(String href) {
@@ -405,6 +413,7 @@ public class MigrationTestUtils {
         return result;
     }
 
+    // links?
     public static void validateCSVDocument(String path, Response sourceResponse, Response targetResponse) {
         assertThat(sourceResponse.getBody().asString()).withFailMessage(
                 FAIL_MESSAGE, path, sourceResponse.getBody().asString(),
