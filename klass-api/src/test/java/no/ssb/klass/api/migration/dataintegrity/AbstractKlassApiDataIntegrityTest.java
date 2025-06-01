@@ -7,7 +7,6 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeAll;
 
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +14,7 @@ import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 
 public abstract class AbstractKlassApiDataIntegrityTest {
 
-    static KlassApiMigrationClient klassApiMigrationClient;
+    protected static KlassApiMigrationClient klassApiMigrationClient;
 
     static Response sourceResponseClassifications;
     static Response targetResponseClassifications;
@@ -24,13 +23,11 @@ public abstract class AbstractKlassApiDataIntegrityTest {
 
     static List<Integer> sourceResponseIdentifiers = new ArrayList<>();
 
-    static int lastClassificationId;
+    protected static int lastClassificationId;
 
     public static final String sourceHost = MigrationTestConfig.getSourceHost();
 
     public static final String targetHost = MigrationTestConfig.getTargetHost();
-
-    static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     static List<String> ssbSectionNames = new ArrayList<>();
 

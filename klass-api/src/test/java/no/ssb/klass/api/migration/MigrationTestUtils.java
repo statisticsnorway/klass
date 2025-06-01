@@ -15,6 +15,7 @@ import java.io.StringReader;
 import java.net.URI;
 import java.net.URL;
 import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.function.Function;
@@ -24,6 +25,8 @@ import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class MigrationTestUtils {
+
+    public static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     /**
      * Compare url from two sources ignoring host.
@@ -318,7 +321,6 @@ public class MigrationTestUtils {
         String sourceXml = sourceResponse.getBody().asString();
         String targetXml = targetResponse.getBody().asString();
 
-        System.out.println(sourceXml + " -> " + targetXml);
         Diff diff = DiffBuilder.compare(sourceXml)
                 .withTest(targetXml)
                 .ignoreWhitespace()
@@ -327,10 +329,11 @@ public class MigrationTestUtils {
                 .withNodeFilter(node -> !isLinkElement(node))
                 .build();
 
-        // with fail message if true
-        if (diff.hasDifferences()) {
-            throw new AssertionError("XML differences at path " +  path +  "found:\n" + diff);
-        }
+        assertThat(diff.hasDifferences()).withFailMessage(
+                FAIL_MESSAGE,
+                path,
+                sourceXml,
+                targetXml).isFalse();
 
     }
 
@@ -338,21 +341,18 @@ public class MigrationTestUtils {
         return node.getNodeType() == Node.ELEMENT_NODE && "link".equals(node.getNodeName());
     }
 
-    // order must be ignored
+    // order must be ignored ?
     public static void validateLinksXml(String path, Response sourceResponse, Response targetResponse) throws Exception {
         Set<String> sourceLinks = extractNormalizedLinks(sourceResponse.getBody().asString());
         Set<String> targetLinks = extractNormalizedLinks(targetResponse.getBody().asString());
 
         System.out.println(sourceLinks + " -> " + targetLinks);
-        // with fail message
+
         assertThat(sourceLinks).withFailMessage(
                 FAIL_MESSAGE,
                 path,
                 sourceLinks,
                 targetLinks).isEqualTo(targetLinks);
-        /*if (!sourceLinks.equals(targetLinks)) {
-            throw new AssertionError("Link differences at path " + path + ":\nSource: " + sourceLinks + "\nTarget: " + targetLinks);
-        }*/
     }
 
     private static String extractSafePath(String href) {
@@ -413,8 +413,8 @@ public class MigrationTestUtils {
         return result;
     }
 
-    // links?
     public static void validateCSVDocument(String path, Response sourceResponse, Response targetResponse) {
+        System.out.println(sourceResponse.getBody().asString() + "-> " + targetResponse.getBody().asString());
         assertThat(sourceResponse.getBody().asString()).withFailMessage(
                 FAIL_MESSAGE, path, sourceResponse.getBody().asString(),
                 targetResponse.getBody().asString()).isEqualTo(targetResponse.getBody().asString());

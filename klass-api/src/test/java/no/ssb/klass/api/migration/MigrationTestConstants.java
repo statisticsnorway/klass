@@ -138,6 +138,7 @@ public final class MigrationTestConstants {
     public static final String INCLUDE_FUTURE= "includeFuture";
     public static final String CODES= "codes";
     public static final String SELECT_CODES= "selectCodes";
+    public static final String SELECT_LEVEL= "selectLevel";
     public static final String CODES_AT= "codesAt";
     public static final String DATE= "date";
     public static final String FROM = "from";
@@ -147,6 +148,7 @@ public final class MigrationTestConstants {
     public static final String VARIANT_NAME= "variantName";
     public static final String SSB_SECTION= "ssbSection";
     public static final String CSV_SEPARATOR= "csvSeparator";
+    public static final String PRESENTATION_NAME_PATTERN= "presentationNamePattern";
 
     // header
     public static final String ACCEPT= "Accept";

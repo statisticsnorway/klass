@@ -17,15 +17,15 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class KlassApiClassificationByIdTest extends AbstractKlassApiDataIntegrityTest {
 
-    static Map<String, Object> paramsLanguageEn = new HashMap<>();
-    static Map<String, Object> paramsLanguageNn = new HashMap<>();
-    static Map<String, Object> paramsIncludeFuture = new HashMap<>();
-
     Response sourceResponse;
     Response targetResponse;
 
+    static Map<String, Object> paramsLanguageNn = new HashMap<>();
+    static Map<String, Object> paramsLanguageEn = new HashMap<>();
+    static Map<String, Object> paramsIncludeFuture = new HashMap<>();
+
     @BeforeAll
-    static void setUpClassification() {
+    static void beforeAllClassification() {
         paramsLanguageEn.put(LANGUAGE, EN);
         paramsLanguageNn.put(LANGUAGE, NN);
         paramsIncludeFuture.put(INCLUDE_FUTURE, TRUE);
