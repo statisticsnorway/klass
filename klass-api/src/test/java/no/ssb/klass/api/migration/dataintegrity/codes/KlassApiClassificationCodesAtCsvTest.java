@@ -12,7 +12,7 @@ import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 import static no.ssb.klass.api.migration.MigrationTestUtils.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class KlassApiClassificationCodesAtJsonTest extends AbstractKlassApiCodesTest {
+public class KlassApiClassificationCodesAtCsvTest extends AbstractKlassApiCodesTest {
 
     @Test
     void getOneClassificationCodesAt(){
@@ -25,8 +25,8 @@ public class KlassApiClassificationCodesAtJsonTest extends AbstractKlassApiCodes
         System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
 
         String path = getCodesAtPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramDate,null);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramDate,null);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramDate,TEXT_CSV);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramDate,TEXT_CSV);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -47,8 +47,8 @@ public class KlassApiClassificationCodesAtJsonTest extends AbstractKlassApiCodes
         System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
 
         String path = getCodesAtPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDate,null);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDate,null);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDate,TEXT_CSV);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDate,TEXT_CSV);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -71,8 +71,8 @@ public class KlassApiClassificationCodesAtJsonTest extends AbstractKlassApiCodes
         int classificationId = 11;
 
         String path = getCodesAtPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageEnAt,null);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageEnAt,null);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageEnAt,TEXT_CSV);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageEnAt,TEXT_CSV);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -91,8 +91,8 @@ public class KlassApiClassificationCodesAtJsonTest extends AbstractKlassApiCodes
         int classificationId = 6;
 
         String path = getCodesAtPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageNnAt,null);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageNnAt,null);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageNnAt,TEXT_CSV);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageNnAt,TEXT_CSV);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -112,8 +112,8 @@ public class KlassApiClassificationCodesAtJsonTest extends AbstractKlassApiCodes
         int classificationId = 6;
 
         String path = getCodesAtPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsIncludeFutureAt,null);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsIncludeFutureAt,null);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsIncludeFutureAt,TEXT_CSV);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsIncludeFutureAt,TEXT_CSV);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -133,8 +133,8 @@ public class KlassApiClassificationCodesAtJsonTest extends AbstractKlassApiCodes
         int classificationId = 131;
 
         String path = getCodesAtPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsSelectCodeAt,null);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsSelectCodeAt,null);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsSelectCodeAt,TEXT_CSV);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsSelectCodeAt,TEXT_CSV);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -154,8 +154,8 @@ public class KlassApiClassificationCodesAtJsonTest extends AbstractKlassApiCodes
         int classificationId = 131;
 
         String path = getCodesAtPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsSelectCodesAt,null);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsSelectCodesAt,null);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsSelectCodesAt,TEXT_CSV);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsSelectCodesAt,TEXT_CSV);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -175,8 +175,8 @@ public class KlassApiClassificationCodesAtJsonTest extends AbstractKlassApiCodes
         int classificationId = 17;
 
         String path = getCodesAtPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsSelectLevelAt,null);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsSelectLevelAt,null);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsSelectLevelAt,TEXT_CSV);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsSelectLevelAt,TEXT_CSV);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -190,14 +190,56 @@ public class KlassApiClassificationCodesAtJsonTest extends AbstractKlassApiCodes
         }
     }
 
+    @Test
+    void getClassificationCodesAtCsvSeparator() {
+        int classificationId = 6;
+
+        String path = getCodesAtPath(classificationId);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsCsvSeparatorAt,TEXT_CSV);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsCsvSeparatorAt,TEXT_CSV);
+
+        assertApiResponseIsNotNull(sourceResponse);
+
+        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+
+        if(sourceResponse.getStatusCode() != 200) {
+            assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
+        }
+        else{
+            validateCSVDocument(path, sourceResponse, targetResponse);
+        }
+    }
+
+
+    @Test
+    void getClassificationCodesAtCsvFields() {
+        int classificationId = 6;
+
+        String path = getCodesAtPath(classificationId);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsCsvFieldsAt,TEXT_CSV);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsCsvFieldsAt,TEXT_CSV);
+
+        assertApiResponseIsNotNull(sourceResponse);
+
+        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+
+        if(sourceResponse.getStatusCode() != 200) {
+            assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
+        }
+        else{
+            validateCSVDocument(path, sourceResponse, targetResponse);
+        }
+    }
+
+
     // Nb the presentation name pattern has no values
     @Test
     void getClassificationCodesAtPresentationPattern() {
         int classificationId = 131;
 
         String path = getCodesAtPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsPresentationCodePatternAt,null);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsPresentationCodePatternAt,null);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsPresentationCodePatternAt,TEXT_CSV);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsPresentationCodePatternAt,TEXT_CSV);
 
         assertApiResponseIsNotNull(sourceResponse);
 
