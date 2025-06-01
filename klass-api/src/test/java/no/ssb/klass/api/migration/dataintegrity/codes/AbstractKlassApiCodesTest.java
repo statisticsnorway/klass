@@ -14,7 +14,7 @@ import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 import static no.ssb.klass.api.migration.MigrationTestConstants.PRESENTATION_NAME_PATTERN;
 import static no.ssb.klass.api.migration.MigrationTestUtils.*;
 
-public class AbstractKlassApiCodesTest extends AbstractKlassApiDataIntegrityTest {
+public abstract class AbstractKlassApiCodesTest extends AbstractKlassApiDataIntegrityTest {
 
     static String dateFromToMax;
 
