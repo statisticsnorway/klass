@@ -1,13 +1,14 @@
-package no.ssb.klass.api.migration.dataintegrity;
+package no.ssb.klass.api.migration.dataintegrity.sections;
 
 import io.restassured.response.Response;
+import no.ssb.klass.api.migration.dataintegrity.AbstractKlassApiDataIntegrityTest;
 import org.junit.jupiter.api.Test;
 
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 import static no.ssb.klass.api.migration.MigrationTestUtils.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class KlassApiSsbSectionsTest extends AbstractKlassApiDataIntegrityTest {
+public class KlassApiSsbSectionsTest extends AbstractKlassApiSections {
 
     @Test
     void getSsbSections(){

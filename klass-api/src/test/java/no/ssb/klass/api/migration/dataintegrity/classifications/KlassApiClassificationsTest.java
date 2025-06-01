@@ -1,5 +1,6 @@
-package no.ssb.klass.api.migration.dataintegrity;
+package no.ssb.klass.api.migration.dataintegrity.classifications;
 import io.restassured.response.Response;
+import no.ssb.klass.api.migration.dataintegrity.AbstractKlassApiDataIntegrityTest;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -10,19 +11,7 @@ import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 import static no.ssb.klass.api.migration.MigrationTestUtils.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class KlassApiClassificationsTest extends AbstractKlassApiDataIntegrityTest {
-
-    static Map<String, Object> paramsIncludeCodeLists = new HashMap<>();
-    static Map<String, Object> paramsChangedSince = new HashMap<>();
-
-    static String queryDate;
-
-    @BeforeAll
-    static void setUpClassifications() {
-        queryDate = "2015-03-01T01:30:00.000-0200";
-        paramsIncludeCodeLists.put(INCLUDE_CODE_LISTS, TRUE);
-        paramsChangedSince.put(CHANGED_SINCE, queryDate);
-    }
+public class KlassApiClassificationsTest extends AbstractKlassApiClassifications {
 
     @Test
     void getClassifications(){
