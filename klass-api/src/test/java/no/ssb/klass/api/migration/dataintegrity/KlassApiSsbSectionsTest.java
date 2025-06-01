@@ -43,7 +43,7 @@ public class KlassApiSsbSectionsTest extends AbstractKlassApiDataIntegrityTest {
         }
         else{
             validateObjectXml(path, sourceResponse, targetResponse);
-            compareLinksXml(path, sourceResponse, targetResponse);
+            validateLinksXml(path, sourceResponse, targetResponse);
         }
     }
 

@@ -81,7 +81,7 @@ public class KlassApiClassificationCodesTest extends AbstractKlassApiDataIntegri
     }
 
     @Test
-    void getOneClassificationWithCodesXml(){
+    void getOneClassificationWithCodesXml() throws Exception {
         Integer classificationId = 6;
         System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
 
@@ -97,7 +97,8 @@ public class KlassApiClassificationCodesTest extends AbstractKlassApiDataIntegri
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXml(sourceResponse, targetResponse);
+            validateObjectXml(path, sourceResponse, targetResponse);
+            validateLinksXml(path,sourceResponse, targetResponse);
         }
     }
 
@@ -151,7 +152,7 @@ public class KlassApiClassificationCodesTest extends AbstractKlassApiDataIntegri
 
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationIds")
-    void getClassificationCodesFromDateXml(Integer classificationId) {
+    void getClassificationCodesFromDateXml(Integer classificationId) throws Exception {
         // For now skipping because of some items size
         assumeTrue(classificationId > 6);
 
@@ -169,7 +170,8 @@ public class KlassApiClassificationCodesTest extends AbstractKlassApiDataIntegri
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXml(sourceResponse, targetResponse);
+            validateObjectXml(path, sourceResponse, targetResponse);
+            validateLinksXml(path,sourceResponse, targetResponse);
         }
 
         System.out.println("End test for ID " + classificationId + " at " + Instant.now());

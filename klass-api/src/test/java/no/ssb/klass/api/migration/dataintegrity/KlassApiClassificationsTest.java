@@ -45,7 +45,7 @@ public class KlassApiClassificationsTest extends AbstractKlassApiDataIntegrityTe
     }
 
     @Test
-    void getClassificationsXML(){
+    void getClassificationsXML() throws Exception {
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(
                 CLASSIFICATIONS_PATH, null, APPLICATION_XML);
         Response targetResponse = klassApiMigrationClient.getFromTargetApi(
@@ -59,7 +59,8 @@ public class KlassApiClassificationsTest extends AbstractKlassApiDataIntegrityTe
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         }
         else {
-           validateXml(sourceResponse, targetResponse);
+            validateObjectXml(CLASSIFICATIONS_PATH, sourceResponse, targetResponse);
+            validateLinksXml(CLASSIFICATIONS_PATH,sourceResponse, targetResponse);
 
         }
     }
@@ -84,7 +85,7 @@ public class KlassApiClassificationsTest extends AbstractKlassApiDataIntegrityTe
     }
 
     @Test
-    void getClassificationsIncludeCodeListsXml() {
+    void getClassificationsIncludeCodeListsXml() throws Exception {
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(CLASSIFICATIONS_PATH, paramsIncludeCodeLists, APPLICATION_XML);
         Response targetResponse = klassApiMigrationClient.getFromTargetApi(CLASSIFICATIONS_PATH, paramsIncludeCodeLists, APPLICATION_XML);
 
@@ -95,7 +96,8 @@ public class KlassApiClassificationsTest extends AbstractKlassApiDataIntegrityTe
         if (sourceResponse.getStatusCode() != 200) {
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         } else {
-            validateXml(sourceResponse, targetResponse);
+            validateObjectXml(CLASSIFICATIONS_PATH, sourceResponse, targetResponse);
+            validateLinksXml(CLASSIFICATIONS_PATH,sourceResponse, targetResponse);
 
         }
     }
@@ -122,7 +124,7 @@ public class KlassApiClassificationsTest extends AbstractKlassApiDataIntegrityTe
     }
 
     @Test
-    void getClassificationsChangedSinceXml(){
+    void getClassificationsChangedSinceXml() throws Exception {
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(CLASSIFICATIONS_PATH, paramsChangedSince, APPLICATION_XML);
         Response targetResponse = klassApiMigrationClient.getFromTargetApi(CLASSIFICATIONS_PATH, paramsChangedSince, APPLICATION_XML);
 
@@ -134,7 +136,8 @@ public class KlassApiClassificationsTest extends AbstractKlassApiDataIntegrityTe
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         } else {
 
-           validateXml(sourceResponse, targetResponse);
+            validateObjectXml(CLASSIFICATIONS_PATH, sourceResponse, targetResponse);
+            validateLinksXml(CLASSIFICATIONS_PATH,sourceResponse, targetResponse);
 
         }
     }

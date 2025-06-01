@@ -192,7 +192,7 @@ public class KlassApiClassificationFamiliesByIdTest extends KlassApiClassificati
 
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationFamilyIds")
-    void getClassificationFamilyNewNorwegianXml(int classificationFamilyId) {
+    void getClassificationFamilyNewNorwegianXml(int classificationFamilyId) throws Exception {
         String path = getClassificationFamilyByIdPath(classificationFamilyId);
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageNn, APPLICATION_XML);
         Response targetResponse = klassApiMigrationClient.getFromTargetApi(path , paramsLanguageNn, APPLICATION_XML);
@@ -205,7 +205,8 @@ public class KlassApiClassificationFamiliesByIdTest extends KlassApiClassificati
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXml(sourceResponse, targetResponse);
+            validateObjectXml(CLASSIFICATIONS_PATH, sourceResponse, targetResponse);
+            validateLinksXml(CLASSIFICATIONS_PATH,sourceResponse, targetResponse);
         }
     }
 
@@ -233,7 +234,7 @@ public class KlassApiClassificationFamiliesByIdTest extends KlassApiClassificati
 
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationFamilyIds")
-    void getClassificationFamilySsbSectionXml(int classificationFamilyId) {
+    void getClassificationFamilySsbSectionXml(int classificationFamilyId) throws Exception {
         paramsSsbSection.put(SSB_SECTION, ssbSectionNames.get(randomSsbSectionId));
 
         String path = getClassificationFamilyByIdPath(classificationFamilyId);
@@ -248,7 +249,8 @@ public class KlassApiClassificationFamiliesByIdTest extends KlassApiClassificati
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         }
         else{
-           validateXml(sourceResponse, targetResponse);
+            validateObjectXml(path, sourceResponse, targetResponse);
+            validateLinksXml(CLASSIFICATIONS_PATH,sourceResponse, targetResponse);
         }
     }
 

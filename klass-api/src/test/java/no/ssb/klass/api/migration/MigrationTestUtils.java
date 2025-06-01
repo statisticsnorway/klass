@@ -336,13 +336,35 @@ public class MigrationTestUtils {
         return node.getNodeType() == Node.ELEMENT_NODE && "link".equals(node.getNodeName());
     }
 
-    public static void compareLinksXml(String path, Response sourceResponse, Response targetResponse) throws Exception {
+    // order must be ignored
+    public static void validateLinksXml(String path, Response sourceResponse, Response targetResponse) throws Exception {
         Set<String> sourceLinks = extractNormalizedLinks(sourceResponse.getBody().asString());
         Set<String> targetLinks = extractNormalizedLinks(targetResponse.getBody().asString());
 
         System.out.println(sourceLinks + " -> " + targetLinks);
         if (!sourceLinks.equals(targetLinks)) {
             throw new AssertionError("Link differences at path " + path + ":\nSource: " + sourceLinks + "\nTarget: " + targetLinks);
+        }
+    }
+
+    private static String extractSafePath(String href) {
+        // Remove URI template (anything after the first `{`)
+        int braceIndex = href.indexOf('{');
+        if (braceIndex >= 0) {
+            href = href.substring(0, braceIndex);
+        }
+
+        try {
+            URI uri = new URI(href);
+            return uri.getPath(); // safe to parse now
+        } catch (Exception e) {
+            // fallback: basic string parsing
+            int start = href.indexOf("://");
+            if (start >= 0) {
+                int pathStart = href.indexOf("/", start + 3);
+                if (pathStart >= 0) return href.substring(pathStart);
+            }
+            return href; // fallback: return as-is
         }
     }
 
@@ -375,11 +397,7 @@ public class MigrationTestUtils {
 
             if (href == null || rel == null) continue;
 
-            URI uri = URI.create(href);
-            String pathAndQuery = uri.getPath();
-            if (uri.getQuery() != null) {
-                pathAndQuery += "?" + uri.getQuery();
-            }
+            String pathAndQuery = extractSafePath(href);
 
             result.add(rel + " -> " + pathAndQuery);
         }

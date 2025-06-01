@@ -46,7 +46,7 @@ public class KlassApiVersionByIdTest extends AbstractKlassApiDataIntegrityTest{
     }
 
     @Test
-    void getVersionByIdXML() {
+    void getVersionByIdXML() throws Exception {
 
         String path = getVersionByIdPath(randomId);
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, null, APPLICATION_XML);
@@ -60,7 +60,8 @@ public class KlassApiVersionByIdTest extends AbstractKlassApiDataIntegrityTest{
             assertThat(compareError(randomId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXml(sourceResponse, targetResponse);
+            validateObjectXml(path, sourceResponse, targetResponse);
+            validateLinksXml(path,sourceResponse, targetResponse);
         }
     }
 

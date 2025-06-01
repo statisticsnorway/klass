@@ -120,7 +120,7 @@ public class KlassApiClassificationChangesTest extends AbstractKlassApiDataInteg
 
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationIds")
-    void getClassificationChangesXml(Integer classificationId) {
+    void getClassificationChangesXml(Integer classificationId) throws Exception {
 
         String path= getChangesPath(classificationId);
         sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDate, APPLICATION_XML);
@@ -134,7 +134,8 @@ public class KlassApiClassificationChangesTest extends AbstractKlassApiDataInteg
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXml(sourceResponse, targetResponse);
+            validateObjectXml(path, sourceResponse, targetResponse);
+            validateLinksXml(path,sourceResponse, targetResponse);
         }
 
     }
