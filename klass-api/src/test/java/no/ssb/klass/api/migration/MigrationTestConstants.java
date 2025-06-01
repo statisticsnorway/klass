@@ -36,11 +36,15 @@ public final class MigrationTestConstants {
     public static final String PUBLISHED_NB="published.nb";
     public static final String PUBLISHED_EN="published.en";
     public static final String PUBLISHED_NN="published.nn";
+    public static final String CLASSIFICATION_NAME = "classification.name";
+    public static final String CLASSIFICATION_ID = "classification.id";
+    public static final String CLASSIFICATION_CLASSIFICATION_TYPE = "classification.type";
 
     // Fields
     public static final String ID = "id";
     public static final String NAME = "name";
     public static final String CLASSIFICATION_TYPE = "classificationType";
+    public static final String CLASSIFICATION = "classification";
     public static final String DESCRIPTION = "description";
     public static final String LAST_MODIFIED = "lastModified";
     public static final String PRIMARY_LANGUAGE = "primaryLanguage";
@@ -85,6 +89,20 @@ public final class MigrationTestConstants {
     public static final String LEVELS= "levels";
     public static final String CLASSIFICATION_ITEMS= "classificationItems";
     public static final String CLASSIFICATIONS_VARIANTS= "classificationVariants";
+    public static final String CLASSIFICATIONS_DESCRIPTION = "classification.description";
+    public static final String ENTITIES_CONTENTS = "entities.contents";
+
+    public static final String CLASSIFICATION_LAST_MODIFIED = "classification.lastModified";
+    public static final String CLASSIFICATION_PRIMARY_LANGUAGE= "classification.primaryLanguage";
+    public static final String CLASSIFICATION_COPYRIGHTED= "classification.copyrighted";
+    public static final String CLASSIFICATION_INCLUDE_SHORTNAME= "classification.includeShortName";
+    public static final String CLASSIFICATION_INCLUDE_NOTES= "classification.includeNotes";
+    public static final String CLASSIFICATION_CONTACT_PERSON= "classification.contactPerson";
+    public static final String CLASSIFICATION_OWNING_SECTION= "classification.owningSection";
+    public static final String CLASSIFICATION_CONTACT_PERSON_NAME= "classification.contactPerson.name";
+    public static final String CLASSIFICATION_CONTACT_PERSON_EMAIL= "classification.contactPerson.email";
+    public static final String CLASSIFICATION_CONTACT_PERSON_PHONE= "classification.contactPerson.phone";
+
 
 
     // Link fields
@@ -170,6 +188,20 @@ public final class MigrationTestConstants {
             LINKS_CORRESPONDS_AT_TEMPLATED,
             LINKS_CHANGES_HREF,
             LINKS_CHANGES_TEMPLATED
+    );
+
+    public static List<String> pathNamesClassificationXml = Arrays.asList(
+            CLASSIFICATION_NAME,
+            CLASSIFICATION_ID,
+            CLASSIFICATION_LAST_MODIFIED,
+            CLASSIFICATION_PRIMARY_LANGUAGE,
+            CLASSIFICATION_COPYRIGHTED,
+            CLASSIFICATION_INCLUDE_SHORTNAME,
+            CLASSIFICATION_INCLUDE_NOTES,
+            CLASSIFICATION_CONTACT_PERSON_NAME,
+            CLASSIFICATION_CONTACT_PERSON_EMAIL,
+            CLASSIFICATION_CONTACT_PERSON_PHONE,
+            CLASSIFICATION_OWNING_SECTION
     );
 
     public static List<String> pathNamesClassificationsPage = Arrays.asList(

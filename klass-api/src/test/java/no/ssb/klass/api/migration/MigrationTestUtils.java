@@ -1,7 +1,18 @@
 package no.ssb.klass.api.migration;
 
 import io.restassured.response.Response;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+import org.xmlunit.builder.DiffBuilder;
+import org.xmlunit.diff.Diff;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.StringReader;
+import java.net.URI;
 import java.net.URL;
 import java.time.*;
 import java.time.temporal.ChronoUnit;
@@ -287,9 +298,93 @@ public class MigrationTestUtils {
         System.out.println("Target: " + targetResponse.getBody().asString());
     }
 
-    public static void validateCSV(Response sourceResponse, Response targetResponse) {
-        System.out.println("Source: " + sourceResponse.getBody().asString());
-        System.out.println("Target: " + targetResponse.getBody().asString());
+
+    public static void validateXmlItems(Response sourceResponse, Response targetResponse, List<String> pathNames) {
+        for(String pathName: pathNames) {
+            Object sourceField = sourceResponse.path(pathName);
+            Object targetField = targetResponse.path(pathName);
+            System.out.println(sourceField + " -> " + targetField);
+            assertThat(sourceField).withFailMessage(
+                    FAIL_MESSAGE,
+                    pathName,
+                    sourceField,
+                    targetField).isEqualTo(targetField);
+        }
+
+    }
+
+    public static void validateObjectXml(String path, Response sourceResponse, Response targetResponse) {
+        String sourceXml = sourceResponse.getBody().asString();
+        String targetXml = targetResponse.getBody().asString();
+
+        System.out.println(sourceXml + " -> " + targetXml);
+        Diff diff = DiffBuilder.compare(sourceXml)
+                .withTest(targetXml)
+                .ignoreWhitespace()
+                .ignoreComments()
+                .checkForSimilar()
+                .withNodeFilter(node -> !isLinkElement(node))
+                .build();
+
+        if (diff.hasDifferences()) {
+            throw new AssertionError("XML differences at path " +  path +  "found:\n" + diff);
+        }
+
+    }
+
+    private static boolean isLinkElement(Node node) {
+        return node.getNodeType() == Node.ELEMENT_NODE && "link".equals(node.getNodeName());
+    }
+
+    public static void compareLinksXml(String path, Response sourceResponse, Response targetResponse) throws Exception {
+        Set<String> sourceLinks = extractNormalizedLinks(sourceResponse.getBody().asString());
+        Set<String> targetLinks = extractNormalizedLinks(targetResponse.getBody().asString());
+
+        System.out.println(sourceLinks + " -> " + targetLinks);
+        if (!sourceLinks.equals(targetLinks)) {
+            throw new AssertionError("Link differences at path " + path + ":\nSource: " + sourceLinks + "\nTarget: " + targetLinks);
+        }
+    }
+
+    private static Set<String> extractNormalizedLinks(String xml) throws Exception {
+        Set<String> result = new HashSet<>();
+
+        DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        Document doc = builder.parse(new InputSource(new StringReader(xml)));
+        NodeList links = doc.getElementsByTagName("link");
+
+        for (int i = 0; i < links.getLength(); i++) {
+            Element link = (Element) links.item(i);
+            String href = null;
+            String rel = null;
+
+            NodeList children = link.getChildNodes();
+            for (int j = 0; j < children.getLength(); j++) {
+                Node child = children.item(j);
+                if (child.getNodeType() == Node.ELEMENT_NODE) {
+                    switch (child.getNodeName()) {
+                        case "href":
+                            href = child.getTextContent().trim();
+                            break;
+                        case "rel":
+                            rel = child.getTextContent().trim();
+                            break;
+                    }
+                }
+            }
+
+            if (href == null || rel == null) continue;
+
+            URI uri = URI.create(href);
+            String pathAndQuery = uri.getPath();
+            if (uri.getQuery() != null) {
+                pathAndQuery += "?" + uri.getQuery();
+            }
+
+            result.add(rel + " -> " + pathAndQuery);
+        }
+
+        return result;
     }
 
     public static void validateCSVDocument(String path, Response sourceResponse, Response targetResponse) {
