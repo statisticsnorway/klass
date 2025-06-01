@@ -1,26 +1,34 @@
 package no.ssb.klass.api.migration.dataintegrity.codes;
 
+
+import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.time.Instant;
+import java.util.HashMap;
+import java.util.Map;
 
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 import static no.ssb.klass.api.migration.MigrationTestUtils.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
-public class KlassApiClassificationCodesJsonTest extends AbstractKlassApiCodesTest {
+public class KlassApiClassificationCodesAtJsonTest extends AbstractKlassApiCodesTest {
 
     @Test
-    void getOneClassificationWithCodes(){
-        int classificationId = 6;
+    void getOneClassificationCodesAt(){
+        Integer classificationId = 2;
+        date = "2001-01-01";
+
+        Map<String, Object> paramDate = new HashMap<>();
+        paramDate.put(DATE, date);
+
         System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
 
-        String path = getCodesPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsFrom,null);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsFrom,null);
+        String path = getCodesAtPath(classificationId);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramDate,null);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramDate,null);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -36,13 +44,11 @@ public class KlassApiClassificationCodesJsonTest extends AbstractKlassApiCodesTe
 
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationIds")
-    void getClassificationWithCodes(Integer classificationId) {
-        // For now skipping because of some items size
-        assumeTrue(classificationId > 6);
+    void getClassificationCodesAt(Integer classificationId) {
 
         System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
 
-        String path = getCodesPath(classificationId);
+        String path = getCodesAtPath(classificationId);
         sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsFrom,null);
         targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsFrom,null);
 
@@ -58,40 +64,17 @@ public class KlassApiClassificationCodesJsonTest extends AbstractKlassApiCodesTe
         }
 
         System.out.println("End test for ID " + classificationId + " at " + Instant.now());
-    }
 
-    @ParameterizedTest
-    @MethodSource("rangeProviderClassificationIds")
-    void getClassificationWithCodesInRange(Integer classificationId) {
-
-        // For now skipping because of some items size
-        assumeTrue(classificationId > 6);
-        System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
-
-        String path = getCodesPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDateInRange,null);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDateInRange,null);
-
-        assertApiResponseIsNotNull(sourceResponse);
-
-        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
-
-        if(sourceResponse.getStatusCode() != 200) {
-            assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
-        }
-        else{
-            validateList(sourceResponse, targetResponse, CODES);
-        }
     }
 
     @Test
-    void getClassificationWithCodesLanguageEn() {
+    void getClassificationCodesAtLanguageEn() {
 
         int classificationId = 11;
 
         String path = getCodesPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageEn,null);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageEn,null);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageEnAt,null);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageEnAt,null);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -106,12 +89,12 @@ public class KlassApiClassificationCodesJsonTest extends AbstractKlassApiCodesTe
     }
 
     @Test
-    void getClassificationWithCodesLanguageNn() {
+    void getClassificationCodesAtLanguageNn() {
         int classificationId = 6;
 
         String path = getCodesPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageNn,null);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageNn,null);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageNnAt,null);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageNnAt,null);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -126,13 +109,13 @@ public class KlassApiClassificationCodesJsonTest extends AbstractKlassApiCodesTe
     }
 
     @Test
-    void getClassificationWithCodesIncludeFuture() {
+    void getClassificationCodesAtIncludeFuture() {
 
         int classificationId = 6;
 
         String path = getCodesPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsIncludeFuture,null);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsIncludeFuture,null);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsIncludeFutureAt,null);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsIncludeFutureAt,null);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -147,13 +130,13 @@ public class KlassApiClassificationCodesJsonTest extends AbstractKlassApiCodesTe
     }
 
     @Test
-    void getClassificationWithCodesSelectCode() {
+    void getClassificationCodesAtSelectCode() {
 
         int classificationId = 131;
 
         String path = getCodesPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsSelectCode,null);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsSelectCode,null);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsSelectCodeAt,null);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsSelectCodeAt,null);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -168,13 +151,13 @@ public class KlassApiClassificationCodesJsonTest extends AbstractKlassApiCodesTe
     }
 
     @Test
-    void getClassificationWithCodesSelectCodes() {
+    void getClassificationCodesAtSelectCodes() {
 
         int classificationId = 131;
 
         String path = getCodesPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsSelectCodes,null);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsSelectCodes,null);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsSelectCodesAt,null);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsSelectCodesAt,null);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -189,13 +172,13 @@ public class KlassApiClassificationCodesJsonTest extends AbstractKlassApiCodesTe
     }
 
     @Test
-    void getClassificationWithCodesSelectLevel() {
+    void getClassificationCodesAtSelectLevel() {
 
         int classificationId = 17;
 
         String path = getCodesPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsSelectLevel,null);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsSelectLevel,null);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsSelectLevelAt,null);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsSelectLevelAt,null);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -211,12 +194,12 @@ public class KlassApiClassificationCodesJsonTest extends AbstractKlassApiCodesTe
 
     // Nb the presentation name pattern has no values
     @Test
-    void getClassificationWithCodesPresentationPattern() {
+    void getClassificationCodesAtPresentationPattern() {
         int classificationId = 131;
 
         String path = getCodesPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsPresentationCodePattern,null);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsPresentationCodePattern,null);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsPresentationCodePatternAt,null);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsPresentationCodePatternAt,null);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -230,24 +213,4 @@ public class KlassApiClassificationCodesJsonTest extends AbstractKlassApiCodesTe
         }
     }
 
-    @Test
-    void getClassificationWithCodesInvalidOrder() {
-        int classificationId = 11;
-
-        String firstDate = "2025-01-01";
-        String secondDate = "1995-11-12";
-
-        paramsDateInRange.put(FROM, firstDate);
-        paramsDateInRange.put(TO, secondDate);
-
-        String path = getCodesPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDateInRange,null);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDateInRange,null);
-
-        assertApiResponseIsNotNull(sourceResponse);
-
-        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
-        assertThat(sourceResponse.getStatusCode()).isEqualTo(400);
-        assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
-    }
 }

@@ -19,8 +19,8 @@ public class KlassApiClassificationCodesXmlTest extends AbstractKlassApiCodesTes
         int classificationId = 6;
 
         String path = getCodesPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDate, APPLICATION_XML);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDate, APPLICATION_XML);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsFrom, APPLICATION_XML);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsFrom, APPLICATION_XML);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -44,8 +44,8 @@ public class KlassApiClassificationCodesXmlTest extends AbstractKlassApiCodesTes
         System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
 
         String path = getCodesPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDate, APPLICATION_XML);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDate, APPLICATION_XML);
+        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsFrom, APPLICATION_XML);
+        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsFrom, APPLICATION_XML);
 
         assertApiResponseIsNotNull(sourceResponse);
 
