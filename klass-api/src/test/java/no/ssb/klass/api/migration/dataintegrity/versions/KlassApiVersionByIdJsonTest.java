@@ -2,6 +2,8 @@ package no.ssb.klass.api.migration.dataintegrity.versions;
 
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 import static no.ssb.klass.api.migration.MigrationTestUtils.*;
@@ -9,10 +11,11 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class KlassApiVersionByIdJsonTest extends AbstractKlassApiVersions {
 
-    @Test
-    void getVersionById() {
+    @ParameterizedTest
+    @MethodSource("rangeProviderVersionIds")
+    void getVersionById(int classificationId) {
 
-        String path = getVersionByIdPath(randomId);
+        String path = getVersionByIdPath(classificationId);
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, null,null);
         Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, null,null);
 
@@ -28,7 +31,7 @@ public class KlassApiVersionByIdJsonTest extends AbstractKlassApiVersions {
             validateList(sourceResponse, targetResponse, PUBLISHED);
             validateList(sourceResponse, targetResponse, CHANGELOGS);
             validateList(sourceResponse, targetResponse, LEVELS);
-            validateList(sourceResponse, targetResponse, CLASSIFICATIONS_VARIANTS);
+            validatePathListWithObjects(sourceResponse, targetResponse, CLASSIFICATIONS_VARIANTS, pathNamesClassificationVariants, ID);
             validatePathListWithObjects(sourceResponse, targetResponse, CORRESPONDENCE_TABLES, pathNamesCorrespondenceTableVersions,ID);
             validatePathListWithObjects(sourceResponse, targetResponse, CLASSIFICATION_ITEMS, pathNamesVersionsClassificationItems, CODE);
         }
@@ -53,7 +56,7 @@ public class KlassApiVersionByIdJsonTest extends AbstractKlassApiVersions {
             validateList(sourceResponse, targetResponse, PUBLISHED);
             validateList(sourceResponse, targetResponse, CHANGELOGS);
             validateList(sourceResponse, targetResponse, LEVELS);
-            validateList(sourceResponse, targetResponse, CLASSIFICATIONS_VARIANTS);
+            validatePathListWithObjects(sourceResponse, targetResponse, CLASSIFICATIONS_VARIANTS, pathNamesClassificationVariants, ID);
             validatePathListWithObjects(sourceResponse, targetResponse, CORRESPONDENCE_TABLES, pathNamesCorrespondenceTableVersions,ID);
             validatePathListWithObjects(sourceResponse, targetResponse, CLASSIFICATION_ITEMS, pathNamesVersionsClassificationItems, CODE);
         }
@@ -78,7 +81,7 @@ public class KlassApiVersionByIdJsonTest extends AbstractKlassApiVersions {
             validateList(sourceResponse, targetResponse, PUBLISHED);
             validateList(sourceResponse, targetResponse, CHANGELOGS);
             validateList(sourceResponse, targetResponse, LEVELS);
-            validateList(sourceResponse, targetResponse, CLASSIFICATIONS_VARIANTS);
+            validatePathListWithObjects(sourceResponse, targetResponse, CLASSIFICATIONS_VARIANTS, pathNamesClassificationVariants, ID);
             validatePathListWithObjects(sourceResponse, targetResponse, CORRESPONDENCE_TABLES, pathNamesCorrespondenceTableVersions,ID);
             validatePathListWithObjects(sourceResponse, targetResponse, CLASSIFICATION_ITEMS, pathNamesVersionsClassificationItems, CODE);
         }
@@ -104,7 +107,7 @@ public class KlassApiVersionByIdJsonTest extends AbstractKlassApiVersions {
             validateList(sourceResponse, targetResponse, PUBLISHED);
             validateList(sourceResponse, targetResponse, CHANGELOGS);
             validateList(sourceResponse, targetResponse, LEVELS);
-            validateList(sourceResponse, targetResponse, CLASSIFICATIONS_VARIANTS);
+            validatePathListWithObjects(sourceResponse, targetResponse, CLASSIFICATIONS_VARIANTS, pathNamesClassificationVariants, ID);
             validatePathListWithObjects(sourceResponse, targetResponse, CORRESPONDENCE_TABLES, pathNamesCorrespondenceTableVersions,ID);
             validatePathListWithObjects(sourceResponse, targetResponse, CLASSIFICATION_ITEMS, pathNamesVersionsClassificationItems, CODE);
         }
