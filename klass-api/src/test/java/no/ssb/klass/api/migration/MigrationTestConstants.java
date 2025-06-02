@@ -36,15 +36,12 @@ public final class MigrationTestConstants {
     public static final String PUBLISHED_NB="published.nb";
     public static final String PUBLISHED_EN="published.en";
     public static final String PUBLISHED_NN="published.nn";
-    public static final String CLASSIFICATION_NAME = "classification.name";
-    public static final String CLASSIFICATION_ID = "classification.id";
-    public static final String CLASSIFICATION_CLASSIFICATION_TYPE = "classification.type";
+    public static final String CLASSIFICATION_VERSION= "classificationVersion";
 
     // Fields
     public static final String ID = "id";
     public static final String NAME = "name";
     public static final String CLASSIFICATION_TYPE = "classificationType";
-    public static final String CLASSIFICATION = "classification";
     public static final String DESCRIPTION = "description";
     public static final String LAST_MODIFIED = "lastModified";
     public static final String PRIMARY_LANGUAGE = "primaryLanguage";
@@ -74,6 +71,14 @@ public final class MigrationTestConstants {
 
     public static final String NUMBER_OF_CLASSIFICATIONS= "numberOfClassifications";
 
+    public static final String CONTACT_PERSON_NAME = "contactPerson.name";
+    public static final String CONTACT_PERSON_EMAIL = "contactPerson.email";
+    public static final String CONTACT_PERSON_PHONE = "contactPerson.phone";
+    public static final String LINK_REL = "link.rel";
+    public static final String LINK_HREF ="link.href" ;
+    public static final String ENTITIES = "entities";
+
+
     // Field of list type
     public static final String CLASSIFICATIONS = "classifications";
     public static final String STATISTICAL_UNITS = "statisticalUnits";
@@ -89,22 +94,15 @@ public final class MigrationTestConstants {
     public static final String LEVELS= "levels";
     public static final String CLASSIFICATION_ITEMS= "classificationItems";
     public static final String CLASSIFICATIONS_VARIANTS= "classificationVariants";
-    public static final String CLASSIFICATIONS_DESCRIPTION = "classification.description";
-    public static final String ENTITIES_CONTENTS = "entities.contents";
 
-    public static final String CLASSIFICATION_LAST_MODIFIED = "classification.lastModified";
-    public static final String CLASSIFICATION_PRIMARY_LANGUAGE= "classification.primaryLanguage";
-    public static final String CLASSIFICATION_COPYRIGHTED= "classification.copyrighted";
-    public static final String CLASSIFICATION_INCLUDE_SHORTNAME= "classification.includeShortName";
-    public static final String CLASSIFICATION_INCLUDE_NOTES= "classification.includeNotes";
-    public static final String CLASSIFICATION_CONTACT_PERSON= "classification.contactPerson";
-    public static final String CLASSIFICATION_OWNING_SECTION= "classification.owningSection";
-    public static final String CLASSIFICATION_CONTACT_PERSON_NAME= "classification.contactPerson.name";
-    public static final String CLASSIFICATION_CONTACT_PERSON_EMAIL= "classification.contactPerson.email";
-    public static final String CLASSIFICATION_CONTACT_PERSON_PHONE= "classification.contactPerson.phone";
+    // Field list type xml
+    public static final String CLASSIFICATION_VERSION_PUBLISHED_LANGUAGES= "classificationVersion.publishedLanguages.published";
 
+    public static final String CLASSIFICATION_VERSION_LEVELS= "classificationVersion.levels.level";
+    public static final String CLASSIFICATION_VERSION_CLASSIFICATION_ITEMS= "classificationVersion.classificationItems.classificationItem";
 
-
+    public static final String CLASSIFICATION_VERSION_CHANGELOGS= "classificationVersion.changelogs.changelog";
+    public static final String ENTITIES_CONTENTS_CONTENT= "entities.contents.content";
     // Link fields
     public static final String HREF= "href";
     public static final String LINKS_SELF_HREF= "_links.self.href";
@@ -153,7 +151,6 @@ public final class MigrationTestConstants {
 
     // header
     public static final String ACCEPT= "Accept";
-    public static final String CONTENT_TYPE= "Content-Type";
     public static final String APPLICATION_XML = "application/xml";
     public static final String TEXT_CSV= "text/csv";
 
@@ -204,18 +201,42 @@ public final class MigrationTestConstants {
             PUBLISHED_NN,
             LINKS_SELF_HREF
     );
-    public static List<String> pathNamesClassificationXml = Arrays.asList(
-            CLASSIFICATION_NAME,
-            CLASSIFICATION_ID,
-            CLASSIFICATION_LAST_MODIFIED,
-            CLASSIFICATION_PRIMARY_LANGUAGE,
-            CLASSIFICATION_COPYRIGHTED,
-            CLASSIFICATION_INCLUDE_SHORTNAME,
-            CLASSIFICATION_INCLUDE_NOTES,
-            CLASSIFICATION_CONTACT_PERSON_NAME,
-            CLASSIFICATION_CONTACT_PERSON_EMAIL,
-            CLASSIFICATION_CONTACT_PERSON_PHONE,
-            CLASSIFICATION_OWNING_SECTION
+
+    public static List<String> pathNamesClassificationVariantsXml = Arrays.asList(
+            NAME,
+            ID,
+            VALID_FROM,
+            LAST_MODIFIED,
+            INTRODUCTION,
+            CONTACT_PERSON_NAME,
+            CONTACT_PERSON_EMAIL,
+            CONTACT_PERSON_PHONE,
+            OWNING_SECTION,
+            PUBLICATIONS,
+            DERIVED_FROM,
+            LEGAL_BASE,
+            LINK_REL,
+            LINK_HREF
+    );
+
+    public static List<String> pathNamesClassificationVariantsCorrespondenceTableXml = Arrays.asList(
+            NAME,
+            ID,
+            CONTACT_PERSON_NAME,
+            CONTACT_PERSON_EMAIL,
+            CONTACT_PERSON_PHONE,
+            OWNING_SECTION,
+            SOURCE,
+            SOURCE_ID,
+            TARGET,
+            TARGET_ID,
+            CHANGE_TABLE,
+            LAST_MODIFIED,
+            PUBLICATIONS,
+            DERIVED_FROM,
+            LEGAL_BASE,
+            LINK_REL,
+            LINK_HREF
     );
 
     public static List<String> pathNamesClassificationsPage = Arrays.asList(
@@ -336,6 +357,12 @@ public final class MigrationTestConstants {
             LINKS_LAST_HREF,
             LINKS_SEARCH_HREF,
             LINKS_SEARCH_TEMPLATED
+
+    );
+
+    public static List<String> pathNamesSsbSectionLinks = Arrays.asList(
+            LINK_REL,
+            LINK_HREF
 
     );
 }
