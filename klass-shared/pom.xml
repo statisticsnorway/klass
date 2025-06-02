@@ -29,6 +29,8 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
 
+        <github.repository>statisticsnorway/klass</github.repository>
+
         <findbugs-version>3.0.5</findbugs-version>
         <checkstyle-version>3.3.0</checkstyle-version>
         <spring.version>4.3.7.RELEASE</spring.version>
@@ -58,6 +60,12 @@
         <spring-restdocs.version>1.2.1.RELEASE</spring-restdocs.version>
 
     </properties>
+
+    <scm>
+        <developerConnection>scm:git:https://github.com/${github.repository}.git</developerConnection>
+        <url>https://github.com/${github.repository}</url>
+        <tag>v2.2.0</tag>
+    </scm>
 
     <dependencies>
 
@@ -373,8 +381,4 @@
             </plugins>
         </pluginManagement>
     </build>
-
-    <scm>
-        <tag>v2.2.0</tag>
-    </scm>
 </project>
