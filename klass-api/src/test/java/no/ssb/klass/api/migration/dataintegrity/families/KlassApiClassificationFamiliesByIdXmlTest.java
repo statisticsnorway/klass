@@ -108,7 +108,7 @@ public class KlassApiClassificationFamiliesByIdXmlTest extends AbstractKlassApiF
 
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationFamilyIds")
-    void getClassificationFamilySsbSection(int classificationFamilyId) throws Exception {
+    void getClassificationFamilySsbSection(int classificationFamilyId) {
         paramsSsbSection.put(SSB_SECTION, ssbSectionNames.get(randomSsbSectionId));
 
         String path = getClassificationFamilyByIdPath(classificationFamilyId);

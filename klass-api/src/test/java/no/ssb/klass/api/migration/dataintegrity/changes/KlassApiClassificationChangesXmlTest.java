@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 public class KlassApiClassificationChangesXmlTest extends AbstractKlassApiChanges {
 
     @Test
-    void getOneClassificationChanges() throws Exception {
+    void getOneClassificationChanges()  {
         Integer classificationId = 6;
 
         System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
@@ -32,15 +32,14 @@ public class KlassApiClassificationChangesXmlTest extends AbstractKlassApiChange
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateObjectXml(path, sourceResponse, targetResponse);
-            validateLinksXml(path,sourceResponse, targetResponse);
+            validateXmlNotReady(sourceResponse, targetResponse);
         }
     }
 
 
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationIds")
-    void getClassificationChanges(int classificationId) throws Exception {
+    void getClassificationChanges(int classificationId) {
 
         // Temp start at id 7 because of heavy requests to some ids
         assumeTrue(classificationId > 6);
@@ -57,15 +56,14 @@ public class KlassApiClassificationChangesXmlTest extends AbstractKlassApiChange
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateObjectXml(path, sourceResponse, targetResponse);
-            validateLinksXml(path,sourceResponse, targetResponse);
+            validateXmlNotReady(sourceResponse, targetResponse);
         }
 
     }
 
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationIds")
-    void getClassificationChangesDatesInRange(int classificationId) throws Exception {
+    void getClassificationChangesDatesInRange(int classificationId) {
 
         // Temp start at id 7 because of heavy requests to some ids
         assumeTrue(classificationId > 6);
@@ -82,15 +80,14 @@ public class KlassApiClassificationChangesXmlTest extends AbstractKlassApiChange
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateObjectXml(path, sourceResponse, targetResponse);
-            validateLinksXml(path,sourceResponse, targetResponse);
+            validateXmlNotReady(sourceResponse, targetResponse);
         }
     }
 
 
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationIds")
-    void getClassificationChangesEnglish(int classificationId) throws Exception {
+    void getClassificationChangesEnglish(int classificationId) {
 
         // Temp start at id 7 because of heavy requests to some ids
         assumeTrue(classificationId > 6);
@@ -107,14 +104,13 @@ public class KlassApiClassificationChangesXmlTest extends AbstractKlassApiChange
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateObjectXml(path, sourceResponse, targetResponse);
-            validateLinksXml(path,sourceResponse, targetResponse);
+            validateXmlNotReady(sourceResponse, targetResponse);
         }
     }
 
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationIds")
-    void getClassificationChangesNewNorwegian(int classificationId) throws Exception {
+    void getClassificationChangesNewNorwegian(int classificationId) {
 
         // Temp start at id 7 because of heavy requests to some ids
         assumeTrue(classificationId > 6);
@@ -131,13 +127,12 @@ public class KlassApiClassificationChangesXmlTest extends AbstractKlassApiChange
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateObjectXml(path, sourceResponse, targetResponse);
-            validateLinksXml(path,sourceResponse, targetResponse);
+           validateXmlNotReady(sourceResponse, targetResponse);
         }
     }
 
     @Test
-    void getOneClassificationChangesIncludeFuture() throws Exception {
+    void getOneClassificationChangesIncludeFuture() {
         int classificationId = 6;
 
         String path = getChangesPath(classificationId);
@@ -152,8 +147,7 @@ public class KlassApiClassificationChangesXmlTest extends AbstractKlassApiChange
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateObjectXml(path, sourceResponse, targetResponse);
-            validateLinksXml(path,sourceResponse, targetResponse);
+           validateXmlNotReady(sourceResponse, targetResponse);
         }
     }
 

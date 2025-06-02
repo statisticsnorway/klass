@@ -14,7 +14,7 @@ public class KlassApiClassificationByIdXmlTest extends AbstractKlassApiClassific
 
 
     @Test
-    void getOneClassificationXml() throws Exception {
+    void getOneClassificationXml() {
 
         int classificationId = sourceResponseIdentifiers.get(11);
         String path = getClassificationByIdPath(classificationId);
@@ -30,14 +30,13 @@ public class KlassApiClassificationByIdXmlTest extends AbstractKlassApiClassific
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else {
-            validateObjectXml(path, sourceResponse, targetResponse);
-            validateLinksXml(path,sourceResponse, targetResponse);
+            validateXmlNotReady(sourceResponse, targetResponse);
         }
     }
 
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationIds")
-    void getClassificationXml(Integer classificationId) throws Exception {
+    void getClassificationXml(Integer classificationId) {
 
         String path = getClassificationByIdPath(classificationId);
 
@@ -52,14 +51,13 @@ public class KlassApiClassificationByIdXmlTest extends AbstractKlassApiClassific
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else {
-            validateObjectXml(path, sourceResponse, targetResponse);
-            validateLinksXml(path,sourceResponse, targetResponse);
+            validateXmlNotReady(sourceResponse, targetResponse);
         }
     }
 
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationIds")
-    void getClassificationEnglishXml(Integer classificationId) throws Exception {
+    void getClassificationEnglishXml(Integer classificationId) {
 
         String path = getClassificationByIdPath(classificationId);
 
@@ -73,14 +71,13 @@ public class KlassApiClassificationByIdXmlTest extends AbstractKlassApiClassific
         if(sourceResponse.getStatusCode() != 200) {
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         } else {
-            validateObjectXml(path, sourceResponse, targetResponse);
-            validateLinksXml(path,sourceResponse, targetResponse);
+            validateXmlNotReady(sourceResponse, targetResponse);
         }
     }
 
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationIds")
-    void getClassificationNewNorwegianXml(Integer classificationId) throws Exception {
+    void getClassificationNewNorwegianXml(Integer classificationId) {
 
         String path = CLASSIFICATIONS_PATH + "/" + classificationId;
 
@@ -95,14 +92,13 @@ public class KlassApiClassificationByIdXmlTest extends AbstractKlassApiClassific
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else {
-            validateObjectXml(path, sourceResponse, targetResponse);
-            validateLinksXml(path,sourceResponse, targetResponse);
+            validateXmlNotReady(sourceResponse, targetResponse);
         }
     }
 
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationIds")
-    void getClassificationIncludeFutureXml(Integer classificationId) throws Exception {
+    void getClassificationIncludeFutureXml(Integer classificationId) {
 
         String path = getClassificationByIdPath(classificationId);
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsIncludeFuture, APPLICATION_XML);
@@ -115,8 +111,7 @@ public class KlassApiClassificationByIdXmlTest extends AbstractKlassApiClassific
         if(sourceResponse.getStatusCode() != 200) {
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }else {
-            validateObjectXml(path, sourceResponse, targetResponse);
-            validateLinksXml(path,sourceResponse, targetResponse);
+            validateXmlNotReady(sourceResponse, targetResponse);
         }
     }
 }

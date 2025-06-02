@@ -1,7 +1,6 @@
 package no.ssb.klass.api.migration.dataintegrity.classification;
 
 import no.ssb.klass.api.migration.dataintegrity.AbstractKlassApiDataIntegrityTest;
-import org.junit.jupiter.api.BeforeAll;
 
 import java.util.HashMap;
 import java.util.Map;

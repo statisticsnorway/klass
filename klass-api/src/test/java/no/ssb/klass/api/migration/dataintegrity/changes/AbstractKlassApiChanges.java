@@ -6,9 +6,6 @@ import org.junit.jupiter.api.BeforeAll;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
-
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 import static no.ssb.klass.api.migration.MigrationTestConstants.CSV_SEPARATOR;
 import static no.ssb.klass.api.migration.MigrationTestUtils.formatter;
