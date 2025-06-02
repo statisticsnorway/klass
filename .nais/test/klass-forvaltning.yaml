@@ -25,23 +25,7 @@ spec:
     - name: SPRING_PROFILES_ACTIVE
       value: frontend, postgres, small-import, skip-indexing, ad-offline, embedded-solr
   envFrom:
-    - secret: sqluser-password-klass-forvaltning
     - secret: google-sql-klass
   filesFrom:
     - mountPath: /var/run/secrets/nais.io/sqlcertificate
       secret: sqeletor-klass-827ec8ec
----
-apiVersion: sql.cnrm.cloud.google.com/v1beta1
-kind: SQLUser
-metadata:
-  name: klass-forvaltning
-  namespace: dapla-metadata
-spec:
-  host: ""
-  instanceRef:
-    external: klass
-  password:
-    valueFrom:
-      secretKeyRef:
-        name: sqluser-password-klass-forvaltning
-        key: NAIS_DATABASE_KLASS_KLASS_FORVALTNING_PASSWORD

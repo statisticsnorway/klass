@@ -1,7 +1,7 @@
 services:
   mariadb:
     image: mariadb:11.7
-    profiles: [migration-testing, migrate-data]
+    profiles: [ migration-testing, migrate-data ]
     container_name: klass_mariadb
     ports:
       - "3306:3306"
@@ -13,7 +13,7 @@ services:
       MARIADB_DATABASE: "klass"
   postgresql:
     image: postgres:17.4
-    profiles: [migration-testing, migrate-data]
+    profiles: [ migration-testing, migrate-data, frontend, api ]
     container_name: klass_postgres
     ports:
       - "5432:5432"
@@ -26,9 +26,9 @@ services:
     build:
       context: ../klass-api
       dockerfile: ../klass-api/Dockerfile
-    command: ["java", "-jar", "app.war", "--spring.profiles.active=api, postgres-local, skip-indexing, embedded-solr"]
+    command: [ "java", "-jar", "app.war", "--spring.profiles.active=api, postgres-local, skip-indexing, embedded-solr" ]
     container_name: klass-api
-    profiles: [migration-testing]
+    profiles: [ migration-testing, api ]
     depends_on:
       - postgresql
     ports:
@@ -39,21 +39,21 @@ services:
           cpus: "1.0"
           memory: 1G
     environment:
+      SPRING_PROFILES_ACTIVE: api, postgres-local, skip-indexing, embedded-solr
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_USER: "klass"
       POSTGRES_INSTANCE: ${POSTGRES_INSTANCE}
-      SPRING_PROFILES_ACTIVE: "postgres-local"
   klass-api-mariadb:
     build:
       context: ../klass-api
       dockerfile: ../klass-api/Dockerfile
-    command: ["java", "-jar", "app.war", "--spring.profiles.active=api, mariadb-local, skip-indexing, embedded-solr"]
+    command: [ "java", "-jar", "app.war", "--spring.profiles.active=api, mariadb-local, skip-indexing, embedded-solr" ]
     container_name: klass-api-mariadb
-    profiles: [migration-testing]
+    profiles: [ migration-testing ]
     depends_on:
       - mariadb
     ports:
-      - "8081:8080"
+      - "8082:8080"
     deploy:
       resources:
         limits:
@@ -73,8 +73,11 @@ services:
       context: ../klass-forvaltning
       dockerfile: ../klass-forvaltning/Dockerfile
     container_name: klass-forvaltning
-    profiles: [klass-forvaltning]
+    profiles: [ frontend ]
     ports:
-      - "8082:8081"
+      - "8081:8081"
     environment:
-      SPRING_PROFILES_ACTIVE: frontend, h2-inmemory, small-import, skip-indexing, embedded-solr
+      SPRING_PROFILES_ACTIVE: frontend, postgres-local, ad-offline, skip-indexing, embedded-solr
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_USER: "klass"
+      POSTGRES_INSTANCE: ${POSTGRES_INSTANCE}
