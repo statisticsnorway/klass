@@ -3,10 +3,9 @@ name: Klass-forvaltning build and deploy
 on:
   release:
     types: [ published ]
-  pull_request:
-    #  push:
-    #    branches:
-    #      - nais-migration
+  push:
+    branches:
+      - nais-migration
     paths:
       - "klass-forvaltning/**"
       - "klass-shared/**"
