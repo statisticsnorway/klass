@@ -64,8 +64,8 @@ public class KlassApiCorrespondenceTablesByIdJsonTest extends AbstractKlassApiCo
     @MethodSource("correspondenceIdRangeProvider")
     void getCorrespondenceTableLanguageEn(int correspondenceTableId) {
         String path = getCorrespondenceTableByIdPath(correspondenceTableId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageEn,null);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageEn,null);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageEn,null);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageEn,null);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -89,8 +89,8 @@ public class KlassApiCorrespondenceTablesByIdJsonTest extends AbstractKlassApiCo
     void getCorrespondenceTableLanguageNn(int correspondenceTableId) {
 
         String path = getCorrespondenceTableByIdPath(correspondenceTableId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageNn,null);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageNn,null);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageNn,null);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageNn,null);
 
         assertApiResponseIsNotNull(sourceResponse);
 

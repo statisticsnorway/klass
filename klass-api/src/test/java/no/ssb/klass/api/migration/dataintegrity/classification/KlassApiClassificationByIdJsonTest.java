@@ -1,5 +1,6 @@
 package no.ssb.klass.api.migration.dataintegrity.classification;
 
+import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -16,8 +17,8 @@ public class KlassApiClassificationByIdJsonTest extends AbstractKlassApiClassifi
         int classificationId = sourceResponseIdentifiers.get(11);
         String path = getClassificationByIdPath(classificationId);
 
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, null, null);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, null, null);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, null, null);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, null, null);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -39,8 +40,8 @@ public class KlassApiClassificationByIdJsonTest extends AbstractKlassApiClassifi
 
         String path = getClassificationByIdPath(classificationId);
 
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, null, null);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, null, null);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, null, null);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, null, null);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -62,8 +63,8 @@ public class KlassApiClassificationByIdJsonTest extends AbstractKlassApiClassifi
 
         String path = getClassificationByIdPath(classificationId);
 
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageEn, null);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageEn, null);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageEn, null);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageEn, null);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -84,8 +85,8 @@ public class KlassApiClassificationByIdJsonTest extends AbstractKlassApiClassifi
 
         String path = CLASSIFICATIONS_PATH + "/" + classificationId;
 
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageNn, null);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageNn, null);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageNn, null);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageNn, null);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -106,8 +107,8 @@ public class KlassApiClassificationByIdJsonTest extends AbstractKlassApiClassifi
     void getClassificationIncludeFuture(Integer classificationId) {
 
         String path = getClassificationByIdPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsIncludeFuture, null);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsIncludeFuture, null);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsIncludeFuture, null);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsIncludeFuture, null);
 
         assertApiResponseIsNotNull(sourceResponse);
 

@@ -1,5 +1,6 @@
 package no.ssb.klass.api.migration.dataintegrity.codes;
 
+import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -25,8 +26,8 @@ public class KlassApiClassificationCodesAtXmlTest extends AbstractKlassApiCodesT
         System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
 
         String path = getCodesAtPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramDate,APPLICATION_XML);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramDate,APPLICATION_XML);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramDate,APPLICATION_XML);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramDate,APPLICATION_XML);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -47,8 +48,8 @@ public class KlassApiClassificationCodesAtXmlTest extends AbstractKlassApiCodesT
         System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
 
         String path = getCodesAtPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDate,APPLICATION_XML);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDate,APPLICATION_XML);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDate,APPLICATION_XML);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDate,APPLICATION_XML);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -71,8 +72,8 @@ public class KlassApiClassificationCodesAtXmlTest extends AbstractKlassApiCodesT
         int classificationId = 11;
 
         String path = getCodesAtPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageEnAt,APPLICATION_XML);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageEnAt,APPLICATION_XML);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageEnAt,APPLICATION_XML);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageEnAt,APPLICATION_XML);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -91,8 +92,8 @@ public class KlassApiClassificationCodesAtXmlTest extends AbstractKlassApiCodesT
         int classificationId = 6;
 
         String path = getCodesAtPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageNnAt,APPLICATION_XML);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageNnAt,APPLICATION_XML);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageNnAt,APPLICATION_XML);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageNnAt,APPLICATION_XML);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -112,8 +113,8 @@ public class KlassApiClassificationCodesAtXmlTest extends AbstractKlassApiCodesT
         int classificationId = 6;
 
         String path = getCodesAtPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsIncludeFutureAt,APPLICATION_XML);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsIncludeFutureAt,APPLICATION_XML);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsIncludeFutureAt,APPLICATION_XML);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsIncludeFutureAt,APPLICATION_XML);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -133,8 +134,8 @@ public class KlassApiClassificationCodesAtXmlTest extends AbstractKlassApiCodesT
         int classificationId = 131;
 
         String path = getCodesAtPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsSelectCodeAt,APPLICATION_XML);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsSelectCodeAt,APPLICATION_XML);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsSelectCodeAt,APPLICATION_XML);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsSelectCodeAt,APPLICATION_XML);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -154,8 +155,8 @@ public class KlassApiClassificationCodesAtXmlTest extends AbstractKlassApiCodesT
         int classificationId = 131;
 
         String path = getCodesAtPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsSelectCodesAt,APPLICATION_XML);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsSelectCodesAt,APPLICATION_XML);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsSelectCodesAt,APPLICATION_XML);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsSelectCodesAt,APPLICATION_XML);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -175,8 +176,8 @@ public class KlassApiClassificationCodesAtXmlTest extends AbstractKlassApiCodesT
         int classificationId = 17;
 
         String path = getCodesAtPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsSelectLevelAt,APPLICATION_XML);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsSelectLevelAt,APPLICATION_XML);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsSelectLevelAt,APPLICATION_XML);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsSelectLevelAt,APPLICATION_XML);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -196,8 +197,8 @@ public class KlassApiClassificationCodesAtXmlTest extends AbstractKlassApiCodesT
         int classificationId = 131;
 
         String path = getCodesAtPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsPresentationCodePatternAt,APPLICATION_XML);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsPresentationCodePatternAt,APPLICATION_XML);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsPresentationCodePatternAt,APPLICATION_XML);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsPresentationCodePatternAt,APPLICATION_XML);
 
         assertApiResponseIsNotNull(sourceResponse);
 

@@ -1,6 +1,5 @@
 package no.ssb.klass.api.migration.dataintegrity.corresponds;
 
-import io.restassured.response.Response;
 import no.ssb.klass.api.migration.dataintegrity.AbstractKlassApiDataIntegrityTest;
 import org.junit.jupiter.api.BeforeAll;
 
@@ -42,9 +41,6 @@ public class AbstractKlassApiCorrespondsTest extends AbstractKlassApiDataIntegri
     static String fromDate;
 
     static String date;
-
-    Response sourceResponse;
-    Response targetResponse;
 
     static Stream<Integer> correspondenceIdRangeProvider() {
         return IntStream.rangeClosed(0, 1500).boxed();

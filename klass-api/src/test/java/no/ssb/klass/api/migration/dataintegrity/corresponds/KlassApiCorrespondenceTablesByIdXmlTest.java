@@ -59,8 +59,8 @@ public class KlassApiCorrespondenceTablesByIdXmlTest extends AbstractKlassApiCor
     @MethodSource("correspondenceIdRangeProvider")
     void getCorrespondenceTableLanguageEn(int correspondenceTableId) throws Exception {
         String path = getCorrespondenceTableByIdPath(correspondenceTableId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageEn,APPLICATION_XML);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageEn,APPLICATION_XML);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageEn,APPLICATION_XML);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageEn,APPLICATION_XML);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -82,8 +82,8 @@ public class KlassApiCorrespondenceTablesByIdXmlTest extends AbstractKlassApiCor
     void getCorrespondenceTableLanguageNn(int correspondenceTableId) throws Exception {
 
         String path = getCorrespondenceTableByIdPath(correspondenceTableId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageNn,APPLICATION_XML);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageNn,APPLICATION_XML);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageNn,APPLICATION_XML);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageNn,APPLICATION_XML);
 
         assertApiResponseIsNotNull(sourceResponse);
 

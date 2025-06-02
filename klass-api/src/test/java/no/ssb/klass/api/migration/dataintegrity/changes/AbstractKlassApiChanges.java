@@ -1,6 +1,5 @@
 package no.ssb.klass.api.migration.dataintegrity.changes;
 
-import io.restassured.response.Response;
 import no.ssb.klass.api.migration.dataintegrity.AbstractKlassApiDataIntegrityTest;
 import org.junit.jupiter.api.BeforeAll;
 
@@ -28,9 +27,6 @@ public class AbstractKlassApiChanges extends AbstractKlassApiDataIntegrityTest {
     static Map<String, Object> paramsDateInRange = new HashMap<>();
     static Map<String, Object> paramsCsvSeparator = new HashMap<>();
     static Map<String, Object> paramsIncludeFuture = new HashMap<>();
-
-    Response sourceResponse;
-    Response targetResponse;
 
     static Stream<Integer> rangeProviderClassificationIds() {
         return IntStream.rangeClosed(0, lastClassificationId).boxed();

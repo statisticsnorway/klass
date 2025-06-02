@@ -1,6 +1,5 @@
 package no.ssb.klass.api.migration.dataintegrity.variant;
 
-import io.restassured.response.Response;
 import no.ssb.klass.api.migration.dataintegrity.AbstractKlassApiDataIntegrityTest;
 import org.junit.jupiter.api.BeforeAll;
 
@@ -11,9 +10,6 @@ import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 import static no.ssb.klass.api.migration.MigrationTestUtils.generateRandomId;
 
 public abstract class AbstractKlassApiVariantTest extends AbstractKlassApiDataIntegrityTest {
-
-    Response sourceResponse;
-    Response targetResponse;
 
     static Integer randomId;
 

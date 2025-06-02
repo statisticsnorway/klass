@@ -1,5 +1,6 @@
 package no.ssb.klass.api.migration.dataintegrity.changes;
 
+import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -16,8 +17,8 @@ public class KlassApiClassificationChangesCsvTest extends AbstractKlassApiChange
         Integer classificationId = 6;
 
         String path = getChangesPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDate,TEXT_CSV);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDate,TEXT_CSV);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDate,TEXT_CSV);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDate,TEXT_CSV);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -36,8 +37,8 @@ public class KlassApiClassificationChangesCsvTest extends AbstractKlassApiChange
     void getClassificationChanges(Integer classificationId) {
 
         String path= getChangesPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDate,TEXT_CSV);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDate,TEXT_CSV);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDate,TEXT_CSV);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDate,TEXT_CSV);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -57,8 +58,8 @@ public class KlassApiClassificationChangesCsvTest extends AbstractKlassApiChange
     void getClassificationChangesDatesInRange(Integer classificationId) {
 
         String path= getChangesPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDateInRange,null);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDateInRange,null);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDateInRange,null);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDateInRange,null);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -77,8 +78,8 @@ public class KlassApiClassificationChangesCsvTest extends AbstractKlassApiChange
         Integer classificationId = 1;
 
         String path = getChangesPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsIncludeFuture,TEXT_CSV);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsIncludeFuture,TEXT_CSV);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsIncludeFuture,TEXT_CSV);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsIncludeFuture,TEXT_CSV);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -97,8 +98,8 @@ public class KlassApiClassificationChangesCsvTest extends AbstractKlassApiChange
     void getClassificationChangesEnglish(Integer classificationId) {
 
         String path= getChangesPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageEn,null);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageEn,null);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageEn,null);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageEn,null);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -117,8 +118,8 @@ public class KlassApiClassificationChangesCsvTest extends AbstractKlassApiChange
     void getClassificationChangesNewNorwegian(Integer classificationId) {
 
         String path= getChangesPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageNn,null);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageNn,null);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageNn,null);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageNn,null);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -137,8 +138,8 @@ public class KlassApiClassificationChangesCsvTest extends AbstractKlassApiChange
     void getClassificationChangesCsvSeparator(Integer classificationId) {
 
         String path= getChangesPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsCsvSeparator,TEXT_CSV);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsCsvSeparator,TEXT_CSV);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsCsvSeparator,TEXT_CSV);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsCsvSeparator,TEXT_CSV);
 
         assertApiResponseIsNotNull(sourceResponse);
 

@@ -1,5 +1,6 @@
 package no.ssb.klass.api.migration.dataintegrity.variant;
 
+import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
@@ -16,8 +17,8 @@ public class KlassApiClassificationVariantAtTest extends AbstractKlassApiVariant
         System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
 
         String path = getVariantAtPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsVariantDate,null);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsVariantDate,null);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsVariantDate,null);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsVariantDate,null);
 
         assertApiResponseIsNotNull(sourceResponse);
 

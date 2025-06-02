@@ -1,6 +1,5 @@
 package no.ssb.klass.api.migration.dataintegrity.codes;
 
-import io.restassured.response.Response;
 import no.ssb.klass.api.migration.dataintegrity.AbstractKlassApiDataIntegrityTest;
 import org.junit.jupiter.api.BeforeAll;
 
@@ -56,10 +55,6 @@ public abstract class AbstractKlassApiCodesTest extends AbstractKlassApiDataInte
     static Map<String, Object> paramsCsvSeparatorAt = new HashMap<>();
     static Map<String, Object> paramsPresentationCodePatternAt = new HashMap<>();
     static Map<String, Object> paramsCsvFieldsAt = new HashMap<>();
-
-
-    Response sourceResponse;
-    Response targetResponse;
 
     String getCodesPath(Integer id) {
         return CLASSIFICATIONS_PATH + "/"+ id + "/" + CODES;

@@ -1,5 +1,6 @@
 package no.ssb.klass.api.migration.dataintegrity.classification;
 
+import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -18,8 +19,8 @@ public class KlassApiClassificationByIdXmlTest extends AbstractKlassApiClassific
         int classificationId = sourceResponseIdentifiers.get(11);
         String path = getClassificationByIdPath(classificationId);
 
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, null, APPLICATION_XML);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, null, APPLICATION_XML);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, null, APPLICATION_XML);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, null, APPLICATION_XML);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -40,8 +41,8 @@ public class KlassApiClassificationByIdXmlTest extends AbstractKlassApiClassific
 
         String path = getClassificationByIdPath(classificationId);
 
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, null, APPLICATION_XML);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, null, APPLICATION_XML);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, null, APPLICATION_XML);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, null, APPLICATION_XML);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -62,8 +63,8 @@ public class KlassApiClassificationByIdXmlTest extends AbstractKlassApiClassific
 
         String path = getClassificationByIdPath(classificationId);
 
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageEn, APPLICATION_XML);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageEn, APPLICATION_XML);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageEn, APPLICATION_XML);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageEn, APPLICATION_XML);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -83,8 +84,8 @@ public class KlassApiClassificationByIdXmlTest extends AbstractKlassApiClassific
 
         String path = CLASSIFICATIONS_PATH + "/" + classificationId;
 
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageNn, APPLICATION_XML);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageNn, APPLICATION_XML);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageNn, APPLICATION_XML);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageNn, APPLICATION_XML);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -104,8 +105,8 @@ public class KlassApiClassificationByIdXmlTest extends AbstractKlassApiClassific
     void getClassificationIncludeFutureXml(Integer classificationId) throws Exception {
 
         String path = getClassificationByIdPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsIncludeFuture, APPLICATION_XML);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsIncludeFuture, APPLICATION_XML);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsIncludeFuture, APPLICATION_XML);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsIncludeFuture, APPLICATION_XML);
 
         assertApiResponseIsNotNull(sourceResponse);
 

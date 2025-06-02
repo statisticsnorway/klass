@@ -1,5 +1,6 @@
 package no.ssb.klass.api.migration.dataintegrity.corresponds;
 
+import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
 
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
@@ -13,8 +14,8 @@ public class KlassApiClassificationCorrespondsAtJsonTest extends AbstractKlassAp
         int classificationId = 131;
 
         String path = getCorrespondsAtPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsTargetIdAndDate,null);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsTargetIdAndDate,null);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsTargetIdAndDate,null);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsTargetIdAndDate,null);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -33,8 +34,8 @@ public class KlassApiClassificationCorrespondsAtJsonTest extends AbstractKlassAp
         int classificationId = 131;
 
         String path = getCorrespondsAtPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsTargetIdAndDateLanguageEn,null);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsTargetIdAndDateLanguageEn,null);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsTargetIdAndDateLanguageEn,null);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsTargetIdAndDateLanguageEn,null);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -53,8 +54,8 @@ public class KlassApiClassificationCorrespondsAtJsonTest extends AbstractKlassAp
         int classificationId = 131;
 
         String path = getCorrespondsAtPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsTargetIdAndDateLanguageNn,null);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsTargetIdAndDateLanguageNn,null);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsTargetIdAndDateLanguageNn,null);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsTargetIdAndDateLanguageNn,null);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -73,8 +74,8 @@ public class KlassApiClassificationCorrespondsAtJsonTest extends AbstractKlassAp
         int classificationId = 131;
 
         String path = getCorrespondsAtPath(classificationId);
-        sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsTargetIdAndDateIncludeFuture,null);
-        targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsTargetIdAndDateIncludeFuture,null);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsTargetIdAndDateIncludeFuture,null);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsTargetIdAndDateIncludeFuture,null);
 
         assertApiResponseIsNotNull(sourceResponse);
 
