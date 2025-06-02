@@ -13,7 +13,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
