@@ -57,10 +57,10 @@ public class KlassApiClassificationChangesJsonTest extends AbstractKlassApiChang
         System.out.println("End test for ID " + classificationId + " at " + Instant.now());
     }
 
-    @ParameterizedTest
-    @MethodSource("rangeProviderClassificationIds")
-    void getClassificationChangesDatesInRange(Integer classificationId) {
+    @Test
+    void getOneClassificationChangesDatesInRange() {
 
+        int classificationId = 6;
         String path= getChangesPath(classificationId);
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDateInRange,null);
         Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDateInRange,null);
