@@ -1,5 +1,6 @@
 package no.ssb.klass.api.migration;
 
+import io.restassured.path.xml.XmlPath;
 import io.restassured.response.Response;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -296,105 +297,63 @@ public class MigrationTestUtils {
         }
     }
 
-    public static void validateXml(Response sourceResponse, Response targetResponse) {
-        System.out.println("Source: " + sourceResponse.getBody().asString());
-        System.out.println("Target: " + targetResponse.getBody().asString());
-    }
-
-    public static void validateObjectXml(String path, Response sourceResponse, Response targetResponse) {
+    public static void validateXmlNotReady(Response sourceResponse, Response targetResponse) {
         String sourceXml = sourceResponse.getBody().asString();
         String targetXml = targetResponse.getBody().asString();
-        System.out.println(sourceXml.length() + " -> " + targetXml.length());
-        Diff diff = DiffBuilder.compare(sourceXml)
-                .withTest(targetXml)
-                .ignoreWhitespace()
-                .ignoreComments()
-                .checkForSimilar()
-                .withNodeFilter(node -> !isLinkElement(node))
-                .build();
+        XmlPath xmlPathSource = new XmlPath(sourceXml);
+        XmlPath xmlPathTarget = new XmlPath(targetXml);
+        System.out.println("Source: " + xmlPathSource);
+        System.out.println("Target: " + xmlPathTarget);
+    }
 
-        assertThat(diff.hasDifferences()).withFailMessage(
+    public static void validateXmlList(String path, Response sourceResponse, Response targetResponse, String pathName) {
+
+        String sourceXml = sourceResponse.getBody().asString();
+        String targetXml = targetResponse.getBody().asString();
+        XmlPath xmlPathSource = new XmlPath(sourceXml);
+        XmlPath xmlPathTarget = new XmlPath(targetXml);
+        List<String> sourceList = xmlPathSource.getList(pathName);
+        List<String> targetList = xmlPathTarget.getList(pathName);
+        System.out.println(sourceList.size() + " -> " + targetList.size());
+
+        assertThat(sourceList).withFailMessage(
                 FAIL_MESSAGE,
                 path,
-                sourceXml,
-                targetXml).isFalse();
-
+                sourceList,
+                targetList).isEqualTo(targetList);
     }
 
-    private static boolean isLinkElement(Node node) {
-        return node.getNodeType() == Node.ELEMENT_NODE && "link".equals(node.getNodeName());
-    }
+    public static void validatePathListWithObjectsXml(Response sourceResponse, Response targetResponse, String listName, List<String> pathNames) {
+        String sourceXml = sourceResponse.getBody().asString();
+        String targetXml = targetResponse.getBody().asString();
+        XmlPath xmlPathSource = new XmlPath(sourceXml);
+        XmlPath xmlPathTarget = new XmlPath(targetXml);
 
-    // order must be ignored ?
-    public static void validateLinksXml(String path, Response sourceResponse, Response targetResponse) throws Exception {
-        Set<String> sourceLinks = extractNormalizedLinks(sourceResponse.getBody().asString());
-        Set<String> targetLinks = extractNormalizedLinks(targetResponse.getBody().asString());
+        for(String pathName: pathNames) {
+            String fullPath = listName + "." + pathName;
+            Object sourceValue = xmlPathSource.get(fullPath);
+            Object targetValue = xmlPathTarget.get(fullPath);
+            System.out.println(sourceValue + " -> " + targetValue);
+            if (pathName.endsWith(HREF)) {
+                URI sourceUri = URI.create(fullPath);
+                URI targetUri = URI.create(fullPath);
 
-        System.out.println(sourceLinks + " -> " + targetLinks);
-
-        assertThat(sourceLinks).withFailMessage(
-                FAIL_MESSAGE,
-                path,
-                sourceLinks,
-                targetLinks).isEqualTo(targetLinks);
-    }
-
-    private static String extractSafePath(String href) {
-        // Remove URI template (anything after the first `{`)
-        int braceIndex = href.indexOf('{');
-        if (braceIndex >= 0) {
-            href = href.substring(0, braceIndex);
-        }
-
-        try {
-            URI uri = new URI(href);
-            return uri.getPath(); // safe to parse now
-        } catch (Exception e) {
-            // fallback: basic string parsing
-            int start = href.indexOf("://");
-            if (start >= 0) {
-                int pathStart = href.indexOf("/", start + 3);
-                if (pathStart >= 0) return href.substring(pathStart);
+                String sourcePath = sourceUri.getPath();
+                String targetPath = targetUri.getPath();
+                assertThat(sourcePath).withFailMessage(
+                        FAIL_MESSAGE,
+                        pathName,
+                        sourcePath,
+                        targetPath).isEqualTo(targetPath);
+            } else {
+                assertThat(sourceValue).withFailMessage(
+                        FAIL_MESSAGE,
+                        pathName,
+                        sourceValue,
+                        targetValue).isEqualTo(targetValue);
             }
-            return href; // fallback: return as-is
-        }
-    }
-
-    private static Set<String> extractNormalizedLinks(String xml) throws Exception {
-        Set<String> result = new HashSet<>();
-
-        DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        Document doc = builder.parse(new InputSource(new StringReader(xml)));
-        NodeList links = doc.getElementsByTagName("link");
-
-        for (int i = 0; i < links.getLength(); i++) {
-            Element link = (Element) links.item(i);
-            String href = null;
-            String rel = null;
-
-            NodeList children = link.getChildNodes();
-            for (int j = 0; j < children.getLength(); j++) {
-                Node child = children.item(j);
-                if (child.getNodeType() == Node.ELEMENT_NODE) {
-                    switch (child.getNodeName()) {
-                        case "href":
-                            href = child.getTextContent().trim();
-                            break;
-                        case "rel":
-                            rel = child.getTextContent().trim();
-                            break;
-                    }
-                }
-            }
-
-            if (href == null || rel == null) continue;
-
-            String pathAndQuery = extractSafePath(href);
-
-            result.add(rel + " -> " + pathAndQuery);
         }
 
-        return result;
     }
 
     public static void validateCSVDocument(String path, Response sourceResponse, Response targetResponse) {
