@@ -16,7 +16,6 @@ import static no.ssb.klass.api.migration.MigrationTestUtils.generateRandomDate;
 
 public class AbstractKlassApiChanges extends AbstractKlassApiDataIntegrityTest {
     static LocalDate date;
-    static LocalDate dateOne;
 
     static String dateFrom;
     static String dateTo;
