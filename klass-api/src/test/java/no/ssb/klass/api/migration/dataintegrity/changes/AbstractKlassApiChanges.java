@@ -16,6 +16,7 @@ import static no.ssb.klass.api.migration.MigrationTestUtils.generateRandomDate;
 
 public class AbstractKlassApiChanges extends AbstractKlassApiDataIntegrityTest {
     static LocalDate date;
+    static LocalDate dateOne;
 
     static String dateFrom;
     static String dateTo;
@@ -42,7 +43,8 @@ public class AbstractKlassApiChanges extends AbstractKlassApiDataIntegrityTest {
                 LocalDate.of(1951, 1, 1),
                 LocalDate.of(2024, 12, 31));
         dateFrom = date.format(formatter);
-        dateTo = generateRandomDate(date, LocalDate.of(2024, 12, 31)).format(formatter);
+        dateTo = generateRandomDate((date.plusDays(1)), LocalDate.of(2024, 12, 31)).format(formatter);
+
         paramsDate.put(FROM, dateFrom);
         paramsDateInRange.putAll(Map.of(FROM, dateFrom, TO, dateTo));
         paramsLanguageEn.putAll(

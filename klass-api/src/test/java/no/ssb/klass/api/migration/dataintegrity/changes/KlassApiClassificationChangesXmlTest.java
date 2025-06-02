@@ -10,6 +10,7 @@ import java.time.Instant;
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 import static no.ssb.klass.api.migration.MigrationTestUtils.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 public class KlassApiClassificationChangesXmlTest extends AbstractKlassApiChanges {
 
@@ -39,7 +40,10 @@ public class KlassApiClassificationChangesXmlTest extends AbstractKlassApiChange
 
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationIds")
-    void getClassificationChanges(Integer classificationId) throws Exception {
+    void getClassificationChanges(int classificationId) throws Exception {
+
+        // Temp start at id 7 because of heavy requests to some ids
+        assumeTrue(classificationId > 6);
 
         String path= getChangesPath(classificationId);
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDate, APPLICATION_XML);
@@ -61,7 +65,10 @@ public class KlassApiClassificationChangesXmlTest extends AbstractKlassApiChange
 
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationIds")
-    void getClassificationChangesDatesInRange(Integer classificationId) throws Exception {
+    void getClassificationChangesDatesInRange(int classificationId) throws Exception {
+
+        // Temp start at id 7 because of heavy requests to some ids
+        assumeTrue(classificationId > 6);
 
         String path= getChangesPath(classificationId);
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDateInRange,APPLICATION_XML);
@@ -83,7 +90,10 @@ public class KlassApiClassificationChangesXmlTest extends AbstractKlassApiChange
 
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationIds")
-    void getClassificationChangesEnglish(Integer classificationId) throws Exception {
+    void getClassificationChangesEnglish(int classificationId) throws Exception {
+
+        // Temp start at id 7 because of heavy requests to some ids
+        assumeTrue(classificationId > 6);
 
         String path= getChangesPath(classificationId);
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageEn,APPLICATION_XML);
@@ -104,7 +114,10 @@ public class KlassApiClassificationChangesXmlTest extends AbstractKlassApiChange
 
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationIds")
-    void getClassificationChangesNewNorwegian(Integer classificationId) throws Exception {
+    void getClassificationChangesNewNorwegian(int classificationId) throws Exception {
+
+        // Temp start at id 7 because of heavy requests to some ids
+        assumeTrue(classificationId > 6);
 
         String path= getChangesPath(classificationId);
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageNn,APPLICATION_XML);
@@ -125,7 +138,7 @@ public class KlassApiClassificationChangesXmlTest extends AbstractKlassApiChange
 
     @Test
     void getOneClassificationChangesIncludeFuture() throws Exception {
-        Integer classificationId = 6;
+        int classificationId = 6;
 
         String path = getChangesPath(classificationId);
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsIncludeFuture,APPLICATION_XML);

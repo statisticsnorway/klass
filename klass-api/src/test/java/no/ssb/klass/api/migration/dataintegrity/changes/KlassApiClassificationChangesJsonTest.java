@@ -10,6 +10,7 @@ import java.time.Instant;
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 import static no.ssb.klass.api.migration.MigrationTestUtils.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 public class KlassApiClassificationChangesJsonTest extends AbstractKlassApiChanges {
 
@@ -35,8 +36,10 @@ public class KlassApiClassificationChangesJsonTest extends AbstractKlassApiChang
 
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationIds")
-    void getClassificationChanges(Integer classificationId) {
+    void getClassificationChanges(int classificationId) {
 
+        // Temp start at id 7 because of heavy requests to some ids
+        assumeTrue(classificationId > 6);
         System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
 
         String path= getChangesPath(classificationId);
@@ -57,10 +60,12 @@ public class KlassApiClassificationChangesJsonTest extends AbstractKlassApiChang
         System.out.println("End test for ID " + classificationId + " at " + Instant.now());
     }
 
-    @Test
-    void getOneClassificationChangesDatesInRange() {
+    @ParameterizedTest
+    @MethodSource("rangeProviderClassificationIds")
+    void getOneClassificationChangesDatesInRange(int classificationId) {
+        // Temp start at id 7 because of heavy requests to some ids
+        assumeTrue(classificationId > 6);
 
-        int classificationId = 6;
         String path= getChangesPath(classificationId);
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDateInRange,null);
         Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDateInRange,null);
@@ -80,8 +85,10 @@ public class KlassApiClassificationChangesJsonTest extends AbstractKlassApiChang
 
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationIds")
-    void getClassificationChangesEnglish(Integer classificationId) {
+    void getClassificationChangesEnglish(int classificationId) {
 
+        // Temp start at id 7 because of heavy requests to some ids
+        assumeTrue(classificationId > 6);
         String path= getChangesPath(classificationId);
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageEn,null);
         Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageEn,null);
@@ -100,8 +107,10 @@ public class KlassApiClassificationChangesJsonTest extends AbstractKlassApiChang
 
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationIds")
-    void getClassificationChangesNewNorwegian(Integer classificationId) {
+    void getClassificationChangesNewNorwegian(int classificationId) {
 
+        // Temp start at id 7 because of heavy requests to some ids
+        assumeTrue(classificationId > 6);
         String path= getChangesPath(classificationId);
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageNn,null);
         Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageNn,null);
@@ -120,7 +129,10 @@ public class KlassApiClassificationChangesJsonTest extends AbstractKlassApiChang
 
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationIds")
-    void getClassificationChangesIncludeFuture(Integer classificationId) {
+    void getClassificationChangesIncludeFuture(int classificationId) {
+
+        // Temp start at id 7 because of heavy requests to some ids
+        assumeTrue(classificationId > 6);
 
         String path= getChangesPath(classificationId);
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsIncludeFuture,null);
