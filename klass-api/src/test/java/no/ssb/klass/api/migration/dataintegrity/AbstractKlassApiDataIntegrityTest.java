@@ -11,8 +11,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 
@@ -59,10 +57,6 @@ public abstract class AbstractKlassApiDataIntegrityTest {
             List <String> names = new ArrayList<>(ssbSectionResponse.path(EMBEDDED_SSB_SECTIONS_NAME));
             ssbSectionNames.addAll(names);
         }
-    }
-
-    static Stream<Integer> rangeProviderClassificationIds() {
-        return IntStream.rangeClosed(0, lastClassificationId).boxed();
     }
 
     @BeforeAll
