@@ -66,7 +66,7 @@ public class KlassApiVersionByIdCsvTest extends AbstractKlassApiVersions {
             assertThat(compareError(randomId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateCSVDocument(path, sourceResponse, targetResponse);;
+            validateCSVDocument(path, sourceResponse, targetResponse);
         }
     }
 
