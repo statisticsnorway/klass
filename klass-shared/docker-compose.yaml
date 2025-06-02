@@ -53,7 +53,7 @@ services:
     depends_on:
       - mariadb
     ports:
-      - "8081:8080"
+      - "8082:8080"
     deploy:
       resources:
         limits:
@@ -75,7 +75,7 @@ services:
     container_name: klass-forvaltning
     profiles: [ frontend ]
     ports:
-      - "8082:8081"
+      - "8081:8081"
     environment:
       SPRING_PROFILES_ACTIVE: frontend, postgres-local, ad-offline, skip-indexing, embedded-solr
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
