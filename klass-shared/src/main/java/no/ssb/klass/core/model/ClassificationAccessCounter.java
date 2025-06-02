@@ -1,30 +1,26 @@
 package no.ssb.klass.core.model;
 
+import javax.persistence.*;
 import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
 
 @Entity
 public class ClassificationAccessCounter {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @Column(nullable = false)
     Date timeStamp;
-    
+
     @OneToOne
     ClassificationSeries classificationSeries;
-    
-    public ClassificationAccessCounter() {}
-    
+
+    public ClassificationAccessCounter() {
+    }
+
     public ClassificationAccessCounter(ClassificationSeries classificationSeries) {
         this.classificationSeries = classificationSeries;
         this.timeStamp = new Date();
     }
-    
+
 }

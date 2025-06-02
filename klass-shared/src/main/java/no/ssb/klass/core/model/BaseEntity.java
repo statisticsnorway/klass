@@ -1,21 +1,15 @@
 package no.ssb.klass.core.model;
 
+import no.ssb.klass.core.util.TimeUtil;
+
+import javax.persistence.*;
 import java.util.Date;
 import java.util.UUID;
-
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.PreUpdate;
-import javax.persistence.Version;
-
-import no.ssb.klass.core.util.TimeUtil;
 
 @MappedSuperclass
 public abstract class BaseEntity {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false)
     private final String uuid;
