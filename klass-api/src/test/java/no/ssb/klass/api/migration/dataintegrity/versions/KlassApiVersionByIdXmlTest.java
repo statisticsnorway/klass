@@ -13,7 +13,7 @@ public class KlassApiVersionByIdXmlTest extends AbstractKlassApiVersions {
 
     @ParameterizedTest
     @MethodSource("rangeProviderVersionIds")
-    void getVersionById(int classificationId) throws Exception {
+    void getVersionById(int classificationId) {
 
         String path = getVersionByIdPath(classificationId);
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, null, APPLICATION_XML);
@@ -27,15 +27,18 @@ public class KlassApiVersionByIdXmlTest extends AbstractKlassApiVersions {
             assertThat(compareError(randomId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateObjectXml(path, sourceResponse, targetResponse);
-            validateLinksXml(path,sourceResponse, targetResponse);
+            validateXmlList(path, sourceResponse, targetResponse, CLASSIFICATION_VERSION_PUBLISHED_LANGUAGES);
+            validateXmlList(path, sourceResponse, targetResponse, CLASSIFICATION_VERSION_LEVELS);
+            validateXmlList(path, sourceResponse, targetResponse, CLASSIFICATION_VERSION_CLASSIFICATION_ITEMS);
+            validateXmlList(path, sourceResponse, targetResponse, CLASSIFICATION_VERSION_CHANGELOGS);
+            validatePathListWithObjectsXml(sourceResponse, targetResponse, CLASSIFICATION_VERSION, pathNamesClassificationVariantsXml);
         }
     }
 
     @Test
-    void getVersionByIdLanguageEn() throws Exception {
+    void getVersionByIdLanguageEn()  {
 
-        String path = getVersionByIdPath(randomId);
+        String path = getVersionByIdPath(354);
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi( path, paramsLanguageEn,APPLICATION_XML);
         Response targetResponse = klassApiMigrationClient.getFromTargetApi( path, paramsLanguageEn,APPLICATION_XML);
 
@@ -47,13 +50,16 @@ public class KlassApiVersionByIdXmlTest extends AbstractKlassApiVersions {
             assertThat(compareError(randomId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateObjectXml(path, sourceResponse, targetResponse);
-            validateLinksXml(path,sourceResponse, targetResponse);
+            validateXmlList(path, sourceResponse, targetResponse, CLASSIFICATION_VERSION_PUBLISHED_LANGUAGES);
+            validateXmlList(path, sourceResponse, targetResponse, CLASSIFICATION_VERSION_LEVELS);
+            validateXmlList(path, sourceResponse, targetResponse, CLASSIFICATION_VERSION_CLASSIFICATION_ITEMS);
+            validateXmlList(path, sourceResponse, targetResponse, CLASSIFICATION_VERSION_CHANGELOGS);
+            validatePathListWithObjectsXml(sourceResponse, targetResponse, CLASSIFICATION_VERSION, pathNamesClassificationVariantsXml);
         }
     }
 
     @Test
-    void getVersionByIdLanguageNn() throws Exception {
+    void getVersionByIdLanguageNn() {
 
         String path = getVersionByIdPath(randomId);
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageNn,APPLICATION_XML);
@@ -67,13 +73,16 @@ public class KlassApiVersionByIdXmlTest extends AbstractKlassApiVersions {
             assertThat(compareError(randomId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateObjectXml(path, sourceResponse, targetResponse);
-            validateLinksXml(path,sourceResponse, targetResponse);
+            validateXmlList(path, sourceResponse, targetResponse, CLASSIFICATION_VERSION_PUBLISHED_LANGUAGES);
+            validateXmlList(path, sourceResponse, targetResponse, CLASSIFICATION_VERSION_LEVELS);
+            validateXmlList(path, sourceResponse, targetResponse, CLASSIFICATION_VERSION_CLASSIFICATION_ITEMS);
+            validateXmlList(path, sourceResponse, targetResponse, CLASSIFICATION_VERSION_CHANGELOGS);
+            validatePathListWithObjectsXml(sourceResponse, targetResponse, CLASSIFICATION_VERSION, pathNamesClassificationVariantsXml);
         }
     }
 
     @Test
-    void getVersionByIdIncludingFuture() throws Exception {
+    void getVersionByIdIncludingFuture() {
         String path = getVersionByIdPath(randomId);
 
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi( path, paramsIncludeFuture,APPLICATION_XML);
@@ -87,8 +96,11 @@ public class KlassApiVersionByIdXmlTest extends AbstractKlassApiVersions {
             assertThat(compareError(randomId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateObjectXml(path, sourceResponse, targetResponse);
-            validateLinksXml(path,sourceResponse, targetResponse);
+            validateXmlList(path, sourceResponse, targetResponse, CLASSIFICATION_VERSION_PUBLISHED_LANGUAGES);
+            validateXmlList(path, sourceResponse, targetResponse, CLASSIFICATION_VERSION_LEVELS);
+            validateXmlList(path, sourceResponse, targetResponse, CLASSIFICATION_VERSION_CLASSIFICATION_ITEMS);
+            validateXmlList(path, sourceResponse, targetResponse, CLASSIFICATION_VERSION_CHANGELOGS);
+            validatePathListWithObjectsXml(sourceResponse, targetResponse, CLASSIFICATION_VERSION, pathNamesClassificationVariantsXml);
         }
     }
 }

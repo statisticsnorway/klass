@@ -9,7 +9,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 public class KlassApiClassificationsXmlTest extends AbstractKlassApiClassifications {
 
     @Test
-    void getClassificationsXML() throws Exception {
+    void getClassificationsXML()  {
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(
                 CLASSIFICATIONS_PATH, null, APPLICATION_XML);
         Response targetResponse = klassApiMigrationClient.getFromTargetApi(
@@ -23,14 +23,13 @@ public class KlassApiClassificationsXmlTest extends AbstractKlassApiClassificati
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         }
         else {
-            validateObjectXml(CLASSIFICATIONS_PATH, sourceResponse, targetResponse);
-            validateLinksXml(CLASSIFICATIONS_PATH,sourceResponse, targetResponse);
+            validateXmlNotReady(sourceResponse, targetResponse);
 
         }
     }
 
     @Test
-    void getClassificationsIncludeCodeListsXml() throws Exception {
+    void getClassificationsIncludeCodeListsXml()  {
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(CLASSIFICATIONS_PATH, paramsIncludeCodeLists, APPLICATION_XML);
         Response targetResponse = klassApiMigrationClient.getFromTargetApi(CLASSIFICATIONS_PATH, paramsIncludeCodeLists, APPLICATION_XML);
 
@@ -41,14 +40,13 @@ public class KlassApiClassificationsXmlTest extends AbstractKlassApiClassificati
         if (sourceResponse.getStatusCode() != 200) {
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         } else {
-            validateObjectXml(CLASSIFICATIONS_PATH, sourceResponse, targetResponse);
-            validateLinksXml(CLASSIFICATIONS_PATH,sourceResponse, targetResponse);
+            validateXmlNotReady(sourceResponse, targetResponse);
 
         }
     }
 
     @Test
-    void getClassificationsChangedSinceXml() throws Exception {
+    void getClassificationsChangedSinceXml() {
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(CLASSIFICATIONS_PATH, paramsChangedSince, APPLICATION_XML);
         Response targetResponse = klassApiMigrationClient.getFromTargetApi(CLASSIFICATIONS_PATH, paramsChangedSince, APPLICATION_XML);
 
@@ -60,8 +58,7 @@ public class KlassApiClassificationsXmlTest extends AbstractKlassApiClassificati
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         } else {
 
-            validateObjectXml(CLASSIFICATIONS_PATH, sourceResponse, targetResponse);
-            validateLinksXml(CLASSIFICATIONS_PATH,sourceResponse, targetResponse);
+            validateXmlNotReady(sourceResponse, targetResponse);
 
         }
     }
