@@ -2,17 +2,6 @@ package no.ssb.klass.api.migration;
 
 import io.restassured.path.xml.XmlPath;
 import io.restassured.response.Response;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
-import org.xmlunit.builder.DiffBuilder;
-import org.xmlunit.diff.Diff;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.StringReader;
 import java.net.URI;
 import java.net.URL;
 import java.time.*;
