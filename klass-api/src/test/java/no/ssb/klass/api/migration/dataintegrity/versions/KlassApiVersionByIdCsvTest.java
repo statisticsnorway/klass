@@ -10,7 +10,7 @@ import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 import static no.ssb.klass.api.migration.MigrationTestUtils.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class KlassApiVersionByIdTest extends AbstractKlassApiVersions {
+public class KlassApiVersionByIdCsvTest extends AbstractKlassApiVersions {
 
     @Test
     void getVersionById() {
@@ -139,9 +139,5 @@ public class KlassApiVersionByIdTest extends AbstractKlassApiVersions {
             validatePathListWithObjects(sourceResponse, targetResponse, CORRESPONDENCE_TABLES, pathNamesCorrespondenceTableVersions,ID);
             validatePathListWithObjects(sourceResponse, targetResponse, CLASSIFICATION_ITEMS, pathNamesVersionsClassificationItems, CODE);
         }
-    }
-
-    String getVersionByIdPath(Integer id) {
-        return "/" + VERSIONS + "/" + id;
     }
 }

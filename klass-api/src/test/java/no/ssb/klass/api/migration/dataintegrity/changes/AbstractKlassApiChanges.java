@@ -28,10 +28,6 @@ public class AbstractKlassApiChanges extends AbstractKlassApiDataIntegrityTest {
     static Map<String, Object> paramsCsvSeparator = new HashMap<>();
     static Map<String, Object> paramsIncludeFuture = new HashMap<>();
 
-    static Stream<Integer> rangeProviderClassificationIds() {
-        return IntStream.rangeClosed(0, lastClassificationId).boxed();
-    }
-
     String getChangesPath(Integer id) {
         return CLASSIFICATIONS_PATH + "/"+ id + "/" + CHANGES;
     }

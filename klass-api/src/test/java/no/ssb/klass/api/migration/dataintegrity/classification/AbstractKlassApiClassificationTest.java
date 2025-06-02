@@ -14,9 +14,4 @@ public abstract class AbstractKlassApiClassificationTest extends AbstractKlassAp
     String getClassificationByIdPath(Integer id) {
         return CLASSIFICATIONS_PATH + "/" + id;
     }
-
-    @BeforeAll
-    static void beforeAllClassification() {
-        paramsIncludeFuture.put(INCLUDE_FUTURE, TRUE);
-    }
 }
