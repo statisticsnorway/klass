@@ -12,7 +12,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 public class KlassApiCorrespondenceTablesByIdXmlTest extends AbstractKlassApiCorrespondsTest {
 
     @Test
-    void getOneCorrespondenceTableById() throws Exception {
+    void getOneCorrespondenceTableById() {
         int correspondenceTableId = 1111;
 
         String path = getCorrespondenceTableByIdPath(correspondenceTableId);
@@ -28,14 +28,13 @@ public class KlassApiCorrespondenceTablesByIdXmlTest extends AbstractKlassApiCor
             assertThat(compareError(correspondenceTableId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateObjectXml(path, sourceResponse, targetResponse);
-            validateLinksXml(path, sourceResponse, targetResponse);
+            validateXmlNotReady(sourceResponse, targetResponse);
         }
     }
 
     @ParameterizedTest
     @MethodSource("correspondenceIdRangeProvider")
-    void getCorrespondenceTable(Integer correspondenceTableId) throws Exception {
+    void getCorrespondenceTable(Integer correspondenceTableId) {
 
         String path = getCorrespondenceTableByIdPath(correspondenceTableId);
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, null,APPLICATION_XML);
@@ -49,15 +48,14 @@ public class KlassApiCorrespondenceTablesByIdXmlTest extends AbstractKlassApiCor
             assertThat(compareError(correspondenceTableId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateObjectXml(path, sourceResponse, targetResponse);
-            validateLinksXml(path, sourceResponse, targetResponse);
+            validateXmlNotReady(sourceResponse, targetResponse);
         }
     }
 
 
     @ParameterizedTest
     @MethodSource("correspondenceIdRangeProvider")
-    void getCorrespondenceTableLanguageEn(int correspondenceTableId) throws Exception {
+    void getCorrespondenceTableLanguageEn(int correspondenceTableId) {
         String path = getCorrespondenceTableByIdPath(correspondenceTableId);
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageEn,APPLICATION_XML);
         Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageEn,APPLICATION_XML);
@@ -70,8 +68,7 @@ public class KlassApiCorrespondenceTablesByIdXmlTest extends AbstractKlassApiCor
             assertThat(compareError(correspondenceTableId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateObjectXml(path, sourceResponse, targetResponse);
-            validateLinksXml(path, sourceResponse, targetResponse);
+            validateXmlNotReady(sourceResponse, targetResponse);
         }
     }
 
@@ -79,7 +76,7 @@ public class KlassApiCorrespondenceTablesByIdXmlTest extends AbstractKlassApiCor
 
     @ParameterizedTest
     @MethodSource("correspondenceIdRangeProvider")
-    void getCorrespondenceTableLanguageNn(int correspondenceTableId) throws Exception {
+    void getCorrespondenceTableLanguageNn(int correspondenceTableId) {
 
         String path = getCorrespondenceTableByIdPath(correspondenceTableId);
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageNn,APPLICATION_XML);
@@ -93,8 +90,7 @@ public class KlassApiCorrespondenceTablesByIdXmlTest extends AbstractKlassApiCor
             assertThat(compareError(correspondenceTableId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateObjectXml(path, sourceResponse, targetResponse);
-            validateLinksXml(path, sourceResponse, targetResponse);
+            validateXmlNotReady(sourceResponse, targetResponse);
         }
 
     }
