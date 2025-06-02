@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 
@@ -35,6 +37,11 @@ public abstract class AbstractKlassApiDataIntegrityTest {
 
     protected static Map<String, Object> paramsLanguageNn = new HashMap<>();
     protected static Map<String, Object> paramsLanguageEn = new HashMap<>();
+    protected static Map<String, Object> paramsIncludeFuture = new HashMap<>();
+
+    protected static Stream<Integer> rangeProviderClassificationIds() {
+        return IntStream.rangeClosed(0, lastClassificationId).boxed();
+    }
 
     private static void setSourceResponseIdentifiers() {
         int totalPages = sourceResponseClassifications.path(PAGE_TOTAL_ELEMENTS);
@@ -65,6 +72,7 @@ public abstract class AbstractKlassApiDataIntegrityTest {
 
         paramsLanguageEn.put(LANGUAGE, EN);
         paramsLanguageNn.put(LANGUAGE, NN);
+        paramsIncludeFuture.put(INCLUDE_FUTURE, TRUE);
 
         boolean sourceUp = klassApiMigrationClient.isApiAvailable(sourceHost);
         boolean targetUp = klassApiMigrationClient.isApiAvailable(targetHost);
