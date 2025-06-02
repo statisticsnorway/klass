@@ -193,6 +193,17 @@ public final class MigrationTestConstants {
             LINKS_CHANGES_TEMPLATED
     );
 
+    public static List<String> pathNamesClassificationVariants = Arrays.asList(
+            NAME,
+            ID,
+            CONTACT_PERSON,
+            OWNING_SECTION,
+            LAST_MODIFIED,
+            PUBLISHED_NB,
+            PUBLISHED_EN,
+            PUBLISHED_NN,
+            LINKS_SELF_HREF
+    );
     public static List<String> pathNamesClassificationXml = Arrays.asList(
             CLASSIFICATION_NAME,
             CLASSIFICATION_ID,

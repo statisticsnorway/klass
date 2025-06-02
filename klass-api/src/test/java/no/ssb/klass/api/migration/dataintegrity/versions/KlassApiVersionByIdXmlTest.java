@@ -9,15 +9,15 @@ import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 import static no.ssb.klass.api.migration.MigrationTestUtils.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class KlassApiVersionByIdCsvTest extends AbstractKlassApiVersions {
+public class KlassApiVersionByIdXmlTest extends AbstractKlassApiVersions {
 
     @ParameterizedTest
     @MethodSource("rangeProviderVersionIds")
-    void getVersionById(int classificationId) {
+    void getVersionById(int classificationId) throws Exception {
 
         String path = getVersionByIdPath(classificationId);
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, null,TEXT_CSV);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, null,TEXT_CSV);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, null, APPLICATION_XML);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, null, APPLICATION_XML);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -27,17 +27,17 @@ public class KlassApiVersionByIdCsvTest extends AbstractKlassApiVersions {
             assertThat(compareError(randomId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateCSVDocument(path, sourceResponse, targetResponse);
-
+            validateObjectXml(path, sourceResponse, targetResponse);
+            validateLinksXml(path,sourceResponse, targetResponse);
         }
     }
 
     @Test
-    void getVersionByIdLanguageEn() {
+    void getVersionByIdLanguageEn() throws Exception {
 
         String path = getVersionByIdPath(randomId);
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi( path, paramsLanguageEn,TEXT_CSV);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi( path, paramsLanguageEn,TEXT_CSV);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi( path, paramsLanguageEn,APPLICATION_XML);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi( path, paramsLanguageEn,APPLICATION_XML);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -47,16 +47,17 @@ public class KlassApiVersionByIdCsvTest extends AbstractKlassApiVersions {
             assertThat(compareError(randomId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateCSVDocument(path, sourceResponse, targetResponse);
+            validateObjectXml(path, sourceResponse, targetResponse);
+            validateLinksXml(path,sourceResponse, targetResponse);
         }
     }
 
     @Test
-    void getVersionByIdLanguageNn() {
+    void getVersionByIdLanguageNn() throws Exception {
 
         String path = getVersionByIdPath(randomId);
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageNn,TEXT_CSV);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageNn,TEXT_CSV);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageNn,APPLICATION_XML);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageNn,APPLICATION_XML);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -66,17 +67,17 @@ public class KlassApiVersionByIdCsvTest extends AbstractKlassApiVersions {
             assertThat(compareError(randomId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateCSVDocument(path, sourceResponse, targetResponse);;
+            validateObjectXml(path, sourceResponse, targetResponse);
+            validateLinksXml(path,sourceResponse, targetResponse);
         }
     }
 
     @Test
-    void getVersionByIdIncludeFuture() {
-
+    void getVersionByIdIncludingFuture() throws Exception {
         String path = getVersionByIdPath(randomId);
 
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi( path, paramsIncludeFuture,TEXT_CSV);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi( path, paramsIncludeFuture,TEXT_CSV);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi( path, paramsIncludeFuture,APPLICATION_XML);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi( path, paramsIncludeFuture,APPLICATION_XML);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -86,7 +87,8 @@ public class KlassApiVersionByIdCsvTest extends AbstractKlassApiVersions {
             assertThat(compareError(randomId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateCSVDocument(path, sourceResponse, targetResponse);
+            validateObjectXml(path, sourceResponse, targetResponse);
+            validateLinksXml(path,sourceResponse, targetResponse);
         }
     }
 }
