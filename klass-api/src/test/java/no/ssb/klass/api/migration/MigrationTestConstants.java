@@ -104,6 +104,7 @@ public final class MigrationTestConstants {
     public static final String ENTITIES_CONTENTS_CONTENT= "entities.contents.content";
     public static final String CODE_CHANGE_LIST_CODE_CHANGE_ITEM= "codeChangeList.codeChangeItem";
     public static final String CODE_LIST_CODE_ITEM= "codeList.codeItem";
+    public static final String CORRESPONDENCE_ITEM_LIST_CORRESPONDENCE_ITEM= "correspondenceItemList.correspondenceItem";
 
     // Link fields
     public static final String HREF= "href";

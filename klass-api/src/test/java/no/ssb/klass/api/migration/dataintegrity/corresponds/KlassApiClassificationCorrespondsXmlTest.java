@@ -4,6 +4,7 @@ import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
 
 import static no.ssb.klass.api.migration.MigrationTestConstants.APPLICATION_XML;
+import static no.ssb.klass.api.migration.MigrationTestConstants.CORRESPONDENCE_ITEM_LIST_CORRESPONDENCE_ITEM;
 import static no.ssb.klass.api.migration.MigrationTestUtils.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -25,7 +26,7 @@ public class KlassApiClassificationCorrespondsXmlTest extends AbstractKlassApiCo
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXmlNotReady(sourceResponse, targetResponse, path);
+            validateXmlList(path, sourceResponse, targetResponse, CORRESPONDENCE_ITEM_LIST_CORRESPONDENCE_ITEM);
         }
     }
 
@@ -45,7 +46,7 @@ public class KlassApiClassificationCorrespondsXmlTest extends AbstractKlassApiCo
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXmlNotReady(sourceResponse, targetResponse, path);
+            validateXmlList(path, sourceResponse, targetResponse, CORRESPONDENCE_ITEM_LIST_CORRESPONDENCE_ITEM);
         }
     }
 
@@ -65,7 +66,7 @@ public class KlassApiClassificationCorrespondsXmlTest extends AbstractKlassApiCo
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXmlNotReady(sourceResponse, targetResponse, path);
+            validateXmlList(path, sourceResponse, targetResponse, CORRESPONDENCE_ITEM_LIST_CORRESPONDENCE_ITEM);
         }
     }
 
@@ -85,7 +86,7 @@ public class KlassApiClassificationCorrespondsXmlTest extends AbstractKlassApiCo
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXmlNotReady(sourceResponse, targetResponse, path);
+            validateXmlList(path, sourceResponse, targetResponse, CORRESPONDENCE_ITEM_LIST_CORRESPONDENCE_ITEM);
         }
     }
 
@@ -105,7 +106,7 @@ public class KlassApiClassificationCorrespondsXmlTest extends AbstractKlassApiCo
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXmlNotReady(sourceResponse, targetResponse, path);
+            validateXmlList(path, sourceResponse, targetResponse, CORRESPONDENCE_ITEM_LIST_CORRESPONDENCE_ITEM);
         }
     }
 }
