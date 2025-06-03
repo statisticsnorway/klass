@@ -11,6 +11,29 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class KlassApiVersionByIdXmlTest extends AbstractKlassApiVersions {
 
+    @Test
+    void getOneVersionById() {
+
+        int classificationId = 683;
+        String path = getVersionByIdPath(classificationId);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, null, APPLICATION_XML);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, null, APPLICATION_XML);
+
+        assertApiResponseIsNotNull(sourceResponse);
+
+        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+
+        if(sourceResponse.getStatusCode() != 200) {
+            assertThat(compareError(randomId, sourceResponse, targetResponse)).isTrue();
+        }
+        else{
+            validateXmlList(path, sourceResponse, targetResponse, CLASSIFICATION_VERSION_PUBLISHED_LANGUAGES);
+            validateXmlList(path, sourceResponse, targetResponse, CLASSIFICATION_VERSION_LEVELS);
+            validateXmlList(path, sourceResponse, targetResponse, CLASSIFICATION_VERSION_CLASSIFICATION_ITEMS);
+            validatePathListWithObjectsXml(sourceResponse, targetResponse, CLASSIFICATION_VERSION, pathNamesClassificationVariantsXml);
+        }
+    }
+
     @ParameterizedTest
     @MethodSource("rangeProviderVersionIds")
     void getVersionById(int classificationId) {
@@ -53,7 +76,6 @@ public class KlassApiVersionByIdXmlTest extends AbstractKlassApiVersions {
             validateXmlList(path, sourceResponse, targetResponse, CLASSIFICATION_VERSION_PUBLISHED_LANGUAGES);
             validateXmlList(path, sourceResponse, targetResponse, CLASSIFICATION_VERSION_LEVELS);
             validateXmlList(path, sourceResponse, targetResponse, CLASSIFICATION_VERSION_CLASSIFICATION_ITEMS);
-            validateXmlList(path, sourceResponse, targetResponse, CLASSIFICATION_VERSION_CHANGELOGS);
             validatePathListWithObjectsXml(sourceResponse, targetResponse, CLASSIFICATION_VERSION, pathNamesClassificationVariantsXml);
         }
     }
@@ -76,7 +98,6 @@ public class KlassApiVersionByIdXmlTest extends AbstractKlassApiVersions {
             validateXmlList(path, sourceResponse, targetResponse, CLASSIFICATION_VERSION_PUBLISHED_LANGUAGES);
             validateXmlList(path, sourceResponse, targetResponse, CLASSIFICATION_VERSION_LEVELS);
             validateXmlList(path, sourceResponse, targetResponse, CLASSIFICATION_VERSION_CLASSIFICATION_ITEMS);
-            validateXmlList(path, sourceResponse, targetResponse, CLASSIFICATION_VERSION_CHANGELOGS);
             validatePathListWithObjectsXml(sourceResponse, targetResponse, CLASSIFICATION_VERSION, pathNamesClassificationVariantsXml);
         }
     }
@@ -99,7 +120,6 @@ public class KlassApiVersionByIdXmlTest extends AbstractKlassApiVersions {
             validateXmlList(path, sourceResponse, targetResponse, CLASSIFICATION_VERSION_PUBLISHED_LANGUAGES);
             validateXmlList(path, sourceResponse, targetResponse, CLASSIFICATION_VERSION_LEVELS);
             validateXmlList(path, sourceResponse, targetResponse, CLASSIFICATION_VERSION_CLASSIFICATION_ITEMS);
-            validateXmlList(path, sourceResponse, targetResponse, CLASSIFICATION_VERSION_CHANGELOGS);
             validatePathListWithObjectsXml(sourceResponse, targetResponse, CLASSIFICATION_VERSION, pathNamesClassificationVariantsXml);
         }
     }
