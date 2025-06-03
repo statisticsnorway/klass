@@ -31,7 +31,7 @@ public class KlassApiClassificationCodesXmlTest extends AbstractKlassApiCodesTes
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXmlNotReady(sourceResponse, targetResponse);
+            validateXmlNotReady(sourceResponse, targetResponse, path);
         }
     }
 
@@ -56,7 +56,7 @@ public class KlassApiClassificationCodesXmlTest extends AbstractKlassApiCodesTes
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXmlNotReady(sourceResponse, targetResponse);
+            validateXmlNotReady(sourceResponse, targetResponse, path);
         }
 
         System.out.println("End test for ID " + classificationId + " at " + Instant.now());
@@ -82,7 +82,7 @@ public class KlassApiClassificationCodesXmlTest extends AbstractKlassApiCodesTes
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXmlNotReady(sourceResponse, targetResponse);
+            validateXmlNotReady(sourceResponse, targetResponse, path);
         }
     }
 
@@ -103,7 +103,7 @@ public class KlassApiClassificationCodesXmlTest extends AbstractKlassApiCodesTes
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXmlNotReady(sourceResponse, targetResponse);
+            validateXmlNotReady(sourceResponse, targetResponse, path);
         }
     }
 
@@ -123,7 +123,7 @@ public class KlassApiClassificationCodesXmlTest extends AbstractKlassApiCodesTes
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXmlNotReady(sourceResponse, targetResponse);
+            validateXmlNotReady(sourceResponse, targetResponse, path);
         }
     }
 
@@ -144,7 +144,7 @@ public class KlassApiClassificationCodesXmlTest extends AbstractKlassApiCodesTes
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXmlNotReady(sourceResponse, targetResponse);
+            validateXmlNotReady(sourceResponse, targetResponse, path);
         }
     }
 
@@ -165,7 +165,7 @@ public class KlassApiClassificationCodesXmlTest extends AbstractKlassApiCodesTes
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXmlNotReady(sourceResponse, targetResponse);
+            validateXmlNotReady(sourceResponse, targetResponse, path);
         }
     }
 
@@ -185,7 +185,7 @@ public class KlassApiClassificationCodesXmlTest extends AbstractKlassApiCodesTes
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXmlNotReady(sourceResponse, targetResponse);
+            validateXmlNotReady(sourceResponse, targetResponse, path);
         }
     }
 
@@ -206,7 +206,7 @@ public class KlassApiClassificationCodesXmlTest extends AbstractKlassApiCodesTes
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXmlNotReady(sourceResponse, targetResponse);
+            validateXmlNotReady(sourceResponse, targetResponse, path);
         }
     }
 

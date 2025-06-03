@@ -28,7 +28,7 @@ public class KlassApiCorrespondenceTablesByIdXmlTest extends AbstractKlassApiCor
             assertThat(compareError(correspondenceTableId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXmlNotReady(sourceResponse, targetResponse);
+            validateXmlNotReady(sourceResponse, targetResponse, path);
         }
     }
 
@@ -48,7 +48,7 @@ public class KlassApiCorrespondenceTablesByIdXmlTest extends AbstractKlassApiCor
             assertThat(compareError(correspondenceTableId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXmlNotReady(sourceResponse, targetResponse);
+            validateXmlNotReady(sourceResponse, targetResponse, path);
         }
     }
 
@@ -68,7 +68,7 @@ public class KlassApiCorrespondenceTablesByIdXmlTest extends AbstractKlassApiCor
             assertThat(compareError(correspondenceTableId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXmlNotReady(sourceResponse, targetResponse);
+            validateXmlNotReady(sourceResponse, targetResponse, path);
         }
     }
 
@@ -90,7 +90,7 @@ public class KlassApiCorrespondenceTablesByIdXmlTest extends AbstractKlassApiCor
             assertThat(compareError(correspondenceTableId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXmlNotReady(sourceResponse, targetResponse);
+            validateXmlNotReady(sourceResponse, targetResponse, path);
         }
 
     }

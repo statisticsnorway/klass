@@ -23,7 +23,7 @@ public class KlassApiClassificationFamiliesXmlTest extends AbstractKlassApiFamil
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXmlNotReady(sourceResponse, targetResponse);
+            validateXmlNotReady(sourceResponse, targetResponse, path);
         }
     }
 
@@ -43,7 +43,7 @@ public class KlassApiClassificationFamiliesXmlTest extends AbstractKlassApiFamil
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXmlNotReady(sourceResponse, targetResponse);
+            validateXmlNotReady(sourceResponse, targetResponse, path);
         }
     }
 }

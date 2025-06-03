@@ -23,7 +23,7 @@ public class KlassApiClassificationsXmlTest extends AbstractKlassApiClassificati
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         }
         else {
-            validateXmlNotReady(sourceResponse, targetResponse);
+            validateXmlNotReady(sourceResponse, targetResponse, CLASSIFICATIONS_PATH);
 
         }
     }
@@ -40,7 +40,7 @@ public class KlassApiClassificationsXmlTest extends AbstractKlassApiClassificati
         if (sourceResponse.getStatusCode() != 200) {
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         } else {
-            validateXmlNotReady(sourceResponse, targetResponse);
+            validateXmlNotReady(sourceResponse, targetResponse, CLASSIFICATIONS_PATH);
 
         }
     }
@@ -58,7 +58,7 @@ public class KlassApiClassificationsXmlTest extends AbstractKlassApiClassificati
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         } else {
 
-            validateXmlNotReady(sourceResponse, targetResponse);
+            validateXmlNotReady(sourceResponse, targetResponse, CLASSIFICATIONS_PATH);
 
         }
     }

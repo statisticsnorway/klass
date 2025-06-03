@@ -25,7 +25,7 @@ public class KlassApiClassificationCorrespondsXmlTest extends AbstractKlassApiCo
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXmlNotReady(sourceResponse, targetResponse);
+            validateXmlNotReady(sourceResponse, targetResponse, path);
         }
     }
 
@@ -45,7 +45,7 @@ public class KlassApiClassificationCorrespondsXmlTest extends AbstractKlassApiCo
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXmlNotReady(sourceResponse, targetResponse);
+            validateXmlNotReady(sourceResponse, targetResponse, path);
         }
     }
 
@@ -65,7 +65,7 @@ public class KlassApiClassificationCorrespondsXmlTest extends AbstractKlassApiCo
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXmlNotReady(sourceResponse, targetResponse);
+            validateXmlNotReady(sourceResponse, targetResponse, path);
         }
     }
 
@@ -85,7 +85,7 @@ public class KlassApiClassificationCorrespondsXmlTest extends AbstractKlassApiCo
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXmlNotReady(sourceResponse, targetResponse);
+            validateXmlNotReady(sourceResponse, targetResponse, path);
         }
     }
 
@@ -105,7 +105,7 @@ public class KlassApiClassificationCorrespondsXmlTest extends AbstractKlassApiCo
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXmlNotReady(sourceResponse, targetResponse);
+            validateXmlNotReady(sourceResponse, targetResponse, path);
         }
     }
 }

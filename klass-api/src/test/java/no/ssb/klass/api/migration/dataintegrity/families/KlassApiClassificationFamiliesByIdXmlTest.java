@@ -26,7 +26,7 @@ public class KlassApiClassificationFamiliesByIdXmlTest extends AbstractKlassApiF
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXmlNotReady(sourceResponse, targetResponse);
+            validateXmlNotReady(sourceResponse, targetResponse, path);
         }
     }
 
@@ -45,7 +45,7 @@ public class KlassApiClassificationFamiliesByIdXmlTest extends AbstractKlassApiF
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXmlNotReady(sourceResponse, targetResponse);
+            validateXmlNotReady(sourceResponse, targetResponse, path);
         }
     }
 
@@ -64,7 +64,7 @@ public class KlassApiClassificationFamiliesByIdXmlTest extends AbstractKlassApiF
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXmlNotReady(sourceResponse, targetResponse);
+            validateXmlNotReady(sourceResponse, targetResponse, path);
         }
     }
 
@@ -83,7 +83,7 @@ public class KlassApiClassificationFamiliesByIdXmlTest extends AbstractKlassApiF
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXmlNotReady(sourceResponse, targetResponse);
+            validateXmlNotReady(sourceResponse, targetResponse, path);
         }
     }
 
@@ -102,7 +102,7 @@ public class KlassApiClassificationFamiliesByIdXmlTest extends AbstractKlassApiF
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXmlNotReady(sourceResponse, targetResponse);
+            validateXmlNotReady(sourceResponse, targetResponse, path);
         }
     }
 
@@ -123,7 +123,7 @@ public class KlassApiClassificationFamiliesByIdXmlTest extends AbstractKlassApiF
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXmlNotReady(sourceResponse, targetResponse);
+            validateXmlNotReady(sourceResponse, targetResponse, path);
         }
     }
 }
