@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 import static no.ssb.klass.api.migration.MigrationTestConstants.VERSIONS;
 import static no.ssb.klass.api.migration.MigrationTestUtils.generateRandomId;
 
-public class AbstractKlassApiVersions extends AbstractKlassApiDataIntegrityTest {
+public abstract class AbstractKlassApiVersions extends AbstractKlassApiDataIntegrityTest {
     static Integer randomId;
     String getVersionByIdPath(Integer id) {
         return "/" + VERSIONS + "/" + id;

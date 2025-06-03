@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 import static no.ssb.klass.api.migration.MigrationTestUtils.generateRandomId;
 
-public class AbstractKlassApiFamiliesTest extends AbstractKlassApiDataIntegrityTest {
+public abstract class AbstractKlassApiFamiliesTest extends AbstractKlassApiDataIntegrityTest {
 
     static Stream<Integer> rangeProviderClassificationFamilyIds() {
         return IntStream.rangeClosed(0, 30).boxed();
