@@ -4,7 +4,7 @@ public class MigrationTestConfig {
 
     public static String getSourceHost() {
         return System.getProperty("source.service.host",
-                System.getenv().getOrDefault("SOURCE_SERVICE_HOST", "http://localhost:8081"));
+                System.getenv().getOrDefault("SOURCE_SERVICE_HOST", "http://localhost:8082"));
     }
 
     public static String getTargetHost() {
