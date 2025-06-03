@@ -32,7 +32,7 @@ public class KlassApiClassificationChangesXmlTest extends AbstractKlassApiChange
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXmlNotReady(sourceResponse, targetResponse);
+            validateXmlList(path,sourceResponse, targetResponse, CODE_CHANGE_LIST_CODE_CHANGE_ITEM);
         }
     }
 
@@ -56,7 +56,7 @@ public class KlassApiClassificationChangesXmlTest extends AbstractKlassApiChange
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXmlNotReady(sourceResponse, targetResponse);
+            validateXmlList(path,sourceResponse, targetResponse, CODE_CHANGE_LIST_CODE_CHANGE_ITEM);
         }
 
     }
@@ -80,14 +80,14 @@ public class KlassApiClassificationChangesXmlTest extends AbstractKlassApiChange
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXmlNotReady(sourceResponse, targetResponse);
+            validateXmlList(path,sourceResponse, targetResponse, CODE_CHANGE_LIST_CODE_CHANGE_ITEM);
         }
     }
 
 
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationIds")
-    void getClassificationChangesEnglish(int classificationId) {
+    void getClassificationChangesLanguageEn(int classificationId) {
 
         // Temp start at id 7 because of heavy requests to some ids
         assumeTrue(classificationId > 6);
@@ -104,13 +104,13 @@ public class KlassApiClassificationChangesXmlTest extends AbstractKlassApiChange
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXmlNotReady(sourceResponse, targetResponse);
+            validateXmlList(path,sourceResponse, targetResponse, CODE_CHANGE_LIST_CODE_CHANGE_ITEM);
         }
     }
 
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationIds")
-    void getClassificationChangesNewNorwegian(int classificationId) {
+    void getClassificationChangesLanguageNn(int classificationId) {
 
         // Temp start at id 7 because of heavy requests to some ids
         assumeTrue(classificationId > 6);
@@ -127,7 +127,7 @@ public class KlassApiClassificationChangesXmlTest extends AbstractKlassApiChange
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-           validateXmlNotReady(sourceResponse, targetResponse);
+            validateXmlList(path,sourceResponse, targetResponse, CODE_CHANGE_LIST_CODE_CHANGE_ITEM);
         }
     }
 
@@ -147,7 +147,7 @@ public class KlassApiClassificationChangesXmlTest extends AbstractKlassApiChange
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-           validateXmlNotReady(sourceResponse, targetResponse);
+            validateXmlList(path,sourceResponse, targetResponse, CODE_CHANGE_LIST_CODE_CHANGE_ITEM);
         }
     }
 
