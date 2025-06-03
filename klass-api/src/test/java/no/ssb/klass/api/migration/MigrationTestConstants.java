@@ -102,9 +102,7 @@ public final class MigrationTestConstants {
     public static final String CLASSIFICATION_VERSION_LEVELS= "classificationVersion.levels.level";
     public static final String CLASSIFICATION_VERSION_CLASSIFICATION_ITEMS= "classificationVersion.classificationItems.classificationItem";
 
-    public static final String CHANGELOGS_CHANGELOG= "changelogs.changelog";
     public static final String CLASSIFICATION_VERSION_CHANGELOGS= "classificationVersion.changelogs";
-    public static final String CLASSIFICATION_VERSION_CHANGELOGS_CHANGELOG= "classificationVersion.changelogs.changelog";
     public static final String ENTITIES_CONTENTS_CONTENT= "entities.contents.content";
     public static final String CODE_CHANGE_LIST_CODE_CHANGE_ITEM= "codeChangeList.codeChangeItem";
 
@@ -217,31 +215,6 @@ public final class MigrationTestConstants {
             CONTACT_PERSON_EMAIL,
             CONTACT_PERSON_PHONE,
             OWNING_SECTION,
-            PUBLICATIONS,
-            DERIVED_FROM,
-            LEGAL_BASE,
-            LINK_REL,
-            LINK_HREF
-    );
-
-    public static List<String> pathNamesChangelogsXml = Arrays.asList(
-            CHANGE_OCCURED,
-            DESCRIPTION
-    );
-
-    public static List<String> pathNamesClassificationVariantsCorrespondenceTableXml = Arrays.asList(
-            NAME,
-            ID,
-            CONTACT_PERSON_NAME,
-            CONTACT_PERSON_EMAIL,
-            CONTACT_PERSON_PHONE,
-            OWNING_SECTION,
-            SOURCE,
-            SOURCE_ID,
-            TARGET,
-            TARGET_ID,
-            CHANGE_TABLE,
-            LAST_MODIFIED,
             PUBLICATIONS,
             DERIVED_FROM,
             LEGAL_BASE,
