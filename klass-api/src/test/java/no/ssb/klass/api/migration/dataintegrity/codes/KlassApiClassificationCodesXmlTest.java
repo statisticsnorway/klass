@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 public class KlassApiClassificationCodesXmlTest extends AbstractKlassApiCodesTest {
 
     @Test
-    void getOneClassificationWithCodesXml() {
+    void getOneClassificationWithCodes() {
         int classificationId = 6;
 
         String path = getCodesPath(classificationId);
@@ -31,14 +31,14 @@ public class KlassApiClassificationCodesXmlTest extends AbstractKlassApiCodesTes
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXmlNotReady(sourceResponse, targetResponse, path);
+            validateXmlList(path, sourceResponse, targetResponse, CODE_LIST_CODE_ITEM);
         }
     }
 
     // Optional params
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationIds")
-    void getClassificationWithCodesXml(Integer classificationId) {
+    void getClassificationWithCodes(Integer classificationId) {
         // For now skipping because of some items size
         assumeTrue(classificationId > 6);
 
@@ -56,7 +56,7 @@ public class KlassApiClassificationCodesXmlTest extends AbstractKlassApiCodesTes
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXmlNotReady(sourceResponse, targetResponse, path);
+            validateXmlList(path, sourceResponse, targetResponse, CODE_LIST_CODE_ITEM);
         }
 
         System.out.println("End test for ID " + classificationId + " at " + Instant.now());
@@ -64,7 +64,7 @@ public class KlassApiClassificationCodesXmlTest extends AbstractKlassApiCodesTes
 
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationIds")
-    void getClassificationWithCodesInRangeXml(Integer classificationId) {
+    void getClassificationWithCodesInRange(Integer classificationId) {
 
         // For now skipping because of some items size
         assumeTrue(classificationId > 6);
@@ -82,12 +82,12 @@ public class KlassApiClassificationCodesXmlTest extends AbstractKlassApiCodesTes
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXmlNotReady(sourceResponse, targetResponse, path);
+            validateXmlList(path, sourceResponse, targetResponse, CODE_LIST_CODE_ITEM);
         }
     }
 
     @Test
-    void getClassificationWithCodesLanguageEnXml() {
+    void getClassificationWithCodesLanguageEn() {
 
         int classificationId = 6;
 
@@ -103,12 +103,12 @@ public class KlassApiClassificationCodesXmlTest extends AbstractKlassApiCodesTes
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXmlNotReady(sourceResponse, targetResponse, path);
+            validateXmlList(path, sourceResponse, targetResponse, CODE_LIST_CODE_ITEM);
         }
     }
 
     @Test
-    void getClassificationWithCodesLanguageNnXml() {
+    void getClassificationWithCodesLanguageNn() {
         int classificationId = 6;
 
         String path = getCodesPath(classificationId);
@@ -123,12 +123,12 @@ public class KlassApiClassificationCodesXmlTest extends AbstractKlassApiCodesTes
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXmlNotReady(sourceResponse, targetResponse, path);
+            validateXmlList(path, sourceResponse, targetResponse, CODE_LIST_CODE_ITEM);
         }
     }
 
     @Test
-    void getClassificationWithCodesIncludeFutureXml() {
+    void getClassificationWithCodesIncludeFuture() {
 
         int classificationId = 6;
 
@@ -144,12 +144,12 @@ public class KlassApiClassificationCodesXmlTest extends AbstractKlassApiCodesTes
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXmlNotReady(sourceResponse, targetResponse, path);
+            validateXmlList(path, sourceResponse, targetResponse, CODE_LIST_CODE_ITEM);
         }
     }
 
     @Test
-    void getClassificationWithCodesSelectCodeXml() {
+    void getClassificationWithCodesSelectCode() {
 
         int classificationId = 131;
 
@@ -165,12 +165,12 @@ public class KlassApiClassificationCodesXmlTest extends AbstractKlassApiCodesTes
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXmlNotReady(sourceResponse, targetResponse, path);
+            validateXmlList(path, sourceResponse, targetResponse, CODE_LIST_CODE_ITEM);
         }
     }
 
     @Test
-    void getClassificationWithCodesSelectLevelXml() {
+    void getClassificationWithCodesSelectLevel() {
         int classificationId = 6;
 
         String path = getCodesPath(classificationId);
@@ -185,13 +185,13 @@ public class KlassApiClassificationCodesXmlTest extends AbstractKlassApiCodesTes
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXmlNotReady(sourceResponse, targetResponse, path);
+            validateXmlList(path, sourceResponse, targetResponse, CODE_LIST_CODE_ITEM);
         }
     }
 
     // Nb the presentation name pattern has no values
     @Test
-    void getClassificationWithCodesPresentationPatternXml() {
+    void getClassificationWithCodesPresentationPattern() {
         int classificationId = 131;
 
         String path = getCodesPath(classificationId);
@@ -206,12 +206,12 @@ public class KlassApiClassificationCodesXmlTest extends AbstractKlassApiCodesTes
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXmlNotReady(sourceResponse, targetResponse, path);
+            validateXmlList(path, sourceResponse, targetResponse, CODE_LIST_CODE_ITEM);
         }
     }
 
     @Test
-    void getClassificationWithCodesInvalidOrderXml() {
+    void getClassificationWithCodesInvalidOrder() {
         int classificationId = 11;
 
         String firstDate = "2025-01-01";
