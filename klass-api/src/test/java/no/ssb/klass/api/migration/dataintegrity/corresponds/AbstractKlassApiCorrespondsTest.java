@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 
-public class AbstractKlassApiCorrespondsTest extends AbstractKlassApiDataIntegrityTest {
+public abstract class AbstractKlassApiCorrespondsTest extends AbstractKlassApiDataIntegrityTest {
 
     String getCorrespondsAtPath(Integer id) {
         return CLASSIFICATIONS_PATH + "/"+ id + "/" + CORRESPONDS_AT;

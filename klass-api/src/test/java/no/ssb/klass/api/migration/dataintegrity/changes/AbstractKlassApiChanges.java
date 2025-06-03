@@ -11,7 +11,7 @@ import static no.ssb.klass.api.migration.MigrationTestConstants.CSV_SEPARATOR;
 import static no.ssb.klass.api.migration.MigrationTestUtils.formatter;
 import static no.ssb.klass.api.migration.MigrationTestUtils.generateRandomDate;
 
-public class AbstractKlassApiChanges extends AbstractKlassApiDataIntegrityTest {
+public abstract class AbstractKlassApiChanges extends AbstractKlassApiDataIntegrityTest {
     static LocalDate date;
 
     static String dateFrom;
