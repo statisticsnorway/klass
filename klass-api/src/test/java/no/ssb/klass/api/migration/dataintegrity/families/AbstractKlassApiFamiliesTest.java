@@ -1,0 +1,38 @@
+package no.ssb.klass.api.migration.dataintegrity.families;
+
+import no.ssb.klass.api.migration.dataintegrity.AbstractKlassApiDataIntegrityTest;
+import org.junit.jupiter.api.BeforeAll;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
+import static no.ssb.klass.api.migration.MigrationTestConstants.*;
+import static no.ssb.klass.api.migration.MigrationTestUtils.generateRandomId;
+
+public class AbstractKlassApiFamiliesTest extends AbstractKlassApiDataIntegrityTest {
+
+    static Stream<Integer> rangeProviderClassificationFamilyIds() {
+        return IntStream.rangeClosed(0, 30).boxed();
+    }
+
+    String getClassificationFamilyByIdPath(Integer id) {
+        return "/" + CLASSIFICATION_FAMILIES + "/" + id;
+    }
+    String getClassificationFamiliesPath() {
+        return "/" + CLASSIFICATION_FAMILIES;
+    }
+
+    static Map<String, Object> paramsIncludeCodeLists= new HashMap<>();
+    static Map<String, Object> paramsSsbSection = new HashMap<>();
+
+    static int randomSsbSectionId;
+
+    @BeforeAll
+    static void beforeAllClassificationFamiliesById() {
+        paramsIncludeCodeLists.put(INCLUDE_CODE_LISTS, TRUE);
+
+        randomSsbSectionId = generateRandomId(ssbSectionNames.size());
+    }
+}

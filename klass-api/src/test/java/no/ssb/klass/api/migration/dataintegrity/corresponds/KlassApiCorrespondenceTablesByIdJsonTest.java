@@ -1,18 +1,16 @@
-package no.ssb.klass.api.migration.dataintegrity;
+package no.ssb.klass.api.migration.dataintegrity.corresponds;
 
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 import static no.ssb.klass.api.migration.MigrationTestUtils.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class KlassApiCorrespondenceTablesByIdTest extends AbstractKlassApiDataIntegrityTest {
+public class KlassApiCorrespondenceTablesByIdJsonTest extends AbstractKlassApiCorrespondsTest {
 
     @Test
     void getOneCorrespondenceTableById() {
@@ -39,7 +37,7 @@ public class KlassApiCorrespondenceTablesByIdTest extends AbstractKlassApiDataIn
     }
 
     @ParameterizedTest
-    @MethodSource("rangeProvider")
+    @MethodSource("correspondenceIdRangeProvider")
     void getCorrespondenceTable(Integer correspondenceTableId) {
 
         String path = getCorrespondenceTableByIdPath(correspondenceTableId);
@@ -61,11 +59,52 @@ public class KlassApiCorrespondenceTablesByIdTest extends AbstractKlassApiDataIn
         }
     }
 
-    static Stream<Integer> rangeProvider() {
-        return IntStream.rangeClosed(0, 1500).boxed();
+
+    @ParameterizedTest
+    @MethodSource("correspondenceIdRangeProvider")
+    void getCorrespondenceTableLanguageEn(int correspondenceTableId) {
+        String path = getCorrespondenceTableByIdPath(correspondenceTableId);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageEn,null);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageEn,null);
+
+        assertApiResponseIsNotNull(sourceResponse);
+
+        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+
+        if(sourceResponse.getStatusCode() != 200) {
+            assertThat(compareError(correspondenceTableId, sourceResponse, targetResponse)).isTrue();
+        }
+        else{
+            validateItems(sourceResponse, targetResponse, pathNamesCorrespondenceTable);
+            validateList(sourceResponse, targetResponse, CORRESPONDENCE_MAPS);
+            validateList(sourceResponse, targetResponse, CHANGELOGS);
+            validateList(sourceResponse, targetResponse, PUBLISHED);
+        }
     }
 
-    String getCorrespondenceTableByIdPath(Integer id) {
-        return "/" + CORRESPONDENCE_TABLES + "/"  + id;
+
+
+    @ParameterizedTest
+    @MethodSource("correspondenceIdRangeProvider")
+    void getCorrespondenceTableLanguageNn(int correspondenceTableId) {
+
+        String path = getCorrespondenceTableByIdPath(correspondenceTableId);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageNn,null);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageNn,null);
+
+        assertApiResponseIsNotNull(sourceResponse);
+
+        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+
+        if(sourceResponse.getStatusCode() != 200) {
+            assertThat(compareError(correspondenceTableId, sourceResponse, targetResponse)).isTrue();
+        }
+        else{
+            validateItems(sourceResponse, targetResponse, pathNamesCorrespondenceTable);
+            validateList(sourceResponse, targetResponse, CORRESPONDENCE_MAPS);
+            validateList(sourceResponse, targetResponse, CHANGELOGS);
+            validateList(sourceResponse, targetResponse, PUBLISHED);
+        }
+
     }
 }

@@ -1,9 +1,11 @@
 package no.ssb.klass.api.migration;
 
+import io.restassured.path.xml.XmlPath;
 import io.restassured.response.Response;
-
+import java.net.URI;
 import java.net.URL;
 import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.function.Function;
@@ -13,6 +15,8 @@ import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class MigrationTestUtils {
+
+    public static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     /**
      * Compare url from two sources ignoring host.
@@ -146,6 +150,7 @@ public class MigrationTestUtils {
                     .withFailMessage(FAIL_MESSAGE, pathName, sourceHref, targetHref)
                     .isTrue();
         } else {
+            System.out.println(sourceField + "-> " + targetField);
             assertThat(sourceField).withFailMessage(FAIL_MESSAGE, pathName, sourceField, targetField).isEqualTo(targetField);
         }
 
@@ -203,7 +208,6 @@ public class MigrationTestUtils {
             System.out.println("Checking pathname: " + pathName);
             Object sourceField = sourceResponse.path(pathName);
             Object targetField = targetResponse.path(pathName);
-
 
             if (sourceField == null) {
                 assertThat(targetField)
@@ -274,11 +278,82 @@ public class MigrationTestUtils {
                             .withFailMessage(FAIL_MESSAGE, pathName, sourceField, targetField)
                             .isTrue();
                 } else {
-                    assertThat(versionSource.get(pathName))
+                    assertThat(sourceField)
                             .withFailMessage(FAIL_MESSAGE, pathName, sourceField, targetField)
-                            .isEqualTo(versionTarget.get(pathName));
+                            .isEqualTo(targetField);
                 }
             }
         }
+    }
+
+    public static void validateXmlNotReady(Response sourceResponse, Response targetResponse, String pathName) {
+        String sourceXml = sourceResponse.getBody().asString();
+        String targetXml = targetResponse.getBody().asString();
+        XmlPath xmlPathSource = new XmlPath(sourceXml);
+        XmlPath xmlPathTarget = new XmlPath(targetXml);
+        System.out.println("Source: " + xmlPathSource.get(pathName));
+        System.out.println("Target: " + xmlPathTarget.get(pathName));
+    }
+
+    public static void validateXmlList(String path, Response sourceResponse, Response targetResponse, String pathName) {
+
+        String sourceXml = sourceResponse.getBody().asString();
+        String targetXml = targetResponse.getBody().asString();
+        XmlPath xmlPathSource = new XmlPath(sourceXml);
+        XmlPath xmlPathTarget = new XmlPath(targetXml);
+        List<String> sourceList = xmlPathSource.getList(pathName);
+        List<String> targetList = xmlPathTarget.getList(pathName);
+        System.out.println(sourceList.size() + " -> " + targetList.size());
+        for(int i = 0; i < sourceList.size(); i++) {
+            System.out.println(sourceList.get(i) + " -> " + targetList.get(i));
+            assertThat(sourceList.get(i)).withFailMessage(
+                    FAIL_MESSAGE,
+                    path,
+                    sourceList.get(i),
+                    targetList.get(i)).isEqualTo(targetList.get(i));
+        }
+
+    }
+
+    public static void validatePathListWithObjectsXml(Response sourceResponse, Response targetResponse, String listName, List<String> pathNames) {
+        String sourceXml = sourceResponse.getBody().asString();
+        String targetXml = targetResponse.getBody().asString();
+        XmlPath xmlPathSource = new XmlPath(sourceXml);
+        XmlPath xmlPathTarget = new XmlPath(targetXml);
+
+        for(String pathName: pathNames) {
+            String fullPath = listName + "." + pathName;
+            Object sourceValue = xmlPathSource.get(fullPath);
+            Object targetValue = xmlPathTarget.get(fullPath);
+
+            System.out.println(sourceValue + " -> " + targetValue);
+
+            if (pathName.endsWith(HREF)) {
+                URI sourceUri = URI.create(fullPath);
+                URI targetUri = URI.create(fullPath);
+
+                String sourcePath = sourceUri.getPath();
+                String targetPath = targetUri.getPath();
+                assertThat(sourcePath).withFailMessage(
+                        FAIL_MESSAGE,
+                        pathName,
+                        sourcePath,
+                        targetPath).isEqualTo(targetPath);
+            } else {
+                assertThat(sourceValue).withFailMessage(
+                        FAIL_MESSAGE,
+                        pathName,
+                        sourceValue,
+                        targetValue).isEqualTo(targetValue);
+            }
+        }
+
+    }
+
+    public static void validateCSVDocument(String path, Response sourceResponse, Response targetResponse) {
+        System.out.println(sourceResponse.getBody().asString().length() + "-> " + targetResponse.getBody().asString().length());
+        assertThat(sourceResponse.getBody().asString()).withFailMessage(
+                FAIL_MESSAGE, path, sourceResponse.getBody().asString(),
+                targetResponse.getBody().asString()).isEqualTo(targetResponse.getBody().asString());
     }
 }

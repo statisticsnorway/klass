@@ -29,10 +29,10 @@ public class KlassApiSsbSectionsTest extends AbstractKlassApiDataIntegrityTest {
     }
 
     @Test
-    void getSsbSectionsXML(){
+    void getSsbSectionsXML() {
         String path = getSsbSectionsPath();
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, null, TEXT_XML);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, null, TEXT_XML);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, null, APPLICATION_XML);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, null, APPLICATION_XML);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -42,11 +42,10 @@ public class KlassApiSsbSectionsTest extends AbstractKlassApiDataIntegrityTest {
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateList(sourceResponse, targetResponse, EMBEDDED_SSB_SECTIONS);
-            validateObject(sourceResponse, targetResponse, LINKS_SELF_HREF);
+            validateXmlList(path, sourceResponse, targetResponse, ENTITIES_CONTENTS_CONTENT);
+            validatePathListWithObjectsXml(sourceResponse, targetResponse, ENTITIES, pathNamesSsbSectionLinks);
         }
     }
-
 
     String getSsbSectionsPath() {
         return "/" + SSB_SECTIONS;

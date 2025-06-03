@@ -1,21 +1,13 @@
-package no.ssb.klass.api.migration.dataintegrity;
+package no.ssb.klass.api.migration.dataintegrity.variant;
 
 import io.restassured.response.Response;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 import static no.ssb.klass.api.migration.MigrationTestUtils.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class KlassApiVariantByIdTest extends AbstractKlassApiDataIntegrityTest {
-
-    static Integer randomId;
-
-    @BeforeAll
-    static void beforeAllVersions() {
-        randomId = generateRandomId(2000);
-    }
+public class KlassApiVariantByIdTest extends AbstractKlassApiVariantTest {
 
     @Test
     void getOneVariantById() {
@@ -39,10 +31,6 @@ public class KlassApiVariantByIdTest extends AbstractKlassApiDataIntegrityTest {
             validateList(sourceResponse, targetResponse, LEVELS);
             validateList(sourceResponse, targetResponse, CLASSIFICATION_ITEMS);
         }
-    }
-
-    String getVariantByIdPath(Integer id) {
-        return "/" + VARIANTS + "/" + id;
     }
 
 }

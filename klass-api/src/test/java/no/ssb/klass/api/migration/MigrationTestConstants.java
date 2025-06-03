@@ -29,11 +29,14 @@ public final class MigrationTestConstants {
     // Combinations
     public static final String PAGE_TOTAL_ELEMENTS = "page.totalElements";
     public static final String EMBEDDED_CLASSIFICATIONS = "_embedded.classifications";
+    public static final String EMBEDDED_CLASSIFICATIONS_ID = "_embedded.classifications.id";
     public static final String EMBEDDED_SSB_SECTIONS= "_embedded.ssbSections";
+    public static final String EMBEDDED_SSB_SECTIONS_NAME= "_embedded.ssbSections.name";
     public static final String EMBEDDED_CLASSIFICATION_FAMILIES = "_embedded.classificationfamilies";
     public static final String PUBLISHED_NB="published.nb";
     public static final String PUBLISHED_EN="published.en";
     public static final String PUBLISHED_NN="published.nn";
+    public static final String CLASSIFICATION_VERSION= "classificationVersion";
 
     // Fields
     public static final String ID = "id";
@@ -68,6 +71,14 @@ public final class MigrationTestConstants {
 
     public static final String NUMBER_OF_CLASSIFICATIONS= "numberOfClassifications";
 
+    public static final String CONTACT_PERSON_NAME = "contactPerson.name";
+    public static final String CONTACT_PERSON_EMAIL = "contactPerson.email";
+    public static final String CONTACT_PERSON_PHONE = "contactPerson.phone";
+    public static final String LINK_REL = "link.rel";
+    public static final String LINK_HREF ="link.href" ;
+    public static final String ENTITIES = "entities";
+
+
     // Field of list type
     public static final String CLASSIFICATIONS = "classifications";
     public static final String STATISTICAL_UNITS = "statisticalUnits";
@@ -84,6 +95,16 @@ public final class MigrationTestConstants {
     public static final String CLASSIFICATION_ITEMS= "classificationItems";
     public static final String CLASSIFICATIONS_VARIANTS= "classificationVariants";
 
+    // Field list type xml
+    public static final String CLASSIFICATION_VERSION_PUBLISHED_LANGUAGES= "classificationVersion.publishedLanguages.published";
+
+    public static final String CLASSIFICATION_VERSION_LEVELS= "classificationVersion.levels.level";
+    public static final String CLASSIFICATION_VERSION_CLASSIFICATION_ITEMS= "classificationVersion.classificationItems.classificationItem";
+
+    public static final String ENTITIES_CONTENTS_CONTENT= "entities.contents.content";
+    public static final String CODE_CHANGE_LIST_CODE_CHANGE_ITEM= "codeChangeList.codeChangeItem";
+    public static final String CODE_LIST_CODE_ITEM= "codeList.codeItem";
+    public static final String CORRESPONDENCE_ITEM_LIST_CORRESPONDENCE_ITEM= "correspondenceItemList.correspondenceItem";
 
     // Link fields
     public static final String HREF= "href";
@@ -117,18 +138,24 @@ public final class MigrationTestConstants {
     public static final String LANGUAGE ="language";
     public static final String INCLUDE_FUTURE= "includeFuture";
     public static final String CODES= "codes";
+    public static final String SELECT_CODES= "selectCodes";
+    public static final String SELECT_LEVEL= "selectLevel";
     public static final String CODES_AT= "codesAt";
     public static final String DATE= "date";
-    public static final String RANGE_FROM= "from";
-    public static final String RANGE_TO= "to";
+    public static final String FROM = "from";
+    public static final String TO = "to";
     public static final String INCLUDE_CODE_LISTS= "includeCodeLists";
     public static final String CHANGED_SINCE= "changedSince";
     public static final String VARIANT_NAME= "variantName";
     public static final String SSB_SECTION= "ssbSection";
+    public static final String CSV_SEPARATOR= "csvSeparator";
+    public static final String CSV_FIELDS = "csvFields";
+    public static final String PRESENTATION_NAME_PATTERN= "presentationNamePattern";
 
     // header
-    public static final String CONTENT_TYPE= "Content-Type";
-    public static final String TEXT_XML= "text/xml";
+    public static final String ACCEPT= "Accept";
+    public static final String APPLICATION_XML = "application/xml";
+    public static final String TEXT_CSV= "text/csv";
 
     // Messages
     public static final String FAIL_MESSAGE= "Mismatch at path '%s':\n  Source: %s\n  Target: %s";
@@ -164,6 +191,35 @@ public final class MigrationTestConstants {
             LINKS_CORRESPONDS_AT_TEMPLATED,
             LINKS_CHANGES_HREF,
             LINKS_CHANGES_TEMPLATED
+    );
+
+    public static List<String> pathNamesClassificationVariants = Arrays.asList(
+            NAME,
+            ID,
+            CONTACT_PERSON,
+            OWNING_SECTION,
+            LAST_MODIFIED,
+            PUBLISHED_NB,
+            PUBLISHED_EN,
+            PUBLISHED_NN,
+            LINKS_SELF_HREF
+    );
+
+    public static List<String> pathNamesClassificationVariantsXml = Arrays.asList(
+            NAME,
+            ID,
+            VALID_FROM,
+            LAST_MODIFIED,
+            INTRODUCTION,
+            CONTACT_PERSON_NAME,
+            CONTACT_PERSON_EMAIL,
+            CONTACT_PERSON_PHONE,
+            OWNING_SECTION,
+            PUBLICATIONS,
+            DERIVED_FROM,
+            LEGAL_BASE,
+            LINK_REL,
+            LINK_HREF
     );
 
     public static List<String> pathNamesClassificationsPage = Arrays.asList(
@@ -284,6 +340,12 @@ public final class MigrationTestConstants {
             LINKS_LAST_HREF,
             LINKS_SEARCH_HREF,
             LINKS_SEARCH_TEMPLATED
+
+    );
+
+    public static List<String> pathNamesSsbSectionLinks = Arrays.asList(
+            LINK_REL,
+            LINK_HREF
 
     );
 }
