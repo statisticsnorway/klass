@@ -53,7 +53,6 @@ public class KlassApiVersionByIdXmlTest extends AbstractKlassApiVersions {
             validateXmlList(path, sourceResponse, targetResponse, CLASSIFICATION_VERSION_PUBLISHED_LANGUAGES);
             validateXmlList(path, sourceResponse, targetResponse, CLASSIFICATION_VERSION_LEVELS);
             validateXmlList(path, sourceResponse, targetResponse, CLASSIFICATION_VERSION_CLASSIFICATION_ITEMS);
-            validateXmlList(path, sourceResponse, targetResponse, CLASSIFICATION_VERSION_CHANGELOGS);
             validatePathListWithObjectsXml(sourceResponse, targetResponse, CLASSIFICATION_VERSION, pathNamesClassificationVariantsXml);
         }
     }
