@@ -286,13 +286,13 @@ public class MigrationTestUtils {
         }
     }
 
-    public static void validateXmlNotReady(Response sourceResponse, Response targetResponse) {
+    public static void validateXmlNotReady(Response sourceResponse, Response targetResponse, String pathName) {
         String sourceXml = sourceResponse.getBody().asString();
         String targetXml = targetResponse.getBody().asString();
         XmlPath xmlPathSource = new XmlPath(sourceXml);
         XmlPath xmlPathTarget = new XmlPath(targetXml);
-        System.out.println("Source: " + xmlPathSource);
-        System.out.println("Target: " + xmlPathTarget);
+        System.out.println("Source: " + xmlPathSource.get(pathName));
+        System.out.println("Target: " + xmlPathTarget.get(pathName));
     }
 
     public static void validateXmlList(String path, Response sourceResponse, Response targetResponse, String pathName) {
@@ -304,12 +304,15 @@ public class MigrationTestUtils {
         List<String> sourceList = xmlPathSource.getList(pathName);
         List<String> targetList = xmlPathTarget.getList(pathName);
         System.out.println(sourceList.size() + " -> " + targetList.size());
+        for(int i = 0; i < sourceList.size(); i++) {
+            System.out.println(sourceList.get(i) + " -> " + targetList.get(i));
+            assertThat(sourceList.get(i)).withFailMessage(
+                    FAIL_MESSAGE,
+                    path,
+                    sourceList.get(i),
+                    targetList.get(i)).isEqualTo(targetList.get(i));
+        }
 
-        assertThat(sourceList).withFailMessage(
-                FAIL_MESSAGE,
-                path,
-                sourceList,
-                targetList).isEqualTo(targetList);
     }
 
     public static void validatePathListWithObjectsXml(Response sourceResponse, Response targetResponse, String listName, List<String> pathNames) {
@@ -322,7 +325,9 @@ public class MigrationTestUtils {
             String fullPath = listName + "." + pathName;
             Object sourceValue = xmlPathSource.get(fullPath);
             Object targetValue = xmlPathTarget.get(fullPath);
+
             System.out.println(sourceValue + " -> " + targetValue);
+
             if (pathName.endsWith(HREF)) {
                 URI sourceUri = URI.create(fullPath);
                 URI targetUri = URI.create(fullPath);
