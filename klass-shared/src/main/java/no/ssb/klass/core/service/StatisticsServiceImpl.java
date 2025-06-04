@@ -21,7 +21,7 @@ import java.util.List;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 public class StatisticsServiceImpl implements StatisticsService {
 
     private final ClassificationSeriesRepository classificationRepository;
