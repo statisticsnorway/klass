@@ -18,8 +18,6 @@ import org.springframework.test.context.ActiveProfiles;
  * Testsuite that test the list (all) classificationFamilies
  */
 
-@ActiveProfiles({ ConfigurationProfiles.POSTGRES_EMBEDDED, ConfigurationProfiles.MOCK_SEARCH })
-@AutoConfigureEmbeddedDatabase(provider = ZONKY, type= AutoConfigureEmbeddedDatabase.DatabaseType.POSTGRES)
 public class RestApiListClassificationFamilyIntegrationTest extends AbstractRestApiApplicationTest {
     // @formatter:off
     @Test

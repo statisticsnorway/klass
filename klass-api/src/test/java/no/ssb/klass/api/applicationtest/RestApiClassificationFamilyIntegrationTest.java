@@ -1,21 +1,15 @@
 package no.ssb.klass.api.applicationtest;
 
 import static io.restassured.RestAssured.*;
-import static io.zonky.test.db.AutoConfigureEmbeddedDatabase.DatabaseProvider.ZONKY;
 import static org.hamcrest.Matchers.*;
 
-import io.zonky.test.db.AutoConfigureEmbeddedDatabase;
-import no.ssb.klass.core.config.ConfigurationProfiles;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
 import io.restassured.http.ContentType;
 
 import no.ssb.klass.core.model.ClassificationType;
-import org.springframework.test.context.ActiveProfiles;
 
-@ActiveProfiles({ ConfigurationProfiles.POSTGRES_EMBEDDED, ConfigurationProfiles.MOCK_SEARCH })
-@AutoConfigureEmbeddedDatabase(provider = ZONKY, type= AutoConfigureEmbeddedDatabase.DatabaseType.POSTGRES)
 public class RestApiClassificationFamilyIntegrationTest extends AbstractRestApiApplicationTest {
     // @formatter:off
     @Test

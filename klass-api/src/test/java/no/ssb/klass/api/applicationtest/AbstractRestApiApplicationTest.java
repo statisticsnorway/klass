@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import io.zonky.test.db.AutoConfigureEmbeddedDatabase;
 import no.ssb.klass.core.model.CorrespondenceTable;
 import no.ssb.klass.testutil.TestDataProvider;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,9 +36,12 @@ import no.ssb.klass.api.util.RestConstants;
 import no.ssb.klass.testutil.ConstantClockSource;
 import no.ssb.klass.testutil.TestUtil;
 
+import static io.zonky.test.db.AutoConfigureEmbeddedDatabase.DatabaseProvider.ZONKY;
+
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = { ApplicationTestConfig.class }, webEnvironment = WebEnvironment.RANDOM_PORT)
-@ActiveProfiles(profiles = { ConfigurationProfiles.H2_INMEMORY, ConfigurationProfiles.MOCK_SEARCH })
+@ActiveProfiles({ ConfigurationProfiles.POSTGRES_EMBEDDED, ConfigurationProfiles.MOCK_SEARCH })
+@AutoConfigureEmbeddedDatabase(provider = ZONKY, type= AutoConfigureEmbeddedDatabase.DatabaseType.POSTGRES)
 @ComponentScan(basePackageClasses = TranslatablePersistenceConverter.class)
 public abstract class AbstractRestApiApplicationTest {
 
