@@ -57,7 +57,7 @@ class ClassificationFamilyRepositoryImpl implements ClassificationFamilyReposito
                        "select family.id, family.name, family.icon_name, count(classification.id) from classification_family family "
                      + "left outer join classification_series classification on classification.classification_family_id=family.id "
                      + "  and classification.deleted = false"
-                     + "  and (:section is null or :section = (select usr.section from user usr where usr.id = classification.contact_person_id)) "
+                     + "  and (:section is null or :section = (select usr.section from \"user\" usr where usr.id = classification.contact_person_id)) "
                      + "  and (:classificationType is null or :classificationType = classification.classification_type) "
                      + "group by family.id"
                 // @formatter:on
@@ -88,7 +88,7 @@ class ClassificationFamilyRepositoryImpl implements ClassificationFamilyReposito
       + "    and classification.copyrighted is false "
       + "    and (:classificationType is null or :classificationType = classification.classification_type) "
       + "    and (:section is null or :section "
-      + "           = (select usr.section from user usr where usr.id = classification.contact_person_id)) "
+      + "           = (select usr.section from \"user\" usr where usr.id = classification.contact_person_id)) "
       + "  group by family.id"
     // @formatter:on
         ).setParameter("section", section).setParameter("classificationType", classificationType == null ? null
