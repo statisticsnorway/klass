@@ -101,7 +101,7 @@ public class StatisticsServiceImpl implements StatisticsService {
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional
     public void addUseForClassification(ClassificationSeries classificationSeries) {
         ClassificationAccessCounter loggUse = new ClassificationAccessCounter(classificationSeries);
         classificationAccessRepository.save(loggUse);
@@ -119,7 +119,7 @@ public class StatisticsServiceImpl implements StatisticsService {
         
         Instant fromDate = fromSearchDate.atStartOfDay(ZoneId.systemDefault()).toInstant();
         Instant toDate = toSearchDate.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant();
-        
+
         switch (operation) {
         case TOTAL_CLASSIFIC:
             return classificationAccessRepository.getClassificationsCount(Date.from(fromDate), Date.from(toDate), pageable);
