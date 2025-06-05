@@ -21,7 +21,7 @@ import java.util.List;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 public class StatisticsServiceImpl implements StatisticsService {
 
     private final ClassificationSeriesRepository classificationRepository;
@@ -101,7 +101,7 @@ public class StatisticsServiceImpl implements StatisticsService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = false)
     public void addUseForClassification(ClassificationSeries classificationSeries) {
         ClassificationAccessCounter loggUse = new ClassificationAccessCounter(classificationSeries);
         classificationAccessRepository.save(loggUse);
