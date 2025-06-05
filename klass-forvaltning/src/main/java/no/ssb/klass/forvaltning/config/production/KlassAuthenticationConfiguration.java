@@ -1,10 +1,9 @@
 package no.ssb.klass.forvaltning.config.production;
 
+import no.ssb.klass.core.ldap.KlassUserDetailsMapper;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.ldap.core.support.LdapContextSource;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -18,16 +17,13 @@ import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.rememberme.InMemoryTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
 
-import no.ssb.klass.core.config.ConfigurationProfiles;
-import no.ssb.klass.core.ldap.KlassUserDetailsMapper;
-
 /**
  * Configuration for production environment, all test beans are excluded
  *
  * @author Mads Lundemo, SSB.
  */
-@Configuration
-@Profile(value = ConfigurationProfiles.PRODUCTION)
+//@Configuration
+//@Profile(value = ConfigurationProfiles.PRODUCTION)
 public class KlassAuthenticationConfiguration extends GlobalAuthenticationConfigurerAdapter {
 
     /**
@@ -86,11 +82,11 @@ public class KlassAuthenticationConfiguration extends GlobalAuthenticationConfig
     @Bean
     public FilterBasedLdapUserSearch ldapUserSearch(LdapContextSource ldapContext) {
         FilterBasedLdapUserSearch search = new FilterBasedLdapUserSearch(searchBase, searchFilter, ldapContext);
-        String[] attributes = { KlassUserDetailsMapper.SECTION_ATTRIBUTE,
+        String[] attributes = {KlassUserDetailsMapper.SECTION_ATTRIBUTE,
                 KlassUserDetailsMapper.NAME_ATTRIBUTE,
                 KlassUserDetailsMapper.MAIL_ATTRIBUTE,
                 KlassUserDetailsMapper.MOBILE_PHONE_ATTRIBUTE,
-                KlassUserDetailsMapper.LANDLINE_PHONE_ATTRIBUTE };
+                KlassUserDetailsMapper.LANDLINE_PHONE_ATTRIBUTE};
         search.setReturningAttributes(attributes);
         search.setSearchSubtree(true);
         return search;

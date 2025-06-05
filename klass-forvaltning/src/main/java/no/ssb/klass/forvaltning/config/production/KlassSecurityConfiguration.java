@@ -1,34 +1,27 @@
 package no.ssb.klass.forvaltning.config.production;
 
-import no.ssb.klass.core.config.ConfigurationProfiles;
+import no.ssb.klass.designer.ui.KlassUI;
+import no.ssb.klass.designer.ui.LoginUI;
+import no.ssb.klass.forvaltning.controllers.monitor.MonitorController;
+import no.ssb.klass.forvaltning.controllers.ping.PingController;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.RememberMeServices;
-import org.vaadin.spring.annotation.EnableVaadinExtensions;
-import org.vaadin.spring.security.annotation.EnableVaadinSharedSecurity;
-
-import no.ssb.klass.forvaltning.config.test.KlassTestAuthenticationConfiguration;
-import no.ssb.klass.forvaltning.controllers.monitor.MonitorController;
-import no.ssb.klass.forvaltning.controllers.ping.PingController;
-import no.ssb.klass.designer.ui.KlassUI;
-import no.ssb.klass.designer.ui.LoginUI;
 
 /**
  * @author Mads Lundemo, SSB.
  */
-@Configuration
-@EnableVaadinExtensions
-@EnableVaadinSharedSecurity
-@EnableGlobalMethodSecurity(securedEnabled = true)
-@Import(KlassTestAuthenticationConfiguration.class)
+
+//@Configuration
+//@EnableVaadinExtensions
+//@EnableVaadinSharedSecurity
+//@EnableGlobalMethodSecurity(securedEnabled = true)
+//@Import(KlassTestAuthenticationConfiguration.class)
 public class KlassSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private static final String WILDCARD = "**";
