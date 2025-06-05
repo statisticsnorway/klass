@@ -11,10 +11,20 @@
             </activation>
             <repositories>
                 <repository>
+                    <id>central</id>
+                    <name>Central Repository</name>
+                    <url>https://repo.maven.apache.org/maven2</url>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                </repository>
+
+                <repository>
                     <id>github</id>
                     <name>GitHub Packages</name>
                     <url>https://maven.pkg.github.com/${github.repository}</url>
                 </repository>
+                
                 <repository>
                     <id>maven-restlet</id>
                     <name>Public online Restlet repository</name>
@@ -23,12 +33,4 @@
             </repositories>
         </profile>
     </profiles>
-
-    <mirrors>
-        <mirror>
-            <id>maven-restletMirror</id>
-            <url>https://maven.restlet.talend.com</url>
-            <mirrorOf>maven-restlet</mirrorOf>
-        </mirror>
-    </mirrors>
 </settings>
