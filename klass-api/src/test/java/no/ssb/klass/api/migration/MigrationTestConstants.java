@@ -7,6 +7,7 @@ import java.util.List;
 public final class MigrationTestConstants {
 
     // paths
+    public static final String DATA_SSB_HOST = "https://data.ssb.no";
     public static final String BASE_PATH = "/api/klass";
     public static final String CLASSIFICATIONS_PATH = "/classifications";
     public static final String CHANGES = "changes";

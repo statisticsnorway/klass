@@ -34,7 +34,13 @@ public class KlassApiMigrationClient {
 
     public boolean isApiAvailable(String host) {
         try {
-            Response response = RestAssured.get(host + "/ping");
+            Response response;
+            if(host.equals(DATA_SSB_HOST)){
+                response = RestAssured.get(host + BASE_PATH + "/ping");
+            }
+            else{
+                response = RestAssured.get(host + "/ping");
+            }
             return response.getStatusCode() == 200;
         } catch (Exception e) {
             return false;
