@@ -61,8 +61,8 @@ public class KlassApiClassificationChangesCsvTest extends AbstractKlassApiChange
     void getClassificationChangesDatesInRange(int classificationId) {
         // Temp start at id 7 because of heavy requests to some ids
         String path= getChangesPath(classificationId);
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDateInRange,null);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDateInRange,null);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDateInRange,TEXT_CSV);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDateInRange,TEXT_CSV);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -72,7 +72,7 @@ public class KlassApiClassificationChangesCsvTest extends AbstractKlassApiChange
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateList(sourceResponse, targetResponse, CODE_CHANGES);
+            validateCSVDocument(path, sourceResponse, targetResponse);
         }
     }
 
@@ -103,8 +103,8 @@ public class KlassApiClassificationChangesCsvTest extends AbstractKlassApiChange
         // Temp start at id 7 because of heavy requests to some ids
         assumeTrue(classificationId > 6);
         String path= getChangesPath(classificationId);
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageEn,null);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageEn,null);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageEn,TEXT_CSV);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageEn,TEXT_CSV);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -114,7 +114,7 @@ public class KlassApiClassificationChangesCsvTest extends AbstractKlassApiChange
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateList(sourceResponse, targetResponse, CODE_CHANGES);
+            validateCSVDocument(path, sourceResponse, targetResponse);
         }
     }
 
@@ -125,8 +125,8 @@ public class KlassApiClassificationChangesCsvTest extends AbstractKlassApiChange
         // Temp start at id 7 because of heavy requests to some ids
         assumeTrue(classificationId > 6);
         String path= getChangesPath(classificationId);
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageNn,null);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageNn,null);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageNn,TEXT_CSV);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageNn,TEXT_CSV);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -136,7 +136,7 @@ public class KlassApiClassificationChangesCsvTest extends AbstractKlassApiChange
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateList(sourceResponse, targetResponse, CODE_CHANGES);
+            validateCSVDocument(path, sourceResponse, targetResponse);
         }
     }
 
