@@ -23,9 +23,7 @@ services:
       POSTGRES_DATABASE: "klass"
       POSTGRES_LOCAL_FILEPATH: ${POSTGRES_LOCAL_FILEPATH}
   klass-api:
-    build:
-      context: ../klass-api
-      dockerfile: ../klass-api/Dockerfile
+    image: target-postgres-image:latest
     command: [ "java", "-jar", "app.war", "--spring.profiles.active=api, postgres-local, skip-indexing, embedded-solr" ]
     container_name: klass-api
     profiles: [ migration-testing, api ]
@@ -44,9 +42,7 @@ services:
       POSTGRES_USER: "klass"
       POSTGRES_INSTANCE: ${POSTGRES_INSTANCE}
   klass-api-mariadb:
-    build:
-      context: ../klass-api
-      dockerfile: ../klass-api/Dockerfile
+    image: source-mariadb-image:latest
     command: [ "java", "-jar", "app.war", "--spring.profiles.active=api, mariadb-local, skip-indexing, embedded-solr" ]
     container_name: klass-api-mariadb
     profiles: [ migration-testing ]
