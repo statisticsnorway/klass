@@ -26,9 +26,9 @@ spec:
   resources:
     requests:
       cpu: 400m
-      memory: 608Mi
-    limits:
       memory: 1024Mi
+    limits:
+      memory: 2048Mi
   env:
     - name: SPRING_PROFILES_ACTIVE
       value: frontend, postgres, small-import, skip-indexing, ad-offline, embedded-solr
