@@ -16,6 +16,9 @@ spec:
     provider: openid
     enforce:
       enabled: true
+      excludePaths:
+        - /monitor
+        - /ping
 
   replicas:
     min: 1
@@ -34,3 +37,9 @@ spec:
   filesFrom:
     - mountPath: /var/run/secrets/nais.io/sqlcertificate
       secret: sqeletor-klass-827ec8ec
+
+  liveness:
+    path: /ping
+  readiness:
+    path: /monitor
+    initialDelay: 120
