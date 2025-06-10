@@ -12,6 +12,11 @@ spec:
   ingresses:
     - https://klass-forvaltning.intern.test.ssb.no
 
+  login:
+    provider: openid
+    enforce:
+      enabled: true
+
   replicas:
     min: 1
     max: 1
