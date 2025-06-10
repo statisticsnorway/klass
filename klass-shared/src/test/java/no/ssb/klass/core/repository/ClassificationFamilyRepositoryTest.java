@@ -1,5 +1,6 @@
 package no.ssb.klass.core.repository;
 
+import static io.zonky.test.db.AutoConfigureEmbeddedDatabase.DatabaseProvider.ZONKY;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -8,6 +9,8 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
+import io.zonky.test.db.AutoConfigureEmbeddedDatabase;
+import no.ssb.klass.core.model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,18 +24,14 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import no.ssb.klass.core.config.ConfigurationProfiles;
-import no.ssb.klass.core.model.ClassificationFamily;
-import no.ssb.klass.core.model.ClassificationSeries;
-import no.ssb.klass.core.model.ClassificationType;
-import no.ssb.klass.core.model.ClassificationVersion;
-import no.ssb.klass.core.model.User;
 import no.ssb.klass.core.util.DateRange;
 import no.ssb.klass.core.util.TranslatablePersistenceConverter;
 import no.ssb.klass.testutil.TestUtil;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-@ActiveProfiles(ConfigurationProfiles.H2_INMEMORY)
+@ActiveProfiles(ConfigurationProfiles.POSTGRES_EMBEDDED)
+@AutoConfigureEmbeddedDatabase(provider = ZONKY, type= AutoConfigureEmbeddedDatabase.DatabaseType.POSTGRES)
 @Transactional
 public class ClassificationFamilyRepositoryTest {
     @Autowired
@@ -261,6 +260,7 @@ public class ClassificationFamilyRepositoryTest {
         // then
         assertEquals(2, result.size());
         assertEquals(1, result.get(0).getNumberOfClassifications());
+        System.out.println(result.get(1).getNumberOfClassifications());
         assertEquals(2, result.get(1).getNumberOfClassifications());
     }
 
@@ -294,6 +294,37 @@ public class ClassificationFamilyRepositoryTest {
         assertEquals(0, result.get(0).getNumberOfClassifications());
     }
 
+    @Test
+    public void findPublicClassificationFamilySummariesWhereClassificationVersionIsUnpublished() {
+        // given
+        ClassificationFamily family = createClassificationFamilyVersionNotPublished();
+        subject.save(family);
+
+        // when
+        List<ClassificationFamilySummary> result = subject.findPublicClassificationFamilySummaries(allSections,
+                allClassificationTypes);
+
+        // then
+        assertEquals(1, result.size());
+        assertEquals(0, result.get(0).getNumberOfClassifications());
+    }
+
+    @Test
+    public void findPublicClassificationFamilySummariesWhereClassificationVersionIsDeleted() {
+        // given
+        ClassificationFamily family = createClassificationFamilyVersionDeleted();
+        subject.save(family);
+
+        // when
+        List<ClassificationFamilySummary> result = subject.findPublicClassificationFamilySummaries(allSections,
+                allClassificationTypes);
+
+        // then
+        assertEquals(1, result.size());
+        assertEquals(0, result.get(0).getNumberOfClassifications());
+    }
+
+
     private ClassificationFamily createClassificationFamilyWithOneClassification() {
         ClassificationFamily family = subject.save(TestUtil.createClassificationFamily("family"));
         ClassificationSeries classification = TestUtil.createClassification("classification");
@@ -322,6 +353,8 @@ public class ClassificationFamilyRepositoryTest {
         classification.addClassificationVersion(version1);
         classificationSeriesRepository.save(classification);
         classificationSeriesRepository.save(classification2);
+        System.out.println(classification.getId());
+        System.out.println(classification2.getId());
         return family;
     }
 
@@ -346,6 +379,46 @@ public class ClassificationFamilyRepositoryTest {
         classificationSeriesRepository.save(classification);
         classification.setDeleted();
         return family;
+    }
+
+    private ClassificationFamily createClassificationFamilyVersionNotPublished() {
+        ClassificationFamily family = subject.save(TestUtil.createClassificationFamily("Winter-family"));
+        ClassificationSeries classification = TestUtil.createClassification("july");
+        classification.setContactPerson(user);
+        family.addClassificationSeries(classification);
+        ClassificationVersion version = TestUtil.createClassificationVersion(DateRange.create("1999-01-01",
+                "2001-01-01"));
+        classification.addClassificationVersion(version);
+        classificationSeriesRepository.save(classification);
+        classification.getClassificationVersions().get(0).unpublish(Language.NB);
+        System.out.println(classification.getClassificationVersions().get(0).isPublishedInAnyLanguage());
+        return family;
+    }
+
+    private ClassificationFamily createClassificationFamilyVersionDeleted() {
+        ClassificationFamily family = subject.save(TestUtil.createClassificationFamily("Winter-family"));
+        ClassificationSeries classification = TestUtil.createClassification("july");
+        classification.setContactPerson(user);
+        family.addClassificationSeries(classification);
+        ClassificationVersion version = TestUtil.createClassificationVersion(DateRange.create("1999-01-01",
+                "2001-01-01"));
+        classification.addClassificationVersion(version);
+        classificationSeriesRepository.save(classification);
+        return family;
+    }
+
+    private void checkClassification(){
+        ClassificationFamily family = subject.save(TestUtil.createClassificationFamily("Winter-family"));
+        ClassificationSeries classification = TestUtil.createClassification("july");
+        classification.setContactPerson(user);
+        family.addClassificationSeries(classification);
+        ClassificationVersion version1 = TestUtil.createClassificationVersion(DateRange.create("1999-01-01",
+                "2001-01-01"));
+        classification.addClassificationVersion(version1);
+        classificationSeriesRepository.save(classification);
+        classification.getClassificationVersions().get(0).unpublish(Language.NB);
+        System.out.println(classification.getClassificationVersions().get(0).isPublishedInAnyLanguage());
+
     }
 
     @Configuration

@@ -1,12 +1,16 @@
 package no.ssb.klass.core.repository;
 
 import no.ssb.klass.core.model.*;
+import no.ssb.klass.core.util.TranslatablePersistenceConverter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -15,49 +19,109 @@ public class ClassificationFamilyRepositoryImpl implements ClassificationFamilyR
     @PersistenceContext
     private EntityManager em;
 
+    @Autowired
+    private TranslatablePersistenceConverter converter;
+
     @Override
     public List<ClassificationFamilySummary> findClassificationFamilySummaries(
             @Param("section") String section,
             @Param("classificationType") ClassificationType classificationType
     ){
-        List resultList = em.createQuery("select new no.ssb.klass.core.repository.ClassificationFamilySummary(" +
-                        "family.id," +
-                        " family.name, " +
-                        "  family.iconName, " +
-                        "  count(classification)) " +
-                        "from ClassificationFamily family " +
-                        "left join family.classificationSeriesList classification " +
-                        "  with classification.deleted = false " +
-                        "where (:section is null or :section = (" +
-                        "  select user.section from User user where user = classification.contactPerson)) " +
-                        "and (:classificationType is null or :classificationType = classification.classificationType) " +
-                        "group by family.id, family.name, family.iconName"
-                ).setParameter("classificationType", classificationType)
-                .setParameter("section", section)
-                .getResultList();
-        return resultList;
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<ClassificationFamilySummary> cq = cb.createQuery(ClassificationFamilySummary.class);
+
+        Root<ClassificationFamily> family = cq.from(ClassificationFamily.class);
+
+        Join<ClassificationFamily, ClassificationSeries> classification = family.join("classificationSeriesList", JoinType.LEFT);
+
+        List<Predicate> predicates = new ArrayList<>();
+
+        predicates.add(cb.isFalse(classification.get("deleted")));
+
+        if (classificationType != null) {
+            predicates.add(cb.equal(classification.get("classificationType"), classificationType));
+        }
+
+        if (section != null) {
+            Subquery<String> sectionSubquery = cq.subquery(String.class);
+            Root<User> user = sectionSubquery.from(User.class);
+            sectionSubquery.select(user.get("section"))
+                    .where(cb.equal(user.get("id"), classification.get("contactPerson").get("id")));
+            predicates.add(cb.equal(sectionSubquery, section));
+        }
+
+        classification.on(predicates.toArray(new Predicate[0]));
+        System.out.println(classification.get("id"));
+
+        cq.multiselect(
+                        family.get("id"),
+                        family.get("name"),
+                        family.get("iconName"),
+                        cb.countDistinct(classification.get("id"))
+                )
+                .groupBy(family.get("id"), family.get("name"), family.get("iconName"));
+
+        return em.createQuery(cq).getResultList();
     }
 
     @Override
     public List<ClassificationFamilySummary> findPublicClassificationFamilySummaries(
-            @Param("section") String section,
-            @Param("classificationType") ClassificationType classificationType
+            String section, ClassificationType classificationType
     ){
-        List resultList  = em.createQuery("select new no.ssb.klass.core.repository.ClassificationFamilySummary(" +
-                        "family.id," +
-                        " family.name, " +
-                        "  family.iconName, " +
-                        "  count(classification)) " +
-                        "from ClassificationFamily family " +
-                        "left join family.classificationSeriesList classification " +
-                        "  with classification.deleted = false and classification.copyrighted = false" +
-                        " where (:section is null or :section = (" +
-                        "  select user.section from User user where user = classification.contactPerson)) " +
-                        "and (:classificationType is null or :classificationType = classification.classificationType) " +
-                        "group by family.id, family.name, family.iconName"
-                ).setParameter("classificationType", classificationType)
-                .setParameter("section", section)
-                .getResultList();
-        return resultList;
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<ClassificationFamilySummary> cq = cb.createQuery(ClassificationFamilySummary.class);
+
+        Root<ClassificationFamily> family = cq.from(ClassificationFamily.class);
+
+        Join<ClassificationFamily, ClassificationSeries> classification = family.join("classificationSeriesList", JoinType.LEFT);
+
+        List<Predicate> predicates = new ArrayList<>();
+
+        Join<ClassificationSeries, StatisticalClassification> version =
+                classification.join("classificationVersions", JoinType.LEFT);
+
+        /*Predicate versionIsValid = cb.and(
+                cb.isFalse(version.get("deleted")),
+                cb.or(
+                        cb.isTrue(version.get("published").get("published_en")),
+                        cb.isTrue(version.get("published").get("published_no")),
+                        cb.isTrue(version.get("published").get("published_nn"))
+                )
+        );
+
+        // Keep classifications with no versions OR valid versions
+        Predicate versionOptional = cb.or(
+                cb.isNull(version),
+                versionIsValid
+        );
+
+        predicates.add(versionOptional);*/
+
+        predicates.add(cb.isFalse(classification.get("deleted")));
+        predicates.add(cb.isFalse(classification.get("copyrighted")));
+
+        if (classificationType != null) {
+            predicates.add(cb.equal(classification.get("classificationType"), classificationType));
+        }
+
+        if (section != null) {
+            Subquery<String> sectionSubquery = cq.subquery(String.class);
+            Root<User> user = sectionSubquery.from(User.class);
+            sectionSubquery.select(user.get("section"))
+                    .where(cb.equal(user.get("id"), classification.get("contactPerson").get("id")));
+            predicates.add(cb.equal(sectionSubquery, section));
+        }
+
+        classification.on(predicates.toArray(new Predicate[0]));
+
+        cq.multiselect(
+                        family.get("id"),
+                        family.get("name"),
+                        family.get("iconName"),
+                        cb.countDistinct(classification.get("id"))
+                )
+                .groupBy(family.get("id"), family.get("name"), family.get("iconName"));
+
+        return em.createQuery(cq).getResultList();
     }
 }
