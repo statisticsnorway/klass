@@ -1,5 +1,6 @@
 package no.ssb.klass.core.repository;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
@@ -245,6 +246,54 @@ public class ClassificationFamilyRepositoryTest {
         assertEquals(0, result.get(0).getNumberOfClassifications());
     }
 
+    @Test
+    public void findPublicClassificationFamilySummaries() {
+        // given
+        ClassificationFamily family = createClassificationFamilyWithOneClassification();
+        subject.save(family);
+        ClassificationFamily family2 = createClassificationFamilyTwoClassifications();
+        subject.save(family2);
+
+        // when
+        List<ClassificationFamilySummary> result = subject.findPublicClassificationFamilySummaries(allSections,
+                allClassificationTypes);
+
+        // then
+        assertEquals(2, result.size());
+        assertEquals(1, result.get(0).getNumberOfClassifications());
+        assertEquals(2, result.get(1).getNumberOfClassifications());
+    }
+
+    @Test
+    public void findPublicClassificationFamilySummariesWhereClassificationIsCopyrighted() {
+        // given
+        ClassificationFamily family = createClassificationFamilyCopyrighted();
+        subject.save(family);
+
+        // when
+        List<ClassificationFamilySummary> result = subject.findPublicClassificationFamilySummaries(allSections,
+                allClassificationTypes);
+
+        // then
+        assertEquals(1, result.size());
+        assertEquals(0, result.get(0).getNumberOfClassifications());
+    }
+
+    @Test
+    public void findPublicClassificationFamilySummariesWhereClassificationIsDeleted() {
+        // given
+        ClassificationFamily family = createClassificationFamilyDeleted();
+        subject.save(family);
+
+        // when
+        List<ClassificationFamilySummary> result = subject.findPublicClassificationFamilySummaries(allSections,
+                allClassificationTypes);
+
+        // then
+        assertEquals(1, result.size());
+        assertEquals(0, result.get(0).getNumberOfClassifications());
+    }
+
     private ClassificationFamily createClassificationFamilyWithOneClassification() {
         ClassificationFamily family = subject.save(TestUtil.createClassificationFamily("family"));
         ClassificationSeries classification = TestUtil.createClassification("classification");
@@ -260,15 +309,42 @@ public class ClassificationFamilyRepositoryTest {
         return family;
     }
 
-    private ClassificationFamily createClassificationFamilyClassification2() {
+    private ClassificationFamily createClassificationFamilyTwoClassifications() {
         ClassificationFamily family = subject.save(TestUtil.createClassificationFamily("Postgres-family"));
-        ClassificationSeries classification = TestUtil.createClassification("classification");
+        ClassificationSeries classification = TestUtil.createClassification("bus");
         classification.setContactPerson(user2);
+        ClassificationSeries classification2 = TestUtil.createClassification("car");
+        classification2.setContactPerson(user2);
+        ClassificationVersion version1 = TestUtil.createClassificationVersion(DateRange.create("1999-01-01",
+                "2001-01-01"));
+        family.addClassificationSeries(classification);
+        family.addClassificationSeries(classification2);
+        classification.addClassificationVersion(version1);
+        classificationSeriesRepository.save(classification);
+        classificationSeriesRepository.save(classification2);
+        return family;
+    }
+
+    private ClassificationFamily createClassificationFamilyCopyrighted() {
+        ClassificationFamily family = subject.save(TestUtil.createClassificationFamily("Code-family"));
+        ClassificationSeries classification = TestUtil.createClassification("java");
+        classification.setContactPerson(user);
+        classification.setCopyrighted(true);
         ClassificationVersion version1 = TestUtil.createClassificationVersion(DateRange.create("1999-01-01",
                 "2001-01-01"));
         family.addClassificationSeries(classification);
         classification.addClassificationVersion(version1);
         classificationSeriesRepository.save(classification);
+        return family;
+    }
+
+    private ClassificationFamily createClassificationFamilyDeleted() {
+        ClassificationFamily family = subject.save(TestUtil.createClassificationFamily("Summer-family"));
+        ClassificationSeries classification = TestUtil.createClassification("july");
+        classification.setContactPerson(user);
+        family.addClassificationSeries(classification);
+        classificationSeriesRepository.save(classification);
+        classification.setDeleted();
         return family;
     }
 
