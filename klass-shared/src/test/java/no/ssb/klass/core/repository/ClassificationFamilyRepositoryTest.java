@@ -45,10 +45,13 @@ public class ClassificationFamilyRepositoryTest {
     private final String allSections = null;
     private final ClassificationType allClassificationTypes = null;
     private User user;
+    private User user2;
 
     @BeforeEach
     public void setup() {
+
         user = userRepository.save(TestUtil.createUser());
+        user2 = userRepository.save(TestUtil.createUser2());
     }
 
     @Test
@@ -147,6 +150,101 @@ public class ClassificationFamilyRepositoryTest {
         assertEquals(0, result.get(0).getNumberOfClassifications());
     }
 
+    @Test
+    public void findPublicClassificationFamilySummariesForAllSectionsAndAllClassificationTypes() {
+        // given
+        ClassificationFamily family = createClassificationFamilyWithOneClassification();
+        subject.save(family);
+
+        // when
+        List<ClassificationFamilySummary> result = subject.findPublicClassificationFamilySummaries(allSections,
+                allClassificationTypes);
+
+        // then
+        assertEquals(1, result.size());
+        assertEquals(1, result.get(0).getNumberOfClassifications());
+    }
+
+    @Test
+    public void findPublicClassificationFamilySummariesWithMatchingSection() {
+        // given
+        ClassificationFamily family = createClassificationFamilyWithOneClassification();
+        subject.save(family);
+
+        // when
+        String section = family.getClassificationSeries().get(0).getContactPerson().getSection();
+        List<ClassificationFamilySummary> result = subject.findPublicClassificationFamilySummaries(section,
+                allClassificationTypes);
+
+        // then
+        assertEquals(1, result.size());
+        assertEquals(1, result.get(0).getNumberOfClassifications());
+    }
+
+    @Test
+    public void findPublicClassificationFamilySummariesWithMatchingSection2() {
+        // given
+        ClassificationFamily family = createClassificationFamilyWithOneClassification();
+        subject.save(family);
+
+        // when
+        String section = family.getClassificationSeries().get(0).getContactPerson().getSection();
+        List<ClassificationFamilySummary> result = subject.findPublicClassificationFamilySummaries(section,
+                allClassificationTypes);
+
+        // then
+        assertEquals(1, result.size());
+        assertEquals(1, result.get(0).getNumberOfClassifications());
+    }
+
+    @Test
+    public void findPublicClassificationFamilySummariesWithNoMatchingSection() {
+        // given
+        ClassificationFamily family = createClassificationFamilyWithOneClassification();
+        subject.save(family);
+
+        // when
+        List<ClassificationFamilySummary> result = subject.findPublicClassificationFamilySummaries("unknown section",
+                allClassificationTypes);
+
+        // then
+        assertEquals(1, result.size());
+        assertEquals(0, result.get(0).getNumberOfClassifications());
+    }
+
+    @Test
+    public void findPublicClassificationFamilySummariesWithMatchingClassificationType() {
+        // given
+        ClassificationFamily family = createClassificationFamilyWithOneClassification();
+        subject.save(family);
+
+        // when
+        ClassificationType classificationType = family.getClassificationSeries().get(0).getClassificationType();
+        List<ClassificationFamilySummary> result = subject.findPublicClassificationFamilySummaries(allSections,
+                classificationType);
+
+        // then
+        assertEquals(1, result.size());
+        assertEquals(1, result.get(0).getNumberOfClassifications());
+    }
+
+    @Test
+    public void findPublicClassificationFamilySummariesWithNoMatchingClassificationType() {
+        // given
+        ClassificationFamily family = createClassificationFamilyWithOneClassification();
+        subject.save(family);
+
+        // when
+        ClassificationType classificationType = TestUtil.oppositeClassificationType(family.getClassificationSeries()
+                .get(0).getClassificationType());
+        List<ClassificationFamilySummary> result = subject.findPublicClassificationFamilySummaries(allSections,
+                classificationType);
+
+        // then
+        assertEquals(1, result.size());
+        assertEquals(0, result.get(0).getNumberOfClassifications());
+    }
+
     private ClassificationFamily createClassificationFamilyWithOneClassification() {
         ClassificationFamily family = subject.save(TestUtil.createClassificationFamily("family"));
         ClassificationSeries classification = TestUtil.createClassification("classification");
@@ -158,6 +256,18 @@ public class ClassificationFamilyRepositoryTest {
         family.addClassificationSeries(classification);
         classification.addClassificationVersion(version1);
         classification.addClassificationVersion(version2);
+        classificationSeriesRepository.save(classification);
+        return family;
+    }
+
+    private ClassificationFamily createClassificationFamilyClassification2() {
+        ClassificationFamily family = subject.save(TestUtil.createClassificationFamily("Postgres-family"));
+        ClassificationSeries classification = TestUtil.createClassification("classification");
+        classification.setContactPerson(user2);
+        ClassificationVersion version1 = TestUtil.createClassificationVersion(DateRange.create("1999-01-01",
+                "2001-01-01"));
+        family.addClassificationSeries(classification);
+        classification.addClassificationVersion(version1);
         classificationSeriesRepository.save(classification);
         return family;
     }
