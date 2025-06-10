@@ -91,18 +91,6 @@ public class MainView extends MainDesign implements ViewChangeListener {
             log.debug("Set User {}", userContext);
             userContext.setUser(new User("kno@ssb.no", "Kari Nordmann", "854"));
         }
-//        Authentication authentication = vaadinSecurity.getAuthentication();
-//        if (!userContext.hasUser() && vaadinSecurity.isRememberMeAuthenticated()) {
-//            // create user based on remembered credentials (Remember me)
-//            try {
-////                User user = klassLoginService.getUserFromAuthentication(authentication);
-////                userContext.setUser(user);
-//                userContext.setUser(new User("kno@ssb.no", "Kari Nordmann", "854"));
-//                log.info("Set User {}", userContext);
-//            } catch (Exception e) {
-//                vaadinSecurity.logout();
-//            }
-//        }
     }
 
     public void configureNavigator() {
