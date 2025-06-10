@@ -40,6 +40,7 @@ spec:
 
   liveness:
     path: /ping
+    initialDelay: 120
   readiness:
     path: /monitor
     initialDelay: 120
