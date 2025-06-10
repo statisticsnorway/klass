@@ -38,22 +38,20 @@ public class ClassificationFamilyRepositoryImpl implements ClassificationFamilyR
         return resultList;
     }
 
-
-
     @Override
     public List<ClassificationFamilySummary> findPublicClassificationFamilySummaries(
             @Param("section") String section,
             @Param("classificationType") ClassificationType classificationType
     ){
-        List resultList = em.createQuery("select new no.ssb.klass.core.repository.ClassificationFamilySummary(" +
+        List resultList  = em.createQuery("select new no.ssb.klass.core.repository.ClassificationFamilySummary(" +
                         "family.id," +
                         " family.name, " +
                         "  family.iconName, " +
                         "  count(classification)) " +
                         "from ClassificationFamily family " +
                         "left join family.classificationSeriesList classification " +
-                        "  with classification.deleted = false " +
-                        "where (:section is null or :section = (" +
+                        "  with classification.deleted = false and classification.copyrighted = false" +
+                        " where (:section is null or :section = (" +
                         "  select user.section from User user where user = classification.contactPerson)) " +
                         "and (:classificationType is null or :classificationType = classification.classificationType) " +
                         "group by family.id, family.name, family.iconName"
