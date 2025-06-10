@@ -26,7 +26,6 @@
         <klass.doc.env.url/>
         <klass.doc.env.port/>
 
-        <postgresql.version>42.7.5</postgresql.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <findbugs-version>3.0.5</findbugs-version>
@@ -40,6 +39,7 @@
         <asciidoctor-version>1.6.0</asciidoctor-version>
         <maven-jaxb2-plugin-version>2.5.0</maven-jaxb2-plugin-version>
         <tomcat7-maven-plugin-version>2.2</tomcat7-maven-plugin-version>
+        <postgresql.version>42.7.5</postgresql.version>
     </properties>
 
     <dependencies>

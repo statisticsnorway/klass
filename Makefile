@@ -45,6 +45,15 @@ run-klass-forvaltning-local:
 	popd; \
 	${sdk} env clear
 
+.PHONY: run-klass-forvaltning-local-postgres
+run-klass-forvaltning-local-postgres:
+	pushd klass-forvaltning && \
+	${sdk} env && \
+	mvn spring-boot\:run  -Dspring.profiles.active=postgres-local,embedded-solr,frontend,skip-indexing,small-import,ad-offline; \
+	popd; \
+	${sdk} env clear
+
+
 .PHONY: run-klass-forvaltning-local-mariadb
 # Requires that a MariaDB instance is already running with a database called klass and a user called klass.
 # The environment variable KLASS_ENV_MARIADB_PASSWORD must be specified with the password for the klass user.
