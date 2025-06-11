@@ -19,9 +19,6 @@ public class ClassificationFamilyRepositoryImpl implements ClassificationFamilyR
     @PersistenceContext
     private EntityManager em;
 
-    @Autowired
-    private TranslatablePersistenceConverter converter;
-
     @Override
     public List<ClassificationFamilySummary> findClassificationFamilySummaries(
             @Param("section") String section,
@@ -51,7 +48,6 @@ public class ClassificationFamilyRepositoryImpl implements ClassificationFamilyR
         }
 
         classification.on(predicates.toArray(new Predicate[0]));
-        System.out.println(classification.get("id"));
 
         cq.multiselect(
                         family.get("id"),
@@ -69,6 +65,8 @@ public class ClassificationFamilyRepositoryImpl implements ClassificationFamilyR
             String section, ClassificationType classificationType
     ){
         CriteriaBuilder cb = em.getCriteriaBuilder();
+
+
         CriteriaQuery<ClassificationFamilySummary> cq = cb.createQuery(ClassificationFamilySummary.class);
 
         Root<ClassificationFamily> family = cq.from(ClassificationFamily.class);
@@ -76,26 +74,6 @@ public class ClassificationFamilyRepositoryImpl implements ClassificationFamilyR
         Join<ClassificationFamily, ClassificationSeries> classification = family.join("classificationSeriesList", JoinType.LEFT);
 
         List<Predicate> predicates = new ArrayList<>();
-
-        Join<ClassificationSeries, StatisticalClassification> version =
-                classification.join("classificationVersions", JoinType.LEFT);
-
-        /*Predicate versionIsValid = cb.and(
-                cb.isFalse(version.get("deleted")),
-                cb.or(
-                        cb.isTrue(version.get("published").get("published_en")),
-                        cb.isTrue(version.get("published").get("published_no")),
-                        cb.isTrue(version.get("published").get("published_nn"))
-                )
-        );
-
-        // Keep classifications with no versions OR valid versions
-        Predicate versionOptional = cb.or(
-                cb.isNull(version),
-                versionIsValid
-        );
-
-        predicates.add(versionOptional);*/
 
         predicates.add(cb.isFalse(classification.get("deleted")));
         predicates.add(cb.isFalse(classification.get("copyrighted")));
@@ -113,6 +91,21 @@ public class ClassificationFamilyRepositoryImpl implements ClassificationFamilyR
         }
 
         classification.on(predicates.toArray(new Predicate[0]));
+
+        Join<ClassificationSeries, ClassificationVersion> version =
+                classification.join("classificationVersions", JoinType.LEFT);
+
+        version.on(
+                cb.and(
+                        cb.isFalse(version.get("deleted")),
+                        cb.isNotNull(version.get("published")),
+                        cb.or(
+                                cb.isTrue(version.get("published").get("published_no")),
+                                cb.isTrue(version.get("published").get("published_nn")),
+                                cb.isTrue(version.get("published").get("published_en"))
+                        )
+                )
+        );
 
         cq.multiselect(
                         family.get("id"),
