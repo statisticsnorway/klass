@@ -42,6 +42,7 @@
         <solr-version>5.5.5</solr-version>
         <spring-data-solr-version>2.1.0.RELEASE</spring-data-solr-version>
         <postgresql.version>42.7.5</postgresql.version>
+        <spring-security.version>5.7.11</spring-security.version>
     </properties>
 
     <parent>
@@ -93,14 +94,18 @@
         </dependency>
 
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-oauth2-resource-server</artifactId>
-            <version>5.1.13.RELEASE</version>
+            <version>5.8.16</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-oauth2-jose</artifactId>
-            <version>5.1.13.RELEASE</version>
+            <version>5.8.16</version>
         </dependency>
 
         <!--TOMCAT-->
@@ -211,6 +216,10 @@
             <artifactId>jakarta.servlet-api</artifactId>
             <version>4.0.4</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
         </dependency>
     </dependencies>
 

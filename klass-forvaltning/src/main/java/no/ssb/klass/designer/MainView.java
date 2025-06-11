@@ -16,7 +16,7 @@ import no.ssb.klass.designer.admin.ContentUseStatView;
 import no.ssb.klass.designer.components.BreadcumbPanel.Breadcrumb;
 import no.ssb.klass.designer.components.ClassificationListViewSelection;
 import no.ssb.klass.designer.service.ClassificationFacade;
-import no.ssb.klass.designer.service.KlassLoginService;
+import no.ssb.klass.designer.user.KlassUserDetailsProvider;
 import no.ssb.klass.designer.user.UserContext;
 import no.ssb.klass.designer.util.ConfirmationDialog;
 import no.ssb.klass.designer.util.KlassTheme;
@@ -32,25 +32,30 @@ import java.util.List;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 @SpringUI
-@SuppressWarnings("serial")
 public class MainView extends MainDesign implements ViewChangeListener {
     private static final Logger log = LoggerFactory.getLogger(MainView.class);
     private Navigator navigator;
 
     private final SpringViewProvider springViewProvider;
-    private final KlassLoginService klassLoginService;
     private final VaadinSecurity vaadinSecurity;
     private final UserContext userContext;
+    private final KlassUserDetailsProvider user;
+
 
     private ConfirmationDialog confirmationDialog;
 
     @Autowired
-    public MainView(ClassificationFacade classificationFacade, SpringViewProvider springViewProvider,
-                    VaadinSecurity vaadinSecurity, KlassLoginService vaadinLoginService, UserContext userContext) {
+    public MainView(
+            ClassificationFacade classificationFacade,
+            SpringViewProvider springViewProvider,
+            VaadinSecurity vaadinSecurity,
+            UserContext userContext,
+            KlassUserDetailsProvider user
+    ) {
         this.springViewProvider = springViewProvider;
-        this.klassLoginService = vaadinLoginService;
         this.vaadinSecurity = vaadinSecurity;
         this.userContext = userContext;
+        this.user = user;
         verifyUser();
         configureNavigator();
         MainFilterLogic.configureFilterPanel(selectKodeverk, selectSection, classificationFacade);
@@ -88,8 +93,8 @@ public class MainView extends MainDesign implements ViewChangeListener {
         /* TODO https://statistics-norway.atlassian.net/browse/DPMETA-916
                 Replace hardcoded user with user info extracted from the token
         */
-            log.debug("Set User {}", userContext);
-            userContext.setUser(new User("kno@ssb.no", "Kari Nordmann", "854"));
+            log.debug("Set User {}", user);
+            userContext.setUser(new User(user.getUsername(), "Kari Nordmann", "854"));
         }
     }
 
