@@ -185,6 +185,26 @@ public class ClassificationFamilyRepositoryTest {
     }
 
     @Test
+    public void findClassificationFamilySummariesOneClassificationIsCopyrightedNotPublic() {
+        // This test is for demonstrating why we should test method 'findPublicClassificationFamilySummaries' which
+        // is used in klass-api and not 'findClassificationFamilySummaries'
+
+        // given
+        ClassificationFamily family = createClassificationFamilyOneClassificationIsCopyrighted();
+        subject.save(family);
+
+        assertThat(family.getClassificationSeries().size()).isEqualTo(2);
+
+        // when
+        List<ClassificationFamilySummary> result = subject.findClassificationFamilySummaries(allSections,
+                allClassificationTypes);
+
+        // then
+        assertEquals(1, result.size());
+        assertEquals(2, result.get(0).getNumberOfClassifications());
+    }
+
+    @Test
     public void findClassificationFamilySummariesOneClassificationIsDeleted() {
         // given
         ClassificationFamily family = createClassificationFamilyOneClassificationIsDeleted();
