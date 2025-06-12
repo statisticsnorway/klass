@@ -448,56 +448,6 @@ public class ClassificationFamilyRepositoryTest {
 
     // temp tests for dev
     @Test
-    public void verifyFindAllClassificationFamilies() {
-        ClassificationFamily family = createClassificationFamilyWithOneClassification();
-        subject.save(family);
-
-        List<ClassificationFamily> classificationFamilies = classificationFamilySummaries.findPublicClassificationFamilies();
-        assertEquals(1, classificationFamilies.size());
-
-    }
-
-    @Test
-    public void verifyFindAllClassificationFamiliesFilterCopyrighted() {
-        ClassificationFamily family = createClassificationFamilyOneClassificationIsCopyrighted();
-        subject.save(family);
-
-        List<ClassificationFamily> classificationFamilies = classificationFamilySummaries.getPublicClassificationFamiliesFilterCopyrighted();
-        assertEquals(1, classificationFamilies.size());
-
-    }
-
-    @Test
-    public void verifyFindAllClassificationFamiliesFilterClassificationDeleted() {
-        ClassificationFamily family = createClassificationFamilyOneClassificationIsDeleted();
-        subject.save(family);
-
-        List<ClassificationFamily> classificationFamilies = classificationFamilySummaries.getPublicClassificationFamiliesFilterClassificationDeleted();
-        assertEquals(1, classificationFamilies.size());
-
-    }
-
-    @Test
-    public void verifyFindAllClassificationFamiliesFilterClassificationVersionDeleted() {
-        ClassificationFamily family = createClassificationFamilyOneVersionDeleted();
-        subject.save(family);
-
-        List<ClassificationFamily> classificationFamilies = classificationFamilySummaries.getPublicClassificationFamiliesFilterVersionDeleted();
-        assertEquals(1, classificationFamilies.size());
-
-    }
-
-    @Test
-    public void verifyFindAllClassificationFamiliesFilterClassificationVersionNotPublished() {
-        ClassificationFamily family = createClassificationFamilyOneVersionNotPublished();
-        subject.save(family);
-
-        List<ClassificationFamily> classificationFamilies = classificationFamilySummaries.getPublicClassificationFamiliesFilterVersionNotPublished();
-        assertEquals(1, classificationFamilies.size());
-
-    }
-
-    @Test
     public void verifyFindAllClassificationFamiliesCount() {
         ClassificationFamily summer_family = createClassificationFamilyOneVersionNotPublished();
         subject.save(summer_family);
