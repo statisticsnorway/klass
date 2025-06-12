@@ -30,7 +30,7 @@ public class ClassificationFamilySummaryBuilder {
      *
      * @return a list of {@link ClassificationFamilySummary} representing summaries of the input families
      */
-    public List<ClassificationFamilySummary> buildPublicClassificationSummaries() {
+    public List<ClassificationFamilySummary> buildPublicClassificationSummaries(String section) {
         List<ClassificationFamily> families = classificationFamilyRepository.findAll();
         return families.stream()
                 .map(this::toPublicClassificationFamilySummary)
