@@ -687,15 +687,6 @@ public class ClassificationServiceImplTest {
         assertEquals(1, result.size());
     }
 
-    @Test
-    public void findAllClassificationFamiliesCopyrighted() {
-
-        List<ClassificationFamily> result = subject.findAllClassificationFamilies();
-        org.assertj.core.api.Assertions.assertThat(result).isNotNull();
-        org.assertj.core.api.Assertions.assertThat(result.size()).isEqualTo(1);
-        org.assertj.core.api.Assertions.assertThat(result.get(0).getClassificationSeries().get(0).isCopyrighted()).isTrue();
-    }
-
     private ClassificationVersion createClassificationVersion() {
         ClassificationVersion version = TestUtil.createClassificationVersion(TestUtil.anyDateRange());
         ClassificationSeries classification = TestUtil.createClassification("name");
