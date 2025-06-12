@@ -1,8 +1,6 @@
 package no.ssb.klass.core.repository;
 
 import no.ssb.klass.core.model.*;
-import no.ssb.klass.core.util.TranslatablePersistenceConverter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.*;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
