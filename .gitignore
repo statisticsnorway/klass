@@ -48,3 +48,5 @@ target
 klass.log*
 /.checkstyle
 .dccache
+
+**/initdb/*.sql
