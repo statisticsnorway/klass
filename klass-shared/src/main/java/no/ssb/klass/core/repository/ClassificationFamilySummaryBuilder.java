@@ -28,10 +28,10 @@ public class ClassificationFamilySummaryBuilder {
      * <p>Each summary includes the family's ID, translatable name, icon path, and
      * count of public classification series.</p>
      *
-     * @param families the list of classification families to summarize
      * @return a list of {@link ClassificationFamilySummary} representing summaries of the input families
      */
-    public List<ClassificationFamilySummary> buildPublicClassificationSummaries(List<ClassificationFamily> families) {
+    public List<ClassificationFamilySummary> buildPublicClassificationSummaries() {
+        List<ClassificationFamily> families = classificationFamilyRepository.findAll();
         return families.stream()
                 .map(this::toPublicClassificationFamilySummary)
                 .collect(Collectors.toList());

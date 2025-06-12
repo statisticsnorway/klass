@@ -86,9 +86,7 @@ public class ClassificationFamilyRepositoryTest {
         List<ClassificationFamilySummary> result = subject.findPublicClassificationFamilySummaries(allSections,
                 allClassificationTypes);
 
-        List<ClassificationFamily> classificationFamilies = classificationFamilySummaries.findPublicClassificationFamilies();
-        List<ClassificationFamilySummary> result2 = classificationFamilySummaries.buildPublicClassificationSummaries(classificationFamilies);
-
+        List<ClassificationFamilySummary> result2 = classificationFamilySummaries.buildPublicClassificationSummaries();
 
         // then
         assertEquals(1, result.size());
@@ -116,8 +114,7 @@ public class ClassificationFamilyRepositoryTest {
         List<ClassificationFamilySummary> result = subject.findPublicClassificationFamilySummaries(allSections,
                 allClassificationTypes);
 
-        List<ClassificationFamily> classificationFamilies = classificationFamilySummaries.findPublicClassificationFamilies();
-        List<ClassificationFamilySummary> result2 = classificationFamilySummaries.buildPublicClassificationSummaries(classificationFamilies);
+        List<ClassificationFamilySummary> result2 = classificationFamilySummaries.buildPublicClassificationSummaries();
 
         // then
         assertEquals(3, result.size());
@@ -208,9 +205,7 @@ public class ClassificationFamilyRepositoryTest {
         List<ClassificationFamilySummary> result = subject.findPublicClassificationFamilySummaries(allSections,
                 allClassificationTypes);
 
-        List<ClassificationFamily> classificationFamilies = classificationFamilySummaries.findPublicClassificationFamilies();
-        List<ClassificationFamilySummary> result2 = classificationFamilySummaries.buildPublicClassificationSummaries(classificationFamilies);
-
+        List<ClassificationFamilySummary> result2 = classificationFamilySummaries.buildPublicClassificationSummaries();
 
         // then
         assertEquals(1, result.size());
@@ -254,9 +249,7 @@ public class ClassificationFamilyRepositoryTest {
         List<ClassificationFamilySummary> result = subject.findPublicClassificationFamilySummaries(allSections,
                 allClassificationTypes);
 
-        List<ClassificationFamily> classificationFamilies = classificationFamilySummaries.findPublicClassificationFamilies();
-        List<ClassificationFamilySummary> result2 = classificationFamilySummaries.buildPublicClassificationSummaries(classificationFamilies);
-
+        List<ClassificationFamilySummary> result2 = classificationFamilySummaries.buildPublicClassificationSummaries();
 
         // then
         assertEquals(1, result.size());
@@ -278,9 +271,7 @@ public class ClassificationFamilyRepositoryTest {
         List<ClassificationFamilySummary> result = subject.findPublicClassificationFamilySummaries(allSections,
                 allClassificationTypes);
 
-        List<ClassificationFamily> classificationFamilies = classificationFamilySummaries.findPublicClassificationFamilies();
-        List<ClassificationFamilySummary> result2 = classificationFamilySummaries.buildPublicClassificationSummaries(classificationFamilies);
-
+        List<ClassificationFamilySummary> result2 = classificationFamilySummaries.buildPublicClassificationSummaries();
 
         // then
         assertEquals(1, result.size());
@@ -302,8 +293,7 @@ public class ClassificationFamilyRepositoryTest {
         List<ClassificationFamilySummary> result = subject.findPublicClassificationFamilySummaries(allSections,
                 allClassificationTypes);
 
-        List<ClassificationFamily> classificationFamilies = classificationFamilySummaries.findPublicClassificationFamilies();
-        List<ClassificationFamilySummary> result2 = classificationFamilySummaries.buildPublicClassificationSummaries(classificationFamilies);
+        List<ClassificationFamilySummary> result2 = classificationFamilySummaries.buildPublicClassificationSummaries();
 
         // then
         assertEquals(1, result.size());
@@ -486,9 +476,8 @@ public class ClassificationFamilyRepositoryTest {
 
         logger.info(LOGGER_MESSAGE_FAMILIES, subject.count());
 
-        List<ClassificationFamily> classificationFamilies = classificationFamilySummaries.findPublicClassificationFamilies();
         List<ClassificationFamilySummary> classificationFamilyBuilder;
-        classificationFamilyBuilder = classificationFamilySummaries.buildPublicClassificationSummaries(classificationFamilies);
+        classificationFamilyBuilder = classificationFamilySummaries.buildPublicClassificationSummaries();
         assertEquals(4, classificationFamilyBuilder.size());
         assertThat(classificationFamilyBuilder.get(0).getNumberOfClassifications()).isEqualTo(1);
         assertThat(classificationFamilyBuilder.get(1).getNumberOfClassifications()).isEqualTo(1);
