@@ -1,25 +1,22 @@
 package no.ssb.klass.designer.user;
 
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.google.common.collect.ImmutableSet;
 import com.vaadin.spring.annotation.SpringComponent;
-import com.vaadin.spring.annotation.VaadinSessionScope;
-
 import no.ssb.klass.core.model.ClassificationEntityOperations;
 import no.ssb.klass.core.model.ClassificationSeries;
 import no.ssb.klass.core.model.User;
 import no.ssb.klass.core.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author Mads Lundemo, SSB.
  */
 @SpringComponent
-@VaadinSessionScope
+//@VaadinSessionScope
 class UserContextImpl implements UserContext {
 
     @Autowired
@@ -77,9 +74,9 @@ class UserContextImpl implements UserContext {
     }
 
     public void setUser(User currentUser) {
-        if (hasUser()) {
-            throw new RuntimeException("User already set");
-        }
+//        if (hasUser()) {
+//            throw new RuntimeException("User already set");
+//        }
         this.currentUser = currentUser;
     }
 

@@ -1,26 +1,23 @@
 package no.ssb.klass.designer.admin.tabs;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-
 import com.vaadin.ui.Button;
-
-import no.ssb.klass.core.ldap.ActiveDirectoryService;
 import no.ssb.klass.core.model.ClassificationSeries;
 import no.ssb.klass.core.model.ClassificationVariant;
 import no.ssb.klass.core.model.User;
 import no.ssb.klass.core.service.ClassificationService;
 import no.ssb.klass.core.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 /**
  * @author Mads Lundemo, SSB.
  */
 public class SectionsTab extends SectionsTabDesign {
 
-    @Autowired
-    private ActiveDirectoryService activeDirectoryService;
+    // Disabled when transitioning away from LDAP
+//    @Autowired
+//    private ActiveDirectoryService activeDirectoryService;
     @Autowired
     private UserService userService;
 
@@ -98,18 +95,19 @@ public class SectionsTab extends SectionsTabDesign {
     }
 
     private void updateInfoForUser(User user) {
-        try {
-            List<String> changes = activeDirectoryService.syncActiveDirectory(user);
-            if (!changes.isEmpty()) {
-                logUpdatedUser(user, changes);
-                updated++;
-            } else {
-                ignored++;
-            }
-        } catch (UsernameNotFoundException e) {
-            notFound++;
-            logMissingUser(user);
-        }
+        // Disabled when transitioning away from LDAP
+//        try {
+//            List<String> changes = activeDirectoryService.syncActiveDirectory(user);
+//            if (!changes.isEmpty()) {
+//                logUpdatedUser(user, changes);
+//                updated++;
+//            } else {
+//                ignored++;
+//            }
+//        } catch (UsernameNotFoundException e) {
+//            notFound++;
+//            logMissingUser(user);
+//        }
     }
 
     private void logUpdatedUser(User user, List<String> changes) {

@@ -1,19 +1,15 @@
 package no.ssb.klass.designer.admin.tabs;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-
 import com.google.common.base.Strings;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
-
-import no.ssb.klass.core.ldap.ActiveDirectoryService;
 import no.ssb.klass.core.model.User;
 import no.ssb.klass.core.service.AdminService;
 import no.ssb.klass.core.service.UserService;
 import no.ssb.klass.designer.util.ConfirmationDialog;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @author Mads Lundemo, SSB.
@@ -22,8 +18,9 @@ public class OwnershipTab extends OwnershipTabDesign {
 
     private static final Logger log = LoggerFactory.getLogger(OwnershipTab.class);
 
-    @Autowired
-    private ActiveDirectoryService activeDirectoryService;
+    // Disabled when transitioning away from LDAP
+//    @Autowired
+//    private ActiveDirectoryService activeDirectoryService;
     @Autowired
     private UserService userService;
     @Autowired
@@ -80,15 +77,18 @@ public class OwnershipTab extends OwnershipTabDesign {
     }
 
     private User getOrCreateUser(String newContactPersonName) {
-        User newContactPersonUser = userService.getUserByUserName(newContactPersonName);
-        if (newContactPersonUser == null) {
-            try {
-                return activeDirectoryService.createAndSaveNewUser(newContactPersonName);
-            } catch (UsernameNotFoundException e) {
-                log.warn("User " + newContactPersonName + " not found in AD.");
-                return null;
-            }
-        }
-        return newContactPersonUser;
+        throw new RuntimeException("Not Supported since moving away from LDAP auth.");
+
+        // Disabled when transitioning away from LDAP
+//        User newContactPersonUser = userService.getUserByUserName(newContactPersonName);
+//        if (newContactPersonUser == null) {
+//            try {
+//                return activeDirectoryService.createAndSaveNewUser(newContactPersonName);
+//            } catch (UsernameNotFoundException e) {
+//                log.warn("User " + newContactPersonName + " not found in AD.");
+//                return null;
+//            }
+//        }
+//        return newContactPersonUser;
     }
 }

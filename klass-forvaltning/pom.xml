@@ -17,7 +17,7 @@
         <github.repository>statisticsnorway/klass</github.repository>
         <!-- Klass dependencies are built with support for Java 8 and Spring Boot 1.4.4.
              Newer versions are not supported -->
-        <klass-shared-version>2.2.1</klass-shared-version>
+        <klass-shared-version>2.2.2-SNAPSHOT</klass-shared-version>
         <klass-solr-version>2.1.7</klass-solr-version>
         <!-- Vaadin 7.7.17 was the last public open-source version of the Vaadin 7 framework.
              See https://vaadin.com/support/vaadin-7-extended-maintenance  -->
@@ -42,7 +42,6 @@
         <solr-version>5.5.5</solr-version>
         <spring-data-solr-version>2.1.0.RELEASE</spring-data-solr-version>
         <postgresql.version>42.7.5</postgresql.version>
-        <spring-security.version>5.7.11</spring-security.version>
     </properties>
 
     <parent>
@@ -100,12 +99,12 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-oauth2-resource-server</artifactId>
-            <version>5.8.16</version>
+            <version>5.3.5.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-oauth2-jose</artifactId>
-            <version>5.8.16</version>
+            <version>5.3.5.RELEASE</version>
         </dependency>
 
         <!--TOMCAT-->

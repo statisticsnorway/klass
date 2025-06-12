@@ -1,6 +1,5 @@
 package no.ssb.klass.designer.user;
 
-import no.ssb.klass.core.ldap.KlassUserDetailsException;
 import no.ssb.klass.core.model.Role;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

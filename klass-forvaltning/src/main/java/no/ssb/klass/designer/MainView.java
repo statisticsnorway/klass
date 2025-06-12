@@ -10,13 +10,11 @@ import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.NativeSelect;
 import com.vaadin.ui.UI;
 import no.ssb.klass.core.model.ClassificationType;
-import no.ssb.klass.core.model.User;
 import no.ssb.klass.designer.admin.AdminView;
 import no.ssb.klass.designer.admin.ContentUseStatView;
 import no.ssb.klass.designer.components.BreadcumbPanel.Breadcrumb;
 import no.ssb.klass.designer.components.ClassificationListViewSelection;
 import no.ssb.klass.designer.service.ClassificationFacade;
-import no.ssb.klass.designer.user.KlassUserDetailsProvider;
 import no.ssb.klass.designer.user.UserContext;
 import no.ssb.klass.designer.util.ConfirmationDialog;
 import no.ssb.klass.designer.util.KlassTheme;
@@ -25,7 +23,6 @@ import no.ssb.klass.designer.util.VaadinUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.vaadin.spring.security.VaadinSecurity;
 
 import java.util.List;
 
@@ -37,9 +34,7 @@ public class MainView extends MainDesign implements ViewChangeListener {
     private Navigator navigator;
 
     private final SpringViewProvider springViewProvider;
-    private final VaadinSecurity vaadinSecurity;
     private final UserContext userContext;
-    private final KlassUserDetailsProvider user;
 
 
     private ConfirmationDialog confirmationDialog;
@@ -48,15 +43,10 @@ public class MainView extends MainDesign implements ViewChangeListener {
     public MainView(
             ClassificationFacade classificationFacade,
             SpringViewProvider springViewProvider,
-            VaadinSecurity vaadinSecurity,
-            UserContext userContext,
-            KlassUserDetailsProvider user
+            UserContext userContext
     ) {
         this.springViewProvider = springViewProvider;
-        this.vaadinSecurity = vaadinSecurity;
         this.userContext = userContext;
-        this.user = user;
-        verifyUser();
         configureNavigator();
         MainFilterLogic.configureFilterPanel(selectKodeverk, selectSection, classificationFacade);
         configureTopPanel();
@@ -77,7 +67,7 @@ public class MainView extends MainDesign implements ViewChangeListener {
     }
 
     private void logout(MenuBar.MenuItem menuItem) {
-        vaadinSecurity.logout();
+//        vaadinSecurity.logout();
     }
 
     private void createAdminView() {
@@ -86,16 +76,6 @@ public class MainView extends MainDesign implements ViewChangeListener {
 
     private void createInnholdBruksstatistikkView() {
         VaadinUtil.navigateTo(ContentUseStatView.NAME);
-    }
-
-    private void verifyUser() {
-        if (!userContext.hasUser()) {
-        /* TODO https://statistics-norway.atlassian.net/browse/DPMETA-916
-                Replace hardcoded user with user info extracted from the token
-        */
-            log.debug("Set User {}", user);
-            userContext.setUser(new User(user.getUsername(), "Kari Nordmann", "854"));
-        }
     }
 
     public void configureNavigator() {
