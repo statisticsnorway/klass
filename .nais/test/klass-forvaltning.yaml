@@ -44,6 +44,3 @@ spec:
   liveness:
     path: /ping
     initialDelay: 300
-  startup:
-    path: /ping
-    initialDelay: 300
