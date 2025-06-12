@@ -31,7 +31,7 @@ public class ClassificationFamilySummaryBuilder {
      * @param families the list of classification families to summarize
      * @return a list of {@link ClassificationFamilySummary} representing summaries of the input families
      */
-    public List<ClassificationFamilySummary> buildClassificationSummaries(List<ClassificationFamily> families) {
+    public List<ClassificationFamilySummary> buildPublicClassificationSummaries(List<ClassificationFamily> families) {
         return families.stream()
                 .map(this::toPublicClassificationFamilySummary)
                 .collect(Collectors.toList());
@@ -58,6 +58,31 @@ public class ClassificationFamilySummaryBuilder {
         );
     }
 
+    /**
+     * Builds a list of {@link ClassificationFamilySummary} objects from a list of
+     * {@link ClassificationFamily} entities.
+     *
+     * <p>Each summary includes the family's ID, translatable name, icon path, and
+     * count of classification series.</p>
+     *
+     * @param families the list of classification families to summarize
+     * @return a list of {@link ClassificationFamilySummary} representing summaries of the input families
+     */
+    public List<ClassificationFamilySummary> buildClassificationSummaries(List<ClassificationFamily> families) {
+        return families.stream()
+                .map(this::toClassificationFamilySummary)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Converts a {@link ClassificationFamily} into a {@link ClassificationFamilySummary}
+     *
+     * <p>The summary contains the family's ID, translatable name, icon path,
+     * and the count of classification series.</p>
+     *
+     * @param family the classification family to summarize
+     * @return a {@link ClassificationFamilySummary} representing the public summary of the family
+     */
     private ClassificationFamilySummary toClassificationFamilySummary(ClassificationFamily family) {
         long validSeriesCount = family.getClassificationSeries().size();
         return new ClassificationFamilySummary(

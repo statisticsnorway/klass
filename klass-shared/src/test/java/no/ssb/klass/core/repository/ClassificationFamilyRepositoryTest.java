@@ -87,7 +87,7 @@ public class ClassificationFamilyRepositoryTest {
                 allClassificationTypes);
 
         List<ClassificationFamily> classificationFamilies = classificationFamilySummaries.findPublicClassificationFamilies();
-        List<ClassificationFamilySummary> result2 = classificationFamilySummaries.buildClassificationSummaries(classificationFamilies);
+        List<ClassificationFamilySummary> result2 = classificationFamilySummaries.buildPublicClassificationSummaries(classificationFamilies);
 
 
         // then
@@ -117,7 +117,7 @@ public class ClassificationFamilyRepositoryTest {
                 allClassificationTypes);
 
         List<ClassificationFamily> classificationFamilies = classificationFamilySummaries.findPublicClassificationFamilies();
-        List<ClassificationFamilySummary> result2 = classificationFamilySummaries.buildClassificationSummaries(classificationFamilies);
+        List<ClassificationFamilySummary> result2 = classificationFamilySummaries.buildPublicClassificationSummaries(classificationFamilies);
 
         // then
         assertEquals(3, result.size());
@@ -209,7 +209,7 @@ public class ClassificationFamilyRepositoryTest {
                 allClassificationTypes);
 
         List<ClassificationFamily> classificationFamilies = classificationFamilySummaries.findPublicClassificationFamilies();
-        List<ClassificationFamilySummary> result2 = classificationFamilySummaries.buildClassificationSummaries(classificationFamilies);
+        List<ClassificationFamilySummary> result2 = classificationFamilySummaries.buildPublicClassificationSummaries(classificationFamilies);
 
 
         // then
@@ -255,7 +255,7 @@ public class ClassificationFamilyRepositoryTest {
                 allClassificationTypes);
 
         List<ClassificationFamily> classificationFamilies = classificationFamilySummaries.findPublicClassificationFamilies();
-        List<ClassificationFamilySummary> result2 = classificationFamilySummaries.buildClassificationSummaries(classificationFamilies);
+        List<ClassificationFamilySummary> result2 = classificationFamilySummaries.buildPublicClassificationSummaries(classificationFamilies);
 
 
         // then
@@ -279,7 +279,7 @@ public class ClassificationFamilyRepositoryTest {
                 allClassificationTypes);
 
         List<ClassificationFamily> classificationFamilies = classificationFamilySummaries.findPublicClassificationFamilies();
-        List<ClassificationFamilySummary> result2 = classificationFamilySummaries.buildClassificationSummaries(classificationFamilies);
+        List<ClassificationFamilySummary> result2 = classificationFamilySummaries.buildPublicClassificationSummaries(classificationFamilies);
 
 
         // then
@@ -303,7 +303,7 @@ public class ClassificationFamilyRepositoryTest {
                 allClassificationTypes);
 
         List<ClassificationFamily> classificationFamilies = classificationFamilySummaries.findPublicClassificationFamilies();
-        List<ClassificationFamilySummary> result2 = classificationFamilySummaries.buildClassificationSummaries(classificationFamilies);
+        List<ClassificationFamilySummary> result2 = classificationFamilySummaries.buildPublicClassificationSummaries(classificationFamilies);
 
         // then
         assertEquals(1, result.size());
@@ -488,7 +488,7 @@ public class ClassificationFamilyRepositoryTest {
 
         List<ClassificationFamily> classificationFamilies = classificationFamilySummaries.findPublicClassificationFamilies();
         List<ClassificationFamilySummary> classificationFamilyBuilder;
-        classificationFamilyBuilder = classificationFamilySummaries.buildClassificationSummaries(classificationFamilies);
+        classificationFamilyBuilder = classificationFamilySummaries.buildPublicClassificationSummaries(classificationFamilies);
         assertEquals(4, classificationFamilyBuilder.size());
         assertThat(classificationFamilyBuilder.get(0).getNumberOfClassifications()).isEqualTo(1);
         assertThat(classificationFamilyBuilder.get(1).getNumberOfClassifications()).isEqualTo(1);
