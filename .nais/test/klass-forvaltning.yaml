@@ -12,15 +12,23 @@ spec:
   ingresses:
     - https://klass-forvaltning.intern.test.ssb.no
 
+  login:
+    provider: openid
+    enforce:
+      enabled: true
+      excludePaths:
+        - /monitor
+        - /ping
+
   replicas:
     min: 1
     max: 1
   resources:
     requests:
       cpu: 400m
-      memory: 448Mi
+      memory: 1024Mi
     limits:
-      memory: 576Mi
+      memory: 2048Mi
   env:
     - name: SPRING_PROFILES_ACTIVE
       value: frontend, postgres, small-import, skip-indexing, ad-offline, embedded-solr
@@ -29,3 +37,7 @@ spec:
   filesFrom:
     - mountPath: /var/run/secrets/nais.io/sqlcertificate
       secret: sqeletor-klass-827ec8ec
+
+  liveness:
+    path: /ping
+    initialDelay: 300

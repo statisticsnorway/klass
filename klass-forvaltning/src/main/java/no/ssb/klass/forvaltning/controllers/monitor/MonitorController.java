@@ -1,15 +1,6 @@
 package no.ssb.klass.forvaltning.controllers.monitor;
 
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.LinkedList;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
+import no.ssb.klass.core.repository.UserRepository;
 import no.ssb.klass.core.service.SearchService;
 import no.ssb.klass.core.service.search.SolrSearchResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +9,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.solr.core.query.result.FacetAndHighlightPage;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
-import no.ssb.klass.core.repository.UserRepository;
+import javax.servlet.http.HttpServletRequest;
+import java.net.*;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @author Mads Lundemo, SSB.
@@ -29,7 +23,7 @@ import no.ssb.klass.core.repository.UserRepository;
 @Controller
 @RequestMapping(MonitorController.PATH)
 public class MonitorController {
-    public static final String PATH = "/monitor/";
+    public static final String PATH = "/monitor";
 
     private static final String DATABASE_TILKOBLING = "Database tilkobling";
     private static final String KLASS_FORVALTNING = "Klass Forvaltning";
@@ -44,7 +38,7 @@ public class MonitorController {
     @Autowired
     private SearchService searchService;
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @GetMapping
     public String render(HttpServletRequest request, ModelMap model) {
 
         List<MonitorStatus> statusList = new LinkedList<>();
@@ -110,7 +104,7 @@ public class MonitorController {
         URL url = new URL(request.getRequestURL().toString());
         String host = url.getHost();
         String userInfo = url.getUserInfo();
-        String scheme = header != null ? header :url.getProtocol();
+        String scheme = header != null ? header : url.getProtocol();
         int port = url.getPort();
         String path = request.getContextPath();
 
