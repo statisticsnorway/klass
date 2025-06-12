@@ -16,11 +16,13 @@ import org.springframework.web.filter.GenericFilterBean;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Enumeration;
 
-
+/**
+ * Extract User Details from a request with a JWT Bearer token in the Authorization header.
+ * <p>
+ * This approach is taken because Spring Security 4 does not have OAuth support.
+ */
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class UserDetailsExtractorFilter extends GenericFilterBean implements Filter {
@@ -36,26 +38,29 @@ public class UserDetailsExtractorFilter extends GenericFilterBean implements Fil
 
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws ServletException, IOException {
-        HttpServletResponse response = (HttpServletResponse) res;
         HttpServletRequest request = (HttpServletRequest) req;
-        log.info("Filtering request {}", req.toString());
 
-        if (request.getRequestURI().contains("/ping")) {
+        if (isUnauthenticatedPath(request)) {
             chain.doFilter(req, res);
             return;
         }
 
-        HttpServletRequest httpRequest = (HttpServletRequest) request;
-        Enumeration<String> headerNames = httpRequest.getHeaderNames();
+        Jwt jwt = extractJwt(request);
 
-        if (headerNames != null) {
-            while (headerNames.hasMoreElements()) {
-                String name = headerNames.nextElement();
-                log.info("Header: {}  value: {}", name, httpRequest.getHeader(name));
-            }
-        }
+        User user = new User(jwt.getClaimAsString("email"), jwt.getClaimAsString("name"), "854");
+        user.setEmail(jwt.getClaimAsString("email"));
+        log.info("Active User: {}", user.getUsername());
+        userContext.setUser(user);
 
-        String authHeader = httpRequest.getHeader("authorization");
+        chain.doFilter(req, res);
+    }
+
+    private boolean isUnauthenticatedPath(HttpServletRequest request) {
+        return request.getRequestURI().contains("/ping");
+    }
+
+    private Jwt extractJwt(HttpServletRequest request) {
+        String authHeader = request.getHeader("authorization");
 
         if (authHeader == null) {
             throw new AuthenticationCredentialsNotFoundException("Request is unauthenticated");
@@ -67,15 +72,7 @@ public class UserDetailsExtractorFilter extends GenericFilterBean implements Fil
 
         decoder.setJwtValidator(new JwtIssuerValidator("https://auth.test.ssb.no/realms/ssb"));
 
-        Jwt jwt = decoder.decode(authHeader.replace("Bearer ", "").replaceAll("\\s+", ""));
-
-        log.info("Claims: {}", jwt.getClaims());
-
-        User user = new User(jwt.getClaimAsString("email"), jwt.getClaimAsString("name"), "854");
-        log.info("Set User {}", user);
-        userContext.setUser(user);
-
-        chain.doFilter(req, res);
+        return decoder.decode(authHeader.replace("Bearer ", "").replaceAll("\\s+", ""));
 
     }
 }
