@@ -314,6 +314,28 @@ public class ClassificationFamilyRepositoryTest {
         assertEquals(1, result2.get(0).getNumberOfClassifications());
     }
 
+    @Test
+    public void verifyFindAllClassificationFamiliesBuildSummaries() {
+        ClassificationFamily summer_family = createClassificationFamilyOneVersionNotPublished();
+        subject.save(summer_family);
+        ClassificationFamily family = createClassificationFamilyWithOneClassification();
+        subject.save(family);
+        ClassificationFamily code_family = createClassificationFamilyOneClassificationIsCopyrighted();
+        subject.save(code_family);
+        ClassificationFamily skate_family = createClassificationFamilyNoVersionPublished();
+        subject.save(skate_family);
+
+        logger.info(LOGGER_MESSAGE_FAMILIES, subject.count());
+
+        List<ClassificationFamilySummary> classificationFamilyBuilder;
+        classificationFamilyBuilder = classificationFamilySummaries.buildPublicClassificationSummaries(allSections, allClassificationTypes);
+        assertEquals(4, classificationFamilyBuilder.size());
+        assertThat(classificationFamilyBuilder.get(0).getNumberOfClassifications()).isEqualTo(1);
+        assertThat(classificationFamilyBuilder.get(1).getNumberOfClassifications()).isEqualTo(1);
+        assertThat(classificationFamilyBuilder.get(2).getNumberOfClassifications()).isEqualTo(1);
+        assertThat(classificationFamilyBuilder.get(3).getNumberOfClassifications()).isEqualTo(0);
+    }
+
     private ClassificationFamily createClassificationFamilyWithOneClassification() {
         ClassificationFamily family = subject.save(TestUtil.createClassificationFamily("family"));
         ClassificationSeries classification = TestUtil.createClassification("classification");
