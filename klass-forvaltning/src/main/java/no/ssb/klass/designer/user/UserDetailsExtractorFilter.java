@@ -13,12 +13,10 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Enumeration;
 
 
@@ -36,10 +34,15 @@ public class UserDetailsExtractorFilter extends GenericFilterBean implements Fil
     }
 
     @Override
-    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) {
-        log.info("Filtering request {}", req.toString());
+    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws ServletException, IOException {
         HttpServletResponse response = (HttpServletResponse) res;
         HttpServletRequest request = (HttpServletRequest) req;
+        log.info("Filtering request {}", req.toString());
+
+        if (request.getRequestURI().contains("/ping")) {
+            chain.doFilter(req, res);
+            return;
+        }
 
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         Enumeration<String> headerNames = httpRequest.getHeaderNames();
@@ -66,6 +69,8 @@ public class UserDetailsExtractorFilter extends GenericFilterBean implements Fil
         User user = new User(jwt.getClaimAsString("email"), jwt.getClaimAsString("name"), "854");
         log.info("Set User {}", user);
         userContext.setUser(user);
+
+        chain.doFilter(req, res);
 
     }
 }
