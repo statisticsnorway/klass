@@ -17,10 +17,6 @@ public class ClassificationFamilySummaryBuilder {
         this.classificationFamilyRepository = classificationFamilyRepository;
     }
 
-    public List<ClassificationFamily> findPublicClassificationFamilies(){
-        return classificationFamilyRepository.findAll();
-    }
-
     /**
      * Builds a list of {@link ClassificationFamilySummary} objects from a list of
      * {@link ClassificationFamily} entities.
