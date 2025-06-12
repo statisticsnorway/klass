@@ -51,7 +51,7 @@ public class UserDetailsExtractorFilter extends GenericFilterBean implements Fil
             }
         }
 
-        String authHeader = httpRequest.getHeader("authorization");
+        String authHeader = httpRequest.getHeader("authorization").replace("Bearer ", "").replaceAll("\\s+", "");
 
         NimbusJwtDecoder decoder = NimbusJwtDecoder
                 .withJwkSetUri("https://auth.test.ssb.no/realms/ssb/protocol/openid-connect/certs")
