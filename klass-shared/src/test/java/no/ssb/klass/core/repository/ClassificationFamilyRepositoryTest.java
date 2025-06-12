@@ -1,6 +1,7 @@
 package no.ssb.klass.core.repository;
 
 import static io.zonky.test.db.AutoConfigureEmbeddedDatabase.DatabaseProvider.ZONKY;
+import static no.ssb.klass.core.model.ClassificationType.CLASSIFICATION;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
@@ -8,8 +9,10 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.zonky.test.db.AutoConfigureEmbeddedDatabase;
 import no.ssb.klass.core.model.*;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,6 +44,8 @@ public class ClassificationFamilyRepositoryTest {
     private ClassificationSeriesRepository classificationSeriesRepository;
     @Autowired
     private EntityManager entityManager;
+    ClassificationFamilySummaryRes classificationFamilySummaryRes;
+
     private final String allSections = null;
     private final ClassificationType allClassificationTypes = null;
     private User user;
@@ -48,9 +53,9 @@ public class ClassificationFamilyRepositoryTest {
 
     @BeforeEach
     public void setup() {
-
         user = userRepository.save(TestUtil.createUser());
         user2 = userRepository.save(TestUtil.createUser2());
+        classificationFamilySummaryRes = new ClassificationFamilySummaryRes(subject);
     }
 
     @Test
@@ -68,6 +73,97 @@ public class ClassificationFamilyRepositoryTest {
         // then
         assertEquals(1, result.getClassificationSeries().size());
         assertEquals(2, result.getClassificationSeries().get(0).getClassificationVersions().size());
+    }
+
+    @Test
+    public void findAllClassificationFamilies() throws JsonProcessingException {
+
+        ClassificationFamily family = createClassificationFamilyWithOneClassification();
+        ClassificationFamily family2 = createClassificationFamilyTwoClassifications();
+        subject.save(family);
+        subject.save(family2);
+
+        List<ClassificationFamily> result = classificationFamilySummaryRes.findPublicClassificationFamilies();
+        classificationFamilySummaryRes.printClassificationFamilyClassifications();
+        Assertions.assertThat(result).isNotNull();
+        Assertions.assertThat(result.size()).isEqualTo(2);
+        Assertions.assertThat(result.get(0).getClassificationSeries().get(0).getClassificationType()).isEqualTo(CLASSIFICATION);
+        Assertions.assertThat(result.get(0).getClassificationSeries().get(0).getClassificationVersions().size()).isEqualTo(2);
+        Assertions.assertThat(result.get(1).getClassificationSeries().get(0).getClassificationVersions().size()).isEqualTo(1);
+    }
+
+    @Test
+    public void findAllClassificationFamiliesCopyrighted() {
+        ClassificationFamily family = createClassificationFamilyCopyrighted();
+        subject.save(family);
+
+        List<ClassificationFamily> result = classificationFamilySummaryRes.findPublicClassificationFamilies();
+        Assertions.assertThat(result).isNotNull();
+        Assertions.assertThat(result.size()).isEqualTo(1);
+        Assertions.assertThat(result.get(0).getClassificationSeries().get(0).isCopyrighted()).isTrue();
+    }
+
+    @Test
+    public void findAllClassificationFamiliesDeleted() {
+        ClassificationFamily family = createClassificationFamilyDeleted();
+        subject.save(family);
+
+        List<ClassificationFamily> result = classificationFamilySummaryRes.findPublicClassificationFamilies();
+        Assertions.assertThat(result).isNotNull();
+        Assertions.assertThat(result.size()).isEqualTo(1);
+        Assertions.assertThat(result.get(0).getClassificationSeries()).isNotNull();
+        Assertions.assertThat(result.get(0).getClassificationSeries()).isEmpty();
+    }
+
+    @Test
+    public void findAllClassificationFamiliesVersionPublished() {
+        ClassificationFamily family = createClassificationFamilyTwoClassifications();
+        subject.save(family);
+
+        List<ClassificationFamily> result = classificationFamilySummaryRes.findPublicClassificationFamilies();
+        Assertions.assertThat(result).isNotNull();
+        Assertions.assertThat(result.size()).isEqualTo(1);
+        Assertions.assertThat(result.get(0).getClassificationSeries()).isNotNull();
+        Assertions.assertThat(result.get(0).getClassificationSeries().get(0).getPublicClassificationVersions().get(0).isPublished(Language.NB)).isTrue();
+    }
+
+    @Test
+    public void findAllClassificationFamiliesVersionDeleted() {
+        ClassificationFamily family = createClassificationFamilyVersionDeleted();
+        subject.save(family);
+
+        List<ClassificationFamily> result = classificationFamilySummaryRes.findPublicClassificationFamilies();
+        Assertions.assertThat(result).isNotNull();
+        Assertions.assertThat(result.size()).isEqualTo(1);
+        Assertions.assertThat(result.get(0).getClassificationSeries()).isNotNull();
+        Assertions.assertThat(result.get(0).getClassificationSeries().get(0).getPublicClassificationVersions()).isEmpty();
+
+    }
+
+    @Test
+    public void findAllClassificationFamiliesFilterByClassificationType() {
+        ClassificationFamily family = createClassificationFamilyVersionDeleted();
+        subject.save(family);
+
+        List<ClassificationFamily> result = classificationFamilySummaryRes.findPublicClassificationFamilies();
+        Assertions.assertThat(result).isNotNull();
+        Assertions.assertThat(result.size()).isEqualTo(1);
+        Assertions.assertThat(result.get(0).getClassificationSeries()).isNotNull();
+        Assertions.assertThat(result.get(0).getClassificationSeries().get(0).getPublicClassificationVersions()).isEmpty();
+
+    }
+
+    @Test
+    public void findAllClassificationFamiliesFilterBySsbSection() {
+        ClassificationFamily family = createClassificationFamilyVersionDeleted();
+        subject.save(family);
+
+        List<ClassificationFamily> result = classificationFamilySummaryRes.findPublicClassificationFamilies();
+        Assertions.assertThat(result).isNotNull();
+        Assertions.assertThat(result.size()).isEqualTo(1);
+        Assertions.assertThat(result.get(0).getClassificationSeries()).isNotNull();
+        Assertions.assertThat(result.get(0).getClassificationSeries().get(0).getPublicClassificationVersions()).isEmpty();
+
     }
 
     @Test
@@ -305,7 +401,7 @@ public class ClassificationFamilyRepositoryTest {
 
         // then
         assertEquals(1, result.size());
-        //assertEquals(0, result.get(0).getNumberOfClassifications());
+        assertEquals(0, result.get(0).getNumberOfClassifications());
     }
 
     @Test
@@ -322,7 +418,6 @@ public class ClassificationFamilyRepositoryTest {
         assertEquals(1, result.size());
         //assertEquals(0, result.get(0).getNumberOfClassifications());
     }
-
 
     private ClassificationFamily createClassificationFamilyWithOneClassification() {
         ClassificationFamily family = subject.save(TestUtil.createClassificationFamily("family"));
@@ -390,7 +485,7 @@ public class ClassificationFamilyRepositoryTest {
         classification.addClassificationVersion(version);
         classificationSeriesRepository.save(classification);
         classification.getClassificationVersions().get(0).unpublish(Language.NB);
-        System.out.println(classification.getClassificationVersions().get(0).isPublishedInAnyLanguage());
+        System.out.println(classification.getClassificationVersions().get(0));
         return family;
     }
 
@@ -403,6 +498,7 @@ public class ClassificationFamilyRepositoryTest {
                 "2001-01-01"));
         classification.addClassificationVersion(version);
         classificationSeriesRepository.save(classification);
+        classification.getClassificationVersions().get(0).setDeleted();
         return family;
     }
 
