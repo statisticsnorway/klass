@@ -1,8 +1,6 @@
 package no.ssb.klass.core.repository;
 
 import no.ssb.klass.core.model.ClassificationFamily;
-import no.ssb.klass.core.model.ClassificationSeries;
-import no.ssb.klass.core.model.ClassificationVersion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,6 +49,7 @@ public class ClassificationFamilySummaryBuilder {
      */
     private ClassificationFamilySummary toPublicClassificationFamilySummary(ClassificationFamily family) {
         long validSeriesCount = family.getPublicClassificationSeries().size();
+        logger.trace("validSeriesCount: {}", validSeriesCount);
         return new ClassificationFamilySummary(
                 family.getId(),
                 family.getTranslatableName(),
