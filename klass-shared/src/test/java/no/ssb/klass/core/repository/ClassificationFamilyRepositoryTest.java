@@ -30,7 +30,7 @@ import no.ssb.klass.testutil.TestUtil;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-@ActiveProfiles(ConfigurationProfiles.H2_INMEMORY)
+@ActiveProfiles(ConfigurationProfiles.POSTGRES_EMBEDDED)
 @Transactional
 public class ClassificationFamilyRepositoryTest {
 
