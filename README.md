@@ -80,6 +80,15 @@ This may be done by generating a Personal Access Token (classic) on GitHub with 
 </servers>
 ```
 
+Colima should have at least 5G memory and the project folder must be mounted. Change this in `~/.colima/default/colima.yaml` e.g.
+```yaml
+memory: 5
+...
+mounts:
+  - location: /Users/perolsen/Repository/github/klass
+    writable: false
+```
+
 ### Introduction
 
 It's recommended to build with maven before starting development as some classes are generated as part of the build process.

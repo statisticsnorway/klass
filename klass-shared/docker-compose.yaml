@@ -17,6 +17,9 @@ services:
     container_name: klass_postgres
     ports:
       - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./initdb:/docker-entrypoint-initdb.d
     environment:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_USER: "klass"
@@ -67,7 +70,6 @@ services:
       MARIADB_DATABASE: "klass"
       SPRING_PROFILES_ACTIVE: "mariadb-local"
       MARIADB_INSTANCE: ${MARIADB_INSTANCE}
-
   klass-forvaltning:
     build:
       context: ../klass-forvaltning
@@ -76,8 +78,13 @@ services:
     profiles: [ frontend ]
     ports:
       - "8081:8081"
+    depends_on:
+      - postgresql
+    command: [ "java", "-XshowSettings:vm", "-Xms512m", "-Xmx2g", "-jar", "app.war", "--spring.profiles.active=frontend, postgres-local, ad-offline, small-import, skip-indexing, embedded-solr" ]
+    mem_limit: 3g
     environment:
-      SPRING_PROFILES_ACTIVE: frontend, postgres-local, ad-offline, skip-indexing, embedded-solr
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_USER: "klass"
       POSTGRES_INSTANCE: ${POSTGRES_INSTANCE}
+volumes:
+  pgdata:
