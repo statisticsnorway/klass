@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import no.ssb.klass.core.model.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,18 +27,6 @@ import org.springframework.data.domain.Pageable;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
-import no.ssb.klass.core.model.ClassificationItem;
-import no.ssb.klass.core.model.ClassificationSeries;
-import no.ssb.klass.core.model.ClassificationType;
-import no.ssb.klass.core.model.ClassificationVariant;
-import no.ssb.klass.core.model.ClassificationVersion;
-import no.ssb.klass.core.model.CorrespondenceMap;
-import no.ssb.klass.core.model.CorrespondenceTable;
-import no.ssb.klass.core.model.Language;
-import no.ssb.klass.core.model.Level;
-import no.ssb.klass.core.model.ReferencingClassificationItem;
-import no.ssb.klass.core.model.StatisticalUnit;
-import no.ssb.klass.core.model.User;
 import no.ssb.klass.core.repository.ClassificationFamilyRepository;
 import no.ssb.klass.core.repository.ClassificationSeriesRepository;
 import no.ssb.klass.core.repository.ClassificationSeriesSpecification;
@@ -696,6 +685,15 @@ public class ClassificationServiceImplTest {
 
         // then
         assertEquals(1, result.size());
+    }
+
+    @Test
+    public void findAllClassificationFamiliesCopyrighted() {
+
+        List<ClassificationFamily> result = subject.findAllClassificationFamilies();
+        org.assertj.core.api.Assertions.assertThat(result).isNotNull();
+        org.assertj.core.api.Assertions.assertThat(result.size()).isEqualTo(1);
+        org.assertj.core.api.Assertions.assertThat(result.get(0).getClassificationSeries().get(0).isCopyrighted()).isTrue();
     }
 
     private ClassificationVersion createClassificationVersion() {
