@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ClassificationFamilySummaryBuilder {
@@ -99,30 +98,5 @@ public class ClassificationFamilySummaryBuilder {
                 family.getIconPath(),
                 validSeriesCount
         );
-    }
-
-    // Temp methods for dev
-    public Map<String, Long> countValidClassificationSeriesPerFamilyMethod() {
-        List<ClassificationFamily> families = classificationFamilyRepository.findAll();
-
-        return families.stream()
-                .collect(Collectors.toMap(
-                        ClassificationFamily::getName,
-                        family -> (long) family.getPublicClassificationSeries().size()
-                ));
-    }
-
-    public Map<String, Long> countValidClassificationSeriesPerFamily() {
-        List<ClassificationFamily> families = classificationFamilyRepository.findAll();
-
-        return families.stream()
-                .collect(Collectors.toMap(
-                        ClassificationFamily::getName,
-                        family -> family.getClassificationSeries().stream()
-                                .filter(series -> !series.isDeleted() && !series.isCopyrighted())
-                                .filter(series -> series.getClassificationVersions().stream()
-                                        .anyMatch(version -> !version.isDeleted() && version.isPublishedInAnyLanguage()))
-                                .count()
-                ));
     }
 }

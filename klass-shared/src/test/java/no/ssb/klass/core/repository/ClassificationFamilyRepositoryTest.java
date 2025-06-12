@@ -4,7 +4,6 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
-import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
@@ -446,54 +445,5 @@ public class ClassificationFamilyRepositoryTest {
     @ComponentScan(basePackageClasses = TranslatablePersistenceConverter.class)
     static class Config {
 
-    }
-
-    // temp tests for dev
-    @Test
-    public void verifyFindAllClassificationFamiliesCount() {
-        ClassificationFamily summer_family = createClassificationFamilyOneVersionNotPublished();
-        subject.save(summer_family);
-        ClassificationFamily family = createClassificationFamilyWithOneClassification();
-        subject.save(family);
-        ClassificationFamily code_family = createClassificationFamilyOneClassificationIsCopyrighted();
-        subject.save(code_family);
-        ClassificationFamily skate_family = createClassificationFamilyNoVersionPublished();
-        subject.save(skate_family);
-
-        logger.info(LOGGER_MESSAGE_FAMILIES, subject.count());
-
-        Map<String, Long> classificationsNum = classificationFamilySummaries.countValidClassificationSeriesPerFamily();
-        assertEquals(1, classificationsNum.get("family"));
-        assertEquals(1, classificationsNum.get("Code family"));
-        assertEquals(1, classificationsNum.get("Summer family"));
-        assertEquals(0, classificationsNum.get("Skate family"));
-
-        Map<String, Long> classificationsNum2 = classificationFamilySummaries.countValidClassificationSeriesPerFamilyMethod();
-        assertEquals(1, classificationsNum2.get("family"));
-        assertEquals(1, classificationsNum2.get("Code family"));
-        assertEquals(1, classificationsNum2.get("Summer family"));
-        assertEquals(0, classificationsNum2.get("Skate family"));
-    }
-
-    @Test
-    public void verifyFindAllClassificationFamiliesBuildSummaries() {
-        ClassificationFamily summer_family = createClassificationFamilyOneVersionNotPublished();
-        subject.save(summer_family);
-        ClassificationFamily family = createClassificationFamilyWithOneClassification();
-        subject.save(family);
-        ClassificationFamily code_family = createClassificationFamilyOneClassificationIsCopyrighted();
-        subject.save(code_family);
-        ClassificationFamily skate_family = createClassificationFamilyNoVersionPublished();
-        subject.save(skate_family);
-
-        logger.info(LOGGER_MESSAGE_FAMILIES, subject.count());
-
-        List<ClassificationFamilySummary> classificationFamilyBuilder;
-        classificationFamilyBuilder = classificationFamilySummaries.buildPublicClassificationSummaries(allSections, allClassificationTypes);
-        assertEquals(4, classificationFamilyBuilder.size());
-        assertThat(classificationFamilyBuilder.get(0).getNumberOfClassifications()).isEqualTo(1);
-        assertThat(classificationFamilyBuilder.get(1).getNumberOfClassifications()).isEqualTo(1);
-        assertThat(classificationFamilyBuilder.get(2).getNumberOfClassifications()).isEqualTo(1);
-        assertThat(classificationFamilyBuilder.get(3).getNumberOfClassifications()).isEqualTo(0);
     }
 }
