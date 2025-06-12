@@ -131,8 +131,9 @@ public class ClassificationFamilyRepositoryTest {
 
         // when
         String section = family.getClassificationSeries().get(0).getContactPerson().getSection();
-        List<ClassificationFamilySummary> result = subject.findPublicClassificationFamilySummaries(section,
-                allClassificationTypes);
+
+        List<ClassificationFamilySummary> result = classificationFamilySummaries.buildPublicClassificationSummaries(section);
+
 
         // then
         assertEquals(1, result.size());
@@ -148,8 +149,7 @@ public class ClassificationFamilyRepositoryTest {
         logger.info(LOGGER_MESSAGE_FAMILIES, subject.count());
 
         // when
-        List<ClassificationFamilySummary> result = subject.findPublicClassificationFamilySummaries("unknown section",
-                allClassificationTypes);
+        List<ClassificationFamilySummary> result = classificationFamilySummaries.buildPublicClassificationSummaries("unknown section");
 
         // then
         assertEquals(0, result.size());

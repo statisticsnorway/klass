@@ -33,6 +33,9 @@ public class ClassificationFamilySummaryBuilder {
     public List<ClassificationFamilySummary> buildPublicClassificationSummaries(String section) {
         List<ClassificationFamily> families = classificationFamilyRepository.findAll();
         return families.stream()
+                .filter(family -> family.getClassificationSeries().stream()
+                        .anyMatch(series -> series.getContactPerson() != null
+                                && section.equals(series.getContactPerson().getSection())))
                 .map(this::toPublicClassificationFamilySummary)
                 .collect(Collectors.toList());
     }
