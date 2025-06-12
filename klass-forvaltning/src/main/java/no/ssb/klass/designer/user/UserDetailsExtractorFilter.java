@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtIssuerValidator;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
@@ -54,7 +55,11 @@ public class UserDetailsExtractorFilter extends GenericFilterBean implements Fil
             }
         }
 
-        String authHeader = httpRequest.getHeader("authorization").replace("Bearer ", "").replaceAll("\\s+", "");
+        String authHeader = httpRequest.getHeader("authorization");
+
+        if (authHeader == null) {
+            throw new AuthenticationCredentialsNotFoundException("Request is unauthenticated");
+        }
 
         NimbusJwtDecoder decoder = NimbusJwtDecoder
                 .withJwkSetUri("https://auth.test.ssb.no/realms/ssb/protocol/openid-connect/certs")
@@ -62,7 +67,7 @@ public class UserDetailsExtractorFilter extends GenericFilterBean implements Fil
 
         decoder.setJwtValidator(new JwtIssuerValidator("https://auth.test.ssb.no/realms/ssb"));
 
-        Jwt jwt = decoder.decode(authHeader);
+        Jwt jwt = decoder.decode(authHeader.replace("Bearer ", "").replaceAll("\\s+", ""));
 
         log.info("Claims: {}", jwt.getClaims());
 
