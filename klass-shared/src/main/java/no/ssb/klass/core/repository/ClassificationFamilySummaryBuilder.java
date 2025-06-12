@@ -1,6 +1,7 @@
 package no.ssb.klass.core.repository;
 
 import no.ssb.klass.core.model.ClassificationFamily;
+import no.ssb.klass.core.model.ClassificationType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,19 +20,27 @@ public class ClassificationFamilySummaryBuilder {
 
     /**
      * Builds a list of {@link ClassificationFamilySummary} objects from a list of
-     * {@link ClassificationFamily} entities.
+     * {@link ClassificationFamily} entities, filtered by section and classification type if provided.
      *
      * <p>Each summary includes the family's ID, translatable name, icon path, and
-     * count of public classification series.</p>
+     * the count of public classification series that match the given section and classification type.</p>
      *
-     * @return a list of {@link ClassificationFamilySummary} representing summaries of the input families
+     * <p>If {@code section} and/or {@code classificationType} is {@code null}, that filter is ignored.</p>
+     *
+     * @param section the section to filter classification series by; if {@code null}, no section filtering is applied
+     * @param classificationType the classification type to filter classification series by; if {@code null}, no type filtering is applied
+     * @return a list of {@link ClassificationFamilySummary} representing summaries of the filtered families
      */
-    public List<ClassificationFamilySummary> buildPublicClassificationSummaries(String section) {
+    public List<ClassificationFamilySummary> buildPublicClassificationSummaries(String section, ClassificationType classificationType) {
         List<ClassificationFamily> families = classificationFamilyRepository.findAll();
         return families.stream()
-                .filter(family -> section == null || family.getClassificationSeries().stream()
-                        .anyMatch(series -> series.getContactPerson() != null
-                                && section.equals(series.getContactPerson().getSection())))
+                .filter(family -> (section == null && classificationType == null)
+                        || family.getClassificationSeries().stream()
+                        .anyMatch(series ->
+                                series.getContactPerson() != null &&
+                                        (section == null || section.equals(series.getContactPerson().getSection())) &&
+                                        (classificationType == null || classificationType.equals(series.getClassificationType()))
+                        ))
                 .map(this::toPublicClassificationFamilySummary)
                 .collect(Collectors.toList());
     }
