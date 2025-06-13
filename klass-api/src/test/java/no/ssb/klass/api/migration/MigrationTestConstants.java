@@ -38,6 +38,17 @@ public final class MigrationTestConstants {
     public static final String PUBLISHED_EN="published.en";
     public static final String PUBLISHED_NN="published.nn";
     public static final String CLASSIFICATION_VERSION= "classificationVersion";
+    public static final String CLASSIFICATION_NAME =  "classification.name";
+    public static final String CLASSIFICATION_ID = "classification.id";
+    public static final String CLASSIFICATION_CLASSIFICATION_TYPE = "classification.classificationType";
+    public static final String CLASSIFICATION_DESCRIPTION = "classification.description";
+    public static final String CLASSIFICATION_LAST_MODIFIED = "classification.lastModified";
+    public static final String CLASSIFICATION_PRIMARY_LANGUAGE = "classification.primaryLanguage";
+    public static final String CLASSIFICATION_COPYRIGHTED = "classification.copyrighted";
+    public static final String CLASSIFICATION_INCLUDE_SHORTNAME = "classification.includeShortName";
+    public static final String CLASSIFICATION_INCLUDE_NOTES = "classification.includeNotes";
+    public static final String CLASSIFICATION_CONTACT_PERSON = "classification.contactPerson";
+    public static final String CLASSIFICATION_OWNING_SECTION = "classification.owningSection";
 
     // Fields
     public static final String ID = "id";
@@ -78,6 +89,8 @@ public final class MigrationTestConstants {
     public static final String LINK_REL = "link.rel";
     public static final String LINK_HREF ="link.href" ;
     public static final String ENTITIES = "entities";
+    public static final String CORRESPONDENCE_TABLE_NAME= "correspondenceTable.name";
+    public static final String CORRESPONDENCE_TABLE_OWNING_SECTION =  "correspondenceTable.owningSection";
 
 
     // Field of list type
@@ -106,6 +119,10 @@ public final class MigrationTestConstants {
     public static final String CODE_CHANGE_LIST_CODE_CHANGE_ITEM= "codeChangeList.codeChangeItem";
     public static final String CODE_LIST_CODE_ITEM= "codeList.codeItem";
     public static final String CORRESPONDENCE_ITEM_LIST_CORRESPONDENCE_ITEM= "correspondenceItemList.correspondenceItem";
+    public static final String CLASSIFICATION_FAMILY = "classificationFamily";
+    public static final String CLASSIFICATION_FAMILY_CLASSIFICATIONS_CLASSIFICATION = "classificationFamily.classifications.classification";
+    public static final String PAGED_ENTITIES_CONTENTS_CONTENT = "pagedEntities.contents.content";
+    public static final String CORRESPONDENCE_TABLE = "correspondenceTable";
 
     // Link fields
     public static final String HREF= "href";
@@ -194,6 +211,20 @@ public final class MigrationTestConstants {
             LINKS_CHANGES_TEMPLATED
     );
 
+    public static List<String> pathNamesClassificationXml = Arrays.asList(
+            CLASSIFICATION_NAME,
+            CLASSIFICATION_ID,
+            CLASSIFICATION_CLASSIFICATION_TYPE,
+            CLASSIFICATION_DESCRIPTION,
+            CLASSIFICATION_LAST_MODIFIED,
+            CLASSIFICATION_PRIMARY_LANGUAGE,
+            CLASSIFICATION_COPYRIGHTED,
+            CLASSIFICATION_INCLUDE_SHORTNAME,
+            CLASSIFICATION_INCLUDE_NOTES,
+            CLASSIFICATION_CONTACT_PERSON,
+            CLASSIFICATION_OWNING_SECTION
+    );
+
     public static List<String> pathNamesClassificationVariants = Arrays.asList(
             NAME,
             ID,
@@ -231,6 +262,15 @@ public final class MigrationTestConstants {
             LINKS_SELF_HREF
     );
 
+    public static List<String> pathNamesClassificationsPageXml = Arrays.asList(
+            NAME,
+            ID,
+            CLASSIFICATION_TYPE,
+            LAST_MODIFIED,
+            LINK_REL,
+            LINK_HREF
+    );
+
     public static List<String> pathNamesVersion = Arrays.asList(
             NAME,
             ID,
@@ -252,6 +292,13 @@ public final class MigrationTestConstants {
             NAME,
             ID,
             LINKS_SELF_HREF
+    );
+
+    public static List<String> pathNamesClassificationFamilyByIdXml = Arrays.asList(
+            NAME,
+            ID,
+            LINK_REL,
+            LINK_HREF
     );
 
     public static List<String> pathNamesVersionsById = Arrays.asList(
@@ -334,6 +381,14 @@ public final class MigrationTestConstants {
             LINKS_SELF_HREF
     );
 
+    public static List<String> pathNamesClassificationFamiliesXml = Arrays.asList(
+            NAME,
+            ID,
+            NUMBER_OF_CLASSIFICATIONS,
+            LINK_REL,
+            LINK_HREF
+    );
+
     public static List<String> pathNamesClassificationsLinks = Arrays.asList(
             LINKS_FIRST_HREF,
             LINKS_SELF_HREF,
@@ -344,9 +399,16 @@ public final class MigrationTestConstants {
 
     );
 
-    public static List<String> pathNamesSsbSectionLinks = Arrays.asList(
+    public static List<String> pathNamesXmlLinks = Arrays.asList(
             LINK_REL,
             LINK_HREF
 
     );
+
+    public static List<String> pathNamesCorrespondenceTableXml = Arrays.asList(
+            CORRESPONDENCE_TABLE_NAME,
+            CORRESPONDENCE_TABLE_OWNING_SECTION
+
+    );
+
 }
