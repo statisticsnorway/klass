@@ -47,14 +47,6 @@ public class UsersTab extends UsersTabDesign {
 
         throw new RuntimeException("Not Supported since moving away from LDAP auth.");
 
-//        User newUser = activeDirectoryService.createAndSaveNewUser((KlassUserDetails) userDetails);
-//        if (newUser != null) {
-//            Notification.show("Brukeren '" + newUser.getFullname() + "'  er nå opprettet");
-//        } else {
-//            Notification.show("Auda!", "Her ser det ut som noe har gått feil", Notification.Type.WARNING_MESSAGE);
-//            return;
-//        }
-
     }
 
 }
