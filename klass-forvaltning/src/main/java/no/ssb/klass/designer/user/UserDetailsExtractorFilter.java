@@ -2,20 +2,24 @@ package no.ssb.klass.designer.user;
 
 
 import no.ssb.klass.core.model.User;
+import org.apache.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
-import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtIssuerValidator;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.stereotype.Component;
-import org.springframework.web.filter.GenericFilterBean;
+import org.springframework.web.filter.OncePerRequestFilter;
 
-import javax.servlet.*;
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
@@ -25,7 +29,8 @@ import java.io.IOException;
  */
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
-public class UserDetailsExtractorFilter extends GenericFilterBean implements Filter {
+@WebFilter
+public class UserDetailsExtractorFilter extends OncePerRequestFilter implements Filter {
 
     private final UserContext userContext;
 
@@ -37,15 +42,18 @@ public class UserDetailsExtractorFilter extends GenericFilterBean implements Fil
     }
 
     @Override
-    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws ServletException, IOException {
-        HttpServletRequest request = (HttpServletRequest) req;
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        return request.getRequestURI().contains("/ping");
+    }
 
-        if (isUnauthenticatedPath(request)) {
-            chain.doFilter(req, res);
+    @Override
+    public void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws ServletException, IOException {
+        Jwt jwt = extractJwt(req);
+
+        if (jwt == null) {
+            res.sendError(HttpStatus.SC_UNAUTHORIZED, "No authentication credentials provided");
             return;
         }
-
-        Jwt jwt = extractJwt(request);
 
         User user = new User(jwt.getClaimAsString("email"), jwt.getClaimAsString("name"), "854");
         user.setEmail(jwt.getClaimAsString("email"));
@@ -55,15 +63,11 @@ public class UserDetailsExtractorFilter extends GenericFilterBean implements Fil
         chain.doFilter(req, res);
     }
 
-    private boolean isUnauthenticatedPath(HttpServletRequest request) {
-        return request.getRequestURI().contains("/ping");
-    }
-
     private Jwt extractJwt(HttpServletRequest request) {
         String authHeader = request.getHeader("authorization");
 
         if (authHeader == null) {
-            throw new AuthenticationCredentialsNotFoundException("Request is unauthenticated");
+            return null;
         }
 
         NimbusJwtDecoder decoder = NimbusJwtDecoder
@@ -75,4 +79,5 @@ public class UserDetailsExtractorFilter extends GenericFilterBean implements Fil
         return decoder.decode(authHeader.replace("Bearer ", "").replaceAll("\\s+", ""));
 
     }
+
 }
