@@ -33,7 +33,10 @@ public class SectionsTab extends SectionsTabDesign {
     private int notFound;
 
     public SectionsTab() {
-        updateButton.addClickListener(this::updateButtonClick);
+        // Functionality no longer available after transitioning away from LDAP
+//        updateButton.addClickListener(this::updateButtonClick);
+        updateButton.setEnabled(false);
+
         logButton.addClickListener(this::logButtonClick);
         logTextArea.setVisible(false);
     }

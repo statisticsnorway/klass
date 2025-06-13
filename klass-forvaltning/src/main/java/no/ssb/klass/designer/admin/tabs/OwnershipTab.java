@@ -77,10 +77,10 @@ public class OwnershipTab extends OwnershipTabDesign {
     }
 
     private User getOrCreateUser(String newContactPersonName) {
-        throw new RuntimeException("Not Supported since moving away from LDAP auth.");
+
+        User newContactPersonUser = userService.getUserByUserName(newContactPersonName);
 
         // Disabled when transitioning away from LDAP
-//        User newContactPersonUser = userService.getUserByUserName(newContactPersonName);
 //        if (newContactPersonUser == null) {
 //            try {
 //                return activeDirectoryService.createAndSaveNewUser(newContactPersonName);
@@ -89,6 +89,6 @@ public class OwnershipTab extends OwnershipTabDesign {
 //                return null;
 //            }
 //        }
-//        return newContactPersonUser;
+        return newContactPersonUser;
     }
 }
