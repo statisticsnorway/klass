@@ -59,7 +59,8 @@ public class UserDetailsExtractorFilter extends OncePerRequestFilter implements 
             log.info("Logged in user: {}", user.getEmail());
             userContext.setUser(user);
         } catch (KlassUserDetailsException e) {
-            res.sendError(HttpStatus.SC_UNAUTHORIZED, e.getMessage());
+            log.error("Could not log in user", e);
+            res.sendError(HttpStatus.SC_UNAUTHORIZED, "Insufficient authentication credentials provided");
         }
 
         chain.doFilter(req, res);
