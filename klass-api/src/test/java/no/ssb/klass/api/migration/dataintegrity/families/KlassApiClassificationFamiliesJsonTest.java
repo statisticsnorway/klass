@@ -69,4 +69,64 @@ public class KlassApiClassificationFamiliesJsonTest extends AbstractKlassApiFami
             validatePathListWithObjects(sourceResponse, targetResponse, EMBEDDED_CLASSIFICATION_FAMILIES, pathNamesClassificationFamilies, ID);
         }
     }
+
+    @Test
+    void getClassificationFamiliesIncludeCodeLists() {
+
+        String path = getClassificationFamiliesPath();
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsIncludeCodeLists,null);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsIncludeCodeLists,null);
+
+        assertApiResponseIsNotNull(sourceResponse);
+
+        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(),path);
+
+        if(sourceResponse.getStatusCode() != 200) {
+            assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
+        }
+        else{
+            validateObject(sourceResponse, targetResponse, LINKS_SELF_HREF);
+            validatePathListWithObjects(sourceResponse, targetResponse, EMBEDDED_CLASSIFICATION_FAMILIES, pathNamesClassificationFamilies, ID);
+        }
+    }
+
+    @Test
+    void getClassificationFamiliesIncludeLanguageEn() {
+
+        String path = getClassificationFamiliesPath();
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageEn,null);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageEn,null);
+
+        assertApiResponseIsNotNull(sourceResponse);
+
+        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(),path);
+
+        if(sourceResponse.getStatusCode() != 200) {
+            assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
+        }
+        else{
+            validateObject(sourceResponse, targetResponse, LINKS_SELF_HREF);
+            validatePathListWithObjects(sourceResponse, targetResponse, EMBEDDED_CLASSIFICATION_FAMILIES, pathNamesClassificationFamilies, ID);
+        }
+    }
+
+    @Test
+    void getClassificationFamiliesIncludeLanguageNn() {
+
+        String path = getClassificationFamiliesPath();
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageNn,null);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageNn,null);
+
+        assertApiResponseIsNotNull(sourceResponse);
+
+        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(),path);
+
+        if(sourceResponse.getStatusCode() != 200) {
+            assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
+        }
+        else{
+            validateObject(sourceResponse, targetResponse, LINKS_SELF_HREF);
+            validatePathListWithObjects(sourceResponse, targetResponse, EMBEDDED_CLASSIFICATION_FAMILIES, pathNamesClassificationFamilies, ID);
+        }
+    }
 }
