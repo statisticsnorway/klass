@@ -13,7 +13,7 @@ public class KlassApiClassificationFamiliesXmlTest extends AbstractKlassApiFamil
     void getClassificationFamilies() {
         String path = getClassificationFamiliesPath();
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, null,APPLICATION_XML);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, null,null);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, null,APPLICATION_XML);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -23,7 +23,8 @@ public class KlassApiClassificationFamiliesXmlTest extends AbstractKlassApiFamil
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXmlNotReady(sourceResponse, targetResponse, path);
+            validatePathListWithObjectsIterateXml(sourceResponse, targetResponse, ENTITIES_CONTENTS_CONTENT, pathNamesClassificationFamiliesXml);
+            validatePathListWithObjectsXml(sourceResponse, targetResponse, ENTITIES, pathNamesXmlLinks);
         }
     }
 
@@ -43,7 +44,68 @@ public class KlassApiClassificationFamiliesXmlTest extends AbstractKlassApiFamil
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXmlNotReady(sourceResponse, targetResponse, path);
+            validatePathListWithObjectsIterateXml(sourceResponse, targetResponse, ENTITIES_CONTENTS_CONTENT, pathNamesClassificationFamiliesXml);
+            validatePathListWithObjectsXml(sourceResponse, targetResponse, ENTITIES, pathNamesXmlLinks);
+        }
+    }
+
+    @Test
+    void getClassificationFamiliesIncludeCodeLists() {
+
+        String path = getClassificationFamiliesPath();
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsIncludeCodeLists,APPLICATION_XML);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsIncludeCodeLists,APPLICATION_XML);
+
+        assertApiResponseIsNotNull(sourceResponse);
+
+        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(),path);
+
+        if(sourceResponse.getStatusCode() != 200) {
+            assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
+        }
+        else{
+            validatePathListWithObjectsIterateXml(sourceResponse, targetResponse, ENTITIES_CONTENTS_CONTENT, pathNamesClassificationFamiliesXml);
+            validatePathListWithObjectsXml(sourceResponse, targetResponse, ENTITIES, pathNamesXmlLinks);
+        }
+    }
+
+    @Test
+    void getClassificationFamiliesIncludeLanguageEn() {
+
+        String path = getClassificationFamiliesPath();
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageEn,APPLICATION_XML);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageEn,APPLICATION_XML);
+
+        assertApiResponseIsNotNull(sourceResponse);
+
+        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(),path);
+
+        if(sourceResponse.getStatusCode() != 200) {
+            assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
+        }
+        else{
+            validatePathListWithObjectsIterateXml(sourceResponse, targetResponse, ENTITIES_CONTENTS_CONTENT, pathNamesClassificationFamiliesXml);
+            validatePathListWithObjectsXml(sourceResponse, targetResponse, ENTITIES, pathNamesXmlLinks);
+        }
+    }
+
+    @Test
+    void getClassificationFamiliesIncludeLanguageNn() {
+
+        String path = getClassificationFamiliesPath();
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageNn,APPLICATION_XML);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageNn,APPLICATION_XML);
+
+        assertApiResponseIsNotNull(sourceResponse);
+
+        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(),path);
+
+        if(sourceResponse.getStatusCode() != 200) {
+            assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
+        }
+        else{
+            validatePathListWithObjectsIterateXml(sourceResponse, targetResponse, ENTITIES_CONTENTS_CONTENT, pathNamesClassificationFamiliesXml);
+            validatePathListWithObjectsXml(sourceResponse, targetResponse, ENTITIES, pathNamesXmlLinks);
         }
     }
 }

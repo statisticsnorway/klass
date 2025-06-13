@@ -103,7 +103,7 @@ public class KlassApiClassificationCodesAtXmlTest extends AbstractKlassApiCodesT
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXmlNotReady(sourceResponse, targetResponse, path);
+            validateXmlList(path, sourceResponse, targetResponse, CODE_LIST_CODE_ITEM);
         }
     }
 
@@ -124,7 +124,7 @@ public class KlassApiClassificationCodesAtXmlTest extends AbstractKlassApiCodesT
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXmlNotReady(sourceResponse, targetResponse, path);
+            validateXmlList(path, sourceResponse, targetResponse, CODE_LIST_CODE_ITEM);
         }
     }
 
