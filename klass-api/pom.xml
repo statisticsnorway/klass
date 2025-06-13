@@ -23,7 +23,7 @@
         <dependency>
             <groupId>no.ssb.klass</groupId>
             <artifactId>klass-shared</artifactId>
-            <version>3.0.5-classificationfamily_v4-SNAPSHOT</version>
+            <version>3.0.5-classificationfamily_v6-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>no.ssb.klass</groupId>
