@@ -4,10 +4,12 @@ import no.ssb.klass.core.model.ClassificationFamily;
 import no.ssb.klass.core.model.ClassificationType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Repository
 public class ClassificationFamilySummaryBuilder {
     private static final Logger logger = LoggerFactory.getLogger(ClassificationFamilySummaryBuilder.class);
 
@@ -40,10 +42,11 @@ public class ClassificationFamilySummaryBuilder {
                                         (section == null || section.equals(series.getContactPerson().getSection())) &&
                                         (classificationType == null || classificationType.equals(series.getClassificationType()))
                         ))
-                .map(this::toPublicClassificationFamilySummary)
+                .map(family -> toPublicClassificationFamilySummary(family, section, classificationType))
                 .collect(Collectors.toList());
     }
 
+    // .map(this::toPublicClassificationFamilySummary)
     /**
      * Converts a {@link ClassificationFamily} into a {@link ClassificationFamilySummary}
      * including only public classification series.
@@ -54,8 +57,9 @@ public class ClassificationFamilySummaryBuilder {
      * @param family the classification family to summarize
      * @return a {@link ClassificationFamilySummary} representing the public summary of the family
      */
-    private ClassificationFamilySummary toPublicClassificationFamilySummary(ClassificationFamily family) {
-        long validSeriesCount = family.getPublicClassificationSeries().size();
+    private ClassificationFamilySummary toPublicClassificationFamilySummary(ClassificationFamily family, String section, ClassificationType classificationType) {
+        long validSeriesCount = family.getClassificationSeriesBySectionAndClassificationType(section, classificationType).size();
+        //long validSeriesCount = family.getPublicClassificationSeries().size();
         logger.trace("validSeriesCount: {}", validSeriesCount);
         return new ClassificationFamilySummary(
                 family.getId(),
@@ -65,6 +69,7 @@ public class ClassificationFamilySummaryBuilder {
         );
     }
 
+    // getClassificationSeriesBySectionAndClassificationType
     /**
      * Builds a list of {@link ClassificationFamilySummary} objects from a list of
      * {@link ClassificationFamily} entities.
