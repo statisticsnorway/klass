@@ -17,7 +17,7 @@ public class KlassApiClassificationCodesAtXmlTest extends AbstractKlassApiCodesT
 
     @Test
     void getOneClassificationCodesAt(){
-        int classificationId = 2;
+        int classificationId = gender_standard_id;
         date = "2001-01-01";
 
         Map<String, Object> paramDate = new HashMap<>();
@@ -89,7 +89,7 @@ public class KlassApiClassificationCodesAtXmlTest extends AbstractKlassApiCodesT
 
     @Test
     void getClassificationCodesAtLanguageNn() {
-        int classificationId = 6;
+        int classificationId = industry_classification_standard;
 
         String path = getCodesAtPath(classificationId);
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageNnAt,APPLICATION_XML);
@@ -110,7 +110,7 @@ public class KlassApiClassificationCodesAtXmlTest extends AbstractKlassApiCodesT
     @Test
     void getClassificationCodesAtIncludeFuture() {
 
-        int classificationId = 6;
+        int classificationId = industry_classification_standard;
 
         String path = getCodesAtPath(classificationId);
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsIncludeFutureAt,APPLICATION_XML);

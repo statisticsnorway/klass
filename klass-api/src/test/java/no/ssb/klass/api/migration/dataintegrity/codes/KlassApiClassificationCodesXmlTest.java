@@ -17,7 +17,7 @@ public class KlassApiClassificationCodesXmlTest extends AbstractKlassApiCodesTes
 
     @Test
     void getOneClassificationWithCodes() {
-        int classificationId = 6;
+        int classificationId = industry_classification_standard;
 
         String path = getCodesPath(classificationId);
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsFrom, APPLICATION_XML);
@@ -89,7 +89,7 @@ public class KlassApiClassificationCodesXmlTest extends AbstractKlassApiCodesTes
     @Test
     void getClassificationWithCodesLanguageEn() {
 
-        int classificationId = 6;
+        int classificationId = industry_classification_standard;
 
         String path = getCodesPath(classificationId);
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageEn,APPLICATION_XML);
@@ -109,7 +109,7 @@ public class KlassApiClassificationCodesXmlTest extends AbstractKlassApiCodesTes
 
     @Test
     void getClassificationWithCodesLanguageNn() {
-        int classificationId = 6;
+        int classificationId = industry_classification_standard;
 
         String path = getCodesPath(classificationId);
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageNn,APPLICATION_XML);
@@ -130,7 +130,7 @@ public class KlassApiClassificationCodesXmlTest extends AbstractKlassApiCodesTes
     @Test
     void getClassificationWithCodesIncludeFuture() {
 
-        int classificationId = 6;
+        int classificationId = industry_classification_standard;
 
         String path = getCodesPath(classificationId);
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsIncludeFuture,APPLICATION_XML);
@@ -171,7 +171,7 @@ public class KlassApiClassificationCodesXmlTest extends AbstractKlassApiCodesTes
 
     @Test
     void getClassificationWithCodesSelectLevel() {
-        int classificationId = 6;
+        int classificationId = industry_classification_standard;
 
         String path = getCodesPath(classificationId);
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDateInRange,APPLICATION_XML);

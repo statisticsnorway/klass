@@ -29,6 +29,11 @@ public abstract class AbstractKlassApiDataIntegrityTest {
 
     protected static int lastClassificationId;
 
+    protected static int gender_standard_id = 2;
+    protected static int marital_status_standard_id = 19;
+    protected static int industry_classification_standard = 6;
+
+
     public static final String sourceHost = MigrationTestConfig.getSourceHost();
 
     public static final String targetHost = MigrationTestConfig.getTargetHost();
