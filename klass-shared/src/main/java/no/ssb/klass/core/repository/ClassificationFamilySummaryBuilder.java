@@ -46,7 +46,6 @@ public class ClassificationFamilySummaryBuilder {
                 .collect(Collectors.toList());
     }
 
-    // .map(this::toPublicClassificationFamilySummary)
     /**
      * Converts a {@link ClassificationFamily} into a {@link ClassificationFamilySummary}
      * including only public classification series.
