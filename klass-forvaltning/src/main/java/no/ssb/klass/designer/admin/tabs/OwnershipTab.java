@@ -80,15 +80,9 @@ public class OwnershipTab extends OwnershipTabDesign {
 
         User newContactPersonUser = userService.getUserByUserName(newContactPersonName);
 
+        // There was previously functionality to create the user if they don't exist
         // Disabled when transitioning away from LDAP
-//        if (newContactPersonUser == null) {
-//            try {
-//                return activeDirectoryService.createAndSaveNewUser(newContactPersonName);
-//            } catch (UsernameNotFoundException e) {
-//                log.warn("User " + newContactPersonName + " not found in AD.");
-//                return null;
-//            }
-//        }
+
         return newContactPersonUser;
     }
 }
