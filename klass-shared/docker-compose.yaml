@@ -91,3 +91,4 @@ services:
       POSTGRES_INSTANCE: ${POSTGRES_INSTANCE}
 volumes:
   pgdata:
+    name: klass_pgdata
