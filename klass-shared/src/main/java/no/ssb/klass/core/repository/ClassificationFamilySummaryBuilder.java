@@ -59,7 +59,6 @@ public class ClassificationFamilySummaryBuilder {
      */
     private ClassificationFamilySummary toPublicClassificationFamilySummary(ClassificationFamily family, String section, ClassificationType classificationType) {
         long validSeriesCount = family.getClassificationSeriesBySectionAndClassificationType(section, classificationType, true).size();
-        //long validSeriesCount = family.getPublicClassificationSeries().size();
         logger.trace("validSeriesCount: {}", validSeriesCount);
         return new ClassificationFamilySummary(
                 family.getId(),
