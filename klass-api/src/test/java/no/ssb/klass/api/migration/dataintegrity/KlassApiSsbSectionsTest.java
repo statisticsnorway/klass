@@ -43,7 +43,7 @@ public class KlassApiSsbSectionsTest extends AbstractKlassApiDataIntegrityTest {
         }
         else{
             validateXmlList(path, sourceResponse, targetResponse, ENTITIES_CONTENTS_CONTENT);
-            validatePathListWithObjectsXml(sourceResponse, targetResponse, ENTITIES, pathNamesSsbSectionLinks);
+            validatePathListWithObjectsXml(sourceResponse, targetResponse, ENTITIES, pathNamesXmlLinks);
         }
     }
 
