@@ -54,11 +54,13 @@ public class UserDetailsExtractorFilter extends OncePerRequestFilter implements 
             res.sendError(HttpStatus.SC_UNAUTHORIZED, "No authentication credentials provided");
             return;
         }
-
-        User user = new User(jwt.getClaimAsString("email"), jwt.getClaimAsString("name"), "854");
-        user.setEmail(jwt.getClaimAsString("email"));
-        log.info("Active User: {}", user.getUsername());
-        userContext.setUser(user);
+        try {
+            User user = new KlassUserMapperJwt(jwt).getUser();
+            log.info("Logged in user: {}", user.getEmail());
+            userContext.setUser(user);
+        } catch (KlassUserDetailsException e) {
+            res.sendError(HttpStatus.SC_UNAUTHORIZED, e.getMessage());
+        }
 
         chain.doFilter(req, res);
     }
