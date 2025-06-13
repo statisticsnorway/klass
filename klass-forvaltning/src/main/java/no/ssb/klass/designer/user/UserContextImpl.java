@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
  * @author Mads Lundemo, SSB.
  */
 @SpringComponent
-//@VaadinSessionScope
 class UserContextImpl implements UserContext {
 
     @Autowired
@@ -74,9 +73,6 @@ class UserContextImpl implements UserContext {
     }
 
     public void setUser(User currentUser) {
-//        if (hasUser()) {
-//            throw new RuntimeException("User already set");
-//        }
         this.currentUser = currentUser;
     }
 
