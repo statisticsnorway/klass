@@ -23,7 +23,7 @@
         <dependency>
             <groupId>no.ssb.klass</groupId>
             <artifactId>klass-shared</artifactId>
-            <version>${project.parent.version}</version>
+            <version>3.0.5-classificationfamily_v4-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>no.ssb.klass</groupId>
