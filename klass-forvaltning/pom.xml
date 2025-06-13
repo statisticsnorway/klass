@@ -17,7 +17,7 @@
         <github.repository>statisticsnorway/klass</github.repository>
         <!-- Klass dependencies are built with support for Java 8 and Spring Boot 1.4.4.
              Newer versions are not supported -->
-        <klass-shared-version>2.2.1</klass-shared-version>
+        <klass-shared-version>2.2.2-SNAPSHOT</klass-shared-version>
         <klass-solr-version>2.1.7</klass-solr-version>
         <!-- Vaadin 7.7.17 was the last public open-source version of the Vaadin 7 framework.
              See https://vaadin.com/support/vaadin-7-extended-maintenance  -->
@@ -93,14 +93,18 @@
         </dependency>
 
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-oauth2-resource-server</artifactId>
-            <version>5.1.13.RELEASE</version>
+            <version>5.3.5.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-oauth2-jose</artifactId>
-            <version>5.1.13.RELEASE</version>
+            <version>5.3.5.RELEASE</version>
         </dependency>
 
         <!--TOMCAT-->
@@ -211,6 +215,10 @@
             <artifactId>jakarta.servlet-api</artifactId>
             <version>4.0.4</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
         </dependency>
     </dependencies>
 
