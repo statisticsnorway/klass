@@ -1,6 +1,5 @@
 package no.ssb.klass.api.migration;
 
-import com.sun.xml.bind.v2.TODO;
 import io.restassured.internal.path.xml.NodeChildrenImpl;
 import io.restassured.path.xml.XmlPath;
 import io.restassured.response.Response;
