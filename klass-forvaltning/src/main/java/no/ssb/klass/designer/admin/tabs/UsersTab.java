@@ -1,17 +1,13 @@
 package no.ssb.klass.designer.admin.tabs;
 
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Notification;
+import no.ssb.klass.core.model.User;
+import no.ssb.klass.core.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Notification;
-
-import no.ssb.klass.core.ldap.ActiveDirectoryService;
-import no.ssb.klass.core.ldap.KlassUserDetails;
-import no.ssb.klass.core.model.User;
-import no.ssb.klass.core.service.UserService;
 
 /**
  * @author Mads Lundemo, SSB.
@@ -21,8 +17,6 @@ public class UsersTab extends UsersTabDesign {
     @Autowired
     private UserDetailsService userDetailsService;
 
-    @Autowired
-    private ActiveDirectoryService activeDirectoryService;
     @Autowired
     private UserService userService;
 
@@ -51,13 +45,7 @@ public class UsersTab extends UsersTabDesign {
             return;
         }
 
-        User newUser = activeDirectoryService.createAndSaveNewUser((KlassUserDetails) userDetails);
-        if (newUser != null) {
-            Notification.show("Brukeren '" + newUser.getFullname() + "'  er nå opprettet");
-        } else {
-            Notification.show("Auda!", "Her ser det ut som noe har gått feil", Notification.Type.WARNING_MESSAGE);
-            return;
-        }
+        throw new RuntimeException("Not Supported since moving away from LDAP auth.");
 
     }
 

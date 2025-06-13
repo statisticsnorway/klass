@@ -11,7 +11,10 @@ spec:
 
   ingresses:
     - https://klass-forvaltning.intern.test.ssb.no
-
+  accessPolicy:
+    outbound:
+      external:
+        - host: auth.test.ssb.no
   login:
     provider: openid
     enforce:
