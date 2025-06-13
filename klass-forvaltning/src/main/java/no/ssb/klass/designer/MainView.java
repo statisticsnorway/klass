@@ -10,13 +10,11 @@ import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.NativeSelect;
 import com.vaadin.ui.UI;
 import no.ssb.klass.core.model.ClassificationType;
-import no.ssb.klass.core.model.User;
 import no.ssb.klass.designer.admin.AdminView;
 import no.ssb.klass.designer.admin.ContentUseStatView;
 import no.ssb.klass.designer.components.BreadcumbPanel.Breadcrumb;
 import no.ssb.klass.designer.components.ClassificationListViewSelection;
 import no.ssb.klass.designer.service.ClassificationFacade;
-import no.ssb.klass.designer.service.KlassLoginService;
 import no.ssb.klass.designer.user.UserContext;
 import no.ssb.klass.designer.util.ConfirmationDialog;
 import no.ssb.klass.designer.util.KlassTheme;
@@ -25,33 +23,30 @@ import no.ssb.klass.designer.util.VaadinUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.vaadin.spring.security.VaadinSecurity;
 
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 @SpringUI
-@SuppressWarnings("serial")
 public class MainView extends MainDesign implements ViewChangeListener {
     private static final Logger log = LoggerFactory.getLogger(MainView.class);
     private Navigator navigator;
 
     private final SpringViewProvider springViewProvider;
-    private final KlassLoginService klassLoginService;
-    private final VaadinSecurity vaadinSecurity;
     private final UserContext userContext;
+
 
     private ConfirmationDialog confirmationDialog;
 
     @Autowired
-    public MainView(ClassificationFacade classificationFacade, SpringViewProvider springViewProvider,
-                    VaadinSecurity vaadinSecurity, KlassLoginService vaadinLoginService, UserContext userContext) {
+    public MainView(
+            ClassificationFacade classificationFacade,
+            SpringViewProvider springViewProvider,
+            UserContext userContext
+    ) {
         this.springViewProvider = springViewProvider;
-        this.klassLoginService = vaadinLoginService;
-        this.vaadinSecurity = vaadinSecurity;
         this.userContext = userContext;
-        verifyUser();
         configureNavigator();
         MainFilterLogic.configureFilterPanel(selectKodeverk, selectSection, classificationFacade);
         configureTopPanel();
@@ -72,7 +67,7 @@ public class MainView extends MainDesign implements ViewChangeListener {
     }
 
     private void logout(MenuBar.MenuItem menuItem) {
-        vaadinSecurity.logout();
+//        vaadinSecurity.logout();
     }
 
     private void createAdminView() {
@@ -81,16 +76,6 @@ public class MainView extends MainDesign implements ViewChangeListener {
 
     private void createInnholdBruksstatistikkView() {
         VaadinUtil.navigateTo(ContentUseStatView.NAME);
-    }
-
-    private void verifyUser() {
-        if (!userContext.hasUser()) {
-        /* TODO https://statistics-norway.atlassian.net/browse/DPMETA-916
-                Replace hardcoded user with user info extracted from the token
-        */
-            log.debug("Set User {}", userContext);
-            userContext.setUser(new User("kno@ssb.no", "Kari Nordmann", "854"));
-        }
     }
 
     public void configureNavigator() {

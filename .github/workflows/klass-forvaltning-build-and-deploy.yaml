@@ -8,7 +8,6 @@ on:
       - nais-migration
     paths:
       - "klass-forvaltning/**"
-      - "klass-shared/**"
       - ".nais/**/klass-forvaltning.yaml"
       - ".github/workflows/klass-forvaltning-build-and-deploy.yaml"
 
