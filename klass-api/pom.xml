@@ -23,7 +23,7 @@
         <dependency>
             <groupId>no.ssb.klass</groupId>
             <artifactId>klass-shared</artifactId>
-            <version>3.0.5-classificationfamily-SNAPSHOT</version>
+            <version>3.0.5-classificationfamily_v4-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>no.ssb.klass</groupId>
@@ -192,6 +192,12 @@
             <!-- add this dep which bring back the groovy-xml in a single and last version (4) -->
             <groupId>io.rest-assured</groupId>
             <artifactId>xml-path</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.zonky.test</groupId>
+            <artifactId>embedded-database-spring-test</artifactId>
+            <version>2.6.0</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
