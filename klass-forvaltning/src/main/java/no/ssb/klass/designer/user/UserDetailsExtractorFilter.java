@@ -43,6 +43,9 @@ public class UserDetailsExtractorFilter extends OncePerRequestFilter implements 
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
+        /* TODO https://statistics-norway.atlassian.net/browse/DPMETA-932
+         * Configure value with property
+         */
         return request.getRequestURI().contains("/ping");
     }
 
@@ -66,6 +69,12 @@ public class UserDetailsExtractorFilter extends OncePerRequestFilter implements 
         chain.doFilter(req, res);
     }
 
+    /**
+     * Extract a {@link Jwt} from the Authorization header on a request.
+     *
+     * @param request The request being processed.
+     * @return the decoded JWT token
+     */
     private Jwt extractJwt(HttpServletRequest request) {
         String authHeader = request.getHeader("authorization");
 
@@ -73,10 +82,17 @@ public class UserDetailsExtractorFilter extends OncePerRequestFilter implements 
             return null;
         }
 
+        /* TODO https://statistics-norway.atlassian.net/browse/DPMETA-932
+         * Configure value with property
+         */
         NimbusJwtDecoder decoder = NimbusJwtDecoder
                 .withJwkSetUri("https://auth.test.ssb.no/realms/ssb/protocol/openid-connect/certs")
                 .build();
 
+
+        /* TODO https://statistics-norway.atlassian.net/browse/DPMETA-932
+         * Configure value with property
+         */
         decoder.setJwtValidator(new JwtIssuerValidator("https://auth.test.ssb.no/realms/ssb"));
 
         return decoder.decode(authHeader.replace("Bearer ", "").replaceAll("\\s+", ""));
