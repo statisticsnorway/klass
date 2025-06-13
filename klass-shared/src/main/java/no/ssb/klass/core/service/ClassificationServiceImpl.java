@@ -395,7 +395,7 @@ public class ClassificationServiceImpl implements ClassificationService {
     @Transactional(readOnly = true)
     public List<ClassificationFamilySummary> findAllClassificationFamilySummaries(String section,
             ClassificationType classificationType) {
-        return classificationFamilyRepository.findClassificationFamilySummaries(section, classificationType);
+        return classificationFamilySummaryBuilder.buildClassificationSummaries(section, classificationType);
     }
 
     @Override
@@ -404,15 +404,6 @@ public class ClassificationServiceImpl implements ClassificationService {
             String section, ClassificationType classificationType) {
         return classificationFamilySummaryBuilder.buildPublicClassificationSummaries(section, classificationType);
     }
-
-    /*
-    @Override
-    @Transactional(readOnly = true)
-    public List<ClassificationFamilySummary> findPublicClassificationFamilySummaries(
-            String section, ClassificationType classificationType) {
-        return classificationFamilyRepository.findPublicClassificationFamilySummaries(section, classificationType);
-    }
-     */
 
     @Override
     @Transactional(readOnly = true)

@@ -67,19 +67,17 @@ public class ClassificationFamilySummaryBuilder {
         );
     }
 
-    // getClassificationSeriesBySectionAndClassificationType
-    /**
-     * Builds a list of {@link ClassificationFamilySummary} objects from a list of
-     * {@link ClassificationFamily} entities.
-     *
-     * <p>Each summary includes the family's ID, translatable name, icon path, and
-     * count of classification series.</p>
-     *
-     * @param families the list of classification families to summarize
-     * @return a list of {@link ClassificationFamilySummary} representing summaries of the input families
-     */
-    public List<ClassificationFamilySummary> buildClassificationSummaries(List<ClassificationFamily> families) {
+
+    public List<ClassificationFamilySummary> buildClassificationSummaries(String section, ClassificationType classificationType) {
+        List<ClassificationFamily> families = classificationFamilyRepository.findAll();
         return families.stream()
+                .filter(family -> (section == null && classificationType == null)
+                        || family.getClassificationSeries().stream()
+                        .anyMatch(series ->
+                                series.getContactPerson() != null &&
+                                        (section == null || section.equals(series.getContactPerson().getSection())) &&
+                                        (classificationType == null || classificationType.equals(series.getClassificationType()))
+                        ))
                 .map(this::toClassificationFamilySummary)
                 .collect(Collectors.toList());
     }
@@ -91,10 +89,11 @@ public class ClassificationFamilySummaryBuilder {
      * and the count of classification series.</p>
      *
      * @param family the classification family to summarize
-     * @return a {@link ClassificationFamilySummary} representing the public summary of the family
+     * @return a {@link ClassificationFamilySummary} representing the summary of the family
      */
     private ClassificationFamilySummary toClassificationFamilySummary(ClassificationFamily family) {
         long validSeriesCount = family.getClassificationSeries().size();
+        logger.trace("validSeriesCount: {}", validSeriesCount);
         return new ClassificationFamilySummary(
                 family.getId(),
                 family.getTranslatableName(),

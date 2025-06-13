@@ -221,8 +221,7 @@ public class ClassificationFamilyRepositoryTest {
         assertThat(family.getClassificationSeries().size()).isEqualTo(2);
 
         // when
-        List<ClassificationFamilySummary> result = subject.findClassificationFamilySummaries(allSections,
-                allClassificationTypes);
+        List<ClassificationFamilySummary> result = classificationFamilySummaries.buildClassificationSummaries(allSections, allClassificationTypes);
 
         // then
         assertEquals(1, result.size());
