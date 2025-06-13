@@ -18,9 +18,6 @@ public class OwnershipTab extends OwnershipTabDesign {
 
     private static final Logger log = LoggerFactory.getLogger(OwnershipTab.class);
 
-    // Disabled when transitioning away from LDAP
-//    @Autowired
-//    private ActiveDirectoryService activeDirectoryService;
     @Autowired
     private UserService userService;
     @Autowired

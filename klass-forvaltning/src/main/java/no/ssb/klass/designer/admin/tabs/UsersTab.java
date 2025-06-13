@@ -17,9 +17,6 @@ public class UsersTab extends UsersTabDesign {
     @Autowired
     private UserDetailsService userDetailsService;
 
-    // Disabled when transitioning away from LDAP
-//    @Autowired
-//    private ActiveDirectoryService activeDirectoryService;
     @Autowired
     private UserService userService;
 
