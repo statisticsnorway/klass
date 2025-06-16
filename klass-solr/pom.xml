@@ -74,7 +74,7 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-    
+
     <build>
 
         <testResources>
@@ -85,7 +85,7 @@
                 </excludes>
             </testResource>
         </testResources>
-        
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

@@ -20,9 +20,9 @@
         ja disse skal være her og skal være tomme,de er  nødvendig siden jgitflow plugin ikke plukker opp at  local profilen er activateByDefault
         (på server defaulter disse til applications.properties)
         -->
-        <klass.env.name />
-        <klass.doc.env.url />
-        <klass.doc.env.port />
+        <klass.env.name/>
+        <klass.doc.env.url/>
+        <klass.doc.env.port/>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
