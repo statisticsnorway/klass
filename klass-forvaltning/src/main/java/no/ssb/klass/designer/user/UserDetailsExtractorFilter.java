@@ -46,26 +46,28 @@ public class UserDetailsExtractorFilter extends OncePerRequestFilter implements 
         /* TODO https://statistics-norway.atlassian.net/browse/DPMETA-932
          * Configure value with property
          */
-        return request.getRequestURI().contains("/ping");
+        return !request.getRequestURI().contains("/klassui");
     }
 
     @Override
     public void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws ServletException, IOException {
-        Jwt jwt = extractJwt(req);
+        if (!userContext.hasUser()) {
+            Jwt jwt = extractJwt(req);
 
-        if (jwt == null) {
-            res.sendError(HttpStatus.SC_UNAUTHORIZED, "No authentication credentials provided");
-            return;
-        }
-        log.debug("JWT token claims: {}", jwt.getClaims());
-        try {
-            User user = new KlassUserMapperJwt(jwt).getUser();
-            log.info("Logged in user: {}", user.getEmail());
-            userContext.setUser(user);
-        } catch (KlassUserDetailsException e) {
-            log.error("Could not log in user", e);
-            res.sendError(HttpStatus.SC_UNAUTHORIZED, "Insufficient authentication credentials provided");
-            return;
+            if (jwt == null) {
+                res.sendError(HttpStatus.SC_UNAUTHORIZED, "No authentication credentials provided");
+                return;
+            }
+            log.debug("JWT token claims: {}", jwt.getClaims());
+            try {
+                User user = new KlassUserMapperJwt(jwt).getUser();
+                log.info("Logged in user: {}", user.getEmail());
+                userContext.setUser(user);
+            } catch (KlassUserDetailsException e) {
+                log.error("Could not log in user", e);
+                res.sendError(HttpStatus.SC_UNAUTHORIZED, "Insufficient authentication credentials provided");
+                return;
+            }
         }
 
         // Not permitted to continue filter chain in this case, just return.
