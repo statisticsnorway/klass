@@ -118,6 +118,8 @@ public final class MigrationTestConstants {
     public static final String CLASSIFICATION_VERSION_LEVELS= "classificationVersion.levels.level";
     public static final String CLASSIFICATION_VERSION_CLASSIFICATION_ITEMS= "classificationVersion.classificationItems.classificationItem";
 
+    public static final String CLASSIFICATION_VARIANT_CLASSIFICATION_ITEMS= "classificationVariant.classificationItems.classificationItem";
+
     public static final String ENTITIES_CONTENTS_CONTENT= "entities.contents.content";
     public static final String CODE_CHANGE_LIST_CODE_CHANGE_ITEM= "codeChangeList.codeChangeItem";
     public static final String CODE_LIST_CODE_ITEM= "codeList.codeItem";

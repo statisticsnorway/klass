@@ -24,12 +24,7 @@ public class KlassApiVariantByIdXmlTest extends AbstractKlassApiVariantTest {
             assertThat(compareError(variantId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateItems(sourceResponse, targetResponse, pathNamesVariantById);
-            validateList(sourceResponse, targetResponse, PUBLISHED);
-            validateList(sourceResponse, targetResponse, CORRESPONDENCE_TABLES);
-            validateList(sourceResponse, targetResponse, CHANGELOGS);
-            validateList(sourceResponse, targetResponse, LEVELS);
-            validateList(sourceResponse, targetResponse, CLASSIFICATION_ITEMS);
+            validateXmlList(path, sourceResponse, targetResponse, CLASSIFICATION_VARIANT_CLASSIFICATION_ITEMS);
         }
     }
 
