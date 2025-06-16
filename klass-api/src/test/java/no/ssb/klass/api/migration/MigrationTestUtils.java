@@ -290,12 +290,20 @@ public class MigrationTestUtils {
 
     //TODO Refactor/combine/correct xml validation methods
 
+    private static XmlPath[] extractXmlPaths(Response source, Response target) {
+        return new XmlPath[] {
+                new XmlPath(source.getBody().asString()),
+                new XmlPath(target.getBody().asString())
+        };
+    }
+
+
     // Flat compare
     public static void validateXmlItems(Response sourceResponse, Response targetResponse, List<String> pathNames)  {
-        String sourceXml = sourceResponse.getBody().asString();
-        String targetXml = targetResponse.getBody().asString();
-        XmlPath xmlPathSource = new XmlPath(sourceXml);
-        XmlPath xmlPathTarget = new XmlPath(targetXml);
+        XmlPath[] paths = extractXmlPaths(sourceResponse, targetResponse);
+        XmlPath xmlPathSource = paths[0];
+        XmlPath xmlPathTarget = paths[1];
+
         for(String pathName : pathNames) {
             Object sourcePath = xmlPathSource.get(pathName);
             Object targetPath = xmlPathTarget.get(pathName);
@@ -317,13 +325,14 @@ public class MigrationTestUtils {
 
     // List path name
     public static void validateXmlList(String path, Response sourceResponse, Response targetResponse, String pathName) {
-        String sourceXml = sourceResponse.getBody().asString();
-        String targetXml = targetResponse.getBody().asString();
-        XmlPath xmlPathSource = new XmlPath(sourceXml);
-        XmlPath xmlPathTarget = new XmlPath(targetXml);
+        XmlPath[] paths = extractXmlPaths(sourceResponse, targetResponse);
+        XmlPath xmlPathSource = paths[0];
+        XmlPath xmlPathTarget = paths[1];
+
         List<String> sourceList = xmlPathSource.getList(pathName);
         List<String> targetList = xmlPathTarget.getList(pathName);
         System.out.println(sourceList.size() + " -> " + targetList.size());
+
         for(int i = 0; i < sourceList.size(); i++) {
             System.out.println(sourceList.get(i) + " -> " + targetList.get(i));
             assertThat(sourceList.get(i)).withFailMessage(
@@ -335,12 +344,10 @@ public class MigrationTestUtils {
 
     }
 
-
     public static void validatePathListWithObjectsXml(Response sourceResponse, Response targetResponse, String listName, List<String> pathNames) {
-        String sourceXml = sourceResponse.getBody().asString();
-        String targetXml = targetResponse.getBody().asString();
-        XmlPath xmlPathSource = new XmlPath(sourceXml);
-        XmlPath xmlPathTarget = new XmlPath(targetXml);
+        XmlPath[] paths = extractXmlPaths(sourceResponse, targetResponse);
+        XmlPath xmlPathSource = paths[0];
+        XmlPath xmlPathTarget = paths[1];
 
         for(String pathName: pathNames) {
             String fullPath = listName + "." + pathName;
@@ -373,10 +380,9 @@ public class MigrationTestUtils {
 
     // More details
     public static void validatePathListWithObjectsIterateXml(Response sourceResponse, Response targetResponse, String listName, List<String> pathNames) {
-        String sourceXml = sourceResponse.getBody().asString();
-        String targetXml = targetResponse.getBody().asString();
-        XmlPath xmlPathSource = new XmlPath(sourceXml);
-        XmlPath xmlPathTarget = new XmlPath(targetXml);
+        XmlPath[] paths = extractXmlPaths(sourceResponse, targetResponse);
+        XmlPath xmlPathSource = paths[0];
+        XmlPath xmlPathTarget = paths[1];
 
         for(String pathName: pathNames) {
             String fullPath = listName + "." + pathName;
