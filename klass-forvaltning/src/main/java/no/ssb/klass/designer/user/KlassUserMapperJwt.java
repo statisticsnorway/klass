@@ -20,20 +20,22 @@ public class KlassUserMapperJwt {
     private static final Logger log = LoggerFactory.getLogger(KlassUserMapperJwt.class);
     private final String email;
     private final String name;
-    private final String username;
+    private String username;
 
     public KlassUserMapperJwt(Jwt jwt) throws KlassUserDetailsException {
         if (jwt == null) {
             throw new KlassUserDetailsException("No authentication credentials provided");
         }
 
-        this.username = jwt.getClaimAsString(SHORT_USERNAME_CLAIM);
+        this.username = jwt.getClaimAsString(EMAIL_CLAIM);
         this.email = jwt.getClaimAsString(EMAIL_CLAIM);
         this.name = jwt.getClaimAsString(NAME_CLAIM);
 
         if (this.username == null || this.email == null || this.name == null) {
             throw new KlassUserDetailsException("Token is missing necessary user detail claims.");
         }
+
+        this.username = this.username.split("@")[0];
     }
 
     public User getUser() {
