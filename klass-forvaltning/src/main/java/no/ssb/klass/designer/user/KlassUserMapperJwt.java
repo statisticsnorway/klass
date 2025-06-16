@@ -27,14 +27,13 @@ public class KlassUserMapperJwt {
             throw new KlassUserDetailsException("No authentication credentials provided");
         }
 
-        this.username = jwt.getClaimAsString(SHORT_USERNAME_CLAIM).split("-")[1];
+        this.username = jwt.getClaimAsString(SHORT_USERNAME_CLAIM);
         this.email = jwt.getClaimAsString(EMAIL_CLAIM);
         this.name = jwt.getClaimAsString(NAME_CLAIM);
 
         if (this.username == null || this.email == null || this.name == null) {
             throw new KlassUserDetailsException("Token is missing necessary user detail claims.");
         }
-
     }
 
     public User getUser() {

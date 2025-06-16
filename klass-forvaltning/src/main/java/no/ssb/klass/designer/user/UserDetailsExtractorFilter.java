@@ -57,6 +57,7 @@ public class UserDetailsExtractorFilter extends OncePerRequestFilter implements 
             res.sendError(HttpStatus.SC_UNAUTHORIZED, "No authentication credentials provided");
             return;
         }
+        log.debug("JWT token claims: {}", jwt.getClaims());
         try {
             User user = new KlassUserMapperJwt(jwt).getUser();
             log.info("Logged in user: {}", user.getEmail());
