@@ -5,8 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
 
-import static no.ssb.klass.api.migration.MigrationTestConstants.APPLICATION_XML;
-import static no.ssb.klass.api.migration.MigrationTestConstants.CODES;
+import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 import static no.ssb.klass.api.migration.MigrationTestUtils.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -29,7 +28,7 @@ public class KlassApiClassificationVariantAtXmlTest extends AbstractKlassApiVari
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateList(sourceResponse, targetResponse, CODES);
+            validateXmlList(path, sourceResponse, targetResponse, CODE_LIST_CODE_ITEM);
         }
     }
 }
