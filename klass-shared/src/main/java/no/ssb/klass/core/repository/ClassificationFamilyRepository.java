@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 import no.ssb.klass.core.model.ClassificationFamily;
 
 @Repository
-public interface ClassificationFamilyRepository extends JpaRepository<ClassificationFamily, Long>,
-        ClassificationFamilyRepositoryCustom {
+public interface ClassificationFamilyRepository extends JpaRepository<ClassificationFamily, Long>{
     ClassificationFamily findByName(String name);
 }

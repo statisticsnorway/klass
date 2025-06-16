@@ -30,7 +30,7 @@ import no.ssb.klass.testutil.TestUtil;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-@ActiveProfiles(ConfigurationProfiles.H2_INMEMORY)
+@ActiveProfiles(ConfigurationProfiles.POSTGRES_EMBEDDED)
 @Transactional
 public class ClassificationFamilyRepositoryTest {
 
@@ -47,10 +47,13 @@ public class ClassificationFamilyRepositoryTest {
     private final String allSections = null;
     private final ClassificationType allClassificationTypes = null;
     private User user;
+    private ClassificationFamilySummaryBuilder classificationFamilySummaries;
 
     @BeforeEach
     public void setup() {
+
         user = userRepository.save(TestUtil.createUser());
+        classificationFamilySummaries = new ClassificationFamilySummaryBuilder(subject);
     }
 
     @Test
@@ -76,9 +79,11 @@ public class ClassificationFamilyRepositoryTest {
         ClassificationFamily family = createClassificationFamilyWithOneClassification();
         subject.save(family);
 
+        logger.info(LOGGER_MESSAGE_FAMILIES, subject.count());
+
         // when
-        List<ClassificationFamilySummary> result = subject.findPublicClassificationFamilySummaries(allSections,
-                allClassificationTypes);
+        List<ClassificationFamilySummary> result = classificationFamilySummaries.buildPublicClassificationSummaries(
+                allSections, allClassificationTypes);
 
         // then
         assertEquals(1, result.size());
@@ -97,9 +102,11 @@ public class ClassificationFamilyRepositoryTest {
         ClassificationFamily family2 = createClassificationFamilyOneVersionNotPublished();
         subject.save(family2);
 
+        logger.info(LOGGER_MESSAGE_FAMILIES, subject.count());
+
         // when
-        List<ClassificationFamilySummary> result = subject.findPublicClassificationFamilySummaries(allSections,
-                allClassificationTypes);
+        List<ClassificationFamilySummary> result =
+                classificationFamilySummaries.buildPublicClassificationSummaries(allSections, allClassificationTypes);
 
         // then
         assertEquals(3, result.size());
@@ -111,10 +118,14 @@ public class ClassificationFamilyRepositoryTest {
         ClassificationFamily family = createClassificationFamilyWithOneClassification();
         subject.save(family);
 
+        logger.info(LOGGER_MESSAGE_FAMILIES, subject.count());
+
         // when
         String section = family.getClassificationSeries().get(0).getContactPerson().getSection();
-        List<ClassificationFamilySummary> result = subject.findPublicClassificationFamilySummaries(section,
-                allClassificationTypes);
+
+        List<ClassificationFamilySummary> result =
+                classificationFamilySummaries.buildPublicClassificationSummaries(section, allClassificationTypes);
+
 
         // then
         assertEquals(1, result.size());
@@ -127,9 +138,13 @@ public class ClassificationFamilyRepositoryTest {
         ClassificationFamily family = createClassificationFamilyWithOneClassification();
         subject.save(family);
 
+        logger.info(LOGGER_MESSAGE_FAMILIES, subject.count());
+
         // when
-        List<ClassificationFamilySummary> result = subject.findPublicClassificationFamilySummaries("unknown section",
-                allClassificationTypes);
+        List<ClassificationFamilySummary> result =
+                classificationFamilySummaries.buildPublicClassificationSummaries(
+                        "unknown section", allClassificationTypes
+                );
 
         // then
         assertEquals(0, result.size());
@@ -141,10 +156,13 @@ public class ClassificationFamilyRepositoryTest {
         ClassificationFamily family = createClassificationFamilyWithOneClassification();
         subject.save(family);
 
+        logger.info(LOGGER_MESSAGE_FAMILIES, subject.count());
+
         // when
         ClassificationType classificationType = family.getClassificationSeries().get(0).getClassificationType();
-        List<ClassificationFamilySummary> result = subject.findPublicClassificationFamilySummaries(allSections,
-                classificationType);
+
+        List<ClassificationFamilySummary> result =
+                classificationFamilySummaries.buildPublicClassificationSummaries(allSections, classificationType);
 
         // then
         assertEquals(1, result.size());
@@ -157,11 +175,14 @@ public class ClassificationFamilyRepositoryTest {
         ClassificationFamily family = createClassificationFamilyWithOneClassification();
         subject.save(family);
 
+        logger.info(LOGGER_MESSAGE_FAMILIES, subject.count());
+
         // when
         ClassificationType classificationType = TestUtil.oppositeClassificationType(family.getClassificationSeries()
                 .get(0).getClassificationType());
-        List<ClassificationFamilySummary> result = subject.findPublicClassificationFamilySummaries(allSections,
-                classificationType);
+
+        List<ClassificationFamilySummary> result =
+                classificationFamilySummaries.buildPublicClassificationSummaries(allSections, classificationType);
 
         // then
         assertEquals(0, result.size());
@@ -173,11 +194,13 @@ public class ClassificationFamilyRepositoryTest {
         ClassificationFamily family = createClassificationFamilyOneClassificationIsCopyrighted();
         subject.save(family);
 
+        logger.info(LOGGER_MESSAGE_FAMILIES, subject.count());
+
         assertThat(family.getClassificationSeries().size()).isEqualTo(2);
 
         // when
-        List<ClassificationFamilySummary> result = subject.findPublicClassificationFamilySummaries(allSections,
-                allClassificationTypes);
+        List<ClassificationFamilySummary> result =
+                classificationFamilySummaries.buildPublicClassificationSummaries(allSections, allClassificationTypes);
 
         // then
         assertEquals(1, result.size());
@@ -193,11 +216,12 @@ public class ClassificationFamilyRepositoryTest {
         ClassificationFamily family = createClassificationFamilyOneClassificationIsCopyrighted();
         subject.save(family);
 
+        logger.info(LOGGER_MESSAGE_FAMILIES, subject.count());
+
         assertThat(family.getClassificationSeries().size()).isEqualTo(2);
 
         // when
-        List<ClassificationFamilySummary> result = subject.findClassificationFamilySummaries(allSections,
-                allClassificationTypes);
+        List<ClassificationFamilySummary> result = classificationFamilySummaries.buildClassificationSummaries(allSections, allClassificationTypes);
 
         // then
         assertEquals(1, result.size());
@@ -210,9 +234,11 @@ public class ClassificationFamilyRepositoryTest {
         ClassificationFamily family = createClassificationFamilyOneClassificationIsDeleted();
         subject.save(family);
 
+        logger.info(LOGGER_MESSAGE_FAMILIES, subject.count());
+
         // when
-        List<ClassificationFamilySummary> result = subject.findPublicClassificationFamilySummaries(allSections,
-                allClassificationTypes);
+        List<ClassificationFamilySummary> result =
+                classificationFamilySummaries.buildPublicClassificationSummaries(allSections, allClassificationTypes);
 
         // then
         assertEquals(1, result.size());
@@ -225,9 +251,11 @@ public class ClassificationFamilyRepositoryTest {
         ClassificationFamily family = createClassificationFamilyOneVersionNotPublished();
         subject.save(family);
 
+        logger.info(LOGGER_MESSAGE_FAMILIES, subject.count());
+
         // when
-        List<ClassificationFamilySummary> result = subject.findPublicClassificationFamilySummaries(allSections,
-                allClassificationTypes);
+        List<ClassificationFamilySummary> result =
+                classificationFamilySummaries.buildPublicClassificationSummaries(allSections, allClassificationTypes);
 
         // then
         assertEquals(1, result.size());
@@ -240,13 +268,37 @@ public class ClassificationFamilyRepositoryTest {
         ClassificationFamily family = createClassificationFamilyOneVersionDeleted();
         subject.save(family);
 
+        logger.info(LOGGER_MESSAGE_FAMILIES, subject.count());
+
         // when
-        List<ClassificationFamilySummary> result = subject.findPublicClassificationFamilySummaries(allSections,
-                allClassificationTypes);
+        List<ClassificationFamilySummary> result =
+                classificationFamilySummaries.buildPublicClassificationSummaries(allSections, allClassificationTypes);
 
         // then
         assertEquals(1, result.size());
         assertEquals(1, result.get(0).getNumberOfClassifications());
+    }
+
+    @Test
+    public void verifyFindAllClassificationFamiliesBuildSummaries() {
+        ClassificationFamily summer_family = createClassificationFamilyOneVersionNotPublished();
+        subject.save(summer_family);
+        ClassificationFamily family = createClassificationFamilyWithOneClassification();
+        subject.save(family);
+        ClassificationFamily code_family = createClassificationFamilyOneClassificationIsCopyrighted();
+        subject.save(code_family);
+        ClassificationFamily skate_family = createClassificationFamilyNoVersionPublished();
+        subject.save(skate_family);
+
+        logger.info(LOGGER_MESSAGE_FAMILIES, subject.count());
+
+        List<ClassificationFamilySummary> classificationFamilyBuilder;
+        classificationFamilyBuilder = classificationFamilySummaries.buildPublicClassificationSummaries(allSections, allClassificationTypes);
+        assertEquals(4, classificationFamilyBuilder.size());
+        assertThat(classificationFamilyBuilder.get(0).getNumberOfClassifications()).isEqualTo(1);
+        assertThat(classificationFamilyBuilder.get(1).getNumberOfClassifications()).isEqualTo(1);
+        assertThat(classificationFamilyBuilder.get(2).getNumberOfClassifications()).isEqualTo(1);
+        assertThat(classificationFamilyBuilder.get(3).getNumberOfClassifications()).isEqualTo(0);
     }
 
     private ClassificationFamily createClassificationFamilyWithOneClassification() {
@@ -262,8 +314,7 @@ public class ClassificationFamilyRepositoryTest {
         classification.addClassificationVersion(version2);
         classificationSeriesRepository.save(classification);
 
-        logger.info(LOGGER_MESSAGE_CLASSIFICATION_SERIES, classificationSeriesRepository.count());
-        logger.info(LOGGER_MESSAGE_FAMILIES, subject.count());
+        logger.info(LOGGER_MESSAGE_CLASSIFICATION_SERIES, family.getClassificationSeries().size(),family.getName());
 
         return family;
     }
@@ -286,8 +337,8 @@ public class ClassificationFamilyRepositoryTest {
         classificationSeriesRepository.save(classification);
         classificationSeriesRepository.save(classification1);
 
-        logger.info(LOGGER_MESSAGE_CLASSIFICATION_SERIES, classificationSeriesRepository.count());
-        logger.info(LOGGER_MESSAGE_FAMILIES, subject.count());
+        logger.info(LOGGER_MESSAGE_CLASSIFICATION_SERIES, family.getClassificationSeries().size(),family.getName());
+        logger.info(LOGGER_MESSAGE_CLASSIFICATION_VERSIONS, classification.getClassificationVersions().size(), family.getName());
 
         return family;
     }
@@ -308,8 +359,8 @@ public class ClassificationFamilyRepositoryTest {
         classificationSeriesRepository.save(classification1);
         classification.setDeleted();
 
-        logger.info(LOGGER_MESSAGE_CLASSIFICATION_SERIES, classificationSeriesRepository.count());
-        logger.info(LOGGER_MESSAGE_FAMILIES, subject.count());
+        logger.info(LOGGER_MESSAGE_CLASSIFICATION_SERIES, family.getClassificationSeries().size(),family.getName());
+        logger.info(LOGGER_MESSAGE_CLASSIFICATION_VERSIONS, classification.getClassificationVersions().size(), family.getName());
 
         return family;
     }
@@ -328,9 +379,8 @@ public class ClassificationFamilyRepositoryTest {
         classificationSeriesRepository.save(classification);
         classification.getClassificationVersions().get(0).unpublish(Language.NB);
 
-        logger.info(LOGGER_MESSAGE_CLASSIFICATION_SERIES, classificationSeriesRepository.count());
-        logger.info(LOGGER_MESSAGE_FAMILIES, subject.count());
-        logger.info(LOGGER_MESSAGE_CLASSIFICATION_VERSIONS, classification.getClassificationVersions().size());
+        logger.info(LOGGER_MESSAGE_CLASSIFICATION_SERIES, family.getClassificationSeries().size(),family.getName());
+        logger.info(LOGGER_MESSAGE_CLASSIFICATION_VERSIONS, classification.getClassificationVersions().size(), family.getName());
 
         return family;
     }
@@ -349,16 +399,32 @@ public class ClassificationFamilyRepositoryTest {
         classificationSeriesRepository.save(classification);
         classification.getClassificationVersions().get(1).setDeleted();
 
-        logger.info(LOGGER_MESSAGE_CLASSIFICATION_SERIES, classificationSeriesRepository.count());
-        logger.info(LOGGER_MESSAGE_FAMILIES, subject.count());
-        logger.info(LOGGER_MESSAGE_CLASSIFICATION_VERSIONS, classification.getClassificationVersions().size());
+        logger.info(LOGGER_MESSAGE_CLASSIFICATION_SERIES, family.getClassificationSeries().size(),family.getName());
+        logger.info(LOGGER_MESSAGE_CLASSIFICATION_VERSIONS, classification.getClassificationVersions().size(), family.getName());
 
         return family;
     }
 
-    private final String LOGGER_MESSAGE_CLASSIFICATION_SERIES = "Number of classification series: {}";
-    private final String LOGGER_MESSAGE_FAMILIES = "Number of families: {}";
-    private final String LOGGER_MESSAGE_CLASSIFICATION_VERSIONS = "Number of classification versions: {}";
+    private ClassificationFamily createClassificationFamilyNoVersionPublished() {
+        ClassificationFamily family = subject.save(TestUtil.createClassificationFamily("Skate family"));
+        ClassificationSeries classification = TestUtil.createClassification("surf skate");
+        classification.setContactPerson(user);
+        family.addClassificationSeries(classification);
+        ClassificationVersion version = TestUtil.createClassificationVersion(DateRange.create("1999-01-01",
+                "2001-01-01"));
+        classification.addClassificationVersion(version);
+        classificationSeriesRepository.save(classification);
+        classification.getClassificationVersions().get(0).unpublish(Language.NB);
+
+        logger.info(LOGGER_MESSAGE_CLASSIFICATION_SERIES, family.getClassificationSeries().size(),family.getName());
+        logger.info(LOGGER_MESSAGE_CLASSIFICATION_VERSIONS, classification.getClassificationVersions().size(), family.getName());
+
+        return family;
+    }
+
+    private final String LOGGER_MESSAGE_CLASSIFICATION_SERIES = "Number of classification series: {} for classification family: {}";
+    private final String LOGGER_MESSAGE_FAMILIES = "Total number of families: {}";
+    private final String LOGGER_MESSAGE_CLASSIFICATION_VERSIONS = "Number of classification versions: {} for classification family: {}";
 
     @Configuration
     @EnableAutoConfiguration
