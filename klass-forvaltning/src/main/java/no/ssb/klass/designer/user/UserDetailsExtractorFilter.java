@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.security.oauth2.jwt.JwtIssuerValidator;
+import org.springframework.security.oauth2.jwt.JwtValidators;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -21,6 +21,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Optional;
 
 /**
  * Extract User Details from a request with a JWT Bearer token in the Authorization header.
@@ -35,10 +36,24 @@ public class UserDetailsExtractorFilter extends OncePerRequestFilter implements 
     private final UserContext userContext;
 
     private static final Logger log = LoggerFactory.getLogger(UserDetailsExtractorFilter.class);
+    private final NimbusJwtDecoder decoder;
 
     @Autowired
     public UserDetailsExtractorFilter(UserContext userContext) {
         this.userContext = userContext;
+
+        /* TODO https://statistics-norway.atlassian.net/browse/DPMETA-932
+         * Configure value with property
+         */
+        this.decoder = NimbusJwtDecoder
+                .withJwkSetUri("https://auth.test.ssb.no/realms/ssb/protocol/openid-connect/certs")
+                .build();
+
+
+        /* TODO https://statistics-norway.atlassian.net/browse/DPMETA-932
+         * Configure value with property
+         */
+        this.decoder.setJwtValidator(JwtValidators.createDefaultWithIssuer("https://auth.test.ssb.no/realms/ssb"));
     }
 
     @Override
@@ -52,15 +67,15 @@ public class UserDetailsExtractorFilter extends OncePerRequestFilter implements 
     @Override
     public void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws ServletException, IOException {
         if (!userContext.hasUser()) {
-            Jwt jwt = extractJwt(req);
+            Optional<Jwt> jwt = extractJwt(req);
 
-            if (jwt == null) {
+            if (!jwt.isPresent()) {
                 res.sendError(HttpStatus.SC_UNAUTHORIZED, "No authentication credentials provided");
                 return;
             }
-            log.debug("JWT token claims: {}", jwt.getClaims());
+            log.debug("JWT token claims: {}", jwt.get().getClaims());
             try {
-                User user = new KlassUserMapperJwt(jwt).getUser();
+                User user = new KlassUserMapperJwt(jwt.get()).getUser();
                 log.info("Logged in user: {}", user.getEmail());
                 userContext.setUser(user);
             } catch (KlassUserDetailsException e) {
@@ -82,28 +97,17 @@ public class UserDetailsExtractorFilter extends OncePerRequestFilter implements 
      * @param request The request being processed.
      * @return the decoded JWT token
      */
-    private Jwt extractJwt(HttpServletRequest request) {
+    private Optional<Jwt> extractJwt(HttpServletRequest request) {
+        return getEncodedTokenFromRequest(request).map(this.decoder::decode);
+    }
+
+    private Optional<String> getEncodedTokenFromRequest(HttpServletRequest request) {
         String authHeader = request.getHeader("authorization");
 
         if (authHeader == null) {
-            return null;
+            return Optional.empty();
         }
-
-        /* TODO https://statistics-norway.atlassian.net/browse/DPMETA-932
-         * Configure value with property
-         */
-        NimbusJwtDecoder decoder = NimbusJwtDecoder
-                .withJwkSetUri("https://auth.test.ssb.no/realms/ssb/protocol/openid-connect/certs")
-                .build();
-
-
-        /* TODO https://statistics-norway.atlassian.net/browse/DPMETA-932
-         * Configure value with property
-         */
-        decoder.setJwtValidator(new JwtIssuerValidator("https://auth.test.ssb.no/realms/ssb"));
-
-        return decoder.decode(authHeader.replace("Bearer ", "").replaceAll("\\s+", ""));
-
+        return Optional.of(authHeader.replace("Bearer ", "").replaceAll("\\s+", ""));
     }
 
 }
