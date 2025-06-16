@@ -288,8 +288,6 @@ public class MigrationTestUtils {
         }
     }
 
-    //TODO Refactor/combine/correct xml validation methods
-
     private static XmlPath[] extractXmlPaths(Response source, Response target) {
         return new XmlPath[] {
                 new XmlPath(source.getBody().asString()),
@@ -297,44 +295,54 @@ public class MigrationTestUtils {
         };
     }
 
-
-    // Flat compare
     public static void validateXmlItems(Response sourceResponse, Response targetResponse, List<String> pathNames)  {
-        XmlPath[] paths = extractXmlPaths(sourceResponse, targetResponse);
-        XmlPath xmlPathSource = paths[0];
-        XmlPath xmlPathTarget = paths[1];
+        XmlPath xmlPathSource = extractXmlPaths(sourceResponse, targetResponse)[0];
+        XmlPath xmlPathTarget = extractXmlPaths(sourceResponse, targetResponse)[1];
 
         for(String pathName : pathNames) {
             Object sourcePath = xmlPathSource.get(pathName);
             Object targetPath = xmlPathTarget.get(pathName);
 
-            String sourceField = String.valueOf(sourcePath);
-            String targetField = String.valueOf(targetPath);
+            if (pathName.endsWith(HREF)) {
+                URI sourceUri = URI.create(pathName);
+                URI targetUri = URI.create(pathName);
 
-            assertThat(sourceField).withFailMessage(
-                    FAIL_MESSAGE,
-                    pathName,
-                    sourcePath,
-                    targetPath).isEqualTo(targetField);
+                String sourceUrl = sourceUri.getPath();
+                String targetUrl = targetUri.getPath();
 
-            System.out.println("Source: " + xmlPathSource.get(pathName));
-            System.out.println("Target: " + xmlPathTarget.get(pathName));
+                assertThat(sourceUrl).withFailMessage(
+                        FAIL_MESSAGE,
+                        pathName,
+                        sourceUrl,
+                        targetUrl).isEqualTo(targetUrl);
+            } else {
+
+                String sourceField = String.valueOf(sourcePath);
+                String targetField = String.valueOf(targetPath);
+
+                assertThat(sourceField).withFailMessage(
+                        FAIL_MESSAGE,
+                        pathName,
+                        sourcePath,
+                        targetPath).isEqualTo(targetField);
+
+                System.out.println("Source: " + xmlPathSource.get(pathName));
+                System.out.println("Target: " + xmlPathTarget.get(pathName));
+            }
         }
 
     }
 
-    // List path name
     public static void validateXmlList(String path, Response sourceResponse, Response targetResponse, String pathName) {
-        XmlPath[] paths = extractXmlPaths(sourceResponse, targetResponse);
-        XmlPath xmlPathSource = paths[0];
-        XmlPath xmlPathTarget = paths[1];
+        XmlPath xmlPathSource = extractXmlPaths(sourceResponse, targetResponse)[0];
+        XmlPath xmlPathTarget = extractXmlPaths(sourceResponse, targetResponse)[1];
+
 
         List<String> sourceList = xmlPathSource.getList(pathName);
         List<String> targetList = xmlPathTarget.getList(pathName);
         System.out.println(sourceList.size() + " -> " + targetList.size());
 
         for(int i = 0; i < sourceList.size(); i++) {
-            System.out.println(sourceList.get(i) + " -> " + targetList.get(i));
             assertThat(sourceList.get(i)).withFailMessage(
                     FAIL_MESSAGE,
                     path,
@@ -345,44 +353,8 @@ public class MigrationTestUtils {
     }
 
     public static void validatePathListWithObjectsXml(Response sourceResponse, Response targetResponse, String listName, List<String> pathNames) {
-        XmlPath[] paths = extractXmlPaths(sourceResponse, targetResponse);
-        XmlPath xmlPathSource = paths[0];
-        XmlPath xmlPathTarget = paths[1];
-
-        for(String pathName: pathNames) {
-            String fullPath = listName + "." + pathName;
-            Object sourceValue = xmlPathSource.get(fullPath);
-            Object targetValue = xmlPathTarget.get(fullPath);
-
-            System.out.println(sourceValue + " -> " + targetValue);
-
-            if (pathName.endsWith(HREF)) {
-                URI sourceUri = URI.create(fullPath);
-                URI targetUri = URI.create(fullPath);
-
-                String sourcePath = sourceUri.getPath();
-                String targetPath = targetUri.getPath();
-                assertThat(sourcePath).withFailMessage(
-                        FAIL_MESSAGE,
-                        pathName,
-                        sourcePath,
-                        targetPath).isEqualTo(targetPath);
-            } else {
-                assertThat(sourceValue).withFailMessage(
-                        FAIL_MESSAGE,
-                        pathName,
-                        sourceValue,
-                        targetValue).isEqualTo(targetValue);
-            }
-        }
-
-    }
-
-    // More details
-    public static void validatePathListWithObjectsIterateXml(Response sourceResponse, Response targetResponse, String listName, List<String> pathNames) {
-        XmlPath[] paths = extractXmlPaths(sourceResponse, targetResponse);
-        XmlPath xmlPathSource = paths[0];
-        XmlPath xmlPathTarget = paths[1];
+        XmlPath xmlPathSource = extractXmlPaths(sourceResponse, targetResponse)[0];
+        XmlPath xmlPathTarget = extractXmlPaths(sourceResponse, targetResponse)[1];
 
         for(String pathName: pathNames) {
             String fullPath = listName + "." + pathName;
