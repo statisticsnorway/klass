@@ -60,7 +60,22 @@ class UserContextImpl implements UserContext {
 
     @Override
     public boolean canUserAlterObject(ClassificationEntityOperations series) {
-        return isAdministrator() || Objects.equals(currentUser.getSection(), series.getContactPerson().getSection());
+        String userSection = currentUser.getSection();
+        String classificationSection = series.getContactPerson().getSection();
+        return userSection != null
+                && isAdministrator()
+                || Objects.equals(getSectionCode(userSection), getSectionCode(classificationSection));
+    }
+
+    /**
+     * Extract the section code from the entire section string.
+     *
+     * @param section A string in the form "320 - Seksjon for befolkningsstatistikk"
+     * @return the code in the form "320"
+     */
+    private static String getSectionCode(String section) {
+        if (section == null) return null;
+        return section.split(" - ")[0];
     }
 
     @Override
