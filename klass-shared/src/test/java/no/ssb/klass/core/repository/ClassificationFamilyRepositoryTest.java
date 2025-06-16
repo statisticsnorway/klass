@@ -1,17 +1,13 @@
 package no.ssb.klass.core.repository;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.transaction.Transactional;
-
+import no.ssb.klass.core.config.ConfigurationProfiles;
 import no.ssb.klass.core.model.*;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import no.ssb.klass.core.util.DateRange;
+import no.ssb.klass.core.util.TranslatablePersistenceConverter;
+import no.ssb.klass.testutil.TestUtil;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,14 +17,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import no.ssb.klass.core.config.ConfigurationProfiles;
-import no.ssb.klass.core.util.DateRange;
-import no.ssb.klass.core.util.TranslatablePersistenceConverter;
-import no.ssb.klass.testutil.TestUtil;
+import javax.persistence.EntityManager;
+import javax.transaction.Transactional;
+import java.util.List;
 
-@ExtendWith(SpringExtension.class)
+import static org.junit.Assert.assertEquals;
+
+@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
 @ActiveProfiles(ConfigurationProfiles.POSTGRES_EMBEDDED)
 @Transactional
@@ -49,7 +46,7 @@ public class ClassificationFamilyRepositoryTest {
     private User user;
     private ClassificationFamilySummaryBuilder classificationFamilySummaries;
 
-    @BeforeEach
+    @Before
     public void setup() {
 
         user = userRepository.save(TestUtil.createUser());
@@ -65,8 +62,10 @@ public class ClassificationFamilyRepositoryTest {
         entityManager.detach(family);
 
         // when
-        ClassificationFamily result = subject.findById(family.getId()).orElseThrow(() ->
-                new RuntimeException("ClassificationFamily not found"));
+        ClassificationFamily result = subject.findOne(family.getId());
+        if (result == null) {
+            throw new RuntimeException("ClassificationFamily not found");
+        }
 
         // then
         assertEquals(1, result.getClassificationSeries().size());
@@ -196,7 +195,7 @@ public class ClassificationFamilyRepositoryTest {
 
         logger.info(LOGGER_MESSAGE_FAMILIES, subject.count());
 
-        assertThat(family.getClassificationSeries().size()).isEqualTo(2);
+        assertEquals(2, family.getClassificationSeries().size());
 
         // when
         List<ClassificationFamilySummary> result =
@@ -218,7 +217,7 @@ public class ClassificationFamilyRepositoryTest {
 
         logger.info(LOGGER_MESSAGE_FAMILIES, subject.count());
 
-        assertThat(family.getClassificationSeries().size()).isEqualTo(2);
+        assertEquals(2, family.getClassificationSeries().size());
 
         // when
         List<ClassificationFamilySummary> result = classificationFamilySummaries.buildClassificationSummaries(allSections, allClassificationTypes);
@@ -295,10 +294,10 @@ public class ClassificationFamilyRepositoryTest {
         List<ClassificationFamilySummary> classificationFamilyBuilder;
         classificationFamilyBuilder = classificationFamilySummaries.buildPublicClassificationSummaries(allSections, allClassificationTypes);
         assertEquals(4, classificationFamilyBuilder.size());
-        assertThat(classificationFamilyBuilder.get(0).getNumberOfClassifications()).isEqualTo(1);
-        assertThat(classificationFamilyBuilder.get(1).getNumberOfClassifications()).isEqualTo(1);
-        assertThat(classificationFamilyBuilder.get(2).getNumberOfClassifications()).isEqualTo(1);
-        assertThat(classificationFamilyBuilder.get(3).getNumberOfClassifications()).isEqualTo(0);
+        assertEquals(1, classificationFamilyBuilder.get(0).getNumberOfClassifications());
+        assertEquals(1, classificationFamilyBuilder.get(1).getNumberOfClassifications());
+        assertEquals(1, classificationFamilyBuilder.get(2).getNumberOfClassifications());
+        assertEquals(0, classificationFamilyBuilder.get(3).getNumberOfClassifications());
     }
 
     private ClassificationFamily createClassificationFamilyWithOneClassification() {
@@ -314,7 +313,7 @@ public class ClassificationFamilyRepositoryTest {
         classification.addClassificationVersion(version2);
         classificationSeriesRepository.save(classification);
 
-        logger.info(LOGGER_MESSAGE_CLASSIFICATION_SERIES, family.getClassificationSeries().size(),family.getName());
+        logger.info(LOGGER_MESSAGE_CLASSIFICATION_SERIES, family.getClassificationSeries().size(), family.getName());
 
         return family;
     }
@@ -337,7 +336,7 @@ public class ClassificationFamilyRepositoryTest {
         classificationSeriesRepository.save(classification);
         classificationSeriesRepository.save(classification1);
 
-        logger.info(LOGGER_MESSAGE_CLASSIFICATION_SERIES, family.getClassificationSeries().size(),family.getName());
+        logger.info(LOGGER_MESSAGE_CLASSIFICATION_SERIES, family.getClassificationSeries().size(), family.getName());
         logger.info(LOGGER_MESSAGE_CLASSIFICATION_VERSIONS, classification.getClassificationVersions().size(), family.getName());
 
         return family;
@@ -359,7 +358,7 @@ public class ClassificationFamilyRepositoryTest {
         classificationSeriesRepository.save(classification1);
         classification.setDeleted();
 
-        logger.info(LOGGER_MESSAGE_CLASSIFICATION_SERIES, family.getClassificationSeries().size(),family.getName());
+        logger.info(LOGGER_MESSAGE_CLASSIFICATION_SERIES, family.getClassificationSeries().size(), family.getName());
         logger.info(LOGGER_MESSAGE_CLASSIFICATION_VERSIONS, classification.getClassificationVersions().size(), family.getName());
 
         return family;
@@ -379,7 +378,7 @@ public class ClassificationFamilyRepositoryTest {
         classificationSeriesRepository.save(classification);
         classification.getClassificationVersions().get(0).unpublish(Language.NB);
 
-        logger.info(LOGGER_MESSAGE_CLASSIFICATION_SERIES, family.getClassificationSeries().size(),family.getName());
+        logger.info(LOGGER_MESSAGE_CLASSIFICATION_SERIES, family.getClassificationSeries().size(), family.getName());
         logger.info(LOGGER_MESSAGE_CLASSIFICATION_VERSIONS, classification.getClassificationVersions().size(), family.getName());
 
         return family;
@@ -399,7 +398,7 @@ public class ClassificationFamilyRepositoryTest {
         classificationSeriesRepository.save(classification);
         classification.getClassificationVersions().get(1).setDeleted();
 
-        logger.info(LOGGER_MESSAGE_CLASSIFICATION_SERIES, family.getClassificationSeries().size(),family.getName());
+        logger.info(LOGGER_MESSAGE_CLASSIFICATION_SERIES, family.getClassificationSeries().size(), family.getName());
         logger.info(LOGGER_MESSAGE_CLASSIFICATION_VERSIONS, classification.getClassificationVersions().size(), family.getName());
 
         return family;
@@ -416,7 +415,7 @@ public class ClassificationFamilyRepositoryTest {
         classificationSeriesRepository.save(classification);
         classification.getClassificationVersions().get(0).unpublish(Language.NB);
 
-        logger.info(LOGGER_MESSAGE_CLASSIFICATION_SERIES, family.getClassificationSeries().size(),family.getName());
+        logger.info(LOGGER_MESSAGE_CLASSIFICATION_SERIES, family.getClassificationSeries().size(), family.getName());
         logger.info(LOGGER_MESSAGE_CLASSIFICATION_VERSIONS, classification.getClassificationVersions().size(), family.getName());
 
         return family;
@@ -428,7 +427,7 @@ public class ClassificationFamilyRepositoryTest {
 
     @Configuration
     @EnableAutoConfiguration
-    @EntityScan(basePackageClasses = { ClassificationFamily.class, TranslatablePersistenceConverter.class })
+    @EntityScan(basePackageClasses = {ClassificationFamily.class, TranslatablePersistenceConverter.class})
     @ComponentScan(basePackageClasses = TranslatablePersistenceConverter.class)
     static class Config {
 
