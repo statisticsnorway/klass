@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import io.zonky.test.db.AutoConfigureEmbeddedDatabase;
+import no.ssb.klass.core.config.ConfigurationProfiles;
 import no.ssb.klass.core.model.CorrespondenceTable;
 import no.ssb.klass.testutil.TestDataProvider;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +20,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import no.ssb.klass.core.config.ConfigurationProfiles;
 import no.ssb.klass.core.model.ClassificationFamily;
 import no.ssb.klass.core.model.ClassificationSeries;
 import no.ssb.klass.core.model.User;
