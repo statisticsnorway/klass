@@ -31,7 +31,7 @@ public class KlassApiClassificationFamiliesJsonTest extends AbstractKlassApiFami
     @Test
     void getClassificationFamiliesBySsbSection() {
 
-        paramsSsbSection.put(SSB_SECTION, "320 - Seksjon for befolkningsstatistikk");
+        paramsSsbSection.put(SSB_SECTION, section320);
         String path = getClassificationFamiliesPath();
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsSsbSection,null);
         Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsSsbSection,null);

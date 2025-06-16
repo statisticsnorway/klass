@@ -12,7 +12,6 @@ import static no.ssb.klass.api.migration.MigrationTestUtils.validateItems;
 import static no.ssb.klass.api.migration.MigrationTestUtils.validatePathListWithObjects;
 
 public abstract class AbstractKlassApiClassifications extends AbstractKlassApiDataIntegrityTest {
-    static Map<String, Object> paramsIncludeCodeLists = new HashMap<>();
     static Map<String, Object> paramsChangedSince = new HashMap<>();
 
     static String queryDate;
@@ -36,7 +35,6 @@ public abstract class AbstractKlassApiClassifications extends AbstractKlassApiDa
     @BeforeAll
     static void setUpClassifications() {
         queryDate = "2015-03-01T01:30:00.000-0200";
-        paramsIncludeCodeLists.put(INCLUDE_CODE_LISTS, TRUE);
         paramsChangedSince.put(CHANGED_SINCE, queryDate);
     }
 }

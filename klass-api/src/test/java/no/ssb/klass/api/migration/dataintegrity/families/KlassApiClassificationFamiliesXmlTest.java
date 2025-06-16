@@ -31,7 +31,7 @@ public class KlassApiClassificationFamiliesXmlTest extends AbstractKlassApiFamil
     @Test
     void getClassificationFamiliesBySsbSection() {
 
-        paramsSsbSection.put(SSB_SECTION, "320 - Seksjon for befolkningsstatistikk");
+        paramsSsbSection.put(SSB_SECTION, section320 );
         String path = getClassificationFamiliesPath();
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsSsbSection,APPLICATION_XML);
         Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsSsbSection,APPLICATION_XML);
