@@ -3,9 +3,10 @@ name: Klass-forvaltning build and deploy
 on:
   release:
     types: [ published ]
-  push:
-    branches:
-      - nais-migration
+  #  push:
+  #    branches:
+  #      - nais-migration
+  pull_request:
     paths:
       - "klass-forvaltning/**"
       - ".nais/**/klass-forvaltning.yaml"
