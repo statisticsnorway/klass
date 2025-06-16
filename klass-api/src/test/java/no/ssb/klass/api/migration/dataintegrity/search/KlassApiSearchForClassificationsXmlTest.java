@@ -3,7 +3,7 @@ package no.ssb.klass.api.migration.dataintegrity.search;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
 
-import static no.ssb.klass.api.migration.MigrationTestConstants.APPLICATION_XML;
+import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 import static no.ssb.klass.api.migration.MigrationTestUtils.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -23,7 +23,8 @@ public class KlassApiSearchForClassificationsXmlTest extends AbstractKlassApiSea
         if (sourceResponse.getStatusCode() != 200) {
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         } else {
-            System.out.println("Search success");
+            validateXmlList(path, sourceResponse, targetResponse, PAGED_ENTITIES_CONTENTS_CONTENT);
+            validateXmlList(path, sourceResponse, targetResponse, PAGED_ENTITIES_PAGE);
         }
     }
 
@@ -41,7 +42,8 @@ public class KlassApiSearchForClassificationsXmlTest extends AbstractKlassApiSea
         if (sourceResponse.getStatusCode() != 200) {
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         } else {
-            System.out.println("Search success");
+            validateXmlList(path, sourceResponse, targetResponse, PAGED_ENTITIES_CONTENTS_CONTENT);
+            validateXmlList(path, sourceResponse, targetResponse, PAGED_ENTITIES_PAGE);
         }
     }
 
@@ -59,7 +61,8 @@ public class KlassApiSearchForClassificationsXmlTest extends AbstractKlassApiSea
         if (sourceResponse.getStatusCode() != 200) {
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         } else {
-            System.out.println("Search success");
+            validateXmlList(path, sourceResponse, targetResponse, PAGED_ENTITIES_CONTENTS_CONTENT);
+            validateXmlList(path, sourceResponse, targetResponse, PAGED_ENTITIES_PAGE);
         }
     }
 }

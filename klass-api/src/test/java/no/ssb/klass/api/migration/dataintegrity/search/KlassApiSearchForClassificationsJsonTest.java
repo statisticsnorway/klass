@@ -3,6 +3,8 @@ package no.ssb.klass.api.migration.dataintegrity.search;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
 
+import static no.ssb.klass.api.migration.MigrationTestConstants.LINKS_SELF_HREF;
+import static no.ssb.klass.api.migration.MigrationTestConstants.PAGE;
 import static no.ssb.klass.api.migration.MigrationTestUtils.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -21,8 +23,11 @@ public class KlassApiSearchForClassificationsJsonTest extends AbstractKlassApiSe
 
         if (sourceResponse.getStatusCode() != 200) {
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
+
         } else {
-            System.out.println("Search success");
+            validateObject(sourceResponse, targetResponse, PAGE);
+            validateObject(sourceResponse, targetResponse, LINKS_SELF_HREF);
+
         }
     }
 
@@ -40,7 +45,8 @@ public class KlassApiSearchForClassificationsJsonTest extends AbstractKlassApiSe
         if (sourceResponse.getStatusCode() != 200) {
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         } else {
-            System.out.println("Search success");
+            validateObject(sourceResponse, targetResponse, PAGE);
+            validateObject(sourceResponse, targetResponse, LINKS_SELF_HREF);
         }
     }
 
@@ -58,7 +64,8 @@ public class KlassApiSearchForClassificationsJsonTest extends AbstractKlassApiSe
         if (sourceResponse.getStatusCode() != 200) {
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         } else {
-            System.out.println("Search success");
+            validateObject(sourceResponse, targetResponse, PAGE);
+            validateObject(sourceResponse, targetResponse, LINKS_SELF_HREF);
         }
     }
 }

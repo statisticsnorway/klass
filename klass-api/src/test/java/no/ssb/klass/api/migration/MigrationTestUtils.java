@@ -288,6 +288,9 @@ public class MigrationTestUtils {
         }
     }
 
+    //TODO Refactor/combine/correct xml validation methods
+
+    // Flat compare
     public static void validateXmlItems(Response sourceResponse, Response targetResponse, List<String> pathNames)  {
         String sourceXml = sourceResponse.getBody().asString();
         String targetXml = targetResponse.getBody().asString();
@@ -312,7 +315,7 @@ public class MigrationTestUtils {
 
     }
 
-    //TODO Refactor/combine/correct xml validation methods
+    // List path name
     public static void validateXmlList(String path, Response sourceResponse, Response targetResponse, String pathName) {
         String sourceXml = sourceResponse.getBody().asString();
         String targetXml = targetResponse.getBody().asString();
@@ -331,6 +334,7 @@ public class MigrationTestUtils {
         }
 
     }
+
 
     public static void validatePathListWithObjectsXml(Response sourceResponse, Response targetResponse, String listName, List<String> pathNames) {
         String sourceXml = sourceResponse.getBody().asString();
@@ -367,6 +371,7 @@ public class MigrationTestUtils {
 
     }
 
+    // More details
     public static void validatePathListWithObjectsIterateXml(Response sourceResponse, Response targetResponse, String listName, List<String> pathNames) {
         String sourceXml = sourceResponse.getBody().asString();
         String targetXml = targetResponse.getBody().asString();

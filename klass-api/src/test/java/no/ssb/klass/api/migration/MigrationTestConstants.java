@@ -126,6 +126,7 @@ public final class MigrationTestConstants {
     public static final String CORRESPONDENCE_ITEM_LIST_CORRESPONDENCE_ITEM= "correspondenceItemList.correspondenceItem";
     public static final String CLASSIFICATION_FAMILY = "classificationFamily";
     public static final String PAGED_ENTITIES_CONTENTS_CONTENT = "pagedEntities.contents.content";
+    public static final String PAGED_ENTITIES_PAGE = "pagedEntities.page";
 
     // Link fields
     public static final String HREF= "href";
