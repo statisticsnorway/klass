@@ -21,7 +21,7 @@ import java.util.List;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 public class StatisticsServiceImpl implements StatisticsService {
 
     private final ClassificationSeriesRepository classificationRepository;
@@ -45,6 +45,7 @@ public class StatisticsServiceImpl implements StatisticsService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ContentUseStatisticDto generateContentUseStat(String section, ClassificationType classificationType) {
         int numberOfClassifications = classificationRepository.finNumberOfClassifications(classificationType, section);
         int numberOfPublishedClassifications =
@@ -62,6 +63,7 @@ public class StatisticsServiceImpl implements StatisticsService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ClassificationReportDto> getPublishedClassificationReport(String section, ClassificationType classificationType, ReportMode operation) {
 
         switch (operation) {
@@ -75,6 +77,7 @@ public class StatisticsServiceImpl implements StatisticsService {
         }
     }
     @Override
+    @Transactional(readOnly = true)
     public List<ClassificationVersionReportDto> getPublishedVersionReport(String section, ClassificationType classificationType, ReportMode operation) {
 
         switch (operation) {
@@ -89,6 +92,7 @@ public class StatisticsServiceImpl implements StatisticsService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public UsageStatisticsDto getUsageStatistics(LocalDate fromSearchDate, LocalDate toSearchDate) {
         checkNotNull(fromSearchDate);
         checkNotNull(toSearchDate);
@@ -101,7 +105,6 @@ public class StatisticsServiceImpl implements StatisticsService {
     }
 
     @Override
-    @Transactional(readOnly = false)
     public void addUseForClassification(ClassificationSeries classificationSeries) {
         ClassificationAccessCounter loggUse = new ClassificationAccessCounter(classificationSeries);
         classificationAccessRepository.save(loggUse);
@@ -114,6 +117,7 @@ public class StatisticsServiceImpl implements StatisticsService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<StatisticalEntity> getUsageStatistics(LocalDate fromSearchDate, LocalDate toSearchDate,
                                                  UseStatisticsMode operation, Pageable pageable) {
         
@@ -133,17 +137,20 @@ public class StatisticsServiceImpl implements StatisticsService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<StatisticalEntity> getStaticalUnitsOverView(Pageable pageable) {
         return statisticalUnitRepository.getStaticalUnitsOverView(pageable);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ClassificationReportDto> getAllClassificationSeriesForStaticalUnit(
             StatisticalUnit statisticalUnit) {
         return  statisticalUnitRepository.getAllClassificationSeriesForStaticalUnit(statisticalUnit);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public SubscriberStatisticsDto getSubscriberStatistics() {
         int numberOfSubscribers = subscriberRepository.findNumberOfSubscribers();
         int numberOfInternalSubscribers = subscriberRepository.findNumberOfInternalSubscribers();
@@ -153,6 +160,7 @@ public class StatisticsServiceImpl implements StatisticsService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<StatisticalEntity> getSubscriberReport(SubscriberMode operation, Pageable p) {
         switch (operation) {
         case TOTAL:
@@ -167,6 +175,7 @@ public class StatisticsServiceImpl implements StatisticsService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<StatisticalEntity> getSubscriberDomainReport(SubscriberMode operation, Pageable p) {
         switch (operation) {
         case TOTAL:
@@ -183,6 +192,7 @@ public class StatisticsServiceImpl implements StatisticsService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<StatisticalEntity> getSubscriberClassificationReport(SubscriberMode operation, Pageable p) {
         switch (operation) {
         case TOTAL:

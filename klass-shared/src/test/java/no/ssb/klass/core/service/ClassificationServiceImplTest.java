@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import no.ssb.klass.core.model.*;
+import no.ssb.klass.core.repository.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,28 +28,6 @@ import org.springframework.data.domain.Pageable;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
-import no.ssb.klass.core.model.ClassificationItem;
-import no.ssb.klass.core.model.ClassificationSeries;
-import no.ssb.klass.core.model.ClassificationType;
-import no.ssb.klass.core.model.ClassificationVariant;
-import no.ssb.klass.core.model.ClassificationVersion;
-import no.ssb.klass.core.model.CorrespondenceMap;
-import no.ssb.klass.core.model.CorrespondenceTable;
-import no.ssb.klass.core.model.Language;
-import no.ssb.klass.core.model.Level;
-import no.ssb.klass.core.model.ReferencingClassificationItem;
-import no.ssb.klass.core.model.StatisticalUnit;
-import no.ssb.klass.core.model.User;
-import no.ssb.klass.core.repository.ClassificationFamilyRepository;
-import no.ssb.klass.core.repository.ClassificationSeriesRepository;
-import no.ssb.klass.core.repository.ClassificationSeriesSpecification;
-import no.ssb.klass.core.repository.ClassificationVariantRepository;
-import no.ssb.klass.core.repository.ClassificationVersionRepository;
-import no.ssb.klass.core.repository.CorrespondenceMapRepository;
-import no.ssb.klass.core.repository.CorrespondenceTableRepository;
-import no.ssb.klass.core.repository.ReferencingClassificationItemRepository;
-import no.ssb.klass.core.repository.StatisticalUnitRepository;
-import no.ssb.klass.core.repository.UserRepository;
 import no.ssb.klass.core.util.DateRange;
 import no.ssb.klass.core.util.KlassResourceNotFoundException;
 import no.ssb.klass.core.util.Translatable;
@@ -65,6 +45,7 @@ public class ClassificationServiceImplTest {
     private StatisticalUnitRepository statisticalUnitRepositoryMock;
     private SearchService searchServiceMock;
     private UserRepository userRepositoryMock;
+    private ClassificationFamilySummaryBuilder classificationFamilySummaryBuilder;
 
     @BeforeEach
     public void setup() {
@@ -81,7 +62,7 @@ public class ClassificationServiceImplTest {
         subject = new ClassificationServiceImpl(classificationFamilyRepositoryMock, classificationSeriesRepositoryMock,
                 classificationVersionRepositoryMock, classificationVariantRepositoryMock,
                 correspondenceTableRepositoryMock, referencingClassificationItemRepositoryMock,
-                correspondenceMapRepositoryMock, statisticalUnitRepositoryMock, searchServiceMock, userRepositoryMock);
+                correspondenceMapRepositoryMock, statisticalUnitRepositoryMock, searchServiceMock, userRepositoryMock, classificationFamilySummaryBuilder);
     }
 
     @Test

@@ -13,6 +13,8 @@ public final class ConfigurationProfiles {
         // Utility class
     }
 
+    public static final String POSTGRES_EMBEDDED = "postgres-embedded";
+
     /**
      * Profile for beans that should only be activated for the API application
      */
