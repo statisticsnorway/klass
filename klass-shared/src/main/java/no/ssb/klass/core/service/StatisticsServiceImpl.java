@@ -119,19 +119,20 @@ public class StatisticsServiceImpl implements StatisticsService {
     @Override
     @Transactional(readOnly = true)
     public Page<StatisticalEntity> getUsageStatistics(LocalDate fromSearchDate, LocalDate toSearchDate,
-                                                 UseStatisticsMode operation, Pageable pageable) {
-        
+                                                      UseStatisticsMode operation, Pageable pageable) {
+
         Instant fromDate = fromSearchDate.atStartOfDay(ZoneId.systemDefault()).toInstant();
         Instant toDate = toSearchDate.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant();
+
         switch (operation) {
-        case TOTAL_CLASSIFIC:
-            return classificationAccessRepository.getClassificationsCount(Date.from(fromDate), Date.from(toDate), pageable);
-        case NUMBEROF_SEARCH_RETURNED_NULL:
-            return searchWordsRepository.getSearchWords(MISSED, Date.from(fromDate), Date.from(toDate), pageable);
-        case TOTAL_SEARCH_WORDS:
-            return searchWordsRepository.getSearchWords(Date.from(fromDate), Date.from(toDate), pageable);
-        default:
-            return null;
+            case TOTAL_CLASSIFIC:
+                return classificationAccessRepository.getClassificationsCount(Date.from(fromDate), Date.from(toDate), pageable);
+            case NUMBEROF_SEARCH_RETURNED_NULL:
+                return searchWordsRepository.getSearchWords(MISSED, Date.from(fromDate), Date.from(toDate), pageable);
+            case TOTAL_SEARCH_WORDS:
+                return searchWordsRepository.getSearchWords(Date.from(fromDate), Date.from(toDate), pageable);
+            default:
+                return null;
         }
     }
 
