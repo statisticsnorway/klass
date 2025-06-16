@@ -23,7 +23,8 @@ public class KlassApiClassificationsXmlTest extends AbstractKlassApiClassificati
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         }
         else {
-            validatePathListWithObjectsIterateXml(sourceResponse, targetResponse, PAGED_ENTITIES_CONTENTS_CONTENT, pathNamesClassificationsPageXml);
+            validatePathListWithObjectsXml(sourceResponse, targetResponse, PAGED_ENTITIES_CONTENTS_CONTENT, pathNamesClassificationsPageXml);
+            validateXmlList(CLASSIFICATIONS_PATH, sourceResponse, targetResponse,PAGED_ENTITIES_PAGE);
 
         }
     }
@@ -40,7 +41,9 @@ public class KlassApiClassificationsXmlTest extends AbstractKlassApiClassificati
         if (sourceResponse.getStatusCode() != 200) {
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         } else {
-            validatePathListWithObjectsIterateXml(sourceResponse, targetResponse, PAGED_ENTITIES_CONTENTS_CONTENT, pathNamesClassificationsPageXml);
+            validatePathListWithObjectsXml(sourceResponse, targetResponse, PAGED_ENTITIES_CONTENTS_CONTENT, pathNamesClassificationsPageXml);
+            validateXmlList(CLASSIFICATIONS_PATH, sourceResponse, targetResponse,PAGED_ENTITIES_PAGE);
+
         }
     }
 
@@ -56,7 +59,9 @@ public class KlassApiClassificationsXmlTest extends AbstractKlassApiClassificati
         if (sourceResponse.getStatusCode() != 200) {
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         } else {
-            validatePathListWithObjectsIterateXml(sourceResponse, targetResponse, PAGED_ENTITIES_CONTENTS_CONTENT, pathNamesClassificationsPageXml);
+            validatePathListWithObjectsXml(sourceResponse, targetResponse, PAGED_ENTITIES_CONTENTS_CONTENT, pathNamesClassificationsPageXml);
+            validateXmlList(CLASSIFICATIONS_PATH, sourceResponse, targetResponse,PAGED_ENTITIES_PAGE);
+
         }
     }
 

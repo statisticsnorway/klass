@@ -23,8 +23,8 @@ public class KlassApiClassificationFamiliesXmlTest extends AbstractKlassApiFamil
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validatePathListWithObjectsIterateXml(sourceResponse, targetResponse, ENTITIES_CONTENTS_CONTENT, pathNamesClassificationFamiliesXml);
-            validatePathListWithObjectsXml(sourceResponse, targetResponse, ENTITIES, pathNamesXmlLinks);
+            validatePathListWithObjectsXml(sourceResponse, targetResponse, ENTITIES_CONTENTS_CONTENT, pathNamesClassificationFamiliesXml);
+            validateXmlItems(sourceResponse, targetResponse, pathNamesXmlEntitiesLinks);
         }
     }
 
@@ -44,8 +44,8 @@ public class KlassApiClassificationFamiliesXmlTest extends AbstractKlassApiFamil
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validatePathListWithObjectsIterateXml(sourceResponse, targetResponse, ENTITIES_CONTENTS_CONTENT, pathNamesClassificationFamiliesXml);
-            validatePathListWithObjectsXml(sourceResponse, targetResponse, ENTITIES, pathNamesXmlLinks);
+            validatePathListWithObjectsXml(sourceResponse, targetResponse, ENTITIES_CONTENTS_CONTENT, pathNamesClassificationFamiliesXml);
+            validateXmlItems(sourceResponse, targetResponse, pathNamesXmlEntitiesLinks);
         }
     }
 
@@ -64,8 +64,8 @@ public class KlassApiClassificationFamiliesXmlTest extends AbstractKlassApiFamil
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validatePathListWithObjectsIterateXml(sourceResponse, targetResponse, ENTITIES_CONTENTS_CONTENT, pathNamesClassificationFamiliesXml);
-            validatePathListWithObjectsXml(sourceResponse, targetResponse, ENTITIES, pathNamesXmlLinks);
+            validatePathListWithObjectsXml(sourceResponse, targetResponse, ENTITIES_CONTENTS_CONTENT, pathNamesClassificationFamiliesXml);
+            validateXmlItems(sourceResponse, targetResponse, pathNamesXmlEntitiesLinks);
         }
     }
 
@@ -84,8 +84,8 @@ public class KlassApiClassificationFamiliesXmlTest extends AbstractKlassApiFamil
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validatePathListWithObjectsIterateXml(sourceResponse, targetResponse, ENTITIES_CONTENTS_CONTENT, pathNamesClassificationFamiliesXml);
-            validatePathListWithObjectsXml(sourceResponse, targetResponse, ENTITIES, pathNamesXmlLinks);
+            validatePathListWithObjectsXml(sourceResponse, targetResponse, ENTITIES_CONTENTS_CONTENT, pathNamesClassificationFamiliesXml);
+            validateXmlItems(sourceResponse, targetResponse, pathNamesXmlEntitiesLinks);
         }
     }
 
@@ -104,8 +104,8 @@ public class KlassApiClassificationFamiliesXmlTest extends AbstractKlassApiFamil
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validatePathListWithObjectsIterateXml(sourceResponse, targetResponse, ENTITIES_CONTENTS_CONTENT, pathNamesClassificationFamiliesXml);
-            validatePathListWithObjectsXml(sourceResponse, targetResponse, ENTITIES, pathNamesXmlLinks);
+            validatePathListWithObjectsXml(sourceResponse, targetResponse, ENTITIES_CONTENTS_CONTENT, pathNamesClassificationFamiliesXml);
+            validateXmlItems(sourceResponse, targetResponse, pathNamesXmlEntitiesLinks);
         }
     }
 }

@@ -26,8 +26,8 @@ public class KlassApiClassificationFamiliesByIdXmlTest extends AbstractKlassApiF
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validatePathListWithObjectsXml(
-                    sourceResponse, targetResponse,CLASSIFICATION_FAMILY, pathNamesClassificationFamilyByIdXml
+            validateXmlItems(
+                    sourceResponse, targetResponse,pathNamesClassificationFamilyByIdXml
             );
         }
     }
@@ -47,8 +47,8 @@ public class KlassApiClassificationFamiliesByIdXmlTest extends AbstractKlassApiF
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validatePathListWithObjectsXml(
-                    sourceResponse, targetResponse,CLASSIFICATION_FAMILY, pathNamesClassificationFamilyByIdXml
+            validateXmlItems(
+                    sourceResponse, targetResponse,pathNamesClassificationFamilyByIdXml
             );
         }
     }
@@ -68,8 +68,8 @@ public class KlassApiClassificationFamiliesByIdXmlTest extends AbstractKlassApiF
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validatePathListWithObjectsXml(
-                    sourceResponse, targetResponse,CLASSIFICATION_FAMILY, pathNamesClassificationFamilyByIdXml
+            validateXmlItems(
+                    sourceResponse, targetResponse,pathNamesClassificationFamilyByIdXml
             );
         }
     }
@@ -89,8 +89,8 @@ public class KlassApiClassificationFamiliesByIdXmlTest extends AbstractKlassApiF
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validatePathListWithObjectsXml(
-                    sourceResponse, targetResponse,CLASSIFICATION_FAMILY, pathNamesClassificationFamilyByIdXml
+            validateXmlItems(
+                    sourceResponse, targetResponse,pathNamesClassificationFamilyByIdXml
             );
         }
     }
@@ -110,8 +110,8 @@ public class KlassApiClassificationFamiliesByIdXmlTest extends AbstractKlassApiF
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validatePathListWithObjectsXml(
-                    sourceResponse, targetResponse,CLASSIFICATION_FAMILY, pathNamesClassificationFamilyByIdXml
+            validateXmlItems(
+                    sourceResponse, targetResponse,pathNamesClassificationFamilyByIdXml
             );
         }
     }
@@ -133,8 +133,8 @@ public class KlassApiClassificationFamiliesByIdXmlTest extends AbstractKlassApiF
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validatePathListWithObjectsXml(
-                    sourceResponse, targetResponse,CLASSIFICATION_FAMILY, pathNamesClassificationFamilyByIdXml
+            validateXmlItems(
+                    sourceResponse, targetResponse,pathNamesClassificationFamilyByIdXml
             );
         }
     }
