@@ -1,25 +1,14 @@
 package no.ssb.klass.core.service;
 
-import static org.hamcrest.core.Is.*;
-import static org.hamcrest.core.IsNull.*;
-import static org.junit.Assert.*;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyList;
-import static org.mockito.Matchers.anyLong;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.anyBoolean;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+import no.ssb.klass.core.model.*;
+import no.ssb.klass.core.repository.*;
+import no.ssb.klass.core.util.DateRange;
+import no.ssb.klass.core.util.KlassResourceNotFoundException;
+import no.ssb.klass.core.util.Translatable;
+import no.ssb.klass.testutil.TestUtil;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
@@ -29,35 +18,14 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
+import java.time.LocalDate;
+import java.util.*;
 
-import no.ssb.klass.core.model.ClassificationItem;
-import no.ssb.klass.core.model.ClassificationSeries;
-import no.ssb.klass.core.model.ClassificationType;
-import no.ssb.klass.core.model.ClassificationVariant;
-import no.ssb.klass.core.model.ClassificationVersion;
-import no.ssb.klass.core.model.CorrespondenceMap;
-import no.ssb.klass.core.model.CorrespondenceTable;
-import no.ssb.klass.core.model.Language;
-import no.ssb.klass.core.model.Level;
-import no.ssb.klass.core.model.ReferencingClassificationItem;
-import no.ssb.klass.core.model.StatisticalUnit;
-import no.ssb.klass.core.model.User;
-import no.ssb.klass.core.repository.ClassificationFamilyRepository;
-import no.ssb.klass.core.repository.ClassificationSeriesRepository;
-import no.ssb.klass.core.repository.ClassificationSeriesSpecification;
-import no.ssb.klass.core.repository.ClassificationVariantRepository;
-import no.ssb.klass.core.repository.ClassificationVersionRepository;
-import no.ssb.klass.core.repository.CorrespondenceMapRepository;
-import no.ssb.klass.core.repository.CorrespondenceTableRepository;
-import no.ssb.klass.core.repository.ReferencingClassificationItemRepository;
-import no.ssb.klass.core.repository.StatisticalUnitRepository;
-import no.ssb.klass.core.repository.UserRepository;
-import no.ssb.klass.core.util.DateRange;
-import no.ssb.klass.core.util.KlassResourceNotFoundException;
-import no.ssb.klass.core.util.Translatable;
-import no.ssb.klass.testutil.TestUtil;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.anyBoolean;
+import static org.mockito.Mockito.*;
 
 public class ClassificationServiceImplTest {
     private ClassificationServiceImpl subject;
@@ -71,6 +39,7 @@ public class ClassificationServiceImplTest {
     private StatisticalUnitRepository statisticalUnitRepositoryMock;
     private SearchService searchServiceMock;
     private UserRepository userRepositoryMock;
+    private ClassificationFamilySummaryBuilder classificationFamilySummaryBuilder;
 
     @Before
     public void setup() {
@@ -87,7 +56,7 @@ public class ClassificationServiceImplTest {
         subject = new ClassificationServiceImpl(classificationFamilyRepositoryMock, classificationSeriesRepositoryMock,
                 classificationVersionRepositoryMock, classificationVariantRepositoryMock,
                 correspondenceTableRepositoryMock, referencingClassificationItemRepositoryMock,
-                correspondenceMapRepositoryMock, statisticalUnitRepositoryMock, searchServiceMock, userRepositoryMock);
+                correspondenceMapRepositoryMock, statisticalUnitRepositoryMock, searchServiceMock, userRepositoryMock, classificationFamilySummaryBuilder);
     }
 
     @Test
@@ -124,8 +93,8 @@ public class ClassificationServiceImplTest {
     public void getClassificationSeries() {
         // given
         final Long id = 1L;
-        when(classificationSeriesRepositoryMock.findOne(id)).thenReturn(TestUtil.createClassificationWithId(id,
-                "name"));
+        when(classificationSeriesRepositoryMock.findOne(id)).thenReturn(
+                TestUtil.createClassificationWithId(id, "name"));
 
         // when
         ClassificationSeries result = subject.getClassificationSeries(id);
@@ -275,7 +244,7 @@ public class ClassificationServiceImplTest {
     }
 
     @Test(expected = KlassMessageException.class)
-    public void testDeleteClasificationWithWrongUser() throws Exception {
+    public void testDeleteClassificationWithWrongUser() throws KlassMessageException {
         User mockUser = mock(User.class);
         User mockOwner = mock(User.class);
         ClassificationSeries classificationSeriesMock = mock(ClassificationSeries.class);
@@ -290,7 +259,7 @@ public class ClassificationServiceImplTest {
     }
 
     @Test(expected = KlassMessageException.class)
-    public void testDeleteClasificationPublished() throws Exception {
+    public void testDeleteClassificationPublished() throws Exception {
         User mockUser = mock(User.class);
         ClassificationSeries classificationSeriesMock = mock(ClassificationSeries.class);
         when(mockUser.getUsername()).thenReturn("Donald");
@@ -304,7 +273,7 @@ public class ClassificationServiceImplTest {
     }
 
     @Test
-    public void testDeleteNotOwnerClasificationWithSuperUser() throws Exception {
+    public void testDeleteNotOwnerClassificationWithSuperUser() throws Exception {
         User mockUser = mock(User.class);
         User mockOwner = mock(User.class);
         ClassificationSeries classification = mock(ClassificationSeries.class);
@@ -355,7 +324,6 @@ public class ClassificationServiceImplTest {
     }
 
 
-
     @Test
     public void testThatSaveClassificationVersionUpdatesClassificationLastModified() {
         ClassificationSeries classification = TestUtil.createClassification("name");
@@ -403,11 +371,12 @@ public class ClassificationServiceImplTest {
             answer.setId(1L);
             return answer;
         });
-        assertThat(input.getId(), nullValue());
+        assertNull(input.getId());
         StatisticalUnit output = subject.saveStatisticalUnit(input);
         verify(statisticalUnitRepositoryMock, times(1)).save(input);
-        assertThat(output.getId(), is(1L));
-        assertThat(output.getName(Language.NN), is("test"));
+        long outputId = output.getId();
+        assertEquals(1L, outputId);
+        assertEquals("test", output.getName(Language.NN));
 
     }
 
@@ -418,7 +387,7 @@ public class ClassificationServiceImplTest {
         when(statisticalUnitRepositoryMock.findAll()).thenReturn(statisticalUnitsValues);
 
         List<StatisticalUnit> statisticalUnits = subject.findAllStatisticalUnits();
-        assertThat(statisticalUnits.size(), is(2));
+        assertEquals(2, statisticalUnits.size());
         verify(statisticalUnitRepositoryMock, times(1)).findAll();
     }
 

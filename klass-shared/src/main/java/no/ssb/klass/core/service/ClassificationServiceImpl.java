@@ -37,6 +37,7 @@ public class ClassificationServiceImpl implements ClassificationService {
     private final StatisticalUnitRepository statisticalUnitRepository;
     private final SearchService searchService;
     private final UserRepository userRepository;
+    private final ClassificationFamilySummaryBuilder classificationFamilySummaryBuilder;
 
     @Autowired
     public ClassificationServiceImpl(ClassificationFamilyRepository classificationFamilyRepository,
@@ -47,7 +48,7 @@ public class ClassificationServiceImpl implements ClassificationService {
                                      ReferencingClassificationItemRepository referencingClassificationItemRepository,
                                      CorrespondenceMapRepository correspondenceMapRepository,
                                      StatisticalUnitRepository statisticalUnitRepository,
-                                     SearchService searchService, UserRepository userRepository) {
+                                     SearchService searchService, UserRepository userRepository, ClassificationFamilySummaryBuilder classificationFamilySummaryBuilder) {
         this.classificationFamilyRepository = classificationFamilyRepository;
         this.classificationRepository = classificationRepository;
         this.classificationVersionRepository = classificationVersionRepository;
@@ -58,6 +59,7 @@ public class ClassificationServiceImpl implements ClassificationService {
         this.statisticalUnitRepository = statisticalUnitRepository;
         this.searchService = searchService;
         this.userRepository = userRepository;
+        this.classificationFamilySummaryBuilder = classificationFamilySummaryBuilder;
     }
 
     @Override
@@ -370,14 +372,14 @@ public class ClassificationServiceImpl implements ClassificationService {
     @Transactional(readOnly = true)
     public List<ClassificationFamilySummary> findAllClassificationFamilySummaries(String section,
                                                                                   ClassificationType classificationType) {
-        return classificationFamilyRepository.findClassificationFamilySummaries(section, classificationType);
+        return classificationFamilySummaryBuilder.buildClassificationSummaries(section, classificationType);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<ClassificationFamilySummary> findPublicClassificationFamilySummaries(
             String section, ClassificationType classificationType) {
-        return classificationFamilyRepository.findPublicClassificationFamilySummaries(section, classificationType);
+        return classificationFamilySummaryBuilder.buildPublicClassificationSummaries(section, classificationType);
     }
 
     @Override
@@ -396,7 +398,10 @@ public class ClassificationServiceImpl implements ClassificationService {
     public void deleteNotIndexClassification(User user, ClassificationSeries classification)
             throws KlassMessageException {
         classification = reloadToAvoidLazyInitialization(classification);
-        user = userRepository.findOne(user.getId()); // get attached object
+        user = userRepository.findOne(user.getId());
+        if (user == null) {
+            throw new RuntimeException("User not found");
+        }
         checkAllowedToDelete(user, classification);
         classification.setDeleted();
         saveNotIndexClassification(classification);
@@ -491,7 +496,6 @@ public class ClassificationServiceImpl implements ClassificationService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Set<String> findReferencesOfClassificationItem(ClassificationItem classificationItem) {
         checkNotNull(classificationItem);
         if (classificationItem.getId() == null) {
