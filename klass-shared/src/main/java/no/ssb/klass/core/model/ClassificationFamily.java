@@ -7,12 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Index;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
+import no.ssb.klass.core.util.TranslatablePersistenceConverter;
 import org.hibernate.Hibernate;
 
 import no.ssb.klass.core.util.Translatable;
@@ -24,11 +25,15 @@ import no.ssb.klass.core.util.Translatable;
 public class ClassificationFamily extends BaseEntity {
     public static final String BASE_ICON_PATH = "/icons/";
     @Column(nullable = false)
-    private final Translatable name;
+    @Convert(converter = TranslatablePersistenceConverter.class)
+    private Translatable name;
     @Column(nullable = false)
-    private final String iconName;
+    private String iconName;
     @OneToMany(mappedBy = "classificationFamily", fetch = FetchType.LAZY)
-    private final List<ClassificationSeries> classificationSeriesList;
+    private List<ClassificationSeries> classificationSeriesList;
+
+    public ClassificationFamily() {
+    }
 
     public ClassificationFamily(Translatable name, String iconName) {
         this.name = checkNotNull(name);
@@ -51,6 +56,10 @@ public class ClassificationFamily extends BaseEntity {
 
     public String getName() {
         return getName(Language.getDefault());
+    }
+
+    public Translatable getTranslatableName() {
+        return name;
     }
 
     public String getName(Language language) {
@@ -78,6 +87,7 @@ public class ClassificationFamily extends BaseEntity {
             String section, ClassificationType classificationType) {
         return getClassificationSeriesBySectionAndClassificationType(section, classificationType, false);
     }
+
     public List<ClassificationSeries> getClassificationSeriesBySectionAndClassificationType(String section,
             ClassificationType classificationType, boolean publicOnly) {
         // @formatter:off
