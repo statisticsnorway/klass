@@ -16,7 +16,7 @@ public class KlassApiClassificationCodesJsonTest extends AbstractKlassApiCodesTe
 
     @Test
     void getOneClassificationWithCodes(){
-        int classificationId = 6;
+        int classificationId = industry_classification_standard;
         System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
 
         String path = getCodesPath(classificationId);
@@ -108,7 +108,7 @@ public class KlassApiClassificationCodesJsonTest extends AbstractKlassApiCodesTe
 
     @Test
     void getClassificationWithCodesLanguageNn() {
-        int classificationId = 6;
+        int classificationId = industry_classification_standard;
 
         String path = getCodesPath(classificationId);
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageNn,null);
@@ -129,7 +129,7 @@ public class KlassApiClassificationCodesJsonTest extends AbstractKlassApiCodesTe
     @Test
     void getClassificationWithCodesIncludeFuture() {
 
-        int classificationId = 6;
+        int classificationId = industry_classification_standard;
 
         String path = getCodesPath(classificationId);
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsIncludeFuture,null);

@@ -58,6 +58,10 @@ public class ClassificationFamily extends BaseEntity {
         return getName(Language.getDefault());
     }
 
+    public Translatable getTranslatableName() {
+        return name;
+    }
+
     public String getName(Language language) {
         return name.getString(language);
     }

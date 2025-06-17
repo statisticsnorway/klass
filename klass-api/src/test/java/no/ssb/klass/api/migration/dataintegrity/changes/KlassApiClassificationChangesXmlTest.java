@@ -16,7 +16,7 @@ public class KlassApiClassificationChangesXmlTest extends AbstractKlassApiChange
 
     @Test
     void getOneClassificationChanges()  {
-        Integer classificationId = 6;
+        Integer classificationId = industry_classification_standard;
 
         System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
 
@@ -133,7 +133,7 @@ public class KlassApiClassificationChangesXmlTest extends AbstractKlassApiChange
 
     @Test
     void getOneClassificationChangesIncludeFuture() {
-        int classificationId = 6;
+        int classificationId = industry_classification_standard;
 
         String path = getChangesPath(classificationId);
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsIncludeFuture,APPLICATION_XML);

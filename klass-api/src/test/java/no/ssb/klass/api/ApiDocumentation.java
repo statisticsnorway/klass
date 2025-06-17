@@ -81,7 +81,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         webEnvironment = WebEnvironment.RANDOM_PORT,
         properties = {"spring.main.allow-circular-references=true"}
 )
-@ActiveProfiles(ConfigurationProfiles.H2_INMEMORY)
+@ActiveProfiles(ConfigurationProfiles.POSTGRES_EMBEDDED)
 public class ApiDocumentation {
     private static final int CLASS_ID_FAMILIEGRUPPERING = 17;
     private static final int CLASS_ID_GREENHOUSE_GASES = 84;

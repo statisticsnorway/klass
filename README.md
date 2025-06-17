@@ -97,7 +97,28 @@ Each app has an `.sdkmanrc` file which may be used to configure the Java version
 
 ### Klass API
 
+#### Build
 Build the app: `make build-klass-api`
+
+#### Docker compose
+Service `klass-api` requires a prebuild tagged image. 
+
+Run command in `klass-api` module:
+```
+docker build -t target-postgres-image:latest .
+```
+This service depends on a Postgresql db container. 
+
+For testing with MariaDB build `klass-api` with `klass-shared` version `3.0.5-master-SNAPSHOT`.
+
+This will build klass-api without running tests: 
+```
+mvn clean install -DskipTests -pl klass-api
+```
+And build mariadb image in klass-api module:
+```
+docker build -t source-mariadb-image:latest .
+```
 
 ### Klass Forvaltning
 
