@@ -24,15 +24,12 @@ public abstract class AbstractKlassApiFamiliesTest extends AbstractKlassApiDataI
         return "/" + CLASSIFICATION_FAMILIES;
     }
 
-    static Map<String, Object> paramsIncludeCodeLists= new HashMap<>();
     static Map<String, Object> paramsSsbSection = new HashMap<>();
 
     static int randomSsbSectionId;
 
     @BeforeAll
     static void beforeAllClassificationFamiliesById() {
-        paramsIncludeCodeLists.put(INCLUDE_CODE_LISTS, TRUE);
-
         randomSsbSectionId = generateRandomId(ssbSectionNames.size());
     }
 }

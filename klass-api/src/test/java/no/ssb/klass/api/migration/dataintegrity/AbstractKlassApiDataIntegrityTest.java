@@ -29,6 +29,12 @@ public abstract class AbstractKlassApiDataIntegrityTest {
 
     protected static int lastClassificationId;
 
+    protected static int gender_standard_id = 2;
+    protected static int marital_status_standard_id = 19;
+    protected static int industry_classification_standard = 6;
+    protected static String section320 = "320 - Seksjon for befolkningsstatistikk";
+
+
     public static final String sourceHost = MigrationTestConfig.getSourceHost();
 
     public static final String targetHost = MigrationTestConfig.getTargetHost();
@@ -38,6 +44,7 @@ public abstract class AbstractKlassApiDataIntegrityTest {
     protected static Map<String, Object> paramsLanguageNn = new HashMap<>();
     protected static Map<String, Object> paramsLanguageEn = new HashMap<>();
     protected static Map<String, Object> paramsIncludeFuture = new HashMap<>();
+    protected  static Map<String, Object> paramsIncludeCodeLists= new HashMap<>();
 
     protected static Stream<Integer> rangeProviderClassificationIds() {
         return IntStream.rangeClosed(0, lastClassificationId).boxed();
@@ -73,6 +80,7 @@ public abstract class AbstractKlassApiDataIntegrityTest {
         paramsLanguageEn.put(LANGUAGE, EN);
         paramsLanguageNn.put(LANGUAGE, NN);
         paramsIncludeFuture.put(INCLUDE_FUTURE, TRUE);
+        paramsIncludeCodeLists.put(INCLUDE_CODE_LISTS, TRUE);
 
         boolean sourceUp = klassApiMigrationClient.isApiAvailable(sourceHost);
         boolean targetUp = klassApiMigrationClient.isApiAvailable(targetHost);

@@ -13,7 +13,7 @@ public class KlassApiClassificationFamiliesXmlTest extends AbstractKlassApiFamil
     void getClassificationFamilies() {
         String path = getClassificationFamiliesPath();
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, null,APPLICATION_XML);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, null,null);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, null,APPLICATION_XML);
 
         assertApiResponseIsNotNull(sourceResponse);
 
@@ -23,14 +23,15 @@ public class KlassApiClassificationFamiliesXmlTest extends AbstractKlassApiFamil
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXmlNotReady(sourceResponse, targetResponse, path);
+            validatePathListWithObjectsXml(sourceResponse, targetResponse, ENTITIES_CONTENTS_CONTENT, pathNamesClassificationFamiliesXml);
+            validateXmlItems(sourceResponse, targetResponse, pathNamesXmlEntitiesLinks);
         }
     }
 
     @Test
     void getClassificationFamiliesBySsbSection() {
 
-        paramsSsbSection.put(SSB_SECTION, "320 - Seksjon for befolkningsstatistikk");
+        paramsSsbSection.put(SSB_SECTION, section320 );
         String path = getClassificationFamiliesPath();
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsSsbSection,APPLICATION_XML);
         Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsSsbSection,APPLICATION_XML);
@@ -43,7 +44,68 @@ public class KlassApiClassificationFamiliesXmlTest extends AbstractKlassApiFamil
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXmlNotReady(sourceResponse, targetResponse, path);
+            validatePathListWithObjectsXml(sourceResponse, targetResponse, ENTITIES_CONTENTS_CONTENT, pathNamesClassificationFamiliesXml);
+            validateXmlItems(sourceResponse, targetResponse, pathNamesXmlEntitiesLinks);
+        }
+    }
+
+    @Test
+    void getClassificationFamiliesIncludeCodeLists() {
+
+        String path = getClassificationFamiliesPath();
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsIncludeCodeLists,APPLICATION_XML);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsIncludeCodeLists,APPLICATION_XML);
+
+        assertApiResponseIsNotNull(sourceResponse);
+
+        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(),path);
+
+        if(sourceResponse.getStatusCode() != 200) {
+            assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
+        }
+        else{
+            validatePathListWithObjectsXml(sourceResponse, targetResponse, ENTITIES_CONTENTS_CONTENT, pathNamesClassificationFamiliesXml);
+            validateXmlItems(sourceResponse, targetResponse, pathNamesXmlEntitiesLinks);
+        }
+    }
+
+    @Test
+    void getClassificationFamiliesIncludeLanguageEn() {
+
+        String path = getClassificationFamiliesPath();
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageEn,APPLICATION_XML);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageEn,APPLICATION_XML);
+
+        assertApiResponseIsNotNull(sourceResponse);
+
+        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(),path);
+
+        if(sourceResponse.getStatusCode() != 200) {
+            assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
+        }
+        else{
+            validatePathListWithObjectsXml(sourceResponse, targetResponse, ENTITIES_CONTENTS_CONTENT, pathNamesClassificationFamiliesXml);
+            validateXmlItems(sourceResponse, targetResponse, pathNamesXmlEntitiesLinks);
+        }
+    }
+
+    @Test
+    void getClassificationFamiliesIncludeLanguageNn() {
+
+        String path = getClassificationFamiliesPath();
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageNn,APPLICATION_XML);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageNn,APPLICATION_XML);
+
+        assertApiResponseIsNotNull(sourceResponse);
+
+        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(),path);
+
+        if(sourceResponse.getStatusCode() != 200) {
+            assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
+        }
+        else{
+            validatePathListWithObjectsXml(sourceResponse, targetResponse, ENTITIES_CONTENTS_CONTENT, pathNamesClassificationFamiliesXml);
+            validateXmlItems(sourceResponse, targetResponse, pathNamesXmlEntitiesLinks);
         }
     }
 }

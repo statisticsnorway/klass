@@ -17,7 +17,7 @@ public class KlassApiClassificationCodesCsvTest extends AbstractKlassApiCodesTes
 
     @Test
     void getOneClassificationWithCodesCsv(){
-        int classificationId = 6;
+        int classificationId = industry_classification_standard;
 
         String path = getCodesPath(classificationId);
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsFrom,TEXT_CSV);
@@ -63,7 +63,7 @@ public class KlassApiClassificationCodesCsvTest extends AbstractKlassApiCodesTes
 
     @Test
     void getClassificationWithCodesCsvSeparator() {
-        int classificationId = 6;
+        int classificationId = industry_classification_standard;
 
         String path = getCodesPath(classificationId);
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsCsvSeparator,TEXT_CSV);
@@ -84,7 +84,7 @@ public class KlassApiClassificationCodesCsvTest extends AbstractKlassApiCodesTes
 
     @Test
     void getClassificationWithCodesCsvFields() {
-        int classificationId = 6;
+        int classificationId = industry_classification_standard;
 
         String path = getCodesPath(classificationId);
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsCsvFields,TEXT_CSV);

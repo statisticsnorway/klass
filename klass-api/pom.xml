@@ -41,7 +41,6 @@
             <artifactId>h2</artifactId>
             <scope>runtime</scope>
         </dependency>
-
         <!--Spring-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -73,6 +72,10 @@
             <artifactId>jaxb-api</artifactId>
             <version>${jaxb-api-version}</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
         </dependency>
 
         <!--TOMCAT-->
@@ -125,6 +128,20 @@
             <groupId>jakarta.ws.rs</groupId>
             <artifactId>jakarta.ws.rs-api</artifactId>
             <version>${jakarta-rs-api-version}</version>
+        </dependency>
+
+        <!-- Zonky test -->
+        <dependency>
+            <groupId>io.zonky.test</groupId>
+            <artifactId>embedded-postgres</artifactId>
+            <version>2.1.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.zonky.test</groupId>
+            <artifactId>embedded-database-spring-test</artifactId>
+            <version>2.5.1</version>
+            <scope>test</scope>
         </dependency>
 
         <!--Spring TEST-->
