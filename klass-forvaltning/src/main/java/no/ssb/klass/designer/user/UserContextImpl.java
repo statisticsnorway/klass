@@ -6,6 +6,8 @@ import no.ssb.klass.core.model.ClassificationEntityOperations;
 import no.ssb.klass.core.model.ClassificationSeries;
 import no.ssb.klass.core.model.User;
 import no.ssb.klass.core.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.constraints.NotNull;
@@ -18,6 +20,8 @@ import java.util.stream.Collectors;
  */
 @SpringComponent
 class UserContextImpl implements UserContext {
+
+    private static final Logger log = LoggerFactory.getLogger(UserContextImpl.class);
 
     @Autowired
     private UserService userService;
@@ -61,11 +65,13 @@ class UserContextImpl implements UserContext {
 
     @Override
     public boolean canUserAlterObject(ClassificationEntityOperations series) {
-        String userSection = currentUser.getSection();
-        String classificationSection = series.getContactPerson().getSection();
-        return userSection != null
+        String userSection = getSectionCode(currentUser.getSection());
+        String classificationSection = getSectionCode(series.getContactPerson().getSection());
+        boolean result = userSection != null
                 && isAdministrator()
-                || Objects.equals(getSectionCode(userSection), getSectionCode(classificationSection));
+                || Objects.equals(userSection, classificationSection);
+        log.debug("User: {} section: {} can alter: {} classification: {} section: {}", currentUser.getUsername(), userSection, result, series.getNameInPrimaryLanguage(), classificationSection);
+        return result;
     }
 
     /**
