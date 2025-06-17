@@ -8,6 +8,7 @@ import no.ssb.klass.core.model.User;
 import no.ssb.klass.core.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -87,8 +88,18 @@ class UserContextImpl implements UserContext {
         currentUser = userService.saveUser(currentUser);
     }
 
-    public void setUser(User currentUser) {
+    public void setUser(@NotNull User currentUser) {
         this.currentUser = currentUser;
+        persistCurrentUserSection();
+    }
+
+    private void persistCurrentUserSection() {
+        User savedUser = userService.getUserByUserName(this.currentUser.getUsername());
+        if (!Objects.equals(getSectionCode(savedUser.getSection()), getSectionCode(this.currentUser.getSection())) && this.currentUser.getSection() != null) {
+            savedUser.setSection(getSectionCode(this.currentUser.getSection()));
+            userService.saveUser(savedUser);
+        }
+
     }
 
     @Override
