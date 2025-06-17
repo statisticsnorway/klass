@@ -95,18 +95,21 @@ class UserContextImpl implements UserContext {
     }
 
     public void setUser(@NotNull User currentUser) {
-        this.currentUser = persistCurrentUserSection(currentUser);
+        this.currentUser = updateOrCreateUser(currentUser);
     }
 
-    private User persistCurrentUserSection(User currentUser) {
+    private User updateOrCreateUser(User currentUser) {
         User savedUser = userService.getUserByUserName(currentUser.getUsername());
         if (savedUser == null) {
+            log.debug("New user {}. Persisting.", currentUser.getUsername());
             return userService.saveUser(currentUser);
         }
         if (!Objects.equals(savedUser.getSection(), currentUser.getSection()) && currentUser.getSection() != null) {
+            log.debug("Updating section for user {} to {}.", currentUser.getUsername(), currentUser.getSection());
             savedUser.setSection(currentUser.getSection());
             return userService.saveUser(savedUser);
         }
+        log.debug("Found user {}. No updates required.", currentUser.getUsername());
         return savedUser;
     }
 
