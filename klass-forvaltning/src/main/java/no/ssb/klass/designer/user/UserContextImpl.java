@@ -1,6 +1,7 @@
 package no.ssb.klass.designer.user;
 
 import com.google.common.collect.ImmutableSet;
+import com.vaadin.server.VaadinSession;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.VaadinSessionScope;
 import no.ssb.klass.core.model.ClassificationEntityOperations;
@@ -21,14 +22,21 @@ import java.util.stream.Collectors;
  */
 @SpringComponent
 @VaadinSessionScope
-class UserContextImpl implements UserContext {
+public class UserContextImpl implements UserContext {
 
     private static final Logger log = LoggerFactory.getLogger(UserContextImpl.class);
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
     private User currentUser;
+
+    public UserContextImpl(@Autowired UserService userService) {
+        VaadinSession session = VaadinSession.getCurrent();
+        this.userService = userService;
+        User user = session.getAttribute(User.class);
+        log.debug("Setting user {}", user);
+        this.setUser(user);
+    }
 
     @Override
     public boolean toggleFavorite(ClassificationSeries series) {
