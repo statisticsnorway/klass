@@ -2,8 +2,11 @@ package no.ssb.klass.auth;
 
 
 import org.apache.http.HttpStatus;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.core.context.SecurityContext;
@@ -35,28 +38,33 @@ import java.util.Optional;
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @WebFilter
+@Configuration
 public class JwtAuthFilter extends OncePerRequestFilter implements Filter {
 
     private static final Logger log = LoggerFactory.getLogger(JwtAuthFilter.class);
     private final NimbusJwtDecoder decoder;
 
+    @NotEmpty
+    @Value("${klass.security.oauth2.protected.paths}")
+    private List<String> protectedPaths;
 
-    public JwtAuthFilter() {
+    public JwtAuthFilter(
+            @NotEmpty
+            @Value("${klass.security.oauth2.jwt.jwks.uri}")
+            String jwksUri,
+            @NotEmpty
+            @Value("${klass.security.oauth2.jwt.issuer}")
+            String jwtIssuer
+    ) {
 
-        /* TODO https://statistics-norway.atlassian.net/browse/DPMETA-932
-         * Configure value with property
-         */
         this.decoder = NimbusJwtDecoder
-                .withJwkSetUri("https://auth.test.ssb.no/realms/ssb/protocol/openid-connect/certs")
+                .withJwkSetUri(jwksUri)
                 .build();
 
 
-        /* TODO https://statistics-norway.atlassian.net/browse/DPMETA-932
-         * Configure values with property
-         */
         List<OAuth2TokenValidator<Jwt>> validators = new ArrayList<>();
         validators.add(new JwtTimestampValidator());
-        validators.add(new JwtIssuerValidator("https://auth.test.ssb.no/realms/ssb"));
+        validators.add(new JwtIssuerValidator(jwtIssuer));
         validators.add(new JwtClaimValidator<>("email", Objects::nonNull));
         validators.add(new JwtClaimValidator<>("short_username", Objects::nonNull));
         validators.add(new JwtClaimValidator<>("name", Objects::nonNull));
@@ -66,10 +74,7 @@ public class JwtAuthFilter extends OncePerRequestFilter implements Filter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        /* TODO https://statistics-norway.atlassian.net/browse/DPMETA-932
-         * Configure value with property
-         */
-        return !request.getRequestURI().contains("/klassui");
+        return this.protectedPaths.stream().noneMatch((path) -> request.getRequestURI().contains(path));
     }
 
     @Override
