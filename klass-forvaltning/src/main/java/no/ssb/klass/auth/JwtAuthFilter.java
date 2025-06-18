@@ -31,9 +31,9 @@ import java.util.Objects;
 import java.util.Optional;
 
 /**
- * Extract User Details from a request with a JWT Bearer token in the Authorization header.
+ * Authenticate a user by validating and decoding the provided JWT token.
  * <p>
- * This approach is taken because Spring Security 4 does not have OAuth support.
+ * This is custom implemented in a filter because Spring Security 4 does not have OAuth support.
  */
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -65,10 +65,6 @@ public class JwtAuthFilter extends OncePerRequestFilter implements Filter {
         validators.add(new JwtTimestampValidator());
         validators.add(new JwtIssuerValidator(jwtIssuer));
         Claims.REQUIRED_CLAIMS.forEach((claim) -> validators.add(new JwtClaimValidator<>(claim, Objects::nonNull)));
-
-        validators.add(new JwtClaimValidator<>("short_username", Objects::nonNull));
-        validators.add(new JwtClaimValidator<>("name", Objects::nonNull));
-        validators.add(new JwtClaimValidator<>("dapla", Objects::nonNull));
         this.decoder.setJwtValidator(new DelegatingOAuth2TokenValidator<>(validators));
     }
 
