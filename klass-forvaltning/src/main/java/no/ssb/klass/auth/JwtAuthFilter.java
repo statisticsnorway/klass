@@ -61,11 +61,11 @@ public class JwtAuthFilter extends OncePerRequestFilter implements Filter {
                 .withJwkSetUri(jwksUri)
                 .build();
 
-
         List<OAuth2TokenValidator<Jwt>> validators = new ArrayList<>();
         validators.add(new JwtTimestampValidator());
         validators.add(new JwtIssuerValidator(jwtIssuer));
-        validators.add(new JwtClaimValidator<>("email", Objects::nonNull));
+        Claims.REQUIRED_CLAIMS.forEach((claim) -> validators.add(new JwtClaimValidator<>(claim, Objects::nonNull)));
+
         validators.add(new JwtClaimValidator<>("short_username", Objects::nonNull));
         validators.add(new JwtClaimValidator<>("name", Objects::nonNull));
         validators.add(new JwtClaimValidator<>("dapla", Objects::nonNull));

@@ -1,5 +1,6 @@
 package no.ssb.klass.designer.user;
 
+import no.ssb.klass.auth.Claims;
 import no.ssb.klass.core.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,11 +16,6 @@ import java.util.Map;
  */
 public class KlassUserMapperJwt {
 
-    private static final String SHORT_USERNAME_CLAIM = "short_username";
-    private static final String EMAIL_CLAIM = "email";
-    private static final String NAME_CLAIM = "name";
-    private static final String DAPLA_CLAIM = "dapla";
-
     private static final Logger log = LoggerFactory.getLogger(KlassUserMapperJwt.class);
     private final String email;
     private final String name;
@@ -31,9 +27,9 @@ public class KlassUserMapperJwt {
             throw new KlassUserDetailsException("No authentication credentials provided");
         }
 
-        this.username = jwt.getClaimAsString(SHORT_USERNAME_CLAIM);
-        this.email = jwt.getClaimAsString(EMAIL_CLAIM);
-        this.name = jwt.getClaimAsString(NAME_CLAIM);
+        this.username = jwt.getClaimAsString(Claims.SHORT_USERNAME);
+        this.email = jwt.getClaimAsString(Claims.EMAIL);
+        this.name = jwt.getClaimAsString(Claims.NAME);
 
         this.sectionCode = this.extractSectionCode(jwt);
 
@@ -43,10 +39,10 @@ public class KlassUserMapperJwt {
     }
 
     private String extractSectionCode(Jwt jwt) {
-        Map<String, Object> dapla = jwt.getClaimAsMap(DAPLA_CLAIM);
+        Map<String, Object> dapla = jwt.getClaimAsMap(Claims.DAPLA);
         if (dapla == null) return null;
 
-        return (String) dapla.get("section_code");
+        return (String) dapla.get(Claims.SECTION_CODE);
     }
 
     public User getUser() {
