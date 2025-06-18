@@ -2,6 +2,7 @@ package no.ssb.klass.designer.user;
 
 import com.google.common.collect.ImmutableSet;
 import com.vaadin.spring.annotation.SpringComponent;
+import com.vaadin.spring.annotation.VaadinSessionScope;
 import no.ssb.klass.core.model.ClassificationEntityOperations;
 import no.ssb.klass.core.model.ClassificationSeries;
 import no.ssb.klass.core.model.User;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
  * @author Mads Lundemo, SSB.
  */
 @SpringComponent
+@VaadinSessionScope
 class UserContextImpl implements UserContext {
 
     private static final Logger log = LoggerFactory.getLogger(UserContextImpl.class);

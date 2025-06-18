@@ -1,16 +1,17 @@
-package no.ssb.klass.designer.user;
+package no.ssb.klass.auth;
 
 
-import no.ssb.klass.core.model.User;
 import org.apache.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
-import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.security.oauth2.jwt.JwtValidators;
-import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
+import org.springframework.security.oauth2.core.OAuth2TokenValidator;
+import org.springframework.security.oauth2.jwt.*;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -21,6 +22,9 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -31,16 +35,13 @@ import java.util.Optional;
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @WebFilter
-public class UserDetailsExtractorFilter extends OncePerRequestFilter implements Filter {
+public class JwtAuthFilter extends OncePerRequestFilter implements Filter {
 
-    private final UserContext userContext;
-
-    private static final Logger log = LoggerFactory.getLogger(UserDetailsExtractorFilter.class);
+    private static final Logger log = LoggerFactory.getLogger(JwtAuthFilter.class);
     private final NimbusJwtDecoder decoder;
 
-    @Autowired
-    public UserDetailsExtractorFilter(UserContext userContext) {
-        this.userContext = userContext;
+
+    public JwtAuthFilter() {
 
         /* TODO https://statistics-norway.atlassian.net/browse/DPMETA-932
          * Configure value with property
@@ -51,9 +52,16 @@ public class UserDetailsExtractorFilter extends OncePerRequestFilter implements 
 
 
         /* TODO https://statistics-norway.atlassian.net/browse/DPMETA-932
-         * Configure value with property
+         * Configure values with property
          */
-        this.decoder.setJwtValidator(JwtValidators.createDefaultWithIssuer("https://auth.test.ssb.no/realms/ssb"));
+        List<OAuth2TokenValidator<Jwt>> validators = new ArrayList<>();
+        validators.add(new JwtTimestampValidator());
+        validators.add(new JwtIssuerValidator("https://auth.test.ssb.no/realms/ssb"));
+        validators.add(new JwtClaimValidator<>("email", Objects::nonNull));
+        validators.add(new JwtClaimValidator<>("short_username", Objects::nonNull));
+        validators.add(new JwtClaimValidator<>("name", Objects::nonNull));
+        validators.add(new JwtClaimValidator<>("dapla", Objects::nonNull));
+        this.decoder.setJwtValidator(new DelegatingOAuth2TokenValidator<>(validators));
     }
 
     @Override
@@ -66,7 +74,7 @@ public class UserDetailsExtractorFilter extends OncePerRequestFilter implements 
 
     @Override
     public void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws ServletException, IOException {
-        if (!userContext.hasUser()) {
+        try {
             Optional<Jwt> jwt = extractJwt(req);
 
             if (!jwt.isPresent()) {
@@ -74,15 +82,13 @@ public class UserDetailsExtractorFilter extends OncePerRequestFilter implements 
                 return;
             }
             log.debug("JWT token claims: {}", jwt.get().getClaims());
-            try {
-                User user = new KlassUserMapperJwt(jwt.get()).getUser();
-                log.info("Logged in user: {}", user.getEmail());
-                userContext.setUser(user);
-            } catch (KlassUserDetailsException e) {
-                log.error("Could not log in user", e);
-                res.sendError(HttpStatus.SC_UNAUTHORIZED, "Insufficient authentication credentials provided");
-                return;
-            }
+            SecurityContext context = SecurityContextHolder.createEmptyContext();
+            context.setAuthentication(new JwtAuthenticationToken(jwt.get()));
+            SecurityContextHolder.setContext(context);
+        } catch (Exception e) {
+            log.error("Could not log in user", e);
+            res.sendError(HttpStatus.SC_UNAUTHORIZED, "Insufficient authentication credentials provided");
+            return;
         }
 
         // Not permitted to continue filter chain in this case, just return.
@@ -107,7 +113,9 @@ public class UserDetailsExtractorFilter extends OncePerRequestFilter implements 
         if (authHeader == null) {
             return Optional.empty();
         }
-        return Optional.of(authHeader.replace("Bearer ", "").replaceAll("\\s+", ""));
+        String encodedToken = authHeader.replace("Bearer ", "").replaceAll("\\s+", "");
+        log.debug("Token {}", encodedToken);
+        return Optional.of(encodedToken);
     }
 
 }
