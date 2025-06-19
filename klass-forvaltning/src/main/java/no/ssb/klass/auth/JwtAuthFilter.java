@@ -13,7 +13,10 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
 import org.springframework.security.oauth2.core.OAuth2TokenValidator;
-import org.springframework.security.oauth2.jwt.*;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtClaimValidator;
+import org.springframework.security.oauth2.jwt.JwtIssuerValidator;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -62,7 +65,7 @@ public class JwtAuthFilter extends OncePerRequestFilter implements Filter {
                 .build();
 
         List<OAuth2TokenValidator<Jwt>> validators = new ArrayList<>();
-        validators.add(new JwtTimestampValidator());
+//        validators.add(new JwtTimestampValidator());
         validators.add(new JwtIssuerValidator(jwtIssuer));
         Claims.REQUIRED_CLAIMS.forEach((claim) -> validators.add(new JwtClaimValidator<>(claim, Objects::nonNull)));
         this.decoder.setJwtValidator(new DelegatingOAuth2TokenValidator<>(validators));
