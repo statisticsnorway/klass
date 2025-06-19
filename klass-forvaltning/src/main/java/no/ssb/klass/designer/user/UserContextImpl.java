@@ -42,6 +42,7 @@ public class UserContextImpl implements UserContext {
             List<String> adminUsers
     ) {
         this.adminUsers = adminUsers;
+        log.debug("Users to assign admin role to {}", adminUsers);
         VaadinSession session = VaadinSession.getCurrent();
         this.userService = userService;
         User user = session.getAttribute(User.class);
@@ -122,15 +123,15 @@ public class UserContextImpl implements UserContext {
 
     private Role getRoleForUser(User user) {
         Role role = Role.STANDARD;
-        if (shouldHaveAdminRole(user)) {
+        if (shouldHaveAdminRole(user, this.adminUsers)) {
             role = Role.ADMINISTRATOR;
         }
         log.info("User '{}' assigned role '{}'", user.getUsername(), role);
         return role;
     }
 
-    private boolean shouldHaveAdminRole(User user) {
-        return this.adminUsers.stream().anyMatch((adminUser) -> Objects.equals(adminUser, user.getUsername()));
+    public static boolean shouldHaveAdminRole(User user, List<String> adminUsers) {
+        return adminUsers.stream().anyMatch((adminUser) -> Objects.equals(adminUser, user.getUsername()));
     }
 
     private User updateOrCreateUser(User currentUser) {
