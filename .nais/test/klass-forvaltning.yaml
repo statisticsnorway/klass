@@ -41,6 +41,7 @@ spec:
       value: /oauth2/logout
   envFrom:
     - secret: google-sql-klass
+    - secret: klass-forvaltning-application-properties
   filesFrom:
     - mountPath: /var/run/secrets/nais.io/sqlcertificate
       secret: sqeletor-klass-827ec8ec
