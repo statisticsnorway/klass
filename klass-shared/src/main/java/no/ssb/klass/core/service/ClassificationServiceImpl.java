@@ -17,17 +17,7 @@ import no.ssb.klass.core.model.ReferencingClassificationItem;
 import no.ssb.klass.core.model.StatisticalClassification;
 import no.ssb.klass.core.model.StatisticalUnit;
 import no.ssb.klass.core.model.User;
-import no.ssb.klass.core.repository.ClassificationFamilyRepository;
-import no.ssb.klass.core.repository.ClassificationFamilySummary;
-import no.ssb.klass.core.repository.ClassificationSeriesRepository;
-import no.ssb.klass.core.repository.ClassificationSeriesSpecification;
-import no.ssb.klass.core.repository.ClassificationVariantRepository;
-import no.ssb.klass.core.repository.ClassificationVersionRepository;
-import no.ssb.klass.core.repository.CorrespondenceMapRepository;
-import no.ssb.klass.core.repository.CorrespondenceTableRepository;
-import no.ssb.klass.core.repository.ReferencingClassificationItemRepository;
-import no.ssb.klass.core.repository.StatisticalUnitRepository;
-import no.ssb.klass.core.repository.UserRepository;
+import no.ssb.klass.core.repository.*;
 import no.ssb.klass.core.service.dto.CodeDto;
 import no.ssb.klass.core.service.dto.CorrespondenceDto;
 import no.ssb.klass.core.util.DateRange;
@@ -68,17 +58,18 @@ public class ClassificationServiceImpl implements ClassificationService {
     private final StatisticalUnitRepository statisticalUnitRepository;
     private final SearchService searchService;
     private final UserRepository userRepository;
+    private final ClassificationFamilySummaryBuilder classificationFamilySummaryBuilder;
 
     @Autowired
     public ClassificationServiceImpl(ClassificationFamilyRepository classificationFamilyRepository,
-            ClassificationSeriesRepository classificationRepository,
-            ClassificationVersionRepository classificationVersionRepository,
-            ClassificationVariantRepository classificationVariantRepository,
-            CorrespondenceTableRepository correspondenceTableRepository,
-            ReferencingClassificationItemRepository referencingClassificationItemRepository,
-            CorrespondenceMapRepository correspondenceMapRepository,
-            StatisticalUnitRepository statisticalUnitRepository,
-            SearchService searchService, UserRepository userRepository) {
+                                     ClassificationSeriesRepository classificationRepository,
+                                     ClassificationVersionRepository classificationVersionRepository,
+                                     ClassificationVariantRepository classificationVariantRepository,
+                                     CorrespondenceTableRepository correspondenceTableRepository,
+                                     ReferencingClassificationItemRepository referencingClassificationItemRepository,
+                                     CorrespondenceMapRepository correspondenceMapRepository,
+                                     StatisticalUnitRepository statisticalUnitRepository,
+                                     SearchService searchService, UserRepository userRepository, ClassificationFamilySummaryBuilder classificationFamilySummaryBuilder) {
         this.classificationFamilyRepository = classificationFamilyRepository;
         this.classificationRepository = classificationRepository;
         this.classificationVersionRepository = classificationVersionRepository;
@@ -89,6 +80,7 @@ public class ClassificationServiceImpl implements ClassificationService {
         this.statisticalUnitRepository = statisticalUnitRepository;
         this.searchService = searchService;
         this.userRepository = userRepository;
+        this.classificationFamilySummaryBuilder = classificationFamilySummaryBuilder;
     }
 
     @Override
@@ -403,14 +395,14 @@ public class ClassificationServiceImpl implements ClassificationService {
     @Transactional(readOnly = true)
     public List<ClassificationFamilySummary> findAllClassificationFamilySummaries(String section,
             ClassificationType classificationType) {
-        return classificationFamilyRepository.findClassificationFamilySummaries(section, classificationType);
+        return classificationFamilySummaryBuilder.buildClassificationSummaries(section, classificationType);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<ClassificationFamilySummary> findPublicClassificationFamilySummaries(
             String section, ClassificationType classificationType) {
-        return classificationFamilyRepository.findPublicClassificationFamilySummaries(section, classificationType);
+        return classificationFamilySummaryBuilder.buildPublicClassificationSummaries(section, classificationType);
     }
 
     @Override

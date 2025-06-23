@@ -7,7 +7,7 @@ import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 import static no.ssb.klass.api.migration.MigrationTestUtils.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class KlassApiVariantByIdTest extends AbstractKlassApiVariantTest {
+public class KlassApiVariantByIdJsonTest extends AbstractKlassApiVariantTest {
 
     @Test
     void getOneVariantById() {

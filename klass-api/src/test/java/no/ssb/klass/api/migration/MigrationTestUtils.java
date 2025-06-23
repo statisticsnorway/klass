@@ -1,7 +1,9 @@
 package no.ssb.klass.api.migration;
 
+import io.restassured.internal.path.xml.NodeChildrenImpl;
 import io.restassured.path.xml.XmlPath;
 import io.restassured.response.Response;
+
 import java.net.URI;
 import java.net.URL;
 import java.time.*;
@@ -286,26 +288,61 @@ public class MigrationTestUtils {
         }
     }
 
-    public static void validateXmlNotReady(Response sourceResponse, Response targetResponse, String pathName) {
-        String sourceXml = sourceResponse.getBody().asString();
-        String targetXml = targetResponse.getBody().asString();
-        XmlPath xmlPathSource = new XmlPath(sourceXml);
-        XmlPath xmlPathTarget = new XmlPath(targetXml);
-        System.out.println("Source: " + xmlPathSource.get(pathName));
-        System.out.println("Target: " + xmlPathTarget.get(pathName));
+    private static XmlPath[] extractXmlPaths(Response source, Response target) {
+        return new XmlPath[] {
+                new XmlPath(source.getBody().asString()),
+                new XmlPath(target.getBody().asString())
+        };
+    }
+
+    public static void validateXmlItems(Response sourceResponse, Response targetResponse, List<String> pathNames)  {
+        XmlPath xmlPathSource = extractXmlPaths(sourceResponse, targetResponse)[0];
+        XmlPath xmlPathTarget = extractXmlPaths(sourceResponse, targetResponse)[1];
+
+        for(String pathName : pathNames) {
+            Object sourcePath = xmlPathSource.get(pathName);
+            Object targetPath = xmlPathTarget.get(pathName);
+
+            if (pathName.endsWith(HREF)) {
+                URI sourceUri = URI.create(pathName);
+                URI targetUri = URI.create(pathName);
+
+                String sourceUrl = sourceUri.getPath();
+                String targetUrl = targetUri.getPath();
+
+                assertThat(sourceUrl).withFailMessage(
+                        FAIL_MESSAGE,
+                        pathName,
+                        sourceUrl,
+                        targetUrl).isEqualTo(targetUrl);
+            } else {
+
+                String sourceField = String.valueOf(sourcePath);
+                String targetField = String.valueOf(targetPath);
+
+                assertThat(sourceField).withFailMessage(
+                        FAIL_MESSAGE,
+                        pathName,
+                        sourcePath,
+                        targetPath).isEqualTo(targetField);
+
+                System.out.println("Source: " + xmlPathSource.get(pathName));
+                System.out.println("Target: " + xmlPathTarget.get(pathName));
+            }
+        }
+
     }
 
     public static void validateXmlList(String path, Response sourceResponse, Response targetResponse, String pathName) {
+        XmlPath xmlPathSource = extractXmlPaths(sourceResponse, targetResponse)[0];
+        XmlPath xmlPathTarget = extractXmlPaths(sourceResponse, targetResponse)[1];
 
-        String sourceXml = sourceResponse.getBody().asString();
-        String targetXml = targetResponse.getBody().asString();
-        XmlPath xmlPathSource = new XmlPath(sourceXml);
-        XmlPath xmlPathTarget = new XmlPath(targetXml);
+
         List<String> sourceList = xmlPathSource.getList(pathName);
         List<String> targetList = xmlPathTarget.getList(pathName);
         System.out.println(sourceList.size() + " -> " + targetList.size());
+
         for(int i = 0; i < sourceList.size(); i++) {
-            System.out.println(sourceList.get(i) + " -> " + targetList.get(i));
             assertThat(sourceList.get(i)).withFailMessage(
                     FAIL_MESSAGE,
                     path,
@@ -316,36 +353,45 @@ public class MigrationTestUtils {
     }
 
     public static void validatePathListWithObjectsXml(Response sourceResponse, Response targetResponse, String listName, List<String> pathNames) {
-        String sourceXml = sourceResponse.getBody().asString();
-        String targetXml = targetResponse.getBody().asString();
-        XmlPath xmlPathSource = new XmlPath(sourceXml);
-        XmlPath xmlPathTarget = new XmlPath(targetXml);
+        XmlPath xmlPathSource = extractXmlPaths(sourceResponse, targetResponse)[0];
+        XmlPath xmlPathTarget = extractXmlPaths(sourceResponse, targetResponse)[1];
 
         for(String pathName: pathNames) {
             String fullPath = listName + "." + pathName;
             Object sourceValue = xmlPathSource.get(fullPath);
             Object targetValue = xmlPathTarget.get(fullPath);
 
-            System.out.println(sourceValue + " -> " + targetValue);
+            NodeChildrenImpl sourceNodes = (NodeChildrenImpl) sourceValue;
+            NodeChildrenImpl targetNodes = (NodeChildrenImpl) targetValue;
 
-            if (pathName.endsWith(HREF)) {
-                URI sourceUri = URI.create(fullPath);
-                URI targetUri = URI.create(fullPath);
+            for (int i = 0; i < sourceNodes.size(); i++) {
+                String sourceField = String.valueOf(sourceNodes.get(i));
+                String targetField = String.valueOf(targetNodes.get(i));
 
-                String sourcePath = sourceUri.getPath();
-                String targetPath = targetUri.getPath();
-                assertThat(sourcePath).withFailMessage(
-                        FAIL_MESSAGE,
-                        pathName,
-                        sourcePath,
-                        targetPath).isEqualTo(targetPath);
-            } else {
-                assertThat(sourceValue).withFailMessage(
-                        FAIL_MESSAGE,
-                        pathName,
-                        sourceValue,
-                        targetValue).isEqualTo(targetValue);
+                System.out.printf("Source: [%s] (%d chars)%n", sourceField, sourceField.length());
+                System.out.printf("Target: [%s] (%d chars)%n", targetField, targetField.length());
+
+                if (pathName.endsWith(HREF)) {
+                    URI sourceUri = URI.create(fullPath);
+                    URI targetUri = URI.create(fullPath);
+
+                    String sourcePath = sourceUri.getPath();
+                    String targetPath = targetUri.getPath();
+                    assertThat(sourcePath).withFailMessage(
+                            FAIL_MESSAGE,
+                            pathName,
+                            sourcePath,
+                            targetPath).isEqualTo(targetPath);
+                } else {
+                    assertThat(sourceField).withFailMessage(
+                            FAIL_MESSAGE,
+                            pathName,
+                            sourceField,
+                            targetField).isEqualTo(targetField);
+                }
             }
+
+
         }
 
     }
@@ -356,4 +402,5 @@ public class MigrationTestUtils {
                 FAIL_MESSAGE, path, sourceResponse.getBody().asString(),
                 targetResponse.getBody().asString()).isEqualTo(targetResponse.getBody().asString());
     }
+
 }

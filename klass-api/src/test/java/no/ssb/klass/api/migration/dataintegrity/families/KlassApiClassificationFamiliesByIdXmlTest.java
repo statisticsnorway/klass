@@ -26,7 +26,9 @@ public class KlassApiClassificationFamiliesByIdXmlTest extends AbstractKlassApiF
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXmlNotReady(sourceResponse, targetResponse, path);
+            validateXmlItems(
+                    sourceResponse, targetResponse,pathNamesClassificationFamilyByIdXml
+            );
         }
     }
 
@@ -45,7 +47,9 @@ public class KlassApiClassificationFamiliesByIdXmlTest extends AbstractKlassApiF
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXmlNotReady(sourceResponse, targetResponse, path);
+            validateXmlItems(
+                    sourceResponse, targetResponse,pathNamesClassificationFamilyByIdXml
+            );
         }
     }
 
@@ -64,7 +68,9 @@ public class KlassApiClassificationFamiliesByIdXmlTest extends AbstractKlassApiF
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXmlNotReady(sourceResponse, targetResponse, path);
+            validateXmlItems(
+                    sourceResponse, targetResponse,pathNamesClassificationFamilyByIdXml
+            );
         }
     }
 
@@ -83,7 +89,9 @@ public class KlassApiClassificationFamiliesByIdXmlTest extends AbstractKlassApiF
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXmlNotReady(sourceResponse, targetResponse, path);
+            validateXmlItems(
+                    sourceResponse, targetResponse,pathNamesClassificationFamilyByIdXml
+            );
         }
     }
 
@@ -102,7 +110,9 @@ public class KlassApiClassificationFamiliesByIdXmlTest extends AbstractKlassApiF
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXmlNotReady(sourceResponse, targetResponse, path);
+            validateXmlItems(
+                    sourceResponse, targetResponse,pathNamesClassificationFamilyByIdXml
+            );
         }
     }
 
@@ -123,7 +133,9 @@ public class KlassApiClassificationFamiliesByIdXmlTest extends AbstractKlassApiF
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXmlNotReady(sourceResponse, targetResponse, path);
+            validateXmlItems(
+                    sourceResponse, targetResponse,pathNamesClassificationFamilyByIdXml
+            );
         }
     }
 }

@@ -30,7 +30,7 @@ public class KlassApiVersionByIdXmlTest extends AbstractKlassApiVersions {
             validateXmlList(path, sourceResponse, targetResponse, CLASSIFICATION_VERSION_PUBLISHED_LANGUAGES);
             validateXmlList(path, sourceResponse, targetResponse, CLASSIFICATION_VERSION_LEVELS);
             validateXmlList(path, sourceResponse, targetResponse, CLASSIFICATION_VERSION_CLASSIFICATION_ITEMS);
-            validatePathListWithObjectsXml(sourceResponse, targetResponse, CLASSIFICATION_VERSION, pathNamesClassificationVariantsXml);
+            validateXmlItems(sourceResponse,targetResponse, pathNamesClassificationVersionXml);
         }
     }
 
@@ -53,7 +53,7 @@ public class KlassApiVersionByIdXmlTest extends AbstractKlassApiVersions {
             validateXmlList(path, sourceResponse, targetResponse, CLASSIFICATION_VERSION_PUBLISHED_LANGUAGES);
             validateXmlList(path, sourceResponse, targetResponse, CLASSIFICATION_VERSION_LEVELS);
             validateXmlList(path, sourceResponse, targetResponse, CLASSIFICATION_VERSION_CLASSIFICATION_ITEMS);
-            validatePathListWithObjectsXml(sourceResponse, targetResponse, CLASSIFICATION_VERSION, pathNamesClassificationVariantsXml);
+            validateXmlItems(sourceResponse,targetResponse, pathNamesClassificationVersionXml);
         }
     }
 
@@ -75,7 +75,7 @@ public class KlassApiVersionByIdXmlTest extends AbstractKlassApiVersions {
             validateXmlList(path, sourceResponse, targetResponse, CLASSIFICATION_VERSION_PUBLISHED_LANGUAGES);
             validateXmlList(path, sourceResponse, targetResponse, CLASSIFICATION_VERSION_LEVELS);
             validateXmlList(path, sourceResponse, targetResponse, CLASSIFICATION_VERSION_CLASSIFICATION_ITEMS);
-            validatePathListWithObjectsXml(sourceResponse, targetResponse, CLASSIFICATION_VERSION, pathNamesClassificationVariantsXml);
+            validateXmlItems(sourceResponse,targetResponse, pathNamesClassificationVersionXml);
         }
     }
 
@@ -97,7 +97,7 @@ public class KlassApiVersionByIdXmlTest extends AbstractKlassApiVersions {
             validateXmlList(path, sourceResponse, targetResponse, CLASSIFICATION_VERSION_PUBLISHED_LANGUAGES);
             validateXmlList(path, sourceResponse, targetResponse, CLASSIFICATION_VERSION_LEVELS);
             validateXmlList(path, sourceResponse, targetResponse, CLASSIFICATION_VERSION_CLASSIFICATION_ITEMS);
-            validatePathListWithObjectsXml(sourceResponse, targetResponse, CLASSIFICATION_VERSION, pathNamesClassificationVariantsXml);
+            validateXmlItems(sourceResponse,targetResponse, pathNamesClassificationVersionXml);
         }
     }
 
@@ -119,7 +119,7 @@ public class KlassApiVersionByIdXmlTest extends AbstractKlassApiVersions {
             validateXmlList(path, sourceResponse, targetResponse, CLASSIFICATION_VERSION_PUBLISHED_LANGUAGES);
             validateXmlList(path, sourceResponse, targetResponse, CLASSIFICATION_VERSION_LEVELS);
             validateXmlList(path, sourceResponse, targetResponse, CLASSIFICATION_VERSION_CLASSIFICATION_ITEMS);
-            validatePathListWithObjectsXml(sourceResponse, targetResponse, CLASSIFICATION_VERSION, pathNamesClassificationVariantsXml);
+            validateXmlItems(sourceResponse,targetResponse, pathNamesClassificationVersionXml);
         }
     }
 }

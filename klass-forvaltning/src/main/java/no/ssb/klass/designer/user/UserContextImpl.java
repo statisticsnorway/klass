@@ -13,9 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -28,7 +25,7 @@ import java.util.stream.Collectors;
  */
 @SpringComponent
 @VaadinSessionScope
-public class UserContextImpl implements UserContext, AuthenticationProvider {
+public class UserContextImpl implements UserContext {
 
     private static final Logger log = LoggerFactory.getLogger(UserContextImpl.class);
 
@@ -165,15 +162,5 @@ public class UserContextImpl implements UserContext, AuthenticationProvider {
     @Override
     public String getUsername() {
         return currentUser.getUsername();
-    }
-
-    @Override
-    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        return null;
-    }
-
-    @Override
-    public boolean supports(Class<?> authentication) {
-        return false;
     }
 }

@@ -23,11 +23,6 @@ docker compose --profile migration-testing exec -T postgresql psql -U "$POSTGRES
 echo "Wait for load from file to finish"
 sleep 10
 
-echo "Build klass-api image"
-docker compose --profile migration-testing build
-
-sleep 10
-
 echo "Restart klass api mariadb"
 docker compose --profile migration-testing restart klass-api-mariadb
 

@@ -2,6 +2,7 @@ SHELL=/bin/zsh
 MVN_AVAILABLE := $(shell command -v mvn 2> /dev/null)
 SDK_AVAILABLE := $(shell [[ -s "${HOME}/.sdkman/bin/sdkman-init.sh" ]] && source "${HOME}/.sdkman/bin/sdkman-init.sh" && command -v sdk)
 sdk = source "${HOME}/.sdkman/bin/sdkman-init.sh" && sdk
+COMPOSE_FILE = -f klass-shared/docker-compose.yaml
 
 .PHONY: check
 check:
@@ -71,3 +72,19 @@ run-klass-api-local-mariadb:
 	mvn spring-boot\:run -Dspring.profiles.active=mariadb,hardcoded-user,embedded-solr,mock-mailserver,skip-indexing,small-import,ad-offline; \
 	popd; \
 	${sdk} env clear
+
+.PHONY: start-klass-forvaltning-docker
+start-klass-forvaltning-docker:
+	docker compose $(COMPOSE_FILE) --profile frontend up --build -d
+
+.PHONY: logs-klass-forvaltning
+logs-klass-forvaltning:
+	docker compose $(COMPOSE_FILE) --profile frontend logs -f
+
+.PHONY: stop-klass-forvaltning-docker
+stop-klass-forvaltning-docker:
+	docker compose $(COMPOSE_FILE) --profile frontend down
+
+.PHONY: clean-klass-forvaltning-volumes
+clean-klass-forvaltning-volumes:
+	docker volume rm klass_pgdata || true

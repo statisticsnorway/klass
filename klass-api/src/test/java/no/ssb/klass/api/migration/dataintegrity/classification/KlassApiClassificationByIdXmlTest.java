@@ -5,8 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import static no.ssb.klass.api.migration.MigrationTestConstants.APPLICATION_XML;
-import static no.ssb.klass.api.migration.MigrationTestConstants.CLASSIFICATIONS_PATH;
+import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 import static no.ssb.klass.api.migration.MigrationTestUtils.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -30,7 +29,7 @@ public class KlassApiClassificationByIdXmlTest extends AbstractKlassApiClassific
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else {
-            validateXmlNotReady(sourceResponse, targetResponse, path);
+            validateXmlItems(sourceResponse, targetResponse, pathNamesClassificationXml);
         }
     }
 
@@ -51,7 +50,7 @@ public class KlassApiClassificationByIdXmlTest extends AbstractKlassApiClassific
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else {
-            validateXmlNotReady(sourceResponse, targetResponse, path);
+            validateXmlItems(sourceResponse, targetResponse, pathNamesClassificationXml);
         }
     }
 
@@ -71,7 +70,7 @@ public class KlassApiClassificationByIdXmlTest extends AbstractKlassApiClassific
         if(sourceResponse.getStatusCode() != 200) {
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         } else {
-            validateXmlNotReady(sourceResponse, targetResponse, path);
+            validateXmlItems(sourceResponse, targetResponse, pathNamesClassificationXml);
         }
     }
 
@@ -92,7 +91,7 @@ public class KlassApiClassificationByIdXmlTest extends AbstractKlassApiClassific
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else {
-            validateXmlNotReady(sourceResponse, targetResponse, path);
+            validateXmlItems(sourceResponse, targetResponse, pathNamesClassificationXml);
         }
     }
 
@@ -111,7 +110,7 @@ public class KlassApiClassificationByIdXmlTest extends AbstractKlassApiClassific
         if(sourceResponse.getStatusCode() != 200) {
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }else {
-            validateXmlNotReady(sourceResponse, targetResponse, path);
+            validateXmlItems(sourceResponse, targetResponse, pathNamesClassificationXml);
         }
     }
 }

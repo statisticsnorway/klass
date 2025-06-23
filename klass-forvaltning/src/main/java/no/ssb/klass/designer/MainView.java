@@ -8,6 +8,7 @@ import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.navigator.SpringViewProvider;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.NativeSelect;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 import no.ssb.klass.core.model.ClassificationType;
 import no.ssb.klass.designer.admin.AdminView;
@@ -23,6 +24,8 @@ import no.ssb.klass.designer.util.VaadinUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 
@@ -35,6 +38,8 @@ public class MainView extends MainDesign implements ViewChangeListener {
 
     private final SpringViewProvider springViewProvider;
     private final UserContext userContext;
+    private final String klassForvaltningServerName;
+    private final String logoutPath;
 
 
     private ConfirmationDialog confirmationDialog;
@@ -43,10 +48,16 @@ public class MainView extends MainDesign implements ViewChangeListener {
     public MainView(
             ClassificationFacade classificationFacade,
             SpringViewProvider springViewProvider,
-            UserContext userContext
+            UserContext userContext,
+            @Value("${klass.env.server}")
+            String klassForvaltningServerName,
+            @Value("${klass.security.oauth2.logout.path}")
+            String logoutPath
     ) {
         this.springViewProvider = springViewProvider;
         this.userContext = userContext;
+        this.klassForvaltningServerName = klassForvaltningServerName;
+        this.logoutPath = logoutPath;
         configureNavigator();
         MainFilterLogic.configureFilterPanel(selectKodeverk, selectSection, classificationFacade);
         configureTopPanel();
@@ -62,12 +73,19 @@ public class MainView extends MainDesign implements ViewChangeListener {
             menuItem.addItem("Administrator", c -> createAdminView());
         }
         menuItem.addItem("Innhold og bruksstatistikk", c -> createInnholdBruksstatistikkView());
-        menuItem.addItem("Log ut", this::logout);
+        menuItem.addItem("Logge ut", this::logout);
         userIcon.addComponent(menuBar);
     }
 
     private void logout(MenuBar.MenuItem menuItem) {
-//        vaadinSecurity.logout();
+        if (klassForvaltningServerName == null || logoutPath == null) {
+            Notification.show("Kunne ikke logge ut. Sesjonen din løper ut etterhvert.", Notification.Type.ERROR_MESSAGE);
+            return;
+        }
+        UriComponentsBuilder urlBuilder = UriComponentsBuilder.fromPath(logoutPath);
+        urlBuilder.scheme("https");
+        urlBuilder.host(klassForvaltningServerName);
+        getUI().getPage().setLocation(urlBuilder.toUriString());
     }
 
     private void createAdminView() {

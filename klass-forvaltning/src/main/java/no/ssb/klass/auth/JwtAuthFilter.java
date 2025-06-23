@@ -14,10 +14,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
 import org.springframework.security.oauth2.core.OAuth2TokenValidator;
-import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.security.oauth2.jwt.JwtClaimValidator;
-import org.springframework.security.oauth2.jwt.JwtIssuerValidator;
-import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.security.oauth2.jwt.*;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -29,7 +26,10 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Authenticate a user by validating and decoding the provided JWT token.
@@ -64,7 +64,7 @@ public class JwtAuthFilter extends OncePerRequestFilter implements Filter {
                 .build();
 
         List<OAuth2TokenValidator<Jwt>> validators = new ArrayList<>();
-//        validators.add(new JwtTimestampValidator());
+        validators.add(new JwtTimestampValidator());
         validators.add(new JwtIssuerValidator(jwtIssuer));
         Claims.REQUIRED_CLAIMS.forEach((claim) -> validators.add(new JwtClaimValidator<>(claim, Objects::nonNull)));
         this.decoder.setJwtValidator(new DelegatingOAuth2TokenValidator<>(validators));
@@ -86,7 +86,7 @@ public class JwtAuthFilter extends OncePerRequestFilter implements Filter {
             }
             log.debug("JWT token claims: {}", jwt.get().getClaims());
             SecurityContext context = SecurityContextHolder.createEmptyContext();
-            context.setAuthentication(new JwtAuthenticationToken(jwt.get(), Collections.singletonList(() -> "KLASS_ROLE_ADMIN")));
+            context.setAuthentication(new JwtAuthenticationToken(jwt.get()));
             SecurityContextHolder.setContext(context);
         } catch (Exception e) {
             log.error("Could not log in user", e);

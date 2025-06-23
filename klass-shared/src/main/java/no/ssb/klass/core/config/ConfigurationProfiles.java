@@ -6,6 +6,9 @@ package no.ssb.klass.core.config;
  * @author Mads Lundemo, SSB.
  */
 public final class ConfigurationProfiles {
+
+    public static final String POSTGRES_EMBEDDED = "postgres-embedded";
+
     private ConfigurationProfiles() {
         // Utility class
     }
