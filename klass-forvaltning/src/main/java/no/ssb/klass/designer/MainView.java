@@ -8,6 +8,7 @@ import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.spring.navigator.SpringViewProvider;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.NativeSelect;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 import no.ssb.klass.core.model.ClassificationType;
 import no.ssb.klass.designer.admin.AdminView;
@@ -24,7 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.web.util.RedirectUrlBuilder;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 
@@ -78,13 +79,13 @@ public class MainView extends MainDesign implements ViewChangeListener {
 
     private void logout(MenuBar.MenuItem menuItem) {
         if (klassForvaltningServerName == null || logoutPath == null) {
-            throw new RuntimeException("Cannot log out due to missing configuration");
+            Notification.show("Kunne ikke logge ut. Sesjonen din løper ut etterhvert.", Notification.Type.ERROR_MESSAGE);
+            return;
         }
-        RedirectUrlBuilder urlBuilder = new RedirectUrlBuilder();
-        urlBuilder.setScheme("https");
-        urlBuilder.setServerName(klassForvaltningServerName);
-        urlBuilder.setPathInfo(logoutPath);
-        getUI().getPage().setLocation(urlBuilder.getUrl());
+        UriComponentsBuilder urlBuilder = UriComponentsBuilder.fromPath(logoutPath);
+        urlBuilder.scheme("https");
+        urlBuilder.host(klassForvaltningServerName);
+        getUI().getPage().setLocation(urlBuilder.toUriString());
     }
 
     private void createAdminView() {
