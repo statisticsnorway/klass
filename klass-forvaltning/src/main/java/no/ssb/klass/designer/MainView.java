@@ -81,6 +81,7 @@ public class MainView extends MainDesign implements ViewChangeListener {
             throw new RuntimeException("Cannot log out due to missing configuration");
         }
         RedirectUrlBuilder urlBuilder = new RedirectUrlBuilder();
+        urlBuilder.setScheme("https");
         urlBuilder.setServerName(klassForvaltningServerName);
         urlBuilder.setPathInfo(logoutPath);
         getUI().getPage().setLocation(urlBuilder.getUrl());
