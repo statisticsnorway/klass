@@ -23,6 +23,8 @@ import no.ssb.klass.designer.util.VaadinUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.web.util.RedirectUrlBuilder;
 
 import java.util.List;
 
@@ -35,6 +37,8 @@ public class MainView extends MainDesign implements ViewChangeListener {
 
     private final SpringViewProvider springViewProvider;
     private final UserContext userContext;
+    private final String klassForvaltningServerName;
+    private final String logoutPath;
 
 
     private ConfirmationDialog confirmationDialog;
@@ -43,10 +47,16 @@ public class MainView extends MainDesign implements ViewChangeListener {
     public MainView(
             ClassificationFacade classificationFacade,
             SpringViewProvider springViewProvider,
-            UserContext userContext
+            UserContext userContext,
+            @Value("${klass.env.server}")
+            String klassForvaltningServerName,
+            @Value("${klass.security.oauth2.logout.path}")
+            String logoutPath
     ) {
         this.springViewProvider = springViewProvider;
         this.userContext = userContext;
+        this.klassForvaltningServerName = klassForvaltningServerName;
+        this.logoutPath = logoutPath;
         configureNavigator();
         MainFilterLogic.configureFilterPanel(selectKodeverk, selectSection, classificationFacade);
         configureTopPanel();
@@ -62,12 +72,18 @@ public class MainView extends MainDesign implements ViewChangeListener {
             menuItem.addItem("Administrator", c -> createAdminView());
         }
         menuItem.addItem("Innhold og bruksstatistikk", c -> createInnholdBruksstatistikkView());
-        menuItem.addItem("Log ut", this::logout);
+        menuItem.addItem("Logge ut", this::logout);
         userIcon.addComponent(menuBar);
     }
 
     private void logout(MenuBar.MenuItem menuItem) {
-//        vaadinSecurity.logout();
+        if (klassForvaltningServerName == null || logoutPath == null) {
+            throw new RuntimeException("Cannot log out due to missing configuration");
+        }
+        RedirectUrlBuilder urlBuilder = new RedirectUrlBuilder();
+        urlBuilder.setServerName(klassForvaltningServerName);
+        urlBuilder.setPathInfo(logoutPath);
+        getUI().getPage().setLocation(urlBuilder.getUrl());
     }
 
     private void createAdminView() {
