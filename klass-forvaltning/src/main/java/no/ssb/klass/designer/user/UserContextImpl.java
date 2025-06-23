@@ -17,7 +17,6 @@ import org.springframework.core.env.Environment;
 
 import javax.validation.constraints.NotNull;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -32,7 +31,7 @@ public class UserContextImpl implements UserContext {
     private static final Logger log = LoggerFactory.getLogger(UserContextImpl.class);
 
     private final UserService userService;
-    private final List<String> adminUsers;
+    private final String[] adminUsers;
     private final Environment environment;
 
     private User currentUser;
@@ -42,7 +41,7 @@ public class UserContextImpl implements UserContext {
             UserService userService,
             @Value("${klass.security.roles.admin.users}")
             @NotNull
-            List<String> adminUsers,
+            String[] adminUsers,
             @Autowired
             Environment environment
     ) {
@@ -140,8 +139,8 @@ public class UserContextImpl implements UserContext {
         return role;
     }
 
-    public static boolean shouldHaveAdminRole(User user, List<String> adminUsers) {
-        return adminUsers.stream().anyMatch((adminUser) -> {
+    public static boolean shouldHaveAdminRole(User user, String[] adminUsers) {
+        return Arrays.stream(adminUsers).anyMatch((adminUser) -> {
             boolean result = Objects.equals(adminUser, user.getUsername());
             log.debug("Current user: {} | admin user: {} | result: {}", user.getUsername(), adminUser, result);
             return result;
