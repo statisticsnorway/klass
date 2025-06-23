@@ -35,6 +35,10 @@ spec:
   env:
     - name: SPRING_PROFILES_ACTIVE
       value: frontend, postgres, small-import, skip-indexing, ad-offline, embedded-solr
+    - name: KLASS_ENV_SERVER
+      value: klass-forvaltning.intern.test.ssb.no
+    - name: KLASS_SECURITY_OAUTH2_LOGOUT_PATH
+      value: /oauth2/logout
   envFrom:
     - secret: google-sql-klass
   filesFrom:
