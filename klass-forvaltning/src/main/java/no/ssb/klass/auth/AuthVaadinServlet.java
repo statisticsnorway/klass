@@ -18,7 +18,7 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 
 
-@Component("vaadinServlet")
+@Component
 @WebServlet(urlPatterns = "/*", name = "AuthVaadinServlet", asyncSupported = true)
 @Profile("!hardcoded-user")
 public class AuthVaadinServlet extends SpringVaadinServlet {

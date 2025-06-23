@@ -3,7 +3,6 @@ package no.ssb.klass.auth.test;
 import com.vaadin.server.SessionInitEvent;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.spring.server.SpringVaadinServlet;
-import no.ssb.klass.core.config.ConfigurationProfiles;
 import no.ssb.klass.core.model.Role;
 import no.ssb.klass.core.model.User;
 import org.slf4j.Logger;
@@ -17,9 +16,9 @@ import javax.servlet.annotation.WebServlet;
 import java.util.Objects;
 
 
-@Component("vaadinServlet")
-@WebServlet(urlPatterns = "/*", name = "AuthVaadinServlet", asyncSupported = true)
-@Profile({"hardcoded-user", "!" + ConfigurationProfiles.PRODUCTION})
+@Component
+@WebServlet(urlPatterns = "/*", name = "TestAuthVaadinServlet", asyncSupported = true)
+@Profile("hardcoded-user & !production")
 public class TestAuthVaadinServlet extends SpringVaadinServlet {
     private static final Logger log = LoggerFactory.getLogger(TestAuthVaadinServlet.class);
     private final String userRole;
