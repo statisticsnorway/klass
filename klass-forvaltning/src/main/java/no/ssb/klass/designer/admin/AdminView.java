@@ -3,13 +3,11 @@ package no.ssb.klass.designer.admin;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.spring.annotation.SpringView;
-import org.springframework.security.access.annotation.Secured;
 import org.vaadin.spring.annotation.PrototypeScope;
 
 
 @PrototypeScope
 @SpringView(name = AdminView.NAME)
-@Secured("ROLE_KLASS_ADMIN")
 public class AdminView extends AdminDesign implements View {
 
     public static final String NAME = "AdminView";

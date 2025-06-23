@@ -7,6 +7,7 @@ import no.ssb.klass.core.model.User;
 import no.ssb.klass.designer.user.KlassUserMapperJwt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -19,6 +20,7 @@ import javax.servlet.annotation.WebServlet;
 
 @Component("vaadinServlet")
 @WebServlet(urlPatterns = "/*", name = "AuthVaadinServlet", asyncSupported = true)
+@Profile("!hardcoded-user")
 public class AuthVaadinServlet extends SpringVaadinServlet {
     private static final Logger log = LoggerFactory.getLogger(AuthVaadinServlet.class);
 

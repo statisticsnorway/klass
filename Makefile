@@ -49,7 +49,7 @@ run-klass-forvaltning-local:
 run-klass-forvaltning-local-postgres:
 	pushd klass-forvaltning && \
 	${sdk} env && \
-	mvn spring-boot\:run  -Dspring.profiles.active=postgres-local,embedded-solr,frontend,skip-indexing,small-import,ad-offline; \
+	mvn spring-boot\:run  -Dspring.profiles.active=postgres-local,hardcoded-user,embedded-solr,frontend,skip-indexing,small-import,ad-offline; \
 	popd; \
 	${sdk} env clear
 
@@ -60,7 +60,7 @@ run-klass-forvaltning-local-postgres:
 run-klass-forvaltning-local-mariadb:
 	pushd klass-forvaltning && \
 	${sdk} env && \
-	mvn spring-boot\:run -Dspring.profiles.active=mariadb,embedded-solr,frontend,skip-indexing,small-import,ad-offline; \
+	mvn spring-boot\:run -Dspring.profiles.active=mariadb,hardcoded-user,embedded-solr,frontend,skip-indexing,small-import,ad-offline; \
 	popd; \
 	${sdk} env clear
 
@@ -68,6 +68,6 @@ run-klass-forvaltning-local-mariadb:
 run-klass-api-local-mariadb:
 	pushd klass-api && \
 	${sdk} env && \
-	mvn spring-boot\:run -Dspring.profiles.active=mariadb,embedded-solr,mock-mailserver,skip-indexing,small-import,ad-offline; \
+	mvn spring-boot\:run -Dspring.profiles.active=mariadb,hardcoded-user,embedded-solr,mock-mailserver,skip-indexing,small-import,ad-offline; \
 	popd; \
 	${sdk} env clear
