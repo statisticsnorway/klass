@@ -141,7 +141,11 @@ public class UserContextImpl implements UserContext {
     }
 
     public static boolean shouldHaveAdminRole(User user, List<String> adminUsers) {
-        return adminUsers.stream().anyMatch((adminUser) -> Objects.equals(adminUser, user.getUsername()));
+        return adminUsers.stream().anyMatch((adminUser) -> {
+            boolean result = Objects.equals(adminUser, user.getUsername());
+            log.debug("Current user: {} | admin user: {} | result: {}", user.getUsername(), adminUser, result);
+            return result;
+        });
     }
 
     private User updateOrCreateUser(User currentUser) {
