@@ -6,13 +6,17 @@ import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.VaadinSessionScope;
 import no.ssb.klass.core.model.ClassificationEntityOperations;
 import no.ssb.klass.core.model.ClassificationSeries;
+import no.ssb.klass.core.model.Role;
 import no.ssb.klass.core.model.User;
 import no.ssb.klass.core.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 
 import javax.validation.constraints.NotNull;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -27,10 +31,23 @@ public class UserContextImpl implements UserContext {
     private static final Logger log = LoggerFactory.getLogger(UserContextImpl.class);
 
     private final UserService userService;
+    private final String[] adminUsers;
+    private final Environment environment;
 
     private User currentUser;
 
-    public UserContextImpl(@Autowired UserService userService) {
+    public UserContextImpl(
+            @Autowired
+            UserService userService,
+            @Value("${klass.security.roles.admin.users}")
+            @NotNull
+            String[] adminUsers,
+            @Autowired
+            Environment environment
+    ) {
+        this.adminUsers = adminUsers;
+        this.environment = environment;
+        log.debug("Users to assign admin role to {}", adminUsers);
         VaadinSession session = VaadinSession.getCurrent();
         this.userService = userService;
         User user = session.getAttribute(User.class);
@@ -106,6 +123,28 @@ public class UserContextImpl implements UserContext {
 
     public void setUser(@NotNull User currentUser) {
         this.currentUser = updateOrCreateUser(currentUser);
+        if (Arrays.stream(environment.getActiveProfiles()).noneMatch((profile) -> Objects.equals(profile, "hardcoded-user"))) {
+            this.currentUser.setRole(getRoleForUser(this.currentUser));
+        } else {
+            log.warn("Hardcoded user! Not deducing role.");
+        }
+    }
+
+    private Role getRoleForUser(User user) {
+        Role role = Role.STANDARD;
+        if (shouldHaveAdminRole(user, this.adminUsers)) {
+            role = Role.ADMINISTRATOR;
+        }
+        log.info("User '{}' assigned role '{}'", user.getUsername(), role);
+        return role;
+    }
+
+    public static boolean shouldHaveAdminRole(User user, String[] adminUsers) {
+        return Arrays.stream(adminUsers).anyMatch((adminUser) -> {
+            boolean result = Objects.equals(adminUser, user.getUsername());
+            log.debug("Current user: {} | admin user: {} | result: {}", user.getUsername(), adminUser, result);
+            return result;
+        });
     }
 
     private User updateOrCreateUser(User currentUser) {
