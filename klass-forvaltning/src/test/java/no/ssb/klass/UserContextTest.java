@@ -4,8 +4,6 @@ import no.ssb.klass.core.model.User;
 import no.ssb.klass.designer.user.UserContextImpl;
 import org.junit.Test;
 
-import java.util.Arrays;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -18,7 +16,7 @@ public class UserContextTest {
         assertThat(
                 UserContextImpl.shouldHaveAdminRole(
                         user,
-                        Arrays.asList("kno", "aaa", "bbb")
+                        new String[]{"kno", "aaa", "bbb"}
                 ), is(true));
     }
 
@@ -27,7 +25,7 @@ public class UserContextTest {
         assertThat(
                 UserContextImpl.shouldHaveAdminRole(
                         user,
-                        Arrays.asList("aaa", "bbb")
+                        new String[]{"aaa", "bbb"}
                 ), is(false));
     }
 }
