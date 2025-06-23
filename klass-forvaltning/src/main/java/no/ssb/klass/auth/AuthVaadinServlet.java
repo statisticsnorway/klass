@@ -18,7 +18,7 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 
 
-@Component
+@Component("vaadinServlet")
 @WebServlet(urlPatterns = "/*", name = "AuthVaadinServlet", asyncSupported = true)
 @Profile("!hardcoded-user")
 public class AuthVaadinServlet extends SpringVaadinServlet {
@@ -26,6 +26,7 @@ public class AuthVaadinServlet extends SpringVaadinServlet {
 
     @Override
     protected void servletInitialized() throws ServletException {
+        log.info("Initializing {}", AuthVaadinServlet.class.getSimpleName());
         getService().addSessionInitListener(this::onServletInit);
         super.servletInitialized();
     }

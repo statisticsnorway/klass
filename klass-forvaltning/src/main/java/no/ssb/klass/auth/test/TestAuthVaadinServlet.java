@@ -16,9 +16,9 @@ import javax.servlet.annotation.WebServlet;
 import java.util.Objects;
 
 
-@Component
+@Component("vaadinServlet")
 @WebServlet(urlPatterns = "/*", name = "TestAuthVaadinServlet", asyncSupported = true)
-@Profile("hardcoded-user & !production")
+@Profile("hardcoded-user")
 public class TestAuthVaadinServlet extends SpringVaadinServlet {
     private static final Logger log = LoggerFactory.getLogger(TestAuthVaadinServlet.class);
     private final String userRole;
@@ -32,6 +32,7 @@ public class TestAuthVaadinServlet extends SpringVaadinServlet {
 
     @Override
     protected void servletInitialized() throws ServletException {
+        log.warn("Initializing {}", TestAuthVaadinServlet.class.getSimpleName());
         getService().addSessionInitListener(this::onServletInit);
         super.servletInitialized();
     }
