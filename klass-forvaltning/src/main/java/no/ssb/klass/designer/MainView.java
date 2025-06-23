@@ -70,6 +70,7 @@ public class MainView extends MainDesign implements ViewChangeListener {
         MenuBar.MenuItem menuItem = menuBar.addItem(userContext.getUsername(), null);
         menuItem.setIcon(FontAwesome.USER);
         if (userContext.isAdministrator()) {
+            log.info("User {} is admin, adding Administrator menu item", userContext.getUsername());
             menuItem.addItem("Administrator", c -> createAdminView());
         }
         menuItem.addItem("Innhold og bruksstatistikk", c -> createInnholdBruksstatistikkView());

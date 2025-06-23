@@ -13,8 +13,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 
 import javax.validation.constraints.NotNull;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -31,6 +33,7 @@ public class UserContextImpl implements UserContext {
 
     private final UserService userService;
     private final List<String> adminUsers;
+    private final Environment environment;
 
     private User currentUser;
 
@@ -39,9 +42,12 @@ public class UserContextImpl implements UserContext {
             UserService userService,
             @Value("${klass.security.roles.admin.users}")
             @NotNull
-            List<String> adminUsers
+            List<String> adminUsers,
+            @Autowired
+            Environment environment
     ) {
         this.adminUsers = adminUsers;
+        this.environment = environment;
         log.debug("Users to assign admin role to {}", adminUsers);
         VaadinSession session = VaadinSession.getCurrent();
         this.userService = userService;
@@ -118,7 +124,11 @@ public class UserContextImpl implements UserContext {
 
     public void setUser(@NotNull User currentUser) {
         this.currentUser = updateOrCreateUser(currentUser);
-        this.currentUser.setRole(getRoleForUser(this.currentUser));
+        if (Arrays.stream(environment.getActiveProfiles()).noneMatch((profile) -> Objects.equals(profile, "hardcoded-user"))) {
+            this.currentUser.setRole(getRoleForUser(this.currentUser));
+        } else {
+            log.warn("Hardcoded user! Not deducing role.");
+        }
     }
 
     private Role getRoleForUser(User user) {
