@@ -28,10 +28,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Authenticate a user by validating and decoding the provided JWT token.
@@ -87,7 +84,7 @@ public class JwtAuthFilter extends OncePerRequestFilter implements Filter {
             }
             log.debug("JWT token claims: {}", jwt.get().getClaims());
             SecurityContext context = SecurityContextHolder.createEmptyContext();
-            context.setAuthentication(new JwtAuthenticationToken(jwt.get()));
+            context.setAuthentication(new JwtAuthenticationToken(jwt.get(), Collections.singletonList(() -> "KLASS_ROLE_ADMIN")));
             SecurityContextHolder.setContext(context);
         } catch (Exception e) {
             log.error("Could not log in user", e);

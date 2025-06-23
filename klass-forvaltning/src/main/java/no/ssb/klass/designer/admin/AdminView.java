@@ -7,10 +7,9 @@ import org.springframework.security.access.annotation.Secured;
 import org.vaadin.spring.annotation.PrototypeScope;
 
 
-@SuppressWarnings("serial")
 @PrototypeScope
 @SpringView(name = AdminView.NAME)
-@Secured("ADMINISTRATOR")
+@Secured("ROLE_KLASS_ADMIN")
 public class AdminView extends AdminDesign implements View {
 
     public static final String NAME = "AdminView";
