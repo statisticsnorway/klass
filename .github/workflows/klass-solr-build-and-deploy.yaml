@@ -1,0 +1,44 @@
+name: Klass-solr build and deploy
+
+on:
+  pull_request:
+    #branches:
+    #  - nais-migration
+    #paths:
+    #  - "klass-solr/**"
+
+
+jobs:
+  build_and_deploy:
+    name: Build, push and deploy
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch all history for what-changed action
+      - name: Determine what to do
+        id: changed-files
+        uses: "nais/what-changed@main"
+        with:
+          files: .nais/klass-solr.yaml #, topic.yaml, statefulset.yaml, etc.
+      - name: Build and push image and SBOM to OCI registry
+        if: steps.changed-files.outputs.changed != 'only-inputs'
+        uses: nais/docker-build-push@v0
+        id: docker-build-push
+        with:
+          team: dapla-metadata
+          image_suffix: solr
+          dockerfile: klass-solr/Dockerfile
+          docker_context: klass-solr
+
+      - name: Deploy to Nais
+        uses: nais/deploy/actions/deploy@v2
+        env:
+          CLUSTER: test
+          RESOURCE: .nais/klass-solr.yaml # same list as in changed-files step above
+          WORKLOAD_IMAGE: ${{ steps.docker-build-push.outputs.image }}
+          TELEMETRY: ${{ steps.docker-build-push.outputs.telemetry }}
