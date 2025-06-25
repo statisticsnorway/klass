@@ -1,8 +1,5 @@
 package no.ssb.klass.designer;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
 import com.vaadin.data.Validator.InvalidValueException;
@@ -12,17 +9,17 @@ import com.vaadin.server.ErrorMessage;
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
-
 import no.ssb.klass.designer.editing.ElementNotFoundErrorPageView;
 import no.ssb.klass.designer.exceptions.ParameterException;
 import no.ssb.klass.designer.util.VaadinUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Add your Klass exception to the "if (t instanceof MyKlassException)..." list, and use the default error page
  * (displayDefaultErrorView) or make a custom one.
- * 
- * @author kons-johnsen
  *
+ * @author kons-johnsen
  */
 @SuppressWarnings("serial")
 public class KlassErrorHandler extends DefaultErrorHandler {
@@ -33,21 +30,16 @@ public class KlassErrorHandler extends DefaultErrorHandler {
 
     @Override
     public void error(com.vaadin.server.ErrorEvent event) {
-        boolean showErrorMesage = true;
-        StringBuilder errorMessage = new StringBuilder();
+        boolean showErrorMessage = true;
         for (Throwable t = event.getThrowable(); t != null; t = t.getCause()) {
-            if (t != null) {
-                log.error(t.getMessage(), t);
-            }
+            log.error(t.getMessage(), t);
+
             if (t instanceof ParameterException) {
                 ParameterException parameterException = (ParameterException) t;
-                String sidenavn = parameterException.getContext();
-                if (sidenavn == null) {
-                    sidenavn = "siden";
-                }
+                String pageName = parameterException.getContext();
                 String parameter = parameterException.getParameterString();
-                displayParameterErrorPage(sidenavn, parameter != null ? parameter : " ");
-                showErrorMesage = false;
+                displayParameterErrorPage(pageName != null ? pageName : "Error", parameter != null ? parameter : " ");
+                showErrorMessage = false;
             }
             if (t instanceof InvalidValueException) {
                 AbstractComponent component = findAbstractComponent(event);
@@ -55,16 +47,13 @@ public class KlassErrorHandler extends DefaultErrorHandler {
                     // Shows the error in AbstractComponent
                     ErrorMessage message = AbstractErrorMessage.getErrorMessageForException(t);
                     component.setComponentError(message);
-                    showErrorMesage = false;
+                    showErrorMessage = false;
                 }
             }
         }
-        if (showErrorMesage) {
+        if (showErrorMessage) {
             Notification.show(DEFAULT_ERROR_MESSAGE, Type.ERROR_MESSAGE);
         }
-
-        log.error(errorMessage.toString(), event.getThrowable());
-        // doDefault(event);
     }
 
     private void displayParameterErrorPage(String view, String parameter) {
