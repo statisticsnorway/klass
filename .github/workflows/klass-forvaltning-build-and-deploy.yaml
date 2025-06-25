@@ -11,8 +11,6 @@ on:
       - "klass-forvaltning/**"
       - ".nais/**/klass-forvaltning.yaml"
       - ".github/workflows/klass-forvaltning-build-and-deploy.yaml"
-
-
 jobs:
   docker-build:
     name: Docker build
@@ -21,23 +19,19 @@ jobs:
       id-token: "write"
       packages: "read"
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
       - uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '8'
           cache: 'maven'
-
       - name: Build with Maven
         working-directory: klass-forvaltning
         run: mvn -B install -DskipTests
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Build and push
         uses: nais/docker-build-push@v0
         id: docker-build-push
@@ -46,7 +40,6 @@ jobs:
           image_suffix: forvaltning
           dockerfile: klass-forvaltning/Dockerfile
           docker_context: klass-forvaltning
-
       - name: Generate NAIS deploy variables
         id: nais-deploy-vars
         run: |
@@ -57,7 +50,6 @@ jobs:
             echo "nais_cluster=test" >> "$GITHUB_OUTPUT"
             echo "nais_config_path=.nais/test/klass-forvaltning.yaml" >> "$GITHUB_OUTPUT"
           fi
-
       - uses: nais/deploy/actions/deploy@v2
         env:
           CLUSTER: ${{ steps.nais-deploy-vars.outputs.nais_cluster }}
