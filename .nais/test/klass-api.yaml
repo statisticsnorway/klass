@@ -31,6 +31,10 @@ spec:
       value:  api, postgres
     - name: SPRING_DATA_SOLR_HOST
       value: http://klass-solr:8983/solr
+    - name: KLASS_ENV_SEARCH_SOLR_INSTANCE
+      value: klass-solr
+    - name: KLASS_ENV_SEARCH_SOLR_PORT
+      value: "8983"
 
   accessPolicy:
     outbound:
