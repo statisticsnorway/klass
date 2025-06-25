@@ -17,8 +17,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.solr.core.SolrTemplate;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -30,9 +33,15 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
-@ActiveProfiles(ConfigurationProfiles.H2_INMEMORY)
+@ActiveProfiles(ConfigurationProfiles.POSTGRES_EMBEDDED)
 @Transactional
 public class UserServiceTest {
+
+    // These mocks are necessary to inject a ClassificationService bean for UserServiceImpl
+    @MockBean
+    private SolrTemplate solrTemplate;
+    @MockBean
+    private JavaMailSender javaMailSender;
 
     @Autowired
     private UserRepository userRepository;
@@ -76,8 +85,8 @@ public class UserServiceTest {
 
     @Configuration
     @EnableAutoConfiguration
-    @EntityScan(basePackageClasses = {User.class})
-    @ComponentScan(basePackageClasses = TranslatablePersistenceConverter.class)
+    @EntityScan(basePackageClasses = {User.class, ClassificationFamily.class, ClassificationSeries.class})
+    @ComponentScan(basePackageClasses = {UserService.class, ClassificationFamilyRepository.class, ClassificationSeriesRepository.class, UserRepository.class, TranslatablePersistenceConverter.class})
     static class Config {
     }
 }
