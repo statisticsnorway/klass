@@ -1,4 +1,4 @@
-name: Klass-solr build and deploy
+name: Klass-solr deploy
 
 on:
   push:
