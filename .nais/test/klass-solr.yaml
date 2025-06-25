@@ -18,6 +18,11 @@ spec:
       cpu: 20m
       memory: 400Mi
 
+  accessPolicy:
+    inbound:
+      rules:
+        - application: klass-solr
+
   liveness:
     path: /solr/admin/cores?action=STATUS
     port: 8983

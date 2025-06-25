@@ -108,18 +108,15 @@ services:
       POSTGRES_USER: "klass"
       POSTGRES_INSTANCE: ${POSTGRES_INSTANCE}
   solr:
-    image: solr:5.5.2
+    build:
+      context: .
+      dockerfile: ../klass-solr/Dockerfile
     container_name: solr
     profiles: [ search ]
     ports:
       - "8983:8983"
     volumes:
       - solr_data:/opt/solr/server/solr
-      - ../klass-solr/src/main/resources/solr/embedded/Klass:/opt/solr/server/solr/mycores/Klass
-    command:
-      - solr-precreate
-      - Klass
-      - /opt/solr/server/solr/custom_config
     mem_limit: 4g
 volumes:
   pgdata:
