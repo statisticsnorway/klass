@@ -27,3 +27,4 @@ jobs:
           CLUSTER: test
           RESOURCE: .nais/test/klass-solr.yaml # same list as in changed-files step above
           WORKLOAD_IMAGE: europe-north1-docker.pkg.dev/${{ secrets.NAIS_MANAGEMENT_PROJECT_ID }}/dapla-metadata/klass-solr:latest
+          VAR: image=europe-north1-docker.pkg.dev/${{ secrets.NAIS_MANAGEMENT_PROJECT_ID }}/dapla-metadata/klass-solr:latest
