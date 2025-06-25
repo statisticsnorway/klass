@@ -20,8 +20,7 @@ spec:
     enforce:
       enabled: true
       excludePaths:
-        - /monitor
-        - /ping
+        - /manage
 
   replicas:
     min: 1
@@ -47,5 +46,10 @@ spec:
       secret: sqeletor-klass-827ec8ec
 
   liveness:
-    path: /ping
+    path: /manage/info
     initialDelay: 300
+    port: 8091
+  readiness:
+    path: /manage/info
+    initialDelay: 300
+    port: 8091
