@@ -7,19 +7,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigInteger;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 @Transactional
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final ClassificationService classificationService;
 
     @Autowired
-    UserServiceImpl(UserRepository userRepository) {
+    UserServiceImpl(UserRepository userRepository, ClassificationService classificationService) {
         this.userRepository = userRepository;
+        this.classificationService = classificationService;
     }
 
     @Override
@@ -39,16 +39,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public long countUsersWithClassifications() {
-        return userRepository.getUserIdsForUsersWithClassifications().size();
+        return getUsersWithClassifications().size();
     }
 
     @Override
     public List<User> getUsersWithClassifications() {
-        Set<BigInteger> userIds = userRepository.getUserIdsForUsersWithClassifications();
-        List<Long> collect = userIds.stream().map(bigInteger -> bigInteger.longValueExact()).collect(Collectors
-                .toList());
-        return userRepository.findAll(collect);
-
+        return userRepository.findAll().stream()
+                .filter(classificationService::doesUserOwnAnyClassifications)
+                .collect(Collectors.toList());
     }
 
     @Override

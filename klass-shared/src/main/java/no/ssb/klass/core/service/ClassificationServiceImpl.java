@@ -22,6 +22,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
+import static no.ssb.klass.core.util.PredicateUtils.not;
 
 @Service
 @Transactional()
@@ -576,6 +577,14 @@ public class ClassificationServiceImpl implements ClassificationService {
     @Transactional(readOnly = true)
     public List<ClassificationVariant> findVariantsByContactPerson(User contactPerson) {
         return classificationVariantRepository.findByContactPerson(contactPerson);
+    }
+
+    @Override
+    public boolean doesUserOwnAnyClassifications(User contactPerson) {
+        return findVariantsByContactPerson(contactPerson).stream()
+                .anyMatch(not(ClassificationVariant::isDeleted))
+                || findClassificationSeriesByContactPerson(contactPerson).stream()
+                .anyMatch(not(ClassificationSeries::isDeleted));
     }
 
     @Override
