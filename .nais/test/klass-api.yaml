@@ -28,10 +28,9 @@ spec:
           - name: klass
   env:
     - name: SPRING_PROFILES_ACTIVE
-      value:  api, postgres, remote-solr
+      value:  api, postgres
     - name: SPRING_DATA_SOLR_HOST
       value: http://klass-solr:8983/solr
-
 
   accessPolicy:
     outbound:
