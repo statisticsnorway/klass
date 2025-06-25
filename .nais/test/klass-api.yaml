@@ -20,13 +20,23 @@ spec:
     requests:
       cpu: 20m
       memory: 400Mi
-
   gcp:
     sqlInstances:
       - type: POSTGRES_17
         tier: db-f1-micro
         databases:
           - name: klass
+  env:
+    - name: SPRING_PROFILES_ACTIVE
+      value:  api, postgres, remote-solr
+    - name: SPRING_DATA_SOLR_HOST
+      value: http://klass-solr:8983/solr
+
+
+  accessPolicy:
+    outbound:
+      rules:
+        - application: klass-solr
 
   prometheus:
     enabled: true
