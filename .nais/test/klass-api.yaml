@@ -31,7 +31,7 @@ spec:
       value:  api, postgres, remote-solr
 
   accessPolicy:
-    outbound:
+    inbound:
       rules:
         - application: klass-solr
 
