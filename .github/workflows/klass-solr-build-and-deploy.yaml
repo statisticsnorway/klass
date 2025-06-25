@@ -1,11 +1,11 @@
 name: Klass-solr build and deploy
 
 on:
-  pull_request:
-    #branches:
-    #  - nais-migration
-    #paths:
-    #  - "klass-solr/**"
+  push:
+    branches:
+      - nais-migration
+    paths:
+      - "klass-solr/**"
 
 
 jobs:
