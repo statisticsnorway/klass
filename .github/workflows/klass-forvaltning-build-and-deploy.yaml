@@ -3,10 +3,9 @@ name: Klass-forvaltning build and deploy
 on:
   release:
     types: [ published ]
-  #  push:
-  #    branches:
-  #      - nais-migration
-  pull_request:
+  push:
+    branches:
+      - nais-migration
     paths:
       - "klass-forvaltning/**"
       - ".nais/**/klass-forvaltning.yaml"
@@ -58,4 +57,3 @@ jobs:
           DEPLOY_SERVER: deploy.ssb.cloud.nais.io:443
           WORKLOAD_IMAGE: ${{ steps.docker-build-push.outputs.image }}
           TELEMETRY: ${{ steps.docker-build-push.outputs.telemetry }}
-          REF: dpmeta-951-klass-forvaltning-readiness
