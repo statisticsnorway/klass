@@ -50,3 +50,5 @@ spec:
     path: /manage/info
     initialDelay: 300
     port: 8091
+    failureThreshold: 10
+    periodSeconds: 10
