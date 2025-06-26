@@ -8,7 +8,6 @@ metadata:
 spec:
   image: "{{ image }}" # Injected from the GitHub Action
   port: 8081
-
   ingresses:
     - https://klass-forvaltning.intern.test.ssb.no
   accessPolicy:
@@ -20,9 +19,7 @@ spec:
     enforce:
       enabled: true
       excludePaths:
-        - /monitor
-        - /ping
-
+        - /manage
   replicas:
     min: 1
     max: 1
@@ -45,7 +42,14 @@ spec:
   filesFrom:
     - mountPath: /var/run/secrets/nais.io/sqlcertificate
       secret: sqeletor-klass-827ec8ec
-
   liveness:
-    path: /ping
+    path: /manage/info
     initialDelay: 300
+    port: 8091
+  readiness:
+    path: /manage/info
+    initialDelay: 300
+    port: 8091
+    failureThreshold: 10
+    periodSeconds: 10
+  terminationGracePeriodSeconds: 120
