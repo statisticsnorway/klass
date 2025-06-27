@@ -26,7 +26,7 @@
         <vaadin.testbench.api.version>7.7.14</vaadin.testbench.api.version>
         <vaadin.widgetset.mode>local</vaadin.widgetset.mode>
         <vaadin-spring-boot-starter-version>1.0.0</vaadin-spring-boot-starter-version>
-        <vaadin-spring-ext-security-version>0.0.7.RELEASE</vaadin-spring-ext-security-version>
+        <vaadin-spring-extensions-version>0.0.7.RELEASE</vaadin-spring-extensions-version>
         <!--IMPORTANT HIBERNATE BUG FIX ( needed for Translatable as lobs)-->
         <!--https://hibernate.atlassian.net/browse/HHH-10818-->
         <hibernate.version>5.2.3.Final</hibernate.version>
@@ -122,14 +122,14 @@
 
         <!--VAADIN-->
         <dependency>
-            <groupId>org.vaadin.spring.extensions</groupId>
-            <artifactId>vaadin-spring-ext-security</artifactId>
-            <version>${vaadin-spring-ext-security-version}</version>
-        </dependency>
-        <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-spring-boot-starter</artifactId>
             <version>${vaadin-spring-boot-starter-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.vaadin.spring.extensions</groupId>
+            <artifactId>vaadin-spring-ext-core</artifactId>
+            <version>${vaadin-spring-extensions-version}</version>
         </dependency>
         <dependency>
             <groupId>com.vaadin</groupId>
