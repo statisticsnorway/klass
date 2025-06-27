@@ -6,6 +6,9 @@ metadata:
   namespace: dapla-metadata
   labels:
     team: dapla-metadata
+  annotations:
+    nais.io/run-as-user: "8983"
+    nais.io/run-as-group: "8983"
 spec:
   image: "{{ image }}"
   port: 8983
