@@ -24,6 +24,8 @@ public class SearchIndexPopulator implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        classificationSeriesRepository.findAllClassificationIds().forEach(id -> searchService.indexAsync(id));
+        // Use indexSync instead of indexAsync during startup
+        classificationSeriesRepository.findAll().forEach(classification ->
+                searchService.indexSync(classification));
     }
 }
