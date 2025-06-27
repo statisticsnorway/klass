@@ -7,6 +7,7 @@ metadata:
   labels:
     team: dapla-metadata
   annotations:
+    nais.io/read-only-file-system: "false"
     nais.io/run-as-user: "8983"
     nais.io/run-as-group: "8983"
 spec:
