@@ -35,6 +35,9 @@ spec:
       value: klass-solr
     - name: KLASS_ENV_SEARCH_SOLR_PORT
       value: "8983"
+    - name: JAVA_TOOL_OPTIONS
+      value: "-Xms256m -Xmx300m"
+
 
   accessPolicy:
     outbound:
