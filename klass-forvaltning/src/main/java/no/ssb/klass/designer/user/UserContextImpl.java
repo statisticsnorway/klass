@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 
-import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Set;
@@ -40,19 +39,26 @@ public class UserContextImpl implements UserContext {
             @Autowired
             UserService userService,
             @Value("${klass.security.roles.admin.users}")
-            @NotNull
             String[] adminUsers,
             @Autowired
             Environment environment
     ) {
-        this.adminUsers = adminUsers;
+        if (adminUsers == null) {
+            this.adminUsers = new String[]{};
+        } else {
+            this.adminUsers = adminUsers;
+        }
         this.environment = environment;
-        log.debug("Users to assign admin role to {}", adminUsers);
+        log.debug("Users to assign admin role to {}", this.adminUsers);
         VaadinSession session = VaadinSession.getCurrent();
         this.userService = userService;
         User user = session.getAttribute(User.class);
-        log.debug("Setting user {}", user);
-        this.setUser(user);
+        if (user == null) {
+            log.error("User is null! Application features may be broken.");
+        } else {
+            log.debug("Setting user {}", user.getUsername());
+            this.setUser(user);
+        }
     }
 
     @Override
@@ -121,7 +127,7 @@ public class UserContextImpl implements UserContext {
         currentUser = userService.saveUser(currentUser);
     }
 
-    public void setUser(@NotNull User currentUser) {
+    public void setUser(User currentUser) {
         this.currentUser = updateOrCreateUser(currentUser);
         if (Arrays.stream(environment.getActiveProfiles()).noneMatch((profile) -> Objects.equals(profile, "hardcoded-user"))) {
             this.currentUser.setRole(getRoleForUser(this.currentUser));
