@@ -34,13 +34,17 @@ public class AuthVaadinServlet extends SpringVaadinServlet {
     private void onServletInit(SessionInitEvent sessionInitEvent) {
         VaadinSession session = sessionInitEvent.getSession();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        log.debug("Got Authentication in Vaadin session {}", authentication.getPrincipal());
-        if (authentication.getClass() == JwtAuthenticationToken.class) {
-            Jwt jwt = ((JwtAuthenticationToken) authentication).getToken();
-            log.debug("Got JWT in Vaadin session {}", jwt);
-            User user = new KlassUserMapperJwt(jwt).getUser();
-            log.debug("Making user available in session {}", user.getUsername());
-            session.setAttribute(User.class, user);
+        if (authentication == null) {
+            log.warn("Authentication is null!");
+        } else {
+            log.debug("Got Authentication in Vaadin session {}", authentication.getPrincipal());
+            if (authentication.getClass() == JwtAuthenticationToken.class) {
+                Jwt jwt = ((JwtAuthenticationToken) authentication).getToken();
+                log.debug("Got JWT in Vaadin session {}", jwt);
+                User user = new KlassUserMapperJwt(jwt).getUser();
+                log.debug("Making user available in session {}", user.getUsername());
+                session.setAttribute(User.class, user);
+            }
         }
     }
 }
