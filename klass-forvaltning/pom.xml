@@ -26,7 +26,7 @@
         <vaadin.testbench.api.version>7.7.14</vaadin.testbench.api.version>
         <vaadin.widgetset.mode>local</vaadin.widgetset.mode>
         <vaadin-spring-boot-starter-version>1.0.0</vaadin-spring-boot-starter-version>
-        <vaadin-spring-ext-security-version>0.0.7.RELEASE</vaadin-spring-ext-security-version>
+        <vaadin-spring-extensions-version>0.0.7.RELEASE</vaadin-spring-extensions-version>
         <!--IMPORTANT HIBERNATE BUG FIX ( needed for Translatable as lobs)-->
         <!--https://hibernate.atlassian.net/browse/HHH-10818-->
         <hibernate.version>5.2.3.Final</hibernate.version>
@@ -41,13 +41,13 @@
         <spring-restdocs.version>1.2.1.RELEASE</spring-restdocs.version>
         <solr-version>5.5.5</solr-version>
         <spring-data-solr-version>2.1.0.RELEASE</spring-data-solr-version>
-        <postgresql.version>42.7.5</postgresql.version>
+        <postgresql.version>42.7.7</postgresql.version>
     </properties>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.4.4.RELEASE</version>
+        <version>1.5.22.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -113,23 +113,38 @@
             <artifactId>spring-boot-starter-tomcat</artifactId>
             <scope>provided</scope>
         </dependency>
-
         <dependency>
             <groupId>org.apache.tomcat.embed</groupId>
             <artifactId>tomcat-embed-jasper</artifactId>
             <scope>provided</scope>
         </dependency>
 
-        <!--VAADIN-->
         <dependency>
-            <groupId>org.vaadin.spring.extensions</groupId>
-            <artifactId>vaadin-spring-ext-security</artifactId>
-            <version>${vaadin-spring-ext-security-version}</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-spring-legacy</artifactId>
+            <version>1.0.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+            <version>1.0.3</version>
+        </dependency>
+
+        <!--VAADIN-->
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-spring-boot-starter</artifactId>
             <version>${vaadin-spring-boot-starter-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.vaadin.spring.extensions</groupId>
+            <artifactId>vaadin-spring-ext-core</artifactId>
+            <version>${vaadin-spring-extensions-version}</version>
         </dependency>
         <dependency>
             <groupId>com.vaadin</groupId>
@@ -144,25 +159,6 @@
             <artifactId>resetbuttonfortextfield</artifactId>
             <version>1.2.1</version>
         </dependency>
-
-
-        <!-- JSTL og EL for JSP / monitor page -->
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>jstl</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>javax.el</groupId>
-            <artifactId>javax.el-api</artifactId>
-            <version>3.0.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish</groupId>
-            <artifactId>javax.el</artifactId>
-            <version>3.0.0</version>
-        </dependency>
-
 
         <!-- TEST SCOPE-->
         <dependency>
@@ -209,16 +205,6 @@
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>jakarta.servlet</groupId>
-            <artifactId>jakarta.servlet-api</artifactId>
-            <version>4.0.4</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-autoconfigure</artifactId>
         </dependency>
     </dependencies>
 
