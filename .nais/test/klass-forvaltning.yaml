@@ -48,17 +48,17 @@ spec:
     port: "8091"
   liveness:
     path: /actuator/health
-    initialDelay: 300
+    initialDelay: 60
     port: 8091
   readiness:
     path: /actuator/health
-    initialDelay: 300
+    initialDelay: 60
     port: 8091
     failureThreshold: 10
     periodSeconds: 10
   startup:
     path: /actuator/health
-    initialDelay: 300
+    initialDelay: 60
     port: 8091
     failureThreshold: 10
     periodSeconds: 10
