@@ -42,12 +42,22 @@ spec:
   filesFrom:
     - mountPath: /var/run/secrets/nais.io/sqlcertificate
       secret: sqeletor-klass-827ec8ec
+  prometheus:
+    enabled: true
+    path: /actuator/prometheus
+    port: "8091"
   liveness:
-    path: /manage/info
+    path: /actuator/health
     initialDelay: 300
     port: 8091
   readiness:
-    path: /manage/info
+    path: /actuator/health
+    initialDelay: 300
+    port: 8091
+    failureThreshold: 10
+    periodSeconds: 10
+  startup:
+    path: /actuator/health
     initialDelay: 300
     port: 8091
     failureThreshold: 10
