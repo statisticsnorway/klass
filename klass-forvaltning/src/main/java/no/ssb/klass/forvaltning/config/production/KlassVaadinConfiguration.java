@@ -14,10 +14,9 @@ import org.springframework.scheduling.annotation.EnableAsync;
 public class KlassVaadinConfiguration {
 
     @Bean
-    public VaadinSpringComponentFactory componentFactory() {
+    public static VaadinSpringComponentFactory componentFactory() {
         VaadinSpringComponentFactory componentFactory = new VaadinSpringComponentFactory();
         Design.setComponentFactory(componentFactory);
         return componentFactory;
     }
-
 }

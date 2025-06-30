@@ -145,25 +145,6 @@
             <version>1.2.1</version>
         </dependency>
 
-
-        <!-- JSTL og EL for JSP / monitor page -->
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>jstl</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>javax.el</groupId>
-            <artifactId>javax.el-api</artifactId>
-            <version>3.0.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish</groupId>
-            <artifactId>javax.el</artifactId>
-            <version>3.0.0</version>
-        </dependency>
-
-
         <!-- TEST SCOPE-->
         <dependency>
             <groupId>no.ssb.klass</groupId>
