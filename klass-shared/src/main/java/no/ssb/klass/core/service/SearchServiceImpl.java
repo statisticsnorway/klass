@@ -114,6 +114,7 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     @Transactional(readOnly = true)
+    @Async
     public void indexAsync(Long classificationSeriesId) {
         checkNotNull(classificationSeriesId);
         ClassificationSeries classification = classificationRepository.getOne(classificationSeriesId);
