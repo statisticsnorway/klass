@@ -35,7 +35,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 public class KlassSearchConfiguration implements AsyncConfigurer {
 
     @NotEmpty
-    @Value("${spring.data.solr.host}")
+    @Value("${klass.env.search.solr.url}")
     protected String solrUrl;
     @NotEmpty
     @Value("${klass.env.search.solr.core}")
@@ -44,7 +44,7 @@ public class KlassSearchConfiguration implements AsyncConfigurer {
     @Bean
     @Profile("remote-solr")
     public SolrClient solrClient() {
-        HttpSolrClient httpSolrClient = new SolrBackwardsCompatibleHttpClient(solrUrl + "/Klass");
+        HttpSolrClient httpSolrClient = new SolrBackwardsCompatibleHttpClient(solrUrl);
         httpSolrClient.setRequestWriter(new RequestWriter());
         return httpSolrClient;
     }
