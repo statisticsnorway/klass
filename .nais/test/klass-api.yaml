@@ -33,8 +33,7 @@ spec:
       value:  api, postgres, solr-remote
     - name: SPRING_DATA_SOLR_HOST
       value: http://klass-solr/solr
-    - name: JAVA_TOOL_OPTIONS
-      value: "-Xms256m -Xmx300m"
+
 
 
   accessPolicy:
