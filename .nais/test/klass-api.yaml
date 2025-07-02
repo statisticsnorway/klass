@@ -28,9 +28,11 @@ spec:
           - name: klass
   env:
     - name: SPRING_PROFILES_ACTIVE
-      value:  api, postgres, remote-solr
+      value: api, postgres, remote-solr
     - name: SPRING_DATA_SOLR_HOST
       value: http://klass-solr:8983/solr
+    - name: MESSAGING_POSTMAN_PUBSUB_TOPIC_INCOMING
+      value: projects/sup-t-2r/topics/sup-test-postman-incoming-topic
 
 
   accessPolicy:
