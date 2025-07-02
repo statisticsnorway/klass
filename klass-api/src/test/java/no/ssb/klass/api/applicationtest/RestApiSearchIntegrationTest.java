@@ -1,21 +1,19 @@
 package no.ssb.klass.api.applicationtest;
 
-import static io.restassured.RestAssured.*;
-import static org.hamcrest.Matchers.*;
-
+import io.restassured.http.ContentType;
+import no.ssb.klass.core.config.ConfigurationProfiles;
 import no.ssb.klass.testutil.TestDataProvider;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 
-import io.restassured.http.ContentType;
-
-import no.ssb.klass.core.config.ConfigurationProfiles;
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.*;
 
 /**
  * @author Mads Lundemo, SSB.
  */
-@ActiveProfiles(profiles = { ConfigurationProfiles.H2_INMEMORY }, inheritProfiles = false)
+@ActiveProfiles(profiles = {ConfigurationProfiles.H2_INMEMORY, ConfigurationProfiles.MOCK_MAILSERVER}, inheritProfiles = false)
 public class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest {
     // @formatter:off
     @Test

@@ -1,12 +1,10 @@
 package no.ssb.klass.core.repository;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.net.URL;
-import java.util.List;
-
-import javax.transaction.Transactional;
-
+import no.ssb.klass.core.config.ConfigurationProfiles;
+import no.ssb.klass.core.model.ClassificationSeries;
+import no.ssb.klass.core.model.Subscriber;
+import no.ssb.klass.core.util.TranslatablePersistenceConverter;
+import no.ssb.klass.testutil.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,15 +17,15 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import no.ssb.klass.core.config.ConfigurationProfiles;
-import no.ssb.klass.core.model.ClassificationSeries;
-import no.ssb.klass.core.model.Subscriber;
-import no.ssb.klass.core.util.TranslatablePersistenceConverter;
-import no.ssb.klass.testutil.TestUtil;
+import javax.transaction.Transactional;
+import java.net.URL;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-@ActiveProfiles(ConfigurationProfiles.H2_INMEMORY)
+@ActiveProfiles({ConfigurationProfiles.POSTGRES_EMBEDDED, ConfigurationProfiles.MOCK_MAILSERVER})
 @Transactional
 public class SubscriberRepositoryTest {
 
@@ -104,7 +102,7 @@ public class SubscriberRepositoryTest {
 
     @Configuration
     @EnableAutoConfiguration
-    @EntityScan(basePackageClasses = { Subscriber.class, TranslatablePersistenceConverter.class })
+    @EntityScan(basePackageClasses = {Subscriber.class, TranslatablePersistenceConverter.class})
     @ComponentScan(basePackageClasses = TranslatablePersistenceConverter.class)
     static class Config {
 
