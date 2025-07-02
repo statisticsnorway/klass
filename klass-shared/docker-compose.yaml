@@ -109,15 +109,11 @@ services:
       POSTGRES_USER: klass
       POSTGRES_INSTANCE: postgresql
   solr:
-    build:
-      context: .
-      dockerfile: ../klass-solr/Dockerfile
+    image: klass-shared-solr:5.5.2
     container_name: solr
-    profiles: [ search ]
+    profiles: [search]
     ports:
       - "8983:8983"
-    volumes:
-      - solr_data:/opt/solr/server/solr
     mem_limit: 4g
 volumes:
   pgdata:
