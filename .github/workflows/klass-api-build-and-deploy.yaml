@@ -3,9 +3,10 @@ name: Klass-api build and deploy
 on:
   release:
     types: [ published ]
-  push:
-    branches:
-      - nais-migration
+  #  push:
+  #    branches:
+  #      - nais-migration
+  pull_request:
     paths:
       - "klass-api/**"
       - "klass-shared/**"
