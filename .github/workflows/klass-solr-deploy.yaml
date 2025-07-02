@@ -1,8 +1,7 @@
 name: Klass-solr deploy
 
 on:
-  pull_request:
-  #workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   deploy:
