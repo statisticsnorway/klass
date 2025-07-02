@@ -7,8 +7,8 @@ import no.ssb.klass.core.model.User;
 import no.ssb.klass.core.util.TranslatablePersistenceConverter;
 import no.ssb.klass.testutil.TestDataProvider;
 import no.ssb.klass.testutil.TestUtil;
-import org.junit.Ignore;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,13 +30,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
 /**
  * @author Mads Lundemo, SSB.
  */
-// This test exposes a bug. The bug is fixed in klass-shared v2.x versions since this functionality is
-// only used in Klass forvaltning which uses klass-shared v2.x
-@Ignore
 @ExtendWith(SpringExtension.class)
 @SpringBootTest()
 @ActiveProfiles({ConfigurationProfiles.POSTGRES_EMBEDDED, ConfigurationProfiles.MOCK_MAILSERVER})
 @Transactional
+// This test exposes a bug. The bug is fixed in klass-shared v2.x versions since this functionality is
+// only used in Klass forvaltning which uses klass-shared v2.x
+@Disabled
 public class UserRepositoryTest {
 
     @Autowired
