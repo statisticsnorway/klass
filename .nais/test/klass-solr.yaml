@@ -16,7 +16,7 @@ spec:
 
   filesFrom:
     - persistentVolumeClaim: klass-solr-pvc
-      mountPath: /opt/solr/server/solr/mycores/Klass/data/index
+      mountPath: /opt/solr/server/solr/mycores/Klass/data
 
   replicas:
     min: 1
