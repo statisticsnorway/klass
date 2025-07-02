@@ -6,6 +6,10 @@ metadata:
   namespace: dapla-metadata
   labels:
     team: dapla-metadata
+  annotations:
+    nais.io/read-only-file-system: "false"
+    nais.io/run-as-user: "8983"
+    nais.io/run-as-group: "8983"
 spec:
   image: "{{ image }}"
   port: 8983
@@ -15,13 +19,15 @@ spec:
     max: 1
   resources:
     requests:
-      cpu: 20m
-      memory: 400Mi
+      cpu: 400m
+      memory: 1024Mi
+    limits:
+      memory: 2048Mi
 
   accessPolicy:
     inbound:
       rules:
-        - application: klass-solr
+        - application: klass
 
   liveness:
     path: /solr/admin/cores?action=STATUS

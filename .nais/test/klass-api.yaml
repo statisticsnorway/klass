@@ -18,8 +18,10 @@ spec:
     max: 1
   resources:
     requests:
-      cpu: 20m
-      memory: 400Mi
+      cpu: 400m
+      memory: 1024Mi
+    limits:
+      memory: 2048Mi
   gcp:
     sqlInstances:
       - type: POSTGRES_17
@@ -28,9 +30,9 @@ spec:
           - name: klass
   env:
     - name: SPRING_PROFILES_ACTIVE
-      value: api, postgres, remote-solr
+      value:  api, postgres, solr-remote, skip-indexing
     - name: SPRING_DATA_SOLR_HOST
-      value: http://klass-solr:8983/solr
+      value: http://klass-solr/solr
     - name: MESSAGING_POSTMAN_PUBSUB_TOPIC_INCOMING
       value: projects/sup-t-2r/topics/sup-test-postman-incoming-topic
 

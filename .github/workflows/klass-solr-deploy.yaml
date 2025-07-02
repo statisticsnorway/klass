@@ -1,12 +1,7 @@
 name: Klass-solr deploy
 
 on:
-  push:
-    branches:
-      - nais-migration
-    paths:
-      - "klass-solr/**"
-
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -26,5 +21,5 @@ jobs:
         env:
           CLUSTER: test
           RESOURCE: .nais/test/klass-solr.yaml # same list as in changed-files step above
-          WORKLOAD_IMAGE: europe-north1-docker.pkg.dev/${{ secrets.NAIS_MANAGEMENT_PROJECT_ID }}/dapla-metadata/klass-solr:5.5.2-custom
-          VAR: image=europe-north1-docker.pkg.dev/${{ secrets.NAIS_MANAGEMENT_PROJECT_ID }}/dapla-metadata/klass-solr:5.5.2-custom
+          WORKLOAD_IMAGE: europe-north1-docker.pkg.dev/${{ secrets.NAIS_MANAGEMENT_PROJECT_ID }}/dapla-metadata/klass-solr:5.5.2
+          VAR: image=europe-north1-docker.pkg.dev/${{ secrets.NAIS_MANAGEMENT_PROJECT_ID }}/dapla-metadata/klass-solr:5.5.2
