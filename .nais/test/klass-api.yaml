@@ -34,8 +34,6 @@ spec:
     - name: SPRING_DATA_SOLR_HOST
       value: http://klass-solr/solr
 
-
-
   accessPolicy:
     outbound:
       rules:
