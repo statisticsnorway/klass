@@ -14,6 +14,7 @@ spec:
     outbound:
       external:
         - host: auth.test.ssb.no
+        - application: klass-solr
   login:
     provider: openid
     enforce:
@@ -31,7 +32,7 @@ spec:
       memory: 2048Mi
   env:
     - name: SPRING_PROFILES_ACTIVE
-      value: frontend, postgres, small-import, skip-indexing, ad-offline, embedded-solr
+      value: frontend, postgres, small-import, skip-indexing, ad-offline, remote-solr
     - name: KLASS_ENV_SERVER
       value: klass-forvaltning.intern.test.ssb.no
     - name: KLASS_SECURITY_OAUTH2_LOGOUT_PATH
