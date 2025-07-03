@@ -113,16 +113,11 @@ public class PostmanService implements MailService {
 
         private final MessageChannel messageChannel = MessageChannel.EMAIL;
 
-
         private final EmailRequest emailRequest;
 
         public MessageRequest(EmailRequest emailRequest) {
             this.id = String.format("klass-subscriber-%s-%s", emailRequest.receiverEmailAddress, emailRequest.message.hashCode());
             this.emailRequest = emailRequest;
-        }
-
-        public boolean isEmail() {
-            return messageChannel == MessageChannel.EMAIL && emailRequest != null;
         }
 
         public String getId() {
