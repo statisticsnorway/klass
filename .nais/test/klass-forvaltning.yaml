@@ -33,13 +33,13 @@ spec:
       memory: 2048Mi
   env:
     - name: SPRING_PROFILES_ACTIVE
-      value: frontend, postgres, small-import, skip-indexing, ad-offline, remote-solr
+      value: frontend, postgres, small-import, skip-indexing, ad-offline, solr-remote
     - name: KLASS_ENV_SERVER
       value: klass-forvaltning.intern.test.ssb.no
     - name: KLASS_SECURITY_OAUTH2_LOGOUT_PATH
       value: /oauth2/logout
     - name: SPRING_DATA_SOLR_HOST
-      value: http://klass-solr
+      value: http://klass-solr/solr
   envFrom:
     - secret: google-sql-klass
     - secret: klass-forvaltning-application-properties
