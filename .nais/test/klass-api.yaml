@@ -36,7 +36,6 @@ spec:
     - name: MESSAGING_POSTMAN_PUBSUB_TOPIC_INCOMING
       value: projects/sup-t-2r/topics/sup-test-postman-incoming-topic
 
-
   accessPolicy:
     outbound:
       rules:
