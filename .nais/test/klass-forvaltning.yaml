@@ -14,6 +14,7 @@ spec:
     outbound:
       external:
         - host: auth.test.ssb.no
+      rules:
         - application: klass-solr
   login:
     provider: openid
