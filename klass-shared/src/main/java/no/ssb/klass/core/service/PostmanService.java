@@ -39,7 +39,7 @@ public class PostmanService implements MailService {
     @Override
     public void sendMail(String to, String subject, String body) {
         log.debug("Postman sending mail to {} with subject {}", to, subject);
-        EmailRequest emailRequest = new EmailRequest(body, subject, to);
+        EmailRequest emailRequest = new EmailRequest(body, subject, to, postmanConfig.getFromDisplayName());
         String topic = postmanConfig.getPubsubTopicIncoming();
         PubsubMessage message = pubsubMessageOf(new MessageRequest(emailRequest));
         pubSubPublisher.publish(topic, message);
@@ -65,12 +65,12 @@ public class PostmanService implements MailService {
         String fromDisplayName;
         Boolean includeLogo;
 
-        public EmailRequest(String message, String subject, String receiverEmailAddress) {
+        public EmailRequest(String message, String subject, String receiverEmailAddress, String fromDisplayName) {
             this.message = message;
             this.subject = subject;
             this.receiverEmailAddress = receiverEmailAddress;
             this.fromType = FromType.NO_REPLY;
-            this.fromDisplayName = null;
+            this.fromDisplayName = fromDisplayName;
             this.includeLogo = true;
         }
 

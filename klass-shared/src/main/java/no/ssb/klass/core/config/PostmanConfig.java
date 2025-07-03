@@ -14,6 +14,8 @@ public class PostmanConfig {
 
     private String pubsubTopicIncoming;
 
+    private String fromDisplayName;
+
     public @NonNull String getPublisherAppName() {
         return publisherAppName;
     }
@@ -28,6 +30,14 @@ public class PostmanConfig {
 
     public void setPubsubTopicIncoming(String pubsubTopicIncoming) {
         this.pubsubTopicIncoming = pubsubTopicIncoming;
+    }
+
+    public @NonNull String getFromDisplayName() {
+        return fromDisplayName;
+    }
+
+    public void setFromDisplayName(String fromDisplayName) {
+        this.fromDisplayName = fromDisplayName;
     }
 
 }
