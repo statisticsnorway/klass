@@ -4,6 +4,7 @@ on:
   release:
     types: [ published ]
   push:
+    pull_request:
     branches:
       - nais-migration
     paths:
