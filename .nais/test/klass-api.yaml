@@ -32,7 +32,7 @@ spec:
     - name: SPRING_PROFILES_ACTIVE
       value:  api, postgres, solr-remote, skip-indexing
     - name: SPRING_DATA_SOLR_HOST
-      value: http://klass-solr/solr
+      value: http://klass-solr
 
   accessPolicy:
     outbound:
