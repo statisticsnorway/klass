@@ -1,10 +1,10 @@
 name: Klass-forvaltning build and deploy
 
 on:
+  pull_request:
   release:
     types: [ published ]
   push:
-    pull_request:
     branches:
       - nais-migration
     paths:
