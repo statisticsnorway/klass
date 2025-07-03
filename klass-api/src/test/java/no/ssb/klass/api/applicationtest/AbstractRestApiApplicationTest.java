@@ -1,13 +1,24 @@
 package no.ssb.klass.api.applicationtest;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import io.zonky.test.db.AutoConfigureEmbeddedDatabase;
+import no.ssb.klass.api.applicationtest.config.ApplicationTestConfig;
+import no.ssb.klass.api.applicationtest.utils.ApplicationTestUtil;
+import no.ssb.klass.api.util.RestConstants;
 import no.ssb.klass.core.config.ConfigurationProfiles;
+import no.ssb.klass.core.model.ClassificationFamily;
+import no.ssb.klass.core.model.ClassificationSeries;
 import no.ssb.klass.core.model.CorrespondenceTable;
+import no.ssb.klass.core.model.User;
+import no.ssb.klass.core.repository.ClassificationFamilyRepository;
+import no.ssb.klass.core.repository.ClassificationSeriesRepository;
+import no.ssb.klass.core.repository.CorrespondenceTableRepository;
+import no.ssb.klass.core.repository.UserRepository;
+import no.ssb.klass.core.service.ClassificationService;
+import no.ssb.klass.core.util.TimeUtil;
+import no.ssb.klass.core.util.TranslatablePersistenceConverter;
+import no.ssb.klass.testutil.ConstantClockSource;
 import no.ssb.klass.testutil.TestDataProvider;
+import no.ssb.klass.testutil.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,28 +31,20 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import no.ssb.klass.core.model.ClassificationFamily;
-import no.ssb.klass.core.model.ClassificationSeries;
-import no.ssb.klass.core.model.User;
-import no.ssb.klass.core.repository.ClassificationFamilyRepository;
-import no.ssb.klass.core.repository.ClassificationSeriesRepository;
-import no.ssb.klass.core.repository.CorrespondenceTableRepository;
-import no.ssb.klass.core.repository.UserRepository;
-import no.ssb.klass.core.service.ClassificationService;
-import no.ssb.klass.core.util.TimeUtil;
-import no.ssb.klass.core.util.TranslatablePersistenceConverter;
-import no.ssb.klass.api.applicationtest.config.ApplicationTestConfig;
-import no.ssb.klass.api.applicationtest.utils.ApplicationTestUtil;
-import no.ssb.klass.api.util.RestConstants;
-import no.ssb.klass.testutil.ConstantClockSource;
-import no.ssb.klass.testutil.TestUtil;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import static io.zonky.test.db.AutoConfigureEmbeddedDatabase.DatabaseProvider.ZONKY;
 
 @ExtendWith(SpringExtension.class)
-@SpringBootTest(classes = { ApplicationTestConfig.class }, webEnvironment = WebEnvironment.RANDOM_PORT)
-@ActiveProfiles({ ConfigurationProfiles.POSTGRES_EMBEDDED, ConfigurationProfiles.MOCK_SEARCH })
-@AutoConfigureEmbeddedDatabase(provider = ZONKY, type= AutoConfigureEmbeddedDatabase.DatabaseType.POSTGRES)
+@SpringBootTest(classes = {ApplicationTestConfig.class}, webEnvironment = WebEnvironment.RANDOM_PORT, properties = {
+        "spring.cloud.gcp.core.enabled=false",
+        "spring.cloud.gcp.config.enabled=false",
+        "spring.cloud.gcp.pubsub.enabled=false"
+})
+@ActiveProfiles({ConfigurationProfiles.POSTGRES_EMBEDDED, ConfigurationProfiles.MOCK_MAILSERVER, ConfigurationProfiles.MOCK_SEARCH})
+@AutoConfigureEmbeddedDatabase(provider = ZONKY, type = AutoConfigureEmbeddedDatabase.DatabaseType.POSTGRES)
 @ComponentScan(basePackageClasses = TranslatablePersistenceConverter.class)
 public abstract class AbstractRestApiApplicationTest {
 

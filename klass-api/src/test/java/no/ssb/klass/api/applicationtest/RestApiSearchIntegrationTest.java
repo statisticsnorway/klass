@@ -13,7 +13,7 @@ import static org.hamcrest.Matchers.*;
 /**
  * @author Mads Lundemo, SSB.
  */
-@ActiveProfiles(profiles = {ConfigurationProfiles.H2_INMEMORY, ConfigurationProfiles.MOCK_MAILSERVER}, inheritProfiles = false)
+@ActiveProfiles(profiles = {ConfigurationProfiles.POSTGRES_EMBEDDED, ConfigurationProfiles.MOCK_MAILSERVER}, inheritProfiles = false)
 public class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest {
     // @formatter:off
     @Test
