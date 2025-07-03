@@ -38,10 +38,12 @@ public class PostmanService implements MailService {
 
     @Override
     public void sendMail(String to, String subject, String body) {
+        log.debug("Postman sending mail to {} with subject {}", to, subject);
         EmailRequest emailRequest = new EmailRequest(body, subject, to);
         String topic = postmanConfig.getPubsubTopicIncoming();
         PubsubMessage message = pubsubMessageOf(new MessageRequest(emailRequest));
         pubSubPublisher.publish(topic, message);
+        log.debug("Postman published {} to topic {}", message.getMessageId(), topic);
     }
 
     /**
