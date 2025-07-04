@@ -77,10 +77,15 @@
             <version>3.24.2</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <version>7.4</version>
+        </dependency>
     </dependencies>
     
     <build>
-
         <testResources>
             <testResource>
                 <directory>src/main/resources</directory>
