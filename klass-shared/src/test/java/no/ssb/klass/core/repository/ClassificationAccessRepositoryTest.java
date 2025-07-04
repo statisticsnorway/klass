@@ -1,13 +1,14 @@
 package no.ssb.klass.core.repository;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.transaction.Transactional;
-
+import no.ssb.klass.core.config.ConfigurationProfiles;
+import no.ssb.klass.core.model.ClassificationAccessCounter;
+import no.ssb.klass.core.model.ClassificationSeries;
+import no.ssb.klass.core.model.User;
+import no.ssb.klass.core.service.dto.StatisticalEntity;
+import no.ssb.klass.core.util.TimeUtil;
+import no.ssb.klass.core.util.TranslatablePersistenceConverter;
+import no.ssb.klass.testutil.IncrementableClockSource;
+import no.ssb.klass.testutil.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,19 +23,16 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import no.ssb.klass.core.config.ConfigurationProfiles;
-import no.ssb.klass.core.model.ClassificationAccessCounter;
-import no.ssb.klass.core.model.ClassificationSeries;
-import no.ssb.klass.core.model.User;
-import no.ssb.klass.core.service.dto.StatisticalEntity;
-import no.ssb.klass.core.util.TimeUtil;
-import no.ssb.klass.core.util.TranslatablePersistenceConverter;
-import no.ssb.klass.testutil.IncrementableClockSource;
-import no.ssb.klass.testutil.TestUtil;
+import javax.persistence.EntityManager;
+import javax.transaction.Transactional;
+import java.util.Date;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-@ActiveProfiles(ConfigurationProfiles.H2_INMEMORY)
+@ActiveProfiles({ConfigurationProfiles.POSTGRES_EMBEDDED, ConfigurationProfiles.MOCK_MAILSERVER})
 @Transactional
 public class ClassificationAccessRepositoryTest {
 
@@ -89,7 +87,7 @@ public class ClassificationAccessRepositoryTest {
 
     @Configuration
     @EnableAutoConfiguration
-    @EntityScan(basePackageClasses = { ClassificationAccessCounter.class, ClassificationSeries.class })
+    @EntityScan(basePackageClasses = {ClassificationAccessCounter.class, ClassificationSeries.class})
     @ComponentScan(basePackageClasses = TranslatablePersistenceConverter.class)
     static class Config {
     }
