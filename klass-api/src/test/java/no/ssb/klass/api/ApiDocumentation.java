@@ -5,17 +5,8 @@ import com.google.common.collect.Sets;
 import no.ssb.klass.api.config.MockConfig;
 import no.ssb.klass.api.config.TestConfig;
 import no.ssb.klass.api.util.RestConstants;
-import no.ssb.klass.core.model.ClassificationFamily;
-import no.ssb.klass.core.model.ClassificationItem;
-import no.ssb.klass.core.model.ClassificationSeries;
-import no.ssb.klass.core.model.ClassificationType;
-import no.ssb.klass.core.model.ClassificationVariant;
-import no.ssb.klass.core.model.ClassificationVersion;
-import no.ssb.klass.core.model.CorrespondenceMap;
-import no.ssb.klass.core.model.CorrespondenceTable;
-import no.ssb.klass.core.model.Language;
-import no.ssb.klass.core.model.Level;
-import no.ssb.klass.core.model.User;
+import no.ssb.klass.core.config.ConfigurationProfiles;
+import no.ssb.klass.core.model.*;
 import no.ssb.klass.core.repository.ClassificationFamilySummary;
 import no.ssb.klass.core.service.ClassificationService;
 import no.ssb.klass.core.service.SearchService;
@@ -25,7 +16,6 @@ import no.ssb.klass.core.service.search.SolrSearchResult;
 import no.ssb.klass.core.util.DateRange;
 import no.ssb.klass.core.util.KlassResourceNotFoundException;
 import no.ssb.klass.core.util.Translatable;
-import no.ssb.klass.core.config.ConfigurationProfiles;
 import no.ssb.klass.testutil.TestUtil;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -61,14 +51,10 @@ import java.util.Date;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
-import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.halLinks;
-import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.linkWithRel;
-import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.links;
+import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.relaxedResponseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
@@ -79,9 +65,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith({SpringExtension.class, RestDocumentationExtension.class})
 @SpringBootTest(classes = {TestConfig.class, MockConfig.class},
         webEnvironment = WebEnvironment.RANDOM_PORT,
-        properties = {"spring.main.allow-circular-references=true"}
+        properties = {
+                "spring.main.allow-circular-references=true",
+                "spring.cloud.gcp.core.enabled=false",
+                "spring.cloud.gcp.config.enabled=false",
+                "spring.cloud.gcp.pubsub.enabled=false"
+        }
 )
-@ActiveProfiles(ConfigurationProfiles.POSTGRES_EMBEDDED)
+@ActiveProfiles({ConfigurationProfiles.POSTGRES_EMBEDDED, ConfigurationProfiles.MOCK_MAILSERVER, ConfigurationProfiles.MOCK_SEARCH})
 public class ApiDocumentation {
     private static final int CLASS_ID_FAMILIEGRUPPERING = 17;
     private static final int CLASS_ID_GREENHOUSE_GASES = 84;

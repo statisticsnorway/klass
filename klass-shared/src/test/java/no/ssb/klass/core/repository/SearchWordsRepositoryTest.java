@@ -1,14 +1,9 @@
 package no.ssb.klass.core.repository;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
-import java.util.List;
-
-import javax.transaction.Transactional;
-
+import no.ssb.klass.core.config.ConfigurationProfiles;
+import no.ssb.klass.core.model.SearchWords;
+import no.ssb.klass.core.service.dto.StatisticalEntity;
+import no.ssb.klass.core.util.TranslatablePersistenceConverter;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,14 +17,17 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import no.ssb.klass.core.config.ConfigurationProfiles;
-import no.ssb.klass.core.model.SearchWords;
-import no.ssb.klass.core.service.dto.StatisticalEntity;
-import no.ssb.klass.core.util.TranslatablePersistenceConverter;
+import javax.transaction.Transactional;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-@ActiveProfiles(ConfigurationProfiles.H2_INMEMORY)
+@ActiveProfiles({ConfigurationProfiles.POSTGRES_EMBEDDED, ConfigurationProfiles.MOCK_MAILSERVER})
 @Transactional
 public class SearchWordsRepositoryTest {
 
@@ -121,7 +119,7 @@ public class SearchWordsRepositoryTest {
 
     @Configuration
     @EnableAutoConfiguration
-    @EntityScan(basePackageClasses = { SearchWords.class })
+    @EntityScan(basePackageClasses = {SearchWords.class})
     @ComponentScan(basePackageClasses = TranslatablePersistenceConverter.class)
     static class Config {
     }
