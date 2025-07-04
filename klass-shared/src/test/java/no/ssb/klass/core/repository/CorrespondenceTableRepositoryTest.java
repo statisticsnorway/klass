@@ -1,12 +1,10 @@
 package no.ssb.klass.core.repository;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.List;
-
-import javax.transaction.Transactional;
-
 import com.google.common.collect.Lists;
+import no.ssb.klass.core.config.ConfigurationProfiles;
+import no.ssb.klass.core.model.*;
+import no.ssb.klass.core.util.TranslatablePersistenceConverter;
+import no.ssb.klass.testutil.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,18 +17,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import no.ssb.klass.core.config.ConfigurationProfiles;
-import no.ssb.klass.core.model.ClassificationFamily;
-import no.ssb.klass.core.model.ClassificationSeries;
-import no.ssb.klass.core.model.ClassificationVersion;
-import no.ssb.klass.core.model.CorrespondenceTable;
-import no.ssb.klass.core.model.User;
-import no.ssb.klass.core.util.TranslatablePersistenceConverter;
-import no.ssb.klass.testutil.TestUtil;
+import javax.transaction.Transactional;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-@ActiveProfiles(ConfigurationProfiles.H2_INMEMORY)
+@ActiveProfiles({ConfigurationProfiles.POSTGRES_EMBEDDED, ConfigurationProfiles.MOCK_MAILSERVER})
 @Transactional
 public class CorrespondenceTableRepositoryTest {
     @Autowired
@@ -133,7 +127,7 @@ public class CorrespondenceTableRepositoryTest {
 
     @Configuration
     @EnableAutoConfiguration
-    @EntityScan(basePackageClasses = { CorrespondenceTable.class })
+    @EntityScan(basePackageClasses = {CorrespondenceTable.class})
     @ComponentScan(basePackageClasses = TranslatablePersistenceConverter.class)
     static class Config {
     }

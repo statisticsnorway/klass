@@ -1,11 +1,14 @@
 package no.ssb.klass.core.repository;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.List;
-
-import javax.transaction.Transactional;
-
+import no.ssb.klass.core.config.ConfigurationProfiles;
+import no.ssb.klass.core.model.ClassificationSeries;
+import no.ssb.klass.core.model.StatisticalUnit;
+import no.ssb.klass.core.model.User;
+import no.ssb.klass.core.service.dto.ClassificationReportDto;
+import no.ssb.klass.core.service.dto.StatisticalEntity;
+import no.ssb.klass.core.util.Translatable;
+import no.ssb.klass.core.util.TranslatablePersistenceConverter;
+import no.ssb.klass.testutil.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,19 +23,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import no.ssb.klass.core.config.ConfigurationProfiles;
-import no.ssb.klass.core.model.ClassificationSeries;
-import no.ssb.klass.core.model.StatisticalUnit;
-import no.ssb.klass.core.model.User;
-import no.ssb.klass.core.service.dto.ClassificationReportDto;
-import no.ssb.klass.core.service.dto.StatisticalEntity;
-import no.ssb.klass.core.util.Translatable;
-import no.ssb.klass.core.util.TranslatablePersistenceConverter;
-import no.ssb.klass.testutil.TestUtil;
+import javax.transaction.Transactional;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-@ActiveProfiles(ConfigurationProfiles.H2_INMEMORY)
+@ActiveProfiles({ConfigurationProfiles.POSTGRES_EMBEDDED, ConfigurationProfiles.MOCK_MAILSERVER})
 @Transactional
 public class StatisticalUnitRepositoryTest {
 
@@ -111,7 +109,7 @@ public class StatisticalUnitRepositoryTest {
 
     @Configuration
     @EnableAutoConfiguration
-    @EntityScan(basePackageClasses = { StatisticalUnit.class, ClassificationSeries.class })
+    @EntityScan(basePackageClasses = {StatisticalUnit.class, ClassificationSeries.class})
     @ComponentScan(basePackageClasses = TranslatablePersistenceConverter.class)
     static class Config {
     }

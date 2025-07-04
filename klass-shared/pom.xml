@@ -39,6 +39,7 @@
         <maven-jaxb2-plugin-version>2.5.0</maven-jaxb2-plugin-version>
         <tomcat7-maven-plugin-version>2.2</tomcat7-maven-plugin-version>
         <postgresql.version>42.7.5</postgresql.version>
+        <spring-cloud-gcp-dependencies.version>3.9.4</spring-cloud-gcp-dependencies.version>
     </properties>
 
     <dependencies>
@@ -152,8 +153,8 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-mail</artifactId>
+            <groupId>com.google.cloud</groupId>
+            <artifactId>spring-cloud-gcp-starter-pubsub</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.restdocs</groupId>
@@ -235,6 +236,18 @@
             <version>1.2.2</version>
         </dependency>
     </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.google.cloud</groupId>
+                <artifactId>spring-cloud-gcp-dependencies</artifactId>
+                <version>${spring-cloud-gcp-dependencies.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <profiles>
         <profile>
