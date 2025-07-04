@@ -70,7 +70,7 @@ services:
     image: target-postgres-image:latest
     container_name: klass-api
     command: [ "java", "-Xms2g", "-Xmx4g", "-jar", "app.war" ]
-    profiles: [  ]
+    profiles: [ search ]
     depends_on:
       - solr
       - postgresql
@@ -83,11 +83,13 @@ services:
           cpus: "1.0"
           memory: 8G
     environment:
-      SPRING_PROFILES_ACTIVE: "api,postgres-local,small-import"
+      SPRING_PROFILES_ACTIVE: "api,small-import, h2-inmemory"
       SPRING_DATA_SOLR_HOST: http://solr:8983/solr
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_USER: "klass"
       POSTGRES_INSTANCE: postgresql
+      KLASS_ENV_SEARCH_SOLR_URL: http://solr:8983/solr/
+      KLASS_ENV_SEARCH_SOLR_CORE: Klass
   klass-forvaltning:
     build:
       context: ../klass-forvaltning
@@ -124,11 +126,13 @@ services:
         limits:
           memory: 3G
     environment:
-      SPRING_PROFILES_ACTIVE: frontend, hardcoded-user, postgres-local, ad-offline, small-import, skip-indexing
+      SPRING_PROFILES_ACTIVE: frontend, hardcoded-user, postgres-local, ad-offline, small-import, remote-solr, skip-indexing
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_USER: klass
       POSTGRES_INSTANCE: postgresql
       SPRING_DATA_SOLR_HOST: http://solr:8983/solr/
+      KLASS_ENV_SEARCH_SOLR_URL: http://solr:8983/solr/
+      KLASS_ENV_SEARCH_SOLR_CORE: Klass
   solr:
     image: klass-shared-solr:5.5.2
     container_name: solr
