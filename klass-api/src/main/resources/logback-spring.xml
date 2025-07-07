@@ -1,10 +1,24 @@
-<configuration>
+
+<configuration debug="true">
+    <contextName>klass-api</contextName>
+
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n</pattern>
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+                <timestamp />
+                <logLevel />
+                <loggerName />
+                <message />
+                <mdc />
+            </providers>
         </encoder>
     </appender>
-    <root level="INFO">
+
+    <logger name="org.springframework.boot.actuate.endpoint.mvc.HealthMvcEndpoint" level="DEBUG">
         <appender-ref ref="STDOUT"/>
+    </logger>
+
+    <root level="INFO">
+        <appender-ref ref="STDOUT" />
     </root>
 </configuration>
