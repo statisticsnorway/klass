@@ -44,6 +44,9 @@ spec:
       value: http://solr:8983/solr/
     - name: KLASS_ENV_SEARCH_SOLR_CORE
       value: Klass
+    - name: MANAGEMENT_HEALTH_SOLR_ENABLED
+      value: "false"
+
   envFrom:
     - secret: google-sql-klass
     - secret: klass-forvaltning-application-properties
