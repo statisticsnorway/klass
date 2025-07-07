@@ -10,6 +10,7 @@ import org.apache.solr.common.SolrInputDocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.solr.core.SolrTemplate;
 import org.springframework.data.solr.core.query.FacetAndHighlightQuery;
@@ -37,6 +38,8 @@ import no.ssb.klass.core.util.TimeUtil;
 @Service
 public class SearchServiceImpl implements SearchService {
     private static final Logger log = LoggerFactory.getLogger(SearchServiceImpl.class);
+    @Value("${klass.env.search.solr.core}")
+    protected String solrCore;
 
     private final ClassificationSeriesRepository classificationRepository;
 
@@ -51,7 +54,7 @@ public class SearchServiceImpl implements SearchService {
     public FacetAndHighlightPage<SolrSearchResult> search(FacetAndHighlightQuery query) {
 
         Date start = TimeUtil.now();
-        FacetAndHighlightPage<SolrSearchResult> searchResults = solrTemplate.queryForFacetAndHighlightPage(query,
+        FacetAndHighlightPage<SolrSearchResult> searchResults = solrTemplate.queryForFacetAndHighlightPage(solrCore, query,
                 SolrSearchResult.class);
         log.info("Search for: '" + query + "' resulted in " + searchResults.getTotalElements() + " hits. Took (ms): "
                 + TimeUtil.millisecondsSince(start));
@@ -99,7 +102,7 @@ public class SearchServiceImpl implements SearchService {
     }
 
     public void clearIndex() {
-        solrTemplate.delete(new SimpleQuery("*:*"));
+        solrTemplate.delete(solrCore, new SimpleQuery("*:*"));
     }
 
     @Async
@@ -146,7 +149,7 @@ public class SearchServiceImpl implements SearchService {
             }
 
         }
-        solrTemplate.commit();
+        solrTemplate.commit(solrCore);
         log.info("Indexing: " + classification.getNameInPrimaryLanguage() + ". Took (ms): " + TimeUtil
                 .millisecondsSince(start));
     }
@@ -211,9 +214,9 @@ public class SearchServiceImpl implements SearchService {
 
     private void updateSolr(SoftDeletable entity, SolrInputDocument doc) {
         if (!entity.isDeleted()) {
-            solrTemplate.saveDocument(doc);
+            solrTemplate.saveDocument(solrCore, doc);
         } else {
-            solrTemplate.deleteById((String) doc.getField("uuid").getValue());
+            solrTemplate.deleteById(solrCore, (String) doc.getField("uuid").getValue());
         }
     }
 
