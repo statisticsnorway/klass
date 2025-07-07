@@ -40,6 +40,10 @@ spec:
       value: /oauth2/logout
     - name: SPRING_DATA_SOLR_HOST
       value: http://klass-solr/solr
+    - name: KLASS_ENV_SEARCH_SOLR_URL
+      value: http://solr:8983/solr/
+    - name: KLASS_ENV_SEARCH_SOLR_CORE
+      value: Klass
   envFrom:
     - secret: google-sql-klass
     - secret: klass-forvaltning-application-properties
