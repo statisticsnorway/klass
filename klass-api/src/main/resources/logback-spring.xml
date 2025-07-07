@@ -10,7 +10,7 @@
                 <loggerName />
                 <logLevel />
                 <message />
-                <arguments/>
+                <mdc />
             </providers>
         </encoder>
     </appender>
