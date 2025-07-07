@@ -1,13 +1,10 @@
 package no.ssb.klass.core.repository;
 
-import static org.hamcrest.core.Is.*;
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.Set;
-
-import javax.transaction.Transactional;
-import static org.assertj.core.api.Assertions.assertThat;
-
+import no.ssb.klass.core.config.ConfigurationProfiles;
+import no.ssb.klass.core.model.*;
+import no.ssb.klass.core.util.Translatable;
+import no.ssb.klass.core.util.TranslatablePersistenceConverter;
+import no.ssb.klass.testutil.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,27 +17,18 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import no.ssb.klass.core.config.ConfigurationProfiles;
-import no.ssb.klass.core.model.ClassificationFamily;
-import no.ssb.klass.core.model.ClassificationItem;
-import no.ssb.klass.core.model.ClassificationSeries;
-import no.ssb.klass.core.model.ClassificationVersion;
-import no.ssb.klass.core.model.ConcreteClassificationItem;
-import no.ssb.klass.core.model.CorrespondenceMap;
-import no.ssb.klass.core.model.CorrespondenceTable;
-import no.ssb.klass.core.model.Language;
-import no.ssb.klass.core.model.Level;
-import no.ssb.klass.core.model.User;
-import no.ssb.klass.core.util.Translatable;
-import no.ssb.klass.core.util.TranslatablePersistenceConverter;
-import no.ssb.klass.testutil.TestUtil;
+import javax.transaction.Transactional;
+import java.util.Set;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Mads Lundemo, SSB.
  */
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-@ActiveProfiles(ConfigurationProfiles.H2_INMEMORY)
+@ActiveProfiles({ConfigurationProfiles.POSTGRES_EMBEDDED, ConfigurationProfiles.MOCK_MAILSERVER})
 @Transactional
 public class CorrespondenceMapRepositoryTest {
 
@@ -140,7 +128,7 @@ public class CorrespondenceMapRepositoryTest {
 
     @Configuration
     @EnableAutoConfiguration
-    @EntityScan(basePackageClasses = { CorrespondenceTable.class })
+    @EntityScan(basePackageClasses = {CorrespondenceTable.class})
     @ComponentScan(basePackageClasses = TranslatablePersistenceConverter.class)
     static class Config {
     }

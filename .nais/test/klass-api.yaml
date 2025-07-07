@@ -33,6 +33,8 @@ spec:
       value:  api, postgres, solr-remote, skip-indexing
     - name: SPRING_DATA_SOLR_HOST
       value: http://klass-solr/solr
+    - name: MESSAGING_POSTMAN_PUBSUB_TOPIC_INCOMING
+      value: projects/sup-t-2r/topics/sup-test-postman-incoming-topic
 
   accessPolicy:
     outbound:

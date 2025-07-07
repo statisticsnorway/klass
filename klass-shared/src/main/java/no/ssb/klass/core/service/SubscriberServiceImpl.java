@@ -1,19 +1,18 @@
 package no.ssb.klass.core.service;
 
-import java.net.URL;
-import java.util.Optional;
-
+import no.ssb.klass.core.model.ClassificationSeries;
+import no.ssb.klass.core.model.Subscriber;
+import no.ssb.klass.core.model.Verification;
+import no.ssb.klass.core.repository.SubscriberRepository;
+import no.ssb.klass.core.util.ClientException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import no.ssb.klass.core.model.ClassificationSeries;
-import no.ssb.klass.core.model.Subscriber;
-import no.ssb.klass.core.model.Verification;
-import no.ssb.klass.core.repository.SubscriberRepository;
-import no.ssb.klass.core.util.ClientException;
+import java.net.URL;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -48,8 +47,8 @@ public class SubscriberServiceImpl implements SubscriberService {
 
     @Override
     public void sendVerificationMail(String email, URL verifySubscriptionUrl, ClassificationSeries classification) {
-        String heading = "Verifisering av abonnement";
-        String body = "Verifiser ditt abonnement på klassifikasjonen: " + classification.getNameInPrimaryLanguage();
+        String heading = "Verifiser abonnement på klassifikasjon";
+        String body = "<br/><br/>Verifiser ditt abonnement på klassifikasjonen  <em>" + classification.getNameInPrimaryLanguage() + "</em>";
         body += "<br/><br/>Klikk følgende lenke innen 24 timer: <a href=\"" + verifySubscriptionUrl.toString()
                 + "\">Verifiser abonnement</a>";
         try {
@@ -72,7 +71,7 @@ public class SubscriberServiceImpl implements SubscriberService {
 
     @Override
     public void informSubscribersOfUpdatedClassification(ClassificationSeries classification, String whatChanged,
-            String descriptionOfChange) {
+                                                         String descriptionOfChange) {
         for (Subscriber subscriber : subscriberRepository.findVerifiedSubscribersOfClassification(classification)) {
             sendMailToSubscriber(classification, whatChanged, descriptionOfChange, subscriber);
         }
@@ -85,7 +84,7 @@ public class SubscriberServiceImpl implements SubscriberService {
     }
 
     private void sendMailToSubscriber(ClassificationSeries classification, String whatChanged, String reasonForChange,
-            Subscriber subscriber) {
+                                      Subscriber subscriber) {
         String mailSubject = classification.getNameInPrimaryLanguage() + " har blitt oppdatert";
         String reasonForChangeParagraph = "<p>Grunn for endring<br/>-----------------------<pre>" + reasonForChange
                 + "</pre></p>";
