@@ -39,7 +39,7 @@ spec:
     - name: KLASS_SECURITY_OAUTH2_LOGOUT_PATH
       value: /oauth2/logout
     - name: SPRING_DATA_SOLR_HOST
-      value: http://klass-solr/solr
+      value: http://klass-solr/solr/
     - name: KLASS_ENV_SEARCH_SOLR_URL
       value: http://klass-solr/solr/
     - name: KLASS_ENV_SEARCH_SOLR_CORE
