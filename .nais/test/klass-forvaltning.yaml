@@ -33,7 +33,7 @@ spec:
       memory: 2048Mi
   env:
     - name: SPRING_PROFILES_ACTIVE
-      value: frontend, postgres, small-import, skip-indexing, ad-offline
+      value: frontend, postgres, small-import, skip-indexing, ad-offline, remote-solr
     - name: KLASS_ENV_SERVER
       value: klass-forvaltning.intern.test.ssb.no
     - name: KLASS_SECURITY_OAUTH2_LOGOUT_PATH
@@ -42,8 +42,6 @@ spec:
       value: http://klass-solr/solr/
     - name: KLASS_ENV_SEARCH_SOLR_URL
       value: http://klass-solr/solr/
-    - name: KLASS_ENV_SEARCH_SOLR_CORE
-      value: Klass
     - name: MANAGEMENT_HEALTH_SOLR_ENABLED
       value: "false"
 
