@@ -49,7 +49,7 @@
              Remove when Spring Boot includes this version or newer -->
         <flyway.version>10.0.1</flyway.version>
         <jaxb-api-version>2.3.1</jaxb-api-version>
-        <commons-io-version>2.15.1</commons-io-version>
+        <commons-io-version>2.20.0</commons-io-version>
         <jakarta-rs-api-version>2.1.6</jakarta-rs-api-version>
         <spring-restdocs-version>2.0.8.RELEASE</spring-restdocs-version>
         <snakeyaml.version>1.31</snakeyaml.version>
