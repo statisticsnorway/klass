@@ -2,7 +2,6 @@ services:
   mariadb:
     image: mariadb:11.7
     profiles: [ migration-testing, migrate-data ]
-    container_name: klass_mariadb
     ports:
       - "3306:3306"
     environment:
@@ -28,7 +27,6 @@ services:
       context: ../klass-api
       dockerfile: ../klass-api/Dockerfile
     command: [ "java", "-jar", "app.war" ]
-    container_name: klass-api
     profiles: [ migration-testing, api ]
     depends_on:
       - postgresql
@@ -47,7 +45,6 @@ services:
   klass-api-mariadb:
     image: source-mariadb-image:latest
     command: [ "java", "-jar", "app.war", "--spring.profiles.active=api, mariadb-local, skip-indexing, embedded-solr" ]
-    container_name: klass-api-mariadb
     profiles: [ migration-testing ]
     depends_on:
       - mariadb
@@ -67,8 +64,9 @@ services:
       SPRING_PROFILES_ACTIVE: "mariadb-local"
       MARIADB_INSTANCE: mariadb
   klass-api-search:
-    image: target-postgres-image:latest
-    container_name: klass-api
+    build:
+      context: ../klass-api
+      dockerfile: ../klass-api/Dockerfile
     command: [ "java", "-Xms2g", "-Xmx4g", "-jar", "app.war" ]
     profiles: [ search ]
     depends_on:
@@ -94,7 +92,6 @@ services:
     build:
       context: ../klass-forvaltning
       dockerfile: ../klass-forvaltning/Dockerfile
-    container_name: klass-forvaltning
     profiles: [ frontend ]
     ports:
       - "8081:8081"
@@ -114,7 +111,6 @@ services:
     build:
       context: ../klass-forvaltning
       dockerfile: ../klass-forvaltning/Dockerfile
-    container_name: klass-forvaltning
     profiles: [ search ]
     ports:
       - "8081:8081"
@@ -134,9 +130,10 @@ services:
       KLASS_ENV_SEARCH_SOLR_URL: http://solr:8983/solr/
       KLASS_ENV_SEARCH_SOLR_CORE: Klass
   solr:
-    image: klass-shared-solr:5.5.2
-    container_name: solr
-    profiles: [search]
+    build:
+      context: ../klass-solr
+      dockerfile: ../klass-solr/Dockerfile
+    profiles: [ search ]
     ports:
       - "8983:8983"
     mem_limit: 4g
