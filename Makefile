@@ -54,6 +54,14 @@ run-klass-forvaltning-local-postgres:
 	popd; \
 	${sdk} env clear
 
+.PHONY: run-klass-forvaltning-local-postgres-search
+run-klass-forvaltning-local-postgres-search:
+	pushd klass-forvaltning && \
+	${sdk} env && \
+	mvn spring-boot\:run -Dspring.profiles.active=postgres-local,hardcoded-user,frontend,skip-indexing,small-import,ad-offline,remote-solr -Dklass.env.search.solr.url=http://localhost:8983/solr/; \
+	popd; \
+	${sdk} env clear
+
 
 .PHONY: run-klass-forvaltning-local-mariadb
 # Requires that a MariaDB instance is already running with a database called klass and a user called klass.
