@@ -1,5 +1,7 @@
 package no.ssb.klass.mail.services;
 
+import no.ssb.klass.mail.models.Email;
+
 public interface MailService {
-    void sendMail(String to, String subject, String body);
+    void sendMail(Email email);
 }

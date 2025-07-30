@@ -6,6 +6,7 @@ import com.google.cloud.spring.pubsub.core.publisher.PubSubPublisherTemplate;
 import com.google.protobuf.ByteString;
 import com.google.pubsub.v1.PubsubMessage;
 import no.ssb.klass.mail.config.PostmanConfig;
+import no.ssb.klass.mail.models.Email;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,9 +35,9 @@ public class PostmanService implements MailService {
     }
 
     @Override
-    public void sendMail(String to, String subject, String body) {
-        log.debug("Postman sending mail to {} with subject {}", to, subject);
-        EmailRequest emailRequest = new EmailRequest(body, subject, to, postmanConfig.getFromDisplayName());
+    public void sendMail(Email email) {
+        log.debug("Postman sending mail to {} with subject {}", email.to(), email.subject());
+        EmailRequest emailRequest = new EmailRequest(email, postmanConfig.getFromDisplayName());
         String topic = postmanConfig.getPubsubTopicIncoming();
         PubsubMessage message = pubsubMessageOf(new MessageRequest(emailRequest));
         pubSubPublisher.publish(topic, message);
@@ -62,10 +63,10 @@ public class PostmanService implements MailService {
         String fromDisplayName;
         Boolean includeLogo;
 
-        public EmailRequest(String message, String subject, String receiverEmailAddress, String fromDisplayName) {
-            this.message = message;
-            this.subject = subject;
-            this.receiverEmailAddress = receiverEmailAddress;
+        public EmailRequest(Email email, String fromDisplayName) {
+            this.message = email.body();
+            this.subject = email.subject();
+            this.receiverEmailAddress = email.to();
             this.fromType = FromType.NO_REPLY;
             this.fromDisplayName = fromDisplayName;
             this.includeLogo = true;
