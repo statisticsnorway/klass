@@ -36,7 +36,7 @@ jobs:
           cache: 'maven'
 
       - name: Build with Maven
-        run: mvn --batch-mode --update-snapshots install -pl ':klass-api'
+        run: mvn --batch-mode --update-snapshots install -pl '!:klass-forvaltning'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
