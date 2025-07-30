@@ -16,7 +16,6 @@
 
     <properties>
         <snippetsDirectory>${project.build.directory}/generated-snippets</snippetsDirectory>
-        <spring-cloud-gcp-dependencies.version>3.9.4</spring-cloud-gcp-dependencies.version>
     </properties>
 
 
@@ -78,10 +77,6 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.google.cloud</groupId>
-            <artifactId>spring-cloud-gcp-starter-pubsub</artifactId>
         </dependency>
 
         <!--TOMCAT-->
@@ -209,18 +204,6 @@
             <version>6.6</version>
         </dependency>
     </dependencies>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>com.google.cloud</groupId>
-                <artifactId>spring-cloud-gcp-dependencies</artifactId>
-                <version>${spring-cloud-gcp-dependencies.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <profiles>
         <profile>

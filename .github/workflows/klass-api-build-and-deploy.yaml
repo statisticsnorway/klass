@@ -3,9 +3,10 @@ name: Klass-api build and deploy
 on:
   release:
     types: [ published ]
-  push:
-    branches:
-      - nais-migration
+  #  push:
+  #    branches:
+  #      - nais-migration
+  pull_request:
     paths:
       - "klass-api/**"
       - "klass-shared/**"
@@ -35,7 +36,7 @@ jobs:
           cache: 'maven'
 
       - name: Build with Maven
-        run: mvn --batch-mode --update-snapshots install -pl '!:klass-forvaltning'
+        run: mvn --batch-mode --update-snapshots install -pl ':klass-api'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
