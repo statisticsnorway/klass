@@ -1,20 +1,17 @@
-package no.ssb.klass.core.service;
+package no.ssb.klass.mail.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.cloud.spring.pubsub.core.publisher.PubSubPublisherTemplate;
 import com.google.protobuf.ByteString;
 import com.google.pubsub.v1.PubsubMessage;
-import no.ssb.klass.core.config.ConfigurationProfiles;
-import no.ssb.klass.core.config.PostmanConfig;
+import no.ssb.klass.mail.config.PostmanConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 @Service
-@Profile("!" + ConfigurationProfiles.MOCK_MAILSERVER)
 public class PostmanService implements MailService {
 
     private static final Logger log = LoggerFactory.getLogger(PostmanService.class);
