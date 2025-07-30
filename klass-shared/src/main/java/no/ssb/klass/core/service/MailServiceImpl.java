@@ -1,6 +1,6 @@
 package no.ssb.klass.core.service;
 
-import no.ssb.klass.mail.models.Email;
+import no.ssb.klass.core.model.Email;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.web.client.RestTemplate;
@@ -17,7 +17,7 @@ public class MailServiceImpl implements MailService {
     public MailServiceImpl(RestTemplateBuilder restTemplateBuilder) {
         this.klassMail = restTemplateBuilder.uriTemplateHandler(new DefaultUriBuilderFactory("http://" + klassMailHost)).build();
     }
-    
+
     @Override
     public void sendMail(String to, String subject, String body) {
         klassMail.postForEntity("/mail", new Email(to, subject, body), Email.class);
