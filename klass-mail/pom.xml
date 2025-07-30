@@ -19,13 +19,7 @@
     </properties>
 
     <dependencies>
-        <!--KLASS-->
-        <dependency>
-            <groupId>no.ssb.klass</groupId>
-            <artifactId>klass-shared</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-        
+
         <!--Spring-->
         <dependency>
             <groupId>org.springframework.boot</groupId>

@@ -1,15 +1,15 @@
 <configuration>
 
-    <contextName>klass-api</contextName>
+    <contextName>klass-mail</contextName>
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
             <providers>
-                <timestamp />
-                <contextName />
-                <loggerName />
-                <logLevel />
-                <message />
+                <timestamp/>
+                <contextName/>
+                <loggerName/>
+                <logLevel/>
+                <message/>
                 <arguments/>
             </providers>
         </encoder>
