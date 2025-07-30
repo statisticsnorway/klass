@@ -3,10 +3,9 @@ name: Klass-mail build and deploy
 on:
   release:
     types: [ published ]
-  #  push:
-  #    branches:
-  #      - nais-migration
-  pull_request:
+  push:
+    #    branches:
+    #      - nais-migration
     paths:
       - "klass-mail/**"
       - ".nais/**/klass-mail.yaml"
