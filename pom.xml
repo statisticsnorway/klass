@@ -20,6 +20,7 @@
         <module>klass-shared</module>
         <module>klass-api</module>
         <module>klass-forvaltning</module>
+        <module>klass-mail</module>
     </modules>
 
     <scm>

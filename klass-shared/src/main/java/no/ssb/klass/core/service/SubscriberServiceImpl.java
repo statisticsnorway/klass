@@ -1,5 +1,6 @@
 package no.ssb.klass.core.service;
 
+import no.ssb.klass.core.exception.KlassEmailException;
 import no.ssb.klass.core.model.ClassificationSeries;
 import no.ssb.klass.core.model.Subscriber;
 import no.ssb.klass.core.model.Verification;
@@ -46,7 +47,7 @@ public class SubscriberServiceImpl implements SubscriberService {
     }
 
     @Override
-    public void sendVerificationMail(String email, URL verifySubscriptionUrl, ClassificationSeries classification) {
+    public void sendVerificationMail(String email, URL verifySubscriptionUrl, ClassificationSeries classification) throws KlassEmailException {
         String heading = "Verifiser abonnement på klassifikasjon";
         String body = "<br/><br/>Verifiser ditt abonnement på klassifikasjonen  <em>" + classification.getNameInPrimaryLanguage() + "</em>";
         body += "<br/><br/>Klikk følgende lenke innen 24 timer: <a href=\"" + verifySubscriptionUrl.toString()
@@ -54,7 +55,7 @@ public class SubscriberServiceImpl implements SubscriberService {
         try {
             mailService.sendMail(email, heading, body);
         } catch (Exception e) {
-            throw new RuntimeException("Unable to send verification mail", e);
+            throw new KlassEmailException("Unable to send verification mail", e);
         }
     }
 

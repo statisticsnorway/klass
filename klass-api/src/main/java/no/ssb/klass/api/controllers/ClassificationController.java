@@ -2,30 +2,11 @@ package no.ssb.klass.api.controllers;
 
 import com.google.common.base.Strings;
 import no.ssb.klass.api.controllers.validators.CsvFieldsValidator;
-import no.ssb.klass.api.dto.CodeChangeList;
-import no.ssb.klass.api.dto.CodeList;
-import no.ssb.klass.api.dto.CorrespondenceItemList;
-import no.ssb.klass.api.dto.KlassPagedResources;
-import no.ssb.klass.api.dto.KlassResources;
-import no.ssb.klass.api.dto.SubscribeResponse;
-import no.ssb.klass.api.dto.hal.ClassificationFamilyResource;
-import no.ssb.klass.api.dto.hal.ClassificationFamilySummaryResource;
-import no.ssb.klass.api.dto.hal.ClassificationResource;
-import no.ssb.klass.api.dto.hal.ClassificationSummaryResource;
-import no.ssb.klass.api.dto.hal.ClassificationVariantResource;
-import no.ssb.klass.api.dto.hal.ClassificationVersionResource;
-import no.ssb.klass.api.dto.hal.CorrespondenceTableResource;
-import no.ssb.klass.api.dto.hal.ResourceUtil;
-import no.ssb.klass.api.dto.hal.SearchResultResource;
-import no.ssb.klass.api.dto.hal.SsbSectionResource;
+import no.ssb.klass.api.dto.*;
+import no.ssb.klass.api.dto.hal.*;
 import no.ssb.klass.api.util.RestConstants;
-import no.ssb.klass.core.model.ClassificationFamily;
-import no.ssb.klass.core.model.ClassificationSeries;
-import no.ssb.klass.core.model.ClassificationType;
-import no.ssb.klass.core.model.ClassificationVariant;
-import no.ssb.klass.core.model.ClassificationVersion;
-import no.ssb.klass.core.model.CorrespondenceTable;
-import no.ssb.klass.core.model.Language;
+import no.ssb.klass.core.exception.KlassEmailException;
+import no.ssb.klass.core.model.*;
 import no.ssb.klass.core.repository.ClassificationFamilySummary;
 import no.ssb.klass.core.service.ClassificationService;
 import no.ssb.klass.core.service.SearchService;
@@ -48,31 +29,20 @@ import org.springframework.data.solr.core.query.result.FacetAndHighlightPage;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
-import org.springframework.hateoas.IanaLinkRelations;
-import org.springframework.hateoas.Link;
-import org.springframework.hateoas.MediaTypes;
-import org.springframework.hateoas.PagedModel;
-import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.*;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.servlet.view.RedirectView;
 
-import javax.transaction.Transactional;
 import java.beans.PropertyEditorSupport;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -86,8 +56,8 @@ import static java.util.stream.Collectors.toList;
 @RestController
 // NOTE: CrossOrigin config moved to KlassSecurityConfiguration
 // due to conditional behavior where some requests didn't get CORS headers and cause cache problems
-@RequestMapping(value = {RestConstants.PREFIX_AND_API_VERSION_V1, RestConstants.API_VERSION_V1, "/rest/v1" },
-    produces = {MediaTypes.HAL_JSON_VALUE, "application/*", "text/csv"})
+@RequestMapping(value = {RestConstants.PREFIX_AND_API_VERSION_V1, RestConstants.API_VERSION_V1, "/rest/v1"},
+        produces = {MediaTypes.HAL_JSON_VALUE, "application/*", "text/csv"})
 public class ClassificationController {
     private static final Logger log = LoggerFactory.getLogger(ClassificationController.class);
     private final ClassificationService classificationService;
@@ -101,9 +71,9 @@ public class ClassificationController {
 
     @Autowired
     public ClassificationController(ClassificationService classificationService,
-            SubscriberService subscriberService,
-            SearchService searchService, StatisticsService statisticsService,
-            CsvFieldsValidator csvFieldsValidator) {
+                                    SubscriberService subscriberService,
+                                    SearchService searchService, StatisticsService statisticsService,
+                                    CsvFieldsValidator csvFieldsValidator) {
         this.classificationService = classificationService;
         this.subscriberService = subscriberService;
         this.searchService = searchService;
@@ -271,7 +241,7 @@ public class ClassificationController {
 
     @RequestMapping(value = "/classifications/{id}/codes", method = RequestMethod.GET)
     public CodeList codes(@PathVariable Long id,
-            // @formatter:off
+                          // @formatter:off
                           @RequestParam(value = "from") @DateTimeFormat(pattern = RestConstants.DATE_FORMAT) LocalDate from,
                           @RequestParam(value = "to", required = false) @DateTimeFormat(pattern = RestConstants.DATE_FORMAT) LocalDate to,
                           @RequestParam(value = "csvSeparator", defaultValue = ",") String csvSeparator,
@@ -286,9 +256,9 @@ public class ClassificationController {
         CodeList codeList = codesInternal(id, new DateRangeHolder(from, to), csvSeparator, selectLevel, selectCodes,
                 presentationNamePattern, language, includeFuture);
 
-        if (!csvFields.isEmpty())  {
+        if (!csvFields.isEmpty()) {
             List<String> csvFieldsList = getCsvFieldsList(csvFields);
-            csvFieldsValidator.validateFieldsCodeItem( csvFieldsList);
+            csvFieldsValidator.validateFieldsCodeItem(csvFieldsList);
             codeList.setCsvFields(csvFieldsList);
         }
         return codeList;
@@ -296,7 +266,7 @@ public class ClassificationController {
 
     @RequestMapping(value = "/classifications/{id}/codesAt", method = RequestMethod.GET)
     public CodeList codesAt(@PathVariable Long id,
-            // @formatter:off
+                            // @formatter:off
                           @RequestParam(value = "date") @DateTimeFormat(pattern = RestConstants.DATE_FORMAT) LocalDate date,
                           @RequestParam(value = "csvSeparator", defaultValue = ",") String csvSeparator,
                           @RequestParam(value = "csvFields", defaultValue = "") String csvFields,
@@ -311,7 +281,7 @@ public class ClassificationController {
         CodeList codeList = codesInternal(id, new DateRangeHolder(date), csvSeparator, selectLevel, selectCodes,
                 presentationNamePattern, language, includeFuture);
 
-        if (!csvFields.isEmpty())  {
+        if (!csvFields.isEmpty()) {
             List<String> csvFieldsList = getCsvFieldsList(csvFields);
             csvFieldsValidator.validateFieldsCodeItem(csvFieldsList);
             codeList.setCsvFields(csvFieldsList);
@@ -320,7 +290,7 @@ public class ClassificationController {
     }
 
     private CodeList codesInternal(Long id, DateRangeHolder dateRangeHolder, String csvSeparator, String selectLevel,
-            String selectCodes, String presentationNamePattern, Language language, Boolean includeFuture) {
+                                   String selectCodes, String presentationNamePattern, Language language, Boolean includeFuture) {
         List<CodeDto> codes = classificationService.findClassificationCodes(id, dateRangeHolder.dateRange, language, includeFuture);
         CodeList codeList = new CodeList(csvSeparator, dateRangeHolder.withRange, dateRangeHolder.dateRange, includeFuture).convert(codes);
         return codeList.filterValidity(dateRangeHolder.dateRange)
@@ -334,7 +304,7 @@ public class ClassificationController {
 
     @RequestMapping(value = "/classifications/{id}/changes", method = RequestMethod.GET)
     public CodeChangeList changes(@PathVariable Long id,
-            // @formatter:off
+                                  // @formatter:off
                           @RequestParam(value = "from") @DateTimeFormat(pattern = RestConstants.DATE_FORMAT) LocalDate from,
                           @RequestParam(value = "to", required = false) @DateTimeFormat(pattern = RestConstants.DATE_FORMAT) LocalDate to,
                           @RequestParam(value = "csvSeparator", defaultValue = ",") String csvSeparator,
@@ -351,7 +321,7 @@ public class ClassificationController {
             codeChanges = codeChanges.merge(codeChanges.convert(changeTable, language));
         }
 
-        if (!csvFields.isEmpty())  {
+        if (!csvFields.isEmpty()) {
             List<String> csvFieldsList = getCsvFieldsList(csvFields);
             csvFieldsValidator.validateFieldsChangeItemSchema(csvFieldsList);
             codeChanges.setCsvFields(csvFieldsList);
@@ -362,7 +332,7 @@ public class ClassificationController {
 
     @RequestMapping(value = "/classifications/{id}/variant", method = RequestMethod.GET)
     public CodeList variant(@PathVariable Long id,
-            // @formatter:off
+                            // @formatter:off
                           @RequestParam(value = "variantName") String variantName,
                           @RequestParam(value = "from") @DateTimeFormat(pattern = RestConstants.DATE_FORMAT) LocalDate from,
                           @RequestParam(value = "to", required = false) @DateTimeFormat(pattern = RestConstants.DATE_FORMAT) LocalDate to,
@@ -378,7 +348,7 @@ public class ClassificationController {
         CodeList codeList = variantInternal(id, variantName, new DateRangeHolder(from, to), csvSeparator, selectLevel, selectCodes,
                 presentationNamePattern, language, includeFuture);
 
-        if (!csvFields.isEmpty())  {
+        if (!csvFields.isEmpty()) {
             List<String> csvFieldsList = getCsvFieldsList(csvFields);
             csvFieldsValidator.validateFieldsCodeItem(csvFieldsList);
             codeList.setCsvFields(csvFieldsList);
@@ -390,7 +360,7 @@ public class ClassificationController {
 
     @RequestMapping(value = "/classifications/{id}/variantAt", method = RequestMethod.GET)
     public CodeList variantAt(@PathVariable Long id,
-            // @formatter:off
+                              // @formatter:off
                           @RequestParam(value = "variantName") String variantName,
                           @RequestParam(value = "date", required = false) @DateTimeFormat(pattern = RestConstants.DATE_FORMAT) LocalDate date,
                           @RequestParam(value = "csvSeparator", defaultValue = ",") String csvSeparator,
@@ -405,7 +375,7 @@ public class ClassificationController {
         CodeList codeList = variantInternal(id, variantName, new DateRangeHolder(date), csvSeparator, selectLevel, selectCodes,
                 presentationNamePattern, language, includeFuture);
 
-        if (!csvFields.isEmpty())  {
+        if (!csvFields.isEmpty()) {
             List<String> csvFieldsList = getCsvFieldsList(csvFields);
             csvFieldsValidator.validateFieldsCodeItem(csvFieldsList);
             codeList.setCsvFields(csvFieldsList);
@@ -415,9 +385,8 @@ public class ClassificationController {
     }
 
 
-
     private CodeList variantInternal(Long id, String variantName, DateRangeHolder dateRangeHolder, String csvSeparator,
-            String selectLevel, String selectCodes, String presentationNamePattern, Language language, Boolean includeFuture) {
+                                     String selectLevel, String selectCodes, String presentationNamePattern, Language language, Boolean includeFuture) {
         List<CodeDto> codes = classificationService.findVariantClassificationCodes(id, variantName, language,
                 dateRangeHolder.dateRange, includeFuture);
         return new CodeList(csvSeparator, dateRangeHolder.withRange, dateRangeHolder.dateRange, includeFuture).convert(codes).limit(dateRangeHolder.dateRange)
@@ -427,7 +396,7 @@ public class ClassificationController {
 
     @RequestMapping(value = "/classifications/{id}/corresponds", method = RequestMethod.GET)
     public CorrespondenceItemList corresponds(@PathVariable Long id,
-            // @formatter:off
+                                              // @formatter:off
                           @RequestParam(value = "targetClassificationId") Long targetClassificationId,
                           @RequestParam(value = "from") @DateTimeFormat(pattern = RestConstants.DATE_FORMAT) LocalDate from,
                           @RequestParam(value = "to", required = false) @DateTimeFormat(pattern = RestConstants.DATE_FORMAT) LocalDate to,
@@ -439,7 +408,7 @@ public class ClassificationController {
         CorrespondenceItemList correspondenceList = correspondsInternal(id, targetClassificationId,
                 new DateRangeHolder(from, to), csvSeparator, language, includeFuture, false);
 
-        if (!csvFields.isEmpty())  {
+        if (!csvFields.isEmpty()) {
             List<String> csvFieldsList = getCsvFieldsList(csvFields);
             csvFieldsValidator.validateFieldsCorrespondenceItem(csvFieldsList);
             correspondenceList.setCsvFields(csvFieldsList);
@@ -450,7 +419,7 @@ public class ClassificationController {
 
     @RequestMapping(value = "/classifications/{id}/correspondsAt", method = RequestMethod.GET)
     public CorrespondenceItemList correspondsAt(@PathVariable Long id,
-            // @formatter:off
+                                                // @formatter:off
                           @RequestParam(value = "targetClassificationId") Long targetClassificationId,
                           @RequestParam(value = "date", required = false) @DateTimeFormat(pattern = RestConstants.DATE_FORMAT) LocalDate date,
                           @RequestParam(value = "csvSeparator", defaultValue = ",") String csvSeparator,
@@ -462,7 +431,7 @@ public class ClassificationController {
         CorrespondenceItemList correspondenceList = correspondsInternal(id, targetClassificationId,
                 new DateRangeHolder(date), csvSeparator, language, includeFuture, inverted);
 
-        if (!csvFields.isEmpty())  {
+        if (!csvFields.isEmpty()) {
             List<String> csvFieldsList = getCsvFieldsList(csvFields);
             csvFieldsValidator.validateFieldsCorrespondenceItem(csvFieldsList);
             correspondenceList.setCsvFields(csvFieldsList);
@@ -472,8 +441,8 @@ public class ClassificationController {
     }
 
     private CorrespondenceItemList correspondsInternal(Long id, Long targetClassificationId,
-            DateRangeHolder dateRangeHolder, String csvSeparator, Language language,
-            Boolean includeFuture, Boolean inverted) {
+                                                       DateRangeHolder dateRangeHolder, String csvSeparator, Language language,
+                                                       Boolean includeFuture, Boolean inverted) {
         List<CorrespondenceDto> correspondences = classificationService.findCorrespondences(id, targetClassificationId,
                 dateRangeHolder.dateRange, language, includeFuture, inverted);
         return new CorrespondenceItemList(csvSeparator, dateRangeHolder.withRange, includeFuture)
@@ -484,43 +453,35 @@ public class ClassificationController {
                 .sort();
     }
 
-    @Transactional
+    @Transactional(rollbackFor = {KlassEmailException.class, MalformedURLException.class})
     @RequestMapping(value = "/classifications/{classificationId}/trackChanges", method = RequestMethod.POST)
-    public ResponseEntity<SubscribeResponse> trackChanges(@PathVariable Long classificationId, @RequestParam(
-            value = "email") String email) {
-        ClassificationSeries classification;
+    public ResponseEntity<SubscribeResponse> trackChanges(
+            @PathVariable Long classificationId,
+            @RequestParam(value = "email") String email
+    ) {
+        ClassificationSeries classification = classificationService.getClassificationSeries(classificationId);
+        if (subscriberService.containsTracking(email, classification)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(SubscribeResponse.EXISTS);
+        }
         try {
-            classification = classificationService.getClassificationSeries(classificationId);
-            if (subscriberService.containsTracking(email, classification)) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(SubscribeResponse.EXISTS);
-            } else {
-                URL endSubscriptionUrl = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(ClassificationController.class)
-                        .removeTracking(classificationId, email)).toUri().toURL();
+            URL endSubscriptionUrl = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(ClassificationController.class)
+                    .removeTracking(classificationId, email)).toUri().toURL();
 
-                String token = subscriberService.trackChanges(email, classification, endSubscriptionUrl);
+            String token = subscriberService.trackChanges(email, classification, endSubscriptionUrl);
 
-                URL verifySubscriptionUrl = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(ClassificationController.class)
-                        .verifyTracking(email, token)).toUri().toURL();
+            URL verifySubscriptionUrl = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(ClassificationController.class)
+                    .verifyTracking(email, token)).toUri().toURL();
 
-                subscriberService.sendVerificationMail(email, verifySubscriptionUrl, classification);
-            }
-        } catch (ClientException e) {
-            log.error(e.getMessage(), e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(SubscribeResponse.UNKNOWN_ERROR);
-        } catch (MalformedURLException e) {
+            subscriberService.sendVerificationMail(email, verifySubscriptionUrl, classification);
+        } catch (KlassEmailException | MalformedURLException e) {
             log.error(e.getMessage(), e);
             // rollback to avoid people signing up without getting verification mail
             // TODO: we should probably make a way to resend verification email instead.
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(SubscribeResponse.EMAIL_PROBLEM);
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(SubscribeResponse.UNKNOWN_ERROR);
         }
-        // return ResponseEntity.ok("An email is sent for verification.");
         return ResponseEntity.ok(SubscribeResponse.CREATED);
     }
 
@@ -534,38 +495,38 @@ public class ClassificationController {
             throw new RestClientException(e.getMessage());
         }
         return ResponseEntity.ok("""
-                                <!DOCTYPE html>
-                                <html>
-                                    <head><title>Klass subscription</title></head>
-                                    <body>
-                                        <header>
-                                            <h2>Klass subscription</h2>
-                                        </header>
-                                        <p>Subscription is deleted.</p>
-                                    </body>
-                                </html>
-                                """);
+                <!DOCTYPE html>
+                <html>
+                    <head><title>Klass subscription</title></head>
+                    <body>
+                        <header>
+                            <h2>Klass subscription</h2>
+                        </header>
+                        <p>Subscription is deleted.</p>
+                    </body>
+                </html>
+                """);
     }
 
-@RequestMapping(value = "/classifications/verifyTracking/{email}/{token}", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
-public ResponseEntity<String> verifyTracking(@PathVariable String email, @PathVariable String token) {
-try {
-subscriberService.verifyTracking(email, token);
-} catch (ClientException e) {
-throw new RestClientException(e.getMessage());
-}
-return ResponseEntity.ok("""
-                            <!DOCTYPE html>
-                            <html>
-                                <head><title>Klass subscription</title></head>
-                                <body>
-                                    <header>
-                                        <h2>Klass subscription</h2>
-                                    </header>
-                                    <p>Subscription is verified.</p>
-                                </body>
-                            </html>
-                            """);
+    @RequestMapping(value = "/classifications/verifyTracking/{email}/{token}", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
+    public ResponseEntity<String> verifyTracking(@PathVariable String email, @PathVariable String token) {
+        try {
+            subscriberService.verifyTracking(email, token);
+        } catch (ClientException e) {
+            throw new RestClientException(e.getMessage());
+        }
+        return ResponseEntity.ok("""
+                <!DOCTYPE html>
+                <html>
+                    <head><title>Klass subscription</title></head>
+                    <body>
+                        <header>
+                            <h2>Klass subscription</h2>
+                        </header>
+                        <p>Subscription is verified.</p>
+                    </body>
+                </html>
+                """);
     }
 
     private void addSearchLink(PagedModel<ClassificationSummaryResource> response) {
