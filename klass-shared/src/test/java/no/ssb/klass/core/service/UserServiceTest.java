@@ -21,7 +21,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.solr.core.SolrTemplate;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -33,15 +32,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
-@ActiveProfiles(ConfigurationProfiles.POSTGRES_EMBEDDED)
+@ActiveProfiles({ConfigurationProfiles.POSTGRES_EMBEDDED, ConfigurationProfiles.MOCK_MAILSERVER})
 @Transactional
 public class UserServiceTest {
 
     // These mocks are necessary to inject a ClassificationService bean for UserServiceImpl
     @MockBean
     private SolrTemplate solrTemplate;
-    @MockBean
-    private JavaMailSender javaMailSender;
 
     @Autowired
     private UserRepository userRepository;
