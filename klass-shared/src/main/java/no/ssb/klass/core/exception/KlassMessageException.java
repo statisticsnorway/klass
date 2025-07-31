@@ -1,6 +1,5 @@
-package no.ssb.klass.core.service;
+package no.ssb.klass.core.exception;
 
-@SuppressWarnings("serial")
 public class KlassMessageException extends Exception {
     public KlassMessageException(String errorMessage) {
         super(errorMessage);

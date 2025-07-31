@@ -30,16 +30,17 @@ spec:
           - name: klass
   env:
     - name: SPRING_PROFILES_ACTIVE
-      value:  api, postgres, solr-remote, skip-indexing
+      value: api, postgres, solr-remote, skip-indexing
     - name: SPRING_DATA_SOLR_HOST
       value: http://klass-solr/solr
-    - name: MESSAGING_POSTMAN_PUBSUB_TOPIC_INCOMING
-      value: projects/sup-t-2r/topics/sup-test-postman-incoming-topic
+    - name: KLASS_ENV_CLIENT_KLASS_MAIL_URL
+      value: http://klass-mail
 
   accessPolicy:
     outbound:
       rules:
         - application: klass-solr
+        - application: klass-mail
 
   prometheus:
     enabled: true

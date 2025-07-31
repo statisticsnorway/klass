@@ -1,22 +1,8 @@
 package no.ssb.klass.core.service;
 
 import com.google.common.collect.Lists;
-import no.ssb.klass.core.model.ClassificationEntityOperations;
-import no.ssb.klass.core.model.ClassificationFamily;
-import no.ssb.klass.core.model.ClassificationItem;
-import no.ssb.klass.core.model.ClassificationSeries;
-import no.ssb.klass.core.model.ClassificationType;
-import no.ssb.klass.core.model.ClassificationVariant;
-import no.ssb.klass.core.model.ClassificationVersion;
-import no.ssb.klass.core.model.CorrespondenceMap;
-import no.ssb.klass.core.model.CorrespondenceTable;
-import no.ssb.klass.core.model.Language;
-import no.ssb.klass.core.model.Level;
-import no.ssb.klass.core.model.MigratedFrom;
-import no.ssb.klass.core.model.ReferencingClassificationItem;
-import no.ssb.klass.core.model.StatisticalClassification;
-import no.ssb.klass.core.model.StatisticalUnit;
-import no.ssb.klass.core.model.User;
+import no.ssb.klass.core.exception.KlassMessageException;
+import no.ssb.klass.core.model.*;
 import no.ssb.klass.core.repository.*;
 import no.ssb.klass.core.service.dto.CodeDto;
 import no.ssb.klass.core.service.dto.CorrespondenceDto;
@@ -31,13 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -251,7 +231,7 @@ public class ClassificationServiceImpl implements ClassificationService {
     }
 
     private Set<CorrespondenceMap> findCorrespondenceMapsReferencing(ClassificationItem classificationItem,
-            boolean deleted) {
+                                                                     boolean deleted) {
         return correspondenceMapRepository.findBySourceOrTarget(classificationItem, deleted);
     }
 
@@ -292,8 +272,8 @@ public class ClassificationServiceImpl implements ClassificationService {
     @Override
     @Transactional(readOnly = true)
     public List<CorrespondenceDto> findCorrespondences(Long sourceClassificationId, Long targetClassificationId,
-            DateRange dateRange, Language language, Boolean includeFuture,
-            Boolean inverted) {
+                                                       DateRange dateRange, Language language, Boolean includeFuture,
+                                                       Boolean inverted) {
         checkNotNull(dateRange);
         checkNotNull(language);
         ClassificationSeries sourceClassification = getClassificationSeries(sourceClassificationId);
@@ -311,17 +291,17 @@ public class ClassificationServiceImpl implements ClassificationService {
     }
 
     public static String createCorrespondenceNotFoundErrorMessage(ClassificationSeries sourceClassification,
-            ClassificationSeries targetClassification) {
+                                                                  ClassificationSeries targetClassification) {
         return "Classification '" + sourceClassification.getName(Language.getDefault())
                 + "' has no correspondence table with Classification '" + targetClassification.getName(Language
-                        .getDefault())
+                .getDefault())
                 + "'";
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<CodeDto> findVariantClassificationCodes(Long id, String variantName, Language language,
-            DateRange dateRange, Boolean includeFuture) {
+                                                        DateRange dateRange, Boolean includeFuture) {
         checkNotNull(variantName);
         checkNotNull(language);
         checkNotNull(dateRange);
@@ -333,7 +313,7 @@ public class ClassificationServiceImpl implements ClassificationService {
     @Override
     @Transactional(readOnly = true)
     public List<CodeDto> findClassificationCodes(Long id, DateRange dateRange, Language language,
-            Boolean includeFuture) {
+                                                 Boolean includeFuture) {
         checkNotNull(dateRange);
         checkNotNull(language);
         ClassificationSeries classification = getClassificationSeries(id);
@@ -394,7 +374,7 @@ public class ClassificationServiceImpl implements ClassificationService {
     @Override
     @Transactional(readOnly = true)
     public List<ClassificationFamilySummary> findAllClassificationFamilySummaries(String section,
-            ClassificationType classificationType) {
+                                                                                  ClassificationType classificationType) {
         return classificationFamilySummaryBuilder.buildClassificationSummaries(section, classificationType);
     }
 
@@ -486,7 +466,7 @@ public class ClassificationServiceImpl implements ClassificationService {
     }
 
     private void makeNotOwnerErrorMessage(User user, ClassificationEntityOperations entity, User owner,
-            StringBuilder errorMsg) {
+                                          StringBuilder errorMsg) {
         errorMsg.append("siden du er ikke eier av den\n");
         errorMsg.append("Bare eier og administrator kan slette denne.");
     }
@@ -558,7 +538,7 @@ public class ClassificationServiceImpl implements ClassificationService {
                 .collect(toSet());
 
         result.addAll(referencingCorrespondenceTables.stream().map(table -> table.getNameInPrimaryLanguage()
-                + " ID=" + table.getId()) // Also returns ID for error printing
+                        + " ID=" + table.getId()) // Also returns ID for error printing
                 .collect(toSet()));
 
         return result;
@@ -602,7 +582,7 @@ public class ClassificationServiceImpl implements ClassificationService {
     @Override
     @Transactional(readOnly = true)
     public List<CorrespondenceTable> findCorrespondenceTablesBetween(ClassificationVersion version1, Level level1,
-            ClassificationVersion version2, Level level2) {
+                                                                     ClassificationVersion version2, Level level2) {
         if (level1 != null) {
             checkArgument(version1.equals(level1.getStatisticalClassification()));
         }

@@ -16,6 +16,7 @@ spec:
         - host: auth.test.ssb.no
       rules:
         - application: klass-solr
+        - application: klass-mail
   login:
     provider: openid
     enforce:

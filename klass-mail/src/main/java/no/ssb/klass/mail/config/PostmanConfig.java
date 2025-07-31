@@ -1,12 +1,10 @@
-package no.ssb.klass.core.config;
+package no.ssb.klass.mail.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Profile;
 import org.springframework.lang.NonNull;
 import org.springframework.validation.annotation.Validated;
 
 @Validated
-@Profile("!" + ConfigurationProfiles.MOCK_MAILSERVER)
 @ConfigurationProperties(prefix = "messaging.postman")
 public class PostmanConfig {
 
