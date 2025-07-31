@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.concurrent.TimeUnit;
+
 @Service
 public class PostmanService implements MailService {
 
@@ -40,7 +42,12 @@ public class PostmanService implements MailService {
         EmailRequest emailRequest = new EmailRequest(email, postmanConfig.getFromDisplayName());
         String topic = postmanConfig.getPubsubTopicIncoming();
         PubsubMessage message = pubsubMessageOf(new MessageRequest(emailRequest));
-        pubSubPublisher.publish(topic, message);
+        try {
+            pubSubPublisher.publish(topic, message).get(10L, TimeUnit.SECONDS);
+        } catch (Exception e) {
+            log.error("Could not publish message to topic to send email", e);
+            throw new RuntimeException(e);
+        }
         log.debug("Postman published {} to topic {}", message.getMessageId(), topic);
     }
 

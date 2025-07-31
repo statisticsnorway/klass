@@ -33,8 +33,8 @@ spec:
       value: api, postgres, solr-remote, skip-indexing
     - name: SPRING_DATA_SOLR_HOST
       value: http://klass-solr/solr
-    - name: KLASS_ENV_CLIENT_KLASS_MAIL_HOST
-      value: klass-mail
+    - name: KLASS_ENV_CLIENT_KLASS_MAIL_URL
+      value: http://klass-mail
 
   accessPolicy:
     outbound:

@@ -1,18 +1,7 @@
 package no.ssb.klass.core.service;
 
-import no.ssb.klass.core.model.ClassificationFamily;
-import no.ssb.klass.core.model.ClassificationItem;
-import no.ssb.klass.core.model.ClassificationSeries;
-import no.ssb.klass.core.model.ClassificationType;
-import no.ssb.klass.core.model.ClassificationVariant;
-import no.ssb.klass.core.model.ClassificationVersion;
-import no.ssb.klass.core.model.CorrespondenceTable;
-import no.ssb.klass.core.model.Language;
-import no.ssb.klass.core.model.Level;
-import no.ssb.klass.core.model.MigratedFrom;
-import no.ssb.klass.core.model.StatisticalClassification;
-import no.ssb.klass.core.model.StatisticalUnit;
-import no.ssb.klass.core.model.User;
+import no.ssb.klass.core.exception.KlassMessageException;
+import no.ssb.klass.core.model.*;
 import no.ssb.klass.core.repository.ClassificationFamilySummary;
 import no.ssb.klass.core.service.dto.CodeDto;
 import no.ssb.klass.core.service.dto.CorrespondenceDto;
@@ -42,8 +31,7 @@ public interface ClassificationService {
      * Save ClassificationSeries. Note that the classification is not indexed for search. Front end (Vaadin) code shall
      * use {@link no.ssb.klass.designer.service.ClassificationFacade} which has methods for saving and indexing.
      *
-     * @param classification
-     *            classification to save
+     * @param classification classification to save
      * @return updated classification after saving
      */
     ClassificationSeries saveNotIndexClassification(ClassificationSeries classification);
@@ -56,8 +44,7 @@ public interface ClassificationService {
      * <p>
      * This is expected mostly/only to be used by integration tests
      *
-     * @param classification
-     *            classification to save and index for search
+     * @param classification classification to save and index for search
      * @return updated classification after saving
      */
     ClassificationSeries saveAndIndexClassification(ClassificationSeries classification);
@@ -66,8 +53,7 @@ public interface ClassificationService {
      * Save ClassificationVersion. Note that the version is not indexed for search. Front end (Vaadin) code shall use
      * {@link no.ssb.klass.designer.service.ClassificationFacade} which has methods for saving and indexing.
      *
-     * @param version
-     *            version to save
+     * @param version version to save
      * @return updated version after saving
      */
     ClassificationVersion saveNotIndexVersion(ClassificationVersion version);
@@ -76,8 +62,7 @@ public interface ClassificationService {
      * Save ClassificationVariant. Note that the variant is not indexed for search. Front end (Vaadin) code shall use
      * {@link no.ssb.klass.designer.service.ClassificationFacade} which has methods for saving and indexing.
      *
-     * @param variant
-     *            variant to save
+     * @param variant variant to save
      * @return updated variant after saving
      */
     ClassificationVariant saveNotIndexVariant(ClassificationVariant variant);
@@ -86,8 +71,7 @@ public interface ClassificationService {
      * Save CorrespondenceTable. Note that the correspondenceTable is not indexed for search. Front end (Vaadin) code
      * shall use {@link no.ssb.klass.designer.service.ClassificationFacade} which has methods for saving and indexing.
      *
-     * @param correspondenceTable
-     *            correspondenceTable to save
+     * @param correspondenceTable correspondenceTable to save
      * @return updated correspondenceTable after saving
      */
     CorrespondenceTable saveNotIndexCorrespondenceTable(CorrespondenceTable correspondenceTable);
@@ -99,8 +83,7 @@ public interface ClassificationService {
      *
      * @param id
      * @return ClassificationSeries, never null
-     * @throws no.ssb.klass.core.util.KlassResourceNotFoundException
-     *             if no ClassificationSeries found with id
+     * @throws no.ssb.klass.core.util.KlassResourceNotFoundException if no ClassificationSeries found with id
      */
     ClassificationSeries getClassificationSeries(Long id);
 
@@ -110,8 +93,7 @@ public interface ClassificationService {
      *
      * @param id
      * @return ClassificationSeries, never null
-     * @throws no.ssb.klass.core.util.KlassResourceNotFoundException
-     *             if no ClassificationSeries found with id
+     * @throws no.ssb.klass.core.util.KlassResourceNotFoundException if no ClassificationSeries found with id
      */
     ClassificationSeries getClassificationSeriesFullyInitialized(Long id);
 
@@ -120,8 +102,7 @@ public interface ClassificationService {
      *
      * @param id
      * @return ClassificationVersion, never null
-     * @throws no.ssb.klass.core.util.KlassResourceNotFoundException
-     *             if no ClassificationVersion found with id
+     * @throws no.ssb.klass.core.util.KlassResourceNotFoundException if no ClassificationVersion found with id
      */
     ClassificationVersion getClassificationVersion(Long id);
 
@@ -130,8 +111,7 @@ public interface ClassificationService {
      *
      * @param id
      * @return ClassificationVariant, never null
-     * @throws no.ssb.klass.core.util.KlassResourceNotFoundException
-     *             if no ClassificationVariant found with id
+     * @throws no.ssb.klass.core.util.KlassResourceNotFoundException if no ClassificationVariant found with id
      */
     ClassificationVariant getClassificationVariant(Long id);
 
@@ -140,8 +120,7 @@ public interface ClassificationService {
      *
      * @param id
      * @return CorrespondenceTable, never null
-     * @throws no.ssb.klass.core.util.KlassResourceNotFoundException
-     *             if no CorrespondenceTable found with id
+     * @throws no.ssb.klass.core.util.KlassResourceNotFoundException if no CorrespondenceTable found with id
      */
     CorrespondenceTable getCorrespondenceTable(long id);
 
@@ -150,8 +129,7 @@ public interface ClassificationService {
      *
      * @param id
      * @return ClassificationFamily, never null
-     * @throws no.ssb.klass.core.util.KlassResourceNotFoundException
-     *             if no ClassificationFamily found with id
+     * @throws no.ssb.klass.core.util.KlassResourceNotFoundException if no ClassificationFamily found with id
      */
     ClassificationFamily getClassificationFamily(long id);
 
@@ -163,17 +141,15 @@ public interface ClassificationService {
 
     List<StatisticalUnit> findClassificationStatisticalUnit(StatisticalUnit statUnit);
 
-        /**
-         * Find all classificationFamilySummaries
-         *
-         * @param section
-         *            null means all sections
-         * @param classificationType
-         *            null means all classificationTypes
-         * @return classificationFamilySummaries
-         */
+    /**
+     * Find all classificationFamilySummaries
+     *
+     * @param section            null means all sections
+     * @param classificationType null means all classificationTypes
+     * @return classificationFamilySummaries
+     */
     List<ClassificationFamilySummary> findAllClassificationFamilySummaries(String section,
-            ClassificationType classificationType);
+                                                                           ClassificationType classificationType);
 
     List<ClassificationFamilySummary> findPublicClassificationFamilySummaries(
             String section, ClassificationType classificationType);
@@ -196,7 +172,7 @@ public interface ClassificationService {
     /**
      * Finds all sections that is responsible for at least one classification with at least one version published in at
      * least one language.
-     *
+     * <p>
      * (Intended for use with Klass WEB/JS to avoid confusion as only published data is shown ).
      *
      * @return set of classifications responsible sections
@@ -210,8 +186,7 @@ public interface ClassificationService {
      * <p>
      * Also classification is not actually deleted from database, but only marked as deleted.
      *
-     * @param classification
-     *            classification to delete
+     * @param classification classification to delete
      */
     void deleteNotIndexClassification(User currentUser, ClassificationSeries classification)
             throws KlassMessageException;
@@ -223,8 +198,7 @@ public interface ClassificationService {
      * <p>
      * Also variant is not actually deleted from database, but only marked as deleted.
      *
-     * @param variant
-     *            variant to delete
+     * @param variant variant to delete
      */
     void deleteNotIndexVariant(User user, ClassificationVariant variant) throws KlassMessageException;
 
@@ -235,8 +209,7 @@ public interface ClassificationService {
      * <p>
      * Also version is not actually deleted from database, but only marked as deleted.
      *
-     * @param version
-     *            version to delete
+     * @param version version to delete
      */
     void deleteNotIndexVersion(User user, ClassificationVersion version) throws KlassMessageException;
 
@@ -247,8 +220,7 @@ public interface ClassificationService {
      * <p>
      * Also correspondenceTable is not actually deleted from database, but only marked as deleted.
      *
-     * @param correspondenceTable
-     *            correspondenceTable to delete
+     * @param correspondenceTable correspondenceTable to delete
      */
     void deleteNotIndexCorrespondenceTable(User user, CorrespondenceTable correspondenceTable)
             throws KlassMessageException;
@@ -272,8 +244,7 @@ public interface ClassificationService {
      * ClassificationVariant may reference classificationItems in its base ClassificationVersion. Similarly a
      * CorrespondenceTable will reference classificationItems in target and source ClassificationVersion.
      *
-     * @param classificationItem
-     *            classificationItem to check if is referenced, null not allowed
+     * @param classificationItem classificationItem to check if is referenced, null not allowed
      * @return names for ClassificationVariants and CorrespondenceTables that refer to classificationItem
      */
     Set<String> findReferencesOfClassificationItem(ClassificationItem classificationItem);
@@ -296,7 +267,7 @@ public interface ClassificationService {
      * @return all correspondenceTables between specified versions (and levels)
      */
     List<CorrespondenceTable> findCorrespondenceTablesBetween(ClassificationVersion version1, Level level1,
-            ClassificationVersion version2, Level level2);
+                                                              ClassificationVersion version2, Level level2);
 
 
 }

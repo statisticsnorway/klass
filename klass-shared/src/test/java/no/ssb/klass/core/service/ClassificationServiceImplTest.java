@@ -1,19 +1,14 @@
 package no.ssb.klass.core.service;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+import no.ssb.klass.core.exception.KlassMessageException;
 import no.ssb.klass.core.model.*;
 import no.ssb.klass.core.repository.*;
+import no.ssb.klass.core.util.DateRange;
+import no.ssb.klass.core.util.KlassResourceNotFoundException;
+import no.ssb.klass.core.util.Translatable;
+import no.ssb.klass.testutil.TestUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,13 +20,12 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
+import java.time.LocalDate;
+import java.util.*;
 
-import no.ssb.klass.core.util.DateRange;
-import no.ssb.klass.core.util.KlassResourceNotFoundException;
-import no.ssb.klass.core.util.Translatable;
-import no.ssb.klass.testutil.TestUtil;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
 
 public class ClassificationServiceImplTest {
     private ClassificationServiceImpl subject;
@@ -334,7 +328,6 @@ public class ClassificationServiceImplTest {
         subject.deleteNotIndexClassification(classification.getContactPerson(), classification);
         verify(classificationSeriesRepositoryMock, times(1)).save(classification);
     }
-
 
 
     @Test
