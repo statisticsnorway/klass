@@ -17,7 +17,7 @@
         <github.repository>statisticsnorway/klass</github.repository>
         <!-- Klass dependencies are built with support for Java 8 and Spring Boot 1.4.4.
              Newer versions are not supported -->
-        <klass-shared-version>2.2.7</klass-shared-version>
+        <klass-shared-version>2.2.8</klass-shared-version>
         <klass-solr-version>2.1.7</klass-solr-version>
         <!-- Vaadin 7.7.17 was the last public open-source version of the Vaadin 7 framework.
              See https://vaadin.com/support/vaadin-7-extended-maintenance  -->
