@@ -50,18 +50,18 @@ public class MailServiceImpl implements MailService {
     }
 
     private static class Email {
-        private final String string;
+        private final String to;
         private final String subject;
         private final String body;
 
         public Email(String to, String subject, String body) {
-            string = to;
+            this.to = to;
             this.subject = subject;
             this.body = body;
         }
 
-        public String getString() {
-            return string;
+        public String getTo() {
+            return to;
         }
 
         public String getSubject() {
