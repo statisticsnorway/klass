@@ -39,7 +39,7 @@ spec:
       value: /oauth2/logout
     - name: SPRING_DATA_SOLR_HOST
       value: http://klass-solr/solr/
-    - name: KLASS_ENV_HOST
+    - name: KLASS_ENV_SERVER
       value: klass-forvaltning.intern.test.ssb.no
     - name: KLASS_ENV_CLIENT_KLASS_MAIL_URL
       value: http://klass-mail
