@@ -1,21 +1,23 @@
-package no.ssb.klass.designer.service;
-
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.Optional;
-
-import org.junit.jupiter.api.Test;
+package no.ssb.klass;
 
 import no.ssb.klass.core.model.Changelog;
 import no.ssb.klass.core.model.ClassificationSeries;
 import no.ssb.klass.core.model.ClassificationVersion;
 import no.ssb.klass.core.model.Language;
+import no.ssb.klass.designer.service.InformSubscribers;
 import no.ssb.klass.testutil.TestUtil;
+import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class InformSubscribersTest {
     @Test
     public void createNotInformSubscribers() {
-        assertEquals(false, InformSubscribers.createNotInformSubscribers().isInformSubscribers());
+        Assertions.assertFalse(InformSubscribers.createNotInformSubscribers().isInformSubscribers());
     }
 
     @Test
@@ -28,7 +30,7 @@ public class InformSubscribersTest {
         boolean result = subject.isInformSubscribers();
 
         // then
-        assertEquals(false, result);
+        assertFalse(result);
     }
 
     @Test
@@ -42,7 +44,7 @@ public class InformSubscribersTest {
         boolean result = subject.isInformSubscribers();
 
         // then
-        assertEquals(true, result);
+        assertTrue(result);
     }
 
     @Test
@@ -56,7 +58,7 @@ public class InformSubscribersTest {
         boolean result = subject.isInformSubscribers();
 
         // then
-        assertEquals(false, result);
+        assertFalse(result);
     }
 
     @Test
@@ -71,7 +73,7 @@ public class InformSubscribersTest {
         boolean result = subject.isInformSubscribers();
 
         // then
-        assertEquals(true, result);
+        assertTrue(result);
     }
 
     private ClassificationVersion createUnpublishedVersion() {

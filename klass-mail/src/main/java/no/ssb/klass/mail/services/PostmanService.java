@@ -38,7 +38,7 @@ public class PostmanService implements MailService {
 
     @Override
     public void sendMail(Email email) {
-        log.debug("Postman sending mail to {} with subject {}", email.to(), email.subject());
+        log.info("Sending mail to {} with subject {}", email.to(), email.subject());
         EmailRequest emailRequest = new EmailRequest(email, postmanConfig.getFromDisplayName());
         String topic = postmanConfig.getPubsubTopicIncoming();
         PubsubMessage message = pubsubMessageOf(new MessageRequest(emailRequest));
