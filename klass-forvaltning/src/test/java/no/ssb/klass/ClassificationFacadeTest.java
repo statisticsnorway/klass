@@ -1,31 +1,26 @@
-package no.ssb.klass.designer.service;
+package no.ssb.klass;
 
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.*;
-
-import java.util.Optional;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import no.ssb.klass.core.model.Changelog;
-import no.ssb.klass.core.model.ClassificationSeries;
-import no.ssb.klass.core.model.ClassificationVariant;
-import no.ssb.klass.core.model.ClassificationVersion;
-import no.ssb.klass.core.model.CorrespondenceTable;
-import no.ssb.klass.core.model.Language;
+import no.ssb.klass.core.model.*;
 import no.ssb.klass.core.service.ChangeLogService;
 import no.ssb.klass.core.service.ClassificationService;
 import no.ssb.klass.core.service.SearchService;
 import no.ssb.klass.core.service.SubscriberService;
+import no.ssb.klass.designer.service.ClassificationFacade;
+import no.ssb.klass.designer.service.InformSubscribers;
 import no.ssb.klass.testutil.TestUtil;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.Optional;
+
+import static org.mockito.Mockito.*;
 
 public class ClassificationFacadeTest {
     private ClassificationFacade subject;
     private SubscriberService subscriberServiceMock;
     private ChangeLogService ChangeLogServiceMock;
 
-    @BeforeEach
+    @Before
     public void setup() {
         subscriberServiceMock = mock(SubscriberService.class);
         ChangeLogServiceMock = mock(ChangeLogService.class);
