@@ -5,7 +5,7 @@ on:
     types: [ published ]
   push:
     branches:
-      - nais-migration
+     # - nais-migration
     paths:
       - "klass-forvaltning/**"
       - ".nais/**/klass-forvaltning.yaml"
