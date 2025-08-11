@@ -86,13 +86,19 @@ The `MigrationTestConfig` class provides methods to retrieve host values for the
 Returns the source base URL by checking the following, in order:
 1. Property: `source.service.host`
 2. Environment variable: `SOURCE_SERVICE_HOST`
-3. Default fallback: `http://localhost:8081`
+3. Default fallback: `http://localhost:8082`
+
+Source Klass Api SSB url: use constant `DATA_SSB_HOST`
 
 ### `getTargetHost()`
 Returns the target base URL by checking the following, in order:
 1. Property: `target.service.host`
 2. Environment variable: `TARGET_SERVICE_HOST`
 3. Default fallback: `http://localhost:8080`
+
+Target Klass Api Nais Test url: use constant `NAIS_TEST_HOSTNAIS_TEST_HOST`
+
+Set system property: `System.setProperty("<property name>", "<host name>");`
 
 ## Details and Running the Tests
 
