@@ -35,9 +35,8 @@ public abstract class AbstractKlassApiDataIntegrityTest {
     protected static String section320 = "320 - Seksjon for befolkningsstatistikk";
 
 
-    public static final String sourceHost = MigrationTestConfig.getSourceHost();
-
-    public static final String targetHost = MigrationTestConfig.getTargetHost();
+    public static String sourceHost;
+    public static String targetHost;
 
     protected static List<String> ssbSectionNames = new ArrayList<>();
 
@@ -75,6 +74,10 @@ public abstract class AbstractKlassApiDataIntegrityTest {
 
     @BeforeAll
     static void beforeAll() {
+
+        sourceHost = MigrationTestConfig.getSourceHost();
+        targetHost = MigrationTestConfig.getTargetHost();
+
         klassApiMigrationClient = new KlassApiMigrationClient();
 
         paramsLanguageEn.put(LANGUAGE, EN);
@@ -97,7 +100,8 @@ public abstract class AbstractKlassApiDataIntegrityTest {
     }
 
     @AfterAll
-    public static void cleanUp(){
+    public static void cleanUp() {
         System.out.println("Cleanup after tests");
+
     }
 }
