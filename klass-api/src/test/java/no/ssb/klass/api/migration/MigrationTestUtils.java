@@ -200,7 +200,7 @@ public class MigrationTestUtils {
             String targetDate = getDate(targetField);
             System.out.println("Comparing timestamp values: " + sourceDate + " -> " + targetDate);
             assertThat(sourceDate).withFailMessage(FAIL_MESSAGE,
-                    pathName, sourceField, targetField)
+                    pathName, sourceDate, targetDate)
                     .isEqualTo(targetDate);
         }
 
@@ -300,7 +300,7 @@ public class MigrationTestUtils {
                 System.out.println("Comparing timestamp values: " + sourceDate + " -> " + targetDate);
 
                 assertThat(sourceDate).withFailMessage(FAIL_MESSAGE,
-                                pathName, sourceField, targetField)
+                                pathName, sourceDate, targetDate)
                         .isEqualTo(targetDate);
             }
 
@@ -382,7 +382,7 @@ public class MigrationTestUtils {
                     String targetDate = getDate(targetField);
                     System.out.println("Comparing timestamp values: " + sourceDate + " -> " + targetDate);
                     assertThat(sourceDate).withFailMessage(FAIL_MESSAGE,
-                                    pathName, sourceField, targetField)
+                                    pathName, sourceDate, targetDate)
                             .isEqualTo(targetDate);
                 }
                 else if (pathName.equals(OWNING_SECTION)) {
@@ -432,7 +432,7 @@ public class MigrationTestUtils {
                 System.out.println("Comparing timestamp values: " + sourceDate + " -> " + targetDate);
 
                 assertThat(sourceDate).withFailMessage(FAIL_MESSAGE,
-                                pathName, sourcePath, targetPath)
+                                pathName, sourceDate, targetDate)
                         .isEqualTo(targetDate);
             }
 
@@ -519,7 +519,7 @@ public class MigrationTestUtils {
                     System.out.println("Comparing timestamp values: " + sourceDate + " -> " + targetDate);
 
                     assertThat(sourceDate).withFailMessage(FAIL_MESSAGE,
-                                    pathName, sourceField, targetField)
+                                    pathName, sourceDate, targetDate)
                             .isEqualTo(targetDate);
                 }
 
