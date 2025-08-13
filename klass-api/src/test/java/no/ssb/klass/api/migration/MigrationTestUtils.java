@@ -45,7 +45,41 @@ public class MigrationTestUtils {
         }
     }
 
+    /**
+     * Extracts the date part from a full datetime object.
+     *
+     * @param dateTime the full datetime object as input
+     * @return the extracted date as a formatted string (yyyy-MM-dd)
+     */
+    private static String getDate(Object dateTime) {
+        String dateTimeStr = Objects.toString(dateTime, "");
+        OffsetDateTime odt = OffsetDateTime.parse(dateTimeStr,
+                DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ"));
 
+        return odt.toLocalDate().format(formatter);
+    }
+
+    /**
+     * Extracts the section number from a section object by converting it to string.
+     *
+     * @param section the object containing section number and name (converted to string)
+     * @return the section number part before the " - " delimiter, or empty string if none
+     */
+    private static String getSectionNumber(Object section) {
+        String sectionStr = Objects.toString(section, "");
+        String[] parts = sectionStr.split(" - ", 2);
+
+        return parts[0];
+    }
+
+
+    /**
+     * Navigates a nested map using a dot-separated path and returns the value at that path.
+     *
+     * @param map  the root map to search within
+     * @param path dot-separated keys indicating the nested path
+     * @return the value found at the given path, or null if any key is missing or not a map
+     */
     private static Object resolvePath(Map<String, Object> map, String path) {
         String[] parts = path.split("\\.");
         Object current = map;
@@ -81,6 +115,13 @@ public class MigrationTestUtils {
        return true;
     }
 
+    /**
+     * Generates a random date between the given start and end dates (inclusive).
+     *
+     * @param startDate the start of the date range
+     * @param endDate   the end of the date range
+     * @return a random {@link LocalDate} between startDate and endDate
+     */
     public static LocalDate generateRandomDate(LocalDate startDate, LocalDate endDate) {
         long daysBetween = ChronoUnit.DAYS.between(startDate, endDate);
         Random random = new Random();
@@ -88,6 +129,13 @@ public class MigrationTestUtils {
         return startDate.plusDays(randomDay);
     }
 
+
+    /**
+     * Generates a random integer between 0 (inclusive) and the specified upper bound (exclusive).
+     *
+     * @param to the upper bound (exclusive) for the generated random number
+     * @return a random integer >= 0 and < to
+     */
     public static Integer generateRandomId(int to) {
         Random random = new Random();
         return random.nextInt(to);
@@ -107,6 +155,14 @@ public class MigrationTestUtils {
                 .isEqualTo(targetStatusCode);
     }
 
+    /**
+     * Converts a list of maps into a map indexed by the specified field's value.
+     *
+     * @param list  the list of maps to be transformed
+     * @param field the key to use as the new map's keys
+     * @return a map where each key is the value of the specified field from the list's items,
+     *         and the value is the corresponding map from the list
+     */
     private static Map<Object, Map<String, Object>> mapByField(List<Map<String, Object>> list, String field) {
         return list.stream()
                 .filter(item -> item.containsKey(field) && item.get(field) != null)
@@ -139,8 +195,25 @@ public class MigrationTestUtils {
                     .withFailMessage(FAIL_MESSAGE, pathName, null, targetField)
                     .isNull();
         }
+        if (pathName.equals(LAST_MODIFIED)) {
+            String sourceDate = getDate(sourceField);
+            String targetDate = getDate(targetField);
+            System.out.println("Comparing timestamp values: " + sourceDate + " -> " + targetDate);
+            assertThat(sourceDate).withFailMessage(FAIL_MESSAGE,
+                    pathName, sourceDate, targetDate)
+                    .isEqualTo(targetDate);
+        }
 
-        if (pathName.endsWith(HREF)) {
+        else if (pathName.equals(OWNING_SECTION)) {
+            String sourceSectionNumber = getSectionNumber(sourceField);
+            String targetSectionNumber = getSectionNumber(targetField);
+            System.out.println("Comparing owning section: " + sourceSectionNumber + " -> " + targetSectionNumber);
+            assertThat(sourceSectionNumber).withFailMessage(FAIL_MESSAGE,
+                            pathName, sourceField, targetField)
+                    .isEqualTo(targetSectionNumber);
+        }
+
+        else if (pathName.endsWith(HREF)) {
             String sourceHref = Objects.toString(sourceField, "");
             String targetHref = Objects.toString(targetField, "");
             if (sourceHref.isEmpty()) {
@@ -169,6 +242,8 @@ public class MigrationTestUtils {
         ArrayList<String> sourceList = sourceResponse.path(pathListName);
         ArrayList<String> targetList = targetResponse.path(pathListName);
 
+        System.out.println("Checking pathname: " + pathListName);
+
         if (sourceList == null) {
             assertThat(targetList)
                     .withFailMessage(FAIL_MESSAGE, pathListName, null, targetList)
@@ -181,6 +256,7 @@ public class MigrationTestUtils {
                 .isNotNull();
 
         System.out.println("List sizes: " + sourceList.size() + " -> " + targetList.size());
+
         assertThat(sourceList.size())
                 .withFailMessage(FAIL_MESSAGE,
                         pathListName, sourceList.size(), targetList.size())
@@ -208,6 +284,7 @@ public class MigrationTestUtils {
 
         for (String pathName : pathNames) {
             System.out.println("Checking pathname: " + pathName);
+
             Object sourceField = sourceResponse.path(pathName);
             Object targetField = targetResponse.path(pathName);
 
@@ -216,8 +293,27 @@ public class MigrationTestUtils {
                         .withFailMessage(FAIL_MESSAGE, pathName, null, targetField)
                         .isNull();
             }
+            if (pathName.equals(LAST_MODIFIED)) {
+                String sourceDate = getDate(sourceField);
+                String targetDate = getDate(targetField);
 
-            if (pathName.endsWith(HREF)) {
+                System.out.println("Comparing timestamp values: " + sourceDate + " -> " + targetDate);
+
+                assertThat(sourceDate).withFailMessage(FAIL_MESSAGE,
+                                pathName, sourceDate, targetDate)
+                        .isEqualTo(targetDate);
+            }
+
+            else if (pathName.equals(OWNING_SECTION)) {
+                String sourceSectionNumber = getSectionNumber(sourceField);
+                String targetSectionNumber = getSectionNumber(targetField);
+                System.out.println("Comparing owning section: " + sourceSectionNumber + " -> " + targetSectionNumber);
+                assertThat(sourceSectionNumber).withFailMessage(FAIL_MESSAGE,
+                                pathName, sourceField, targetField)
+                        .isEqualTo(targetSectionNumber);
+            }
+
+            else if (pathName.endsWith(HREF)) {
                 String sourceHref = Objects.toString(sourceField, "");
                 String targetHref = Objects.toString(targetField, "");
                 if (sourceHref.isEmpty()) {
@@ -248,6 +344,8 @@ public class MigrationTestUtils {
     public static void validatePathListWithObjects(Response sourceResponse, Response targetResponse, String listName, List<String> pathNames, String idField) {
         List<Map<String, Object>> sourceList = sourceResponse.path(listName);
         List<Map<String, Object>> targetList = targetResponse.path(listName);
+
+        System.out.println("Checking list name: " + listName);
         if (sourceList == null) {
             assertThat(targetList)
                     .withFailMessage(FAIL_MESSAGE, listName, null, targetList)
@@ -259,8 +357,11 @@ public class MigrationTestUtils {
                 .withFailMessage(FAIL_MESSAGE, listName, sourceList, targetList)
                 .isNotNull();
 
-        assertThat(sourceList.size()).isEqualTo(targetList.size());
         System.out.println("List sizes: " + sourceList.size() + " -> " + targetList.size());
+
+        assertThat(sourceList.size())
+                .withFailMessage("Expected size to be <%d> but was <%d>", targetList.size(), sourceList.size())
+                .isEqualTo(targetList.size());
 
         Map<Object, Map<String, Object>> sourceById = mapByField(sourceList, idField);
         Map<Object, Map<String, Object>> targetById = mapByField(targetList, idField);
@@ -271,10 +372,28 @@ public class MigrationTestUtils {
 
             for (String pathName : pathNames) {
 
+                System.out.println("Checking pathname: " + pathName);
+
                 Object sourceField = resolvePath(versionSource, pathName);
                 Object targetField = resolvePath(versionTarget, pathName);
 
-                if (pathName.endsWith(HREF)) {
+                if (pathName.equals(LAST_MODIFIED)) {
+                    String sourceDate = getDate(sourceField);
+                    String targetDate = getDate(targetField);
+                    System.out.println("Comparing timestamp values: " + sourceDate + " -> " + targetDate);
+                    assertThat(sourceDate).withFailMessage(FAIL_MESSAGE,
+                                    pathName, sourceDate, targetDate)
+                            .isEqualTo(targetDate);
+                }
+                else if (pathName.equals(OWNING_SECTION)) {
+                    String sourceSectionNumber = getSectionNumber(sourceField);
+                    String targetSectionNumber = getSectionNumber(targetField);
+                    System.out.println("Comparing owning section: " + sourceSectionNumber + " -> " + targetSectionNumber);
+                    assertThat(sourceSectionNumber).withFailMessage(FAIL_MESSAGE,
+                                    pathName, sourceField, targetField)
+                            .isEqualTo(targetSectionNumber);
+                }
+                else if (pathName.endsWith(HREF)) {
                     assertThat(sourceField == null && targetField == null ||
                             sourceField != null && targetField != null && isPathEqualIgnoreHost(sourceField.toString(), targetField.toString()))
                             .withFailMessage(FAIL_MESSAGE, pathName, sourceField, targetField)
@@ -300,10 +419,32 @@ public class MigrationTestUtils {
         XmlPath xmlPathTarget = extractXmlPaths(sourceResponse, targetResponse)[1];
 
         for(String pathName : pathNames) {
+
+            System.out.println("Checking pathname: " + pathName);
+
             Object sourcePath = xmlPathSource.get(pathName);
             Object targetPath = xmlPathTarget.get(pathName);
 
-            if (pathName.endsWith(HREF)) {
+            if (pathName.equals(CLASSIFICATION_LAST_MODIFIED)) {
+                String sourceDate = getDate(sourcePath);
+                String targetDate = getDate(targetPath);
+
+                System.out.println("Comparing timestamp values: " + sourceDate + " -> " + targetDate);
+
+                assertThat(sourceDate).withFailMessage(FAIL_MESSAGE,
+                                pathName, sourceDate, targetDate)
+                        .isEqualTo(targetDate);
+            }
+
+            else if (pathName.equals(CLASSIFICATION_OWNING_SECTION)) {
+                String sourceSectionNumber = getSectionNumber(sourcePath);
+                String targetSectionNumber = getSectionNumber(targetPath);
+                System.out.println("Comparing owning section: " + sourceSectionNumber + " -> " + targetSectionNumber);
+                assertThat(sourceSectionNumber).withFailMessage(FAIL_MESSAGE,
+                                pathName, sourcePath, targetPath)
+                        .isEqualTo(targetSectionNumber);
+            }
+            else if (pathName.endsWith(HREF)) {
                 URI sourceUri = URI.create(pathName);
                 URI targetUri = URI.create(pathName);
 
@@ -371,7 +512,27 @@ public class MigrationTestUtils {
                 System.out.printf("Source: [%s] (%d chars)%n", sourceField, sourceField.length());
                 System.out.printf("Target: [%s] (%d chars)%n", targetField, targetField.length());
 
-                if (pathName.endsWith(HREF)) {
+                if (pathName.equals(CLASSIFICATION_LAST_MODIFIED) || pathName.equals(LAST_MODIFIED)) {
+                    String sourceDate = getDate(sourceField);
+                    String targetDate = getDate(targetField);
+
+                    System.out.println("Comparing timestamp values: " + sourceDate + " -> " + targetDate);
+
+                    assertThat(sourceDate).withFailMessage(FAIL_MESSAGE,
+                                    pathName, sourceDate, targetDate)
+                            .isEqualTo(targetDate);
+                }
+
+                else if (pathName.equals(CLASSIFICATION_OWNING_SECTION)) {
+                    String sourceSectionNumber = getSectionNumber(sourceField);
+                    String targetSectionNumber = getSectionNumber(targetField);
+                    System.out.println("Comparing owning section: " + sourceSectionNumber + " -> " + targetSectionNumber);
+                    assertThat(sourceSectionNumber).withFailMessage(FAIL_MESSAGE,
+                                    pathName, sourceField, targetField)
+                            .isEqualTo(targetSectionNumber);
+                }
+
+                else if (pathName.endsWith(HREF)) {
                     URI sourceUri = URI.create(fullPath);
                     URI targetUri = URI.create(fullPath);
 
