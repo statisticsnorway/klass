@@ -451,6 +451,10 @@ public class ClassificationServiceImpl implements ClassificationService {
             throws KlassMessageException {
         checkAllowedToDelete(user, correspondenceTable);
         correspondenceTable.setDeleted();
+        // Delete all the correspondence maps to avoid future constraint violations
+        correspondenceTable.getCorrespondenceMaps().forEach(map -> correspondenceMapRepository.delete(map.getId()));
+        // This just updates the object in memory, has no effect on persistence
+        correspondenceTable.removeAllCorrespondenceMaps();
         saveNotIndexCorrespondenceTable(correspondenceTable);
     }
 

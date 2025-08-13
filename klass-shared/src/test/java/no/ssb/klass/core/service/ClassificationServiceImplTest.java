@@ -698,6 +698,27 @@ public class ClassificationServiceImplTest {
         assertEquals(1, result.size());
     }
 
+    @Test
+    public void deleteCorrespondenceTable() throws KlassMessageException {
+        // given
+        ClassificationVersion source = createClassificationVersion();
+        CorrespondenceTable correspondenceTable = TestUtil.createCorrespondenceTable(source,
+                createClassificationVersion());
+
+        correspondenceTable.addCorrespondenceMap(new CorrespondenceMap(TestUtil.createClassificationItem("code1", "Code 1"), TestUtil.createClassificationItem("code2", "Code 2")));
+        correspondenceTable.addCorrespondenceMap(new CorrespondenceMap(TestUtil.createClassificationItem("code3", "Code 3"), TestUtil.createClassificationItem("code4", "Code 4")));
+        correspondenceTable.unpublish(Language.getDefault());
+        when(correspondenceTableRepositoryMock.save(correspondenceTable)).thenReturn(correspondenceTable);
+
+        // when
+        subject.deleteNotIndexCorrespondenceTable(TestUtil.createUser(), correspondenceTable);
+
+        // then
+        assertTrue(correspondenceTable.isDeleted());
+        verify(correspondenceMapRepositoryMock, times(2)).delete(anyLong());
+        assertEquals(0, correspondenceTable.getCorrespondenceMaps().size());
+    }
+
     private ClassificationVersion createClassificationVersion() {
         ClassificationVersion version = TestUtil.createClassificationVersion(TestUtil.anyDateRange());
         ClassificationSeries classification = TestUtil.createClassification("name");
