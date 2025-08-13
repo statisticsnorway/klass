@@ -10,6 +10,7 @@ spec:
   port: 8081
   ingresses:
     - https://klass-forvaltning.intern.test.ssb.no
+    - https://i.test.ssb.no/klass/admin
   accessPolicy:
     outbound:
       external:
