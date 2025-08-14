@@ -81,9 +81,15 @@
 
         <!--Flyway-->
         <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>42.7.3</version> <!-- use latest -->
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-database-postgresql</artifactId>
+            <version>11.11.0</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+            <version>11.11.1</version>
         </dependency>
 
 
@@ -225,14 +231,6 @@
                         <groupId>org.flywaydb</groupId>
                         <artifactId>flyway-maven-plugin</artifactId>
                         <version>10.17.0</version> <!-- use latest -->
-                        <configuration>
-                            <url>jdbc:postgresql://localhost:5432/klass</url>
-                            <user>klass</user>
-                            <password>secret</password>
-                            <schemas>
-                                <schema>klass</schema>
-                            </schemas>
-                        </configuration>
                     </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
