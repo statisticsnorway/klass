@@ -30,11 +30,6 @@
         <!--IMPORTANT HIBERNATE BUG FIX ( needed for Translatable as lobs)-->
         <!--https://hibernate.atlassian.net/browse/HHH-10818-->
         <hibernate.version>5.2.3.Final</hibernate.version>
-
-        <!-- Override Spring Boot managed version. Flyway bug #995 forces us to use version 4.0 or newer.
-             Replacing old search engine with solr search
-             Remove when Spring Boot includes this version or newer -->
-        <flyway.version>4.1.1</flyway.version>
         <!-- Override Spring Boot managed version. Spring restdocs bug #286 in version 1.1.1 (duplicate query parameters)
              forces us to downgrade to version 1.1.0. (https://github.com/spring-projects/spring-restdocs/issues/286)
              Remove when Spring Boot includes version 1.1.2 or newer -->
