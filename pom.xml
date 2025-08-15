@@ -46,6 +46,9 @@
         <asciidoctor-version>2.2.4</asciidoctor-version>
         <maven-jaxb2-plugin-version>0.15.3</maven-jaxb2-plugin-version>
         <tomcat7-maven-plugin-version>2.2</tomcat7-maven-plugin-version>
+        <!-- Override Spring Boot managed version.
+             Remove when Spring Boot includes this version or newer -->
+        <flyway.version>10.0.1</flyway.version>
         <jaxb-api-version>2.3.1</jaxb-api-version>
         <commons-io-version>2.15.1</commons-io-version>
         <jakarta-rs-api-version>2.1.6</jakarta-rs-api-version>
