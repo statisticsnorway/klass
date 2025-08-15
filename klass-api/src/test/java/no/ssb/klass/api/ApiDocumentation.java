@@ -69,8 +69,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
                 "spring.main.allow-circular-references=true",
                 "spring.cloud.gcp.core.enabled=false",
                 "spring.cloud.gcp.config.enabled=false",
-                "spring.cloud.gcp.pubsub.enabled=false",
-                "spring.flyway.enabled=false",
+                "spring.cloud.gcp.pubsub.enabled=false"
         }
 )
 @ActiveProfiles({ConfigurationProfiles.POSTGRES_EMBEDDED, ConfigurationProfiles.MOCK_MAILSERVER, ConfigurationProfiles.MOCK_SEARCH})

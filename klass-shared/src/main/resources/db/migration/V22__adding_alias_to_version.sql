@@ -1,0 +1,1 @@
+ALTER TABLE statistical_classification ADD alias VARCHAR(1024);
