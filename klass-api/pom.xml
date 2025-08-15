@@ -79,6 +79,19 @@
             <artifactId>postgresql</artifactId>
         </dependency>
 
+        <!--Flyway-->
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-database-postgresql</artifactId>
+            <version>11.11.0</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+            <version>11.11.1</version>
+        </dependency>
+
         <!--TOMCAT-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
