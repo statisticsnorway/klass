@@ -11,6 +11,7 @@
                 <logLevel />
                 <message />
                 <arguments/>
+                <stackTrace />
             </providers>
         </encoder>
     </appender>
