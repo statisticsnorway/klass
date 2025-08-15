@@ -6,7 +6,6 @@ on:
   push:
     branches:
       - nais-migration
-      - feat/set-up-flyway-no-changes-to-klass-forvaltning
     paths:
       - "klass-api/**"
       - "klass-shared/**"
