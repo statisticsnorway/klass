@@ -96,3 +96,15 @@ stop-klass-forvaltning-docker:
 .PHONY: clean-klass-forvaltning-volumes
 clean-klass-forvaltning-volumes:
 	docker volume rm klass_pgdata || true
+
+.PHONY: start-klass-api-docker
+start-klass-api-docker:
+	docker compose $(COMPOSE_FILE) --profile api up --build -d
+
+.PHONY: logs-klass-api
+logs-klass-api:
+	docker compose $(COMPOSE_FILE) --profile api logs -f
+
+.PHONY: stop-klass-api-docker
+stop-klass-api-docker:
+	docker compose $(COMPOSE_FILE) --profile api down
