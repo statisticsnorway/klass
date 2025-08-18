@@ -9,6 +9,8 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class KlassApiSsbSectionsTest extends AbstractKlassApiDataIntegrityTest {
 
+    Boolean migrated = true;
+
     @Test
     void getSsbSections(){
         String path = getSsbSectionsPath();
@@ -23,7 +25,12 @@ public class KlassApiSsbSectionsTest extends AbstractKlassApiDataIntegrityTest {
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateList(sourceResponse, targetResponse, EMBEDDED_SSB_SECTIONS);
+            if(migrated) {
+                validateMigratedSsbSections(sourceResponse, targetResponse);
+            }
+            else{
+                validateList(sourceResponse, targetResponse, EMBEDDED_SSB_SECTIONS);
+            }
             validateObject(sourceResponse, targetResponse, LINKS_SELF_HREF);
         }
     }
@@ -42,7 +49,12 @@ public class KlassApiSsbSectionsTest extends AbstractKlassApiDataIntegrityTest {
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
         }
         else{
-            validateXmlList(path, sourceResponse, targetResponse, ENTITIES_CONTENTS_CONTENT);
+            if(migrated){
+                validateXmlMigratedSsbsections(path, sourceResponse, targetResponse);
+            }
+            else {
+                validateXmlList(path, sourceResponse, targetResponse, ENTITIES_CONTENTS_CONTENT);
+            }
             validateXmlItems(sourceResponse, targetResponse, pathNamesXmlEntitiesLinks);
         }
     }
