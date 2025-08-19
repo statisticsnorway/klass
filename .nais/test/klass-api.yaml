@@ -9,10 +9,8 @@ metadata:
 spec:
   image: "{{ image }}"  # Injected from the GitHub Action
   port: 8080
-
   ingresses:
-    - https://klass.intern.test.ssb.no
-
+    - https://klass.intern.test.ssb.no/api/klass
   replicas:
     min: 1
     max: 1
