@@ -18,7 +18,7 @@ spec:
       cpu: 10m
   env:
     - name: MESSAGING_POSTMAN_PUBSUB_TOPIC_INCOMING
-      value: projects/sup-t-2r/topics/sup-prod-postman-incoming-topic
+      value: projects/sup-p-2b/topics/sup-prod-postman-incoming-topic
 
   accessPolicy:
     inbound:
