@@ -1,0 +1,74 @@
+apiVersion: nais.io/v1alpha1
+kind: Application
+metadata:
+  name: klass-forvaltning
+  namespace: dapla-metadata
+  labels:
+    team: dapla-metadata
+spec:
+  image: "{{ image }}" # Injected from the GitHub Action
+  port: 8081
+  ingresses:
+    - https://klass-forvaltning.intern.ssb.no
+    - https://i.ssb.no/klass/admin
+  accessPolicy:
+    outbound:
+      external:
+        - host: auth.ssb.no
+      rules:
+        - application: klass-solr
+        - application: klass-mail
+  login:
+    provider: openid
+    enforce:
+      enabled: true
+      excludePaths:
+        - /manage
+        - /klass/admin/schemas/version.xsd
+  replicas:
+    min: 1
+    max: 1
+  resources:
+    requests:
+      cpu: 400m
+      memory: 1024Mi
+    limits:
+      memory: 2048Mi
+  env:
+    - name: SPRING_PROFILES_ACTIVE
+      value: frontend, postgres, small-import, skip-indexing, ad-offline, remote-solr
+    - name: KLASS_SECURITY_OAUTH2_LOGOUT_PATH
+      value: /oauth2/logout
+    - name: SPRING_DATA_SOLR_HOST
+      value: http://klass-solr/solr/
+    - name: KLASS_ENV_SERVER
+      value: klass-forvaltning.intern.ssb.no
+    - name: KLASS_ENV_CLIENT_KLASS_MAIL_URL
+      value: http://klass-mail
+  envFrom:
+    - secret: google-sql-klass
+    - secret: klass-forvaltning-application-properties
+  filesFrom:
+    - mountPath: /var/run/secrets/nais.io/sqlcertificate
+      secret: sqeletor-klass-827ec8ec
+  prometheus:
+    enabled: true
+    path: /actuator/prometheus
+    port: "8091"
+  liveness:
+    path: /actuator/health
+    initialDelay: 60
+    port: 8091
+  readiness:
+    path: /actuator/health
+    initialDelay: 60
+    port: 8091
+    failureThreshold: 10
+    periodSeconds: 10
+  startup:
+    path: /actuator/health
+    initialDelay: 60
+    port: 8091
+    failureThreshold: 10
+    periodSeconds: 10
+  terminationGracePeriodSeconds: 120
