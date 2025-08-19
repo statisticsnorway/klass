@@ -42,7 +42,7 @@ spec:
     - name: SPRING_DATA_SOLR_HOST
       value: http://klass-solr/solr/
     - name: KLASS_ENV_SERVER
-      value: klass-forvaltning.intern.test.ssb.no
+      value: klass-forvaltning.intern.ssb.no
     - name: KLASS_ENV_CLIENT_KLASS_MAIL_URL
       value: http://klass-mail
   envFrom:
