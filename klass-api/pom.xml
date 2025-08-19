@@ -143,6 +143,11 @@
             <version>${jakarta-rs-api-version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
+
         <!-- Zonky test -->
         <dependency>
             <groupId>io.zonky.test</groupId>
