@@ -41,12 +41,9 @@ jobs:
         id: changed-files
         uses: "nais/what-changed@main"
         with:
-          paths: |
-            klass-api/**
-            klass-shared/**
+          files: |
             .nais/**/klass-api.yaml
 
-          files: ''
       - name: Build with Maven
         if: steps.changed-files.outputs.changed != 'only-inputs'
         run: mvn --batch-mode --update-snapshots install -pl '!:klass-forvaltning'
