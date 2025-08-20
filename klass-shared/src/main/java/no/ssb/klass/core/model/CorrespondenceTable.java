@@ -25,6 +25,7 @@ import com.google.common.collect.Lists;
 import no.ssb.klass.core.util.DateRange;
 import no.ssb.klass.core.util.TimeUtil;
 import no.ssb.klass.core.util.Translatable;
+import org.springframework.transaction.annotation.Transactional;
 
 @Entity
 @Table(indexes = { @Index(columnList = "source_id", name = "ct_source_idx"),
@@ -40,7 +41,7 @@ public class CorrespondenceTable extends BaseEntity implements ClassificationEnt
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private final ClassificationVersion target;
     private final int targetLevelNumber;
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "correspondenceTable")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "correspondenceTable", fetch = FetchType.EAGER)
     private final List<CorrespondenceMap> correspondenceMaps;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "correspondencetable_changelog", joinColumns = @JoinColumn(name = "correspondencetable_id"), inverseJoinColumns = @JoinColumn(name = "changelog_id"))
@@ -159,6 +160,7 @@ public class CorrespondenceTable extends BaseEntity implements ClassificationEnt
         return Optional.of(version.getLevel(levelNumber));
     }
 
+    @Transactional
     public List<CorrespondenceMap> getCorrespondenceMaps() {
         return correspondenceMaps.stream().sorted().collect(toList());
     }
