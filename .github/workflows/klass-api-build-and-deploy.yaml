@@ -41,7 +41,7 @@ jobs:
         id: changed-files
         uses: "nais/what-changed@main"
         with:
-          files: .nais/**/klass-api.yaml
+          files: .nais/test/klass-api.yaml
 
       - name: Build with Maven
         if: steps.changed-files.outputs.changed != 'only-inputs'
