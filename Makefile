@@ -30,11 +30,27 @@ build-klass-forvaltning:
 	popd; \
 	${sdk} env clear
 
+.PHONY: build-clean-klass-forvaltning
+build-clean-klass-forvaltning:
+	pushd klass-forvaltning && \
+	${sdk} env && \
+	mvn clean install; \
+	popd; \
+	${sdk} env clear
+
 .PHONY: build-klass-api
 build-klass-api:
 	pushd klass-api && \
 	${sdk} env && \
 	mvn install; \
+ 	popd; \
+	${sdk} env clear
+
+.PHONY: build-clean-klass-api
+build-clean-klass-api:
+	pushd klass-api && \
+	${sdk} env && \
+	mvn clean install; \
  	popd; \
 	${sdk} env clear
 
@@ -104,6 +120,18 @@ start-klass-api-docker:
 .PHONY: logs-klass-api
 logs-klass-api:
 	docker compose $(COMPOSE_FILE) --profile api logs -f
+
+.PHONY: check-klass-api-docker
+check-klass-api-docker:
+	docker compose $(COMPOSE_FILE) --profile api ps
+
+.PHONY: rebuild-klass-api-docker
+rebuild-klass-api-docker:
+	docker compose $(COMPOSE_FILE) --profile api build --no-cache klass-api
+
+.PHONY: restart-klass-api-docker
+restart-klass-api-docker:
+	docker compose $(COMPOSE_FILE) --profile api restart klass-api
 
 .PHONY: stop-klass-api-docker
 stop-klass-api-docker:
