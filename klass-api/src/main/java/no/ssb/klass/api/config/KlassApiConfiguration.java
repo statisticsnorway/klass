@@ -1,7 +1,6 @@
 package no.ssb.klass.api.config;
 
 import no.ssb.klass.core.config.ConfigurationProfiles;
-import no.ssb.klass.api.controllers.MonitorController;
 import no.ssb.klass.api.controllers.PingController;
 import no.ssb.klass.api.util.RestConstants;
 import org.springframework.context.annotation.Bean;
@@ -30,7 +29,6 @@ public class KlassApiConfiguration {
                 // allow rest API and health checks
                 .antMatchers(RestConstants.API_VERSION_V1 + "/**").permitAll()
                 .antMatchers(PingController.PATH).permitAll()
-                .antMatchers(MonitorController.PATH).permitAll()
 
                 .and()
                 .csrf().disable()
