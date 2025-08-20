@@ -304,6 +304,7 @@ public class MigrationTestUtils {
         for (int i = 0; i < sourceList.size(); i++){
             String sourceName = sourceList.get(i).get("name").toString();
             String targetName = targetList.get(i).get("name").toString();
+            System.out.println("Checking " + sourceName + " -> " + targetName);
             if(sourceName != null){
                 assertThat(sourceName).withFailMessage(
                         FAIL_MESSAGE,
