@@ -42,7 +42,7 @@ spec:
 
   prometheus:
     enabled: true
-    path: /prometheus
+    path: /actuator/prometheus
     port: "8090"
 
   liveness:
