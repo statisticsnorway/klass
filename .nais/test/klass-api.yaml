@@ -40,6 +40,7 @@ spec:
         - application: klass-solr
         - application: klass-mail
 
+
   prometheus:
     enabled: true
     path: /actuator/prometheus
