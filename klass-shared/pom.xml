@@ -11,7 +11,7 @@
     <parent>
         <groupId>no.ssb.klass</groupId>
         <artifactId>klass-root</artifactId>
-        <version>2.1.8-SNAPSHOT</version>
+        <version>2.1.9</version>
     </parent>
 
     <properties>
@@ -221,7 +221,7 @@
             <version>${rest-assured-version}</version>
             <scope>test</scope>
         </dependency>
-         
+
     </dependencies>
 
     <profiles>
@@ -294,7 +294,7 @@
                 </plugins>
             </build>
         </profile>
-        
+
 
     </profiles>
 
@@ -329,7 +329,7 @@
                     </execution>
                 </executions>
             </plugin>
-            
+
         </plugins>
         <pluginManagement>
             <plugins>
@@ -351,7 +351,7 @@
                         <arguments>-Pdocumentation -Dmaven.javadoc.skip=true</arguments>
                     </configuration>
                 </plugin>
-                
+
                 <plugin>
                     <groupId>org.apache.tomcat.maven</groupId>
                     <artifactId>tomcat7-maven-plugin</artifactId>
