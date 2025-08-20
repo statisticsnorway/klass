@@ -35,6 +35,8 @@ import no.ssb.klass.core.util.KlassResourceNotFoundException;
 import no.ssb.klass.core.util.TimeUtil;
 import no.ssb.klass.core.util.Translatable;
 import org.hibernate.Hibernate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -58,6 +60,7 @@ import static java.util.stream.Collectors.toSet;
 @Transactional(readOnly = true)
 public class ClassificationServiceImpl implements ClassificationService {
 
+    private static final Logger log = LoggerFactory.getLogger(ClassificationServiceImpl.class);
     private final ClassificationFamilyRepository classificationFamilyRepository;
     private final ClassificationSeriesRepository classificationRepository;
     private final ClassificationVersionRepository classificationVersionRepository;
@@ -450,9 +453,13 @@ public class ClassificationServiceImpl implements ClassificationService {
     public void deleteNotIndexCorrespondenceTable(User user, CorrespondenceTable correspondenceTable)
             throws KlassMessageException {
         checkAllowedToDelete(user, correspondenceTable);
+        log.info("Soft deleting correspondence table {} {}", correspondenceTable.getNameInPrimaryLanguage(), correspondenceTable.getId());
         correspondenceTable.setDeleted();
         // Delete all the correspondence maps to avoid future constraint violations
-        correspondenceTable.getCorrespondenceMaps().forEach(map -> correspondenceMapRepository.delete(map.getId()));
+        List<CorrespondenceMap> maps = correspondenceTable.getCorrespondenceMaps();
+
+        log.info("Hard deleting {} child correspondence maps", maps.size());
+        maps.forEach(map -> correspondenceMapRepository.delete(map.getId()));
         // This just updates the object in memory, has no effect on persistence
         correspondenceTable.removeAllCorrespondenceMaps();
         saveNotIndexCorrespondenceTable(correspondenceTable);
