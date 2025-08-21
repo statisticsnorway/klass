@@ -1,7 +1,6 @@
 name: Klass-api build and deploy
 
 on:
-  pull_request:
   release:
     types: [ published ]
   push:
@@ -41,7 +40,7 @@ jobs:
         id: changed-files
         uses: "nais/what-changed@main"
         with:
-          files: .nais/test/klass-api.yaml
+          files: .nais/**/klass-api.yaml
 
       - name: Build with Maven
         if: steps.changed-files.outputs.changed != 'only-inputs'
