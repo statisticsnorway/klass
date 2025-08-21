@@ -10,6 +10,7 @@ on:
       - "klass-shared/**"
       - ".nais/**/klass-api.yaml"
       - ".github/workflows/klass-api-build-and-deploy.yaml"
+
 jobs:
   build:
     name: Build
@@ -65,6 +66,10 @@ jobs:
   deploy-test:
     name: Deploy to test
     needs: build
+    permissions:
+      contents: "read"
+      id-token: "write"
+      packages: "read"
     runs-on: ubuntu-latest
     if: github.event_name != 'release' && needs.build.outputs.prod-config-only != 'true'
     steps:
@@ -82,6 +87,10 @@ jobs:
   deploy-prod:
     name: Deploy to prod
     needs: build
+    permissions:
+      contents: "read"
+      id-token: "write"
+      packages: "read"
     runs-on: ubuntu-latest
     if: github.event_name == 'release' || needs.build.outputs.prod-config-only == 'true'
     steps:
