@@ -24,6 +24,7 @@ jobs:
       image: ${{ steps.docker-build-push.outputs.image }}
       telemetry: ${{ steps.docker-build-push.outputs.telemetry }}
       prod-config-only: ${{ steps.prod-config-changed.outputs.changed == 'only-inputs' }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
