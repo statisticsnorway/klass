@@ -1,4 +1,5 @@
 name: Klass-api build and deploy
+
 on:
   release:
     types: [ published ]
