@@ -1,5 +1,4 @@
 name: Klass-api build and deploy
-
 on:
   release:
     types: [ published ]
@@ -11,19 +10,18 @@ on:
       - "klass-shared/**"
       - ".nais/**/klass-api.yaml"
       - ".github/workflows/klass-api-build-and-deploy.yaml"
-
 jobs:
-  docker-build:
-    name: Docker build
+  build:
+    name: Build
     permissions:
       contents: "read"
       id-token: "write"
       packages: "read"
     runs-on: ubuntu-latest
     outputs:
-      nais_config_path: ${{ steps.nais-deploy-vars.outputs.nais_config_path }}
-      nais_cluster: ${{ steps.nais-deploy-vars.outputs.nais_cluster }}
-
+      image: ${{ steps.docker-build-push.outputs.image }}
+      telemetry: ${{ steps.docker-build-push.outputs.telemetry }}
+      prod-config-only: ${{ steps.prod-config-changed.outputs.changed == 'only-inputs' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -36,11 +34,17 @@ jobs:
           java-version: '17'
           cache: 'maven'
 
-      - name: Determine what to do
+      - name: Check what changed
         id: changed-files
         uses: "nais/what-changed@main"
         with:
           files: .nais/**/klass-api.yaml
+
+      - name: Check for prod config changes
+        id: prod-config-changed
+        uses: "nais/what-changed@main"
+        with:
+          files: .nais/prod/klass-api.yaml
 
       - name: Build with Maven
         if: steps.changed-files.outputs.changed != 'only-inputs'
@@ -58,21 +62,36 @@ jobs:
           dockerfile: klass-api/Dockerfile
           docker_context: klass-api
 
-      - name: Generate NAIS deploy variables
-        id: nais-deploy-vars
-        run: |
-          if [[ ${{ github.event_name }} == "release" ]]; then
-            echo "nais_cluster=prod" >> "$GITHUB_OUTPUT"
-            echo "nais_config_path=.nais/prod/klass-api.yaml" >> "$GITHUB_OUTPUT"
-          else
-            echo "nais_cluster=test" >> "$GITHUB_OUTPUT"
-            echo "nais_config_path=.nais/test/klass-api.yaml" >> "$GITHUB_OUTPUT"
-          fi
+  deploy-test:
+    name: Deploy to test
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.event_name != 'release' && needs.build.outputs.prod-config-only != 'true'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - uses: nais/deploy/actions/deploy@v2
         env:
-          CLUSTER: ${{ steps.nais-deploy-vars.outputs.nais_cluster }}
-          RESOURCE: ${{ steps.nais-deploy-vars.outputs.nais_config_path }}
+          CLUSTER: test
+          RESOURCE: .nais/test/klass-api.yaml
           DEPLOY_SERVER: deploy.ssb.cloud.nais.io:443
-          WORKLOAD_IMAGE: ${{ steps.docker-build-push.outputs.image }}
-          TELEMETRY: ${{ steps.docker-build-push.outputs.telemetry }}
+          WORKLOAD_IMAGE: ${{ needs.build.outputs.image }}
+          TELEMETRY: ${{ needs.build.outputs.telemetry }}
+
+  deploy-prod:
+    name: Deploy to prod
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.event_name == 'release' || needs.build.outputs.prod-config-only == 'true'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: nais/deploy/actions/deploy@v2
+        env:
+          CLUSTER: prod
+          RESOURCE: .nais/prod/klass-api.yaml
+          DEPLOY_SERVER: deploy.ssb.cloud.nais.io:443
+          WORKLOAD_IMAGE: ${{ needs.build.outputs.image }}
+          TELEMETRY: ${{ needs.build.outputs.telemetry }}
