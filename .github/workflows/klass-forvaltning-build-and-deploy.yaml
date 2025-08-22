@@ -1,7 +1,6 @@
 name: Klass-forvaltning build and deploy
 
 on:
-  pull_request:
   release:
     types: [ published ]
   push:
@@ -61,26 +60,26 @@ jobs:
           dockerfile: klass-forvaltning/Dockerfile
           docker_context: klass-forvaltning
 
-  #deploy-test:
-  #  name: Deploy to test
-  #  needs: docker-build
-  # permissions:
-  #    contents: "read"
-  #    id-token: "write"
-  #    packages: "read"
-  # runs-on: ubuntu-latest
-  #  if: github.event_name != 'release' && needs.build.outputs.prod-config-only != 'true'
-  #  steps:
-  #   - name: Checkout
-  #      uses: actions/checkout@v4
+  deploy-test:
+    name: Deploy to test
+    needs: docker-build
+    permissions:
+      contents: "read"
+      id-token: "write"
+      packages: "read"
+    runs-on: ubuntu-latest
+    if: github.event_name != 'release' && needs.build.outputs.prod-config-only != 'true'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-  #    - uses: nais/deploy/actions/deploy@v2
-  #      env:
-  #        CLUSTER: test
-  #        RESOURCE: .nais/test/klass-forvaltning.yaml
-  #        DEPLOY_SERVER: deploy.ssb.cloud.nais.io:443
-  #        WORKLOAD_IMAGE: ${{ needs.build.outputs.image }}
-  #        TELEMETRY: ${{ needs.build.outputs.telemetry }}
+      - uses: nais/deploy/actions/deploy@v2
+        env:
+          CLUSTER: test
+          RESOURCE: .nais/test/klass-forvaltning.yaml
+          DEPLOY_SERVER: deploy.ssb.cloud.nais.io:443
+          WORKLOAD_IMAGE: ${{ needs.build.outputs.image }}
+          TELEMETRY: ${{ needs.build.outputs.telemetry }}
 
   deploy-prod:
     name: Deploy to prod
@@ -90,7 +89,7 @@ jobs:
       id-token: "write"
       packages: "read"
     runs-on: ubuntu-latest
-    #if: github.event_name == 'release' || needs.build.outputs.prod-config-only == 'true'
+    if: github.event_name == 'release' || needs.build.outputs.prod-config-only == 'true'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
