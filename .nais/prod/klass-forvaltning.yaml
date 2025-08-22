@@ -9,8 +9,7 @@ spec:
   image: "{{ image }}" # Injected from the GitHub Action
   port: 8081
   ingresses:
-    - https://klass-forvaltning.intern.ssb.no
-    - https://i.ssb.no/klass/admin
+    - https://klass.intern.ssb.no/klass/admin
   accessPolicy:
     outbound:
       external:
