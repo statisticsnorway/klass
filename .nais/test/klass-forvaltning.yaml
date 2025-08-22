@@ -38,7 +38,7 @@ spec:
     - name: KLASS_SECURITY_OAUTH2_LOGOUT_PATH
       value: /oauth2/logout
     - name: KLASS_SECURITY_OAUTH2_JWT_JWKS_URI
-      value: https://auth.ssb.no/realms/ssb/protocol/openid-connect/certs
+      value: https://auth.test.ssb.no/realms/ssb/protocol/openid-connect/certs
     - name: KLASS_SECURITY_OAUTH2_JWT_ISSUER
       value: https://auth.ssb.no/realms/ssb
     - name: SPRING_DATA_SOLR_HOST
