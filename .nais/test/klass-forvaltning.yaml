@@ -6,7 +6,6 @@ metadata:
   labels:
     team: dapla-metadata
 spec:
-  image: "{{ image }}" # Injected from the GitHub Action
   port: 8081
   ingresses:
     - https://klass.intern.test.ssb.no/klass/admin
