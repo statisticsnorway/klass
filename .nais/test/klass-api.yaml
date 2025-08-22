@@ -56,3 +56,4 @@ spec:
     path: /actuator/health/liveness
     port: 8090
     initialDelay: 60
+    timeout: 180
