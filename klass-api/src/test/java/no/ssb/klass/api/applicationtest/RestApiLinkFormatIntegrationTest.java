@@ -19,10 +19,11 @@ public class RestApiLinkFormatIntegrationTest extends AbstractRestApiApplication
     }
 
     @Test
-    public void hateoasLinksWithForwardedHeaders() {
+    public void hateoasLinksWithCustomForwardedHostHeader() {
         given().port(port).accept(ContentType.JSON)
                 .header(new Header("X-Forwarded-Proto", "https"))
-                .header(new Header("X-Forwarded-Host", "klass.ssb.no"))
+                .header(new Header("X-SSB-Forwarded-Host", "klass.ssb.no"))
+                .header(new Header("X-Forwarded-Host", "ignored"))
                 .when().get(REQUEST)
                 .then()
                 .body(JSON_LINKS + ".self.href", containsString(REQUEST))
