@@ -40,7 +40,7 @@ spec:
     - name: KLASS_SECURITY_OAUTH2_JWT_JWKS_URI
       value: https://auth.test.ssb.no/realms/ssb/protocol/openid-connect/certs
     - name: KLASS_SECURITY_OAUTH2_JWT_ISSUER
-      value: https://auth.ssb.no/realms/ssb
+      value: https://auth.test.ssb.no/realms/ssb
     - name: SPRING_DATA_SOLR_HOST
       value: http://klass-solr/solr/
     - name: KLASS_ENV_SERVER
