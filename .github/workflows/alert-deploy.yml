@@ -15,32 +15,54 @@ permissions:
   id-token: write
 
 jobs:
-  test-deploy:
-    name: Deploy alerts to test
+  discover-alerts:
+    name: Discover alert files
     runs-on: ubuntu-latest
+    outputs:
+      test-alerts: ${{ steps.discover.outputs.test }}
+      prod-alerts: ${{ steps.discover.outputs.prod }}
     steps:
       - uses: actions/checkout@v4
-      - name: Deploy test alerts
+
+      - id: discover
         run: |
-          for file in .nais/test/*-alerts.yaml; do
-            echo "Deploying $file to test"
-            nais deploy \
-              --cluster test \
-              --resource "$file" \
-              --deploy-server deploy.ssb.cloud.nais.io:443
-          done
+          test_files=$(ls .nais/test/*-alerts.yaml 2>/dev/null | sort | jq -R -s -c 'split("\n")[:-1]')
+          prod_files=$(ls .nais/prod/*-alerts.yaml 2>/dev/null | sort | jq -R -s -c 'split("\n")[:-1]')
+
+          echo "Found test alerts: $test_files"
+          echo "Found prod alerts: $prod_files"
+
+          echo "test=$test_files" >> $GITHUB_OUTPUT
+          echo "prod=$prod_files" >> $GITHUB_OUTPUT
+
+  test-deploy:
+    name: Deploy alerts to test
+    needs: discover-alerts
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        resource: ${{ fromJson(needs.discover-alerts.outputs.test-alerts) }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy ${{ matrix.resource }} to test
+        uses: nais/deploy/actions/deploy@v2
+        env:
+          CLUSTER: test
+          RESOURCE: ${{ matrix.resource }}
+          DEPLOY_SERVER: deploy.ssb.cloud.nais.io:443
 
   prod-deploy:
     name: Deploy alerts to prod
+    needs: discover-alerts
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        resource: ${{ fromJson(needs.discover-alerts.outputs.prod-alerts) }}
     steps:
       - uses: actions/checkout@v4
-      - name: Deploy prod alerts
-        run: |
-          for file in .nais/prod/*-alerts.yaml; do
-            echo "Deploying $file to prod"
-            nais deploy \
-              --cluster prod \
-              --resource "$file" \
-              --deploy-server deploy.ssb.cloud.nais.io:443
-          done
+      - name: Deploy ${{ matrix.resource }} to prod
+        uses: nais/deploy/actions/deploy@v2
+        env:
+          CLUSTER: prod
+          RESOURCE: ${{ matrix.resource }}
+          DEPLOY_SERVER: deploy.ssb.cloud.nais.io:443
