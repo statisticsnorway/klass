@@ -11,6 +11,8 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class KlassApiClassificationFamiliesByIdJsonTest extends AbstractKlassApiFamiliesTest {
 
+    Boolean migrated = true;
+
     @Test
     void getOneClassificationFamilyById() {
         int classificationFamilyId = 11;
@@ -116,6 +118,7 @@ public class KlassApiClassificationFamiliesByIdJsonTest extends AbstractKlassApi
     void getClassificationFamilySsbSection(int classificationFamilyId) {
 
         paramsSsbSection.put(SSB_SECTION, ssbSectionNames.get(randomSsbSectionId));
+        // if migrated extract code from target
         String path = getClassificationFamilyByIdPath(classificationFamilyId);
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsSsbSection, null);
         Response targetResponse = klassApiMigrationClient.getFromTargetApi(path , paramsSsbSection,null);
