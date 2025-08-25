@@ -25,8 +25,11 @@ public abstract class AbstractKlassApiFamiliesTest extends AbstractKlassApiDataI
     }
 
     static Map<String, Object> paramsSsbSection = new HashMap<>();
+    static Map<String, Object> paramsTargetSsbSection = new HashMap<>();
 
     static int randomSsbSectionId;
+
+    Boolean migrated = true;
 
     @BeforeAll
     static void beforeAllClassificationFamiliesById() {

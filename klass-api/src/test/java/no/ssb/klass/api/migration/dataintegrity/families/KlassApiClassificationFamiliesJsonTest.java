@@ -33,8 +33,19 @@ public class KlassApiClassificationFamiliesJsonTest extends AbstractKlassApiFami
 
         paramsSsbSection.put(SSB_SECTION, section320);
         String path = getClassificationFamiliesPath();
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsSsbSection,null);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsSsbSection,null);
+        Response sourceResponse;
+        Response targetResponse;
+        if (migrated) {
+            paramsTargetSsbSection.put(SSB_SECTION, "320");
+            sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsSsbSection,null);
+            targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsTargetSsbSection,null);
+
+        }
+        else {
+            sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsSsbSection,null);
+            targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsSsbSection,null);
+        }
+
 
         assertApiResponseIsNotNull(sourceResponse);
 
