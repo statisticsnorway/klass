@@ -26,7 +26,7 @@ services:
     build:
       context: ../klass-api
       dockerfile: ../klass-api/Dockerfile
-    command: [ "java", "-jar", "app.war" ]
+    command: [ "java", "-jar", "app.war", "--debug"]
     profiles: [ migration-testing, api ]
     depends_on:
       - postgresql
