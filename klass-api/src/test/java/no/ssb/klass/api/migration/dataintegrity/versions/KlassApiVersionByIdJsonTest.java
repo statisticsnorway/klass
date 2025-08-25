@@ -29,7 +29,7 @@ public class KlassApiVersionByIdJsonTest extends AbstractKlassApiVersions {
         else{
             validateItems(sourceResponse, targetResponse, pathNamesVersionsById);
             validateList(sourceResponse, targetResponse, PUBLISHED);
-            validateList(sourceResponse, targetResponse, CHANGELOGS);
+            validateChangelogs(sourceResponse, targetResponse);
             validateList(sourceResponse, targetResponse, LEVELS);
             validatePathListWithObjects(sourceResponse, targetResponse, CLASSIFICATIONS_VARIANTS, pathNamesClassificationVariants, ID);
             validatePathListWithObjects(sourceResponse, targetResponse, CORRESPONDENCE_TABLES, pathNamesCorrespondenceTableVersions,ID);
@@ -54,7 +54,7 @@ public class KlassApiVersionByIdJsonTest extends AbstractKlassApiVersions {
         else{
             validateItems(sourceResponse, targetResponse, pathNamesVersionsById);
             validateList(sourceResponse, targetResponse, PUBLISHED);
-            validateList(sourceResponse, targetResponse, CHANGELOGS);
+            validateChangelogs(sourceResponse, targetResponse);
             validateList(sourceResponse, targetResponse, LEVELS);
             validatePathListWithObjects(sourceResponse, targetResponse, CLASSIFICATIONS_VARIANTS, pathNamesClassificationVariants, ID);
             validatePathListWithObjects(sourceResponse, targetResponse, CORRESPONDENCE_TABLES, pathNamesCorrespondenceTableVersions,ID);
@@ -79,7 +79,7 @@ public class KlassApiVersionByIdJsonTest extends AbstractKlassApiVersions {
         else{
             validateItems(sourceResponse, targetResponse, pathNamesVersionsById);
             validateList(sourceResponse, targetResponse, PUBLISHED);
-            validateList(sourceResponse, targetResponse, CHANGELOGS);
+            validateChangelogs(sourceResponse, targetResponse);
             validateList(sourceResponse, targetResponse, LEVELS);
             validatePathListWithObjects(sourceResponse, targetResponse, CLASSIFICATIONS_VARIANTS, pathNamesClassificationVariants, ID);
             validatePathListWithObjects(sourceResponse, targetResponse, CORRESPONDENCE_TABLES, pathNamesCorrespondenceTableVersions,ID);
@@ -105,7 +105,7 @@ public class KlassApiVersionByIdJsonTest extends AbstractKlassApiVersions {
         else{
             validateItems(sourceResponse, targetResponse, pathNamesVersionsById);
             validateList(sourceResponse, targetResponse, PUBLISHED);
-            validateList(sourceResponse, targetResponse, CHANGELOGS);
+            validateChangelogs(sourceResponse, targetResponse);
             validateList(sourceResponse, targetResponse, LEVELS);
             validatePathListWithObjects(sourceResponse, targetResponse, CLASSIFICATIONS_VARIANTS, pathNamesClassificationVariants, ID);
             validatePathListWithObjects(sourceResponse, targetResponse, CORRESPONDENCE_TABLES, pathNamesCorrespondenceTableVersions,ID);
