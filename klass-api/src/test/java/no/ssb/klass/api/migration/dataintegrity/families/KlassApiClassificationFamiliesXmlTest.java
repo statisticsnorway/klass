@@ -31,11 +31,20 @@ public class KlassApiClassificationFamiliesXmlTest extends AbstractKlassApiFamil
     @Test
     void getClassificationFamiliesBySsbSection() {
 
-        paramsSsbSection.put(SSB_SECTION, section320 );
+        paramsSsbSection.put(SSB_SECTION, section320);
         String path = getClassificationFamiliesPath();
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsSsbSection,APPLICATION_XML);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsSsbSection,APPLICATION_XML);
+        Response sourceResponse;
+        Response targetResponse;
+        if (migrated) {
+            paramsTargetSsbSection.put(SSB_SECTION, "320");
+            sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsSsbSection,APPLICATION_XML);
+            targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsTargetSsbSection,APPLICATION_XML);
 
+        }
+        else {
+            sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsSsbSection,APPLICATION_XML);
+            targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsSsbSection,APPLICATION_XML);
+        }
         assertApiResponseIsNotNull(sourceResponse);
 
         assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(),path);

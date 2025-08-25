@@ -119,12 +119,24 @@ public class KlassApiClassificationFamiliesByIdXmlTest extends AbstractKlassApiF
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationFamilyIds")
     void getClassificationFamilySsbSection(int classificationFamilyId) {
-        paramsSsbSection.put(SSB_SECTION, ssbSectionNames.get(randomSsbSectionId));
 
         String path = getClassificationFamilyByIdPath(classificationFamilyId);
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsSsbSection, APPLICATION_XML);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path , paramsSsbSection, APPLICATION_XML);
-
+        Response sourceResponse;
+        Response targetResponse;
+        if(migrated){
+            String sourceSection = ssbSectionNames.get(randomSsbSectionId);
+            String[] parts = sourceSection.split(" - ", 2);
+            String targetSection =  parts[0];
+            paramsSsbSection.put(SSB_SECTION, sourceSection);
+            paramsTargetSsbSection.put(SSB_SECTION, targetSection);
+            sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsSsbSection,APPLICATION_XML);
+            targetResponse = klassApiMigrationClient.getFromTargetApi(path , paramsTargetSsbSection,APPLICATION_XML);
+        }
+        else {
+            paramsSsbSection.put(SSB_SECTION, ssbSectionNames.get(randomSsbSectionId));
+            sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsSsbSection, APPLICATION_XML);
+            targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsSsbSection, APPLICATION_XML);
+        }
         assertApiResponseIsNotNull(sourceResponse);
 
         assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);

@@ -115,12 +115,24 @@ public class KlassApiClassificationFamiliesByIdJsonTest extends AbstractKlassApi
     @MethodSource("rangeProviderClassificationFamilyIds")
     void getClassificationFamilySsbSection(int classificationFamilyId) {
 
-        paramsSsbSection.put(SSB_SECTION, ssbSectionNames.get(randomSsbSectionId));
-        // if migrated extract code from target
         String path = getClassificationFamilyByIdPath(classificationFamilyId);
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsSsbSection, null);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path , paramsSsbSection,null);
+        Response sourceResponse;
+        Response targetResponse;
 
+        if(migrated){
+            String sourceSection = ssbSectionNames.get(randomSsbSectionId);
+            String[] parts = sourceSection.split(" - ", 2);
+            String targetSection =  parts[0];
+            paramsSsbSection.put(SSB_SECTION, sourceSection);
+            paramsTargetSsbSection.put(SSB_SECTION, targetSection);
+            sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsSsbSection,null);
+            targetResponse = klassApiMigrationClient.getFromTargetApi(path , paramsTargetSsbSection,null);
+        }
+        else {
+            paramsSsbSection.put(SSB_SECTION, ssbSectionNames.get(randomSsbSectionId));
+            sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsSsbSection, null);
+            targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsSsbSection, null);
+        }
         assertApiResponseIsNotNull(sourceResponse);
 
         assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
