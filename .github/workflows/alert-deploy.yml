@@ -1,0 +1,46 @@
+name: Deploy alerts
+run-name: Deploy alerts for klass to test and prod
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+    paths:
+      - '.nais/test/*-alerts.yaml'
+      - '.nais/prod/*-alerts.yaml'
+      - '.github/workflows/alert-deploy.yml'
+
+permissions:
+  id-token: write
+
+jobs:
+  test-deploy:
+    name: Deploy alerts to test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy test alerts
+        run: |
+          for file in .nais/test/*-alerts.yaml; do
+            echo "Deploying $file to test"
+            nais deploy \
+              --cluster test \
+              --resource "$file" \
+              --deploy-server deploy.ssb.cloud.nais.io:443
+          done
+
+  prod-deploy:
+    name: Deploy alerts to prod
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy prod alerts
+        run: |
+          for file in .nais/prod/*-alerts.yaml; do
+            echo "Deploying $file to prod"
+            nais deploy \
+              --cluster prod \
+              --resource "$file" \
+              --deploy-server deploy.ssb.cloud.nais.io:443
+          done
