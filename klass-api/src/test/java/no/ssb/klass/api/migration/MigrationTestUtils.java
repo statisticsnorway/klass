@@ -196,12 +196,11 @@ public class MigrationTestUtils {
                     .isNull();
         }
         else if (pathName.equals(OWNING_SECTION)) {
-            String sourceSectionNumber = getSectionNumber(sourceField);
-            String targetSectionNumber = getSectionNumber(targetField);
-            System.out.println("Comparing owning section: " + sourceSectionNumber + " -> " + targetSectionNumber);
-            assertThat(sourceSectionNumber).withFailMessage(FAIL_MESSAGE,
+            System.out.println("Comparing owning section: " + sourceField + " -> " + targetField);
+            assert targetField != null;
+            assertThat(sourceField.toString()).withFailMessage(FAIL_MESSAGE,
                             pathName, sourceField, targetField)
-                    .isEqualTo(targetSectionNumber);
+                    .contains(targetField.toString());
         }
 
         else if (pathName.endsWith(HREF)) {
@@ -262,6 +261,43 @@ public class MigrationTestUtils {
                 .withFailMessage(FAIL_MESSAGE,
                         pathListName, sourceList, targetList)
                 .isTrue();
+    }
+
+    public static void validateChangelogs(Response sourceResponse, Response targetResponse) {
+
+        ArrayList<Map<String, Object>> sourceList = sourceResponse.path(CHANGELOGS);
+        ArrayList<Map<String, Object>> targetList = targetResponse.path(CHANGELOGS);
+
+        if (sourceList == null) {
+            assertThat(targetList)
+                    .withFailMessage(FAIL_MESSAGE, CHANGELOGS, null, targetList)
+                    .isNull();
+            return;
+        }
+
+        assertThat(targetList)
+                .withFailMessage(FAIL_MESSAGE, CHANGELOGS, sourceList, targetList)
+                .isNotNull();
+
+        System.out.println("List sizes: " + sourceList.size() + " -> " + targetList.size());
+
+        assertThat(sourceList.size())
+                .withFailMessage(FAIL_MESSAGE,
+                        CHANGELOGS, sourceList.size(), targetList.size())
+                .isEqualTo(targetList.size());
+
+        for (int i = 0; i < sourceList.size(); i++) {
+            String sourceName = sourceList.get(i).get("description").toString();
+            String targetName = targetList.get(i).get("description").toString();
+            System.out.println("Checking " + sourceName + " -> " + targetName);
+            if (sourceName != null) {
+                assertThat(sourceName).withFailMessage(
+                        FAIL_MESSAGE,
+                        CHANGELOGS,
+                        sourceName,
+                        targetName).isEqualTo(targetName);
+            }
+        }
     }
 
     /**
@@ -330,12 +366,12 @@ public class MigrationTestUtils {
                         .isNull();
             }
             if (pathName.equals(OWNING_SECTION)) {
-                String sourceSectionNumber = getSectionNumber(sourceField);
-                String targetSectionNumber = getSectionNumber(targetField);
-                System.out.println("Comparing owning section: " + sourceSectionNumber + " -> " + targetSectionNumber);
-                assertThat(sourceSectionNumber).withFailMessage(FAIL_MESSAGE,
+                System.out.println("Comparing owning section: " + sourceField + " -> " + targetField);
+                assert targetField != null;
+                assert sourceField != null;
+                assertThat(sourceField.toString()).withFailMessage(FAIL_MESSAGE,
                                 pathName, sourceField, targetField)
-                        .isEqualTo(targetSectionNumber);
+                        .contains(targetField.toString());
             }
 
             else if (pathName.endsWith(HREF)) {
@@ -402,12 +438,12 @@ public class MigrationTestUtils {
                 Object sourceField = resolvePath(versionSource, pathName);
                 Object targetField = resolvePath(versionTarget, pathName);
                 if (pathName.equals(OWNING_SECTION)) {
-                    String sourceSectionNumber = getSectionNumber(sourceField);
-                    String targetSectionNumber = getSectionNumber(targetField);
-                    System.out.println("Comparing owning section: " + sourceSectionNumber + " -> " + targetSectionNumber);
-                    assertThat(sourceSectionNumber).withFailMessage(FAIL_MESSAGE,
+                    System.out.println("Comparing owning section: " + sourceField + " -> " + targetField);
+                    assert targetField != null;
+                    assert sourceField != null;
+                    assertThat(sourceField.toString()).withFailMessage(FAIL_MESSAGE,
                                     pathName, sourceField, targetField)
-                            .isEqualTo(targetSectionNumber);
+                            .contains(targetField.toString());
                 }
                 else if (pathName.endsWith(HREF)) {
                     assertThat(sourceField == null && targetField == null ||
