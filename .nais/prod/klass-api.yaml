@@ -29,7 +29,7 @@ spec:
           - name: klass
   env:
     - name: SPRING_PROFILES_ACTIVE
-      value: api, postgres, solr-remote
+      value: api, postgres, solr-remote, skip-indexing
     - name: SPRING_DATA_SOLR_HOST
       value: http://klass-solr/solr
     - name: KLASS_ENV_CLIENT_KLASS_MAIL_URL
