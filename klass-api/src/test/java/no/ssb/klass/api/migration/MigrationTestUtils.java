@@ -274,7 +274,9 @@ public class MigrationTestUtils {
     }
 
     /**
-     *
+     * Temporary validation for migrated section names.
+     * Ensure migrated sections follow the rules for migration.
+     * When core method fetches section name from code list this validation is unnecessary.
      */
     public static void validateMigratedSsbSections(Response sourceResponse, Response targetResponse) {
         String pathListName = EMBEDDED_SSB_SECTIONS;
@@ -457,6 +459,11 @@ public class MigrationTestUtils {
         };
     }
 
+    /**
+     * Temporary validation for migrated section names.
+     * Ensure migrated sections follow the rules for migration.
+     * When core method fetches section name from code list this validation is unnecessary.
+     */
     public static void validateXmlItems(Response sourceResponse, Response targetResponse, List<String> pathNames)  {
         XmlPath xmlPathSource = extractXmlPaths(sourceResponse, targetResponse)[0];
         XmlPath xmlPathTarget = extractXmlPaths(sourceResponse, targetResponse)[1];
