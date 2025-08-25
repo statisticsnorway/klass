@@ -1,0 +1,48 @@
+apiVersion: "monitoring.coreos.com/v1"
+kind: PrometheusRule
+metadata:
+  name: alert-klass-forvaltning
+  namespace: dapla-metadata
+  labels:
+    team: dapla-metadata
+spec:
+  groups:
+    - name: dapla-metadata
+      rules:
+        - alert: High number of errors
+          expr: (100 * sum by (app, namespace) (rate(logback_events_total{app="klass-forvaltning",level="error"}[3m])) / sum by (app, namespace) (rate(logback_events_total{app="klass-forvaltning"}[3m]))) > 10
+          for: 3m
+          annotations:
+            title: "High number of errors logged"
+            consequence: "There can be different causes for errors, check logs for cause and evaluation of consequences."
+            action: "`kubectl describe pod -l app=klass-forvaltning -n dapla-metadata` -> `kubectl logs <podname>`"
+          labels:
+            service: klass-forvaltning
+            namespace: dapla-metadata
+            severity: critical
+            environment: prod
+
+        - alert: A Klass-forvaltning client is unavailable
+          expr: rate(http_client_requests_seconds_count{app="klass-forvaltning", status!="200"}[1m]) > 0
+          for: 1m
+          annotations:
+            title: "A Klass-forvaltning client is unavailable "
+            consequence: "The service may lack some functionality"
+            description: "Client {{ $labels.serviceId }} responded with {{ $labels.status }} causing {{ $labels.exception }}"
+          labels:
+            service: klass-forvaltning
+            namespace: dapla-metadata
+            severity: critical
+            environment: prod
+
+        - alert: Klass-forvaltning is unavailable
+          expr: kube_deployment_status_replicas_available{deployment="klass-forvaltning"} == 0
+          for: 1m
+          annotations:
+            title: "Klass-forvaltning is unavailable"
+            consequence: "Service is unavailable to users. "
+          labels:
+            service: klass-forvaltning
+            namespace: dapla-metadata
+            severity: critical
+            environment: prod
