@@ -2,7 +2,6 @@ name: Deploy alerts
 run-name: Deploy alerts for klass to test and prod
 
 on:
-  pull_request:
   push:
     branches:
       - main
