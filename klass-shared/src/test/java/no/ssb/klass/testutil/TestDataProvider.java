@@ -25,10 +25,6 @@ public final class TestDataProvider {
     public static final String KOMMUNEINNDELING_NAVN_NN = "Standard for kommuneinndeling (Nynorsk)";
     public static final String KOMMUNEINNDELING_NAVN_EN = "Standard for kommuneinndeling(English)";
 
-    public static final String SEKSJONSINNDELING_NAVN_NO = "Standard for seksjonsinndeling";
-    public static final String SEKSJONSINNDELING_NAVN_NN = "Standard for seksjonsinndeling (Nynorsk)";
-    public static final String SEKSJONSINNDELING_NAVN_EN = "Standard for seksjonsinndeling(English)";
-
     public static final String KOMMUNEINNDELING_BESKRIVELSE_NO =
             "kommune inndelingen er en administrativ inndeling av kommuner i Norge";
     public static final String KOMMUNEINNDELING_BESKRIVELSE_NN = "kommune beskrivelse";
@@ -123,60 +119,6 @@ public final class TestDataProvider {
                 .getLevelNumber(), null);
         version2008.publish(Language.NB);
         classification.addClassificationVersion(version2008);
-
-        return classification;
-    }
-
-    public static ClassificationSeries createClassificationSSBSections() {
-        ClassificationSeries classification = TestUtil.createClassification(SEKSJONSINNDELING_NAVN_NO,
-                SEKSJONSINNDELING_NAVN_NN, SEKSJONSINNDELING_NAVN_EN, KOMMUNEINNDELING_BESKRIVELSE_NO,
-                KOMMUNEINNDELING_BESKRIVELSE_NN, KOMMUNEINNDELING_BESKRIVELSE_EN);
-
-        ClassificationVersion versionFuture = TestUtil.createClassificationVersion(DateRange.create(TestDataProvider.TEN_YEARS_LATER_DATE, null));
-
-        Level levelFuture = TestUtil.createLevel(1);
-        versionFuture.addLevel(levelFuture);
-        versionFuture.addClassificationItem(TestUtil.createClassificationItem("120", "Internasjonalt sekretæriat"), levelFuture.getLevelNumber(),
-                null);
-        versionFuture.addClassificationItem(TestUtil.createClassificationItem("150", "Seksjon HR"), levelFuture.getLevelNumber(),
-                null);
-        versionFuture.addClassificationItem(TestUtil.createClassificationItem("320", "Seksjon for befolkningsstatistikk"), levelFuture.getLevelNumber(),
-                null);
-        versionFuture.addClassificationItem(TestUtil.createClassificationItem("330", "Seksjon for helsestatistikk"), levelFuture
-                .getLevelNumber(), null);
-        versionFuture.addClassificationItem(TestUtil.createClassificationItem("426", "Seksjon for eiendoms-, areal- og primærnæringsstatistikk"),
-                levelFuture.getLevelNumber(), null);
-        classification.addClassificationVersion(versionFuture);
-
-        ClassificationVersion version2014 = TestUtil.createClassificationVersion(DateRange.create("2014-01-01", TEN_YEARS_LATER_DATE));
-
-        Level level = TestUtil.createLevel(1);
-        version2014.addLevel(level);
-        version2014.addClassificationItem(TestUtil.createClassificationItem("120", "Internasjonalt sekretæriat"), level.getLevelNumber(),
-                null);
-        version2014.addClassificationItem(TestUtil.createClassificationItem("150", "Seksjon HR"), level.getLevelNumber(),
-                null);
-        version2014.addClassificationItem(TestUtil.createClassificationItem("330", "Seksjon for helsestatistikk"), level.getLevelNumber(),
-                null);
-        version2014.addClassificationItem(TestUtil.createClassificationItem("426", "Seksjon for eiendoms-, areal- og primærnæringsstatistikk"), level.getLevelNumber(),
-                null);
-        classification.addClassificationVersion(version2014);
-
-        ClassificationVersion version2012 = TestUtil.createClassificationVersion(DateRange.create("2012-01-01",
-                "2014-01-01"));
-
-        Level level2012 = TestUtil.createLevel(1);
-        version2012.addLevel(level2012);
-        version2012.addClassificationItem(TestUtil.createClassificationItem("120", "Internasjonalt sekretæriat"), level.getLevelNumber(),
-                null);
-        version2012.addClassificationItem(TestUtil.createClassificationItem("150", "Seksjon HR"), level.getLevelNumber(),
-                null);
-        version2012.addClassificationItem(TestUtil.createClassificationItem("330", "Seksjon for helsestatistikk"), level.getLevelNumber(),
-                null);
-        version2012.addClassificationItem(TestUtil.createClassificationItem("426", "Seksjon for eiendoms-, areal- og primærnæringsstatistikk"), level.getLevelNumber(),
-                null);
-        version2012.publish(Language.NB);
-        classification.addClassificationVersion(version2012);
 
         return classification;
     }
