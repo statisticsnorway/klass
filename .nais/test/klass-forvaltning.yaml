@@ -21,7 +21,6 @@ spec:
     enforce:
       enabled: true
       excludePaths:
-        - /manage
         - /klass/admin/schemas/version.xsd
   replicas:
     min: 1
