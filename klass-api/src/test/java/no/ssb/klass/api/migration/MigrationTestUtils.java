@@ -482,13 +482,11 @@ public class MigrationTestUtils {
             Object sourcePath = xmlPathSource.get(pathName);
             Object targetPath = xmlPathTarget.get(pathName);
 
-            if (pathName.equals(CLASSIFICATION_OWNING_SECTION)) {
-                String sourceSectionNumber = getSectionNumber(sourcePath);
-                String targetSectionNumber = getSectionNumber(targetPath);
-                System.out.println("Comparing owning section: " + sourceSectionNumber + " -> " + targetSectionNumber);
-                assertThat(sourceSectionNumber).withFailMessage(FAIL_MESSAGE,
+            if (pathName.endsWith(OWNING_SECTION)) {
+                System.out.println("Comparing owning section: " + sourcePath + " -> " + targetPath);
+                assertThat(sourcePath.toString()).withFailMessage(FAIL_MESSAGE,
                                 pathName, sourcePath, targetPath)
-                        .isEqualTo(targetSectionNumber);
+                        .contains(targetPath.toString());
             }
             else if (pathName.endsWith(HREF)) {
                 URI sourceUri = URI.create(pathName);
@@ -582,12 +580,10 @@ public class MigrationTestUtils {
                 System.out.printf("Target: [%s] (%d chars)%n", targetField, targetField.length());
 
                 if (pathName.equals(CLASSIFICATION_OWNING_SECTION)) {
-                    String sourceSectionNumber = getSectionNumber(sourceField);
-                    String targetSectionNumber = getSectionNumber(targetField);
-                    System.out.println("Comparing owning section: " + sourceSectionNumber + " -> " + targetSectionNumber);
-                    assertThat(sourceSectionNumber).withFailMessage(FAIL_MESSAGE,
+                    System.out.println("Comparing owning section: " + sourceField + " -> " + targetField);
+                    assertThat(sourceField).withFailMessage(FAIL_MESSAGE,
                                     pathName, sourceField, targetField)
-                            .isEqualTo(targetSectionNumber);
+                            .contains(targetField);
                 }
 
                 else if (pathName.endsWith(HREF)) {
