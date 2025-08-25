@@ -1,0 +1,22 @@
+apiVersion: "monitoring.coreos.com/v1"
+kind: PrometheusRule
+metadata:
+  name: alert-klass-solr
+  namespace: dapla-metadata
+  labels:
+    team: dapla-metadata
+spec:
+  groups:
+    - name: dapla-metadata
+      rules:
+        - alert: Klass-solr is unavailable
+          expr: kube_deployment_status_replicas_available{deployment="klass-solr"} == 0
+          for: 1m
+          annotations:
+            title: "Klass-solr is unavailable"
+            consequence: "Service is unavailable to users. "
+          labels:
+            service: klass-solr
+            namespace: dapla-metadata
+            severity: critical
+            environment: prod
