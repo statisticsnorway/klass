@@ -23,8 +23,8 @@ public class TestAuthVaadinServlet extends SpringVaadinServlet {
     private static final Logger log = LoggerFactory.getLogger(TestAuthVaadinServlet.class);
     private final String userRole;
 
-    private static final User standardUser = new User("ziggy", "Ziggy Stardust", "999");
-    private static final User adminUser = new User("admin1", "Admin One", "777");
+    private static final User standardUser = new User("ziggy", "Ziggy Stardust", "700");
+    private static final User adminUser = new User("admin1", "Admin One", "724");
 
     public TestAuthVaadinServlet(@Value("${klass.security.hardcoded.user.role}") String userRole) {
         this.userRole = userRole;

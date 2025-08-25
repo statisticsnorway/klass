@@ -9,7 +9,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class UserContextTest {
 
-    private static final User user = new User("kno", "Kari Nordmann", "777");
+    private static final User user = new User("kno", "Kari Nordmann", "724");
 
     @Test
     public void userRoleAdmin() {
