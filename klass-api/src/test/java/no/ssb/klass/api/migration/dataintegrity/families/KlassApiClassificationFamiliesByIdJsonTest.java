@@ -11,8 +11,6 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class KlassApiClassificationFamiliesByIdJsonTest extends AbstractKlassApiFamiliesTest {
 
-    Boolean migrated = true;
-
     @Test
     void getOneClassificationFamilyById() {
         int classificationFamilyId = 11;
