@@ -2,6 +2,15 @@ name: Klass-solr deploy
 
 on:
   workflow_dispatch:
+    inputs:
+      cluster:
+        description: "Which cluster to deploy to?"
+        required: true
+        default: "test"
+        type: choice
+        options:
+          - test
+          - prod
 
 jobs:
   deploy:
@@ -19,7 +28,7 @@ jobs:
       - name: Deploy to Nais
         uses: nais/deploy/actions/deploy@v2
         env:
-          CLUSTER: test
-          RESOURCE: .nais/test/klass-solr.yaml
+          CLUSTER: ${{ github.event.inputs.cluster }}
+          RESOURCE: .nais/${{ github.event.inputs.cluster }}/klass-solr.yaml
           WORKLOAD_IMAGE: europe-north1-docker.pkg.dev/${{ secrets.NAIS_MANAGEMENT_PROJECT_ID }}/dapla-metadata/klass-solr:5.5.2
           VAR: image=europe-north1-docker.pkg.dev/${{ secrets.NAIS_MANAGEMENT_PROJECT_ID }}/dapla-metadata/klass-solr:5.5.2

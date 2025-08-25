@@ -1,4 +1,4 @@
-# Deploy config for the test cluster
+# Deploy config for the prod cluster
 apiVersion: nais.io/v1alpha1
 kind: Application
 metadata:
@@ -8,8 +8,10 @@ metadata:
     team: dapla-metadata
 spec:
   port: 8080
+
   ingresses:
-    - https://klass.intern.test.ssb.no/api/klass
+    - https://klass.intern.ssb.no
+
   replicas:
     min: 1
     max: 1
@@ -41,7 +43,7 @@ spec:
 
   prometheus:
     enabled: true
-    path: /actuator/prometheus
+    path: /prometheus
     port: "8090"
 
   liveness:
@@ -56,4 +58,3 @@ spec:
     path: /actuator/health/liveness
     port: 8090
     initialDelay: 60
-    timeout: 180

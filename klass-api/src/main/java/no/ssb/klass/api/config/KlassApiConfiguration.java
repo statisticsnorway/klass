@@ -1,9 +1,8 @@
 package no.ssb.klass.api.config;
 
-import no.ssb.klass.core.config.ConfigurationProfiles;
-import no.ssb.klass.api.controllers.MonitorController;
 import no.ssb.klass.api.controllers.PingController;
 import no.ssb.klass.api.util.RestConstants;
+import no.ssb.klass.core.config.ConfigurationProfiles;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -14,7 +13,7 @@ import org.springframework.security.web.SecurityFilterChain;
  * @author Mads Lundemo, SSB.
  */
 @Configuration
-@Profile(value = { ConfigurationProfiles.API_ONLY }) // makes config disabled for tests
+@Profile(value = {ConfigurationProfiles.API_ONLY}) // makes config disabled for tests
 public class KlassApiConfiguration {
 
     @Bean
@@ -30,7 +29,6 @@ public class KlassApiConfiguration {
                 // allow rest API and health checks
                 .antMatchers(RestConstants.API_VERSION_V1 + "/**").permitAll()
                 .antMatchers(PingController.PATH).permitAll()
-                .antMatchers(MonitorController.PATH).permitAll()
 
                 .and()
                 .csrf().disable()

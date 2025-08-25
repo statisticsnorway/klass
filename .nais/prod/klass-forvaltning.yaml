@@ -8,11 +8,11 @@ metadata:
 spec:
   port: 8081
   ingresses:
-    - https://klass.intern.test.ssb.no/klass/admin
+    - https://klass.intern.ssb.no/klass/admin
   accessPolicy:
     outbound:
       external:
-        - host: auth.test.ssb.no
+        - host: auth.ssb.no
       rules:
         - application: klass-solr
         - application: klass-mail
@@ -39,7 +39,7 @@ spec:
     - name: SPRING_DATA_SOLR_HOST
       value: http://klass-solr/solr/
     - name: KLASS_ENV_SERVER
-      value: klass.intern.test.ssb.no
+      value: klass.intern.ssb.no
     - name: KLASS_ENV_CLIENT_KLASS_MAIL_URL
       value: http://klass-mail
   envFrom:

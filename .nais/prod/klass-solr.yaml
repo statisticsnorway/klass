@@ -1,0 +1,52 @@
+# Deploy config for the prod cluster
+apiVersion: nais.io/v1alpha1
+kind: Application
+metadata:
+  name: klass-solr
+  namespace: dapla-metadata
+  labels:
+    team: dapla-metadata
+  annotations:
+    nais.io/read-only-file-system: "false"
+    nais.io/run-as-user: "8983"
+    nais.io/run-as-group: "8983"
+spec:
+  image: "{{ image }}"
+  port: 8983
+
+  filesFrom:
+    - persistentVolumeClaim: klass-solr-pvc
+      mountPath: /opt/solr/server/solr/mycores/Klass/data
+
+  replicas:
+    min: 1
+    max: 1
+  resources:
+    requests:
+      cpu: 400m
+      memory: 1024Mi
+    limits:
+      memory: 2048Mi
+
+  accessPolicy:
+    inbound:
+      rules:
+        - application: klass
+        - application: klass-forvaltning
+
+
+  liveness:
+    path: /solr/admin/cores?action=STATUS
+    port: 8983
+    initialDelay: 60
+
+  readiness:
+    path: /solr/admin/cores?action=STATUS
+    port: 8983
+    initialDelay: 60
+
+  startup:
+    path: /solr/admin/cores?action=STATUS
+    port: 8983
+    initialDelay: 60
+
