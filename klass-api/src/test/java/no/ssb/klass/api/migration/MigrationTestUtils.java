@@ -45,6 +45,9 @@ public class MigrationTestUtils {
         }
     }
 
+    private static final DateTimeFormatter DATE_TIME_FORMATTER =
+            DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+
     /**
      * Extracts the date part from a full datetime object.
      *
@@ -52,12 +55,13 @@ public class MigrationTestUtils {
      * @return the extracted date as a formatted string (yyyy-MM-dd)
      */
     private static String getDate(Object dateTime) {
-        String dateTimeStr = Objects.toString(dateTime, "");
-        OffsetDateTime odt = OffsetDateTime.parse(dateTimeStr,
-                DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ"));
+        if (dateTime == null) return null;
 
-        return odt.toLocalDate().format(formatter);
+        String dateTimeStr = dateTime.toString();
+        OffsetDateTime odt = OffsetDateTime.parse(dateTimeStr, DATE_TIME_FORMATTER);
+        return odt.toLocalDate().toString();
     }
+
 
     /**
      * Extracts the section number from a section object by converting it to string.
@@ -287,16 +291,26 @@ public class MigrationTestUtils {
                 .isEqualTo(targetList.size());
 
         for (int i = 0; i < sourceList.size(); i++) {
-            String sourceName = sourceList.get(i).get("description").toString();
-            String targetName = targetList.get(i).get("description").toString();
-            System.out.println("Checking " + sourceName + " -> " + targetName);
-            if (sourceName != null) {
-                assertThat(sourceName).withFailMessage(
+            String sourceDescription = sourceList.get(i).get("description").toString();
+            String targetDescription = targetList.get(i).get("description").toString();
+            System.out.println("Checking " + sourceDescription + " -> " + targetDescription);
+            if (sourceDescription != null) {
+                assertThat(sourceDescription).withFailMessage(
                         FAIL_MESSAGE,
                         CHANGELOGS,
-                        sourceName,
-                        targetName).isEqualTo(targetName);
+                        sourceDescription,
+                        targetDescription).isEqualTo(targetDescription);
             }
+
+            String sourceDate = getDate(sourceList.get(i).get("changeOccured"));
+            String targetDate = getDate(targetList.get(i).get("changeOccured"));
+            System.out.println("Checking " + sourceDate + " -> " + targetDate);
+            assertThat(sourceDate).withFailMessage(
+                    FAIL_MESSAGE,
+                    CHANGELOGS,
+                    sourceDate,
+                    targetDate).isEqualTo(targetDate);
+
         }
     }
 
