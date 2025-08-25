@@ -21,7 +21,6 @@ spec:
     enforce:
       enabled: true
       excludePaths:
-        - /manage
         - /klass/admin/schemas/version.xsd
   replicas:
     min: 1
@@ -36,11 +35,11 @@ spec:
     - name: SPRING_PROFILES_ACTIVE
       value: frontend, postgres, small-import, skip-indexing, ad-offline, remote-solr
     - name: KLASS_SECURITY_OAUTH2_LOGOUT_PATH
-      value: /oauth2/logout
+      value: /klass/admin/oauth2/logout
     - name: SPRING_DATA_SOLR_HOST
       value: http://klass-solr/solr/
     - name: KLASS_ENV_SERVER
-      value: klass-forvaltning.intern.test.ssb.no
+      value: klass.intern.test.ssb.no
     - name: KLASS_ENV_CLIENT_KLASS_MAIL_URL
       value: http://klass-mail
   envFrom:
