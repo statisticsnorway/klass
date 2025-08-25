@@ -7,7 +7,6 @@ metadata:
   labels:
     team: dapla-metadata
 spec:
-  image: "{{ image }}"  # Injected from the GitHub Action
   port: 8082
 
   replicas:
