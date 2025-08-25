@@ -12,7 +12,6 @@ import no.ssb.klass.testutil.TestUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.springframework.data.domain.Page;
@@ -23,6 +22,7 @@ import org.springframework.data.domain.Pageable;
 import java.time.LocalDate;
 import java.util.*;
 
+import static no.ssb.klass.core.service.ClassificationServiceImpl.STANDARD_FOR_SEKSJONSINNDELING;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -335,7 +335,7 @@ public class ClassificationServiceImplTest {
         ClassificationSeries classification = TestUtil.createClassification("name");
         classification.setId(1L);
 
-        ClassificationVersion mock = Mockito.mock(ClassificationVersion.class);
+        ClassificationVersion mock = mock(ClassificationVersion.class);
         when(mock.getOwnerClassification()).thenReturn(classification);
 
         when(classificationVersionRepositoryMock.save(mock)).thenReturn(mock);
@@ -348,7 +348,7 @@ public class ClassificationServiceImplTest {
         ClassificationSeries classification = TestUtil.createClassification("name");
         classification.setId(1L);
 
-        ClassificationVariant mock = Mockito.mock(ClassificationVariant.class);
+        ClassificationVariant mock = mock(ClassificationVariant.class);
         when(mock.getOwnerClassification()).thenReturn(classification);
 
         when(classificationVariantRepositoryMock.save(mock)).thenReturn(mock);
@@ -361,7 +361,7 @@ public class ClassificationServiceImplTest {
         ClassificationSeries classification = TestUtil.createClassification("name");
         classification.setId(1L);
 
-        CorrespondenceTable mock = Mockito.mock(CorrespondenceTable.class);
+        CorrespondenceTable mock = mock(CorrespondenceTable.class);
         when(mock.getOwnerClassification()).thenReturn(classification);
 
         when(correspondenceTableRepositoryMock.save(mock)).thenReturn(mock);
@@ -702,4 +702,33 @@ public class ClassificationServiceImplTest {
         return PageRequest.of(0, 3);
     }
 
+    @Test
+    void findAllResponsibleSections() {
+        String sectionMicroDataName = "Seksjon for mikrodata";
+        String sectionMicroDataCode = "300";
+        String sectionPropertyName= "Seksjon for eiendoms-, areal- og primærnæringsstatistikk";
+        String sectionPropertyCode = "426";
+
+        ClassificationItem item1 = TestUtil.createClassificationItem(sectionMicroDataCode, sectionMicroDataName);
+        ClassificationItem item2 = TestUtil.createClassificationItem(sectionPropertyCode, sectionPropertyName);
+        ClassificationSeries series = TestUtil.createClassification(STANDARD_FOR_SEKSJONSINNDELING);
+        DateRange dateRange = DateRange.create("2025-01-01", "2025-08-01");
+        ClassificationVersion version = TestUtil.createClassificationVersion(dateRange);
+        version.addNextLevel();
+        series.addClassificationVersion(version);
+        version.addClassificationItem(item1, 1, null);
+        version.addClassificationItem(item2, 1, null);
+
+        Set<String> codes = Set.of(sectionMicroDataCode, sectionPropertyCode, "");
+        when(classificationSeriesRepositoryMock.findAllResponsibleSections()).thenReturn(codes);
+
+
+        when(classificationSeriesRepositoryMock.findByNameNoIgnoreCase(STANDARD_FOR_SEKSJONSINNDELING))
+                .thenReturn(series);
+
+        Set<String> result = subject.findAllResponsibleSections();
+
+        assertThat(result).containsExactlyInAnyOrder(sectionPropertyCode + " - " + sectionPropertyName, sectionMicroDataCode + " - " +  sectionMicroDataName);
+        assertThat(result).doesNotContain("");
+    }
 }
