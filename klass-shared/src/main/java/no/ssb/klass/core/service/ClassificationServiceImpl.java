@@ -30,6 +30,7 @@ import static java.util.stream.Collectors.toSet;
 @Transactional()
 public class ClassificationServiceImpl implements ClassificationService {
 
+    protected static final String STANDARD_FOR_SEKSJONSINNDELING = "Standard for seksjonsinndeling";
     private static final Logger log = LoggerFactory.getLogger(ClassificationServiceImpl.class);
     private final ClassificationFamilyRepository classificationFamilyRepository;
     private final ClassificationSeriesRepository classificationRepository;
@@ -388,21 +389,51 @@ public class ClassificationServiceImpl implements ClassificationService {
         return classificationFamilySummaryBuilder.buildPublicClassificationSummaries(section, classificationType);
     }
 
+    /**
+     * Maps section codes to display names in the form "<code> - <officialName>".
+     *
+     * @param responsibleSectionCodes section codes to resolve
+     * @return formatted section names, or an empty set if none match
+     */
+    private Set<String> resolveResponsibleSectionNames(Set<String> responsibleSectionCodes) {
+        return findOneClassificationSeriesWithName(STANDARD_FOR_SEKSJONSINNDELING, Language.NB)
+                .map(ClassificationSeries::getNewestVersion)
+                .map(ClassificationVersion::getAllClassificationItems)
+                .stream()
+                .flatMap(Collection::stream)
+                .filter(item -> responsibleSectionCodes.contains(item.getCode()))
+                .map(this::formatSectionLabel)
+                .collect(toSet());
+    }
+
+    private String formatSectionLabel(ClassificationItem item) {
+        Language language = Language.NB;
+        log.debug("Formatting section label for {}", item);
+        return item.getCode() + " - " + item.getOfficialName(language);
+    }
+
+    /**
+     * Finds all responsible sections and resolves them to display names.
+     *
+     * @return all responsible sections with names
+     */
     @Override
     @Transactional(readOnly = true)
     public Set<String> findAllResponsibleSections() {
-        Set<String> reponsibleSections = classificationRepository.findAllResponsibleSections();
-        log.info("Found {} responsible sections", reponsibleSections.size());
-        log.info("Found {} responsible sections", reponsibleSections);
-        log.debug("Found {} responsible sections", reponsibleSections.size());
-        return classificationRepository.findAllResponsibleSections();
+        return resolveResponsibleSectionNames(classificationRepository.findAllResponsibleSections());
     }
 
+    /**
+     * Finds responsible sections that have published versions and resolves them to display names.
+     *
+     * @return responsible sections with published versions and names
+     */
     @Override
     @Transactional(readOnly = true)
     public Set<String> findResponsibleSectionsWithPublishedVersions() {
-        return classificationRepository.findResponsibleSectionsWithPublishedVersions();
+        return resolveResponsibleSectionNames(classificationRepository.findResponsibleSectionsWithPublishedVersions());
     }
+
 
     @Override
     public void deleteNotIndexClassification(User user, ClassificationSeries classification)
