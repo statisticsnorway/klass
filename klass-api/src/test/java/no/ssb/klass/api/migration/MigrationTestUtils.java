@@ -195,15 +195,6 @@ public class MigrationTestUtils {
                     .withFailMessage(FAIL_MESSAGE, pathName, null, targetField)
                     .isNull();
         }
-        if (pathName.equals(LAST_MODIFIED)) {
-            String sourceDate = getDate(sourceField);
-            String targetDate = getDate(targetField);
-            System.out.println("Comparing timestamp values: " + sourceDate + " -> " + targetDate);
-            assertThat(sourceDate).withFailMessage(FAIL_MESSAGE,
-                    pathName, sourceDate, targetDate)
-                    .isEqualTo(targetDate);
-        }
-
         else if (pathName.equals(OWNING_SECTION)) {
             String sourceSectionNumber = getSectionNumber(sourceField);
             String targetSectionNumber = getSectionNumber(targetField);
@@ -338,18 +329,7 @@ public class MigrationTestUtils {
                         .withFailMessage(FAIL_MESSAGE, pathName, null, targetField)
                         .isNull();
             }
-            if (pathName.equals(LAST_MODIFIED)) {
-                String sourceDate = getDate(sourceField);
-                String targetDate = getDate(targetField);
-
-                System.out.println("Comparing timestamp values: " + sourceDate + " -> " + targetDate);
-
-                assertThat(sourceDate).withFailMessage(FAIL_MESSAGE,
-                                pathName, sourceDate, targetDate)
-                        .isEqualTo(targetDate);
-            }
-
-            else if (pathName.equals(OWNING_SECTION)) {
+            if (pathName.equals(OWNING_SECTION)) {
                 String sourceSectionNumber = getSectionNumber(sourceField);
                 String targetSectionNumber = getSectionNumber(targetField);
                 System.out.println("Comparing owning section: " + sourceSectionNumber + " -> " + targetSectionNumber);
@@ -421,16 +401,7 @@ public class MigrationTestUtils {
 
                 Object sourceField = resolvePath(versionSource, pathName);
                 Object targetField = resolvePath(versionTarget, pathName);
-
-                if (pathName.equals(LAST_MODIFIED)) {
-                    String sourceDate = getDate(sourceField);
-                    String targetDate = getDate(targetField);
-                    System.out.println("Comparing timestamp values: " + sourceDate + " -> " + targetDate);
-                    assertThat(sourceDate).withFailMessage(FAIL_MESSAGE,
-                                    pathName, sourceDate, targetDate)
-                            .isEqualTo(targetDate);
-                }
-                else if (pathName.equals(OWNING_SECTION)) {
+                if (pathName.equals(OWNING_SECTION)) {
                     String sourceSectionNumber = getSectionNumber(sourceField);
                     String targetSectionNumber = getSectionNumber(targetField);
                     System.out.println("Comparing owning section: " + sourceSectionNumber + " -> " + targetSectionNumber);
@@ -475,18 +446,7 @@ public class MigrationTestUtils {
             Object sourcePath = xmlPathSource.get(pathName);
             Object targetPath = xmlPathTarget.get(pathName);
 
-            if (pathName.equals(CLASSIFICATION_LAST_MODIFIED)) {
-                String sourceDate = getDate(sourcePath);
-                String targetDate = getDate(targetPath);
-
-                System.out.println("Comparing timestamp values: " + sourceDate + " -> " + targetDate);
-
-                assertThat(sourceDate).withFailMessage(FAIL_MESSAGE,
-                                pathName, sourceDate, targetDate)
-                        .isEqualTo(targetDate);
-            }
-
-            else if (pathName.equals(CLASSIFICATION_OWNING_SECTION)) {
+            if (pathName.equals(CLASSIFICATION_OWNING_SECTION)) {
                 String sourceSectionNumber = getSectionNumber(sourcePath);
                 String targetSectionNumber = getSectionNumber(targetPath);
                 System.out.println("Comparing owning section: " + sourceSectionNumber + " -> " + targetSectionNumber);
@@ -585,18 +545,7 @@ public class MigrationTestUtils {
                 System.out.printf("Source: [%s] (%d chars)%n", sourceField, sourceField.length());
                 System.out.printf("Target: [%s] (%d chars)%n", targetField, targetField.length());
 
-                if (pathName.equals(CLASSIFICATION_LAST_MODIFIED) || pathName.equals(LAST_MODIFIED)) {
-                    String sourceDate = getDate(sourceField);
-                    String targetDate = getDate(targetField);
-
-                    System.out.println("Comparing timestamp values: " + sourceDate + " -> " + targetDate);
-
-                    assertThat(sourceDate).withFailMessage(FAIL_MESSAGE,
-                                    pathName, sourceDate, targetDate)
-                            .isEqualTo(targetDate);
-                }
-
-                else if (pathName.equals(CLASSIFICATION_OWNING_SECTION)) {
+                if (pathName.equals(CLASSIFICATION_OWNING_SECTION)) {
                     String sourceSectionNumber = getSectionNumber(sourceField);
                     String targetSectionNumber = getSectionNumber(targetField);
                     System.out.println("Comparing owning section: " + sourceSectionNumber + " -> " + targetSectionNumber);

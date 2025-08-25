@@ -47,7 +47,6 @@ public final class MigrationTestConstants {
     public static final String CLASSIFICATION_ID = "classification.id";
     public static final String CLASSIFICATION_CLASSIFICATION_TYPE = "classification.classificationType";
     public static final String CLASSIFICATION_DESCRIPTION = "classification.description";
-    public static final String CLASSIFICATION_LAST_MODIFIED = "classification.lastModified";
     public static final String CLASSIFICATION_PRIMARY_LANGUAGE = "classification.primaryLanguage";
     public static final String CLASSIFICATION_COPYRIGHTED = "classification.copyrighted";
     public static final String CLASSIFICATION_INCLUDE_SHORTNAME = "classification.includeShortName";
@@ -60,7 +59,6 @@ public final class MigrationTestConstants {
     public static final String NAME = "name";
     public static final String CLASSIFICATION_TYPE = "classificationType";
     public static final String DESCRIPTION = "description";
-    public static final String LAST_MODIFIED = "lastModified";
     public static final String PRIMARY_LANGUAGE = "primaryLanguage";
     public static final String COPYRIGHTED = "copyrighted";
     public static final String INCLUDE_SHORTNAME = "includeShortName";
@@ -138,7 +136,6 @@ public final class MigrationTestConstants {
     public static final String CLASSIFICATION_VERSION_LINK_REL = "classificationVersion.link.rel";
     public static final String CLASSIFICATION_VERSION_LINK_HREF= "classificationVersion.link.href";
     public static final String CLASSIFICATION_VERSION_VALID_FROM = "classificationVersion.validFrom";
-    public static final String CLASSIFICATION_VERSION_LAST_MODIFIED = "classificationVersion.lastModified";
     public static final String CLASSIFICATION_VERSION_INTRODUCTION = "classificationVersion.introduction";
     public static final String CLASSIFICATION_VERSION_CONTACT_PERSON_NAME= "classificationVersion.contactPerson.name";
     public static final String CLASSIFICATION_VERSION_CONTACT_PERSON_EMAIL = "classificationVersion.contactPerson.email";
@@ -211,7 +208,6 @@ public final class MigrationTestConstants {
             ID,
             CLASSIFICATION_TYPE,
             DESCRIPTION,
-            LAST_MODIFIED,
             PRIMARY_LANGUAGE,
             COPYRIGHTED,
             INCLUDE_SHORTNAME,
@@ -240,7 +236,6 @@ public final class MigrationTestConstants {
             CLASSIFICATION_ID,
             CLASSIFICATION_CLASSIFICATION_TYPE,
             CLASSIFICATION_DESCRIPTION,
-            CLASSIFICATION_LAST_MODIFIED,
             CLASSIFICATION_PRIMARY_LANGUAGE,
             CLASSIFICATION_COPYRIGHTED,
             CLASSIFICATION_INCLUDE_SHORTNAME,
@@ -254,7 +249,6 @@ public final class MigrationTestConstants {
             ID,
             CONTACT_PERSON,
             OWNING_SECTION,
-            LAST_MODIFIED,
             PUBLISHED_NB,
             PUBLISHED_EN,
             PUBLISHED_NN,
@@ -265,7 +259,6 @@ public final class MigrationTestConstants {
             CLASSIFICATION_VERSION_NAME,
             CLASSIFICATION_VERSION_ID,
             CLASSIFICATION_VERSION_VALID_FROM,
-            CLASSIFICATION_VERSION_LAST_MODIFIED,
             CLASSIFICATION_VERSION_INTRODUCTION,
             CLASSIFICATION_VERSION_CONTACT_PERSON_NAME,
             CLASSIFICATION_VERSION_CONTACT_PERSON_EMAIL,
@@ -282,7 +275,6 @@ public final class MigrationTestConstants {
             NAME,
             ID,
             CLASSIFICATION_TYPE,
-            LAST_MODIFIED,
             LINKS_SELF_HREF
     );
 
@@ -290,7 +282,6 @@ public final class MigrationTestConstants {
             NAME,
             ID,
             CLASSIFICATION_TYPE,
-            LAST_MODIFIED,
             LINK_REL,
             LINK_HREF
     );
@@ -300,7 +291,6 @@ public final class MigrationTestConstants {
             ID,
             VALID_FROM,
             VALID_TO,
-            LAST_MODIFIED,
             PUBLISHED,
             LINKS_SELF_HREF
     );
@@ -330,7 +320,6 @@ public final class MigrationTestConstants {
             ID,
             VALID_FROM,
             VALID_TO,
-            LAST_MODIFIED,
             INTRODUCTION,
             LEGAL_BASE,
             PUBLICATIONS,
@@ -358,7 +347,6 @@ public final class MigrationTestConstants {
             TARGET,
             TARGET_ID,
             CHANGE_TABLE,
-            LAST_MODIFIED,
             SOURCE_LEVEL,
             TARGET_LEVEL,
             DESCRIPTION,
@@ -382,7 +370,6 @@ public final class MigrationTestConstants {
             TARGET,
             TARGET_ID,
             CHANGE_TABLE,
-            LAST_MODIFIED,
             SOURCE_LEVEL,
             TARGET_LEVEL,
             DESCRIPTION,
@@ -398,7 +385,6 @@ public final class MigrationTestConstants {
             ID,
             CONTACT_PERSON,
             OWNING_SECTION,
-            LAST_MODIFIED,
             VALID_FROM,
             VALID_TO,
             INTRODUCTION,
