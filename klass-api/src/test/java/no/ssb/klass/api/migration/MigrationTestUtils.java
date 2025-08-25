@@ -274,6 +274,51 @@ public class MigrationTestUtils {
     }
 
     /**
+     * Temporary validation for migrated section names.
+     * Ensure migrated sections follow the rules for migration.
+     * When core method fetches section name from code list this validation is unnecessary.
+     */
+    public static void validateMigratedSsbSections(Response sourceResponse, Response targetResponse) {
+        String pathListName = EMBEDDED_SSB_SECTIONS;
+        ArrayList<Map<String, Object>> sourceList = sourceResponse.path(pathListName);
+        ArrayList<Map<String, Object>>targetList = targetResponse.path(pathListName);
+
+        System.out.println("Checking pathname: " + pathListName);
+
+        if (sourceList == null) {
+            assertThat(targetList)
+                    .withFailMessage(FAIL_MESSAGE, pathListName, null, targetList)
+                    .isNull();
+            return;
+        }
+
+        assertThat(targetList)
+                .withFailMessage(FAIL_MESSAGE, pathListName, sourceList, targetList)
+                .isNotNull();
+
+        System.out.println("List sizes: " + sourceList.size() + " -> " + targetList.size());
+
+        assertThat(sourceList.size())
+                .withFailMessage(FAIL_MESSAGE,
+                        pathListName, sourceList.size(), targetList.size())
+                .isEqualTo(targetList.size());
+
+        for (int i = 0; i < sourceList.size(); i++){
+            String sourceName = sourceList.get(i).get("name").toString();
+            String targetName = targetList.get(i).get("name").toString();
+            System.out.println("Checking " + sourceName + " -> " + targetName);
+            if(sourceName != null){
+                assertThat(sourceName).withFailMessage(
+                        FAIL_MESSAGE,
+                        pathListName,
+                        sourceName,
+                        targetName).startsWith(targetName);
+            }
+        }
+    }
+
+
+    /**
      *  Validates that the values of fields specified in [pathNames] from two API response bodies are equal.
      *  Handles url paths.
      * @param sourceResponse Response object from source Api
@@ -414,6 +459,11 @@ public class MigrationTestUtils {
         };
     }
 
+    /**
+     * Temporary validation for migrated section names.
+     * Ensure migrated sections follow the rules for migration.
+     * When core method fetches section name from code list this validation is unnecessary.
+     */
     public static void validateXmlItems(Response sourceResponse, Response targetResponse, List<String> pathNames)  {
         XmlPath xmlPathSource = extractXmlPaths(sourceResponse, targetResponse)[0];
         XmlPath xmlPathTarget = extractXmlPaths(sourceResponse, targetResponse)[1];
@@ -489,6 +539,29 @@ public class MigrationTestUtils {
                     path,
                     sourceList.get(i),
                     targetList.get(i)).isEqualTo(targetList.get(i));
+        }
+
+    }
+
+    public static void validateXmlMigratedSsbsections(String path, Response sourceResponse, Response targetResponse) {
+        XmlPath xmlPathSource = extractXmlPaths(sourceResponse, targetResponse)[0];
+        XmlPath xmlPathTarget = extractXmlPaths(sourceResponse, targetResponse)[1];
+
+        String pathName = ENTITIES_CONTENTS_CONTENT_NAME;
+        List<String> sourceList = xmlPathSource.getList(pathName);
+        List<String> targetList = xmlPathTarget.getList(pathName);
+        System.out.println(sourceList.size() + " -> " + targetList.size());
+
+        for(int i = 0; i < sourceList.size(); i++) {
+            String sourceSection = sourceList.get(i);
+            String targetSection = targetList.get(i);
+            if(sourceSection != null){
+                assertThat(sourceSection).withFailMessage(
+                        FAIL_MESSAGE,
+                        path,
+                        sourceSection,
+                        targetSection).startsWith(targetSection);
+            }
         }
 
     }

@@ -105,6 +105,7 @@ public final class MigrationTestConstants {
     public static final String CHANGELOGS= "changelogs";
     public static final String CODE_CHANGES= "codeChanges";
     public static final String SSB_SECTIONS= "ssbsections";
+    public static final String SSB_SECTIONS_PATH= "ssbSections";
     public static final String CORRESPONDENCE_MAPS = "correspondenceMaps";
     public static final String LEVELS= "levels";
     public static final String CLASSIFICATION_ITEMS= "classificationItems";
@@ -118,6 +119,7 @@ public final class MigrationTestConstants {
 
     public static final String CLASSIFICATION_VARIANT_CLASSIFICATION_ITEMS= "classificationVariant.classificationItems.classificationItem";
 
+    public static final String ENTITIES_CONTENTS_CONTENT_NAME= "entities.contents.content.name";
     public static final String ENTITIES_CONTENTS_CONTENT= "entities.contents.content";
     public static final String CODE_CHANGE_LIST_CODE_CHANGE_ITEM= "codeChangeList.codeChangeItem";
     public static final String CODE_LIST_CODE_ITEM= "codeList.codeItem";
