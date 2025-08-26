@@ -4,7 +4,7 @@
 
     <groupId>no.ssb.klass</groupId>
     <artifactId>klass-root</artifactId>
-    <version>4.0.1-SNAPSHOT</version>
+    <version>4.0.1</version>
     <packaging>pom</packaging>
 
     <parent>
@@ -25,7 +25,7 @@
     <scm>
         <developerConnection>scm:git:https://github.com/${github.repository}.git</developerConnection>
         <url>https://github.com/${github.repository}</url>
-        <tag>v4.0.0</tag>
+        <tag>v4.0.1</tag>
     </scm>
 
     <properties>
