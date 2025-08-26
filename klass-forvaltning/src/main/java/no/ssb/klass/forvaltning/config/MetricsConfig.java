@@ -10,6 +10,7 @@ public class MetricsConfig {
 
     @Bean
     public MeterRegistryCustomizer<MeterRegistry> metricsCommonTags() {
+        System.out.println(">>> MetricsConfig loaded!"); // debug
         return registry -> registry.config().commonTags("application", "klass-forvaltning");
     }
 }
