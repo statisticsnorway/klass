@@ -1,6 +1,7 @@
 name: Klass-forvaltning build and deploy
 
 on:
+  pull_request:
   release:
     types: [ published ]
   push:
