@@ -15,6 +15,7 @@ spec:
   resources:
     requests:
       cpu: 10m
+      memory: 288Mi
   env:
     - name: MESSAGING_POSTMAN_PUBSUB_TOPIC_INCOMING
       value: projects/sup-t-2r/topics/sup-test-postman-incoming-topic
