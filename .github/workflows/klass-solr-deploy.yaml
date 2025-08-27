@@ -69,7 +69,7 @@ jobs:
         env:
           CLUSTER: test
           RESOURCE: .nais/test/klass-solr.yaml
-          WORKLOAD_IMAGE: $IMAGE
+          WORKLOAD_IMAGE: ${{ env.IMAGE }}
 
   deploy-prod:
     name: Deploy to Prod
@@ -90,4 +90,4 @@ jobs:
         env:
           CLUSTER: test
           RESOURCE: .nais/test/klass-solr.yaml
-          WORKLOAD_IMAGE: $IMAGE
+          WORKLOAD_IMAGE: ${{ env.IMAGE }}
