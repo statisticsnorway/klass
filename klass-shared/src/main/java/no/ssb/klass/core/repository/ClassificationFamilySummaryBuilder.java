@@ -66,7 +66,7 @@ public class ClassificationFamilySummaryBuilder {
                 || family.getClassificationSeries().stream()
                 .anyMatch(series ->
                         series.getContactPerson() != null &&
-                                (section == null || section.equals(series.getContactPerson().getSection())) &&
+                                (section == null || section.startsWith(series.getContactPerson().getSection())) &&
                                 (classificationType == null || classificationType.equals(series.getClassificationType()))
                 );
     }
