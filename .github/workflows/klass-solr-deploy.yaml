@@ -18,6 +18,9 @@ on:
           - test
           - prod
 
+env:
+  IMAGE: europe-north1-docker.pkg.dev/${{ secrets.NAIS_MANAGEMENT_PROJECT_ID }}/dapla-metadata/klass-solr:5.5.2
+
 jobs:
   what-changed:
     name: What Changed
@@ -66,8 +69,7 @@ jobs:
         env:
           CLUSTER: test
           RESOURCE: .nais/test/klass-solr.yaml
-          WORKLOAD_IMAGE: europe-north1-docker.pkg.dev/${{ secrets.NAIS_MANAGEMENT_PROJECT_ID }}/dapla-metadata/klass-solr:5.5.2
-          VAR: image=europe-north1-docker.pkg.dev/${{ secrets.NAIS_MANAGEMENT_PROJECT_ID }}/dapla-metadata/klass-solr:5.5.2
+          WORKLOAD_IMAGE: $IMAGE
 
   deploy-prod:
     name: Deploy to Prod
@@ -88,5 +90,4 @@ jobs:
         env:
           CLUSTER: test
           RESOURCE: .nais/test/klass-solr.yaml
-          WORKLOAD_IMAGE: europe-north1-docker.pkg.dev/${{ secrets.NAIS_MANAGEMENT_PROJECT_ID }}/dapla-metadata/klass-solr:5.5.2
-          VAR: image=europe-north1-docker.pkg.dev/${{ secrets.NAIS_MANAGEMENT_PROJECT_ID }}/dapla-metadata/klass-solr:5.5.2
+          WORKLOAD_IMAGE: $IMAGE
