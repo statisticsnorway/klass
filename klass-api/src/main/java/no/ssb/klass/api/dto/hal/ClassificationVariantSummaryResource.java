@@ -27,12 +27,15 @@ public class ClassificationVariantSummaryResource extends KlassResource {
     private final Date lastModified;
     private final List<String> published;
 
-    protected ClassificationVariantSummaryResource(ClassificationVariant variant, Language language) {
+    protected ClassificationVariantSummaryResource(
+            ClassificationVariant variant,
+            Language language,
+            String owningSectionName) {
         super(variant.getId());
         this.name = variant.getFullName(language);
         this.lastModified = variant.getLastModified();
         this.contactPerson = new ContactPersonResource(variant.getContactPerson());
-        this.owningSection = variant.getContactPerson().getSection();
+        this.owningSection = owningSectionName;
         this.published = Arrays.stream(Language.getDefaultPrioritizedOrder())
                 .filter(variant::isPublished)
                 .map(Language::getLanguageCode)
@@ -68,8 +71,8 @@ public class ClassificationVariantSummaryResource extends KlassResource {
     }
 
     public static List<ClassificationVariantSummaryResource> convert(List<ClassificationVariant> variants,
-            Language language) {
-        return variants.stream().map(variant -> new ClassificationVariantSummaryResource(variant, language)).collect(
+            Language language, String owningSectionName) {
+        return variants.stream().map(variant -> new ClassificationVariantSummaryResource(variant, language, owningSectionName)).collect(
                 Collectors.toList());
     }
 }
