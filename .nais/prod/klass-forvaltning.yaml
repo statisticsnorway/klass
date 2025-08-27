@@ -33,7 +33,7 @@ spec:
       memory: 800Mi
   env:
     - name: SPRING_PROFILES_ACTIVE
-      value: frontend, postgres, small-import, skip-indexing, ad-offline, remote-solr
+      value: frontend, postgres, skip-indexing, remote-solr
     - name: KLASS_SECURITY_OAUTH2_LOGOUT_PATH
       value: /klass/admin/oauth2/logout
     - name: KLASS_SECURITY_OAUTH2_JWT_JWKS_URI
