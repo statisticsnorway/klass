@@ -11,6 +11,8 @@ import no.ssb.klass.core.util.KlassResourceNotFoundException;
 import no.ssb.klass.core.util.TimeUtil;
 import no.ssb.klass.core.util.Translatable;
 import org.hibernate.Hibernate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,6 +30,8 @@ import static java.util.stream.Collectors.toSet;
 @Transactional()
 public class ClassificationServiceImpl implements ClassificationService {
 
+
+    private static final Logger log = LoggerFactory.getLogger(ClassificationServiceImpl.class);
     private final ClassificationFamilyRepository classificationFamilyRepository;
     private final ClassificationSeriesRepository classificationRepository;
     private final ClassificationVersionRepository classificationVersionRepository;
