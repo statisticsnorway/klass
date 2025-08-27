@@ -23,10 +23,10 @@ spec:
     max: 1
   resources:
     requests:
-      cpu: 400m
-      memory: 1024Mi
+      cpu: 100m
+      memory: 576Mi
     limits:
-      memory: 2048Mi
+      memory: 640Mi
 
   accessPolicy:
     inbound:
@@ -49,4 +49,3 @@ spec:
     path: /solr/admin/cores?action=STATUS
     port: 8983
     initialDelay: 60
-
