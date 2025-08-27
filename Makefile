@@ -116,10 +116,28 @@ clean-klass-forvaltning-volumes:
 start-klass-api-docker:
 	docker compose $(COMPOSE_FILE) --profile api up --build -d
 
+.PHONY: check-klass-api-docker
+check-klass-api-docker:
+	docker compose $(COMPOSE_FILE) --profile api ps
+
+.PHONY: rebuild-klass-api-docker
+rebuild-klass-api-docker:
+	docker compose $(COMPOSE_FILE) --profile api build --no-cache klass-api
+
+.PHONY: rebuild-klass-forvaltning-docker
+rebuild-klass-forvaltning-docker:
+	docker compose $(COMPOSE_FILE) --profile frontend build --no-cache klass-forvaltning
+
+.PHONY: restart-klass-api-docker
+restart-klass-api-docker:
+	docker compose $(COMPOSE_FILE) --profile api restart klass-api
+
+# Log only klass-api
 .PHONY: logs-klass-api
 logs-klass-api:
-	docker compose $(COMPOSE_FILE) --profile api logs -f
+	docker compose $(COMPOSE_FILE) --profile api logs --tail=100 -f klass-api
 
 .PHONY: stop-klass-api-docker
 stop-klass-api-docker:
 	docker compose $(COMPOSE_FILE) --profile api down
+
