@@ -13,6 +13,7 @@ import no.ssb.klass.core.service.dto.CodeDto;
 import no.ssb.klass.core.service.dto.CorrespondenceDto;
 import no.ssb.klass.core.util.DateRange;
 import no.ssb.klass.core.util.KlassResourceNotFoundException;
+import no.ssb.klass.core.util.Translatable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -161,6 +162,12 @@ final class ClassificationServiceHelper {
     private static List<CodeDto> toCodes(List<ClassificationItem> classificationItems, Level level, DateRange dateRange,
                                          Language language) {
         return classificationItems.stream().map(item -> new CodeDto(level, item, dateRange, language)).collect(toList());
+    }
+
+    static final Translatable SSB_SECTION_NAME = new Translatable("Standard for seksjonsinndeling", "Standard for seksjonsinndeling", "Classification of organisational units");
+
+    static String formatSectionLabel(ClassificationItem item, Language language) {
+        return item.getCode() + " - " + item.getOfficialName(language);
     }
 
 }
