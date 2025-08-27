@@ -23,8 +23,9 @@ jobs:
     outputs:
       image: ${{ steps.docker-build-push.outputs.image }}
       telemetry: ${{ steps.docker-build-push.outputs.telemetry }}
-      prod-config-changed: ${{ steps.prod-config-changed.outputs.changed == 'only-inputs' }}
-      test-or-prod-config-changed: ${{ steps.changed-files.outputs.changed == 'only-inputs'}}
+      prod-config-changed: ${{ steps.prod-config-changed.outputs.changed != 'non-inputs' }}
+      test-config-changed: ${{ steps.test-config-changed.outputs.changed != 'non-inputs' }}
+      only-config-changed: ${{ steps.changed-files.outputs.changed == 'only-inputs'}}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -41,6 +42,12 @@ jobs:
         with:
           files: .nais/**/klass-forvaltning.yaml
           main-branch-name: 'nais-migration' #TODO: Remove when we change branch back to main
+      - name: Check for test config changes
+        id: test-config-changed
+        uses: "nais/what-changed@main"
+        with:
+          files: .nais/test/klass-forvaltning.yaml
+          main-branch-name: 'nais-migration'  #TODO: Remove when we change branch back to main
       - name: Check for prod config changes
         id: prod-config-changed
         uses: "nais/what-changed@main"
@@ -71,7 +78,7 @@ jobs:
       id-token: "write"
       packages: "read"
     runs-on: ubuntu-latest
-    if: github.event_name != 'release' && needs.build.outputs.prod-config-only != 'true'
+    if: github.event_name != 'release' || needs.build.outputs.test-config-changed == 'true'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -92,7 +99,7 @@ jobs:
       id-token: "write"
       packages: "read"
     runs-on: ubuntu-latest
-    if: github.event_name == 'release' || needs.build.outputs.prod-config-changed == 'true' || needs.build.outputs.test-or-prod-config-changed == 'true'
+    if: github.event_name == 'release' || (needs.build.outputs.prod-config-changed == 'true' && needs.build.outputs.only-config-changed == 'true')
     steps:
       - name: Checkout
         uses: actions/checkout@v4
