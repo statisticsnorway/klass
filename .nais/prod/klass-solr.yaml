@@ -11,7 +11,6 @@ metadata:
     nais.io/run-as-user: "8983"
     nais.io/run-as-group: "8983"
 spec:
-  image: "{{ image }}"
   port: 8983
 
   filesFrom:
@@ -49,4 +48,3 @@ spec:
     path: /solr/admin/cores?action=STATUS
     port: 8983
     initialDelay: 60
-
