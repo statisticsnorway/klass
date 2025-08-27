@@ -30,17 +30,17 @@ jobs:
       id-token: write
       actions: read
     outputs:
-      prod-config-changed: ${{ steps.prod-manifest-changed.outputs.changed == 'only-inputs' }}
-      test-or-prod-config-changed: ${{ steps.manifest-changed.outputs.changed == 'only-inputs'}}
+      prod-manifest-changed: ${{ steps.prod-manifest-changed.outputs.changed != 'non-inputs' }}
+      test-manifest-changed: ${{ steps.test-manifest-changed.outputs.changed != 'non-inputs'}}
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Check for any manifest changes
-        id: manifest-changed
+      - name: Check for Test manifest changes
+        id: test-manifest-changed
         uses: "nais/what-changed@main"
         with:
-          files: .nais/**/klass-solr.yaml
+          files: .nais/test/klass-solr.yaml
           main-branch-name: 'nais-migration' #TODO: Remove when we change branch back to main
 
       - name: Check for Prod manifest changes
@@ -58,7 +58,7 @@ jobs:
       id-token: write
       actions: read
     needs: what-changed
-    if: needs.what-changed.outputs.prod-config-only != 'true' || github.event.inputs.cluster == 'test'
+    if: needs.what-changed.outputs.test-manifest-changed == 'true' || github.event.inputs.cluster == 'test'
     steps:
       - uses: actions/checkout@v4
         with:
@@ -79,7 +79,7 @@ jobs:
       id-token: write
       actions: read
     needs: what-changed
-    if: needs.what-changed.outputs.prod-config-only == 'true' || github.event.inputs.cluster == 'prod'
+    if: needs.what-changed.outputs.prod-manifest-changed == 'true' || github.event.inputs.cluster == 'prod'
     steps:
       - uses: actions/checkout@v4
         with:
