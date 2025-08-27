@@ -30,11 +30,27 @@ build-klass-forvaltning:
 	popd; \
 	${sdk} env clear
 
+.PHONY: build-clean-klass-forvaltning
+build-clean-klass-forvaltning:
+	pushd klass-forvaltning && \
+	${sdk} env && \
+	mvn clean install; \
+ 	popd; \
+	${sdk} env clear
+
 .PHONY: build-klass-api
 build-klass-api:
 	pushd klass-api && \
 	${sdk} env && \
 	mvn install; \
+ 	popd; \
+	${sdk} env clear
+
+.PHONY: build-clean-klass-api
+build-clean-klass-api:
+	pushd klass-api && \
+	${sdk} env && \
+	mvn clean install; \
  	popd; \
 	${sdk} env clear
 
