@@ -1,6 +1,12 @@
 name: Klass-solr deploy
 
 on:
+  push:
+    branches:
+      - nais-migration
+    paths:
+      - ".nais/**/klass-solr.yaml"
+      - ".github/workflows/klass-solr-deploy.yaml"
   workflow_dispatch:
     inputs:
       cluster:
@@ -13,13 +19,43 @@ on:
           - prod
 
 jobs:
-  deploy:
-    name: Build, push and deploy
+  what-changed:
+    name: What Changed
     runs-on: ubuntu-latest
     permissions:
       contents: read
       id-token: write
       actions: read
+    outputs:
+      prod-config-changed: ${{ steps.prod-manifest-changed.outputs.changed == 'only-inputs' }}
+      test-or-prod-config-changed: ${{ steps.manifest-changed.outputs.changed == 'only-inputs'}}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Check for any manifest changes
+        id: manifest-changed
+        uses: "nais/what-changed@main"
+        with:
+          files: .nais/**/klass-solr.yaml
+          main-branch-name: 'nais-migration' #TODO: Remove when we change branch back to main
+
+      - name: Check for Prod manifest changes
+        id: prod-manifest-changed
+        uses: "nais/what-changed@main"
+        with:
+          files: .nais/prod/klass-solr.yaml
+          main-branch-name: 'nais-migration'  #TODO: Remove when we change branch back to main
+
+  deploy-test:
+    name: Deploy to Test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+      actions: read
+    needs: what-changed
+    if: needs.what-changed.outputs.prod-config-only != 'true' || github.event.inputs.cluster == 'test'
     steps:
       - uses: actions/checkout@v4
         with:
@@ -28,7 +64,29 @@ jobs:
       - name: Deploy to Nais
         uses: nais/deploy/actions/deploy@v2
         env:
-          CLUSTER: ${{ github.event.inputs.cluster }}
-          RESOURCE: .nais/${{ github.event.inputs.cluster }}/klass-solr.yaml
+          CLUSTER: test
+          RESOURCE: .nais/test/klass-solr.yaml
+          WORKLOAD_IMAGE: europe-north1-docker.pkg.dev/${{ secrets.NAIS_MANAGEMENT_PROJECT_ID }}/dapla-metadata/klass-solr:5.5.2
+          VAR: image=europe-north1-docker.pkg.dev/${{ secrets.NAIS_MANAGEMENT_PROJECT_ID }}/dapla-metadata/klass-solr:5.5.2
+
+  deploy-prod:
+    name: Deploy to Prod
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+      actions: read
+    needs: what-changed
+    if: needs.what-changed.outputs.prod-config-only == 'true' || github.event.inputs.cluster == 'prod'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Deploy to Nais
+        uses: nais/deploy/actions/deploy@v2
+        env:
+          CLUSTER: test
+          RESOURCE: .nais/test/klass-solr.yaml
           WORKLOAD_IMAGE: europe-north1-docker.pkg.dev/${{ secrets.NAIS_MANAGEMENT_PROJECT_ID }}/dapla-metadata/klass-solr:5.5.2
           VAR: image=europe-north1-docker.pkg.dev/${{ secrets.NAIS_MANAGEMENT_PROJECT_ID }}/dapla-metadata/klass-solr:5.5.2
