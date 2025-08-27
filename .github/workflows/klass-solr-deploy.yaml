@@ -88,6 +88,6 @@ jobs:
       - name: Deploy to Nais
         uses: nais/deploy/actions/deploy@v2
         env:
-          CLUSTER: test
-          RESOURCE: .nais/test/klass-solr.yaml
+          CLUSTER: prod
+          RESOURCE: .nais/prod/klass-solr.yaml
           WORKLOAD_IMAGE: ${{ env.IMAGE }}
