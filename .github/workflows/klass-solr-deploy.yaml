@@ -2,8 +2,8 @@ name: Klass-solr deploy
 
 on:
   push:
-    #    branches:
-    #      - nais-migration
+    branches:
+      - nais-migration
     paths:
       - ".nais/**/klass-solr.yaml"
       - ".github/workflows/klass-solr-deploy.yaml"
