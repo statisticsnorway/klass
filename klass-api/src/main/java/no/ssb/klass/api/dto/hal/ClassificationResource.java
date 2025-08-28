@@ -33,7 +33,11 @@ public class ClassificationResource extends ClassificationSummaryResource {
     private final List<String> statisticalUnits;
     private final List<ClassificationVersionSummaryResource> versions;
 
-    public ClassificationResource(ClassificationSeries classification, Language language, Boolean includeFuture) {
+    public ClassificationResource(
+            ClassificationSeries classification,
+            Language language,
+            Boolean includeFuture,
+            String owningSectionName) {
         super(language, classification);
         this.description = classification.getDescription(language);
         this.primaryLanguage = classification.getPrimaryLanguage().getLanguageCode();
@@ -41,7 +45,7 @@ public class ClassificationResource extends ClassificationSummaryResource {
         this.includeShortName = classification.isIncludeShortName();
         this.includeNotes = classification.isIncludeNotes();
         this.contactPerson = new ContactPersonResource(classification.getContactPerson());
-        this.owningSection = classification.getContactPerson().getSection();
+        this.owningSection = owningSectionName;
         this.statisticalUnits = classification.getStatisticalUnits().stream().map(unit -> unit.getName(language))
                 .collect(toList());
 

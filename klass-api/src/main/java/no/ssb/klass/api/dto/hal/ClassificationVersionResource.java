@@ -34,12 +34,16 @@ public class ClassificationVersionResource extends ClassificationVersionSummaryR
     private final List<LevelResource> levels;
     private final List<ClassificationItemResource> classificationItems;
 
-    public ClassificationVersionResource(ClassificationVersion version, Language language,
-            List<CorrespondenceTable> corrTableVersionIsTarget, boolean includeFuture) {
+    public ClassificationVersionResource(
+            ClassificationVersion version,
+            Language language,
+            List<CorrespondenceTable> corrTableVersionIsTarget,
+            boolean includeFuture,
+            String owningSectionName) {
         super(version, language, includeFuture);
         this.introduction = version.getIntroduction(language);
         this.contactPerson = new ContactPersonResource(version.getContactPerson());
-        this.owningSection = version.getContactPerson().getSection();
+        this.owningSection = owningSectionName;
         this.legalBase = version.getLegalBase(language);
         this.publications = version.getPublications(language);
         this.derivedFrom = version.getDerivedFrom(language);
@@ -58,9 +62,9 @@ public class ClassificationVersionResource extends ClassificationVersionSummaryR
 
 
         this.correspondenceTables = CorrespondenceTableSummaryResource
-                .convert(publicCorrespondenceTables, language);
+                .convert(publicCorrespondenceTables, language, owningSectionName);
         this.classificationVariants = ClassificationVariantSummaryResource
-                .convert(version.getPublicClassificationVariants(), language);
+                .convert(version.getPublicClassificationVariants(), language, owningSectionName);
         this.classificationItems = ClassificationItemResource.convert(version, language);
         this.changelogs = ChangelogResource.convert(version.getChangelogs());
     }

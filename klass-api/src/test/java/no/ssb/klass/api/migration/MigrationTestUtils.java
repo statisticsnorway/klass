@@ -349,7 +349,7 @@ public class MigrationTestUtils {
                         .isEqualTo(targetDate);
             }
 
-            else if (pathName.equals(OWNING_SECTION)) {
+            else if (pathName.equals(OWNING_SECTION)){
                 String sourceSectionNumber = getSectionNumber(sourceField);
                 String targetSectionNumber = getSectionNumber(targetField);
                 System.out.println("Comparing owning section: " + sourceSectionNumber + " -> " + targetSectionNumber);

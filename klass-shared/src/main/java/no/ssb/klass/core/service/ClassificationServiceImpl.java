@@ -31,6 +31,7 @@ import static no.ssb.klass.core.service.ClassificationServiceHelper.SSB_SECTION_
 @Transactional()
 public class ClassificationServiceImpl implements ClassificationService {
 
+    private static final Logger log = LoggerFactory.getLogger(ClassificationServiceImpl.class);
     private final ClassificationFamilyRepository classificationFamilyRepository;
     private final ClassificationSeriesRepository classificationRepository;
     private final ClassificationVersionRepository classificationVersionRepository;
@@ -634,6 +635,47 @@ public class ClassificationServiceImpl implements ClassificationService {
                 .filter(item -> responsibleSectionCodes.contains(item.getCode()))
                 .map(item -> ClassificationServiceHelper.formatSectionLabel(item, language))
                 .collect(toSet());
+    }
+
+    private Optional<String> findSectionLabel(String sectionCode, Language language) {
+        return findOneClassificationSeriesWithName(SSB_SECTION_NAME.getString(language), language)
+                .flatMap(series -> series.getNewestVersion()
+                        .getAllClassificationItems()
+                        .stream()
+                        .filter(item -> item.getCode().equals(sectionCode))
+                        .map(item -> ClassificationServiceHelper.formatSectionLabel(item, language))
+                        .findFirst());
+    }
+
+
+    /**
+     * Maps one section code to display name in the form "<code> - <officialName>".
+     * Falls back to Norwegian Bokmål (NB) if the given language has no name,
+     * and finally to the raw {@code sectionCode} if nothing is found.
+     *
+     * @param sectionCode Code to retrieve section name for
+     * @param language Selected language for section name
+     * @return formatted section name
+     */
+    @Override
+    public String resolveSectionName(String sectionCode, Language language) {
+        log.debug("Resolving section label for sectionCode={} in lang={}", sectionCode, language);
+
+        // Try requested language
+        Optional<String> label = findSectionLabel(sectionCode, language);
+
+        // Fallback to NB if needed
+        if (label.isEmpty() && !Language.NB.equals(language)) {
+            log.debug("No label found in lang={}, falling back to NB", language);
+            label = findSectionLabel(sectionCode, Language.NB);
+        }
+
+        // Fallback to sectionCode
+        return label.orElseGet(() -> {
+            log.warn("No label found for sectionCode={} in lang={} (or NB). Returning sectionCode.",
+                    sectionCode, language);
+            return sectionCode;
+        });
     }
 
 }

@@ -268,6 +268,7 @@ public interface ClassificationService {
      */
     List<CorrespondenceTable> findCorrespondenceTablesBetween(ClassificationVersion version1, Level level1,
                                                               ClassificationVersion version2, Level level2);
+    String resolveSectionName(String sectionCode, Language language);
 
 
 }
