@@ -1,6 +1,7 @@
 package no.ssb.klass.api.migration.dataintegrity.classification;
 
 import io.restassured.response.Response;
+import no.ssb.klass.core.model.Language;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -28,9 +29,9 @@ public class KlassApiClassificationByIdJsonTest extends AbstractKlassApiClassifi
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else {
-            validateItems(sourceResponse, targetResponse, pathNamesClassification);
+            validateItems(sourceResponse, targetResponse, pathNamesClassification, null);
             validateList(sourceResponse, targetResponse, STATISTICAL_UNITS);
-            validatePathListWithObjects(sourceResponse, targetResponse, VERSIONS, pathNamesVersion, ID);
+            validatePathListWithObjects(sourceResponse, targetResponse, VERSIONS, pathNamesVersion, ID, null);
         }
     }
 
@@ -51,9 +52,9 @@ public class KlassApiClassificationByIdJsonTest extends AbstractKlassApiClassifi
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else {
-            validateItems(sourceResponse, targetResponse, pathNamesClassification);
+            validateItems(sourceResponse, targetResponse, pathNamesClassification, null);
             validateList(sourceResponse, targetResponse, STATISTICAL_UNITS);
-            validatePathListWithObjects(sourceResponse, targetResponse, VERSIONS, pathNamesVersion, ID);
+            validatePathListWithObjects(sourceResponse, targetResponse, VERSIONS, pathNamesVersion, ID, null);
         }
     }
 
@@ -73,9 +74,9 @@ public class KlassApiClassificationByIdJsonTest extends AbstractKlassApiClassifi
         if(sourceResponse.getStatusCode() != 200) {
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         } else {
-            validateItems(sourceResponse, targetResponse, pathNamesClassification);
+            validateItems(sourceResponse, targetResponse, pathNamesClassification, Language.EN);
             validateList(sourceResponse, targetResponse, STATISTICAL_UNITS);
-            validatePathListWithObjects(sourceResponse, targetResponse, VERSIONS, pathNamesVersion, ID);
+            validatePathListWithObjects(sourceResponse, targetResponse, VERSIONS, pathNamesVersion, ID, Language.EN);
         }
     }
 
@@ -95,9 +96,9 @@ public class KlassApiClassificationByIdJsonTest extends AbstractKlassApiClassifi
         if(sourceResponse.getStatusCode() != 200) {
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         } else {
-            validateItems(sourceResponse, targetResponse, pathNamesClassification);
+            validateItems(sourceResponse, targetResponse, pathNamesClassification, Language.EN);
             validateList(sourceResponse, targetResponse, STATISTICAL_UNITS);
-            validatePathListWithObjects(sourceResponse, targetResponse, VERSIONS, pathNamesVersion, ID);
+            validatePathListWithObjects(sourceResponse, targetResponse, VERSIONS, pathNamesVersion, ID, Language.EN);
         }
     }
 
@@ -118,9 +119,9 @@ public class KlassApiClassificationByIdJsonTest extends AbstractKlassApiClassifi
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
             }
         else {
-            validateItems(sourceResponse, targetResponse, pathNamesClassification);
+            validateItems(sourceResponse, targetResponse, pathNamesClassification, Language.NN);
             validateList(sourceResponse, targetResponse, STATISTICAL_UNITS);
-            validatePathListWithObjects(sourceResponse, targetResponse, VERSIONS, pathNamesVersion, ID);
+            validatePathListWithObjects(sourceResponse, targetResponse, VERSIONS, pathNamesVersion, ID, Language.NN);
         }
     }
 
@@ -141,9 +142,9 @@ public class KlassApiClassificationByIdJsonTest extends AbstractKlassApiClassifi
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }
         else {
-            validateItems(sourceResponse, targetResponse, pathNamesClassification);
+            validateItems(sourceResponse, targetResponse, pathNamesClassification, Language.NN);
             validateList(sourceResponse, targetResponse, STATISTICAL_UNITS);
-            validatePathListWithObjects(sourceResponse, targetResponse, VERSIONS, pathNamesVersion, ID);
+            validatePathListWithObjects(sourceResponse, targetResponse, VERSIONS, pathNamesVersion, ID, Language.NN);
         }
     }
 
@@ -162,9 +163,9 @@ public class KlassApiClassificationByIdJsonTest extends AbstractKlassApiClassifi
         if(sourceResponse.getStatusCode() != 200) {
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }else {
-            validateItems(sourceResponse, targetResponse, pathNamesClassification);
+            validateItems(sourceResponse, targetResponse, pathNamesClassification, null);
             validateList(sourceResponse, targetResponse, STATISTICAL_UNITS);
-            validatePathListWithObjects(sourceResponse, targetResponse, VERSIONS, pathNamesVersion, ID);
+            validatePathListWithObjects(sourceResponse, targetResponse, VERSIONS, pathNamesVersion, ID, null);
         }
     }
 
@@ -183,9 +184,9 @@ public class KlassApiClassificationByIdJsonTest extends AbstractKlassApiClassifi
         if(sourceResponse.getStatusCode() != 200) {
             assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
         }else {
-            validateItems(sourceResponse, targetResponse, pathNamesClassification);
+            validateItems(sourceResponse, targetResponse, pathNamesClassification, null);
             validateList(sourceResponse, targetResponse, STATISTICAL_UNITS);
-            validatePathListWithObjects(sourceResponse, targetResponse, VERSIONS, pathNamesVersion, ID);
+            validatePathListWithObjects(sourceResponse, targetResponse, VERSIONS, pathNamesVersion, ID, null);
         }
     }
 }
