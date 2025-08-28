@@ -106,7 +106,6 @@ public final class MigrationTestConstants {
     public static final String CHANGELOGS= "changelogs";
     public static final String CODE_CHANGES= "codeChanges";
     public static final String SSB_SECTIONS= "ssbsections";
-    public static final String SSB_SECTIONS_PATH= "ssbSections";
     public static final String CORRESPONDENCE_MAPS = "correspondenceMaps";
     public static final String LEVELS= "levels";
     public static final String CLASSIFICATION_ITEMS= "classificationItems";
@@ -337,7 +336,8 @@ public final class MigrationTestConstants {
             PUBLICATIONS,
             DERIVED_FROM,
             CONTACT_PERSON,
-            LINKS_SELF_HREF
+            LINKS_SELF_HREF,
+            OWNING_SECTION
     );
 
     public static List<String> pathNamesVersionsClassificationItems = Arrays.asList(
