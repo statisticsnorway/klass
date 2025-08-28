@@ -29,7 +29,7 @@ public class ClassificationResourceTest {
 
         // when
         ClassificationResource subject = new ClassificationResource(createClassification(id, name), Language
-                .getDefault(), null);
+                .getDefault(), null, "320");
 
         // then
         assertEquals(name, subject.getName());

@@ -33,7 +33,7 @@ public class ClassificationVersionResourceTest {
 
         // when
         ClassificationVersionResource subject = new ClassificationVersionResource(version, Language.getDefault(),
-                new LinkedList<>(), false);
+                new LinkedList<>(), false, "320");
 
         // then
         assertEquals(1, subject.getLinks().toList().size());

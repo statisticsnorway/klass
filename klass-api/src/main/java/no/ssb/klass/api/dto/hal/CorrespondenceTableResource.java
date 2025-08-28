@@ -21,8 +21,8 @@ public class CorrespondenceTableResource extends CorrespondenceTableSummaryResou
 
     private final List<CorrespondenceMapResource> correspondenceMaps;
 
-    public CorrespondenceTableResource(CorrespondenceTable correspondenceTable, Language language) {
-        super(correspondenceTable, language);
+    public CorrespondenceTableResource(CorrespondenceTable correspondenceTable, Language language, String owningSectionName) {
+        super(correspondenceTable, language,owningSectionName);
         this.description = correspondenceTable.getDescription(language);
         this.correspondenceMaps = CorrespondenceMapResource.convert(correspondenceTable.getCorrespondenceMaps(),
                 language);

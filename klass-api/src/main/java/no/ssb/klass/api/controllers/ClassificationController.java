@@ -210,7 +210,8 @@ public class ClassificationController {
                                                  @RequestParam(value = "includeFuture", defaultValue = "false") Boolean includeFuture) {
         ClassificationSeries classification = classificationService.getClassificationSeries(id);
         statisticsService.addUseForClassification(classification);
-        return new ClassificationResource(classification, language, includeFuture);
+        String owningSectionName = classificationService.resolveSectionName(classification.getContactPerson().getSection(), language);
+        return new ClassificationResource(classification, language, includeFuture, owningSectionName);
     }
 
     @RequestMapping(value = "/versions/{id}", method = RequestMethod.GET)
@@ -222,21 +223,24 @@ public class ClassificationController {
                 .findPublicCorrespondenceTablesWithTarget(version).stream()
                 .sorted(AlphaNumericalComparator.comparing(CorrespondenceTable::getNameInPrimaryLanguage, true))
                 .collect(toList());
-        return new ClassificationVersionResource(version, language, corrTableVersionIsTarget, includeFuture);
+        String owningSectionName = classificationService.resolveSectionName(version.getContactPerson().getSection(), language);
+        return new ClassificationVersionResource(version, language, corrTableVersionIsTarget, includeFuture, owningSectionName);
     }
 
     @RequestMapping(value = "/correspondencetables/{id}", method = RequestMethod.GET)
     public CorrespondenceTableResource correspondenceTables(@PathVariable Long id, @RequestParam(value = "language",
             defaultValue = "nb") Language language) {
         CorrespondenceTable table = classificationService.getCorrespondenceTable(id);
-        return new CorrespondenceTableResource(table, language);
+        String owningSectionName = classificationService.resolveSectionName(table.getContactPerson().getSection(), language);
+        return new CorrespondenceTableResource(table, language, owningSectionName);
     }
 
     @RequestMapping(value = "/variants/{id}", method = RequestMethod.GET)
     public ClassificationVariantResource variants(@PathVariable Long id, @RequestParam(value = "language",
             defaultValue = "nb") Language language) {
         ClassificationVariant variant = classificationService.getClassificationVariant(id);
-        return new ClassificationVariantResource(variant, language);
+        String owningSectionName = classificationService.resolveSectionName(variant.getContactPerson().getSection(), language);
+        return new ClassificationVariantResource(variant, language, owningSectionName);
     }
 
     @RequestMapping(value = "/classifications/{id}/codes", method = RequestMethod.GET)
