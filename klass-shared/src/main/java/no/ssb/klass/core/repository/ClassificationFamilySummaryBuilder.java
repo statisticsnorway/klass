@@ -62,13 +62,22 @@ public class ClassificationFamilySummaryBuilder {
     }
 
     private boolean hasMatchingSeries(ClassificationFamily family, String section, ClassificationType classificationType) {
-        return section == null && classificationType == null
-                || family.getClassificationSeries().stream()
-                .anyMatch(series ->
-                        series.getContactPerson() != null &&
-                                (section == null || section.equals(series.getContactPerson().getSection())) &&
-                                (classificationType == null || classificationType.equals(series.getClassificationType()))
-                );
+        return family.getClassificationSeries().stream()
+                .anyMatch(series -> {
+                    if (series.getContactPerson() == null) {
+                        return false;
+                    }
+
+                    boolean sectionMatches = section == null || section.equals(series.getContactPerson().getSection());
+                    boolean typeMatches = classificationType == null || classificationType.equals(series.getClassificationType());
+
+                    if (sectionMatches && typeMatches) {
+                        logger.debug("Matched classification series for contact person section={} with section param={}",
+                                series.getContactPerson().getSection(), section);
+                        return true;
+                    }
+                    return false;
+                });
     }
 
     private ClassificationFamilySummary toClassificationFamilySummary(ClassificationFamily family, String section, ClassificationType classificationType, boolean publicOnly) {
