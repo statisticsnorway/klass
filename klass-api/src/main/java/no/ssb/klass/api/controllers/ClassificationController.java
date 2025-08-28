@@ -50,6 +50,9 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static java.util.stream.Collectors.toList;
 
@@ -548,11 +551,22 @@ public class ClassificationController {
         return includeCodelists ? null : ClassificationType.CLASSIFICATION;
     }
 
+
+    /**
+     * Extracts the first section identifier from an SSB section string.
+     * Returns {@code null} if the input is null or empty.
+     * <p>
+     * Example: "210 - Seksjon for nasjonalregnskap" → "210"
+     * Example: "210 - National accounts" -> "210"
+     * Example: "210 " -> "210"
+     */
     private String extractSsbSection(String ssbSection) {
         if (Strings.isNullOrEmpty(ssbSection)) {
             return null;
         }
-        return ssbSection.trim().split("[\\s-]", 2)[0];
+        String s = ssbSection.trim();
+        String[] parts = s.split(" - ", 2);
+        return parts[0];
     }
 
     private List<String> getCsvFieldsList(String csvFields) {
