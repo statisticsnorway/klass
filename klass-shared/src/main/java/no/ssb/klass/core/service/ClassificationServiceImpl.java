@@ -392,13 +392,13 @@ public class ClassificationServiceImpl implements ClassificationService {
     @Override
     @Transactional(readOnly = true)
     public Set<String> findAllResponsibleSections() {
-        return classificationRepository.findAllResponsibleSections();
+        return resolveResponsibleSectionNames(classificationRepository.findAllResponsibleSections());
     }
 
     @Override
     @Transactional(readOnly = true)
     public Set<String> findResponsibleSectionsWithPublishedVersions() {
-        return classificationRepository.findResponsibleSectionsWithPublishedVersions();
+        return resolveResponsibleSectionNames(classificationRepository.findResponsibleSectionsWithPublishedVersions());
     }
 
     @Override
@@ -616,6 +616,25 @@ public class ClassificationServiceImpl implements ClassificationService {
 
         }
         return matchingCorrespondenceTables;
+    }
+
+    /**
+     * Maps section codes to display names in the form "<code> - <officialName>".
+     *
+     * @param responsibleSectionCodes section codes to resolve
+     * @return formatted section names
+     */
+    private Set<String> resolveResponsibleSectionNames(Set<String> responsibleSectionCodes) {
+        // Use language NB until logic for selecting language for path /ssbsections is implemented
+        Language language = Language.NB;
+        return findOneClassificationSeriesWithName(SSB_SECTION_NAME.getString(language), language)
+                .map(ClassificationSeries::getNewestVersion)
+                .map(ClassificationVersion::getAllClassificationItems)
+                .stream()
+                .flatMap(Collection::stream)
+                .filter(item -> responsibleSectionCodes.contains(item.getCode()))
+                .map(item -> ClassificationServiceHelper.formatSectionLabel(item, language))
+                .collect(toSet());
     }
 
     private Optional<String> findSectionLabel(String sectionCode, Language language) {
