@@ -3,7 +3,6 @@ package no.ssb.klass.api.migration;
 import io.restassured.internal.path.xml.NodeChildrenImpl;
 import io.restassured.path.xml.XmlPath;
 import io.restassured.response.Response;
-import no.ssb.klass.core.model.Language;
 
 import java.net.URI;
 import java.net.URL;
@@ -187,7 +186,7 @@ public class MigrationTestUtils {
      * @param targetResponse Response object from target Api
      * @param pathName Name for single path
      */
-    public static void validateObject(Response sourceResponse, Response targetResponse, String pathName, Language language) {
+    public static void validateObject(Response sourceResponse, Response targetResponse, String pathName) {
         Object sourceField = sourceResponse.path(pathName);
         Object targetField = targetResponse.path(pathName);
 
@@ -205,7 +204,7 @@ public class MigrationTestUtils {
                     .isEqualTo(targetDate);
         }
 
-        else if (pathName.equals(OWNING_SECTION) && language != null && (language.equals(Language.EN) || language.equals(Language.NN))) {
+        else if (pathName.equals(OWNING_SECTION)) {
             String sourceSectionNumber = getSectionNumber(sourceField);
             String targetSectionNumber = getSectionNumber(targetField);
             System.out.println("Comparing owning section: " + sourceSectionNumber + " -> " + targetSectionNumber);
@@ -326,7 +325,7 @@ public class MigrationTestUtils {
      * @param targetResponse Response object from target Api
      * @param pathNames List of path names
      */
-    public static void validateItems(Response sourceResponse, Response targetResponse, List<String> pathNames, Language language) {
+    public static void validateItems(Response sourceResponse, Response targetResponse, List<String> pathNames) {
 
         for (String pathName : pathNames) {
             System.out.println("Checking pathname: " + pathName);
@@ -350,7 +349,7 @@ public class MigrationTestUtils {
                         .isEqualTo(targetDate);
             }
 
-            else if (pathName.equals(OWNING_SECTION) && language != null && (language.equals(Language.EN) || language.equals(Language.NN))){
+            else if (pathName.equals(OWNING_SECTION)){
                 String sourceSectionNumber = getSectionNumber(sourceField);
                 String targetSectionNumber = getSectionNumber(targetField);
                 System.out.println("Comparing owning section: " + sourceSectionNumber + " -> " + targetSectionNumber);
@@ -387,7 +386,7 @@ public class MigrationTestUtils {
      * @param pathNames List of fields in listName list
      * @param idField A unique key for list objects
      */
-    public static void validatePathListWithObjects(Response sourceResponse, Response targetResponse, String listName, List<String> pathNames, String idField, Language language) {
+    public static void validatePathListWithObjects(Response sourceResponse, Response targetResponse, String listName, List<String> pathNames, String idField) {
         List<Map<String, Object>> sourceList = sourceResponse.path(listName);
         List<Map<String, Object>> targetList = targetResponse.path(listName);
 
@@ -431,7 +430,7 @@ public class MigrationTestUtils {
                                     pathName, sourceDate, targetDate)
                             .isEqualTo(targetDate);
                 }
-                else if (pathName.equals(OWNING_SECTION) && language != null && (language.equals(Language.EN) || language.equals(Language.NN))) {
+                else if (pathName.equals(OWNING_SECTION)) {
                     String sourceSectionNumber = getSectionNumber(sourceField);
                     String targetSectionNumber = getSectionNumber(targetField);
                     System.out.println("Comparing owning section: " + sourceSectionNumber + " -> " + targetSectionNumber);
