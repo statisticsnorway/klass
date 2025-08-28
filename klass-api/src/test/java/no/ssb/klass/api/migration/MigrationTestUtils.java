@@ -378,6 +378,29 @@ public class MigrationTestUtils {
         }
     }
 
+    public static void validateFilteredClassifications(Response sourceResponse, Response targetResponse) {
+        List<Map<String, Object>> sourceList = sourceResponse.path(CLASSIFICATIONS);
+        List<Map<String, Object>> targetList = targetResponse.path(CLASSIFICATIONS);
+
+        System.out.println("Checking list name: " + CLASSIFICATIONS);
+        if (sourceList == null) {
+            assertThat(targetList)
+                    .withFailMessage(FAIL_MESSAGE, CLASSIFICATIONS, null, targetList)
+                    .isNull();
+            return;
+        }
+
+        assertThat(targetList)
+                .withFailMessage(FAIL_MESSAGE, CLASSIFICATIONS, sourceList, targetList)
+                .isNotNull();
+
+        System.out.println("List sizes: " + sourceList.size() + " -> " + targetList.size());
+
+        assertThat(sourceList.size())
+                .withFailMessage("Expected size to be <%d> but was <%d>", targetList.size(), sourceList.size())
+                .isNotEqualTo(targetList.size());
+    }
+
     /**
      * Validates that path list [listName] with fields specified in [pathNames] from two API response bodies are equal.
      * @param sourceResponse Response object from source Api
