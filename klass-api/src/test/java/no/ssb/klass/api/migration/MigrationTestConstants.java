@@ -9,6 +9,7 @@ public final class MigrationTestConstants {
     // paths
     public static final String DATA_SSB_HOST = "https://data.ssb.no";
     public static final String NAIS_TEST_HOST = "https://klass.intern.test.ssb.no";
+    public static final String NAIS_PROD_HOST = "https://klass.intern.ssb.no";
     public static final String LOCAL_SOURCE_HOST = "http://localhost:8082";
     public static final String LOCAL_TARGET_HOST = "http://localhost:8080";
     public static final String BASE_PATH = "/api/klass";
