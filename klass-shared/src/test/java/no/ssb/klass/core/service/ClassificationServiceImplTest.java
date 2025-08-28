@@ -23,6 +23,7 @@ import org.springframework.data.domain.Pageable;
 import java.time.LocalDate;
 import java.util.*;
 
+import static no.ssb.klass.core.service.ClassificationServiceHelper.SSB_SECTION_NAME;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -670,6 +671,35 @@ public class ClassificationServiceImplTest {
 
         // then
         assertEquals(1, result.size());
+    }
+
+    @Test
+    void findAllResponsibleSections() {
+        String sectionMicroDataName = "Seksjon for mikrodata";
+        String sectionMicroDataCode = "300";
+        String sectionPropertyName= "Seksjon for eiendoms-, areal- og primærnæringsstatistikk";
+        String sectionPropertyCode = "426";
+
+        ClassificationItem item1 = TestUtil.createClassificationItem(sectionMicroDataCode, sectionMicroDataName);
+        ClassificationItem item2 = TestUtil.createClassificationItem(sectionPropertyCode, sectionPropertyName);
+        ClassificationSeries series = TestUtil.createClassification(SSB_SECTION_NAME.getString(Language.NB));
+        DateRange dateRange = DateRange.create("2025-01-01", "2025-08-01");
+        ClassificationVersion version = TestUtil.createClassificationVersion(dateRange);
+        version.addNextLevel();
+        series.addClassificationVersion(version);
+        version.addClassificationItem(item1, 1, null);
+        version.addClassificationItem(item2, 1, null);
+
+        Set<String> codes = Set.of(sectionMicroDataCode, sectionPropertyCode, "");
+        when(classificationSeriesRepositoryMock.findAllResponsibleSections()).thenReturn(codes);
+
+        when(classificationSeriesRepositoryMock.findByNameNoIgnoreCase(SSB_SECTION_NAME.getString(Language.NB)))
+                .thenReturn(series);
+
+        Set<String> result = subject.findAllResponsibleSections();
+
+        assertThat(result).containsExactlyInAnyOrder(sectionPropertyCode + " - " + sectionPropertyName, sectionMicroDataCode + " - " +  sectionMicroDataName);
+        assertThat(result).doesNotContain("");
     }
 
     private ClassificationVersion createClassificationVersion() {
