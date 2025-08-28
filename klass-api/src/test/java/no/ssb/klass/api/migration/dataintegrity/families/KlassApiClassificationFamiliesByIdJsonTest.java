@@ -133,7 +133,6 @@ public class KlassApiClassificationFamiliesByIdJsonTest extends AbstractKlassApi
         }
     }
 
-    // Add test som viser at "210" er ok i nye
     @Test
     void getOneClassificationFamilySsbSection() {
         paramsSsbSection.put(SSB_SECTION, "210 - Seksjon for nasjonalregnskap");
@@ -151,6 +150,27 @@ public class KlassApiClassificationFamiliesByIdJsonTest extends AbstractKlassApi
         else{
             validateItems(sourceResponse, targetResponse, pathNamesClassificationFamilyById);
             validatePathListWithObjects(sourceResponse, targetResponse, CLASSIFICATIONS, pathNamesClassificationsPage, ID);
+        }
+    }
+
+    @Test
+    void getOneClassificationFamilySsbSectionNewSectionFiltering() {
+        // In new Klass it is also possible to filter on just section code
+        paramsSsbSection.put(SSB_SECTION, "210");
+        String path = getClassificationFamilyByIdPath(11);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsSsbSection, null);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path , paramsSsbSection,null);
+
+        assertApiResponseIsNotNull(sourceResponse);
+
+        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+
+        if(sourceResponse.getStatusCode() != 200) {
+            assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
+        }
+        else{
+            validateItems(sourceResponse, targetResponse, pathNamesClassificationFamilyById);
+            validateFilteredClassifications(sourceResponse, targetResponse);
         }
     }
 }
