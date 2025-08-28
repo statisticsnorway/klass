@@ -19,8 +19,8 @@ public abstract class AbstractKlassApiClassifications extends AbstractKlassApiDa
     static void iteratePages(int totalPages, Response sourceResponse, Response targetResponse, Map<String, Object> queryParams) {
         for(int i = 0; i < totalPages; i++) {
             validatePathListWithObjects(
-                    sourceResponse, targetResponse, EMBEDDED_CLASSIFICATIONS, pathNamesClassificationsPage, ID, null);
-            validateItems(sourceResponse, targetResponse, pathNamesClassificationsLinks, null);
+                    sourceResponse, targetResponse, EMBEDDED_CLASSIFICATIONS, pathNamesClassificationsPage, ID);
+            validateItems(sourceResponse, targetResponse, pathNamesClassificationsLinks);
 
             if(sourceResponse.path(LINKS_NEXT_HREF) == null) {
                 return;
