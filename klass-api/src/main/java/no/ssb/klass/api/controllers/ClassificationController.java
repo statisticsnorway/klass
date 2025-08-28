@@ -549,7 +549,10 @@ public class ClassificationController {
     }
 
     private String extractSsbSection(String ssbSection) {
-        return Strings.isNullOrEmpty(ssbSection) ? null : ssbSection;
+        if (Strings.isNullOrEmpty(ssbSection)) {
+            return null;
+        }
+        return ssbSection.trim().split("[\\s-]", 2)[0];
     }
 
     private List<String> getCsvFieldsList(String csvFields) {
