@@ -32,11 +32,8 @@ services:
       - postgresql
     ports:
       - "8080:8080"
-    deploy:
-      resources:
-        limits:
-          cpus: "1.0"
-          memory: 1G
+    mem_limit: 2g
+    cpus: 1.0
     environment:
       SPRING_PROFILES_ACTIVE: api, postgres-local, skip-indexing, embedded-solr
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
