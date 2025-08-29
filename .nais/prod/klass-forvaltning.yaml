@@ -46,7 +46,7 @@ spec:
       value: klass.intern.ssb.no
     - name: KLASS_ENV_CLIENT_KLASS_MAIL_URL
       value: http://klass-mail
-    - name: LOGGING_LEVEL_NO_SSB_KLASS
+    - name: LOGGING_LEVEL_ROOT
       value: INFO
   envFrom:
     - secret: google-sql-klass
