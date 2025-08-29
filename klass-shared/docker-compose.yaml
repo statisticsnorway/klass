@@ -26,13 +26,13 @@ services:
     build:
       context: ../klass-api
       dockerfile: ../klass-api/Dockerfile
-    command: [ "java", "-jar", "app.war" ]
+    command: [ "java", "-Xms1g", "-jar", "app.war" ]
     profiles: [ migration-testing, api ]
     depends_on:
       - postgresql
     ports:
       - "8080:8080"
-    mem_limit: 2g
+    mem_limit: 4g
     cpus: 1.0
     environment:
       SPRING_PROFILES_ACTIVE: api, postgres-local, skip-indexing, embedded-solr
@@ -47,11 +47,8 @@ services:
       - mariadb
     ports:
       - "8082:8080"
-    deploy:
-      resources:
-        limits:
-          cpus: "1.0"
-          memory: 1G
+    mem_limit: 4g
+    cpus: 1.0
     environment:
       MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
       MARIADB_USER: "klass"
@@ -72,11 +69,7 @@ services:
     ports:
       - "8080:8080"
     mem_limit: 8g
-    deploy:
-      resources:
-        limits:
-          cpus: "1.0"
-          memory: 8G
+    cpus: 1.0
     environment:
       SPRING_PROFILES_ACTIVE: "api, postgres-local"
       SPRING_DATA_SOLR_HOST: http://solr:8983/solr
