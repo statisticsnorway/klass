@@ -29,4 +29,4 @@ docker cp alter_timestamp.sql "$(docker compose ps -q postgresql)":/tmp/alter_ti
 docker compose --profile migrate-data exec -T postgresql psql -U klass -d klass -f /tmp/alter_timestamp.sql
 
 echo "Dump data from postgres database to file"
-pg_dump -U klass -h localhost -p 5432 klass > "$POSTGRES_LOCAL_FILEPATH"/"$POSTGRES_DUMP_FILENAME"
+pg_dump -U klass -h localhost -p 5432 klass > "$POSTGRES_LOCAL_FILEPATH"

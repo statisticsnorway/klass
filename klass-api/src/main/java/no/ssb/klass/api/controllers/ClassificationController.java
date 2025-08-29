@@ -548,8 +548,22 @@ public class ClassificationController {
         return includeCodelists ? null : ClassificationType.CLASSIFICATION;
     }
 
+
+    /**
+     * Extracts the first section identifier from an SSB section string.
+     * Returns {@code null} if the input is null or empty.
+     * <p>
+     * Example: "210 - Seksjon for nasjonalregnskap" → "210"
+     * Example: "210 - National accounts" -> "210"
+     * Example: "210 " -> "210"
+     */
     private String extractSsbSection(String ssbSection) {
-        return Strings.isNullOrEmpty(ssbSection) ? null : ssbSection;
+        if (Strings.isNullOrEmpty(ssbSection)) {
+            return null;
+        }
+        String s = ssbSection.trim();
+        String[] parts = s.split(" - ", 2);
+        return parts[0];
     }
 
     private List<String> getCsvFieldsList(String csvFields) {
