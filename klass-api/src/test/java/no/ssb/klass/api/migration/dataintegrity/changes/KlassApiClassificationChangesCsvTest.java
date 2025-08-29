@@ -9,7 +9,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 import static no.ssb.klass.api.migration.MigrationTestUtils.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 public class KlassApiClassificationChangesCsvTest extends AbstractKlassApiChanges {
 
@@ -36,9 +35,6 @@ public class KlassApiClassificationChangesCsvTest extends AbstractKlassApiChange
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationIds")
     void getClassificationChanges(int classificationId) {
-
-        // Temp start at id 7 because of heavy requests to some ids
-        assumeTrue(classificationId > 6);
         String path= getChangesPath(classificationId);
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDate,TEXT_CSV);
         Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDate,TEXT_CSV);
@@ -99,9 +95,6 @@ public class KlassApiClassificationChangesCsvTest extends AbstractKlassApiChange
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationIds")
     void getClassificationChangesEnglish(Integer classificationId) {
-
-        // Temp start at id 7 because of heavy requests to some ids
-        assumeTrue(classificationId > 6);
         String path= getChangesPath(classificationId);
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageEn,TEXT_CSV);
         Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageEn,TEXT_CSV);
@@ -121,9 +114,6 @@ public class KlassApiClassificationChangesCsvTest extends AbstractKlassApiChange
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationIds")
     void getClassificationChangesNewNorwegian(Integer classificationId) {
-
-        // Temp start at id 7 because of heavy requests to some ids
-        assumeTrue(classificationId > 6);
         String path= getChangesPath(classificationId);
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageNn,TEXT_CSV);
         Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageNn,TEXT_CSV);
@@ -143,9 +133,6 @@ public class KlassApiClassificationChangesCsvTest extends AbstractKlassApiChange
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationIds")
     void getClassificationChangesCsvSeparator(Integer classificationId) {
-
-        // Temp start at id 7 because of heavy requests to some ids
-        assumeTrue(classificationId > 6);
         String path= getChangesPath(classificationId);
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsCsvSeparator,TEXT_CSV);
         Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsCsvSeparator,TEXT_CSV);

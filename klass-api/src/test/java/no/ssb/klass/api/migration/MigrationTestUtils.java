@@ -296,15 +296,15 @@ public class MigrationTestUtils {
                 .isEqualTo(targetList.size());
 
         for (int i = 0; i < sourceList.size(); i++){
-            String sourceName = sourceList.get(i).get("name").toString();
-            String targetName = targetList.get(i).get("name").toString();
+            String sourceName = getSectionNumber(sourceList.get(i).get("name").toString());
+            String targetName = getSectionNumber(targetList.get(i).get("name").toString());
             System.out.println("Checking " + sourceName + " -> " + targetName);
             if(sourceName != null){
                 assertThat(sourceName).withFailMessage(
                         FAIL_MESSAGE,
                         pathListName,
                         sourceName,
-                        targetName).startsWith(targetName);
+                        targetName).isEqualTo(targetName);
             }
         }
     }
@@ -550,8 +550,8 @@ public class MigrationTestUtils {
         System.out.println(sourceList.size() + " -> " + targetList.size());
 
         for(int i = 0; i < sourceList.size(); i++) {
-            String sourceSection = sourceList.get(i);
-            String targetSection = targetList.get(i);
+            String sourceSection = getSectionNumber(sourceList.get(i));
+            String targetSection = getSectionNumber(targetList.get(i));
             if(sourceSection != null){
                 assertThat(sourceSection).withFailMessage(
                         FAIL_MESSAGE,

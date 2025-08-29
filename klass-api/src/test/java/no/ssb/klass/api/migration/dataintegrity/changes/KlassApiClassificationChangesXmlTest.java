@@ -10,7 +10,6 @@ import java.time.Instant;
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 import static no.ssb.klass.api.migration.MigrationTestUtils.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 public class KlassApiClassificationChangesXmlTest extends AbstractKlassApiChanges {
 
@@ -41,9 +40,6 @@ public class KlassApiClassificationChangesXmlTest extends AbstractKlassApiChange
     @MethodSource("rangeProviderClassificationIds")
     void getClassificationChanges(int classificationId) {
 
-        // Temp start at id 7 because of heavy requests to some ids
-        assumeTrue(classificationId > 6);
-
         String path= getChangesPath(classificationId);
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDate, APPLICATION_XML);
         Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDate, APPLICATION_XML);
@@ -65,9 +61,6 @@ public class KlassApiClassificationChangesXmlTest extends AbstractKlassApiChange
     @MethodSource("rangeProviderClassificationIds")
     void getClassificationChangesDatesInRange(int classificationId) {
 
-        // Temp start at id 7 because of heavy requests to some ids
-        assumeTrue(classificationId > 6);
-
         String path= getChangesPath(classificationId);
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDateInRange,APPLICATION_XML);
         Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDateInRange,APPLICATION_XML);
@@ -88,10 +81,6 @@ public class KlassApiClassificationChangesXmlTest extends AbstractKlassApiChange
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationIds")
     void getClassificationChangesLanguageEn(int classificationId) {
-
-        // Temp start at id 7 because of heavy requests to some ids
-        assumeTrue(classificationId > 6);
-
         String path= getChangesPath(classificationId);
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageEn,APPLICATION_XML);
         Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageEn,APPLICATION_XML);
@@ -111,10 +100,6 @@ public class KlassApiClassificationChangesXmlTest extends AbstractKlassApiChange
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationIds")
     void getClassificationChangesLanguageNn(int classificationId) {
-
-        // Temp start at id 7 because of heavy requests to some ids
-        assumeTrue(classificationId > 6);
-
         String path= getChangesPath(classificationId);
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageNn,APPLICATION_XML);
         Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageNn,APPLICATION_XML);
