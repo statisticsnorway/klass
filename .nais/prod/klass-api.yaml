@@ -12,10 +12,7 @@ spec:
     - https://klass.intern.ssb.no/api/klass
   replicas:
     min: 2
-    max: 6
-    scalingStrategy:
-      cpu:
-        thresholdPercentage: 90
+    max: 2
   resources:
     requests:
       cpu: 200m
