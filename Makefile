@@ -108,6 +108,10 @@ logs-klass-forvaltning:
 stop-klass-forvaltning-docker:
 	docker compose $(COMPOSE_FILE) --profile frontend down
 
+.PHONY: rebuild-klass-forvaltning-docker
+rebuild-klass-forvaltning-docker:
+	docker compose $(COMPOSE_FILE) --profile frontend build --no-cache klass-forvaltning
+
 .PHONY: clean-klass-forvaltning-volumes
 clean-klass-forvaltning-volumes:
 	docker volume rm klass_pgdata || true
@@ -124,10 +128,6 @@ check-klass-api-docker:
 rebuild-klass-api-docker:
 	docker compose $(COMPOSE_FILE) --profile api build --no-cache klass-api
 
-.PHONY: rebuild-klass-forvaltning-docker
-rebuild-klass-forvaltning-docker:
-	docker compose $(COMPOSE_FILE) --profile frontend build --no-cache klass-forvaltning
-
 .PHONY: restart-klass-api-docker
 restart-klass-api-docker:
 	docker compose $(COMPOSE_FILE) --profile api restart klass-api
@@ -140,4 +140,12 @@ logs-klass-api:
 .PHONY: stop-klass-api-docker
 stop-klass-api-docker:
 	docker compose $(COMPOSE_FILE) --profile api down
+
+.PHONY: start-klass-api-search-docker
+start-klass-api-search-docker:
+	docker compose $(COMPOSE_FILE) --profile api-search up --build -d
+
+.PHONY: stop-klass-api-search-docker
+stop-klass-api-search-docker:
+	docker compose $(COMPOSE_FILE) --profile api-search down
 

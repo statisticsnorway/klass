@@ -9,6 +9,7 @@ public final class MigrationTestConstants {
     // paths
     public static final String DATA_SSB_HOST = "https://data.ssb.no";
     public static final String NAIS_TEST_HOST = "https://klass.intern.test.ssb.no";
+    public static final String NAIS_PROD_HOST = "https://klass.intern.ssb.no";
     public static final String LOCAL_SOURCE_HOST = "http://localhost:8082";
     public static final String LOCAL_TARGET_HOST = "http://localhost:8080";
     public static final String BASE_PATH = "/api/klass";
@@ -105,7 +106,6 @@ public final class MigrationTestConstants {
     public static final String CHANGELOGS= "changelogs";
     public static final String CODE_CHANGES= "codeChanges";
     public static final String SSB_SECTIONS= "ssbsections";
-    public static final String SSB_SECTIONS_PATH= "ssbSections";
     public static final String CORRESPONDENCE_MAPS = "correspondenceMaps";
     public static final String LEVELS= "levels";
     public static final String CLASSIFICATION_ITEMS= "classificationItems";
@@ -336,7 +336,8 @@ public final class MigrationTestConstants {
             PUBLICATIONS,
             DERIVED_FROM,
             CONTACT_PERSON,
-            LINKS_SELF_HREF
+            LINKS_SELF_HREF,
+            OWNING_SECTION
     );
 
     public static List<String> pathNamesVersionsClassificationItems = Arrays.asList(
