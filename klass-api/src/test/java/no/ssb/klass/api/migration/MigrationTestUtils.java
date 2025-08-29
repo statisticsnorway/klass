@@ -410,7 +410,7 @@ public class MigrationTestUtils {
         System.out.println("List sizes: " + sourceList.size() + " -> " + targetList.size());
 
         assertThat(sourceList.size())
-                .withFailMessage("Expected size to be <%d> but was <%d>", targetList.size(), sourceList.size())
+                .withFailMessage("Expected size to be <%d> but was <%d>", sourceList.size(), targetList.size())
                 .isEqualTo(targetList.size());
 
         Map<Object, Map<String, Object>> sourceById = mapByField(sourceList, idField);
