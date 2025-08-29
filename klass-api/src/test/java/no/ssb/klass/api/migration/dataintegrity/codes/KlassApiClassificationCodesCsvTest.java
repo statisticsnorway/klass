@@ -11,7 +11,6 @@ import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 import static no.ssb.klass.api.migration.MigrationTestConstants.TEXT_CSV;
 import static no.ssb.klass.api.migration.MigrationTestUtils.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 public class KlassApiClassificationCodesCsvTest extends AbstractKlassApiCodesTest {
 
@@ -38,9 +37,6 @@ public class KlassApiClassificationCodesCsvTest extends AbstractKlassApiCodesTes
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationIds")
     void getClassificationWithCodesCsv(Integer classificationId) {
-        // For now skipping because of some items size
-        assumeTrue(classificationId > 6);
-
         System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
 
         String path = getCodesPath(classificationId);

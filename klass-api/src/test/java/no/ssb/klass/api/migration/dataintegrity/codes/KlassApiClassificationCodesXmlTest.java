@@ -11,7 +11,6 @@ import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 import static no.ssb.klass.api.migration.MigrationTestConstants.APPLICATION_XML;
 import static no.ssb.klass.api.migration.MigrationTestUtils.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 public class KlassApiClassificationCodesXmlTest extends AbstractKlassApiCodesTest {
 
@@ -39,8 +38,6 @@ public class KlassApiClassificationCodesXmlTest extends AbstractKlassApiCodesTes
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationIds")
     void getClassificationWithCodes(Integer classificationId) {
-        // For now skipping because of some items size
-        assumeTrue(classificationId > 6);
 
         System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
 
@@ -65,9 +62,6 @@ public class KlassApiClassificationCodesXmlTest extends AbstractKlassApiCodesTes
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationIds")
     void getClassificationWithCodesInRange(Integer classificationId) {
-
-        // For now skipping because of some items size
-        assumeTrue(classificationId > 6);
         System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
 
         String path = getCodesPath(classificationId);

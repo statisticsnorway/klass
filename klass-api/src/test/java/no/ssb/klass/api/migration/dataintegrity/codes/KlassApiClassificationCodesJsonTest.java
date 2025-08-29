@@ -10,7 +10,6 @@ import java.time.Instant;
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 import static no.ssb.klass.api.migration.MigrationTestUtils.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 public class KlassApiClassificationCodesJsonTest extends AbstractKlassApiCodesTest {
 
@@ -38,9 +37,6 @@ public class KlassApiClassificationCodesJsonTest extends AbstractKlassApiCodesTe
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationIds")
     void getClassificationWithCodes(Integer classificationId) {
-        // For now skipping because of some items size
-        assumeTrue(classificationId > 6);
-
         System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
 
         String path = getCodesPath(classificationId);
@@ -64,11 +60,28 @@ public class KlassApiClassificationCodesJsonTest extends AbstractKlassApiCodesTe
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationIds")
     void getClassificationWithCodesInRange(Integer classificationId) {
-
-        // For now skipping because of some items size
-        assumeTrue(classificationId > 6);
         System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
 
+        String path = getCodesPath(classificationId);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDateInRange,null);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDateInRange,null);
+
+        assertApiResponseIsNotNull(sourceResponse);
+
+        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+
+        if(sourceResponse.getStatusCode() != 200) {
+            assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
+        }
+        else{
+            validateList(sourceResponse, targetResponse, CODES);
+        }
+    }
+
+    @Test
+    void getOneClassificationWithCodesInRange() {
+
+        int classificationId= 36;
         String path = getCodesPath(classificationId);
         Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDateInRange,null);
         Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDateInRange,null);
