@@ -12,16 +12,13 @@ spec:
     - https://klass.intern.ssb.no/api/klass
   replicas:
     min: 2
-    max: 6
-    scalingStrategy:
-      cpu:
-        thresholdPercentage: 90
+    max: 2
   resources:
     requests:
       cpu: 200m
-      memory: 800Mi
+      memory: 4Gi
     limits:
-      memory: 832Mi
+      memory: 4Gi
   gcp:
     sqlInstances:
       - type: POSTGRES_17

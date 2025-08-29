@@ -36,11 +36,14 @@ public class CorrespondenceTableSummaryResource extends KlassResource {
     private final LevelResource sourceLevel;
     private final LevelResource targetLevel;
 
-    protected CorrespondenceTableSummaryResource(CorrespondenceTable correspondenceTable, Language language) {
+    protected CorrespondenceTableSummaryResource(
+            CorrespondenceTable correspondenceTable,
+            Language language,
+            String owningSectionName) {
         super(correspondenceTable.getId());
         this.name = correspondenceTable.getName(language);
         this.contactPerson = new ContactPersonResource(correspondenceTable.getContactPerson());
-        this.owningSection = correspondenceTable.getContactPerson().getSection();
+        this.owningSection = owningSectionName;
         this.source = correspondenceTable.getSource().getName(language);
         this.sourceId = correspondenceTable.getSource().getId();
         this.target = correspondenceTable.getTarget().getName(language);
@@ -125,8 +128,8 @@ public class CorrespondenceTableSummaryResource extends KlassResource {
     }
 
     public static List<CorrespondenceTableSummaryResource> convert(List<CorrespondenceTable> correspondenceTables,
-            Language language) {
-        return correspondenceTables.stream().map(c -> new CorrespondenceTableSummaryResource(c, language)).collect(
+            Language language, String owningSectionName) {
+        return correspondenceTables.stream().map(c -> new CorrespondenceTableSummaryResource(c, language, owningSectionName)).collect(
                 Collectors.toList());
     }
 }

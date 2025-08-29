@@ -74,5 +74,38 @@ public class RestApiClassificationFamilyIntegrationTest extends AbstractRestApiA
                 .body(JSON_LINKS + ".self.href", containsString(urlParts));
     }
 
+    @Test
+    public void restServiceClassificationFamilyFiltersSsbSectionKnownSection() {
+        final String ssbSection = "section";
+        String urlParts = REQUEST_CLASSIFICATION_FAMILY + "/" + classificationFamily.getId();
+
+        given().port(port).accept(ContentType.JSON)
+                .param("ssbSection", ssbSection)
+                .get(REQUEST_CLASSIFICATION_FAMILY_WITH_ID, classificationFamily.getId())
+                .then()
+                .assertThat().statusCode(HttpStatus.OK.value())
+                .assertThat().contentType(ContentType.JSON)
+                .assertThat().body("name", equalTo(classificationFamily.getName()))
+                .assertThat().body("classifications.size()", equalTo(2))
+                .body(JSON_LINKS + ".self.href", containsString(urlParts));
+    }
+
+    @Test
+    public void restServiceClassificationFamilyFiltersSsbSectionKnownSectionFullName() {
+        final String ssbSection = "section - section name";
+        String urlParts = REQUEST_CLASSIFICATION_FAMILY + "/" + classificationFamily.getId();
+
+        given().port(port).accept(ContentType.JSON)
+                .param("ssbSection", ssbSection)
+                .get(REQUEST_CLASSIFICATION_FAMILY_WITH_ID, classificationFamily.getId())
+                .then()
+                .assertThat().statusCode(HttpStatus.OK.value())
+                .assertThat().contentType(ContentType.JSON)
+                .assertThat().body("name", equalTo(classificationFamily.getName()))
+                .assertThat().body("classifications.size()", equalTo(2))
+                .body(JSON_LINKS + ".self.href", containsString(urlParts));
+    }
+
+
 // @formatter:on
 }

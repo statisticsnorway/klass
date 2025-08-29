@@ -30,18 +30,21 @@ public class ClassificationVariantResource extends ClassificationVariantSummaryR
     private final List<LevelResource> levels;
     private final List<ClassificationItemResource> classificationItems;
 
-    public ClassificationVariantResource(ClassificationVariant variant, Language language) {
-        super(variant, language);
+    public ClassificationVariantResource(
+            ClassificationVariant variant,
+            Language language,
+            String owningSectionName) {
+        super(variant, language, owningSectionName);
         this.validFrom = variant.getDateRange().getFrom();
         LocalDate to = variant.getDateRange().getTo();
         this.validTo = (to.isEqual(LocalDate.MAX)) ? null : to;
         this.introduction = variant.getIntroduction(language);
         this.contactPerson = new ContactPersonResource(variant.getContactPerson());
-        this.owningSection = variant.getContactPerson().getSection();
+        this.owningSection = owningSectionName;
 
         this.levels = LevelResource.convert(variant.getLevels(), language);
         this.correspondenceTables = CorrespondenceTableSummaryResource.convert(variant.getCorrespondenceTables(),
-                language);
+                language, owningSectionName);
         this.classificationItems = ClassificationItemResource.convert(variant, language);
         this.changelogs = ChangelogResource.convert(variant.getChangelogs());
     }

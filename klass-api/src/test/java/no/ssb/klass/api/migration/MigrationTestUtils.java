@@ -195,16 +195,8 @@ public class MigrationTestUtils {
                     .withFailMessage(FAIL_MESSAGE, pathName, null, targetField)
                     .isNull();
         }
-        if (pathName.equals(LAST_MODIFIED)) {
-            String sourceDate = getDate(sourceField);
-            String targetDate = getDate(targetField);
-            System.out.println("Comparing timestamp values: " + sourceDate + " -> " + targetDate);
-            assertThat(sourceDate).withFailMessage(FAIL_MESSAGE,
-                    pathName, sourceDate, targetDate)
-                    .isEqualTo(targetDate);
-        }
 
-        else if (pathName.equals(OWNING_SECTION)) {
+        if (pathName.equals(OWNING_SECTION)) {
             String sourceSectionNumber = getSectionNumber(sourceField);
             String targetSectionNumber = getSectionNumber(targetField);
             System.out.println("Comparing owning section: " + sourceSectionNumber + " -> " + targetSectionNumber);
@@ -338,18 +330,8 @@ public class MigrationTestUtils {
                         .withFailMessage(FAIL_MESSAGE, pathName, null, targetField)
                         .isNull();
             }
-            if (pathName.equals(LAST_MODIFIED)) {
-                String sourceDate = getDate(sourceField);
-                String targetDate = getDate(targetField);
 
-                System.out.println("Comparing timestamp values: " + sourceDate + " -> " + targetDate);
-
-                assertThat(sourceDate).withFailMessage(FAIL_MESSAGE,
-                                pathName, sourceDate, targetDate)
-                        .isEqualTo(targetDate);
-            }
-
-            else if (pathName.equals(OWNING_SECTION)) {
+            if (pathName.equals(OWNING_SECTION)){
                 String sourceSectionNumber = getSectionNumber(sourceField);
                 String targetSectionNumber = getSectionNumber(targetField);
                 System.out.println("Comparing owning section: " + sourceSectionNumber + " -> " + targetSectionNumber);
@@ -376,6 +358,29 @@ public class MigrationTestUtils {
                         .isEqualTo(targetField);
             }
         }
+    }
+
+    public static void validateFilteredClassifications(Response sourceResponse, Response targetResponse) {
+        List<Map<String, Object>> sourceList = sourceResponse.path(CLASSIFICATIONS);
+        List<Map<String, Object>> targetList = targetResponse.path(CLASSIFICATIONS);
+
+        System.out.println("Checking list name: " + CLASSIFICATIONS);
+        if (sourceList == null) {
+            assertThat(targetList)
+                    .withFailMessage(FAIL_MESSAGE, CLASSIFICATIONS, null, targetList)
+                    .isNull();
+            return;
+        }
+
+        assertThat(targetList)
+                .withFailMessage(FAIL_MESSAGE, CLASSIFICATIONS, sourceList, targetList)
+                .isNotNull();
+
+        System.out.println("List sizes: " + sourceList.size() + " -> " + targetList.size());
+
+        assertThat(sourceList.size())
+                .withFailMessage("Expected size to be <%d> but was <%d>", targetList.size(), sourceList.size())
+                .isNotEqualTo(targetList.size());
     }
 
     /**
@@ -422,15 +427,7 @@ public class MigrationTestUtils {
                 Object sourceField = resolvePath(versionSource, pathName);
                 Object targetField = resolvePath(versionTarget, pathName);
 
-                if (pathName.equals(LAST_MODIFIED)) {
-                    String sourceDate = getDate(sourceField);
-                    String targetDate = getDate(targetField);
-                    System.out.println("Comparing timestamp values: " + sourceDate + " -> " + targetDate);
-                    assertThat(sourceDate).withFailMessage(FAIL_MESSAGE,
-                                    pathName, sourceDate, targetDate)
-                            .isEqualTo(targetDate);
-                }
-                else if (pathName.equals(OWNING_SECTION)) {
+                if (pathName.equals(OWNING_SECTION)) {
                     String sourceSectionNumber = getSectionNumber(sourceField);
                     String targetSectionNumber = getSectionNumber(targetField);
                     System.out.println("Comparing owning section: " + sourceSectionNumber + " -> " + targetSectionNumber);
