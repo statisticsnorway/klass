@@ -34,6 +34,8 @@ spec:
       value: http://klass-mail
     - name: JAVA_TOOL_OPTIONS
       value: "-XX:InitialRAMPercentage=50.0 -XX:MaxRAMPercentage=75.0"
+    - name: LOGGING_LEVEL_ROOT
+      value: INFO
 
   accessPolicy:
     outbound:
