@@ -10,8 +10,6 @@ spec:
   port: 8080
   ingresses:
     - https://klass.intern.ssb.no/api/klass
-    # Temporary to allow for performance testing
-    - https://klass.ssb.no/api/klass
   replicas:
     min: 2
     max: 2
@@ -65,4 +63,3 @@ spec:
     port: 8090
     initialDelay: 60
     timeout: 180
-
