@@ -67,7 +67,7 @@ jobs:
       - name: Build with Maven
         if: steps.changed-files.outputs.changed != 'only-inputs' || github.event.inputs.cluster == 'test' || github.event.inputs.cluster == 'prod'
         working-directory: klass-forvaltning
-        run: mvn -B install -DskipTests
+        run: mvn --batch-mode --update-snapshots install -DskipTests
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Build and push
