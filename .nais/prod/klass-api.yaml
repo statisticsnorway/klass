@@ -17,10 +17,10 @@ spec:
     max: 2
   resources:
     requests:
-      cpu: 200m
-      memory: 1030Mi
+      cpu: 840m
+      memory: 1200Mi
     limits:
-      memory: 1340Mi
+      memory: 1500Mi
   gcp:
     sqlInstances:
       - type: POSTGRES_17
