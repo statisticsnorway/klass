@@ -48,6 +48,8 @@ spec:
       value: http://klass-mail
     - name: LOGGING_LEVEL_ROOT
       value: INFO
+    - name: JAVA_TOOL_OPTIONS
+      value: "-XX:InitialRAMPercentage=50.0 -XX:MaxRAMPercentage=50.0"
   envFrom:
     - secret: google-sql-klass
     - secret: klass-forvaltning-application-properties
