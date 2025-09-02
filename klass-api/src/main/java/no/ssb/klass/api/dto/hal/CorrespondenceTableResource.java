@@ -17,12 +17,13 @@ import no.ssb.klass.core.model.Language;
 public class CorrespondenceTableResource extends CorrespondenceTableSummaryResource {
     private final String description;
     private final List<ChangelogResource> changelogs;
-
-
+    private final String owningSection;
     private final List<CorrespondenceMapResource> correspondenceMaps;
 
     public CorrespondenceTableResource(CorrespondenceTable correspondenceTable, Language language, String owningSectionName) {
-        super(correspondenceTable, language,owningSectionName);
+        super(correspondenceTable, language);
+        //  super(correspondenceTable, language,owningSectionName);
+        this.owningSection = owningSectionName;
         this.description = correspondenceTable.getDescription(language);
         this.correspondenceMaps = CorrespondenceMapResource.convert(correspondenceTable.getCorrespondenceMaps(),
                 language);
@@ -31,6 +32,10 @@ public class CorrespondenceTableResource extends CorrespondenceTableSummaryResou
 
     public String getDescription() {
         return description;
+    }
+
+    public String getOwningSection() {
+        return owningSection;
     }
 
     @JacksonXmlElementWrapper(localName = "changelogs")

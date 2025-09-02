@@ -34,7 +34,7 @@ public class ClassificationVariantResource extends ClassificationVariantSummaryR
             ClassificationVariant variant,
             Language language,
             String owningSectionName) {
-        super(variant, language, owningSectionName);
+        super(variant, language);
         this.validFrom = variant.getDateRange().getFrom();
         LocalDate to = variant.getDateRange().getTo();
         this.validTo = (to.isEqual(LocalDate.MAX)) ? null : to;
@@ -44,7 +44,7 @@ public class ClassificationVariantResource extends ClassificationVariantSummaryR
 
         this.levels = LevelResource.convert(variant.getLevels(), language);
         this.correspondenceTables = CorrespondenceTableSummaryResource.convert(variant.getCorrespondenceTables(),
-                language, owningSectionName);
+                language);
         this.classificationItems = ClassificationItemResource.convert(variant, language);
         this.changelogs = ChangelogResource.convert(variant.getChangelogs());
     }
