@@ -5,10 +5,7 @@ import no.ssb.klass.api.applicationtest.config.ApplicationTestConfig;
 import no.ssb.klass.api.applicationtest.utils.ApplicationTestUtil;
 import no.ssb.klass.api.util.RestConstants;
 import no.ssb.klass.core.config.ConfigurationProfiles;
-import no.ssb.klass.core.model.ClassificationFamily;
-import no.ssb.klass.core.model.ClassificationSeries;
-import no.ssb.klass.core.model.CorrespondenceTable;
-import no.ssb.klass.core.model.User;
+import no.ssb.klass.core.model.*;
 import no.ssb.klass.core.repository.ClassificationFamilyRepository;
 import no.ssb.klass.core.repository.ClassificationSeriesRepository;
 import no.ssb.klass.core.repository.CorrespondenceTableRepository;
@@ -63,6 +60,9 @@ public abstract class AbstractRestApiApplicationTest {
     public static final String REQUEST_CORRESPONDENCE_TABLES = RestConstants.API_VERSION_V1
             + "/correspondencetables/{correspondencetablesId}";
 
+    public static final String REQUEST_VERSIONS_WITH_ID = RestConstants.API_VERSION_V1
+            + "/versions/{versionsId}";
+
     public static final String REQUEST_SSB_SECTION = RestConstants.API_VERSION_V1 + "/ssbsections";
 
     public static final String REQUEST_CLASSIFICATION_FAMILY = RestConstants.API_VERSION_V1 + "/classificationfamilies";
@@ -83,11 +83,13 @@ public abstract class AbstractRestApiApplicationTest {
     public static final String JSON_CLASSIFICATION1 = "_embedded.classifications[0]";
     public static final String JSON_CLASSIFICATION2 = "_embedded.classifications[1]";
     public static final String JSON_CLASSIFICATION3 = "_embedded.classifications[2]";
+    public static final String JSON_CLASSIFICATION4 = "_embedded.classifications[3]";
 
     public static final String XML_CLASSIFICATIONS = "PagedResources.contents.content";
     public static final String XML_CLASSIFICATION1 = "PagedResources.contents.content[0]";
     public static final String XML_CLASSIFICATION2 = "PagedResources.contents.content[1]";
     public static final String XML_CLASSIFICATION3 = "PagedResources.contents.content[2]";
+    public static final String XML_CLASSIFICATION4 = "PagedResources.contents.content[3]";
 
     public static final String JSON_PAGE = "page";
     public static final String XML_PAGE = "PagedResources.page";
@@ -118,6 +120,7 @@ public abstract class AbstractRestApiApplicationTest {
     protected ClassificationSeries familieGrupperingCodelist;
     protected ClassificationFamily classificationFamily;
     protected CorrespondenceTable correspondenceTable;
+    protected ClassificationSeries badmintonCodelist;
 
     @Autowired
     protected ApplicationTestUtil applicationTestUtil;
@@ -143,6 +146,8 @@ public abstract class AbstractRestApiApplicationTest {
         applicationTestUtil.clearSearch();
         // if (!testDataInitialized) {
         User user = userRepository.save(TestUtil.createUser());
+        User user2 = userRepository.save(TestUtil.createUser2());
+        User user3 = userRepository.save(TestUtil.createUser3());
         TimeUtil.setClockSource(new ConstantClockSource(parseDate(CHANGED_SINCE_OLD_DATE)));
         classificationFamily = classificationFamilyRepository.save(TestUtil
                 .createClassificationFamily("Befolkning"));
@@ -157,6 +162,10 @@ public abstract class AbstractRestApiApplicationTest {
         familieGrupperingCodelist = TestDataProvider.createFamiliegrupperingCodelist(user);
         classificationFamily.addClassificationSeries(familieGrupperingCodelist);
         classificationService.saveAndIndexClassification(familieGrupperingCodelist);
+
+        badmintonCodelist = TestDataProvider.createBadmintonCodelist(user,user2, user3);
+        classificationFamily.addClassificationSeries(badmintonCodelist);
+        classificationService.saveAndIndexClassification(badmintonCodelist);
 
         kommuneinndeling = classificationService.saveAndIndexClassification(kommuneinndeling);
         bydelsinndeling = classificationService.saveAndIndexClassification(bydelsinndeling);

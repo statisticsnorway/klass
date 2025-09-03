@@ -238,6 +238,37 @@ public final class TestDataProvider {
         return classification;
     }
 
+    public static ClassificationSeries createBadmintonCodelist(User user, User user1, User user2 ) {
+        ClassificationSeries classification = TestUtil.createCodelist("Badminton",
+                "Testing when version owning section is different from variant owning section");
+
+        classification.setContactPerson(user);
+        ClassificationVersion version = TestUtil.createClassificationVersion(DateRange.create("2006-01-01", TestDataProvider.TEN_YEARS_LATER_DATE));
+        Level level = TestUtil.createLevel(1);
+        version.addLevel(level);
+        version.addClassificationItem(TestUtil.createClassificationItem("0.1.1", "Fjærballer pro"),
+                level.getLevelNumber(), null);
+        ClassificationVariant variant = TestUtil.createClassificationVariant(
+                "Variant - Tilleggsinndeling for baller", user1);
+        variant.addClassificationItem(TestUtil.createClassificationItem("A", "Fjærball"), 1, null);
+        variant.addClassificationItem(TestUtil.createClassificationItem("B", "Tennisball"), 1, null);
+        variant.addClassificationItem(TestUtil.createClassificationItem("A_", "Fjærball"), 2, variant.findItem(
+                "A"));
+        variant.addClassificationItem(TestUtil.createClassificationItem("BA", "Tennisball med fjær"),
+                2, variant.findItem("B"));
+        variant.addClassificationItem(TestUtil.createClassificationItem("BB", "Tennisball pro"), 2, variant
+                .findItem("B"));
+        version.addClassificationVariant(variant);
+        ClassificationVariant variant2 = TestUtil.createClassificationVariant(
+                "Variant - Tilleggsinndeling for racketer", user2);
+        variant2.addClassificationItem(TestUtil.createClassificationItem("Q", "Lang racket"), 1, null);
+        variant2.addClassificationItem(TestUtil.createClassificationItem("B", "Kort racket"), 1, null);
+        version.addClassificationVariant(variant2);
+        classification.addClassificationVersion(version);
+
+        return classification;
+    }
+
     public static ClassificationVersion createFamiliegrupperingFutureVersion(User user) {
 
         ClassificationVersion version = TestUtil.createClassificationVersion(DateRange.create(TestDataProvider.TEN_YEARS_LATER_DATE, null));

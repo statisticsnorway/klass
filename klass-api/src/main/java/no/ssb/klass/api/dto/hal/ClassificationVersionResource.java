@@ -62,9 +62,9 @@ public class ClassificationVersionResource extends ClassificationVersionSummaryR
 
 
         this.correspondenceTables = CorrespondenceTableSummaryResource
-                .convert(publicCorrespondenceTables, language, owningSectionName);
+                .convert(publicCorrespondenceTables, language);
         this.classificationVariants = ClassificationVariantSummaryResource
-                .convert(version.getPublicClassificationVariants(), language, owningSectionName);
+                .convert(version.getPublicClassificationVariants(), language);
         this.classificationItems = ClassificationItemResource.convert(version, language);
         this.changelogs = ChangelogResource.convert(version.getChangelogs());
     }
