@@ -147,6 +147,14 @@ public final class TestUtil {
         return new User("ziggy", "Ziggy Stardust", "section");
     }
 
+    public static User createUser2() {
+        return new User("sig", "Sigrid Clouddust", "425");
+    }
+
+    public static User createUser3() {
+        return new User("hik", "Hikke Airballoon", "150");
+    }
+
     public static DateRange anyDateRange() {
         return DateRange.create(TimeUtil.createDate("2012-01-01"), TimeUtil.createDate("2015-01-01"));
     }
