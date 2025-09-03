@@ -49,23 +49,23 @@ public class RestApiListClassificationIntegrationTest extends AbstractRestApiApp
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .contentType(ContentType.JSON)
-                .body(JSON_CLASSIFICATIONS + ".size()", equalTo(3))
+                .body(JSON_CLASSIFICATIONS + ".size()", equalTo(4))
                 // result 1
                 .body(JSON_CLASSIFICATION1 + ".name", equalTo(TestDataProvider.FAMILIEGRUPPERING_NAVN_NO))
                 .body(JSON_CLASSIFICATION1 + "._links.self.href", containsString(REQUEST + "/" + familieGrupperingCodelist.getId()))
                 //result 2
-                .body(JSON_CLASSIFICATION2 + ".name", equalTo(TestDataProvider.KOMMUNEINNDELING_NAVN_NO))
-                .body(JSON_CLASSIFICATION2 + "._links.self.href", containsString(REQUEST + "/" + kommuneinndeling.getId()))
+                .body(JSON_CLASSIFICATION3 + ".name", equalTo(TestDataProvider.KOMMUNEINNDELING_NAVN_NO))
+                .body(JSON_CLASSIFICATION3 + "._links.self.href", containsString(REQUEST + "/" + kommuneinndeling.getId()))
                 //result 3
-                .body(JSON_CLASSIFICATION3 + ".name", equalTo(TestDataProvider.BYDELSINNDELING_NAVN_NO))
-                .body(JSON_CLASSIFICATION3 + "._links.self.href", containsString(REQUEST + "/" + bydelsinndeling.getId()))
+                .body(JSON_CLASSIFICATION4 + ".name", equalTo(TestDataProvider.BYDELSINNDELING_NAVN_NO))
+                .body(JSON_CLASSIFICATION4 + "._links.self.href", containsString(REQUEST + "/" + bydelsinndeling.getId()))
 
                 // links
                 .body(JSON_LINKS + ".self.href", containsString(REQUEST))
                 .body(JSON_LINKS + ".search.href", containsString(REQUEST_SEARCH))
                 //paging
                 .body(JSON_PAGE + ".size", equalTo(20))
-                .body(JSON_PAGE + ".totalElements", equalTo(3))
+                .body(JSON_PAGE + ".totalElements", equalTo(4))
                 .body(JSON_PAGE + ".totalPages", equalTo(1))
                 .body(JSON_PAGE + ".number", equalTo(0));
     }
@@ -133,19 +133,19 @@ public class RestApiListClassificationIntegrationTest extends AbstractRestApiApp
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .contentType(ContentType.XML)
-                .body(XML_CLASSIFICATIONS + ".size()", equalTo(3))
+                .body(XML_CLASSIFICATIONS + ".size()", equalTo(4))
                 // result 1
                 .body(XML_CLASSIFICATION1 + ".name", equalTo(TestDataProvider.FAMILIEGRUPPERING_NAVN_NO))
                 .body(XML_CLASSIFICATION1 + ".link.rel", equalTo("self"))
                 .body(XML_CLASSIFICATION1 + ".link.href", containsString(REQUEST + "/" + familieGrupperingCodelist.getId()))
                 //result 2
-                .body(XML_CLASSIFICATION2 + ".name", equalTo(TestDataProvider.KOMMUNEINNDELING_NAVN_NO))
-                .body(XML_CLASSIFICATION2 + ".link.rel", equalTo("self"))
-                .body(XML_CLASSIFICATION2 + ".link.href", containsString(REQUEST + "/" + kommuneinndeling.getId()))
-                //result 3
-                .body(XML_CLASSIFICATION3 + ".name", equalTo(TestDataProvider.BYDELSINNDELING_NAVN_NO))
+                .body(XML_CLASSIFICATION3 + ".name", equalTo(TestDataProvider.KOMMUNEINNDELING_NAVN_NO))
                 .body(XML_CLASSIFICATION3 + ".link.rel", equalTo("self"))
-                .body(XML_CLASSIFICATION3 + ".link.href", containsString(REQUEST + "/" + bydelsinndeling.getId()))
+                .body(XML_CLASSIFICATION3 + ".link.href", containsString(REQUEST + "/" + kommuneinndeling.getId()))
+                //result 3
+                .body(XML_CLASSIFICATION4 + ".name", equalTo(TestDataProvider.BYDELSINNDELING_NAVN_NO))
+                .body(XML_CLASSIFICATION4 + ".link.rel", equalTo("self"))
+                .body(XML_CLASSIFICATION4 + ".link.href", containsString(REQUEST + "/" + bydelsinndeling.getId()))
 
                 // links
                 .body(XML_ROOT + ".link[0].rel", equalTo("self"))
@@ -154,7 +154,7 @@ public class RestApiListClassificationIntegrationTest extends AbstractRestApiApp
                 .body(XML_ROOT + ".link[1].href", containsString(REQUEST_SEARCH))
                 // paging
                 .body(XML_PAGE + ".size.toInteger();", equalTo(20))
-                .body(XML_PAGE + ".totalElements.toInteger();", equalTo(3))
+                .body(XML_PAGE + ".totalElements.toInteger();", equalTo(4))
                 .body(XML_PAGE + ".totalPages.toInteger();", equalTo(1))
                 .body(XML_PAGE + ".number.toInteger();", equalTo(0));
     }

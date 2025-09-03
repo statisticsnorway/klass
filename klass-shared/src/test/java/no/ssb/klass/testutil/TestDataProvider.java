@@ -239,7 +239,7 @@ public final class TestDataProvider {
     }
 
     public static ClassificationSeries createBadmintonCodelist(User user, User user1, User user2 ) {
-        ClassificationSeries classification = TestUtil.createCodelist("badminton",
+        ClassificationSeries classification = TestUtil.createCodelist("Badminton",
                 "Testing when version owning section is different from variant owning section");
 
         classification.setContactPerson(user);
