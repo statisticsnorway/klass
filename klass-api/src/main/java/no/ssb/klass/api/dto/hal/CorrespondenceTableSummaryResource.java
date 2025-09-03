@@ -130,9 +130,5 @@ public class CorrespondenceTableSummaryResource extends KlassResource {
             Language language) {
         return correspondenceTables.stream().map(c -> new CorrespondenceTableSummaryResource(c, language)).collect(
                 Collectors.toList());
-        /*
-           return correspondenceTables.stream().map(c -> new CorrespondenceTableSummaryResource(c, language, owningSectionName)).collect(
-                Collectors.toList());
-         */
     }
 }
