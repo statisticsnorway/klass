@@ -19,8 +19,10 @@ spec:
   env:
     # Solr crashed with JAVA_TOOL_OPTIONS ref: https://github.com/apache/lucene-solr/pull/405
     # so we use this variable ref: https://solr.apache.org/guide/6_6/taking-solr-to-production.html#TakingSolrtoProduction-MemoryandGCSettings
+    # Solr sets -Xmx512m by default so we MUST override this setting, otherwise the heap allocation will remain constrained
+    # Value should be 50% of memory request
     - name: SOLR_JAVA_MEM
-      value: "-XX:InitialRAMPercentage=50.0 -XX:MaxRAMPercentage=50.0"
+      value: "-Xms1g -Xmx1g"
 
   replicas:
     min: 1
@@ -28,6 +30,7 @@ spec:
   resources:
     requests:
       cpu: 100m
+      # Update SOLR_JAVA_MEM when changing this
       memory: 2Gi
     limits:
       memory: 2Gi
