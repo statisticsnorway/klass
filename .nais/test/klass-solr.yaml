@@ -17,7 +17,9 @@ spec:
     - persistentVolumeClaim: klass-solr-pvc
       mountPath: /opt/solr/server/solr/mycores/Klass/data
   env:
-    - name: JAVA_TOOL_OPTIONS
+    # Solr crashed with JAVA_TOOL_OPTIONS ref: https://github.com/apache/lucene-solr/pull/405
+    # so we use this variable ref: https://solr.apache.org/guide/6_6/taking-solr-to-production.html#TakingSolrtoProduction-MemoryandGCSettings
+    - name: SOLR_JAVA_MEM
       value: "-XX:InitialRAMPercentage=50.0 -XX:MaxRAMPercentage=50.0"
 
   replicas:
