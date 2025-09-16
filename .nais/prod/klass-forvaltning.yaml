@@ -5,6 +5,8 @@ metadata:
   namespace: dapla-metadata
   labels:
     team: dapla-metadata
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "8m"
 spec:
   port: 8081
   ingresses:
