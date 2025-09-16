@@ -16,6 +16,9 @@ spec:
   filesFrom:
     - persistentVolumeClaim: klass-solr-pvc
       mountPath: /opt/solr/server/solr/mycores/Klass/data
+  env:
+    - name: JAVA_TOOL_OPTIONS
+      value: "-XX:InitialRAMPercentage=50.0 -XX:MaxRAMPercentage=50.0"
 
   replicas:
     min: 1
@@ -23,9 +26,9 @@ spec:
   resources:
     requests:
       cpu: 100m
-      memory: 576Mi
+      memory: 2Gi
     limits:
-      memory: 640Mi
+      memory: 2Gi
 
   accessPolicy:
     inbound:
