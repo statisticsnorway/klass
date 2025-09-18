@@ -21,7 +21,12 @@ services:
     environment:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_USER: "klass"
-      POSTGRES_DATABASE: "klass"
+      POSTGRES_DB: "klass"
+    healthcheck:
+        test: [ "CMD-SHELL", "pg_isready -U klass -d klass" ]
+        interval: 10s
+        timeout: 5s
+        retries: 5
   klass-api:
     build:
       context: ../klass-api
@@ -86,17 +91,18 @@ services:
     ports:
       - "8081:8081"
     depends_on:
-      - postgresql
-    command: [ "java", "-XshowSettings:vm", "-Xms512m", "-Xmx2g", "-jar", "app.war" ]
+      postgresql:
+        condition: service_healthy
     deploy:
       resources:
         limits:
           memory: 3G
     environment:
       SPRING_PROFILES_ACTIVE: frontend, hardcoded-user, postgres-local, ad-offline, small-import, skip-indexing, embedded-solr
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_USER: klass
-      POSTGRES_INSTANCE: postgresql
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgresql:5432/klass
+      SPRING_DATASOURCE_USERNAME: klass
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
+      KLASS_ENV_CLIENT_KLASS_MAIL_URL: "http://klass-mail:8080"
   klass-forvaltning-search:
     build:
       context: ../klass-forvaltning
