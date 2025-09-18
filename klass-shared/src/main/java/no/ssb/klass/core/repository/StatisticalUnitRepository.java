@@ -19,7 +19,7 @@ import no.ssb.klass.core.service.dto.StatisticalEntity;
 @Repository
 public interface StatisticalUnitRepository extends JpaRepository<StatisticalUnit, Long> {
     @Query(value = "select new no.ssb.klass.core.service.dto.StatisticalUnitDto(su, count(cs)) "
-            + "from ClassificationSeries cs join cs.statisticalUnits su where cs.deleted = false group by su.name order by su.name")
+            + "from ClassificationSeries cs join cs.statisticalUnits su where cs.deleted = false group by su order by su.name")
     Page<StatisticalEntity> getStaticalUnitsOverView(Pageable p);
 
     @Query(value = "select new no.ssb.klass.core.service.dto.ClassificationReportDto(cs, user) "
