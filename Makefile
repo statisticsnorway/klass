@@ -106,11 +106,7 @@ logs-klass-forvaltning:
 
 .PHONY: stop-klass-forvaltning-docker
 stop-klass-forvaltning-docker:
-	docker compose $(COMPOSE_FILE) --profile frontend down
-
-.PHONY: rebuild-klass-forvaltning-docker
-rebuild-klass-forvaltning-docker:
-	docker compose $(COMPOSE_FILE) --profile frontend build --no-cache klass-forvaltning
+	docker compose $(COMPOSE_FILE) --profile frontend down -v
 
 .PHONY: clean-klass-forvaltning-volumes
 clean-klass-forvaltning-volumes:
@@ -139,7 +135,7 @@ logs-klass-api:
 
 .PHONY: stop-klass-api-docker
 stop-klass-api-docker:
-	docker compose $(COMPOSE_FILE) --profile api down
+	docker compose $(COMPOSE_FILE) --profile api down -v
 
 .PHONY: start-klass-api-search-docker
 start-klass-api-search-docker:
@@ -147,5 +143,5 @@ start-klass-api-search-docker:
 
 .PHONY: stop-klass-api-search-docker
 stop-klass-api-search-docker:
-	docker compose $(COMPOSE_FILE) --profile api-search down
+	docker compose $(COMPOSE_FILE) --profile api-search down -v
 
