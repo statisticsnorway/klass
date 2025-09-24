@@ -10,8 +10,6 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.*;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.web.SecurityFilterChain;
 
 /**
  * @author Mads Lundemo, SSB.
@@ -37,12 +35,4 @@ public class ApplicationTestConfig {
         return new SearchServiceImpl(seriesRepository);
     }
 
-    @Configuration
-    static class TestSecurityConfiguration {
-        @Bean
-        public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-            http.authorizeRequests().antMatchers("/**").permitAll();
-            return http.build();
-        }
-    }
 }
