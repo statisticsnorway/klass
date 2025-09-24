@@ -26,8 +26,7 @@ public class AccessFilter implements Filter {
 
         String path = req.getServletPath();
 
-        if (path.startsWith(RestConstants.API_VERSION_V1) ||
-                path.equals(PingController.PATH)) {
+        if (path.startsWith(RestConstants.API_VERSION_V1)) {
 
             if (path.startsWith(RestConstants.PREFIX_AND_API_VERSION_V1)) {
                 res.addHeader("Access-Control-Allow-Origin", "*");
