@@ -34,8 +34,6 @@ public class AccessFilter implements Filter {
                 res.addHeader("Vary", "X-Forwarded-Proto");
             }
 
-            chain.doFilter(request, response);
-            return;
         }
 
         chain.doFilter(request, response);
