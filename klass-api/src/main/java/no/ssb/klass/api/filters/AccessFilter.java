@@ -26,11 +26,6 @@ public class AccessFilter implements Filter {
 
         String path = req.getServletPath();
 
-        if (path.equals("/manage") || path.startsWith("/manage/")) {
-            res.sendError(HttpServletResponse.SC_FORBIDDEN);
-            return;
-        }
-
         if (path.startsWith(RestConstants.API_VERSION_V1) ||
                 path.equals(PingController.PATH)) {
 
