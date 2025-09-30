@@ -3,7 +3,6 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>klass-shared</artifactId>
     <packaging>jar</packaging>
-    <!--    <packaging>pom</packaging>-->
 
     <name>Klass Shared</name>
     <description>Felles klasser og resurser for Klass komponentene</description>
@@ -26,15 +25,10 @@
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <findbugs-version>3.0.5</findbugs-version>
-        <checkstyle-version>3.3.0</checkstyle-version>
-        <spring.version>4.3.7.RELEASE</spring.version>
         <objenesis-version>3.3</objenesis-version>
         <guava-version>19.0</guava-version>
         <woodstox-version>4.4.1</woodstox-version>
         <commons-lang3-version>3.12.0</commons-lang3-version>
-        <apacheds-server-jndi-version>2.0.0.AM27</apacheds-server-jndi-version>
-        <asciidoctor-version>1.6.0</asciidoctor-version>
         <maven-jaxb2-plugin-version>2.5.0</maven-jaxb2-plugin-version>
         <tomcat7-maven-plugin-version>2.2</tomcat7-maven-plugin-version>
         <postgresql.version>42.7.7</postgresql.version>
@@ -106,18 +100,6 @@
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>${postgresql.version}</version>
-        </dependency>
-        <dependency>
-            <!--java based ldap server for testing-->
-            <groupId>org.apache.directory.server</groupId>
-            <artifactId>apacheds-server-jndi</artifactId>
-            <version>${apacheds-server-jndi-version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>antlr</groupId>
-                    <artifactId>antlr</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.dataformat</groupId>
@@ -219,55 +201,6 @@
     </dependencies>
     <profiles>
         <profile>
-            <id>findbugs</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>findbugs-maven-plugin</artifactId>
-                        <version>${findbugs-version}</version>
-                        <configuration>
-                            <includeTests>true</includeTests>
-                            <threshold>High</threshold>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>check</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>checkstyle</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-checkstyle-plugin</artifactId>
-                        <version>${checkstyle-version}</version>
-                        <configuration>
-                            <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
-                            <configLocation>../build_tools/checkstyle.xml</configLocation>
-                            <includeTestSourceDirectory>true</includeTestSourceDirectory>
-                            <violationSeverity>warning</violationSeverity>
-                            <logViolationsToConsole>true</logViolationsToConsole>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>check</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
             <id>testbench</id>
             <build>
                 <plugins>
@@ -308,7 +241,6 @@
                     </sources>
                 </configuration>
             </plugin>
-
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
