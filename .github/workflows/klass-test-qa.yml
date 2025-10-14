@@ -190,3 +190,4 @@ jobs:
           CLUSTER: test
           RESOURCE: .nais/qa/klass-solr-qa.yaml
           WORKLOAD_IMAGE: ${{ env.IMAGE }}
+          WAIT_TIMEOUT: 900
