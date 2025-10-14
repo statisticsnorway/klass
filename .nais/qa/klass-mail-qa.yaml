@@ -8,7 +8,7 @@ metadata:
     team: dapla-metadata
 spec:
   port: 8082
-
+  ttl: 30m
   replicas:
     min: 1
     max: 1
