@@ -150,44 +150,44 @@ jobs:
           TELEMETRY: ${{ needs.build-mail.outputs.telemetry }}
 
   # --- KLASS SOLR ---
-  what-changed-solr:
-    name: Check Klass Solr changes
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      id-token: write
-      actions: read
-    outputs:
-      test-manifest-changed: ${{ steps.test-manifest-changed.outputs.changed != 'non-inputs' }}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Check for Test manifest changes
-        id: test-manifest-changed
-        uses: nais/what-changed@main
-        with:
-          files: .nais/qa/klass-solr-qa.yaml
-          main-branch-name: 'nais-migration'
-
-  deploy-solr-test:
-    name: Deploy Klass Solr to test
-    runs-on: ubuntu-latest
-    needs: what-changed-solr
-    permissions:
-      contents: read
-      id-token: write
-      actions: read
-    if: needs.what-changed-solr.outputs.test-manifest-changed == 'true'
-    env:
-      IMAGE: europe-north1-docker.pkg.dev/${{ secrets.NAIS_MANAGEMENT_PROJECT_ID }}/dapla-metadata/klass-solr:5.5.2
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - uses: nais/deploy/actions/deploy@v2
-        env:
-          CLUSTER: test
-          RESOURCE: .nais/qa/klass-solr-qa.yaml
-          WORKLOAD_IMAGE: ${{ env.IMAGE }}
-          WAIT_TIMEOUT: 900
+  #what-changed-solr:
+   # name: Check Klass Solr changes
+   # runs-on: ubuntu-latest
+   # permissions:
+   #   contents: read
+   #   id-token: write
+   #   actions: read
+   # outputs:
+   #   test-manifest-changed: ${{ steps.test-manifest-changed.outputs.changed != 'non-inputs' }}
+   # steps:
+   #   - uses: actions/checkout@v4
+   #     with:
+   #       fetch-depth: 0
+   #   - name: Check for Test manifest changes
+   #     id: test-manifest-changed
+   #     uses: nais/what-changed@main
+   #     with:
+   #       files: .nais/qa/klass-solr-qa.yaml
+   #       main-branch-name: 'nais-migration'
+   #
+  #deploy-solr-test:
+   # name: Deploy Klass Solr to test
+   # runs-on: ubuntu-latest
+   # needs: what-changed-solr
+   # permissions:
+   #   contents: read
+   #   id-token: write
+   #   actions: read
+   # if: needs.what-changed-solr.outputs.test-manifest-changed == 'true'
+   # env:
+   #   IMAGE: europe-north1-docker.pkg.dev/${{ secrets.NAIS_MANAGEMENT_PROJECT_ID }}/dapla-metadata/klass-solr:5.5.2
+   # steps:
+   #   - uses: actions/checkout@v4
+   #     with:
+   #       fetch-depth: 0
+   #   - uses: nais/deploy/actions/deploy@v2
+   #     env:
+   #       CLUSTER: test
+   #       RESOURCE: .nais/qa/klass-solr-qa.yaml
+   #       WORKLOAD_IMAGE: ${{ env.IMAGE }}
+   #       WAIT_TIMEOUT: 900
