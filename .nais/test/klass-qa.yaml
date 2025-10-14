@@ -1,0 +1,178 @@
+# Deploy config for deploy qa application on test cluster
+apiVersion: nais.io/v1alpha1
+kind: Application
+metadata:
+  name: klass-pr-{{ pr-number }}
+  namespace: dapla-metadata
+  labels:
+    team: dapla-metadata
+spec:
+  port: 8080
+
+  ttl: 36h
+
+  ingresses:
+    - https://klass-pr-{{ pr-number }}.intern.test.ssb.no/api/klass
+  replicas:
+    min: 1
+    max: 1
+  resources:
+    requests:
+      cpu: 200m
+      memory: 1200Mi
+    limits:
+      memory: 1400Mi
+  gcp:
+    sqlInstances:
+      - type: POSTGRES_17
+        tier: db-custom-1-3840
+        databases:
+          - name: klass
+  env:
+    - name: SPRING_PROFILES_ACTIVE
+      value: api, postgres, solr-remote, skip-indexing
+    - name: SPRING_DATA_SOLR_HOST
+      value: http://klass-solr/solr
+    - name: KLASS_ENV_CLIENT_KLASS_MAIL_URL
+      value: http://klass-mail
+    - name: JAVA_TOOL_OPTIONS
+      value: "-XX:InitialRAMPercentage=50.0 -XX:MaxRAMPercentage=75.0"
+
+  accessPolicy:
+    outbound:
+      rules:
+        - application: klass-solr
+        - application: klass-mail
+
+  prometheus:
+    enabled: true
+    path: /actuator/prometheus
+    port: "8090"
+
+  liveness:
+    path: /actuator/health/liveness
+    port: 8090
+    initialDelay: 60
+    timeout: 180
+  readiness:
+    path: /actuator/health/readiness
+    port: 8090
+    initialDelay: 60
+    timeout: 180
+  startup:
+    path: /actuator/health/liveness
+    port: 8090
+    initialDelay: 60
+    timeout: 180
+
+---
+
+apiVersion: nais.io/v1alpha1
+kind: Application
+metadata:
+  name: klass-mail-{{ pr-number }}
+  namespace: dapla-metadata
+  labels:
+    team: dapla-metadata
+spec:
+  port: 8082
+
+  ttl: 36h
+
+  replicas:
+    min: 1
+    max: 1
+  resources:
+    requests:
+      cpu: 10m
+      memory: 288Mi
+  env:
+    - name: MESSAGING_POSTMAN_PUBSUB_TOPIC_INCOMING
+      value: projects/sup-t-2r/topics/sup-test-postman-incoming-topic
+
+  accessPolicy:
+    inbound:
+      rules:
+        - application: klass
+        - application: klass-forvaltning
+
+  prometheus:
+    enabled: true
+    path: /prometheus
+    port: "8091"
+
+  liveness:
+    path: /actuator/health/liveness
+    port: 8091
+    initialDelay: 60
+  readiness:
+    path: /actuator/health/readiness
+    port: 8091
+    initialDelay: 60
+  startup:
+    path: /actuator/health/liveness
+    port: 8091
+    initialDelay: 60
+
+---
+
+# Deploy config for the test cluster
+apiVersion: nais.io/v1alpha1
+kind: Application
+metadata:
+  name: klass-solr-{{ pr-number }}
+  namespace: dapla-metadata
+  labels:
+    team: dapla-metadata
+  annotations:
+    nais.io/read-only-file-system: "false"
+    nais.io/run-as-user: "8983"
+    nais.io/run-as-group: "8983"
+spec:
+  port: 8983
+
+  ttl: 36h
+
+  filesFrom:
+    - persistentVolumeClaim: klass-solr-pvc
+      mountPath: /opt/solr/server/solr/mycores/Klass/data
+  env:
+    # Solr crashed with JAVA_TOOL_OPTIONS ref: https://github.com/apache/lucene-solr/pull/405
+    # so we use this variable ref: https://solr.apache.org/guide/6_6/taking-solr-to-production.html#TakingSolrtoProduction-MemoryandGCSettings
+    # Solr sets -Xmx512m by default so we MUST override this setting, otherwise the heap allocation will remain constrained
+    # Value should be 50% of memory request
+    - name: SOLR_JAVA_MEM
+      value: "-Xms1g -Xmx1g"
+
+  replicas:
+    min: 1
+    max: 1
+  resources:
+    requests:
+      cpu: 100m
+      # Update SOLR_JAVA_MEM when changing this
+      memory: 2Gi
+    limits:
+      memory: 2Gi
+
+  accessPolicy:
+    inbound:
+      rules:
+        - application: klass
+        - application: klass-forvaltning
+
+
+  liveness:
+    path: /solr/admin/cores?action=STATUS
+    port: 8983
+    initialDelay: 60
+
+  readiness:
+    path: /solr/admin/cores?action=STATUS
+    port: 8983
+    initialDelay: 60
+
+  startup:
+    path: /solr/admin/cores?action=STATUS
+    port: 8983
+    initialDelay: 60
