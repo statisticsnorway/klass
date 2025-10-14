@@ -3,14 +3,14 @@ package no.ssb.klass.api.dto.hal;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.StringJoiner;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import org.springframework.data.solr.core.query.result.HighlightEntry;
+import no.ssb.klass.api.services.search.OpenSearchResult;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.core.Relation;
 
-import no.ssb.klass.core.service.search.SolrSearchResult;
 import no.ssb.klass.api.controllers.ClassificationController;
 
 @Relation(collectionRelation = "searchResults")
@@ -21,32 +21,31 @@ public class SearchResultResource extends KlassResource {
     private String snippet;
     private Double searchScore;
 
-    public SearchResultResource(SolrSearchResult searchResult, List<HighlightEntry.Highlight> highlights) {
+    public SearchResultResource(OpenSearchResult searchResult, Map<String, List<String>> highlights) {
         super(searchResult.getItemid());
         this.name = searchResult.getTitle();
         this.snippet = searchResult.getDescription();
         this.searchScore = searchResult.getScore();
         addLink(createSelfLink(searchResult.getItemid()));
 
-        for (HighlightEntry.Highlight h : highlights) {
-            if (h.getField().getName().equals("codes")) {
-                if (!h.getSnipplets().isEmpty()) {
-                    String snipplet = h.getSnipplets().get(0);
-                    if (snipplet.contains("<strong>")) {
-                        StringJoiner joiner = new StringJoiner(", ");
-                        h.getSnipplets().forEach(joiner::add);
-                        this.snippet = joiner.toString();
-                    }
+        if (highlights != null) {
+            List<String> descriptionHighlights = highlights.get("description");
+            if (descriptionHighlights != null && !descriptionHighlights.isEmpty()) {
+                String snipplet = descriptionHighlights.get(0);
+                if (snipplet.contains("<strong>")) {
+                    this.snippet = snipplet;
+                    return;
                 }
-            } else if (h.getField().getName().equals("description")) {
-                if (!h.getSnipplets().isEmpty()) {
-                    String snipplet = h.getSnipplets().get(0);
-                    if (snipplet.contains("<strong>")) {
-                        this.snippet = snipplet;
-                        return;
-                    }
+            }
+            
+            List<String> codesHighlights = highlights.get("codes");
+            if (codesHighlights != null && !codesHighlights.isEmpty()) {
+                String snipplet = codesHighlights.get(0);
+                if (snipplet.contains("<strong>")) {
+                    StringJoiner joiner = new StringJoiner(", ");
+                    codesHighlights.forEach(joiner::add);
+                    this.snippet = joiner.toString();
                 }
-
             }
         }
     }

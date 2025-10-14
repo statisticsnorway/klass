@@ -4,28 +4,30 @@ import com.google.common.base.Strings;
 import no.ssb.klass.api.controllers.validators.CsvFieldsValidator;
 import no.ssb.klass.api.dto.*;
 import no.ssb.klass.api.dto.hal.*;
+import no.ssb.klass.api.services.SearchService;
+import no.ssb.klass.api.services.search.OpenSearchResult;
 import no.ssb.klass.api.util.RestConstants;
 import no.ssb.klass.core.exception.KlassEmailException;
 import no.ssb.klass.core.model.*;
 import no.ssb.klass.core.repository.ClassificationFamilySummary;
 import no.ssb.klass.core.service.ClassificationService;
-import no.ssb.klass.core.service.SearchService;
 import no.ssb.klass.core.service.StatisticsService;
 import no.ssb.klass.core.service.SubscriberService;
 import no.ssb.klass.core.service.dto.CodeDto;
 import no.ssb.klass.core.service.dto.CorrespondenceDto;
-import no.ssb.klass.core.service.search.SolrSearchResult;
 import no.ssb.klass.core.util.AlphaNumericalComparator;
 import no.ssb.klass.core.util.ClientException;
 import no.ssb.klass.core.util.DateRange;
 import no.ssb.klass.core.util.KlassResourceNotFoundException;
+import org.opensearch.data.client.orhlc.NativeSearchQueryBuilder;
+import org.opensearch.index.query.QueryBuilders;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.solr.core.query.result.FacetAndHighlightPage;
+import org.springframework.data.elasticsearch.core.query.Query;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
@@ -48,6 +50,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -188,20 +191,34 @@ public class ClassificationController {
                 @RequestParam(value = "query") String query,
                 @RequestParam(value = "ssbSection", required = false) String ssbSection,
                 @RequestParam(value = "includeCodelists", defaultValue = "false") boolean includeCodelists,
-                Pageable pageable, PagedResourcesAssembler<SolrSearchResult> assembler) {
+                Pageable pageable) {
             // @formatter:on
         Link self = Link.of(getCurrentRequest(), IanaLinkRelations.SELF);
         ssbSection = extractSsbSection(ssbSection);
 
-        FacetAndHighlightPage<SolrSearchResult> page =
-                searchService.publicSearch(query, pageable, ssbSection, includeCodelists);
-        PagedModel<SearchResultResource> response = assembler.toModel(page,
-                searchResult -> new SearchResultResource(searchResult, page.getHighlights(searchResult)),
-                self);
+        Page<OpenSearchResult> results = searchService.publicSearch(
+                query,
+                pageable,
+                ssbSection, 
+                includeCodelists
+        );
+        
+        List<SearchResultResource> searchResources = results.getContent().stream()
+                .map(result -> new SearchResultResource(result, Collections.emptyMap()))
+                .collect(toList());
 
-        boolean hit = response.getContent().size() != 0;
+        boolean hit = !results.isEmpty();
         statisticsService.addSearchWord(query, hit);
-        return new KlassPagedResources<>(response);
+        
+        PagedModel.PageMetadata pageMetadata = new PagedModel.PageMetadata(
+                pageable.getPageSize(),
+                results.getNumber(),
+                results.getTotalElements(),
+                results.getTotalPages()
+        );
+        
+        PagedModel<SearchResultResource> pagedModel = PagedModel.of(searchResources, pageMetadata, self);
+        return new KlassPagedResources<>(pagedModel);
     }
 
     @RequestMapping(value = "/classifications/{id}", method = RequestMethod.GET)
@@ -534,8 +551,7 @@ public class ClassificationController {
     }
 
     private void addSearchLink(PagedModel<ClassificationSummaryResource> response) {
-        WebMvcLinkBuilder linkBuilder = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(ClassificationController.class).search("query", null, true,
-                null, null));
+        WebMvcLinkBuilder linkBuilder = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(ClassificationController.class).search("query", null, true, null));
         response.add(Link.of(ResourceUtil.createUriTemplate(linkBuilder, "query", "includeCodelists"), "search"));
     }
 

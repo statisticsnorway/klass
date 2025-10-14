@@ -4,15 +4,15 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import no.ssb.klass.api.config.MockConfig;
 import no.ssb.klass.api.config.TestConfig;
+import no.ssb.klass.api.services.SearchService;
+import no.ssb.klass.api.services.search.OpenSearchResult;
 import no.ssb.klass.api.util.RestConstants;
 import no.ssb.klass.core.config.ConfigurationProfiles;
 import no.ssb.klass.core.model.*;
 import no.ssb.klass.core.repository.ClassificationFamilySummary;
 import no.ssb.klass.core.service.ClassificationService;
-import no.ssb.klass.core.service.SearchService;
 import no.ssb.klass.core.service.dto.CodeDto;
 import no.ssb.klass.core.service.dto.CorrespondenceDto;
-import no.ssb.klass.core.service.search.SolrSearchResult;
 import no.ssb.klass.core.util.DateRange;
 import no.ssb.klass.core.util.KlassResourceNotFoundException;
 import no.ssb.klass.core.util.Translatable;
@@ -23,13 +23,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.solr.core.query.result.HighlightEntry;
-import org.springframework.data.solr.core.query.result.SolrResultPage;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
@@ -44,6 +43,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchDataAutoConfiguration;
+import org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchRestClientAutoConfiguration;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -58,7 +59,7 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.relaxedResponseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -73,7 +74,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
                 "spring.flyway.enabled=false",
         }
 )
-@ActiveProfiles({ConfigurationProfiles.POSTGRES_EMBEDDED, ConfigurationProfiles.MOCK_MAILSERVER, ConfigurationProfiles.MOCK_SEARCH})
+@ActiveProfiles({"api-documentation-test", ConfigurationProfiles.POSTGRES_EMBEDDED, ConfigurationProfiles.MOCK_MAILSERVER, ConfigurationProfiles.MOCK_SEARCH})
+@EnableAutoConfiguration(exclude = {
+        ElasticsearchRestClientAutoConfiguration.class,
+        ElasticsearchDataAutoConfiguration.class
+})
 public class ApiDocumentation {
     private static final int CLASS_ID_FAMILIEGRUPPERING = 17;
     private static final int CLASS_ID_GREENHOUSE_GASES = 84;
@@ -158,7 +163,7 @@ public class ApiDocumentation {
         this.mockMvc.perform(getWithContext("/classificationfamilies?ssbSection=714&includeCodelists=true&language=nb")
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(this.documentationHandler.document(
-                        requestParameters(
+                        queryParameters(
                                 ssbSectionParameterDescription("counting number of"),
                                 includeCodelistsParameterDescription("counting number of"),
                                 languageDescription())))
@@ -192,7 +197,7 @@ public class ApiDocumentation {
         this.mockMvc.perform(getWithContext("/classificationfamilies/" + CLASS_FAMILY_BEFOLKNING + "?ssbSection=714&includeCodelists=true&language=nb")
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(this.documentationHandler.document(
-                        requestParameters(
+                        queryParameters(
                                 ssbSectionParameterDescription("listing"),
                                 includeCodelistsParameterDescription("listing"),
                                 languageDescription())))
@@ -250,7 +255,7 @@ public class ApiDocumentation {
         this.mockMvc.perform(getWithContext("/classifications?includeCodelists=true&changedSince=2015-01-01T00:00:00.000-0000")
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(this.documentationHandler.document(
-                        requestParameters(
+                        queryParameters(
                                 includeCodelistsDescription(),
                                 changedSinceDescription())))
                 .andExpect(status().isOk());
@@ -273,8 +278,7 @@ public class ApiDocumentation {
                                 fieldWithPath("_embedded.searchResults[].searchScore")
                                         .description("Represents this classifications relevans for the search"),
                                 fieldWithPath("_embedded.searchResults[]._links").description("Link to classification that matched search"),
-                                fieldWithPath("_links").description("<<search-links,Links>> to other resources"),
-                                fieldWithPath("page").description("Describes number of classifications returned, see <<_page, page>>"))))
+                                fieldWithPath("_links").description("<<search-links,Links>> to other resources"))))
                 .andExpect(status().isOk());
         // @formatter:on
     }
@@ -287,7 +291,7 @@ public class ApiDocumentation {
         this.mockMvc.perform(getWithContext("/classifications/search?query=kommuner&includeCodelists=true&ssbSection=370")
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(this.documentationHandler.document(
-                        requestParameters(
+                        queryParameters(
                                 parameterWithName("query").description("[Mandatory] specifies search terms"),
                                 includeCodelistsDescription(),
                                 ssbSectionParameterDescription("searching"))))
@@ -297,7 +301,7 @@ public class ApiDocumentation {
 
     @Test
     public void classificationExample() throws Exception {
-        when(classificationServiceMock.getClassificationSeries(any())).thenReturn(
+        when(classificationServiceMock.getClassificationSeries(anyLong())).thenReturn(
                 createClassificationKommuneinndeling());
         // @formatter:off
         this.mockMvc.perform(getWithContext("/classifications/" + CLASS_ID_KOMMUNEINNDELING).accept(MediaType.APPLICATION_JSON))
@@ -345,7 +349,7 @@ public class ApiDocumentation {
         this.mockMvc.perform(getWithContext("/classifications/" + CLASS_ID_KOMMUNEINNDELING + "?language=nb&includeFuture=true")
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(this.documentationHandler.document(
-                        requestParameters(languageDescription(),includeFutureDescription(""))))
+                        queryParameters(languageDescription(),includeFutureDescription(""))))
                 .andExpect(status().isOk());
         // @formatter:on
     }
@@ -390,7 +394,7 @@ public class ApiDocumentation {
         this.mockMvc.perform(getWithContext("/versions/" + CLASS_ID_KOMMUNEINNDELING + "?language=nb&includeFuture=true")
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(this.documentationHandler.document(
-                        requestParameters(languageDescription(),includeFutureDescription(""))))
+                        queryParameters(languageDescription(),includeFutureDescription(""))))
                 .andExpect(status().isOk());
         // @formatter:on
     }
@@ -448,7 +452,7 @@ public class ApiDocumentation {
                 .accept("text/csv"))
                 .andDo(this.documentationHandler
                         .document(
-                            requestParameters(
+                            queryParameters(
                                 fromParameterDescription(),
                                 toParameterDescription(),
                                 csvSeparatorParameterDescription(),
@@ -499,7 +503,7 @@ public class ApiDocumentation {
                 + "/codesAt?date=2021-01-01&csvSeparator=;&csvFields=name,code&selectLevel=1&selectCodes=01*"
                 + "&presentationNamePattern={code}-{name}&language=nb&includeFuture=true").accept("text/csv"))
                 .andDo(this.documentationHandler.document(
-                        requestParameters(
+                        queryParameters(
                                 dateParameterDescription(),
                                 csvSeparatorParameterDescription(),
                                 csvFieldsParameterDescription(),
@@ -562,7 +566,7 @@ public class ApiDocumentation {
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(/*prettyPrint()*/)))
                 .andDo(this.documentationHandler.document(
-                        requestParameters(
+                        queryParameters(
                                 variantNameParameterDescription(),
                                 fromParameterDescription(),
                                 toParameterDescription(),
@@ -625,7 +629,7 @@ public class ApiDocumentation {
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(/*prettyPrint()*/)))
                 .andDo(this.documentationHandler.document(
-                        requestParameters(
+                        queryParameters(
                                 variantNameParameterDescription(),
                                 dateParameterDescription(),
                                 csvSeparatorParameterDescription(),
@@ -677,7 +681,7 @@ public class ApiDocumentation {
         this.mockMvc.perform(getWithContext("/variants/" + 1111L + "?language=nb")
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(this.documentationHandler.document(
-                        requestParameters(languageDescription())))
+                        queryParameters(languageDescription())))
                 .andExpect(status().isOk());
         // @formatter:on
     }
@@ -733,7 +737,7 @@ public class ApiDocumentation {
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(/*prettyPrint()*/)))
                 .andDo(this.documentationHandler.document(
-                        requestParameters(
+                        queryParameters(
                                 targetClassificationIdParameterDescription(),
                                 fromParameterDescription(),
                                 toParameterDescription(),
@@ -778,7 +782,7 @@ public class ApiDocumentation {
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(/*prettyPrint()*/)))
                 .andDo(this.documentationHandler.document(
-                        requestParameters(
+                        queryParameters(
                                 targetClassificationIdParameterDescription(),
                                 dateParameterDescription(),
                                 csvSeparatorParameterDescription(),
@@ -841,7 +845,7 @@ public class ApiDocumentation {
         this.mockMvc.perform(getWithContext("/correspondencetables/" + 1L + "?language=nb")
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(this.documentationHandler.document(
-                        requestParameters(languageDescription())))
+                        queryParameters(languageDescription())))
                 .andExpect(status().isOk());
         // @formatter:on
     }
@@ -874,7 +878,7 @@ public class ApiDocumentation {
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(/*prettyPrint()*/)))
                 .andDo(this.documentationHandler.document(
-                        requestParameters(
+                        queryParameters(
                                 fromParameterDescription(),
                                 toParameterDescription(),
                                 csvSeparatorParameterDescription(),
@@ -1228,9 +1232,9 @@ public class ApiDocumentation {
                 .contextPath(contextPath);
     }
 
-    private Page<SolrSearchResult> createSearchPage(Pageable pageable) {
+    private Page<OpenSearchResult> createSearchPage(Pageable pageable) {
         ClassificationSeries classification = createClassificationKommuneinndeling();
-        SolrSearchResult searchResult = new SolrSearchResult();
+        OpenSearchResult searchResult = new OpenSearchResult();
         searchResult.setItemid(classification.getId());
         searchResult.setTitle(classification.getName(Language.getDefault()));
         searchResult.setLanguage(Language.getDefault().getLanguageCode());
@@ -1239,12 +1243,8 @@ public class ApiDocumentation {
         searchResult.setDescription("Kommuneinndelingen er en administrativ inndeling av Norge");
         searchResult.setFamily("familie");
 
-        SolrResultPage page = new SolrResultPage(Lists.newArrayList(searchResult), pageable, 1, 1.0f);
-        HighlightEntry<SolrSearchResult> highlightResult = new HighlightEntry<>(searchResult);
-        highlightResult.addSnipplets("Description", Lists.newArrayList(
-                "Kommuneinndelingen er en administrativ inndeling av Norge"));
-        page.setHighlighted(Lists.newArrayList(highlightResult));
-        return page;
+        List<OpenSearchResult> results = Lists.newArrayList(searchResult);
+        return new PageImpl<>(results, pageable, results.size());
     }
 
     private Page<ClassificationSeries> createPage(Pageable pageable, List<ClassificationSeries> classifications) {

@@ -1,29 +1,18 @@
 package no.ssb.klass.api.config;
 
 import no.ssb.klass.api.controllers.validators.CsvFieldsValidator;
+import no.ssb.klass.api.services.SearchService;
 import no.ssb.klass.core.service.*;
 import no.ssb.klass.api.controllers.ClassificationController;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 import static org.mockito.Mockito.*;
 
+@Configuration
+@Profile("api-documentation-test")
 public class MockConfig {
-
-    @Autowired
-    private ClassificationService classificationService;
-
-    @Autowired
-    private SubscriberService subscriberService;
-
-    @Autowired
-    private SearchService searchService;
-
-    @Autowired
-    private StatisticsService statisticsService;
-
-    @Autowired
-    private CsvFieldsValidator csvFieldsValidator;
 
     @Bean
     public ClassificationService classificationService() {
@@ -51,13 +40,18 @@ public class MockConfig {
     }
 
     @Bean
-    private CsvFieldsValidator csvFieldsValidator() {
+    public CsvFieldsValidator csvFieldsValidator() {
         return new CsvFieldsValidator();
     }
 
-
     @Bean
     public ClassificationController classificationController() {
-        return new ClassificationController(classificationService, subscriberService, searchService, statisticsService, csvFieldsValidator);
+        return new ClassificationController(
+                classificationService(),
+                subscriberService(),
+                searchService(),
+                statisticsService(),
+                csvFieldsValidator()
+        );
     }
 }

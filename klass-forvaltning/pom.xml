@@ -50,7 +50,6 @@
         <version>1.5.22.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-
     <scm>
         <developerConnection>scm:git:https://github.com/${github.repository}.git</developerConnection>
         <url>https://github.com/${github.repository}</url>

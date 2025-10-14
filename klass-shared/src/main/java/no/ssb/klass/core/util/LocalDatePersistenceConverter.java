@@ -3,8 +3,8 @@ package no.ssb.klass.core.util;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-import javax.persistence.AttributeConverter;
-import javax.persistence.Converter;
+import jakarta.persistence.AttributeConverter;
+import jakarta.persistence.Converter;
 
 /**
  * Used by Hibernate to persists {@link LocalDate}s

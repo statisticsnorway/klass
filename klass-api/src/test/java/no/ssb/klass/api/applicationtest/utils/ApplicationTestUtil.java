@@ -1,13 +1,11 @@
 package no.ssb.klass.api.applicationtest.utils;
 
-import java.io.IOException;
+import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.transaction.Transactional;
-
-import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.SolrServerException;
+import org.opensearch.data.client.orhlc.OpenSearchRestTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 /**
@@ -19,8 +17,11 @@ public class ApplicationTestUtil {
     @Autowired
     private EntityManager entityManager;
 
-    @Autowired
-    private SolrClient solrClient;
+    @Autowired(required = false)
+    private OpenSearchRestTemplate openSearchRestTemplate;
+
+    @Value("${klass.env.search.elasticsearch.index:klass}")
+    private String indexName;
 
     @Transactional
     public void clearDatabase() {
@@ -39,10 +40,13 @@ public class ApplicationTestUtil {
     }
 
     public void clearSearch() {
-        try {
-            solrClient.deleteByQuery("*:*");
-        } catch (SolrServerException | IOException e) {
-            throw new RuntimeException("unable to clear search index");
+        if (openSearchRestTemplate != null) {
+            try {
+                openSearchRestTemplate.indexOps(org.springframework.data.elasticsearch.core.mapping.IndexCoordinates.of(indexName)).delete();
+                openSearchRestTemplate.indexOps(org.springframework.data.elasticsearch.core.mapping.IndexCoordinates.of(indexName)).create();
+            } catch (Exception e) {
+                // Ignore if mock or not configured
+            }
         }
     }
 }

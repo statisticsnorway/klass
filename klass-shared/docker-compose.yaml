@@ -1,7 +1,7 @@
 services:
   mariadb:
     image: mariadb:11.7
-    profiles: [ migration-testing, migrate-data ]
+    profiles: [migration-testing, migrate-data]
     ports:
       - "3306:3306"
     environment:
@@ -12,7 +12,17 @@ services:
       MARIADB_DATABASE: "klass"
   postgresql:
     image: postgres:17.4
-    profiles: [ migration-testing, migrate-data, frontend, api, search, api-search ]
+    profiles:
+      [
+        migration-testing,
+        migrate-data,
+        frontend,
+        api,
+        search,
+        api-search,
+        open-search,
+        api-open-search,
+      ]
     ports:
       - "5432:5432"
     volumes:
@@ -23,16 +33,16 @@ services:
       POSTGRES_USER: "klass"
       POSTGRES_DB: "klass"
     healthcheck:
-        test: [ "CMD-SHELL", "pg_isready -U klass -d klass" ]
-        interval: 10s
-        timeout: 5s
-        retries: 5
+      test: ["CMD-SHELL", "pg_isready -U klass -d klass"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
   klass-api:
     build:
       context: ../klass-api
       dockerfile: ../klass-api/Dockerfile
-    command: [ "java", "-Xms1g", "-jar", "app.war" ]
-    profiles: [ migration-testing, api ]
+    command: ["java", "-Xms1g", "-jar", "app.war"]
+    profiles: [migration-testing, api]
     depends_on:
       - postgresql
     ports:
@@ -40,14 +50,20 @@ services:
     mem_limit: 4g
     cpus: 1.0
     environment:
-      SPRING_PROFILES_ACTIVE: api, postgres-local, skip-indexing, embedded-solr
+      SPRING_PROFILES_ACTIVE: api, postgres-local, skip-indexing, mock-search
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_USER: "klass"
       POSTGRES_INSTANCE: postgresql
   klass-api-mariadb:
     image: source-mariadb-image:latest
-    command: [ "java", "-jar", "app.war", "--spring.profiles.active=api, mariadb-local, skip-indexing, embedded-solr" ]
-    profiles: [ migration-testing ]
+    command:
+      [
+        "java",
+        "-jar",
+        "app.war",
+        "--spring.profiles.active=api, mariadb-local, skip-indexing, embedded-solr",
+      ]
+    profiles: [migration-testing]
     depends_on:
       - mariadb
     ports:
@@ -66,8 +82,8 @@ services:
     build:
       context: ../klass-api
       dockerfile: ../klass-api/Dockerfile
-    command: [ "java", "-Xms2g", "-Xmx4g", "-jar", "app.war" ]
-    profiles: [ search, api-search ]
+    command: ["java", "-Xms2g", "-Xmx4g", "-jar", "app.war"]
+    profiles: [search, api-search]
     depends_on:
       - solr
       - postgresql
@@ -83,11 +99,32 @@ services:
       POSTGRES_INSTANCE: postgresql
       KLASS_ENV_SEARCH_SOLR_URL: http://solr:8983/solr/
       KLASS_ENV_SEARCH_SOLR_CORE: Klass
+  klass-api-open-search:
+    build:
+      context: ../klass-api
+      dockerfile: ../klass-api/Dockerfile
+    command: ["java", "-Xms2g", "-Xmx4g", "-jar", "app.war"]
+    profiles: [open-search, api-open-search]
+    depends_on:
+      - opensearch
+      - postgresql
+    ports:
+      - "8080:8080"
+    mem_limit: 8g
+    cpus: 1.0
+    environment:
+      SPRING_PROFILES_ACTIVE: "api,postgres-local,remote-open-search"
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_USER: "klass"
+      POSTGRES_INSTANCE: postgresql
+      SPRING_ELASTICSEARCH_URIS: http://opensearch:9200
+      KLASS_ENV_SEARCH_ELASTICSEARCH_URL: http://opensearch:9200
+      KLASS_ENV_SEARCH_ELASTICSEARCH_INDEX: klass
   klass-forvaltning:
     build:
       context: ../klass-forvaltning
       dockerfile: ../klass-forvaltning/Dockerfile
-    profiles: [ frontend ]
+    profiles: [frontend]
     ports:
       - "8081:8081"
     depends_on:
@@ -107,12 +144,13 @@ services:
     build:
       context: ../klass-forvaltning
       dockerfile: ../klass-forvaltning/Dockerfile
-    profiles: [ search ]
+    profiles: [search]
     ports:
       - "8081:8081"
     depends_on:
       - postgresql
-    command: [ "java", "-XshowSettings:vm", "-Xms512m", "-Xmx2g", "-jar", "app.war" ]
+    command:
+      ["java", "-XshowSettings:vm", "-Xms512m", "-Xmx2g", "-jar", "app.war"]
     deploy:
       resources:
         limits:
@@ -130,13 +168,32 @@ services:
       context: ../klass-solr
       dockerfile: ../klass-solr/Dockerfile
     platform: linux/amd64
-    profiles: [ search, api-search ]
+    profiles: [search, api-search]
     ports:
       - "8983:8983"
     volumes:
       - solr_data:/var/solr
     mem_limit: 4g
+  opensearch:
+    image: opensearchproject/opensearch:3.0.0
+    container_name: klass-shared-opensearch-1
+    ports:
+      - "9200:9200"
+    environment:
+      - discovery.type=single-node
+      - DISABLE_SECURITY_PLUGIN=true
+      - bootstrap.memory_lock=true
+      - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    mem_limit: 2g
+    profiles: [open-search, api-open-search]
+    volumes:
+      - opensearch_data:/usr/share/opensearch/data
 volumes:
   pgdata:
     name: klass_pgdata
   solr_data:
+  opensearch_data:
