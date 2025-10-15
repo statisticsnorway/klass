@@ -1,4 +1,4 @@
-name: klass-api-pr.yml
+name: klass-api-build-and-deploy-pr.yml
 on:
   push:
     branches:
@@ -7,15 +7,15 @@ on:
       - "klass-api/**"
       - "klass-shared/**"
       - ".nais/test/klass-api-pr.yml"
-      - ".github/workflows/klass-api-pr.yaml"
+      - ".github/workflows/klass-api-build-and-deploy.yaml"
   pull_request:
     types:
       - ready_for_review
     paths:
       - "klass-api/**"
       - "klass-shared/**"
-      - ".nais/**/klass-api-pr.yml"
-      - ".github/workflows/klass-api-pr.yaml"
+      - ".nais/test/klass-api-pr.yml"
+      - ".github/workflows/klass-api-build-and-deploy.yaml"
 jobs:
   build:
     name: Build
