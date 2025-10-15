@@ -22,7 +22,7 @@ spec:
       memory: 1400Mi
   env:
     - name: SPRING_PROFILES_ACTIVE
-      value: api, h2-inmemory, small-import, embedded-solr, skip-indexing
+      value: api, h2-inmemory, small-import,remote-open-search
     - name: SPRING_DATA_SOLR_HOST
       value: http://klass-solr/solr
     - name: KLASS_ENV_CLIENT_KLASS_MAIL_URL
@@ -57,5 +57,8 @@ spec:
     port: 8090
     initialDelay: 60
     timeout: 180
+  openSearch:
+    access: readwrite
+    instance: klass-api-open-search
 
   
