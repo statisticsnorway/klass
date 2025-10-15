@@ -23,6 +23,8 @@ spec:
   gcp:
     sqlInstances:
       - name: klass
+        type: POSTGRES_17
+        tier: db-custom-1-3840
         databases:
           - name: klass
   env:
