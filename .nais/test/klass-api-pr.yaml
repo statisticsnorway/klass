@@ -23,10 +23,7 @@ spec:
   gcp:
     sqlInstances:
       - name: klass
-        type: POSTGRES_17
-        tier: db-custom-1-3840
-        databases:
-          - name: klass
+        existing: true
   env:
     - name: SPRING_PROFILES_ACTIVE
       value: api, postgres, solr-remote, skip-indexing
