@@ -3,11 +3,6 @@ on:
   push:
     branches:
       - feat/add-test-qa-instance
-    paths:
-      - "klass-api/**"
-      - "klass-shared/**"
-      - ".nais/**/klass-api-pr.yaml"
-      - ".github/workflows/klass-api-pr.yaml"
   pull_request:
     types:
       - ready_for_review
