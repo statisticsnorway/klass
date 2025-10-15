@@ -22,8 +22,7 @@ spec:
       memory: 1400Mi
   gcp:
     sqlInstances:
-      - type: POSTGRES_17
-        tier: db-custom-1-3840
+      - name: klass
         databases:
           - name: klass
   env:
