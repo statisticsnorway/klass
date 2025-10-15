@@ -7,5 +7,4 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
         org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchRepositoriesAutoConfiguration.class,
         org.springframework.boot.autoconfigure.data.elasticsearch.ReactiveElasticsearchRepositoriesAutoConfiguration.class
 }, scanBasePackages = {})
-public class TestConfig {
-}
+public class TestConfig { }

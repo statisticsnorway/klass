@@ -4,6 +4,8 @@
 package no.ssb.klass.api.applicationtest;
 
 import io.restassured.http.ContentType;
+import no.ssb.klass.api.applicationtest.config.ApplicationTestConfig;
+import no.ssb.klass.api.applicationtest.config.SearchServiceTestConfig;
 import no.ssb.klass.api.services.SearchServiceImpl;
 import no.ssb.klass.core.config.ConfigurationProfiles;
 import no.ssb.klass.core.repository.ClassificationSeriesRepository;
@@ -15,6 +17,7 @@ import org.opensearch.data.client.orhlc.OpenSearchRestTemplate;
 import org.opensearch.testcontainers.OpensearchContainer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
@@ -29,6 +32,7 @@ import static org.hamcrest.Matchers.*;
 
 
 @Testcontainers
+@SpringBootTest(classes = {ApplicationTestConfig.class, SearchServiceTestConfig.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles(profiles = {ConfigurationProfiles.POSTGRES_EMBEDDED, ConfigurationProfiles.MOCK_MAILSERVER}, inheritProfiles = false)
 public class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest {
     // @formatter:off
@@ -43,8 +47,9 @@ public class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest
                     .withReuse(true);
 
     @DynamicPropertySource
-    static void configureOpenSearchProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.elasticsearch.uris", () -> "http://" + opensearchContainer.getHttpHostAddress());
+    static void registerOpenSearchProperties(DynamicPropertyRegistry registry) {
+        String uri = "http://" + opensearchContainer.getHost() + ":" + opensearchContainer.getMappedPort(9200);
+        registry.add("spring.elasticsearch.uris", () -> uri);
     }
 
     @Autowired
