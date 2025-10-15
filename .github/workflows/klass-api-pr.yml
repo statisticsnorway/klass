@@ -6,7 +6,7 @@ on:
     paths:
       - "klass-api/**"
       - "klass-shared/**"
-      - ".nais/**/klass-api.yaml"
+      - ".nais/**/klass-api-pr.yaml"
       - ".github/workflows/klass-api-pr.yaml"
   pull_request:
     types:
@@ -14,8 +14,8 @@ on:
     paths:
       - "klass-api/**"
       - "klass-shared/**"
-      - ".nais/**/klass-api.yaml"
-      - ".github/workflows/klass-api-build-and-deploy.yaml"
+      - ".nais/**/klass-api-pr.yaml"
+      - ".github/workflows/klass-api-pr.yaml"
 jobs:
   build:
     name: Build
