@@ -57,8 +57,8 @@ spec:
     port: 8090
     initialDelay: 60
     timeout: 180
-  openSearch:
-    access: readwrite
-    instance: klass-api-open-search
+  #openSearch:
+  #  access: readwrite
+  #  instance: klass-api-open-search
 
   
