@@ -1,0 +1,92 @@
+name: klass-api-pr.yml
+on:
+  push:
+    branches:
+      - feat/add-test-qa-instance
+    paths:
+      - "klass-api/**"
+      - "klass-shared/**"
+      - ".nais/**/klass-api.yaml"
+      - ".github/workflows/klass-api-build-and-deploy.yaml"
+  pull_request:
+    types:
+      - ready_for_review
+    paths:
+      - "klass-api/**"
+      - "klass-shared/**"
+      - ".nais/**/klass-api.yaml"
+      - ".github/workflows/klass-api-build-and-deploy.yaml"
+jobs:
+  build:
+    name: Build
+    permissions:
+      contents: "read"
+      id-token: "write"
+      packages: "read"
+    runs-on: ubuntu-latest
+    outputs:
+      image: ${{ steps.docker-build-push.outputs.image }}
+      telemetry: ${{ steps.docker-build-push.outputs.telemetry }}
+      test-config-changed: ${{ steps.test-config-changed.outputs.changed != 'non-inputs' }}
+      only-config-changed: ${{ steps.changed-files.outputs.changed == 'only-inputs'}}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'maven'
+
+      - name: Check what changed
+        id: changed-files
+        uses: "nais/what-changed@main"
+        with:
+          files: .nais/**/klass-api.yaml
+          main-branch-name: 'nais-migration' #TODO: Remove when we change branch back to main
+      - name: Check for test config changes
+        id: test-config-changed
+        uses: "nais/what-changed@main"
+        with:
+          files: .nais/test/klass-api.yaml
+          main-branch-name: 'nais-migration'  #TODO: Remove when we change branch back to main
+
+      - name: Build with Maven
+        if: steps.changed-files.outputs.changed != 'only-inputs'
+        run: mvn --batch-mode --update-snapshots install -pl '!:klass-forvaltning'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push
+        if: steps.changed-files.outputs.changed != 'only-inputs'
+        uses: nais/docker-build-push@v0
+        id: docker-build-push
+        with:
+          team: dapla-metadata
+          image_suffix: api
+          dockerfile: klass-api/Dockerfile
+          docker_context: klass-api
+
+  deploy-test:
+    name: Deploy to test
+    needs: build
+    permissions:
+      contents: "read"
+      id-token: "write"
+      packages: "read"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: nais/deploy/actions/deploy@v2
+        env:
+          CLUSTER: test
+          RESOURCE: .nais/test/klass-api-pr.yaml
+          DEPLOY_SERVER: deploy.ssb.cloud.nais.io:443
+          WORKLOAD_IMAGE: ${{ needs.build.outputs.image }}
+          VAR: pr-number=${{github.event.number}}
+          TELEMETRY: ${{ needs.build.outputs.telemetry }}
