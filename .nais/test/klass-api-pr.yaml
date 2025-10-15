@@ -2,7 +2,7 @@
 apiVersion: nais.io/v1alpha1
 kind: Application
 metadata:
-  name: klass--pr-{{ pr-number }}
+  name: klass-pr-{{ pr-number }}
   namespace: dapla-metadata
   labels:
     team: dapla-metadata
