@@ -8,7 +8,7 @@ metadata:
     team: dapla-metadata
 spec:
   port: 8080
-  ttl: 36h
+  ttl: 1h
   ingresses:
     - https://klass-pr-{{ pr-number }}.intern.test.ssb.no/api/klass
   replicas:
@@ -20,10 +20,9 @@ spec:
       memory: 1200Mi
     limits:
       memory: 1400Mi
-  gcp:
-    sqlInstances:
-      - name: klass
-        existing: true
+  filesFrom:
+    - mountPath: /var/run/secrets/nais.io/sqlcertificate
+      secret: sqeletor-klass-827ec8ec
   env:
     - name: SPRING_PROFILES_ACTIVE
       value: api, postgres, solr-remote, skip-indexing
