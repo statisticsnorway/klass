@@ -1,7 +1,6 @@
 name: Klass dev
 
 on:
-
   workflow_dispatch:
     inputs:
       ttl:
@@ -14,6 +13,10 @@ on:
           - 2h
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Hello, workflow!"
   build:
     name: Build
     permissions:
