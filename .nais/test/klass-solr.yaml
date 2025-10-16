@@ -39,7 +39,6 @@ spec:
         - application: klass
         - application: klass-forvaltning
 
-
   liveness:
     path: /solr/admin/cores?action=STATUS
     port: 8983
