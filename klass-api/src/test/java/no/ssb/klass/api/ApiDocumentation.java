@@ -74,7 +74,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
                 "spring.flyway.enabled=false",
         }
 )
-@ActiveProfiles({"api-documentation-test", ConfigurationProfiles.POSTGRES_EMBEDDED, ConfigurationProfiles.MOCK_MAILSERVER, ConfigurationProfiles.MOCK_SEARCH})
+@ActiveProfiles({ConfigurationProfiles.POSTGRES_EMBEDDED, ConfigurationProfiles.MOCK_MAILSERVER, ConfigurationProfiles.MOCK_SEARCH})
 @EnableAutoConfiguration(exclude = {
         ElasticsearchRestClientAutoConfiguration.class,
         ElasticsearchDataAutoConfiguration.class
