@@ -83,5 +83,4 @@ jobs:
           DEPLOY_SERVER: deploy.ssb.cloud.nais.io:443
           WORKLOAD_IMAGE: ${{ needs.build.outputs.image }}
           TELEMETRY: ${{ needs.build.outputs.telemetry }}
-          TIME_TO_LIVE: ${{ github.event.inputs.ttl }}
 
