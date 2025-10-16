@@ -3,7 +3,7 @@ name: Klass-solr deploy
 on:
   push:
     branches:
-      - nais-migration
+      - main
     paths:
       - ".nais/**/klass-solr.yaml"
       - ".github/workflows/klass-solr-deploy.yaml"
@@ -41,14 +41,12 @@ jobs:
         uses: "nais/what-changed@main"
         with:
           files: .nais/test/klass-solr.yaml
-          main-branch-name: 'nais-migration' #TODO: Remove when we change branch back to main
 
       - name: Check for Prod manifest changes
         id: prod-manifest-changed
         uses: "nais/what-changed@main"
         with:
           files: .nais/prod/klass-solr.yaml
-          main-branch-name: 'nais-migration'  #TODO: Remove when we change branch back to main
 
   deploy-test:
     name: Deploy to Test
