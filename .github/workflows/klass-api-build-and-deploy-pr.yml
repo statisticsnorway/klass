@@ -78,5 +78,5 @@ jobs:
           RESOURCE: .nais/test/klass-api-pr.yaml
           DEPLOY_SERVER: deploy.ssb.cloud.nais.io:443
           WORKLOAD_IMAGE: ${{ needs.build.outputs.image }}
-          VAR: pr-number=${{ github.event.number != null && github.event.number || 3 }}
+          VAR: pr-number=${{ github.event.number != null && github.event.number || 1 }}
           TELEMETRY: ${{ needs.build.outputs.telemetry }}
