@@ -17,11 +17,11 @@ spec:
     - persistentVolumeClaim: klass-solr-pvc
       mountPath: /opt/solr/server/solr/mycores/Klass/data
   command:
-    - /opt/solr/docker-entrypoint.sh
+    - docker-entrypoint.sh
     - solr-precreate
     - Klass
     - -m
-    - 1g
+    - 1g  # Set heap size
 
   replicas:
     min: 1
@@ -29,7 +29,6 @@ spec:
   resources:
     requests:
       cpu: 100m
-      # Update SOLR_JAVA_MEM when changing this
       memory: 2Gi
     limits:
       memory: 2Gi
