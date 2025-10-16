@@ -336,11 +336,6 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
                     <argLine>-Dfile.encoding=UTF-8</argLine>
-                    <environmentVariables>
-                        <!-- Configure Testcontainers to find Docker via Colima socket -->
-                        <!--<DOCKER_HOST>unix://${user.home}/.colima/default/docker.sock</DOCKER_HOST>
-                        <TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE>${user.home}/.colima/default/docker.sock</TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE>-->
-                    </environmentVariables>
                 </configuration>
             </plugin>
             <plugin>
