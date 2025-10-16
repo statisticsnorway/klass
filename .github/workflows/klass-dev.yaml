@@ -7,10 +7,11 @@ on:
       ttl:
         description: "How long?"
         required: true
-        default: "1h"
+        default: 1h
         type: choice
         options:
           - 30m
+          - 1h
           - 2h
 
 jobs:
