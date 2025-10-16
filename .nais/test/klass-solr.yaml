@@ -18,11 +18,11 @@ spec:
       mountPath: /opt/solr/server/solr/mycores/Klass/data
   env:
     # Solr crashed with JAVA_TOOL_OPTIONS ref: https://github.com/apache/lucene-solr/pull/405
-    # so we use this variable ref: https://solr.apache.org/guide/6_6/taking-solr-to-production.html#TakingSolrtoProduction-MemoryandGCSettings
-    # Solr sets -Xmx512m by default so we MUST override this setting, otherwise the heap allocation will remain constrained
+    # https://solr.apache.org/guide/solr/latest/deployment-guide/taking-solr-to-production.html#memory-and-gc-settings
+    # Solr sets 512m by default so we MUST override this setting, otherwise the heap allocation will remain constrained
     # Value should be 50% of memory request
-    - name: SOLR_JAVA_MEM
-      value: "-Xms1g -Xmx1g"
+    - name: SOLR_HEAP
+      value: "1g"
 
   replicas:
     min: 1
