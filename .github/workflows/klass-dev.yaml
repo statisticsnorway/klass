@@ -1,7 +1,6 @@
 name: Klass dev
 
 on:
-  push:
   workflow_dispatch:
     inputs:
       message:
