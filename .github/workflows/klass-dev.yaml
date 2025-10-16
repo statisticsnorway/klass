@@ -15,11 +15,6 @@ jobs:
       id-token: "write"
       packages: "read"
     runs-on: ubuntu-latest
-    outputs:
-      image: ${{ steps.docker-build-push.outputs.image }}
-      telemetry: ${{ steps.docker-build-push.outputs.telemetry }}
-      test-config-changed: ${{ steps.test-config-changed.outputs.changed != 'non-inputs' }}
-      only-config-changed: ${{ steps.changed-files.outputs.changed == 'only-inputs'}}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
