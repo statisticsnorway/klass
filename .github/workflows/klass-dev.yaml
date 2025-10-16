@@ -3,9 +3,17 @@ name: Klass dev
 on:
   push:
   workflow_dispatch:
+    inputs:
+      message:
+        description: "Which message?"
+        required: true
+        type: choice
+        options:
+          - "My name"
+          - "Your name"
 
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Hello, workflow!"
+      - run: echo ${{github.event.inputs.message}}
