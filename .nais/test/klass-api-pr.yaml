@@ -23,8 +23,6 @@ spec:
   env:
     - name: SPRING_PROFILES_ACTIVE
       value: api, h2-inmemory, small-import, remote-open-search
-    - name: SPRING_DATA_SOLR_HOST
-      value: http://klass-solr/solr
     - name: KLASS_ENV_CLIENT_KLASS_MAIL_URL
       value: http://klass-mail
     - name: JAVA_TOOL_OPTIONS
@@ -37,8 +35,10 @@ spec:
   accessPolicy:
     outbound:
       rules:
-        - application: klass-solr
         - application: klass-mail
+  openSearch:
+    access: read
+    instance: klass-search
 
   prometheus:
     enabled: true
@@ -60,9 +60,7 @@ spec:
     port: 8090
     initialDelay: 60
     timeout: 180
-  openSearch:
-    access: readwrite
-    instance: klass-search
+
 
 
   
