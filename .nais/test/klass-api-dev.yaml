@@ -9,7 +9,7 @@ metadata:
     team: dapla-metadata
 spec:
   port: 8080
-  ttl: "${TIME_TO_LIVE}"
+  ttl: 1h
   ingresses:
     - https://klass-dev.intern.test.ssb.no/api/klass
   replicas:
