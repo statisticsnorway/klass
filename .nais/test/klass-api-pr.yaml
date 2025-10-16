@@ -22,7 +22,7 @@ spec:
       memory: 1400Mi
   env:
     - name: SPRING_PROFILES_ACTIVE
-      value: api, h2-inmemory, small-import,remote-open-search
+      value: api, postgres, solr-remote, skip-indexing
     - name: SPRING_DATA_SOLR_HOST
       value: http://klass-solr/solr
     - name: KLASS_ENV_CLIENT_KLASS_MAIL_URL
@@ -31,6 +31,9 @@ spec:
       value: "-XX:InitialRAMPercentage=50.0 -XX:MaxRAMPercentage=75.0"
   envFrom:
     - secret: google-sql-klass
+  filesFrom:
+    - mountPath: /var/run/secrets/nais.io/sqlcertificate
+      secret: sqeletor-klass-827ec8ec
   accessPolicy:
     outbound:
       rules:
