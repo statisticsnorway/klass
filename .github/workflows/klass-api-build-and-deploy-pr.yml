@@ -1,8 +1,5 @@
 name: klass-api-build-and-deploy-pr.yml
 on:
-  push:
-    branches:
-      - feat/add-test-qa-instance
   pull_request:
     types:
       - ready_for_review
