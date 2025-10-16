@@ -17,6 +17,7 @@ spec:
     - persistentVolumeClaim: klass-solr-pvc
       mountPath: /opt/solr/server/solr/mycores/Klass/data
   command:
+    - /opt/solr/docker-entrypoint.sh
     - solr-precreate
     - Klass
     - -m
