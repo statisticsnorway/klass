@@ -13,7 +13,6 @@ import org.springframework.context.annotation.Primary;
 public class KlassSearchMockConfig {
 
     @Bean
-    @Primary
     public SearchService searchServiceMock() {
         return Mockito.mock(SearchService.class);
     }

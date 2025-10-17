@@ -68,13 +68,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         webEnvironment = WebEnvironment.RANDOM_PORT,
         properties = {
                 "spring.main.allow-circular-references=true",
+                "spring.main.allow-bean-definition-overriding=true",
                 "spring.cloud.gcp.core.enabled=false",
                 "spring.cloud.gcp.config.enabled=false",
                 "spring.cloud.gcp.pubsub.enabled=false",
                 "spring.flyway.enabled=false",
         }
 )
-@ActiveProfiles({ConfigurationProfiles.POSTGRES_EMBEDDED, ConfigurationProfiles.MOCK_MAILSERVER, ConfigurationProfiles.MOCK_SEARCH})
+@ActiveProfiles({ ConfigurationProfiles.API_DOCUMENTATION_TEST, ConfigurationProfiles.POSTGRES_EMBEDDED, ConfigurationProfiles.MOCK_MAILSERVER, ConfigurationProfiles.MOCK_SEARCH})
 @EnableAutoConfiguration(exclude = {
         ElasticsearchRestClientAutoConfiguration.class,
         ElasticsearchDataAutoConfiguration.class

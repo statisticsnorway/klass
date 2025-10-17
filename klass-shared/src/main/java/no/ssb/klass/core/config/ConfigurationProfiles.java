@@ -66,6 +66,11 @@ public final class ConfigurationProfiles {
     public static final String MOCK_SEARCH = "mock-search";
 
     /**
+     * Profile to be used during the api documentation test
+     */
+    public static final String API_DOCUMENTATION_TEST = "api-documentation-test";
+
+    /**
      * This profile makes use of the h2 database in memory feature, all data will be
      * lost on restart.
      */

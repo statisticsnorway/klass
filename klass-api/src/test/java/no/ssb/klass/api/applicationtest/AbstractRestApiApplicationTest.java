@@ -41,11 +41,7 @@ import static io.zonky.test.db.AutoConfigureEmbeddedDatabase.DatabaseProvider.ZO
         "spring.cloud.gcp.core.enabled=false",
         "spring.cloud.gcp.config.enabled=false",
         "spring.cloud.gcp.pubsub.enabled=false",
-        "spring.main.allow-bean-definition-overriding=true",
-        "server.forward-headers-strategy=NATIVE",
-        "server.tomcat.remoteip.host-header=X-SSB-Forwarded-Host",
-        "klass.env.log.access.exclude-paths=/api/klass/monitor,/api/klass/ping",
-        "klass.env.api.path=/api/klass"
+        "spring.main.allow-bean-definition-overriding=true"
 })
 @ActiveProfiles({ConfigurationProfiles.POSTGRES_EMBEDDED, ConfigurationProfiles.MOCK_MAILSERVER, ConfigurationProfiles.MOCK_SEARCH})
 @AutoConfigureEmbeddedDatabase(provider = ZONKY, type = AutoConfigureEmbeddedDatabase.DatabaseType.POSTGRES)

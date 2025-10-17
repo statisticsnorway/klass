@@ -1,21 +1,24 @@
 package no.ssb.klass.api.applicationtest.config;
 
 import no.ssb.klass.api.services.SearchService;
-import no.ssb.klass.api.services.SearchServiceImpl;
-import no.ssb.klass.core.repository.ClassificationSeriesRepository;
 import no.ssb.klass.core.service.UserService;
 import no.ssb.klass.core.service.UserServiceMock;
 import org.mockito.Mockito;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchDataAutoConfiguration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchRestClientAutoConfiguration;
 import org.springframework.context.annotation.*;
-import org.opensearch.data.client.orhlc.OpenSearchRestTemplate;
 
 /**
  * @author Mads Lundemo, SSB.
  */
-@EnableAutoConfiguration
+@Configuration
+@EnableAutoConfiguration(exclude = {
+        ElasticsearchRestClientAutoConfiguration.class,
+        ElasticsearchDataAutoConfiguration.class
+})
 @ComponentScan(basePackageClasses = {
         no.ssb.klass.api.ApiDocumentation.class,
         no.ssb.klass.core.service.UserService.class,
@@ -31,8 +34,8 @@ public class ApplicationTestConfig {
 
     @Bean
     @ConditionalOnMissingBean
-    public SearchService searchService(ClassificationSeriesRepository seriesRepository) {
-        OpenSearchRestTemplate mockElasticsearch = Mockito.mock(OpenSearchRestTemplate.class);
-        return new SearchServiceImpl(seriesRepository, mockElasticsearch);
+    public SearchService searchService() {
+        // For integration tests with mock-search profile, return a fully mocked SearchService
+        return Mockito.mock(SearchService.class);
     }
 }

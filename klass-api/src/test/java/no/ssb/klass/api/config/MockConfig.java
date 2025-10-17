@@ -1,9 +1,11 @@
+
 package no.ssb.klass.api.config;
 
+import no.ssb.klass.api.controllers.ClassificationController;
 import no.ssb.klass.api.controllers.validators.CsvFieldsValidator;
 import no.ssb.klass.api.services.SearchService;
+import no.ssb.klass.core.config.ConfigurationProfiles;
 import no.ssb.klass.core.service.*;
-import no.ssb.klass.api.controllers.ClassificationController;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -11,7 +13,7 @@ import org.springframework.context.annotation.Profile;
 import static org.mockito.Mockito.*;
 
 @Configuration
-@Profile("api-documentation-test")
+@Profile(ConfigurationProfiles.API_DOCUMENTATION_TEST)
 public class MockConfig {
 
     @Bean
