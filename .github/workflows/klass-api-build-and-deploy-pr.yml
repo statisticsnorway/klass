@@ -1,7 +1,7 @@
 name: klass-api-build-and-deploy-pr.yml
 on:
   workflow_dispatch:
-  push:
+  #push:
 
 jobs:
   build:
