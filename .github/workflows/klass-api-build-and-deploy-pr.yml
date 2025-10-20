@@ -1,8 +1,8 @@
 name: klass-api-build-and-deploy-pr.yml
 on:
-  pull_request:
-    types:
-      - ready_for_review
+  workflow_dispatch:
+  push:
+
 jobs:
   build:
     name: Build
@@ -33,13 +33,13 @@ jobs:
         uses: "nais/what-changed@main"
         with:
           files: .nais/**/klass-api-pr.yaml
-          main-branch-name: 'nais-migration' #TODO: Remove when we change branch back to main
+          main-branch-name: 'main'
       - name: Check for test config changes
         id: test-config-changed
         uses: "nais/what-changed@main"
         with:
           files: .nais/test/klass-api-pr.yaml
-          main-branch-name: 'nais-migration'  #TODO: Remove when we change branch back to main
+          main-branch-name: 'main'
 
       - name: Build with Maven
         if: steps.changed-files.outputs.changed != 'only-inputs'

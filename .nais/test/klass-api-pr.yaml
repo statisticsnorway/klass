@@ -5,6 +5,7 @@ metadata:
   name: klass-pr
   namespace: dapla-metadata
   labels:
+    shared-db: "true"
     team: dapla-metadata
 spec:
   port: 8080
@@ -22,7 +23,7 @@ spec:
       memory: 1400Mi
   env:
     - name: SPRING_PROFILES_ACTIVE
-      value: api, h2-inmemory, small-import, remote-open-search
+      value: api, postgres, remote-open-search
     - name: KLASS_ENV_CLIENT_KLASS_MAIL_URL
       value: http://klass-mail
     - name: JAVA_TOOL_OPTIONS
