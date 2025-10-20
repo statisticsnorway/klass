@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Profile;
 @Profile("!mock-search")
 public class OpenSearchConfig extends AbstractOpenSearchConfiguration {
 
-    @Value("${spring.elasticsearch.uris}")
+    @Value("${opensearch.url}")
     private String opensearchUri;
 
     @Override
