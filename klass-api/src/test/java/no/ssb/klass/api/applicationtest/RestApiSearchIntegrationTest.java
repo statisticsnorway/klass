@@ -42,7 +42,6 @@ public class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest
     protected static final OpensearchContainer<?> opensearchContainer =
             new OpensearchContainer<>(DockerImageName.parse("opensearchproject/opensearch:2.11.0"))
                     .withEnv("OPENSEARCH_JAVA_OPTS", "-Xms2g -Xmx2g")
-                    .withEnv("DISABLE_SECURITY_PLUGIN", "true")
                     .withEnv("discovery.type", "single-node")
                     .withReuse(true);
 
@@ -50,6 +49,8 @@ public class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest
     static void registerOpenSearchProperties(DynamicPropertyRegistry registry) {
         String uri = "http://" + opensearchContainer.getHost() + ":" + opensearchContainer.getMappedPort(9200);
         registry.add("opensearch.url", () -> uri);
+        registry.add("opensearch.username", () -> "admin");
+        registry.add("opensearch.password", () -> "admin");
     }
 
     @Autowired

@@ -17,11 +17,18 @@ public class OpenSearchConfig extends AbstractOpenSearchConfiguration {
     @Value("${opensearch.url}")
     private String opensearchUri;
 
+    @Value("${opensearch.username}")
+    private String username;
+
+    @Value("${opensearch.password}")
+    private String password;
+
     @Override
     @Bean
     public RestHighLevelClient opensearchClient() {
         ClientConfiguration clientConfiguration = ClientConfiguration.builder()
                 .connectedTo(opensearchUri.replace("http://", "").replace("https://", ""))
+                .withBasicAuth(username, password)
                 .withConnectTimeout(20000)
                 .withSocketTimeout(300000)
                 .build();
