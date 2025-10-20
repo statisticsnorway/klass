@@ -2,7 +2,7 @@ name: Klass dev
 
 on:
   workflow_dispatch:
-  push:
+  #push:
 
 jobs:
   build:
