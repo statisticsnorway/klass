@@ -70,4 +70,6 @@ public final class ConfigurationProfiles {
      * lost on restart.
      */
     public static final String H2_INMEMORY = "h2-inmemory";
+
+    public static final String OPEN_SEARCH_TEST = "open-search-test";
 }
