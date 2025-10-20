@@ -6,6 +6,7 @@ metadata:
   name: klass-dev
   namespace: dapla-metadata
   labels:
+    shared-klass-db: true
     team: dapla-metadata
 spec:
   port: 8080
@@ -23,9 +24,7 @@ spec:
       memory: 1400Mi
   env:
     - name: SPRING_PROFILES_ACTIVE
-      value: api, postgres,  solr-remote, skip-indexing
-    - name: SPRING_DATA_SOLR_HOST
-      value: http://klass-solr/solr
+      value: api, postgres, remote-open-search
     - name: KLASS_ENV_CLIENT_KLASS_MAIL_URL
       value: http://klass-mail
     - name: JAVA_TOOL_OPTIONS
@@ -38,7 +37,6 @@ spec:
   accessPolicy:
     outbound:
       rules:
-        - application: klass-solr
         - application: klass-mail
   openSearch:
     access: readwrite
