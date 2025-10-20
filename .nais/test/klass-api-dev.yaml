@@ -23,7 +23,9 @@ spec:
       memory: 1400Mi
   env:
     - name: SPRING_PROFILES_ACTIVE
-      value: api, postgres-open-search, remote-open-search
+      value: api, postgres,  solr-remote, skip-indexing
+    - name: SPRING_DATA_SOLR_HOST
+      value: http://klass-solr/solr
     - name: KLASS_ENV_CLIENT_KLASS_MAIL_URL
       value: http://klass-mail
     - name: JAVA_TOOL_OPTIONS
@@ -36,6 +38,7 @@ spec:
   accessPolicy:
     outbound:
       rules:
+        - application: klass-solr
         - application: klass-mail
   openSearch:
     access: readwrite
