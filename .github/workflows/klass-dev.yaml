@@ -2,27 +2,9 @@ name: Klass dev
 
 on:
   workflow_dispatch:
-    inputs:
-      ttl:
-        description: "How long?"
-        options:
-          - 1h
-          - 2h
-      message:
-        description: "Which message?"
-        required: true
-        type: choice
-        options:
-          - "My name"
-          - "Your name"
   push:
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo ${{ github.event.inputs.message }}
-      - run: echo ${{ github.event.inputs.ttl }}
 
   build:
     name: Build
@@ -52,14 +34,14 @@ jobs:
         id: changed-files
         uses: "nais/what-changed@main"
         with:
-          files: .nais/**/klass-api-pr.yaml
-          main-branch-name: 'nais-migration' #TODO: Remove when we change branch back to main
+          files: .nais/**/klass-api-dev.yaml
+          main-branch-name: 'main' #TODO: Remove when we change branch back to main
       - name: Check for test config changes
         id: test-config-changed
         uses: "nais/what-changed@main"
         with:
-          files: .nais/test/klass-api-pr.yaml
-          main-branch-name: 'nais-migration'  #TODO: Remove when we change branch back to main
+          files: .nais/test/klass-api-dev.yaml
+          main-branch-name: 'main'  #TODO: Remove when we change branch back to main
 
       - name: Build with Maven
         if: steps.changed-files.outputs.changed != 'only-inputs'
