@@ -17,21 +17,11 @@ public class OpenSearchConfig extends AbstractOpenSearchConfiguration {
     @Value("${spring.elasticsearch.uris}")
     private String opensearchUri;
 
-    @Value("${open.search.username}")
-    private String username;
-
-    @Value("${open.search.password}")
-    private String password;
-
-    @Value("${open.search.uri}")
-    private String uri;
-
     @Override
     @Bean
     public RestHighLevelClient opensearchClient() {
         ClientConfiguration clientConfiguration = ClientConfiguration.builder()
-                .connectedTo(uri.replace("http://", "").replace("https://", ""))
-                .withBasicAuth(username, password)
+                .connectedTo(opensearchUri.replace("http://", "").replace("https://", ""))
                 .withConnectTimeout(20000)
                 .withSocketTimeout(300000)
                 .build();
