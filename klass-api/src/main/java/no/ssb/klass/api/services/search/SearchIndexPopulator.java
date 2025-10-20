@@ -32,9 +32,8 @@ public class SearchIndexPopulator implements CommandLineRunner {
     public void run(String... args) {
         CompletableFuture.runAsync(() -> {
             List<Long> ids = classificationSeriesRepository.findAllClassificationIds();
-            List<Long> testIds = ids.stream().limit(1).toList();
             log.info("Starting to index {} classifications", ids.size());
-            testIds.forEach(searchService::indexAsync);
+            ids.forEach(searchService::indexAsync);
             log.info("Finished indexing for {} classifications", ids.size());
         });
     }
