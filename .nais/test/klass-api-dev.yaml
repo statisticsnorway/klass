@@ -23,7 +23,7 @@ spec:
       memory: 1400Mi
   env:
     - name: SPRING_PROFILES_ACTIVE
-      value: api, postgres, remote-open-search
+      value: api, postgres-open-search, remote-open-search
     - name: KLASS_ENV_CLIENT_KLASS_MAIL_URL
       value: http://klass-mail
     - name: JAVA_TOOL_OPTIONS
