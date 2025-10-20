@@ -4,7 +4,7 @@ on:
     inputs:
       app:
         description: 'App name'
-        required: true
+        type: string
   push:
 
 jobs:

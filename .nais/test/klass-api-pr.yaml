@@ -2,7 +2,7 @@
 apiVersion: nais.io/v1alpha1
 kind: Application
 metadata:
-  name: klass-{{ app-name }}
+  name: ${{ app-name }}
   namespace: dapla-metadata
   labels:
     shared-db: "true"
@@ -11,7 +11,7 @@ spec:
   port: 8080
   ttl: 1h
   ingresses:
-    - https://klass-{{ app-name }}.intern.test.ssb.no/api/klass
+    - https://${{ app-name }}.intern.test.ssb.no/api/klass
   replicas:
     min: 1
     max: 1
