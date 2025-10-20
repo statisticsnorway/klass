@@ -6,7 +6,6 @@ metadata:
   name: klass-dev
   namespace: dapla-metadata
   labels:
-    shared-klass-db: true
     team: dapla-metadata
 spec:
   port: 8080
