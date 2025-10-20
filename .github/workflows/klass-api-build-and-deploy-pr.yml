@@ -1,6 +1,10 @@
 name: klass-api-build-and-deploy-pr.yml
 on:
   workflow_dispatch:
+    inputs:
+      app:
+        description: 'App name'
+        required: true
   push:
 
 jobs:
@@ -75,5 +79,6 @@ jobs:
           RESOURCE: .nais/test/klass-api-pr.yaml
           DEPLOY_SERVER: deploy.ssb.cloud.nais.io:443
           WORKLOAD_IMAGE: ${{ needs.build.outputs.image }}
-          VAR: pr-number=${{ github.event.number != null && github.event.number || 1 }}
+          VAR: app-name=${{github.event.inputs.app != null || 'pr'}}
           TELEMETRY: ${{ needs.build.outputs.telemetry }}
+
