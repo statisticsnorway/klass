@@ -1,5 +1,4 @@
 # Deploy config for the test cluster
-# Deploy config for the test cluster
 apiVersion: nais.io/v1alpha1
 kind: Application
 metadata:
