@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
     inputs:
       app:
-        description: "App name"
+        description: "Specify a custom name for your app"
         required: true
         type: string
       ttl:
@@ -12,10 +12,12 @@ on:
         default: '1h'
         type: choice
         options:
+            - 1h
             - 2h
             - 4h
+            - 8h
             - 36h
-  push:
+  #push:
 
 jobs:
   build:
@@ -89,5 +91,5 @@ jobs:
           RESOURCE: .nais/test/klass-api-dev.yaml
           DEPLOY_SERVER: deploy.ssb.cloud.nais.io:443
           WORKLOAD_IMAGE: ${{ needs.build.outputs.image }}
-          VAR: app-name=${{github.event.inputs.app != null || '1'}}, time-to-live=${{ github.event.inputs.ttl }}
+          VAR: app-name=${{github.event.inputs.app != null || 'test'}}, time-to-live=${{ github.event.inputs.ttl }}
           TELEMETRY: ${{ needs.build.outputs.telemetry }}
