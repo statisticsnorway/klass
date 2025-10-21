@@ -5,7 +5,7 @@ on:
       app:
         description: 'App name'
         type: string
-  push:
+  #push:
 
 jobs:
   build:
