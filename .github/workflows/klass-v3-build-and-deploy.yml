@@ -1,7 +1,7 @@
 name: Klass v3
 
 on:
-  #push:
+  push:
 
 jobs:
   build:
