@@ -1,11 +1,7 @@
-name: klass-api-build-and-deploy-pr.yml
+name: Klass v3
+
 on:
-  workflow_dispatch:
-    inputs:
-      app:
-        description: 'App name'
-        type: string
-  #push:
+  push:
 
 jobs:
   build:
@@ -36,13 +32,13 @@ jobs:
         id: changed-files
         uses: "nais/what-changed@main"
         with:
-          files: .nais/**/klass-api-pr.yaml
+          files: .nais/**/klass-api-v3.yaml
           main-branch-name: 'main'
       - name: Check for test config changes
         id: test-config-changed
         uses: "nais/what-changed@main"
         with:
-          files: .nais/test/klass-api-pr.yaml
+          files: .nais/test/klass-api-v3.yaml
           main-branch-name: 'main'
 
       - name: Build with Maven
@@ -76,9 +72,8 @@ jobs:
       - uses: nais/deploy/actions/deploy@v2
         env:
           CLUSTER: test
-          RESOURCE: .nais/test/klass-api-pr.yaml
+          RESOURCE: .nais/test/klass-api-v3.yaml
           DEPLOY_SERVER: deploy.ssb.cloud.nais.io:443
           WORKLOAD_IMAGE: ${{ needs.build.outputs.image }}
-          VAR: app-name=${{github.event.inputs.app != null || 'pr'}}
           TELEMETRY: ${{ needs.build.outputs.telemetry }}
 

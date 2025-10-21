@@ -1,17 +1,15 @@
-# Deploy config for the test cluster
 apiVersion: nais.io/v1alpha1
 kind: Application
 metadata:
-  name: klass-{{ app-name }}
+  name: klass-v3
   namespace: dapla-metadata
   labels:
     shared-db: "true"
     team: dapla-metadata
 spec:
   port: 8080
-  ttl: 1h
   ingresses:
-    - https://klass-{{ app-name }}.intern.test.ssb.no/api/klass
+    - https://klass-v3.intern.test.ssb.no/api/klass
   replicas:
     min: 1
     max: 1
@@ -23,11 +21,12 @@ spec:
       memory: 1400Mi
   env:
     - name: SPRING_PROFILES_ACTIVE
-      value: api, postgres, remote-open-search, skip-indexing
+      value: api, postgres, remote-open-search
     - name: KLASS_ENV_CLIENT_KLASS_MAIL_URL
       value: http://klass-mail
     - name: JAVA_TOOL_OPTIONS
       value: "-XX:InitialRAMPercentage=50.0 -XX:MaxRAMPercentage=75.0"
+
   envFrom:
     - secret: google-sql-klass
   filesFrom:
@@ -61,6 +60,7 @@ spec:
     port: 8090
     initialDelay: 60
     timeout: 180
+
 
 
 
