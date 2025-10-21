@@ -1,3 +1,4 @@
+# Deploy klass api Spring Boot v3x
 apiVersion: nais.io/v1alpha1
 kind: Application
 metadata:
