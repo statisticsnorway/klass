@@ -28,16 +28,27 @@ public class OpenSearchConfig extends AbstractOpenSearchConfiguration {
     @Value("${opensearch.password}")
     private String password;
 
+    @Value("${opensearch.ssl}")  // default false
+    private boolean ssl;
+
     @Override
     @Bean
     public RestHighLevelClient opensearchClient() {
-        ClientConfiguration clientConfiguration = ClientConfiguration.builder()
-                .connectedTo(opensearchUri.replace("http://", "").replace("https://", ""))
-                .usingSsl()
-                .withBasicAuth(username, password)
-                .withConnectTimeout(Duration.ofSeconds(10))
-                .withSocketTimeout(Duration.ofSeconds(5))
-                .build();
+        ClientConfiguration clientConfiguration =
+                (ssl
+                        ? ClientConfiguration.builder()
+                        .connectedTo(opensearchUri.replace("http://", "").replace("https://", ""))
+                        .usingSsl()
+                        .withBasicAuth(username, password)
+                        .withConnectTimeout(Duration.ofSeconds(10))
+                        .withSocketTimeout(Duration.ofSeconds(5))
+                        : ClientConfiguration.builder()
+                        .connectedTo(opensearchUri.replace("http://", "").replace("https://", ""))
+                        .withBasicAuth(username, password)
+                        .withConnectTimeout(Duration.ofSeconds(10))
+                        .withSocketTimeout(Duration.ofSeconds(5))
+                ).build();
+
         return RestClients.create(clientConfiguration).rest();
     }
 
