@@ -49,8 +49,6 @@ public class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest
     static void registerOpenSearchProperties(DynamicPropertyRegistry registry) {
         String uri = "http://" + opensearchContainer.getHost() + ":" + opensearchContainer.getMappedPort(9200);
         registry.add("opensearch.url", () -> uri);
-        registry.add("opensearch.username", () -> "admin");
-        registry.add("opensearch.password", () -> "admin");
     }
 
     @Autowired
