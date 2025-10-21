@@ -33,7 +33,7 @@ import static org.hamcrest.Matchers.*;
 
 @Testcontainers
 @SpringBootTest(classes = {ApplicationTestConfig.class, SearchServiceTestConfig.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles(profiles = {ConfigurationProfiles.POSTGRES_EMBEDDED, ConfigurationProfiles.MOCK_MAILSERVER}, inheritProfiles = false)
+@ActiveProfiles(profiles = {ConfigurationProfiles.POSTGRES_EMBEDDED, ConfigurationProfiles.MOCK_MAILSERVER, ConfigurationProfiles.OPEN_SEARCH_LOCAL}, inheritProfiles = false)
 public class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest {
     // @formatter:off
 
@@ -42,14 +42,13 @@ public class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest
     protected static final OpensearchContainer<?> opensearchContainer =
             new OpensearchContainer<>(DockerImageName.parse("opensearchproject/opensearch:2.11.0"))
                     .withEnv("OPENSEARCH_JAVA_OPTS", "-Xms2g -Xmx2g")
-                    .withEnv("DISABLE_SECURITY_PLUGIN", "true")
                     .withEnv("discovery.type", "single-node")
                     .withReuse(true);
 
     @DynamicPropertySource
     static void registerOpenSearchProperties(DynamicPropertyRegistry registry) {
         String uri = "http://" + opensearchContainer.getHost() + ":" + opensearchContainer.getMappedPort(9200);
-        registry.add("spring.elasticsearch.uris", () -> uri);
+        registry.add("opensearch.url", () -> uri);
     }
 
     @Autowired
