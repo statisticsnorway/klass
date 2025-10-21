@@ -2,7 +2,11 @@ name: Klass dev
 
 on:
   workflow_dispatch:
-  #push:
+    inputs:
+      app:
+        description: 'App name'
+        required: true
+  push:
 
 jobs:
   build:
