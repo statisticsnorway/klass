@@ -13,6 +13,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
+import java.time.Duration;
+
 @Configuration
 @Profile("!mock-search")
 public class OpenSearchConfig extends AbstractOpenSearchConfiguration {
@@ -29,14 +31,11 @@ public class OpenSearchConfig extends AbstractOpenSearchConfiguration {
     @Override
     @Bean
     public RestHighLevelClient opensearchClient() {
-        log.info("Creating OpenSearch client for URL: {} with username: {}",
-                opensearchUri, username);
-
         ClientConfiguration clientConfiguration = ClientConfiguration.builder()
                 .connectedTo(opensearchUri.replace("http://", "").replace("https://", ""))
                 .withBasicAuth(username, password)
-                .withConnectTimeout(20000)
-                .withSocketTimeout(300000)
+                .withConnectTimeout(Duration.ofSeconds(10))
+                .withSocketTimeout(Duration.ofSeconds(5))
                 .build();
         return RestClients.create(clientConfiguration).rest();
     }
