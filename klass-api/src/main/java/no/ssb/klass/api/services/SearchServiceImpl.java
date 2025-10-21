@@ -165,7 +165,6 @@ public class SearchServiceImpl implements SearchService {
         checkNotNull(classificationSeriesId);
         try {
             ClassificationSeries classification = classificationRepository.getOne(classificationSeriesId);
-            log.debug("Indexing classification series {}", classificationSeriesId);
             indexSync(classification);
         } catch (Exception e) {
             log.warn("Failed to index classification {}: {}", classificationSeriesId, e.getMessage());

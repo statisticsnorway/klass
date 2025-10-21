@@ -6,7 +6,7 @@ on:
       app:
         description: 'App name'
         required: true
-  push:
+  #push:
 
 jobs:
   build:
