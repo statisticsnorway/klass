@@ -42,7 +42,7 @@ public class OpenSearchConfig extends AbstractOpenSearchConfiguration {
                         .withConnectTimeout(Duration.ofSeconds(10))
                         .withSocketTimeout(Duration.ofSeconds(5))
                         : ClientConfiguration.builder()
-                        .connectedTo(opensearchUri.replace("http://", ""))
+                        .connectedTo(opensearchUri.replace("http://", "").replace("https://", ""))
                         .withBasicAuth(username, password)
                         .withConnectTimeout(Duration.ofSeconds(10))
                         .withSocketTimeout(Duration.ofSeconds(5))
