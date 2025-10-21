@@ -1,6 +1,5 @@
 package no.ssb.klass.api.config;
 
-import no.ssb.klass.core.config.ConfigurationProfiles;
 import org.opensearch.client.RestHighLevelClient;
 import org.opensearch.data.client.orhlc.AbstractOpenSearchConfiguration;
 import org.opensearch.data.client.orhlc.ClientConfiguration;
@@ -12,8 +11,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import java.time.Duration;
-
-
 
 @Configuration
 @Profile("!mock-search")
@@ -33,20 +30,18 @@ public class OpenSearchConfig extends AbstractOpenSearchConfiguration {
     @Override
     @Bean
     public RestHighLevelClient opensearchClient() {
-        ClientConfiguration clientConfiguration =
-                (ssl
-                        ? ClientConfiguration.builder()
-                        .connectedTo(opensearchUri.replace("https://", ""))
-                        .usingSsl()
-                        .withBasicAuth(username, password)
-                        .withConnectTimeout(Duration.ofSeconds(10))
-                        .withSocketTimeout(Duration.ofSeconds(5))
-                        : ClientConfiguration.builder()
-                        .connectedTo(opensearchUri.replace("https://", "").replace("http://", ""))
-                        .withBasicAuth(username, password)
-                        .withConnectTimeout(Duration.ofSeconds(10))
-                        .withSocketTimeout(Duration.ofSeconds(5))
-                ).build();
+        ClientConfiguration clientConfiguration = (ssl
+                ? ClientConfiguration.builder()
+                .connectedTo(opensearchUri.replace("https://", ""))
+                .usingSsl()
+                .withBasicAuth(username, password)
+                .withConnectTimeout(Duration.ofSeconds(10))
+                .withSocketTimeout(Duration.ofSeconds(5))
+                : ClientConfiguration.builder()
+                .connectedTo(opensearchUri.replace("https://", "").replace("http://", ""))
+                .withConnectTimeout(Duration.ofSeconds(10))
+                .withSocketTimeout(Duration.ofSeconds(5))
+        ).build();
 
         return RestClients.create(clientConfiguration).rest();
     }
