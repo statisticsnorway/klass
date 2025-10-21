@@ -33,6 +33,7 @@ public class OpenSearchConfig extends AbstractOpenSearchConfiguration {
     public RestHighLevelClient opensearchClient() {
         ClientConfiguration clientConfiguration = ClientConfiguration.builder()
                 .connectedTo(opensearchUri.replace("http://", "").replace("https://", ""))
+                .usingSsl()
                 .withBasicAuth(username, password)
                 .withConnectTimeout(Duration.ofSeconds(10))
                 .withSocketTimeout(Duration.ofSeconds(5))
