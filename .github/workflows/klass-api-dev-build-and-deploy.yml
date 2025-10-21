@@ -17,8 +17,6 @@ on:
             - 4h
             - 8h
             - 36h
-  #push:
-
 jobs:
   build:
     name: Build
