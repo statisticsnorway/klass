@@ -33,7 +33,7 @@ import static org.hamcrest.Matchers.*;
 
 @Testcontainers
 @SpringBootTest(classes = {ApplicationTestConfig.class, SearchServiceTestConfig.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles(profiles = {ConfigurationProfiles.POSTGRES_EMBEDDED, ConfigurationProfiles.MOCK_MAILSERVER, ConfigurationProfiles.OPEN_SEARCH_TEST}, inheritProfiles = false)
+@ActiveProfiles(profiles = {ConfigurationProfiles.POSTGRES_EMBEDDED, ConfigurationProfiles.MOCK_MAILSERVER, ConfigurationProfiles.OPEN_SEARCH_LOCAL}, inheritProfiles = false)
 public class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest {
     // @formatter:off
 
