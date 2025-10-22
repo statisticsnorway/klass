@@ -6,11 +6,11 @@ metadata:
   description:
     Spring Boot application that handles classifications for SSB. Klass provides a REST api that clients can use to read classifications.
   tags:
-    - on-prem
     - metadata
     - java
     - classification
     - codelist
+    - nais
   annotations:
     github.com/project-slug: statisticsnorway/klass
 spec:
@@ -21,8 +21,10 @@ spec:
   providesApis:
     - klass-api
   dependsOn:
-    - resource:klass-mariadb
+    - resource:klass-postgresql
+    - resource:klass-opensearch
     - component:ssbno-varnish
+    - component:klass-mail
 ---
 apiVersion: backstage.io/v1alpha1
 kind: API
@@ -48,12 +50,12 @@ metadata:
   description:
     A Vaadin frontend for maintaining classifications for Klass.
   tags:
-    - on-prem
     - metadata
     - java
     - vaadin
     - classification
     - codelist
+    - nais
   annotations:
     github.com/project-slug: statisticsnorway/klass
 spec:
@@ -62,19 +64,79 @@ spec:
   lifecycle: production
   system: metadata
   dependsOn:
-    - resource:klass-mariadb
+    - resource:klass-postgresql
+    - resource:klass-solr
+    - component:ssbno-varnish
+    - component:klass-mail
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  title: Klass Mail
+  name: klass-mail
+  description:
+    A simple service which abstracts Email sending. Uses SUP Postman.
+  tags:
+    - metadata
+    - java
+    - sup-postman
+    - nais
+  annotations:
+    github.com/project-slug: statisticsnorway/klass
+spec:
+  type: website
+  owner: dapla-metadata-developers
+  lifecycle: production
+  system: metadata
+  dependsOn:
+    - resource:postman-incoming-topic
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Resource
 metadata:
-  name: klass-mariadb
-  title: Klass MariaDB
-  description: MariaDB database storing Klass data
+  name: klass-postgresql
+  title: Klass PostgreSQL
+  description: CloudSQL PostgreSQL database deployed from Nais
   tags:
-    - on-prem
+    - postgres
+    - cloudsql
+    - nais
     - database
 spec:
   type: database
+  system: metadata
+  owner: dapla-metadata-developers
+  lifecycle: production
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: klass-solr
+  title: Klass Solr
+  description: Solr instance providing a search index. Used by Klass Forvaltning for legacy reasons.
+  tags:
+    - solr
+    - nais
+    - search
+spec:
+  type: search
+  system: metadata
+  owner: dapla-metadata-developers
+  lifecycle: production
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: klass-opensearch
+  title: Klass OpenSearch
+  description: OpenSearch instance providing a search index.
+  tags:
+    - opensearch
+    - aiven
+    - nais
+    - search
+spec:
+  type: search
   system: metadata
   owner: dapla-metadata-developers
   lifecycle: production
