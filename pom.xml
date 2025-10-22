@@ -36,19 +36,18 @@
         <checkstyle-version>2.17</checkstyle-version>
         <solr-version>8.5.2</solr-version>
         <objenesis-version>2.4</objenesis-version>
-        <guava-version>19.0</guava-version>
+        <guava-version>32.0.1-jre</guava-version>
         <woodstox-version>4.4.1</woodstox-version>
-        <commons-lang3-version>3.4</commons-lang3-version>
-        <rest-assured-version>5.4.0</rest-assured-version>
-        <apacheds-server-jndi-version>1.5.5</apacheds-server-jndi-version>
+        <commons-lang3-version>3.19.0</commons-lang3-version>
+        <rest-assured-version>5.5.6</rest-assured-version>
         <asciidoctor-version>2.2.4</asciidoctor-version>
         <maven-jaxb2-plugin-version>0.15.3</maven-jaxb2-plugin-version>
         <tomcat7-maven-plugin-version>2.2</tomcat7-maven-plugin-version>
         <jaxb-api-version>4.0.0</jaxb-api-version>
-        <commons-io-version>2.15.1</commons-io-version>
+        <commons-io-version>2.20.0</commons-io-version>
         <jakarta-rs-api-version>3.1.0</jakarta-rs-api-version>
         <spring-restdocs-version>3.0.1</spring-restdocs-version>
-        <snakeyaml.version>1.31</snakeyaml.version>
+        <snakeyaml.version>2.5</snakeyaml.version>
         <zonky.version>2.1.0</zonky.version>
         <zonky.pg.version>2.5.1</zonky.pg.version>
         <testcontainers.version>1.20.1</testcontainers.version>
@@ -73,6 +72,11 @@
                 <artifactId>embedded-database-spring-test</artifactId>
                 <version>${zonky.pg.version}</version>
                 <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${commons-lang3-version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
