@@ -84,7 +84,7 @@ metadata:
   annotations:
     github.com/project-slug: statisticsnorway/klass
 spec:
-  type: website
+  type: service
   owner: dapla-metadata-developers
   lifecycle: production
   system: metadata
