@@ -64,6 +64,7 @@ spec:
   lifecycle: production
   system: metadata
   dependsOn:
+    - system:keycloak
     - resource:klass-postgresql
     - resource:klass-solr
     - component:ssbno-varnish
