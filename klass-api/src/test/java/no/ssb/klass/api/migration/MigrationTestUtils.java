@@ -359,6 +359,7 @@ public class MigrationTestUtils {
         }
     }
 
+
     public static void validateFilteredClassifications(Response sourceResponse, Response targetResponse) {
         List<Map<String, Object>> sourceList = sourceResponse.path(CLASSIFICATIONS);
         List<Map<String, Object>> targetList = targetResponse.path(CLASSIFICATIONS);
@@ -379,7 +380,7 @@ public class MigrationTestUtils {
 
         assertThat(sourceList.size())
                 .withFailMessage("Expected size to be <%d> but was <%d>", targetList.size(), sourceList.size())
-                .isNotEqualTo(targetList.size());
+                .isEqualTo(targetList.size());
     }
 
     /**
