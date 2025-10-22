@@ -33,7 +33,6 @@
         <guava-version>32.0.1-jre</guava-version>
         <woodstox-version>4.4.1</woodstox-version>
         <commons-lang3-version>3.19.0</commons-lang3-version>
-        <apacheds-server-jndi-version>2.0.0.AM27</apacheds-server-jndi-version>
         <asciidoctor-version>1.6.0</asciidoctor-version>
         <maven-jaxb2-plugin-version>2.5.0</maven-jaxb2-plugin-version>
         <tomcat7-maven-plugin-version>2.2</tomcat7-maven-plugin-version>
@@ -103,18 +102,6 @@
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>${postgresql.version}</version>
-        </dependency>
-        <dependency>
-            <!--java based ldap server for testing-->
-            <groupId>org.apache.directory.server</groupId>
-            <artifactId>apacheds-server-jndi</artifactId>
-            <version>${apacheds-server-jndi-version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>antlr</groupId>
-                    <artifactId>antlr</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.dataformat</groupId>
