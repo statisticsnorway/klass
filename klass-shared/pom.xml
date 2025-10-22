@@ -30,7 +30,7 @@
         <checkstyle-version>3.3.0</checkstyle-version>
         <spring.version>4.3.7.RELEASE</spring.version>
         <objenesis-version>3.3</objenesis-version>
-        <guava-version>19.0</guava-version>
+        <guava-version>32.0.1-jre</guava-version>
         <woodstox-version>4.4.1</woodstox-version>
         <commons-lang3-version>3.19.0</commons-lang3-version>
         <apacheds-server-jndi-version>2.0.0.AM27</apacheds-server-jndi-version>
