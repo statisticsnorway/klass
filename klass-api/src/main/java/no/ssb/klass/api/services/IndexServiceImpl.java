@@ -8,6 +8,7 @@ import no.ssb.klass.core.model.*;
 import no.ssb.klass.core.repository.ClassificationSeriesRepository;
 import no.ssb.klass.core.util.TimeUtil;
 import org.opensearch.data.client.orhlc.OpenSearchRestTemplate;
+import org.opensearch.index.reindex.ReindexRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,6 +90,11 @@ public class IndexServiceImpl implements IndexService {
         elasticsearchOperations.indexOps(getIndexCoordinates()).refresh();
         log.info("Indexing: {} took (ms): {}", classification.getNameInPrimaryLanguage(),
                 TimeUtil.millisecondsSince(start));
+    }
+
+    @Override
+    public void reIndex(ReindexRequest reindexRequest) {
+
     }
 
     private void recursiveIndex(ClassificationVersion version, Language language) {

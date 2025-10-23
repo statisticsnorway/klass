@@ -1,6 +1,7 @@
 package no.ssb.klass.api.services;
 
 import no.ssb.klass.core.model.ClassificationSeries;
+import org.opensearch.index.reindex.ReindexRequest;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,4 +37,6 @@ public interface IndexService {
      */
     @Transactional(readOnly = true)
     void indexSync(ClassificationSeries classificationSeries);
+
+    void reIndex(ReindexRequest reindexRequest);
 }
