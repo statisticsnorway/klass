@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.StringJoiner;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import no.ssb.klass.api.services.search.OpenSearchResult;
+import no.ssb.klass.api.services.OpenSearchResult;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.core.Relation;
 

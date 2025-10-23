@@ -1,5 +1,7 @@
 package no.ssb.klass.api.applicationtest.config;
 
+import no.ssb.klass.api.services.IndexService;
+import no.ssb.klass.api.services.IndexServiceImpl;
 import no.ssb.klass.api.services.SearchService;
 import no.ssb.klass.core.service.UserService;
 import no.ssb.klass.core.service.UserServiceMock;
@@ -23,7 +25,10 @@ import org.springframework.context.annotation.*;
         no.ssb.klass.api.ApiDocumentation.class,
         no.ssb.klass.core.service.UserService.class,
         no.ssb.klass.core.repository.ChangelogRepository.class},
-        excludeFilters = @ComponentScan.Filter(value = SearchService.class, type = FilterType.ASSIGNABLE_TYPE))
+        excludeFilters = {
+                @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = SearchService.class),
+                @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = IndexServiceImpl.class)
+        })
 @EntityScan(basePackageClasses = no.ssb.klass.core.model.BaseEntity.class)
 public class ApplicationTestConfig {
 
@@ -37,5 +42,12 @@ public class ApplicationTestConfig {
     public SearchService searchService() {
         // For integration tests with mock-search profile, return a fully mocked SearchService
         return Mockito.mock(SearchService.class);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public IndexService indexService() {
+        // For integration tests with mock-search profile, return a fully mocked SearchService
+        return Mockito.mock(IndexService.class);
     }
 }

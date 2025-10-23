@@ -1,6 +1,5 @@
-package no.ssb.klass.api.services.search;
+package no.ssb.klass.api.services;
 
-import no.ssb.klass.api.services.SearchService;
 import no.ssb.klass.core.config.ConfigurationProfiles;
 import no.ssb.klass.core.repository.ClassificationSeriesRepository;
 import org.slf4j.Logger;
@@ -26,14 +25,14 @@ public class SearchIndexPopulator implements CommandLineRunner {
     @Autowired
     private ClassificationSeriesRepository classificationSeriesRepository;
     @Autowired
-    private SearchService searchService;
+    private IndexService indexService;
 
     @Override
     public void run(String... args) {
         CompletableFuture.runAsync(() -> {
             List<Long> ids = classificationSeriesRepository.findAllClassificationIds();
             log.info("Starting to index {} classifications", ids.size());
-            ids.forEach(searchService::indexAsync);
+            ids.forEach(indexService::indexAsync);
             log.info("Finished indexing for {} classifications", ids.size());
         });
     }

@@ -5,7 +5,7 @@ import com.google.common.collect.Sets;
 import no.ssb.klass.api.config.MockConfig;
 import no.ssb.klass.api.config.TestConfig;
 import no.ssb.klass.api.services.SearchService;
-import no.ssb.klass.api.services.search.OpenSearchResult;
+import no.ssb.klass.api.services.OpenSearchResult;
 import no.ssb.klass.api.util.RestConstants;
 import no.ssb.klass.core.config.ConfigurationProfiles;
 import no.ssb.klass.core.model.*;

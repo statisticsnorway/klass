@@ -1,8 +1,7 @@
 package no.ssb.klass.api.config;
 
 import no.ssb.klass.api.services.SearchService;
-import no.ssb.klass.api.services.search.OpenSearchResult;
-import no.ssb.klass.core.model.ClassificationSeries;
+import no.ssb.klass.api.services.OpenSearchResult;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -22,12 +21,6 @@ public class MockSearchConfig {
                                                        boolean includeCodeLists) {
                 return Page.empty();
             }
-
-            @Override
-            public void indexAsync(Long classificationSeriesId) {}
-
-            @Override
-            public void indexSync(ClassificationSeries classificationSeries) {}
         };
     }
 }

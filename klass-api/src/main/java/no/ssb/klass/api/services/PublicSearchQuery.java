@@ -1,4 +1,4 @@
-package no.ssb.klass.api.services.search;
+package no.ssb.klass.api.services;
 
 import no.ssb.klass.core.model.ClassificationType;
 import no.ssb.klass.core.model.Language;

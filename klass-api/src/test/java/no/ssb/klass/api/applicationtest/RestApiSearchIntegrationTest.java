@@ -5,8 +5,8 @@ package no.ssb.klass.api.applicationtest;
 
 import io.restassured.http.ContentType;
 import no.ssb.klass.api.applicationtest.config.ApplicationTestConfig;
-import no.ssb.klass.api.applicationtest.config.SearchServiceTestConfig;
-import no.ssb.klass.api.services.SearchServiceImpl;
+import no.ssb.klass.api.applicationtest.config.IndexServiceTestConfig;
+import no.ssb.klass.api.services.IndexServiceImpl;
 import no.ssb.klass.core.config.ConfigurationProfiles;
 import no.ssb.klass.core.repository.ClassificationSeriesRepository;
 import no.ssb.klass.testutil.TestDataProvider;
@@ -32,7 +32,7 @@ import static org.hamcrest.Matchers.*;
 
 
 @Testcontainers
-@SpringBootTest(classes = {ApplicationTestConfig.class, SearchServiceTestConfig.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = {ApplicationTestConfig.class, IndexServiceTestConfig.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles(profiles = {ConfigurationProfiles.POSTGRES_EMBEDDED, ConfigurationProfiles.MOCK_MAILSERVER, ConfigurationProfiles.OPEN_SEARCH_LOCAL}, inheritProfiles = false)
 public class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest {
     // @formatter:off
@@ -51,8 +51,9 @@ public class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest
         registry.add("opensearch.url", () -> uri);
     }
 
+
     @Autowired
-    private SearchServiceImpl searchService;
+    private IndexServiceImpl indexService;
 
     @Autowired
     @Qualifier("opensearchRestTemplate")
@@ -111,10 +112,10 @@ public class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest
 
         opensearchClient.indices().create(createRequest, org.opensearch.client.RequestOptions.DEFAULT);
 
-        searchService.indexSync(kommuneinndeling);
-        searchService.indexSync(bydelsinndeling);
-        searchService.indexSync(familieGrupperingCodelist);
-        searchService.indexSync(badmintonCodelist);
+        indexService.indexSync(kommuneinndeling);
+        indexService.indexSync(bydelsinndeling);
+        indexService.indexSync(familieGrupperingCodelist);
+        indexService.indexSync(badmintonCodelist);
         openSearchRestTemplate.indexOps(IndexCoordinates.of("klass")).refresh();
     }
 

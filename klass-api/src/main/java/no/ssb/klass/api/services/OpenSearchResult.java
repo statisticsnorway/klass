@@ -1,4 +1,4 @@
-package no.ssb.klass.api.services.search;
+package no.ssb.klass.api.services;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.data.annotation.Id;

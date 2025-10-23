@@ -34,6 +34,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import static io.zonky.test.db.AutoConfigureEmbeddedDatabase.DatabaseProvider.ZONKY;
+import static no.ssb.klass.core.config.ConfigurationProfiles.MOCK_SEARCH;
 
 @Testcontainers
 @ExtendWith(SpringExtension.class)
