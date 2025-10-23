@@ -47,7 +47,7 @@ public class IndexServiceImpl implements IndexService {
     @Override
     @Async
     @Transactional(readOnly = true)
-    @Scheduled(cron = "0 20 23 * * *")
+    @Scheduled(cron = "0 30 23 * * *")
     public void indexAsync(Long classificationSeriesId) {
         checkNotNull(classificationSeriesId);
         try {
