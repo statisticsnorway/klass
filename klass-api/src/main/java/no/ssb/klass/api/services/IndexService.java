@@ -38,5 +38,4 @@ public interface IndexService {
     @Transactional(readOnly = true)
     void indexSync(ClassificationSeries classificationSeries);
 
-    void reIndex(ReindexRequest reindexRequest);
 }

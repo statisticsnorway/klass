@@ -18,6 +18,7 @@ import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
 import org.springframework.data.elasticsearch.core.query.IndexQuery;
 import org.springframework.data.elasticsearch.core.query.IndexQueryBuilder;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,6 +47,7 @@ public class IndexServiceImpl implements IndexService {
     @Override
     @Async
     @Transactional(readOnly = true)
+    @Scheduled(cron = "0 20 23 * * *")
     public void indexAsync(Long classificationSeriesId) {
         checkNotNull(classificationSeriesId);
         try {
@@ -90,11 +92,6 @@ public class IndexServiceImpl implements IndexService {
         elasticsearchOperations.indexOps(getIndexCoordinates()).refresh();
         log.info("Indexing: {} took (ms): {}", classification.getNameInPrimaryLanguage(),
                 TimeUtil.millisecondsSince(start));
-    }
-
-    @Override
-    public void reIndex(ReindexRequest reindexRequest) {
-
     }
 
     private void recursiveIndex(ClassificationVersion version, Language language) {

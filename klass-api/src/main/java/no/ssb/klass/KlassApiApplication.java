@@ -10,6 +10,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.context.annotation.Import;
 import org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchDataAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchRepositoriesAutoConfiguration;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication(exclude = {
         ElasticsearchDataAutoConfiguration.class,
@@ -18,6 +19,7 @@ import org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchRe
 @Import(TomcatServletWebServerFactoryCustomizer.class)
 @ConfigurationPropertiesScan
 @ServletComponentScan
+@EnableScheduling
 public class KlassApiApplication extends SpringBootServletInitializer {
 
     @Override
