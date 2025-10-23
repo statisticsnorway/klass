@@ -162,10 +162,7 @@ below is a quick summary of the profiles available (see _application.properties_
 
 ### Build profiles
 
-we have created custom profiles for time consuming tests that can be toggled on and off to help speed up compile time during development.
 The profile named `documentation` will generate API documentation with AsciiDoc (default: enabled)
-We also have a custom profile (`testbench`) for running GUI tests using TestBench (Vaadin licensed product).
-There's also a `checkstyle` and a `findbugs` for use with Jenkins to create code quality reports.
 
 ### Run / Debug
 
