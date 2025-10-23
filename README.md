@@ -81,6 +81,7 @@ This may be done by generating a Personal Access Token (classic) on GitHub with 
 ```
 
 Colima should have at least 5G memory and the project folder must be mounted. Change this in `~/.colima/default/colima.yaml` e.g.
+
 ```yaml
 memory: 5
 ...
@@ -98,24 +99,31 @@ Each app has an `.sdkmanrc` file which may be used to configure the Java version
 ### Klass API
 
 #### Build
+
 Build the app: `make build-klass-api`
 
 #### Docker compose
-Service `klass-api` requires a prebuild tagged image. 
+
+Service `klass-api` requires a prebuild tagged image.
 
 Run command in `klass-api` module:
+
 ```
 docker build -t target-postgres-image:latest .
 ```
-This service depends on a Postgresql db container. 
+
+This service depends on a Postgresql db container.
 
 For testing with MariaDB build `klass-api` with `klass-shared` version `3.0.5-master-SNAPSHOT`.
 
-This will build klass-api without running tests: 
+This will build klass-api without running tests:
+
 ```
 mvn clean install -DskipTests -pl klass-api
 ```
+
 And build mariadb image in klass-api module:
+
 ```
 docker build -t source-mariadb-image:latest .
 ```
@@ -149,8 +157,6 @@ below is a quick summary of the profiles available (see _application.properties_
 #   ad-offline          = will only use test/embeded AD (apacheDS) [Forvaltning only]
 #   small-import        = imports a small number of classifications from legacy system, useful during development
 #   mock-mailserver     = outgoing emails are only logged
-#   h2                  = use h2 database (stored on your filesystem)
-#   h2-inmemory         = use h2 database but keep everything in memory only.
 #   embedded-solr       = run an instance of solr as part of the application (no need to run a separate solr application)
 ```
 
