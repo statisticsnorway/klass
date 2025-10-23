@@ -89,18 +89,4 @@ public class SearchServiceImpl implements SearchService {
         return search(PublicSearchQuery.build(query, pageable, filterOnSection, includeCodeLists));
     }
 
-    private void updateElasticsearch(SoftDeletable entity, Map<String, Object> doc) {
-        String uuid = (String) doc.get("uuid");
-
-        if (!entity.isDeleted()) {
-            IndexQuery indexQuery = new IndexQueryBuilder()
-                    .withId(uuid)
-                    .withObject(doc)
-                    .build();
-            elasticsearchOperations.index(indexQuery, getIndexCoordinates());
-        } else {
-            elasticsearchOperations.delete(uuid, getIndexCoordinates());
-        }
-    }
-
 }
