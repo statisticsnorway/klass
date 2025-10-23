@@ -88,14 +88,6 @@ run-klass-api-local-postgres:
 	${sdk} env clear
 
 
-# The environment variable KLASS_ENV_SECURITY_IGNORED must be set to "/**" in order to skip authentication
-run-klass-api-local-mariadb:
-	pushd klass-api && \
-	${sdk} env && \
-	mvn spring-boot\:run -Dspring.profiles.active=mariadb,hardcoded-user,embedded-solr,mock-mailserver,skip-indexing,small-import,ad-offline; \
-	popd; \
-	${sdk} env clear
-
 .PHONY: start-klass-forvaltning-docker
 start-klass-forvaltning-docker:
 	docker compose $(COMPOSE_FILE) --profile frontend up --build -d
@@ -152,4 +144,3 @@ start-klass-api-open-search-docker:
 .PHONY: stop-klass-api-open-search-docker
 stop-klass-api-open-search-docker:
 	docker compose $(COMPOSE_FILE) --profile api-open-search down -v
-
