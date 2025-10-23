@@ -2,7 +2,6 @@ package no.ssb.klass.api.services;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,15 +13,11 @@ import org.springframework.data.domain.Pageable;
 import org.opensearch.data.client.orhlc.OpenSearchRestTemplate;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
-import org.springframework.data.elasticsearch.core.query.IndexQuery;
-import org.springframework.data.elasticsearch.core.query.IndexQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.Query;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Service;
 
-import no.ssb.klass.core.model.SoftDeletable;
 import no.ssb.klass.core.repository.ClassificationSeriesRepository;
-
 import no.ssb.klass.core.util.TimeUtil;
 
 @Service
@@ -47,7 +42,13 @@ public class SearchServiceImpl implements SearchService {
         return IndexCoordinates.of(elasticsearchIndex);
     }
 
-    public Page<OpenSearchResult> search(Query query) {
+    @Override
+    public Page<OpenSearchResult> publicSearch(String query, Pageable pageable, String filterOnSection,
+                                               boolean includeCodeLists) {
+        return search(PublicSearchQuery.build(query, pageable, filterOnSection, includeCodeLists));
+    }
+
+    private Page<OpenSearchResult> search(Query query) {
         Date start = TimeUtil.now();
         SearchHits<OpenSearchResult> searchHits = elasticsearchOperations.search(
                 query,
@@ -69,38 +70,8 @@ public class SearchServiceImpl implements SearchService {
                 searchHits.getTotalHits()
         );
 
-        log.info("Search for: '" + query + "' resulted in " + searchResults.getTotalElements() +
-                " hits. Took (ms): " + TimeUtil.millisecondsSince(start));
+        log.info("Search for: '{}' resulted in {} hits. Took (ms): {}",
+                query, searchResults.getTotalElements(), TimeUtil.millisecondsSince(start));
         return searchResults;
     }
-
-    /**
-     * Search for public classifications (filtering out copyrighted and not published)
-     *
-     * @param query query to match, may be many words. Each word will then be searched for
-     * @param pageable
-     * @param filterOnSection null means all sections
-     * @param includeCodeLists
-     * @return searchResults
-     */
-    @Override
-    public Page<OpenSearchResult> publicSearch(String query, Pageable pageable, String filterOnSection,
-                                               boolean includeCodeLists) {
-        return search(PublicSearchQuery.build(query, pageable, filterOnSection, includeCodeLists));
-    }
-
-    private void updateElasticsearch(SoftDeletable entity, Map<String, Object> doc) {
-        String uuid = (String) doc.get("uuid");
-
-        if (!entity.isDeleted()) {
-            IndexQuery indexQuery = new IndexQueryBuilder()
-                    .withId(uuid)
-                    .withObject(doc)
-                    .build();
-            elasticsearchOperations.index(indexQuery, getIndexCoordinates());
-        } else {
-            elasticsearchOperations.delete(uuid, getIndexCoordinates());
-        }
-    }
-
 }
