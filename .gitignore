@@ -47,7 +47,6 @@ pgdata/
 /out/
 .designer/designer-theme.css
 klass.log*
-/.checkstyle
 .dccache
 
 **/initdb/*.sql
