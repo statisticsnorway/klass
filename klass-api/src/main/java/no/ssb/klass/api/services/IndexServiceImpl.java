@@ -8,7 +8,6 @@ import no.ssb.klass.core.model.*;
 import no.ssb.klass.core.repository.ClassificationSeriesRepository;
 import no.ssb.klass.core.util.TimeUtil;
 import org.opensearch.data.client.orhlc.OpenSearchRestTemplate;
-import org.opensearch.index.reindex.ReindexRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,6 @@ import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
 import org.springframework.data.elasticsearch.core.query.IndexQuery;
 import org.springframework.data.elasticsearch.core.query.IndexQueryBuilder;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,7 +45,6 @@ public class IndexServiceImpl implements IndexService {
     @Override
     @Async
     @Transactional(readOnly = true)
-    @Scheduled(cron = "0 30 23 * * *")
     public void indexAsync(Long classificationSeriesId) {
         checkNotNull(classificationSeriesId);
         try {
