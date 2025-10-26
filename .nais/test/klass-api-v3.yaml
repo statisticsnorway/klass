@@ -38,7 +38,7 @@ spec:
       rules:
         - application: klass-mail
   openSearch:
-    access: admin
+    access: readwrite
     instance: klass-search
 
   prometheus:
