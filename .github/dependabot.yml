@@ -7,8 +7,33 @@ version: 2
 updates:
   - package-ecosystem: "maven" # See documentation for possible values
     directory: "/" # Location of package manifests
+    exclude-paths:
+      - /klass-forvaltning  # Versions can't be upgraded due to Vaadin
+      - /klass-api  # Has its own config below
+      - /klass-forvaltning  # Has its own config below
+      - /klass-mail  # Has its own config below
     schedule:
-      interval: "daily"
+      interval: "weekly"
+    groups:
+      klass-root:
+  - package-ecosystem: "maven" # See documentation for possible values
+    directory: "/klass-api" # Location of package manifests
+    schedule:
+      interval: "weekly"
+    groups:
+      klass-api:
+  - package-ecosystem: "maven" # See documentation for possible values
+    directory: "/klass-shared" # Location of package manifests
+    schedule:
+      interval: "weekly"
+    groups:
+      klass-shared:
+  - package-ecosystem: "maven" # See documentation for possible values
+    directory: "/klass-mail" # Location of package manifests
+    schedule:
+      interval: "weekly"
+    groups:
+      klass-mail:
   - package-ecosystem: "github-actions" # See documentation for possible values
     directory: "/" # Location of package manifests
     schedule:
