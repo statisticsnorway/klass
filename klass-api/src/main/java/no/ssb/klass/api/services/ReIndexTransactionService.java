@@ -10,14 +10,14 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class IndexTransactionService {
-    private static final Logger log = LoggerFactory.getLogger(IndexTransactionService.class);
+public class ReIndexTransactionService {
+    private static final Logger log = LoggerFactory.getLogger(ReIndexTransactionService.class);
 
     private final ClassificationSeriesRepository classificationRepository;
     private final IndexService indexService;
 
     @Autowired
-    public IndexTransactionService(ClassificationSeriesRepository classificationRepository,IndexService indexService) {
+    public ReIndexTransactionService(ClassificationSeriesRepository classificationRepository, IndexService indexService) {
         this.classificationRepository = classificationRepository;
         this.indexService = indexService;
     }
