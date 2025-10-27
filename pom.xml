@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>no.ssb.klass</groupId>
@@ -11,7 +12,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.7.18</version>
-        <relativePath /> <!-- lookup parent from repository -->
+        <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
     <modules>
@@ -30,24 +31,26 @@
 
     <properties>
         <java.version>17</java.version>
+        <github.repository>statisticsnorway/klass</github.repository>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <github.repository>statisticsnorway/klass</github.repository>
-        <solr-version>8.5.2</solr-version>
-        <objenesis-version>2.4</objenesis-version>
-        <guava-version>19.0</guava-version>
-        <woodstox-version>4.4.1</woodstox-version>
-        <commons-lang3-version>3.4</commons-lang3-version>
-        <rest-assured-version>5.4.0</rest-assured-version>
+
         <asciidoctor-version>2.2.4</asciidoctor-version>
-        <maven-jaxb2-plugin-version>0.15.3</maven-jaxb2-plugin-version>
-        <tomcat7-maven-plugin-version>2.2</tomcat7-maven-plugin-version>
-        <jaxb-api-version>2.3.1</jaxb-api-version>
         <commons-io-version>2.15.1</commons-io-version>
+        <commons-lang3-version>3.4</commons-lang3-version>
+        <guava-version>19.0</guava-version>
         <jakarta-rs-api-version>2.1.6</jakarta-rs-api-version>
+        <jaxb-api-version>2.3.1</jaxb-api-version>
+        <maven-jaxb2-plugin-version>0.15.3</maven-jaxb2-plugin-version>
+        <objenesis-version>2.4</objenesis-version>
+        <rest-assured-version>5.4.0</rest-assured-version>
+        <solr-version>8.5.2</solr-version>
+        <spotless.version>3.0.0</spotless.version>
         <spring-restdocs-version>2.0.8.RELEASE</spring-restdocs-version>
-        <zonky.version>2.5.1</zonky.version>
+        <tomcat7-maven-plugin-version>2.2</tomcat7-maven-plugin-version>
+        <woodstox-version>4.4.1</woodstox-version>
         <zonky.pg.version>2.1.0</zonky.pg.version>
+        <zonky.version>2.5.1</zonky.version>
     </properties>
 
     <dependencyManagement>
@@ -93,25 +96,27 @@
         <pluginManagement>
             <plugins>
                 <plugin>
-                    <groupId>external.atlassian.jgitflow</groupId>
-                    <artifactId>jgitflow-maven-plugin</artifactId>
-                    <version>1.0-m5.1</version>
+                    <groupId>com.diffplug.spotless</groupId>
+                    <artifactId>spotless-maven-plugin</artifactId>
+                    <version>${spotless.version}</version>
                     <configuration>
-                        <!-- see goals wiki page for configuration options -->
-                        <flowInitContext>
-                            <masterBranchName>master</masterBranchName>
-                            <developBranchName>develop</developBranchName>
-                            <featureBranchPrefix>feature/</featureBranchPrefix>
-                            <releaseBranchPrefix>release/</releaseBranchPrefix>
-                            <hotfixBranchPrefix>hotfix/</hotfixBranchPrefix>
-                            <versionTagPrefix>klass_v</versionTagPrefix>
-                        </flowInitContext>
-                        <pushReleases>true</pushReleases>
-                        <scmCommentPrefix>[RELEASE]-</scmCommentPrefix>
-                        <noDeploy>true</noDeploy>
-                        <autoVersionSubmodules>true</autoVersionSubmodules>
-                        <arguments>-Pdocumentation -Dmaven.javadoc.skip=true -pl :klass-api -am</arguments>
-                        <allowSnapshots>true</allowSnapshots>
+                        <java>
+                            <includes>
+                                <include>klass-api/src/main/java/**/*.java</include>
+                                <include>klass-api/src/test/java/**/*.java</include>
+                                <include>klass-shared/src/main/java/**/*.java</include>
+                                <include>klass-shared/src/test/java/**/*.java</include>
+                                <include>klass-mail/src/main/java/**/*.java</include>
+                                <include>klass-mail/src/test/java/**/*.java</include>
+                            </includes>
+                            <importOrder/>
+                            <removeUnusedImports/>
+                            <googleJavaFormat>
+                                <style>AOSP</style>
+                                <reflowLongStrings>true</reflowLongStrings>
+                                <formatJavadoc>false</formatJavadoc>
+                            </googleJavaFormat>
+                        </java>
                     </configuration>
                 </plugin>
                 <plugin>
