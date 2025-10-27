@@ -22,7 +22,6 @@ import no.ssb.klass.core.util.KlassResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.solr.core.query.result.FacetAndHighlightPage;
@@ -54,9 +53,7 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 
 @RestController
-// NOTE: CrossOrigin config moved to KlassSecurityConfiguration
-// due to conditional behavior where some requests didn't get CORS headers and cause cache problems
-@RequestMapping(value = {RestConstants.PREFIX_AND_API_VERSION_V1, RestConstants.API_VERSION_V1, "/rest/v1"},
+@RequestMapping(value = {RestConstants.CONTEXT_AND_VERSION_V1},
         produces = {MediaTypes.HAL_JSON_VALUE, "application/*", "text/csv"})
 public class ClassificationController {
     private static final Logger log = LoggerFactory.getLogger(ClassificationController.class);
@@ -65,9 +62,6 @@ public class ClassificationController {
     private final SearchService searchService;
     private final StatisticsService statisticsService;
     private final CsvFieldsValidator csvFieldsValidator;
-
-    @Value("${spring.data.rest.base-path:}")
-    private String basePath;
 
     @Autowired
     public ClassificationController(ClassificationService classificationService,

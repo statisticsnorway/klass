@@ -1,21 +1,19 @@
 package no.ssb.klass.api.applicationtest;
 
-import static io.restassured.RestAssured.*;
-import static org.hamcrest.Matchers.*;
-
-import no.ssb.klass.testutil.TestDataProvider;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpStatus;
-
 import io.restassured.http.ContentType;
-
+import no.ssb.klass.api.util.RestConstants;
 import no.ssb.klass.core.model.ClassificationFamily;
 import no.ssb.klass.core.model.ClassificationVariant;
 import no.ssb.klass.core.model.User;
 import no.ssb.klass.core.util.DraftUtil;
-import no.ssb.klass.api.util.RestConstants;
+import no.ssb.klass.testutil.TestDataProvider;
 import no.ssb.klass.testutil.TestUtil;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
+
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.hasSize;
 
 /**
  * @author Mads Lundemo, SSB.
@@ -85,7 +83,7 @@ public class RestApiDraftIntegrationTest extends AbstractRestApiApplicationTest 
     @Test
     public void testThatDraftVariantIsNotExposed() {
         given().port(port).accept(ContentType.JSON)
-                .get(RestConstants.API_VERSION_V1 + "/versions/" + familieGrupperingCodelist.getClassificationVersions().get(0).getId())
+                .get(RestConstants.CONTEXT_AND_VERSION_V1 + "/versions/" + familieGrupperingCodelist.getClassificationVersions().get(0).getId())
 //                .prettyPeek()
                 .then()
                 .statusCode(HttpStatus.OK.value())
@@ -97,7 +95,7 @@ public class RestApiDraftIntegrationTest extends AbstractRestApiApplicationTest 
     @Test
     public void testThatDraftVariantIncludeFutureVersionIsNotExposed() {
         given().port(port).accept(ContentType.JSON).param("includeFuture", true)
-                .get(RestConstants.API_VERSION_V1 + "/versions/" + familieGrupperingCodelist.getClassificationVersions().get(0).getId())
+                .get(RestConstants.CONTEXT_AND_VERSION_V1 + "/versions/" + familieGrupperingCodelist.getClassificationVersions().get(0).getId())
 //                .prettyPeek()
                 .then()
                 .statusCode(HttpStatus.OK.value())
@@ -110,7 +108,7 @@ public class RestApiDraftIntegrationTest extends AbstractRestApiApplicationTest 
     @Test
     public void testThatDraftCorrespondenceIsNotExposed() {
         given().port(port).accept(ContentType.JSON)
-                .get(RestConstants.API_VERSION_V1 + "/versions/" + kommuneinndeling.getClassificationVersions().get(0).getId())
+                .get(RestConstants.CONTEXT_AND_VERSION_V1 + "/versions/" + kommuneinndeling.getClassificationVersions().get(0).getId())
 //                .prettyPeek()
                 .then()
                 .statusCode(HttpStatus.OK.value())
@@ -122,7 +120,7 @@ public class RestApiDraftIntegrationTest extends AbstractRestApiApplicationTest 
     @Test
     public void testThatDraftCorrespondenceIncludeFutureVersionIsNotExposed() {
         given().port(port).accept(ContentType.JSON).param("includeFuture", true)
-                .get(RestConstants.API_VERSION_V1 + "/versions/" + kommuneinndeling.getClassificationVersions().get(0).getId())
+                .get(RestConstants.CONTEXT_AND_VERSION_V1 + "/versions/" + kommuneinndeling.getClassificationVersions().get(0).getId())
 //                .prettyPeek()
                 .then()
                 .statusCode(HttpStatus.OK.value())

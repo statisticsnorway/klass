@@ -7,5 +7,6 @@ public final class RestConstants {
 
     public static final String DATE_FORMAT = "yyyy-MM-dd";
     public static final String API_VERSION_V1 = "/v1";
-    public static final String PREFIX_AND_API_VERSION_V1 = "/api/klass/v1";
+    public static final String CONTEXT_PATH = "/api/klass";
+    public static final String CONTEXT_AND_VERSION_V1 = CONTEXT_PATH + API_VERSION_V1;
 }
