@@ -17,24 +17,32 @@ updates:
       interval: "weekly"
     groups:
       klass-root:
+        patterns:
+          - "*"
   - package-ecosystem: "maven" # See documentation for possible values
     directory: "/klass-api" # Location of package manifests
     schedule:
       interval: "weekly"
     groups:
       klass-api:
+        patterns:
+          - "*"
   - package-ecosystem: "maven" # See documentation for possible values
     directory: "/klass-shared" # Location of package manifests
     schedule:
       interval: "weekly"
     groups:
       klass-shared:
+        patterns:
+          - "*"
   - package-ecosystem: "maven" # See documentation for possible values
     directory: "/klass-mail" # Location of package manifests
     schedule:
       interval: "weekly"
     groups:
       klass-mail:
+        patterns:
+          - "*"
   - package-ecosystem: "github-actions" # See documentation for possible values
     directory: "/" # Location of package manifests
     schedule:
