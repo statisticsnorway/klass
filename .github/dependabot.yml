@@ -9,8 +9,9 @@ updates:
     directory: "/" # Location of package manifests
     exclude-paths:
       - /klass-forvaltning  # Versions can't be upgraded due to Vaadin
+      - /klass-solr  # Not necessary to update
       - /klass-api  # Has its own config below
-      - /klass-forvaltning  # Has its own config below
+      - /klass-shared  # Has its own config below
       - /klass-mail  # Has its own config below
     schedule:
       interval: "weekly"
