@@ -83,7 +83,7 @@ run-klass-forvaltning-local-postgres-search:
 run-klass-api-local-postgres:
 	pushd klass-api && \
 	${sdk} env && \
-	mvn spring-boot\:run  -Dspring.profiles.active=postgres-local,hardcoded-user,embedded-solr,mock-mailserver,api,skip-indexing,small-import,ad-offline; \
+	mvn spring-boot\:run  -Dspring.profiles.active=api,postgres-local,hardcoded-user,mock-search,mock-mailserver,small-import; \
 	popd; \
 	${sdk} env clear
 

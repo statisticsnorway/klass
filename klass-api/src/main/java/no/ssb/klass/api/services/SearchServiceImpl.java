@@ -1,32 +1,31 @@
 package no.ssb.klass.api.services;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
+import no.ssb.klass.api.config.OpenSearchConfig;
+import no.ssb.klass.core.model.SoftDeletable;
+import no.ssb.klass.core.repository.ClassificationSeriesRepository;
+import no.ssb.klass.core.util.TimeUtil;
+import org.opensearch.data.client.orhlc.OpenSearchRestTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.opensearch.data.client.orhlc.OpenSearchRestTemplate;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
 import org.springframework.data.elasticsearch.core.query.IndexQuery;
 import org.springframework.data.elasticsearch.core.query.IndexQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.Query;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Service;
 
-import no.ssb.klass.core.model.SoftDeletable;
-import no.ssb.klass.core.repository.ClassificationSeriesRepository;
-
-import no.ssb.klass.core.util.TimeUtil;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 @Service
-@ConditionalOnBean(OpenSearchRestTemplate.class)
+@ConditionalOnBean({OpenSearchRestTemplate.class, OpenSearchConfig.class})
 public class SearchServiceImpl implements SearchService {
     private static final Logger log = LoggerFactory.getLogger(SearchServiceImpl.class);
 
@@ -77,9 +76,9 @@ public class SearchServiceImpl implements SearchService {
     /**
      * Search for public classifications (filtering out copyrighted and not published)
      *
-     * @param query query to match, may be many words. Each word will then be searched for
+     * @param query            query to match, may be many words. Each word will then be searched for
      * @param pageable
-     * @param filterOnSection null means all sections
+     * @param filterOnSection  null means all sections
      * @param includeCodeLists
      * @return searchResults
      */

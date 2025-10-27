@@ -1,9 +1,7 @@
 package no.ssb.klass.api.services;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
-import java.util.*;
-
+import no.ssb.klass.api.config.OpenSearchConfig;
+import no.ssb.klass.core.config.ConfigurationProfiles;
 import no.ssb.klass.core.model.*;
 import no.ssb.klass.core.repository.ClassificationSeriesRepository;
 import no.ssb.klass.core.util.TimeUtil;
@@ -13,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
 import org.springframework.data.elasticsearch.core.query.IndexQuery;
 import org.springframework.data.elasticsearch.core.query.IndexQueryBuilder;
@@ -20,7 +20,16 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static com.google.common.base.Preconditions.checkNotNull;
+
 @Service
+@Profile("!" + ConfigurationProfiles.MOCK_SEARCH)
+@ConditionalOnBean({OpenSearchRestTemplate.class, OpenSearchConfig.class})
 public class IndexServiceImpl implements IndexService {
 
     private static final Logger log = LoggerFactory.getLogger(IndexServiceImpl.class);

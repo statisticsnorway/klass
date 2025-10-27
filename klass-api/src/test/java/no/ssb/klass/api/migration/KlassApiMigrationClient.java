@@ -9,7 +9,8 @@ import no.ssb.klass.api.util.RestConstants;
 import java.util.Map;
 import java.util.Objects;
 
-import static no.ssb.klass.api.migration.MigrationTestConstants.*;
+import static no.ssb.klass.api.migration.MigrationTestConstants.ACCEPT;
+import static no.ssb.klass.api.migration.MigrationTestConstants.CLASSIFICATIONS_PATH;
 import static no.ssb.klass.api.migration.dataintegrity.AbstractKlassApiDataIntegrityTest.sourceHost;
 import static no.ssb.klass.api.migration.dataintegrity.AbstractKlassApiDataIntegrityTest.targetHost;
 
@@ -21,24 +22,19 @@ public class KlassApiMigrationClient {
     public KlassApiMigrationClient() {
         this.sourceApi = new RequestSpecBuilder()
                 .setBaseUri(sourceHost)
-                .setBasePath(BASE_PATH + RestConstants.API_VERSION_V1)
+                .setBasePath(RestConstants.PREFIX_AND_API_VERSION_V1)
                 .build();
-
 
 
         this.targetApi = new RequestSpecBuilder()
                 .setBaseUri(targetHost)
-                .setBasePath(BASE_PATH + RestConstants.API_VERSION_V1)
+                .setBasePath(RestConstants.PREFIX_AND_API_VERSION_V1)
                 .build();
     }
 
     public boolean isApiAvailable(String host) {
         try {
-            Response response = switch (host) {
-                case DATA_SSB_HOST, NAIS_PROD_HOST, NAIS_TEST_HOST -> RestAssured.get(host + BASE_PATH + "/ping");
-                default -> RestAssured.get(host + "/ping");
-            };
-            return response.getStatusCode() == 200;
+            return RestAssured.get(host + RestConstants.PREFIX_AND_API_VERSION_V1 + CLASSIFICATIONS_PATH).getStatusCode() == 200;
         } catch (Exception e) {
             return false;
         }
