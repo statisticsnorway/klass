@@ -54,19 +54,11 @@ build-clean-klass-api:
  	popd; \
 	${sdk} env clear
 
-.PHONY: run-klass-forvaltning-local
-run-klass-forvaltning-local:
-	pushd klass-forvaltning && \
-	${sdk} env && \
-	mvn spring-boot\:run; \
-	popd; \
-	${sdk} env clear
-
 .PHONY: run-klass-forvaltning-local-postgres
 run-klass-forvaltning-local-postgres:
 	pushd klass-forvaltning && \
 	${sdk} env && \
-	mvn spring-boot\:run  -Dspring.profiles.active=postgres-local,hardcoded-user,embedded-solr,frontend,skip-indexing,small-import,ad-offline; \
+	mvn spring-boot\:run  -Dspring-boot.run.profiles=frontend,postgres-local,hardcoded-user,mock-search,mock-mailserver,small-import,skip-indexing; \
 	popd; \
 	${sdk} env clear
 
@@ -74,7 +66,7 @@ run-klass-forvaltning-local-postgres:
 run-klass-forvaltning-local-postgres-search:
 	pushd klass-forvaltning && \
 	${sdk} env && \
-	mvn spring-boot\:run -Dspring.profiles.active=postgres-local,hardcoded-user,frontend,skip-indexing,small-import,ad-offline,remote-solr -Dklass.env.search.solr.url=http://localhost:8983/solr/; \
+	mvn spring-boot\:run -Dspring-boot.run.profiles=frontend,postgres-local,hardcoded-user,mock-mailserver,small-import,skip-indexing,remote-solr -Dklass.env.search.solr.url=http://localhost:8983/solr/; \
 	popd; \
 	${sdk} env clear
 
@@ -83,7 +75,7 @@ run-klass-forvaltning-local-postgres-search:
 run-klass-api-local-postgres:
 	pushd klass-api && \
 	${sdk} env && \
-	mvn spring-boot\:run  -Dspring.profiles.active=api,postgres-local,hardcoded-user,mock-search,mock-mailserver,small-import; \
+	mvn spring-boot\:run  -Dspring-boot.run.profiles=api,postgres-local,hardcoded-user,mock-search,mock-mailserver,small-import; \
 	popd; \
 	${sdk} env clear
 
