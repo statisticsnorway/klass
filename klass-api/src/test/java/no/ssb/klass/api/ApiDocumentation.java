@@ -22,7 +22,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.data.domain.Page;
@@ -95,8 +94,6 @@ public class ApiDocumentation {
 
     private String server = "data.ssb.no";
     private int port = 443;
-    @Value("${klass.env.api.path}")
-    private String contextPath;
 
     @BeforeEach
     public void setup(RestDocumentationContextProvider restDocumentation) {
@@ -1217,15 +1214,13 @@ public class ApiDocumentation {
     public MockHttpServletRequestBuilder getWithContext(String urlTemplate,
                                                         Object... urlVariables) {
         return MockMvcRequestBuilders
-                .get(contextPath + RestConstants.API_VERSION_V1 + urlTemplate, urlVariables)
-                .requestAttr(RestDocumentationGenerator.ATTRIBUTE_NAME_URL_TEMPLATE, urlTemplate)
-                .contextPath(contextPath);
+                .get(RestConstants.CONTEXT_AND_VERSION_V1 + urlTemplate, urlVariables)
+                .requestAttr(RestDocumentationGenerator.ATTRIBUTE_NAME_URL_TEMPLATE, urlTemplate);
     }
 
     public MockHttpServletRequestBuilder getWithContextUri(String url) {
-        return MockMvcRequestBuilders.get(toUri(contextPath + RestConstants.API_VERSION_V1 + url))
-                .requestAttr(RestDocumentationGenerator.ATTRIBUTE_NAME_URL_TEMPLATE, url)
-                .contextPath(contextPath);
+        return MockMvcRequestBuilders.get(toUri(RestConstants.CONTEXT_AND_VERSION_V1 + url))
+                .requestAttr(RestDocumentationGenerator.ATTRIBUTE_NAME_URL_TEMPLATE, url);
     }
 
     private Page<SolrSearchResult> createSearchPage(Pageable pageable) {

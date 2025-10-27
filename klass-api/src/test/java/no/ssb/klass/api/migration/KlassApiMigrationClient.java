@@ -21,14 +21,13 @@ public class KlassApiMigrationClient {
     public KlassApiMigrationClient() {
         this.sourceApi = new RequestSpecBuilder()
                 .setBaseUri(sourceHost)
-                .setBasePath(BASE_PATH + RestConstants.API_VERSION_V1)
+                .setBasePath(RestConstants.CONTEXT_AND_VERSION_V1)
                 .build();
-
 
 
         this.targetApi = new RequestSpecBuilder()
                 .setBaseUri(targetHost)
-                .setBasePath(BASE_PATH + RestConstants.API_VERSION_V1)
+                .setBasePath(RestConstants.CONTEXT_AND_VERSION_V1)
                 .build();
     }
 
