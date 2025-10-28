@@ -63,11 +63,45 @@ Tips: If you are only setting up Klass for testing/development purposes you can 
 - Java 17: `sdk install java 17.0.15-tem`
 - Java 8 (for Klass Forvaltning): `sdk install java 8.0.452-tem`
 
+### Code Quality configuration
+
+We follow a multi-layered approach based on the "shift-left" philosophy where problems are addressed as early as possible, ideally while writing the code in the IDE. Checks are performed at three stages:
+
+- In the IDE through extensions
+- As a pre-commit hook
+- In CI/CD as a hard check on PRs
+
+Developers are encouraged to install the IDE plugins/extensions and the pre-commit hooks to avoid pain at the PR stage.
+
+#### Plugins/extensions
+
+##### IntelliJ
+
+- https://plugins.jetbrains.com/plugin/7973-sonarqube-for-ide
+- https://plugins.jetbrains.com/plugin/22455-spotless-applier
+
+#### Pre-commit hooks
+
+- Run the following command to install code-formatting pre-commit hooks:
+    ```
+    mvn spotless:install-git-pre-push-hook -pl '!:klass-forvaltning'
+    ```
+
+#### Lint
+
+We use Sonarqube for linting. This runs a range of checks on code quality. It runs in CI/CD and it's a good idea to install the extension in your IDE to get feedback as you code.
+
+#### Formatting
+
+We use Spotless and google-java-format for code formatting. This avoids unproductive discussions about minutiae of bracket placement etc. Make sure it runs in your IDE and you install the pre-commit hook
+
 ### Configuration
+
+#### GitHub Packages
 
 In order to download dependencies from GitHub Packages we must authenticate Maven. See the documentation here: <https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-apache-maven-registry#authenticating-with-a-personal-access-token>
 
-This may be done by generating a Personal Access Token (classic) on GitHub with the `read:packages` scope. Remember to configure SSO. The following configuration may then be placed in your `~/.m2/settings.xml` file.
+This may be done by generating a Personal Access Token (classic) on GitHub with the `write:packages` scope. Remember to configure SSO. The following configuration may then be placed in your `~/.m2/settings.xml` file.
 
 ```xml
 
@@ -80,7 +114,12 @@ This may be done by generating a Personal Access Token (classic) on GitHub with 
 </servers>
 ```
 
+#### Docker
+
+##### Colima on Mac
+
 Colima should have at least 5G memory and the project folder must be mounted. Change this in `~/.colima/default/colima.yaml` e.g.
+
 ```yaml
 memory: 5
 ...
@@ -98,24 +137,31 @@ Each app has an `.sdkmanrc` file which may be used to configure the Java version
 ### Klass API
 
 #### Build
+
 Build the app: `make build-klass-api`
 
 #### Docker compose
-Service `klass-api` requires a prebuild tagged image. 
+
+Service `klass-api` requires a prebuild tagged image.
 
 Run command in `klass-api` module:
+
 ```
 docker build -t target-postgres-image:latest .
 ```
-This service depends on a Postgresql db container. 
+
+This service depends on a Postgresql db container.
 
 For testing with MariaDB build `klass-api` with `klass-shared` version `3.0.5-master-SNAPSHOT`.
 
-This will build klass-api without running tests: 
+This will build klass-api without running tests:
+
 ```
 mvn clean install -DskipTests -pl klass-api
 ```
+
 And build mariadb image in klass-api module:
+
 ```
 docker build -t source-mariadb-image:latest .
 ```
@@ -134,29 +180,11 @@ Visit <http://127.0.0.1:8081/klassui>
 
 ### Spring profiles
 
-Klass API and Klass Forvaltning utilize Spring boot and heavily rely on Spring Profiles to make development and debugging easier.
-below is a quick summary of the profiles available (see _application.properties_ for more details)
-
-```
-# Application profiles:
-#----------------------
-# Profiles for production
-#   production          = no test beans and only Active Directory login
-#   mariadb             = use remote mariaDB database
-#   remote-solr         = use remote Solr server
-#
-# Profiles for development
-#   ad-offline          = will only use test/embeded AD (apacheDS) [Forvaltning only]
-#   small-import        = imports a small number of classifications from legacy system, useful during development
-#   mock-mailserver     = outgoing emails are only logged
-#   h2                  = use h2 database (stored on your filesystem)
-#   h2-inmemory         = use h2 database but keep everything in memory only.
-#   embedded-solr       = run an instance of solr as part of the application (no need to run a separate solr application)
-```
+Klass API and Klass Forvaltning utilize Spring boot and heavily rely on Spring Profiles to make development and debugging easier. See _application.properties_ for the available profiles.
 
 ### Build profiles
 
-we have created custom profiles for time consuming tests that can be toggled on and off to help speed up compile time during development.
+we have created custom profiles for time-consuming tests that can be toggled on and off to help speed up compile time during development.
 The profile named `documentation` will generate API documentation with AsciiDoc (default: enabled)
 We also have a custom profile (`testbench`) for running GUI tests using TestBench (Vaadin licensed product).
 
@@ -184,19 +212,5 @@ Frontend may be accessed at:
 REST api documentation may be accessed at
 
 <http://localhost:8081/api/klass/v1/api-guide.html>
-
-## Troubleshooting
-
-### Known issues
-
-#### build fails due to encoding issues(æøå)
-
-Windows defaults to ascii and java/maven/surefire? does for some reason use this even though utf-8 has been specified everywhere.
-The current solution to this problem is to add an environment variable `JAVA_TOOL_OPTIONS` with value `-Dfile.encoding=UTF-8` to your system.
-
-#### Application running in intelliJ wont show monitor page or CSS
-
-_Intellij 2019.1_ and earlier does not seem to detect the correct work directory and files placed in the webapp directory might not be available to the application.
-the solution is to set workdir manually in your run configuration (set it to `$MODULE_WORKING_DIR$`)
 
 [![IntelliJ](docs/troubleshoot_workdir_small.png)](./docs/troubleshoot_workdir.png)
