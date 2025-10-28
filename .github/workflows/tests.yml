@@ -41,7 +41,7 @@ jobs:
 
       # Build all modules except klass-forvaltning since it is not compatible with JDK 17
       - name: Build and test
-        run: mvn --batch-mode --update-snapshots package -pl '!:klass-forvaltning'
+        run: mvn --batch-mode --update-snapshots package
 
       - name: SonarQube Cloud Scan
         run: mvn --batch-mode sonar:sonar
@@ -59,7 +59,8 @@ jobs:
 
       # Build only klass-forvaltning with JDK 1.8
       - name: Build and test Klass Forvaltning
-        run: mvn --batch-mode --update-snapshots package -Djava.version=1.8 -pl :klass-forvaltning -am
+        working-directory: klass-forvaltning
+        run: mvn --batch-mode --update-snapshots package -Djava.version=1.8 -am
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
