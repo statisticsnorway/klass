@@ -1,21 +1,36 @@
 name: Tests
 run-name: "Build, run tests, package and deploy"
+permissions:
+  contents: read
+  packages: read
 
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
     paths-ignore:
       - '**.md'
 
 jobs:
-  build:
-    strategy:
-      matrix:
-        os: [ 'ubuntu-latest', 'macos-latest' ]
-    runs-on: ${{ matrix.os }}
+  check-code-format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: '0'
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: maven
 
+      - name: Check code format
+        run: mvn --batch-mode fmt:check
+
+  build:
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK 17
@@ -25,10 +40,20 @@ jobs:
           java-version: '17'
           cache: maven
 
-      # Build all modules except klass-forvaltning since it is not compatible with JDK 17
-      - name: Build, test and package with Maven
-        run: mvn --batch-mode --update-snapshots package -pl '!:klass-forvaltning'
+      - name: Build and test
+        run: mvn --batch-mode --update-snapshots package
 
+      - name: SonarQube Cloud Scan
+        run: mvn --batch-mode sonar:sonar
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  build-klass-forvaltning:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
+    steps:
       - uses: actions/checkout@v3
       - name: Set up JDK 1.8
         uses: actions/setup-java@v4
@@ -38,8 +63,9 @@ jobs:
           cache: maven
 
       # Build only klass-forvaltning with JDK 1.8
-      - name: Build, test and package with Maven
-        run: mvn --batch-mode --update-snapshots package -Djava.version=1.8 -pl :klass-forvaltning -am
+      - name: Build and test Klass Forvaltning
+        working-directory: klass-forvaltning
+        run: mvn --batch-mode --update-snapshots package -Djava.version=1.8 -am
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
