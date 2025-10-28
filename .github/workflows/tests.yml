@@ -45,9 +45,14 @@ jobs:
 
       - name: SonarQube Cloud Scan
         run: mvn --batch-mode sonar:sonar
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   build-klass-forvaltning:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK 1.8
