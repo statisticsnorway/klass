@@ -1,15 +1,18 @@
 package no.ssb.klass.api.controllers;
 
+import io.swagger.v3.oas.annotations.Hidden;
+
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author Mads Lundemo, SSB.
  */
-@Controller
+@Hidden
+@RestController
 public class PingController {
     public static final String PATH = "/ping";
 

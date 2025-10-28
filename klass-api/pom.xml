@@ -67,6 +67,11 @@
             <version>1.8.0</version>
         </dependency>
         <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-hateoas</artifactId>
+            <version>1.8.0</version>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-solr</artifactId>
         </dependency>
