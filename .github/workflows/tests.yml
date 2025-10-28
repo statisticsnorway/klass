@@ -4,18 +4,40 @@ run-name: "Build, run tests, package and deploy"
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
     paths-ignore:
       - '**.md'
 
 jobs:
-  build:
-    strategy:
-      matrix:
-        os: [ 'ubuntu-latest', 'macos-latest' ]
-    runs-on: ${{ matrix.os }}
+  check-code-format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: maven
 
+      - name: Check code format
+        run: mvn --batch-mode spotless:check
+
+  sonarcloud-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: SonarQube Cloud Scan
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        # No need to run SonarCloud analysis if dependabot update or token not defined
+        if: env.SONAR_TOKEN != '' && (github.actor != 'dependabot[bot]')
+        uses: SonarSource/sonarqube-scan-action@v6.0.0
+
+
+  build:
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK 17
@@ -26,9 +48,12 @@ jobs:
           cache: maven
 
       # Build all modules except klass-forvaltning since it is not compatible with JDK 17
-      - name: Build, test and package with Maven
+      - name: Build and test
         run: mvn --batch-mode --update-snapshots package -pl '!:klass-forvaltning'
 
+  build-klass-forvaltning:
+    runs-on: ubuntu-latest
+    steps:
       - uses: actions/checkout@v3
       - name: Set up JDK 1.8
         uses: actions/setup-java@v4
@@ -38,7 +63,7 @@ jobs:
           cache: maven
 
       # Build only klass-forvaltning with JDK 1.8
-      - name: Build, test and package with Maven
+      - name: Build and test Klass Forvaltning
         run: mvn --batch-mode --update-snapshots package -Djava.version=1.8 -pl :klass-forvaltning -am
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
