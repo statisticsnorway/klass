@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>no.ssb.klass</groupId>
@@ -11,6 +12,10 @@
         <artifactId>klass-root</artifactId>
         <version>4.0.5-SNAPSHOT</version>
     </parent>
+
+    <properties>
+        <sonar.skip>true</sonar.skip>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -84,7 +89,7 @@
             <version>7.4</version>
         </dependency>
     </dependencies>
-    
+
     <build>
         <testResources>
             <testResource>
@@ -94,7 +99,7 @@
                 </excludes>
             </testResource>
         </testResources>
-        
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
