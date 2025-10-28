@@ -2,6 +2,7 @@ name: Tests
 run-name: "Build, run tests, package and deploy"
 permissions:
   contents: read
+  packages: read
 
 on:
   push:
@@ -26,7 +27,7 @@ jobs:
           cache: maven
 
       - name: Check code format
-        run: mvn --batch-mode spotless:check
+        run: mvn --batch-mode fmt:check
 
   build:
     runs-on: ubuntu-latest
@@ -39,7 +40,6 @@ jobs:
           java-version: '17'
           cache: maven
 
-      # Build all modules except klass-forvaltning since it is not compatible with JDK 17
       - name: Build and test
         run: mvn --batch-mode --update-snapshots package
 

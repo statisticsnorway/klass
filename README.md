@@ -68,24 +68,16 @@ Tips: If you are only setting up Klass for testing/development purposes you can 
 We follow a multi-layered approach based on the "shift-left" philosophy where problems are addressed as early as possible, ideally while writing the code in the IDE. Checks are performed at three stages:
 
 - In the IDE through extensions
-- As a pre-commit hook
 - In CI/CD as a hard check on PRs
 
-Developers are encouraged to install the IDE plugins/extensions and the pre-commit hooks to avoid pain at the PR stage.
+Developers are encouraged to install the IDE plugins/extensions to avoid pain at the PR stage.
 
 #### Plugins/extensions
 
 ##### IntelliJ
 
 - https://plugins.jetbrains.com/plugin/7973-sonarqube-for-ide
-- https://plugins.jetbrains.com/plugin/22455-spotless-applier
-
-#### Pre-commit hooks
-
-- Run the following command to install code-formatting pre-commit hooks:
-    ```
-    mvn spotless:install-git-pre-push-hook -pl '!:klass-forvaltning'
-    ```
+- https://plugins.jetbrains.com/plugin/8527-google-java-format
 
 #### Lint
 
@@ -93,7 +85,7 @@ We use Sonarqube for linting. This runs a range of checks on code quality. It ru
 
 #### Formatting
 
-We use Spotless and google-java-format for code formatting. This avoids unproductive discussions about minutiae of bracket placement etc. Make sure it runs in your IDE and you install the pre-commit hook
+We use google-java-format for code formatting. This avoids unproductive discussions about minutiae of bracket placement etc. Make sure it runs in your IDE and you install the pre-commit hook
 
 ### Configuration
 
