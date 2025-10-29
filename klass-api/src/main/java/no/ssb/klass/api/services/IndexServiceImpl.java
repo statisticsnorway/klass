@@ -137,7 +137,7 @@ public class IndexServiceImpl implements IndexService {
                 .filter(language -> !classification.getName(language).isEmpty())
                 .forEach(language -> indexLanguage(classification, language));
 
-        elasticsearchOperations.indexOps(getIndexCoordinates()).refresh();
+        elasticsearchOperations.indexOps(getIndexCoordinates());
         log.info("Indexing: {} took (ms): {}", classification.getNameInPrimaryLanguage(),
                 TimeUtil.millisecondsSince(start));
     }
