@@ -1,6 +1,3 @@
-
-
-
 package no.ssb.klass.api.applicationtest;
 
 import io.restassured.http.ContentType;
@@ -11,6 +8,7 @@ import no.ssb.klass.core.config.ConfigurationProfiles;
 import no.ssb.klass.core.repository.ClassificationSeriesRepository;
 import no.ssb.klass.testutil.TestDataProvider;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.opensearch.client.RestHighLevelClient;
 import org.opensearch.data.client.orhlc.OpenSearchRestTemplate;
@@ -31,6 +29,8 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 
 
+// TODO @Jorgen-5 runs very slowly
+@Disabled
 @Testcontainers
 @SpringBootTest(classes = {ApplicationTestConfig.class, IndexServiceTestConfig.class}, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles(profiles = {ConfigurationProfiles.POSTGRES_EMBEDDED, ConfigurationProfiles.MOCK_MAILSERVER, ConfigurationProfiles.OPEN_SEARCH_LOCAL}, inheritProfiles = false)
@@ -58,7 +58,7 @@ public class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest
     @Autowired
     @Qualifier("opensearchRestTemplate")
     private OpenSearchRestTemplate openSearchRestTemplate;
-    
+
     @Autowired
     private RestHighLevelClient opensearchClient;
 

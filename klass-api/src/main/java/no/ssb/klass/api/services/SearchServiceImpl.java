@@ -19,6 +19,9 @@ import org.springframework.stereotype.Service;
 
 import no.ssb.klass.core.repository.ClassificationSeriesRepository;
 import no.ssb.klass.core.util.TimeUtil;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 @Service
 @ConditionalOnBean(OpenSearchRestTemplate.class)

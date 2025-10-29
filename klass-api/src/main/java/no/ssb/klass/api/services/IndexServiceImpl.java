@@ -6,6 +6,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import jakarta.annotation.PostConstruct;
+import no.ssb.klass.api.config.OpenSearchConfig;
+import no.ssb.klass.core.config.ConfigurationProfiles;
 import no.ssb.klass.core.model.*;
 import no.ssb.klass.core.repository.ClassificationSeriesRepository;
 import no.ssb.klass.core.util.TimeUtil;
