@@ -40,7 +40,7 @@ spec:
   owner: dapla-metadata-developers
   system: metadata
   definition:
-    $text: .
+    $text: https://data.ssb.no/api/klass/v3/api-docs.yaml
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Component
