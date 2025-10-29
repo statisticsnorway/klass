@@ -32,7 +32,7 @@ public class ReIndexService {
      * asynchronous indexing for each one. The job is scheduled to run every day at 23:30.
      * </p>
      */
-    @Scheduled(cron = "0 0 * * * *")
+    @Scheduled(cron = "0 30 23 * * *")
     public void runDailyIndexJob() {
         log.info("Starting scheduled index job at 23:30");
 
