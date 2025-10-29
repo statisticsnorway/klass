@@ -9,19 +9,29 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ *  Service responsible for re-indexing classification series into the search index.
+ */
 @Service
-public class ReIndexTransactionService {
-    private static final Logger log = LoggerFactory.getLogger(ReIndexTransactionService.class);
+public class ReIndexService {
+    private static final Logger log = LoggerFactory.getLogger(ReIndexService.class);
 
     private final ClassificationSeriesRepository classificationRepository;
     private final IndexService indexService;
 
     @Autowired
-    public ReIndexTransactionService(ClassificationSeriesRepository classificationRepository, IndexService indexService) {
+    public ReIndexService(ClassificationSeriesRepository classificationRepository, IndexService indexService) {
         this.classificationRepository = classificationRepository;
         this.indexService = indexService;
     }
 
+    /**
+     * Executes a daily scheduled job
+     * <p>
+     * This method retrieves all classification IDs from repository and triggers
+     * asynchronous indexing for each one. The job is scheduled to run every day at 23:30.
+     * </p>
+     */
     @Scheduled(cron = "0 30 23 * * *")
     public void runDailyIndexJob() {
         log.info("Starting scheduled index job at 23:30");
