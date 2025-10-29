@@ -10,6 +10,14 @@
 :webfonts!:
 
 == Overview
+=== Introduction
+Klass is Statistics Norway's system for documentation of classifications and code lists. This API provides read-only access to classifications and code lists.
+
+Classifications are "official", and in a classification, the categories at each level must be mutually exclusive and complete, i.e. the classification contains all categories that belong to the area covered by the classification. Code lists are not "official". They may be adapted to a one particular statistic and do not have to be mutually exclusive or complete.
+
+=== Alternative documentation
+We now provide OpenAPI documentation with a Swagger UI. Available here: https://data.ssb.no/api/klass/swagger-ui/index.html
+
 === REST Client
 Examples in this documentation use https://en.wikipedia.org/wiki/CURL[curl]. The `-i` parameter in the examples includes the HTTP response headers. Be aware that when running Curl on MS Windows all single ' have to be replaced by double ". If Curl is not installed, an alternative is
 to use any REST client to explore Klass Rest interface, like https://www.getpostman.com/product/api-client[Postman] or address field in the browser.
@@ -48,7 +56,7 @@ will produce a `404 Not Found` response:
 include::{snippets}/error-example/http-response.adoc[]
 
 === Output formats
-Default output format is XML. JSON is optional, and in many cases CSV. It is possible to get output in the supported output formats without using Curl `-H` (`--header`). Add the dot-prefix `.json`, `.csv` or `.xml` in the URL before the request parameters, 
+Default output format is XML. JSON is optional, and in many cases CSV. It is possible to get output in the supported output formats without using Curl `-H` (`--header`). Add the dot-prefix `.json`, `.csv` or `.xml` in the URL before the request parameters,
 e.g. json: https://data.ssb.no/api/klass/v1/classifications/104/codesAt.json?date=2020-01-01[https://data.ssb.no/api/klass/v1/classifications/104/codesAt.json?date=2020-01-01]. When adding this in the URL you only get the default character sets.
 
 === Character sets

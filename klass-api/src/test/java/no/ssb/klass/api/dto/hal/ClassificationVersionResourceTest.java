@@ -1,10 +1,14 @@
 package no.ssb.klass.api.dto.hal;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.google.common.collect.Lists;
+
 import no.ssb.klass.api.util.RestConstants;
 import no.ssb.klass.core.model.ClassificationVersion;
 import no.ssb.klass.core.model.Language;
 import no.ssb.klass.testutil.TestUtil;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -13,8 +17,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.LinkedList;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ClassificationVersionResourceTest {
 
@@ -35,7 +37,7 @@ public class ClassificationVersionResourceTest {
 
         // then
         assertEquals(1, subject.getLinks().toList().size());
-        assertEquals("http://localhost" + RestConstants.CONTEXT_AND_VERSION_V1 + "/versions/1",
+        assertEquals("http://localhost" + RestConstants.API_VERSION_V1 + "/versions/1",
                 subject.getLink("self").orElseThrow(() -> new RuntimeException("No link found")).getHref());
         assertEquals(version.getName(Language.getDefault()), subject.getName());
     }
