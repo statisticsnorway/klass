@@ -1,5 +1,6 @@
 package no.ssb.klass.api.services;
 
+import no.ssb.klass.api.config.OpenSearchConfig;
 import no.ssb.klass.core.model.ClassificationType;
 import no.ssb.klass.core.model.Language;
 import org.opensearch.index.query.BoolQueryBuilder;
@@ -38,9 +39,11 @@ public class PublicSearchQuery {
         BoolQueryBuilder finalQuery = QueryBuilders.boolQuery()
                 .must(QueryBuilders.queryStringQuery(query)
                         .field("title", 3.0f)
-                        .field("description", 1.0f)
-                        .field("codes", 2.0f)
-                        .defaultOperator(Operator.OR))
+                        .field("description", 2.0f)
+                        .field("codes", 1.0f)
+                        .defaultOperator(Operator.OR)
+                )
+
                 .filter(filterBuilder);
         
         NativeSearchQueryBuilder nativeQueryBuilder = new NativeSearchQueryBuilder()

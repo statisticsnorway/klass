@@ -18,7 +18,7 @@ import java.util.concurrent.CompletableFuture;
  * Read all classifications ids from database and then indexes them for search.
  */
 @Component
-@Profile("!" + ConfigurationProfiles.SKIP_INDEXING)
+@Profile({"!" + ConfigurationProfiles.SKIP_INDEXING + "&" + "!" + ConfigurationProfiles.MOCK_SEARCH})
 public class SearchIndexPopulator implements CommandLineRunner {
     private static final Logger log = LoggerFactory.getLogger(SearchIndexPopulator.class);
 

@@ -50,4 +50,5 @@ public class ApplicationTestConfig {
         // For integration tests with mock-search profile, return a fully mocked SearchService
         return Mockito.mock(IndexService.class);
     }
+
 }
