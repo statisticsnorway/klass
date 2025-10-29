@@ -1,0 +1,10 @@
+apiVersion: batch/v1
+kind: Naisjob
+metadata:
+  name: index-open-search
+  namespace: dapla-metadata
+spec:
+  schedule: "0 0  * * *"
+  image: {{ image }}
+
+  
