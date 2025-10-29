@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 
 import jakarta.annotation.PostConstruct;
 import no.ssb.klass.api.config.OpenSearchConfig;
-import no.ssb.klass.core.config.ConfigurationProfiles;
 import no.ssb.klass.core.model.*;
 import no.ssb.klass.core.repository.ClassificationSeriesRepository;
 import no.ssb.klass.core.util.TimeUtil;
@@ -49,7 +48,6 @@ public class IndexServiceImpl implements IndexService {
         return IndexCoordinates.of(elasticsearchIndex);
     }
 
-
     @PostConstruct
     private void createIndexWithStemmingAnalyzer() {
         try {
@@ -63,7 +61,7 @@ public class IndexServiceImpl implements IndexService {
             Map<String, Object> settings = Map.of(
                     "analysis", Map.of(
                             "analyzer", Map.of(
-                                    "norwegian_stemmer_analyzer", Map.of(
+                                    OpenSearchConfig.NORWEGIAN_STEMMER_ANALYZER, Map.of(
                                             "type", "custom",
                                             "tokenizer", "standard",
                                             "filter", List.of("lowercase", "norwegian_stemmer")
@@ -82,11 +80,18 @@ public class IndexServiceImpl implements IndexService {
                     "properties", Map.of(
                             "title", Map.of(
                                     "type", "text",
-                                    "analyzer", "norwegian_stemmer_analyzer"
+                                    "analyzer", OpenSearchConfig.NORWEGIAN_STEMMER_ANALYZER,
+                                    "search_analyzer", OpenSearchConfig.NORWEGIAN_STEMMER_ANALYZER
                             ),
                             "description", Map.of(
                                     "type", "text",
-                                    "analyzer", "norwegian_stemmer_analyzer"
+                                    "analyzer", OpenSearchConfig.NORWEGIAN_STEMMER_ANALYZER,
+                                    "search_analyzer", OpenSearchConfig.NORWEGIAN_STEMMER_ANALYZER
+                            ),
+                            "codes", Map.of(
+                                    "type", "text",
+                                    "analyzer", OpenSearchConfig.NORWEGIAN_STEMMER_ANALYZER,
+                                    "search_analyzer", OpenSearchConfig.NORWEGIAN_STEMMER_ANALYZER
                             ),
                             "family", Map.of(
                                     "type", "keyword"
