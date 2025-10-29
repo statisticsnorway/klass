@@ -5,6 +5,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import jakarta.annotation.PostConstruct;
 import no.ssb.klass.core.model.*;
 import no.ssb.klass.core.repository.ClassificationSeriesRepository;
 import no.ssb.klass.core.util.TimeUtil;
@@ -14,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.elasticsearch.core.document.Document;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
 import org.springframework.data.elasticsearch.core.query.IndexQuery;
 import org.springframework.data.elasticsearch.core.query.IndexQueryBuilder;
@@ -43,6 +45,67 @@ public class IndexServiceImpl implements IndexService {
 
     private IndexCoordinates getIndexCoordinates() {
         return IndexCoordinates.of(elasticsearchIndex);
+    }
+
+
+    @PostConstruct
+    private void createIndexWithStemmingAnalyzer() {
+        try {
+            var indexOps = elasticsearchOperations.indexOps(getIndexCoordinates());
+
+            if (indexOps.exists()) {
+                log.info("Index '{}' already exists — skipping creation.", elasticsearchIndex);
+                return;
+            }
+
+            Map<String, Object> settings = Map.of(
+                    "analysis", Map.of(
+                            "analyzer", Map.of(
+                                    "norwegian_stemmer_analyzer", Map.of(
+                                            "type", "custom",
+                                            "tokenizer", "standard",
+                                            "filter", List.of("lowercase", "norwegian_stemmer")
+                                    )
+                            ),
+                            "filter", Map.of(
+                                    "norwegian_stemmer", Map.of(
+                                            "type", "stemmer",
+                                            "name", "norwegian"
+                                    )
+                            )
+                    )
+            );
+
+            Map<String, Object> mappings = Map.of(
+                    "properties", Map.of(
+                            "title", Map.of(
+                                    "type", "text",
+                                    "analyzer", "norwegian_stemmer_analyzer"
+                            ),
+                            "description", Map.of(
+                                    "type", "text",
+                                    "analyzer", "norwegian_stemmer_analyzer"
+                            ),
+                            "family", Map.of(
+                                    "type", "keyword"
+                            ),
+                            "section", Map.of(
+                                    "type", "keyword"
+                            )
+                    )
+            );
+
+            boolean created = indexOps.create(settings);
+            if (created) {
+                indexOps.putMapping(Document.from(mappings));
+                log.info("Created index '{}' with Norwegian stemming analyzer.", elasticsearchIndex);
+            } else {
+                log.warn("Failed to create index '{}'", elasticsearchIndex);
+            }
+
+        } catch (Exception e) {
+            log.error("Error creating index '{}': {}", elasticsearchIndex, e.getMessage(), e);
+        }
     }
 
     @Override
