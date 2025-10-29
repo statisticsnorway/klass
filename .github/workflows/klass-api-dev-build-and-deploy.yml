@@ -12,11 +12,11 @@ on:
         default: '1h'
         type: choice
         options:
-            - 1h
-            - 2h
-            - 4h
-            - 8h
-            - 36h
+          - 1h
+          - 2h
+          - 4h
+          - 8h
+          - 36h
 jobs:
   build:
     name: Build
@@ -57,7 +57,7 @@ jobs:
 
       - name: Build with Maven
         if: steps.changed-files.outputs.changed != 'only-inputs'
-        run: mvn --batch-mode --update-snapshots install -pl '!:klass-forvaltning'
+        run: mvn --batch-mode --update-snapshots install
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

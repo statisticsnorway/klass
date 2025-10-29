@@ -86,6 +86,6 @@ jobs:
           cache: maven
 
       - name: Publish to GitHub Packages
-        run: mvn --batch-mode deploy -pl '!:klass-forvaltning' -DskipTests
+        run: mvn --batch-mode deploy -DskipTests
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

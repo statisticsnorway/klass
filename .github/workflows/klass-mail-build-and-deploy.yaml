@@ -48,7 +48,7 @@ jobs:
 
       - name: Build with Maven
         if: steps.changed-files.outputs.changed != 'only-inputs'
-        run: mvn --batch-mode --update-snapshots install -pl '!:klass-forvaltning'
+        run: mvn --batch-mode --update-snapshots install
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
