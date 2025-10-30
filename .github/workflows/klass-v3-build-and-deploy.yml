@@ -43,7 +43,7 @@ jobs:
 
       - name: Build with Maven
         if: steps.changed-files.outputs.changed != 'only-inputs'
-        run: mvn --batch-mode --update-snapshots install -pl '!:klass-forvaltning'
+        run: mvn --batch-mode --update-snapshots install
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -76,4 +76,3 @@ jobs:
           DEPLOY_SERVER: deploy.ssb.cloud.nais.io:443
           WORKLOAD_IMAGE: ${{ needs.build.outputs.image }}
           TELEMETRY: ${{ needs.build.outputs.telemetry }}
-
