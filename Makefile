@@ -121,18 +121,10 @@ logs-klass-api:
 stop-klass-api-docker:
 	docker compose $(COMPOSE_FILE) --profile api down -v
 
-.PHONY: start-klass-api-search-docker
-start-klass-api-search-docker:
-	docker compose $(COMPOSE_FILE) --profile api-search up --build -d
-
-.PHONY: stop-klass-api-search-docker
-stop-klass-api-search-docker:
-	docker compose $(COMPOSE_FILE) --profile api-search down -v
-
 .PHONY: start-klass-api-open-search-docker
 start-klass-api-open-search-docker:
-	docker compose $(COMPOSE_FILE) --profile api-open-search up --build -d
+	docker compose $(COMPOSE_FILE) --profile open-search up --build -d
 
 .PHONY: stop-klass-api-open-search-docker
 stop-klass-api-open-search-docker:
-	docker compose $(COMPOSE_FILE) --profile api-open-search down -v
+	docker compose $(COMPOSE_FILE) --profile open-search down -v
