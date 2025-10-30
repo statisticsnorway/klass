@@ -11,7 +11,7 @@
     <parent>
         <groupId>no.ssb.klass</groupId>
         <artifactId>klass-root</artifactId>
-        <version>4.0.5-SNAPSHOT</version>
+        <version>4.1.2-SNAPSHOT</version>
     </parent>
 
     <properties>
@@ -43,6 +43,17 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
+        </dependency>
+        <!-- TODO This version is needed for Spring 2.x. Upgrade it when we're on Spring 3. -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>1.8.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-hateoas</artifactId>
+            <version>1.8.0</version>
         </dependency>
 
         <dependency>
@@ -101,7 +112,6 @@
             <artifactId>spring-boot-starter-tomcat</artifactId>
             <scope>provided</scope>
         </dependency>
-
 
         <dependency>
             <groupId>org.apache.tomcat.embed</groupId>

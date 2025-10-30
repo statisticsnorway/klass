@@ -1,0 +1,70 @@
+# Deploy config for dev on the test cluster
+apiVersion: nais.io/v1alpha1
+kind: Application
+metadata:
+  name: klass-dev-{{ app-name }}
+  namespace: dapla-metadata
+  labels:
+    shared-db: "true"
+    team: dapla-metadata
+spec:
+  port: 8080
+  ttl: {{ time-to-live }}
+  ingresses:
+    - https://klass-dev-{{ app-name }}.intern.test.ssb.no/api/klass
+  replicas:
+    min: 1
+    max: 1
+  resources:
+    requests:
+      cpu: 200m
+      memory: 1200Mi
+    limits:
+      memory: 1400Mi
+  env:
+    - name: SPRING_PROFILES_ACTIVE
+      value: api, postgres, solr-remote, skip-indexing
+    - name: SPRING_DATA_SOLR_HOST
+      value: http://klass-solr/solr
+    - name: KLASS_ENV_CLIENT_KLASS_MAIL_URL
+      value: http://klass-mail
+    - name: JAVA_TOOL_OPTIONS
+      value: "-XX:InitialRAMPercentage=50.0 -XX:MaxRAMPercentage=75.0"
+
+  envFrom:
+    - secret: google-sql-klass
+  filesFrom:
+    - mountPath: /var/run/secrets/nais.io/sqlcertificate
+      secret: sqeletor-klass-827ec8ec
+  accessPolicy:
+    outbound:
+      rules:
+        - application: klass-solr
+        - application: klass-mail
+
+  prometheus:
+    enabled: true
+    path: /actuator/prometheus
+    port: "8090"
+
+  liveness:
+    path: /actuator/health/liveness
+    port: 8090
+    initialDelay: 60
+    timeout: 180
+  readiness:
+    path: /actuator/health/readiness
+    port: 8090
+    initialDelay: 60
+    timeout: 180
+  startup:
+    path: /actuator/health/liveness
+    port: 8090
+    initialDelay: 60
+    timeout: 180
+
+
+
+
+
+  

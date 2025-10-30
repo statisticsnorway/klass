@@ -5,7 +5,7 @@ on:
     types: [ published ]
   push:
     branches:
-      - nais-migration
+      - main
     paths:
       - "klass-forvaltning/**"
       - ".nais/**/klass-forvaltning.yaml"
@@ -51,19 +51,16 @@ jobs:
         uses: "nais/what-changed@main"
         with:
           files: .nais/**/klass-forvaltning.yaml
-          main-branch-name: 'nais-migration' #TODO: Remove when we change branch back to main
       - name: Check for test config changes
         id: test-config-changed
         uses: "nais/what-changed@main"
         with:
           files: .nais/test/klass-forvaltning.yaml
-          main-branch-name: 'nais-migration'  #TODO: Remove when we change branch back to main
       - name: Check for prod config changes
         id: prod-config-changed
         uses: "nais/what-changed@main"
         with:
           files: .nais/prod/klass-forvaltning.yaml
-          main-branch-name: 'nais-migration'  #TODO: Remove when we change branch back to main
       - name: Build with Maven
         if: steps.changed-files.outputs.changed != 'only-inputs' || github.event.inputs.cluster == 'test' || github.event.inputs.cluster == 'prod'
         working-directory: klass-forvaltning

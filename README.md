@@ -46,11 +46,37 @@ Tips: If you are only setting up Klass for testing/development purposes you can 
 - Java 17: `sdk install java 17.0.15-tem`
 - Java 8 (for Klass Forvaltning): `sdk install java 8.0.452-tem`
 
+### Code Quality configuration
+
+We follow a multi-layered approach based on the "shift-left" philosophy where problems are addressed as early as possible, ideally while writing the code in the IDE. Checks are performed at three stages:
+
+- In the IDE through extensions
+- In CI/CD as a hard check on PRs
+
+Developers are encouraged to install the IDE plugins/extensions to avoid pain at the PR stage.
+
+#### Plugins/extensions
+
+##### IntelliJ
+
+- https://plugins.jetbrains.com/plugin/7973-sonarqube-for-ide
+- https://plugins.jetbrains.com/plugin/8527-google-java-format
+
+#### Lint
+
+We use Sonarqube for linting. This runs a range of checks on code quality. It runs in CI/CD and it's a good idea to install the extension in your IDE to get feedback as you code.
+
+#### Formatting
+
+We use google-java-format for code formatting. This avoids unproductive discussions about minutiae of bracket placement etc. Make sure it runs in your IDE and you install the pre-commit hook
+
 ### Configuration
+
+#### GitHub Packages
 
 In order to download dependencies from GitHub Packages we must authenticate Maven. See the documentation here: <https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-apache-maven-registry#authenticating-with-a-personal-access-token>
 
-This may be done by generating a Personal Access Token (classic) on GitHub with the `read:packages` scope. Remember to configure SSO. The following configuration may then be placed in your `~/.m2/settings.xml` file.
+This may be done by generating a Personal Access Token (classic) on GitHub with the `write:packages` scope. Remember to configure SSO. The following configuration may then be placed in your `~/.m2/settings.xml` file.
 
 ```xml
 
@@ -62,6 +88,10 @@ This may be done by generating a Personal Access Token (classic) on GitHub with 
     </server>
 </servers>
 ```
+
+#### Docker
+
+##### Colima on Mac
 
 Colima should have at least 5G memory and the project folder must be mounted. Change this in `~/.colima/default/colima.yaml` e.g.
 
@@ -111,13 +141,11 @@ below is a quick summary of the profiles available (see _application.properties_
 #----------------------
 # Profiles for production
 #   production          = no test beans and only Active Directory login
-#   remote-solr         = use remote Solr server
 #
 # Profiles for development
 #   ad-offline          = will only use test/embeded AD (apacheDS) [Forvaltning only]
 #   small-import        = imports a small number of classifications from legacy system, useful during development
 #   mock-mailserver     = outgoing emails are only logged
-#   embedded-solr       = run an instance of solr as part of the application (no need to run a separate solr application)
 ```
 
 ### Build profiles
@@ -148,19 +176,5 @@ Frontend may be accessed at:
 REST api documentation may be accessed at
 
 <http://localhost:8081/api/klass/v1/api-guide.html>
-
-## Troubleshooting
-
-### Known issues
-
-#### build fails due to encoding issues(æøå)
-
-Windows defaults to ascii and java/maven/surefire? does for some reason use this even though utf-8 has been specified everywhere.
-The current solution to this problem is to add an environment variable `JAVA_TOOL_OPTIONS` with value `-Dfile.encoding=UTF-8` to your system.
-
-#### Application running in intelliJ wont show monitor page or CSS
-
-_Intellij 2019.1_ and earlier does not seem to detect the correct work directory and files placed in the webapp directory might not be available to the application.
-the solution is to set workdir manually in your run configuration (set it to `$MODULE_WORKING_DIR$`)
 
 [![IntelliJ](docs/troubleshoot_workdir_small.png)](./docs/troubleshoot_workdir.png)

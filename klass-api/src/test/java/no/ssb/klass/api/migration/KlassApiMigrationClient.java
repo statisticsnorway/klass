@@ -22,19 +22,20 @@ public class KlassApiMigrationClient {
     public KlassApiMigrationClient() {
         this.sourceApi = new RequestSpecBuilder()
                 .setBaseUri(sourceHost)
-                .setBasePath(RestConstants.PREFIX_AND_API_VERSION_V1)
+                .setBasePath(RestConstants.CONTEXT_AND_VERSION_V1)
                 .build();
+
 
 
         this.targetApi = new RequestSpecBuilder()
                 .setBaseUri(targetHost)
-                .setBasePath(RestConstants.PREFIX_AND_API_VERSION_V1)
+                .setBasePath(RestConstants.CONTEXT_AND_VERSION_V1)
                 .build();
     }
 
     public boolean isApiAvailable(String host) {
         try {
-            return RestAssured.get(host + RestConstants.PREFIX_AND_API_VERSION_V1 + CLASSIFICATIONS_PATH).getStatusCode() == 200;
+            return RestAssured.get(host + RestConstants.CONTEXT_AND_VERSION_V1 + CLASSIFICATIONS_PATH).getStatusCode() == 200;
         } catch (Exception e) {
             return false;
         }

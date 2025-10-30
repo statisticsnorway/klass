@@ -1,10 +1,12 @@
 package no.ssb.klass.api.dto.hal;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import no.ssb.klass.api.controllers.ClassificationController;
+import no.ssb.klass.api.util.RestConstants;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 public class ResourceUtilTest {
     @Test
@@ -14,6 +16,6 @@ public class ResourceUtilTest {
         String link = ResourceUtil.createUriTemplate(linkBuilder, "query", "includeCodelists").toString();
         // For some reason, the link is different when running the test from command line and from IDE
         link = link.replace("http://localhost", "");
-        assertEquals("/api/klass/v1/classifications/search{?query,includeCodelists}", link);
+        assertEquals(RestConstants.API_VERSION_V1 + "/classifications/search{?query,includeCodelists}", link);
     }
 }

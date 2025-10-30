@@ -1,28 +1,30 @@
 package no.ssb.klass.api.services;
 
-import java.util.Date;
-import java.util.List;
+import no.ssb.klass.core.config.ConfigurationProfiles;
+import no.ssb.klass.core.repository.ClassificationSeriesRepository;
+import no.ssb.klass.core.util.TimeUtil;
 
+import org.opensearch.data.client.orhlc.OpenSearchRestTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.opensearch.data.client.orhlc.OpenSearchRestTemplate;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
 import org.springframework.data.elasticsearch.core.query.Query;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Service;
 
-import no.ssb.klass.core.repository.ClassificationSeriesRepository;
-import no.ssb.klass.core.util.TimeUtil;
-
+import java.util.Date;
+import java.util.List;
 
 @Service
 @ConditionalOnBean(OpenSearchRestTemplate.class)
+@Profile("!" + ConfigurationProfiles.MOCK_SEARCH)
 public class SearchServiceImpl implements SearchService {
     private static final Logger log = LoggerFactory.getLogger(SearchServiceImpl.class);
 

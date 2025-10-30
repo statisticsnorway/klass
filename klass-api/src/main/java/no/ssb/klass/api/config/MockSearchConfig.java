@@ -1,26 +1,19 @@
 package no.ssb.klass.api.config;
 
 import no.ssb.klass.api.services.SearchService;
-import no.ssb.klass.api.services.OpenSearchResult;
+import no.ssb.klass.core.config.ConfigurationProfiles;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 @Configuration
-@Profile("mock-search")
 public class MockSearchConfig {
 
     @Bean
+    @Profile(ConfigurationProfiles.MOCK_SEARCH)
     public SearchService searchService() {
-        return new SearchService() {
-
-            @Override
-            public Page<OpenSearchResult> publicSearch(String query, Pageable pageable, String filterOnSection,
-                                                       boolean includeCodeLists) {
-                return Page.empty();
-            }
-        };
+        return (query, pageable, filterOnSection, includeCodeLists) -> Page.empty();
     }
 }

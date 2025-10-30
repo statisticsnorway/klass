@@ -5,7 +5,10 @@ import no.ssb.klass.api.applicationtest.config.ApplicationTestConfig;
 import no.ssb.klass.api.applicationtest.utils.ApplicationTestUtil;
 import no.ssb.klass.api.util.RestConstants;
 import no.ssb.klass.core.config.ConfigurationProfiles;
-import no.ssb.klass.core.model.*;
+import no.ssb.klass.core.model.ClassificationFamily;
+import no.ssb.klass.core.model.ClassificationSeries;
+import no.ssb.klass.core.model.CorrespondenceTable;
+import no.ssb.klass.core.model.User;
 import no.ssb.klass.core.repository.ClassificationFamilyRepository;
 import no.ssb.klass.core.repository.ClassificationSeriesRepository;
 import no.ssb.klass.core.repository.CorrespondenceTableRepository;
@@ -51,7 +54,7 @@ public abstract class AbstractRestApiApplicationTest {
 
     public static final String CONTENT_TYPE_CSV = "text/csv";
 
-    public static final String REQUEST = RestConstants.API_VERSION_V1 + "/classifications";
+    public static final String REQUEST = RestConstants.CONTEXT_AND_VERSION_V1 + "/classifications";
     public static final String REQUEST_WITH_ID = REQUEST + "/{classificationId}";
     public static final String REQUEST_SEARCH = REQUEST + "/search";
     public static final String REQUEST_WITH_ID_AND_CODES = REQUEST + "/{classificationId}/codes";
@@ -61,15 +64,15 @@ public abstract class AbstractRestApiApplicationTest {
     public static final String REQUEST_WITH_ID_AND_CORRESPONDS = REQUEST + "/{classificationId}/corresponds";
     public static final String REQUEST_WITH_ID_AND_CORRESPONDS_AT = REQUEST + "/{classificationId}/correspondsAt";
 
-    public static final String REQUEST_CORRESPONDENCE_TABLES = RestConstants.API_VERSION_V1
+    public static final String REQUEST_CORRESPONDENCE_TABLES = RestConstants.CONTEXT_AND_VERSION_V1
             + "/correspondencetables/{correspondencetablesId}";
 
-    public static final String REQUEST_VERSIONS_WITH_ID = RestConstants.API_VERSION_V1
+    public static final String REQUEST_VERSIONS_WITH_ID = RestConstants.CONTEXT_AND_VERSION_V1
             + "/versions/{versionsId}";
 
-    public static final String REQUEST_SSB_SECTION = RestConstants.API_VERSION_V1 + "/ssbsections";
+    public static final String REQUEST_SSB_SECTION = RestConstants.CONTEXT_AND_VERSION_V1 + "/ssbsections";
 
-    public static final String REQUEST_CLASSIFICATION_FAMILY = RestConstants.API_VERSION_V1 + "/classificationfamilies";
+    public static final String REQUEST_CLASSIFICATION_FAMILY = RestConstants.CONTEXT_AND_VERSION_V1 + "/classificationfamilies";
     public static final String REQUEST_CLASSIFICATION_FAMILY_WITH_ID = REQUEST_CLASSIFICATION_FAMILY
             + "/{classificationfamilyId}";
 
@@ -167,7 +170,7 @@ public abstract class AbstractRestApiApplicationTest {
         classificationFamily.addClassificationSeries(familieGrupperingCodelist);
         classificationService.saveAndIndexClassification(familieGrupperingCodelist);
 
-        badmintonCodelist = TestDataProvider.createBadmintonCodelist(user,user2, user3);
+        badmintonCodelist = TestDataProvider.createBadmintonCodelist(user, user2, user3);
         classificationFamily.addClassificationSeries(badmintonCodelist);
         classificationService.saveAndIndexClassification(badmintonCodelist);
 

@@ -16,13 +16,12 @@ spec:
   filesFrom:
     - persistentVolumeClaim: klass-solr-pvc
       mountPath: /opt/solr/server/solr/mycores/Klass/data
-  env:
-    # Solr crashed with JAVA_TOOL_OPTIONS ref: https://github.com/apache/lucene-solr/pull/405
-    # so we use this variable ref: https://solr.apache.org/guide/6_6/taking-solr-to-production.html#TakingSolrtoProduction-MemoryandGCSettings
-    # Solr sets -Xmx512m by default so we MUST override this setting, otherwise the heap allocation will remain constrained
-    # Value should be 50% of memory request
-    - name: SOLR_JAVA_MEM
-      value: "-Xms1g -Xmx1g"
+  command:
+    - docker-entrypoint.sh
+    - solr-precreate
+    - Klass
+    - -m
+    - 1g  # Set heap size
 
   replicas:
     min: 1
@@ -30,7 +29,6 @@ spec:
   resources:
     requests:
       cpu: 100m
-      # Update SOLR_JAVA_MEM when changing this
       memory: 2Gi
     limits:
       memory: 2Gi
@@ -40,7 +38,6 @@ spec:
       rules:
         - application: klass
         - application: klass-forvaltning
-
 
   liveness:
     path: /solr/admin/cores?action=STATUS

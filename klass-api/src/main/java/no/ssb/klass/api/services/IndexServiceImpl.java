@@ -2,20 +2,20 @@ package no.ssb.klass.api.services;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
 import jakarta.annotation.PostConstruct;
+
 import no.ssb.klass.api.config.OpenSearchConfig;
+import no.ssb.klass.core.config.ConfigurationProfiles;
 import no.ssb.klass.core.model.*;
 import no.ssb.klass.core.repository.ClassificationSeriesRepository;
 import no.ssb.klass.core.util.TimeUtil;
+
 import org.opensearch.data.client.orhlc.OpenSearchRestTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.elasticsearch.core.document.Document;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
 import org.springframework.data.elasticsearch.core.query.IndexQuery;
@@ -24,7 +24,11 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.*;
+import java.util.stream.Collectors;
+
 @Service
+@Profile("!" + ConfigurationProfiles.MOCK_SEARCH)
 public class IndexServiceImpl implements IndexService {
 
     private static final Logger log = LoggerFactory.getLogger(IndexServiceImpl.class);
@@ -37,8 +41,9 @@ public class IndexServiceImpl implements IndexService {
     private final DocumentMapper documentMapper;
 
     @Autowired
-    public IndexServiceImpl(ClassificationSeriesRepository classificationRepository,
-                            @Qualifier("opensearchRestTemplate") OpenSearchRestTemplate elasticsearchOperations) {
+    public IndexServiceImpl(
+            ClassificationSeriesRepository classificationRepository,
+            OpenSearchRestTemplate elasticsearchOperations) {
         this.classificationRepository = classificationRepository;
         this.elasticsearchOperations = elasticsearchOperations;
         this.documentMapper = new DocumentMapper();
@@ -58,54 +63,66 @@ public class IndexServiceImpl implements IndexService {
                 return;
             }
 
-            Map<String, Object> settings = Map.of(
-                    "analysis", Map.of(
-                            "analyzer", Map.of(
-                                    OpenSearchConfig.NORWEGIAN_STEMMER_ANALYZER, Map.of(
-                                            "type", "custom",
-                                            "tokenizer", "standard",
-                                            "filter", List.of("lowercase", "norwegian_stemmer")
-                                    )
-                            ),
-                            "filter", Map.of(
-                                    "norwegian_stemmer", Map.of(
-                                            "type", "stemmer",
-                                            "name", "norwegian"
-                                    )
-                            )
-                    )
-            );
+            Map<String, Object> settings =
+                    Map.of(
+                            "analysis",
+                            Map.of(
+                                    "analyzer",
+                                            Map.of(
+                                                    OpenSearchConfig.NORWEGIAN_STEMMER_ANALYZER,
+                                                    Map.of(
+                                                            "type", "custom",
+                                                            "tokenizer", "standard",
+                                                            "filter",
+                                                                    List.of(
+                                                                            "lowercase",
+                                                                            "norwegian_stemmer"))),
+                                    "filter",
+                                            Map.of(
+                                                    "norwegian_stemmer",
+                                                    Map.of(
+                                                            "type", "stemmer",
+                                                            "name", "norwegian"))));
 
-            Map<String, Object> mappings = Map.of(
-                    "properties", Map.of(
-                            "title", Map.of(
-                                    "type", "text",
-                                    "analyzer", OpenSearchConfig.NORWEGIAN_STEMMER_ANALYZER,
-                                    "search_analyzer", OpenSearchConfig.NORWEGIAN_STEMMER_ANALYZER
-                            ),
-                            "description", Map.of(
-                                    "type", "text",
-                                    "analyzer", OpenSearchConfig.NORWEGIAN_STEMMER_ANALYZER,
-                                    "search_analyzer", OpenSearchConfig.NORWEGIAN_STEMMER_ANALYZER
-                            ),
-                            "codes", Map.of(
-                                    "type", "text",
-                                    "analyzer", OpenSearchConfig.NORWEGIAN_STEMMER_ANALYZER,
-                                    "search_analyzer", OpenSearchConfig.NORWEGIAN_STEMMER_ANALYZER
-                            ),
-                            "family", Map.of(
-                                    "type", "keyword"
-                            ),
-                            "section", Map.of(
-                                    "type", "keyword"
-                            )
-                    )
-            );
+            Map<String, Object> mappings =
+                    Map.of(
+                            "properties",
+                            Map.of(
+                                    "title",
+                                            Map.of(
+                                                    "type", "text",
+                                                    "analyzer",
+                                                            OpenSearchConfig
+                                                                    .NORWEGIAN_STEMMER_ANALYZER,
+                                                    "search_analyzer",
+                                                            OpenSearchConfig
+                                                                    .NORWEGIAN_STEMMER_ANALYZER),
+                                    "description",
+                                            Map.of(
+                                                    "type", "text",
+                                                    "analyzer",
+                                                            OpenSearchConfig
+                                                                    .NORWEGIAN_STEMMER_ANALYZER,
+                                                    "search_analyzer",
+                                                            OpenSearchConfig
+                                                                    .NORWEGIAN_STEMMER_ANALYZER),
+                                    "codes",
+                                            Map.of(
+                                                    "type", "text",
+                                                    "analyzer",
+                                                            OpenSearchConfig
+                                                                    .NORWEGIAN_STEMMER_ANALYZER,
+                                                    "search_analyzer",
+                                                            OpenSearchConfig
+                                                                    .NORWEGIAN_STEMMER_ANALYZER),
+                                    "family", Map.of("type", "keyword"),
+                                    "section", Map.of("type", "keyword")));
 
             boolean created = indexOps.create(settings);
             if (created) {
                 indexOps.putMapping(Document.from(mappings));
-                log.info("Created index '{}' with Norwegian stemming analyzer.", elasticsearchIndex);
+                log.info(
+                        "Created index '{}' with Norwegian stemming analyzer.", elasticsearchIndex);
             } else {
                 log.warn("Failed to create index '{}'", elasticsearchIndex);
             }
@@ -121,10 +138,14 @@ public class IndexServiceImpl implements IndexService {
     public void indexAsync(Long classificationSeriesId) {
         checkNotNull(classificationSeriesId);
         try {
-            ClassificationSeries classification = classificationRepository.getOne(classificationSeriesId);
+            ClassificationSeries classification =
+                    classificationRepository.getOne(classificationSeriesId);
             indexSync(classification);
         } catch (Exception e) {
-            log.warn("Failed to index classification {}: {}", classificationSeriesId, e.getMessage());
+            log.warn(
+                    "Failed to index classification {}: {}",
+                    classificationSeriesId,
+                    e.getMessage());
         }
     }
 
@@ -138,7 +159,9 @@ public class IndexServiceImpl implements IndexService {
                 .forEach(language -> indexLanguage(classification, language));
 
         elasticsearchOperations.indexOps(getIndexCoordinates());
-        log.info("Indexing: {} took (ms): {}", classification.getNameInPrimaryLanguage(),
+        log.info(
+                "Indexing: {} took (ms): {}",
+                classification.getNameInPrimaryLanguage(),
                 TimeUtil.millisecondsSince(start));
     }
 
@@ -146,7 +169,8 @@ public class IndexServiceImpl implements IndexService {
         Map<String, Object> doc = documentMapper.mapClassificationSeries(classification, language);
         updateElasticsearch(classification, doc);
 
-        classification.getClassificationVersions()
+        classification
+                .getClassificationVersions()
                 .forEach(version -> recursiveIndex(version, language));
     }
 
@@ -158,39 +182,39 @@ public class IndexServiceImpl implements IndexService {
         indexCorrespondenceTables(version.getCorrespondenceTables(), language);
     }
 
-    private void indexCorrespondenceTables(List<CorrespondenceTable> correspondenceTables, Language language) {
-        correspondenceTables.forEach(table -> {
-            Map<String, Object> doc = documentMapper.mapCorrespondenceTable(table, language);
-            updateElasticsearch(table, doc);
-        });
+    private void indexCorrespondenceTables(
+            List<CorrespondenceTable> correspondenceTables, Language language) {
+        correspondenceTables.forEach(
+                table -> {
+                    Map<String, Object> doc =
+                            documentMapper.mapCorrespondenceTable(table, language);
+                    updateElasticsearch(table, doc);
+                });
     }
 
     private void indexVariants(List<ClassificationVariant> variants, Language language) {
-        variants.forEach(variant -> {
-            Map<String, Object> doc = documentMapper.mapVariant(variant, language);
-            updateElasticsearch(variant, doc);
-        });
+        variants.forEach(
+                variant -> {
+                    Map<String, Object> doc = documentMapper.mapVariant(variant, language);
+                    updateElasticsearch(variant, doc);
+                });
     }
 
     private void updateElasticsearch(SoftDeletable entity, Map<String, Object> doc) {
         String uuid = (String) doc.get("uuid");
         if (!entity.isDeleted()) {
-            IndexQuery indexQuery = new IndexQueryBuilder()
-                    .withId(uuid)
-                    .withObject(doc)
-                    .build();
+            IndexQuery indexQuery = new IndexQueryBuilder().withId(uuid).withObject(doc).build();
             elasticsearchOperations.index(indexQuery, getIndexCoordinates());
         } else {
             elasticsearchOperations.delete(uuid, getIndexCoordinates());
         }
     }
 
-    /**
-     * Inner class to handle document mapping from domain entities to search documents
-     */
+    /** Inner class to handle document mapping from domain entities to search documents */
     private static class DocumentMapper {
 
-        public Map<String, Object> mapClassificationSeries(ClassificationSeries classification, Language language) {
+        public Map<String, Object> mapClassificationSeries(
+                ClassificationSeries classification, Language language) {
             Map<String, Object> doc = new HashMap<>();
             doc.put("itemid", classification.getId());
             doc.put("uuid", buildUuid(language, classification.getUuid()));
@@ -203,10 +227,11 @@ public class IndexServiceImpl implements IndexService {
             doc.put("family", classification.getClassificationFamily().getName(language));
             doc.put("section", classification.getContactPerson().getSection());
 
-            List<String> codes = classification.getClassificationVersions().stream()
-                    .flatMap(version -> version.getAllClassificationItems().stream())
-                    .map(item -> formatClassificationItem(language, item))
-                    .collect(Collectors.toList());
+            List<String> codes =
+                    classification.getClassificationVersions().stream()
+                            .flatMap(version -> version.getAllClassificationItems().stream())
+                            .map(item -> formatClassificationItem(language, item))
+                            .collect(Collectors.toList());
             doc.put("codes", codes);
 
             return doc;
@@ -228,9 +253,10 @@ public class IndexServiceImpl implements IndexService {
             doc.put("copyrighted", version.getOwnerClassification().isCopyrighted());
             doc.put("published", version.isPublished(language));
 
-            List<String> codes = version.getAllClassificationItems().stream()
-                    .map(item -> formatClassificationItem(language, item))
-                    .collect(Collectors.toList());
+            List<String> codes =
+                    version.getAllClassificationItems().stream()
+                            .map(item -> formatClassificationItem(language, item))
+                            .collect(Collectors.toList());
             doc.put("codes", codes);
 
             return doc;
@@ -248,15 +274,17 @@ public class IndexServiceImpl implements IndexService {
             doc.put("description", variant.getIntroduction(language));
             doc.put("section", variant.getContactPerson().getSection());
 
-            List<String> codes = variant.getAllClassificationItems().stream()
-                    .map(item -> formatClassificationItem(language, item))
-                    .collect(Collectors.toList());
+            List<String> codes =
+                    variant.getAllClassificationItems().stream()
+                            .map(item -> formatClassificationItem(language, item))
+                            .collect(Collectors.toList());
             doc.put("codes", codes);
 
             return doc;
         }
 
-        public Map<String, Object> mapCorrespondenceTable(CorrespondenceTable table, Language language) {
+        public Map<String, Object> mapCorrespondenceTable(
+                CorrespondenceTable table, Language language) {
             Map<String, Object> doc = new HashMap<>();
             doc.put("itemid", table.getId());
             doc.put("uuid", buildUuid(language, table.getUuid()));
