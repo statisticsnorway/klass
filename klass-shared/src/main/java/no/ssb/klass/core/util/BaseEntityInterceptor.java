@@ -5,8 +5,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.hibernate.EmptyInterceptor;
-import org.hibernate.EntityMode;
+import org.hibernate.Interceptor;
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
 
@@ -19,7 +18,7 @@ import no.ssb.klass.core.model.BaseEntity;
  * @author karsten.vileid
  *
  */
-public class BaseEntityInterceptor extends EmptyInterceptor {
+public class BaseEntityInterceptor implements Interceptor {
     private final Objenesis objenesis;
     private Map<String, Optional<Class<BaseEntity>>> clazzCache;
 
@@ -28,8 +27,7 @@ public class BaseEntityInterceptor extends EmptyInterceptor {
         clazzCache = new ConcurrentHashMap<String, Optional<Class<BaseEntity>>>();
     }
 
-    @Override
-    public BaseEntity instantiate(String entityName, EntityMode entityMode, Serializable id) {
+    public Object instantiate(String entityName, Serializable id) {
         Optional<Class<BaseEntity>> clazz = getOrUpdate(entityName);
         if (!clazz.isPresent()) {
             return null;

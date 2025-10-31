@@ -40,7 +40,6 @@ public class ClassificationServiceImpl implements ClassificationService {
     private final ReferencingClassificationItemRepository referencingClassificationItemRepository;
     private final CorrespondenceMapRepository correspondenceMapRepository;
     private final StatisticalUnitRepository statisticalUnitRepository;
-    private final SearchService searchService;
     private final UserRepository userRepository;
     private final ClassificationFamilySummaryBuilder classificationFamilySummaryBuilder;
 
@@ -52,8 +51,7 @@ public class ClassificationServiceImpl implements ClassificationService {
                                      CorrespondenceTableRepository correspondenceTableRepository,
                                      ReferencingClassificationItemRepository referencingClassificationItemRepository,
                                      CorrespondenceMapRepository correspondenceMapRepository,
-                                     StatisticalUnitRepository statisticalUnitRepository,
-                                     SearchService searchService, UserRepository userRepository, ClassificationFamilySummaryBuilder classificationFamilySummaryBuilder) {
+                                     StatisticalUnitRepository statisticalUnitRepository, UserRepository userRepository, ClassificationFamilySummaryBuilder classificationFamilySummaryBuilder) {
         this.classificationFamilyRepository = classificationFamilyRepository;
         this.classificationRepository = classificationRepository;
         this.classificationVersionRepository = classificationVersionRepository;
@@ -62,7 +60,6 @@ public class ClassificationServiceImpl implements ClassificationService {
         this.referencingClassificationItemRepository = referencingClassificationItemRepository;
         this.correspondenceMapRepository = correspondenceMapRepository;
         this.statisticalUnitRepository = statisticalUnitRepository;
-        this.searchService = searchService;
         this.userRepository = userRepository;
         this.classificationFamilySummaryBuilder = classificationFamilySummaryBuilder;
     }
@@ -178,7 +175,6 @@ public class ClassificationServiceImpl implements ClassificationService {
     @Override
     public ClassificationSeries saveAndIndexClassification(ClassificationSeries classification) {
         classification = classificationRepository.save(classification);
-        searchService.indexSync(classification);
         return classification;
     }
 

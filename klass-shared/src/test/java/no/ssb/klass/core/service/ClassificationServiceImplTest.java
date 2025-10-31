@@ -38,7 +38,6 @@ public class ClassificationServiceImplTest {
     private ReferencingClassificationItemRepository referencingClassificationItemRepositoryMock;
     private CorrespondenceMapRepository correspondenceMapRepositoryMock;
     private StatisticalUnitRepository statisticalUnitRepositoryMock;
-    private SearchService searchServiceMock;
     private UserRepository userRepositoryMock;
     private ClassificationFamilySummaryBuilder classificationFamilySummaryBuilder;
 
@@ -52,12 +51,11 @@ public class ClassificationServiceImplTest {
         referencingClassificationItemRepositoryMock = mock(ReferencingClassificationItemRepository.class);
         correspondenceMapRepositoryMock = mock(CorrespondenceMapRepository.class);
         statisticalUnitRepositoryMock = mock(StatisticalUnitRepository.class);
-        searchServiceMock = mock(SearchService.class);
         userRepositoryMock = mock(UserRepository.class);
         subject = new ClassificationServiceImpl(classificationFamilyRepositoryMock, classificationSeriesRepositoryMock,
                 classificationVersionRepositoryMock, classificationVariantRepositoryMock,
                 correspondenceTableRepositoryMock, referencingClassificationItemRepositoryMock,
-                correspondenceMapRepositoryMock, statisticalUnitRepositoryMock, searchServiceMock, userRepositoryMock, classificationFamilySummaryBuilder);
+                correspondenceMapRepositoryMock, statisticalUnitRepositoryMock, userRepositoryMock, classificationFamilySummaryBuilder);
     }
 
     @Test

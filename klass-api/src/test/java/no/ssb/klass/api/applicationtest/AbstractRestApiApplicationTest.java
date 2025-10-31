@@ -30,18 +30,22 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionTemplate;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import static io.zonky.test.db.AutoConfigureEmbeddedDatabase.DatabaseProvider.ZONKY;
+import static no.ssb.klass.core.config.ConfigurationProfiles.MOCK_SEARCH;
 
+@Testcontainers
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = {ApplicationTestConfig.class}, webEnvironment = WebEnvironment.RANDOM_PORT, properties = {
         "spring.cloud.gcp.core.enabled=false",
         "spring.cloud.gcp.config.enabled=false",
-        "spring.cloud.gcp.pubsub.enabled=false"
+        "spring.cloud.gcp.pubsub.enabled=false",
+        "spring.main.allow-bean-definition-overriding=true"
 })
 @ActiveProfiles({ConfigurationProfiles.POSTGRES_EMBEDDED, ConfigurationProfiles.MOCK_MAILSERVER, ConfigurationProfiles.MOCK_SEARCH})
 @AutoConfigureEmbeddedDatabase(provider = ZONKY, type = AutoConfigureEmbeddedDatabase.DatabaseType.POSTGRES)

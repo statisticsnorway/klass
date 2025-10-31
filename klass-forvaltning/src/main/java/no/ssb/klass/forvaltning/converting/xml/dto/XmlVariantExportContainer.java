@@ -1,16 +1,15 @@
 package no.ssb.klass.forvaltning.converting.xml.dto;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+
+import java.util.List;
 
 /**
  * "hack" to add schemaLocation since Jackson does not seem to support it in current version
  *
  * @author Mads Lundemo, SSB.
  */
-// CHECKSTYLE:OFF
 public class XmlVariantExportContainer extends XmlVariantContainer {
 
     @JacksonXmlProperty(localName = "xmlns", isAttribute = true)
@@ -31,4 +30,3 @@ public class XmlVariantExportContainer extends XmlVariantContainer {
         super(itemList);
     }
 }
-// CHECKSTYLE:ON

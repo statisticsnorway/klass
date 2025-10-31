@@ -1,6 +1,5 @@
 package no.ssb.klass.api.migration;
 
-import io.restassured.internal.path.xml.NodeChildrenImpl;
 import io.restassured.path.xml.XmlPath;
 import io.restassured.response.Response;
 
@@ -360,6 +359,7 @@ public class MigrationTestUtils {
         }
     }
 
+
     public static void validateFilteredClassifications(Response sourceResponse, Response targetResponse) {
         List<Map<String, Object>> sourceList = sourceResponse.path(CLASSIFICATIONS);
         List<Map<String, Object>> targetList = targetResponse.path(CLASSIFICATIONS);
@@ -380,7 +380,7 @@ public class MigrationTestUtils {
 
         assertThat(sourceList.size())
                 .withFailMessage("Expected size to be <%d> but was <%d>", targetList.size(), sourceList.size())
-                .isNotEqualTo(targetList.size());
+                .isEqualTo(targetList.size());
     }
 
     /**
@@ -567,13 +567,11 @@ public class MigrationTestUtils {
         XmlPath xmlPathSource = extractXmlPaths(sourceResponse, targetResponse)[0];
         XmlPath xmlPathTarget = extractXmlPaths(sourceResponse, targetResponse)[1];
 
-        for(String pathName: pathNames) {
+        for (String pathName : pathNames) {
             String fullPath = listName + "." + pathName;
-            Object sourceValue = xmlPathSource.get(fullPath);
-            Object targetValue = xmlPathTarget.get(fullPath);
 
-            NodeChildrenImpl sourceNodes = (NodeChildrenImpl) sourceValue;
-            NodeChildrenImpl targetNodes = (NodeChildrenImpl) targetValue;
+            List<Object> sourceNodes = xmlPathSource.getList(fullPath);
+            List<Object> targetNodes = xmlPathTarget.getList(fullPath);
 
             for (int i = 0; i < sourceNodes.size(); i++) {
                 String sourceField = String.valueOf(sourceNodes.get(i));
@@ -585,46 +583,34 @@ public class MigrationTestUtils {
                 if (pathName.equals(CLASSIFICATION_LAST_MODIFIED) || pathName.equals(LAST_MODIFIED)) {
                     String sourceDate = getDate(sourceField);
                     String targetDate = getDate(targetField);
-
                     System.out.println("Comparing timestamp values: " + sourceDate + " -> " + targetDate);
 
-                    assertThat(sourceDate).withFailMessage(FAIL_MESSAGE,
-                                    pathName, sourceDate, targetDate)
+                    assertThat(sourceDate).withFailMessage(FAIL_MESSAGE, pathName, sourceDate, targetDate)
                             .isEqualTo(targetDate);
-                }
 
-                else if (pathName.equals(CLASSIFICATION_OWNING_SECTION)) {
+                } else if (pathName.equals(CLASSIFICATION_OWNING_SECTION)) {
                     String sourceSectionNumber = getSectionNumber(sourceField);
                     String targetSectionNumber = getSectionNumber(targetField);
                     System.out.println("Comparing owning section: " + sourceSectionNumber + " -> " + targetSectionNumber);
-                    assertThat(sourceSectionNumber).withFailMessage(FAIL_MESSAGE,
-                                    pathName, sourceField, targetField)
-                            .isEqualTo(targetSectionNumber);
-                }
 
-                else if (pathName.endsWith(HREF)) {
-                    URI sourceUri = URI.create(fullPath);
-                    URI targetUri = URI.create(fullPath);
+                    assertThat(sourceSectionNumber).withFailMessage(FAIL_MESSAGE, pathName, sourceField, targetField)
+                            .isEqualTo(targetSectionNumber);
+
+                } else if (pathName.endsWith(HREF)) {
+                    URI sourceUri = URI.create(sourceField);
+                    URI targetUri = URI.create(targetField);
 
                     String sourcePath = sourceUri.getPath();
                     String targetPath = targetUri.getPath();
-                    assertThat(sourcePath).withFailMessage(
-                            FAIL_MESSAGE,
-                            pathName,
-                            sourcePath,
-                            targetPath).isEqualTo(targetPath);
+                    assertThat(sourcePath).withFailMessage(FAIL_MESSAGE, pathName, sourcePath, targetPath)
+                            .isEqualTo(targetPath);
+
                 } else {
-                    assertThat(sourceField).withFailMessage(
-                            FAIL_MESSAGE,
-                            pathName,
-                            sourceField,
-                            targetField).isEqualTo(targetField);
+                    assertThat(sourceField).withFailMessage(FAIL_MESSAGE, pathName, sourceField, targetField)
+                            .isEqualTo(targetField);
                 }
             }
-
-
         }
-
     }
 
     public static void validateCSVDocument(String path, Response sourceResponse, Response targetResponse) {

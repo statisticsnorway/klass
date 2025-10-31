@@ -3,11 +3,10 @@ package no.ssb.klass.api.filters;
 
 import java.io.IOException;
 
-import java.io.IOException;
 
-import javax.servlet.*;
-import javax.servlet.annotation.WebFilter;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.*;
+import jakarta.servlet.annotation.WebFilter;
+import jakarta.servlet.http.HttpServletResponse;
 
 @WebFilter("*")
 public class AccessFilter implements Filter {

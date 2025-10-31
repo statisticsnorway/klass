@@ -7,6 +7,7 @@ To ensure both data fidelity and functional correctness, we test the responses f
 ---
 
 ## Overview
+
 All test classes inherit from the abstract base class **`AbstractKlassApiDataIntegrityTest`**, either directly or via a package-specific base class.
 
 /migration
@@ -75,7 +76,7 @@ All test classes inherit from the abstract base class **`AbstractKlassApiDataInt
     - All field values (except hostname in links)
     - Response size
 - Supports format-specific validation (XML, JSON, CSV)
-- **All supported query parameters** are covered at least once across the test suite. 
+- **All supported query parameters** are covered at least once across the test suite.
 - **Each failing test returns a detailed fail message** with the mismatched path and differing values, making debugging easier
 
 ## Setup
@@ -83,7 +84,9 @@ All test classes inherit from the abstract base class **`AbstractKlassApiDataInt
 The `MigrationTestConfig` class provides methods to retrieve host values for the **source** and **target** systems used in the tests.
 
 ### `getSourceHost()`
+
 Returns the source base URL by checking the following, in order:
+
 1. Property: `source.service.host`
 2. Environment variable: `SOURCE_SERVICE_HOST`
 3. Default fallback: `http://localhost:8082`
@@ -91,7 +94,9 @@ Returns the source base URL by checking the following, in order:
 Source Klass Api SSB url: use constant `DATA_SSB_HOST`
 
 ### `getTargetHost()`
+
 Returns the target base URL by checking the following, in order:
+
 1. Property: `target.service.host`
 2. Environment variable: `TARGET_SERVICE_HOST`
 3. Default fallback: `http://localhost:8080`
@@ -102,7 +107,4 @@ Set system property: `System.setProperty("<property name>", "<host name>");`
 
 ## Details and Running the Tests
 
-### Health Check Before Execution
-Before running tests, a **health check** is performed on both source and target by calling `GET {host}/ping`.  
-If either host is unavailable the tests are **skipped** (ignored) to prevent false failures.
-
+TODO @cbi
