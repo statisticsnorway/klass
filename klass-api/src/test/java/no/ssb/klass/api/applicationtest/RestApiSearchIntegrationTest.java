@@ -8,7 +8,6 @@ import no.ssb.klass.core.config.ConfigurationProfiles;
 import no.ssb.klass.core.repository.ClassificationSeriesRepository;
 import no.ssb.klass.testutil.TestDataProvider;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.opensearch.client.RestHighLevelClient;
 import org.opensearch.data.client.orhlc.OpenSearchRestTemplate;

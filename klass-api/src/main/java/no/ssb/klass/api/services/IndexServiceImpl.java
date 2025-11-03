@@ -31,6 +31,25 @@ import java.util.stream.Collectors;
 @Profile("!" + ConfigurationProfiles.MOCK_SEARCH)
 public class IndexServiceImpl implements IndexService {
 
+    private static final String ANALYZER = "analyzer";
+    private static final String SEARCH_ANALYZER = "search_analyzer";
+
+    private static final String ITEM_ID = "itemid";
+    private static final String UUID = "uuid";
+    private static final String LANGUAGE = "language";
+    private static final String TYPE = "type";
+    private static final String TITLE = "title";
+    private static final String DESCRIPTION = "description";
+    private static final String COPYRIGHTED = "copyrighted";
+    private static final String PUBLISHED = "published";
+    private static final String SECTION = "section";
+    private static final String CODES = "codes";
+    private static final String FAMILY = "family";
+    private static final String CLASSIFICATION_ID = "classificationId";
+    private static final String LEGAL_BASE = "legalBase";
+    private static final String PUBLICATIONS = "publications";
+    private static final String DERIVED_FROM = "derivedFrom";
+
     private static final Logger log = LoggerFactory.getLogger(IndexServiceImpl.class);
 
     @Value("${klass.env.search.elasticsearch.index:klass}")
@@ -55,6 +74,7 @@ public class IndexServiceImpl implements IndexService {
 
     @PostConstruct
     private void createIndexWithStemmingAnalyzer() {
+
         try {
             var indexOps = elasticsearchOperations.indexOps(getIndexCoordinates());
 
@@ -63,11 +83,12 @@ public class IndexServiceImpl implements IndexService {
                 return;
             }
 
+
             Map<String, Object> settings =
                     Map.of(
                             "analysis",
                             Map.of(
-                                    "analyzer",
+                                    ANALYZER,
                                             Map.of(
                                                     OpenSearchConfig.NORWEGIAN_STEMMER_ANALYZER,
                                                     Map.of(
@@ -88,35 +109,34 @@ public class IndexServiceImpl implements IndexService {
                     Map.of(
                             "properties",
                             Map.of(
-                                    "title",
+                                    TITLE,
                                             Map.of(
                                                     "type", "text",
-                                                    "analyzer",
+                                                    ANALYZER,
                                                             OpenSearchConfig
                                                                     .NORWEGIAN_STEMMER_ANALYZER,
-                                                    "search_analyzer",
+                                                    SEARCH_ANALYZER,
                                                             OpenSearchConfig
                                                                     .NORWEGIAN_STEMMER_ANALYZER),
-                                    "description",
+                                    DESCRIPTION,
+                                            Map.of(
+                                                    "type", "text", ANALYZER,
+                                                            OpenSearchConfig
+                                                                    .NORWEGIAN_STEMMER_ANALYZER,
+                                                    SEARCH_ANALYZER,
+                                                            OpenSearchConfig
+                                                                    .NORWEGIAN_STEMMER_ANALYZER),
+                                    CODES,
                                             Map.of(
                                                     "type", "text",
-                                                    "analyzer",
+                                                    ANALYZER,
                                                             OpenSearchConfig
                                                                     .NORWEGIAN_STEMMER_ANALYZER,
-                                                    "search_analyzer",
+                                                    "",
                                                             OpenSearchConfig
                                                                     .NORWEGIAN_STEMMER_ANALYZER),
-                                    "codes",
-                                            Map.of(
-                                                    "type", "text",
-                                                    "analyzer",
-                                                            OpenSearchConfig
-                                                                    .NORWEGIAN_STEMMER_ANALYZER,
-                                                    "search_analyzer",
-                                                            OpenSearchConfig
-                                                                    .NORWEGIAN_STEMMER_ANALYZER),
-                                    "family", Map.of("type", "keyword"),
-                                    "section", Map.of("type", "keyword")));
+                                    FAMILY, Map.of("type", "keyword"),
+                                    SECTION, Map.of("type", "keyword")));
 
             boolean created = indexOps.create(settings);
             if (created) {
@@ -212,21 +232,6 @@ public class IndexServiceImpl implements IndexService {
 
     /** Inner class to handle document mapping from domain entities to search documents */
     private static class DocumentMapper {
-        private static final String ITEM_ID = "itemid";
-        private static final String UUID = "uuid";
-        private static final String LANGUAGE = "language";
-        private static final String TYPE = "type";
-        private static final String TITLE = "title";
-        private static final String DESCRIPTION = "description";
-        private static final String COPYRIGHTED = "copyrighted";
-        private static final String PUBLISHED = "published";
-        private static final String SECTION = "section";
-        private static final String CODES = "codes";
-        private static final String FAMILY = "family";
-        private static final String CLASSIFICATION_ID = "classificationId";
-        private static final String LEGAL_BASE = "legalBase";
-        private static final String PUBLICATIONS = "publications";
-        private static final String DERIVED_FROM = "derivedFrom";
 
         public Map<String, Object> mapClassificationSeries(
                 ClassificationSeries classification, Language language) {
