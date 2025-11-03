@@ -58,14 +58,16 @@ public class IndexServiceImpl implements IndexService {
     private final ClassificationSeriesRepository classificationRepository;
     private final OpenSearchRestTemplate elasticsearchOperations;
     private final DocumentMapper documentMapper;
+    private final IndexService self;
 
     @Autowired
     public IndexServiceImpl(
             ClassificationSeriesRepository classificationRepository,
-            OpenSearchRestTemplate elasticsearchOperations) {
+            OpenSearchRestTemplate elasticsearchOperations,IndexService self) {
         this.classificationRepository = classificationRepository;
         this.elasticsearchOperations = elasticsearchOperations;
         this.documentMapper = new DocumentMapper();
+        this.self = self;
     }
 
     private IndexCoordinates getIndexCoordinates() {
@@ -160,7 +162,7 @@ public class IndexServiceImpl implements IndexService {
         try {
             ClassificationSeries classification =
                     classificationRepository.getOne(classificationSeriesId);
-            indexSync(classification);
+            self.indexSync(classification);
         } catch (Exception e) {
             log.warn(
                     "Failed to index classification {}: {}",
