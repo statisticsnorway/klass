@@ -31,13 +31,11 @@ public class SearchServiceImpl implements SearchService {
     @Value("${klass.env.search.elasticsearch.index:klass}")
     protected String elasticsearchIndex;
 
-    private final ClassificationSeriesRepository classificationRepository;
     private final OpenSearchRestTemplate elasticsearchOperations;
 
     @Autowired
     public SearchServiceImpl(ClassificationSeriesRepository classificationRepository,
                              OpenSearchRestTemplate elasticsearchOperations) {
-        this.classificationRepository = classificationRepository;
         this.elasticsearchOperations = elasticsearchOperations;
     }
 

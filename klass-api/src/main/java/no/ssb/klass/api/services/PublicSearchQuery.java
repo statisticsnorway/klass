@@ -1,6 +1,5 @@
 package no.ssb.klass.api.services;
 
-import no.ssb.klass.api.config.OpenSearchConfig;
 import no.ssb.klass.core.model.ClassificationType;
 import no.ssb.klass.core.model.Language;
 import org.opensearch.index.query.BoolQueryBuilder;
@@ -10,6 +9,10 @@ import org.springframework.data.domain.Pageable;
 import org.opensearch.data.client.orhlc.NativeSearchQueryBuilder;
 
 public class PublicSearchQuery {
+
+    private PublicSearchQuery() {
+        throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
+    }
 
     public static org.springframework.data.elasticsearch.core.query.Query build(
             String query,
@@ -43,9 +46,8 @@ public class PublicSearchQuery {
                         .field("codes", 1.0f)
                         .defaultOperator(Operator.OR)
                 )
-
                 .filter(filterBuilder);
-        
+
         NativeSearchQueryBuilder nativeQueryBuilder = new NativeSearchQueryBuilder()
                 .withQuery(finalQuery)
                 .withSort(org.springframework.data.domain.Sort.by(
