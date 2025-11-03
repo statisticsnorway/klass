@@ -32,7 +32,7 @@ public class OpenSearchConfig extends AbstractOpenSearchConfiguration {
     public static final String NORWEGIAN_STEMMER_ANALYZER = "norwegian_stemmer_analyzer";
 
     @Override
-    @Bean
+    @Bean(destroyMethod = "close")
     public RestHighLevelClient opensearchClient() {
         ClientConfiguration clientConfiguration = (ssl
                 ? ClientConfiguration.builder()
