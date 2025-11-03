@@ -42,6 +42,9 @@ spec:
       rules:
         - application: klass-solr
         - application: klass-mail
+  openSearch:
+    access: readwrite
+    instance: klass-search
 
   prometheus:
     enabled: true
