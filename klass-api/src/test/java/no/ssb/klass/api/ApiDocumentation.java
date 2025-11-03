@@ -1711,7 +1711,7 @@ public class ApiDocumentation {
     private Page<OpenSearchResult> createSearchPage(Pageable pageable) {
         ClassificationSeries classification = createClassificationKommuneinndeling();
         OpenSearchResult searchResult = new OpenSearchResult();
-        searchResult.setItemid(classification.getId());
+        searchResult.setItemId(classification.getId());
         searchResult.setTitle(classification.getName(Language.getDefault()));
         searchResult.setLanguage(Language.getDefault().getLanguageCode());
         searchResult.setScore(8.0);

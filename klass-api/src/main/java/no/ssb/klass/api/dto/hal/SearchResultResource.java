@@ -22,11 +22,11 @@ public class SearchResultResource extends KlassResource {
     private Double searchScore;
 
     public SearchResultResource(OpenSearchResult searchResult, Map<String, List<String>> highlights) {
-        super(searchResult.getItemid());
+        super(searchResult.getItemId());
         this.name = searchResult.getTitle();
         this.snippet = searchResult.getDescription();
         this.searchScore = searchResult.getScore();
-        addLink(createSelfLink(searchResult.getItemid()));
+        addLink(createSelfLink(searchResult.getItemId()));
 
         if (highlights != null) {
             List<String> descriptionHighlights = highlights.get("description");

@@ -77,6 +77,4 @@ public class OpenSearchResult {
     public double getScore() { return score; }
     public void setScore(double score) { this.score = score; }
 
-    public Long getItemid() { return itemId; }
-    public void setItemid(Long itemId) { this.itemId = itemId; }
 }
