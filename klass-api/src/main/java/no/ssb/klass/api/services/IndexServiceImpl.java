@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.elasticsearch.core.document.Document;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
@@ -58,16 +59,18 @@ public class IndexServiceImpl implements IndexService {
     private final ClassificationSeriesRepository classificationRepository;
     private final OpenSearchRestTemplate elasticsearchOperations;
     private final DocumentMapper documentMapper;
-    private final IndexService self;
+
+    @Autowired
+    @Lazy
+    private IndexService indexService;
 
     @Autowired
     public IndexServiceImpl(
             ClassificationSeriesRepository classificationRepository,
-            OpenSearchRestTemplate elasticsearchOperations,IndexService self) {
+            OpenSearchRestTemplate elasticsearchOperations) {
         this.classificationRepository = classificationRepository;
         this.elasticsearchOperations = elasticsearchOperations;
         this.documentMapper = new DocumentMapper();
-        this.self = self;
     }
 
     private IndexCoordinates getIndexCoordinates() {
@@ -162,7 +165,7 @@ public class IndexServiceImpl implements IndexService {
         try {
             ClassificationSeries classification =
                     classificationRepository.getOne(classificationSeriesId);
-            self.indexSync(classification);
+            indexService.indexSync(classification);
         } catch (Exception e) {
             log.warn(
                     "Failed to index classification {}: {}",
