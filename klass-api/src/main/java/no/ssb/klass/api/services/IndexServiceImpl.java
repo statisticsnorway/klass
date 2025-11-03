@@ -212,73 +212,88 @@ public class IndexServiceImpl implements IndexService {
 
     /** Inner class to handle document mapping from domain entities to search documents */
     private static class DocumentMapper {
+        private static final String ITEM_ID = "itemid";
+        private static final String UUID = "uuid";
+        private static final String LANGUAGE = "language";
+        private static final String TYPE = "type";
+        private static final String TITLE = "title";
+        private static final String DESCRIPTION = "description";
+        private static final String COPYRIGHTED = "copyrighted";
+        private static final String PUBLISHED = "published";
+        private static final String SECTION = "section";
+        private static final String CODES = "codes";
+        private static final String FAMILY = "family";
+        private static final String CLASSIFICATION_ID = "classificationId";
+        private static final String LEGAL_BASE = "legalBase";
+        private static final String PUBLICATIONS = "publications";
+        private static final String DERIVED_FROM = "derivedFrom";
 
         public Map<String, Object> mapClassificationSeries(
                 ClassificationSeries classification, Language language) {
             Map<String, Object> doc = new HashMap<>();
-            doc.put("itemid", classification.getId());
-            doc.put("uuid", buildUuid(language, classification.getUuid()));
-            doc.put("language", language.getLanguageCode());
-            doc.put("type", classification.getClassificationType().getDisplayName(Language.EN));
-            doc.put("copyrighted", classification.isCopyrighted());
-            doc.put("published", classification.isPublished(language));
-            doc.put("title", classification.getName(language));
-            doc.put("description", classification.getDescription(language));
-            doc.put("family", classification.getClassificationFamily().getName(language));
-            doc.put("section", classification.getContactPerson().getSection());
+            doc.put(ITEM_ID, classification.getId());
+            doc.put(UUID, buildUuid(language, classification.getUuid()));
+            doc.put(LANGUAGE, language.getLanguageCode());
+            doc.put(TYPE, classification.getClassificationType().getDisplayName(Language.EN));
+            doc.put(COPYRIGHTED, classification.isCopyrighted());
+            doc.put(PUBLISHED, classification.isPublished(language));
+            doc.put(TITLE, classification.getName(language));
+            doc.put(DESCRIPTION, classification.getDescription(language));
+            doc.put(FAMILY, classification.getClassificationFamily().getName(language));
+            doc.put(SECTION, classification.getContactPerson().getSection());
 
             List<String> codes =
                     classification.getClassificationVersions().stream()
                             .flatMap(version -> version.getAllClassificationItems().stream())
                             .map(item -> formatClassificationItem(language, item))
                             .collect(Collectors.toList());
-            doc.put("codes", codes);
+            doc.put(CODES, codes);
 
             return doc;
         }
 
         public Map<String, Object> mapVersion(ClassificationVersion version, Language language) {
             Map<String, Object> doc = new HashMap<>();
-            doc.put("itemid", version.getId());
-            doc.put("uuid", buildUuid(language, version.getUuid()));
-            doc.put("classificationId", version.getClassification().getId());
-            doc.put("language", language.getLanguageCode());
-            doc.put("type", "Version");
-            doc.put("title", version.getName(language));
-            doc.put("legalBase", version.getLegalBase(language));
-            doc.put("publications", version.getPublications(language));
-            doc.put("derivedFrom", version.getDerivedFrom(language));
-            doc.put("description", version.getIntroduction(language));
-            doc.put("section", version.getContactPerson().getSection());
-            doc.put("copyrighted", version.getOwnerClassification().isCopyrighted());
-            doc.put("published", version.isPublished(language));
+            doc.put(ITEM_ID, version.getId());
+            doc.put(UUID, buildUuid(language, version.getUuid()));
+            doc.put(CLASSIFICATION_ID, version.getClassification().getId());
+            doc.put(LANGUAGE, language.getLanguageCode());
+            doc.put(TYPE, "Version");
+            doc.put(TITLE, version.getName(language));
+            doc.put(LEGAL_BASE, version.getLegalBase(language));
+            doc.put(PUBLICATIONS, version.getPublications(language));
+            doc.put(DERIVED_FROM, version.getDerivedFrom(language));
+            doc.put(DESCRIPTION, version.getIntroduction(language));
+            doc.put(SECTION, version.getContactPerson().getSection());
+            doc.put(COPYRIGHTED, version.getOwnerClassification().isCopyrighted());
+            doc.put(PUBLISHED, version.isPublished(language));
 
             List<String> codes =
                     version.getAllClassificationItems().stream()
                             .map(item -> formatClassificationItem(language, item))
                             .collect(Collectors.toList());
-            doc.put("codes", codes);
+            doc.put(CODES, codes);
 
             return doc;
         }
 
         public Map<String, Object> mapVariant(ClassificationVariant variant, Language language) {
             Map<String, Object> doc = new HashMap<>();
-            doc.put("itemid", variant.getId());
-            doc.put("uuid", buildUuid(language, variant.getUuid()));
-            doc.put("language", language.getLanguageCode());
-            doc.put("type", "Variant");
-            doc.put("title", variant.getFullName(language));
-            doc.put("copyrighted", variant.getOwnerClassification().isCopyrighted());
-            doc.put("published", variant.isPublished(language));
-            doc.put("description", variant.getIntroduction(language));
-            doc.put("section", variant.getContactPerson().getSection());
+            doc.put(ITEM_ID, variant.getId());
+            doc.put(UUID, buildUuid(language, variant.getUuid()));
+            doc.put(LANGUAGE, language.getLanguageCode());
+            doc.put(TYPE, "Variant");
+            doc.put(TITLE, variant.getFullName(language));
+            doc.put(COPYRIGHTED, variant.getOwnerClassification().isCopyrighted());
+            doc.put(PUBLISHED, variant.isPublished(language));
+            doc.put(DESCRIPTION, variant.getIntroduction(language));
+            doc.put(SECTION, variant.getContactPerson().getSection());
 
             List<String> codes =
                     variant.getAllClassificationItems().stream()
                             .map(item -> formatClassificationItem(language, item))
                             .collect(Collectors.toList());
-            doc.put("codes", codes);
+            doc.put(CODES, codes);
 
             return doc;
         }
@@ -286,12 +301,12 @@ public class IndexServiceImpl implements IndexService {
         public Map<String, Object> mapCorrespondenceTable(
                 CorrespondenceTable table, Language language) {
             Map<String, Object> doc = new HashMap<>();
-            doc.put("itemid", table.getId());
-            doc.put("uuid", buildUuid(language, table.getUuid()));
-            doc.put("language", language.getLanguageCode());
-            doc.put("type", "Correspondencetable");
-            doc.put("title", table.getName(language));
-            doc.put("description", table.getDescription(language));
+            doc.put(ITEM_ID, table.getId());
+            doc.put(UUID, buildUuid(language, table.getUuid()));
+            doc.put(LANGUAGE, language.getLanguageCode());
+            doc.put(TYPE, "Correspondencetable");
+            doc.put(TITLE, table.getName(language));
+            doc.put(DESCRIPTION, table.getDescription(language));
             return doc;
         }
 
