@@ -20,6 +20,6 @@ public class IndexServiceTestConfig {
     @Primary
     public IndexService indexService(ClassificationSeriesRepository seriesRepository,
                                        OpenSearchRestTemplate openSearchRestTemplate) {
-        return new IndexServiceImpl(seriesRepository, openSearchRestTemplate, null);
+        return new IndexServiceImpl(seriesRepository, openSearchRestTemplate);
     }
 }

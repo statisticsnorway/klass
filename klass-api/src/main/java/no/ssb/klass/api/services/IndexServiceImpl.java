@@ -59,16 +59,18 @@ public class IndexServiceImpl implements IndexService {
     private final ClassificationSeriesRepository classificationRepository;
     private final OpenSearchRestTemplate elasticsearchOperations;
     private final DocumentMapper documentMapper;
-    private final IndexService indexService;
+
+    @Autowired
+    @Lazy
+    private IndexService indexService;
 
     @Autowired
     public IndexServiceImpl(
             ClassificationSeriesRepository classificationRepository,
-            OpenSearchRestTemplate elasticsearchOperations, IndexService indexService) {
+            OpenSearchRestTemplate elasticsearchOperations) {
         this.classificationRepository = classificationRepository;
         this.elasticsearchOperations = elasticsearchOperations;
         this.documentMapper = new DocumentMapper();
-        this.indexService = indexService;
     }
 
     private IndexCoordinates getIndexCoordinates() {
