@@ -25,7 +25,7 @@ spec:
       value: api, postgres, remote-open-search
     - name: OPENSEARCH_USERNAME
       value: OPEN_SEARCH_USERNAME
-    - name: OPENSEARCH_URI
+    - name: OPENSEARCH_URL
       value: OPEN_SEARCH_URI
     - name: OPENSEARCH_PASSWORD
       value: OPEN_SEARCH_PASSWORD
