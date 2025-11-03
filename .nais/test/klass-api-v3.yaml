@@ -24,11 +24,11 @@ spec:
     - name: SPRING_PROFILES_ACTIVE
       value: api, postgres, remote-open-search
     - name: OPENSEARCH_USERNAME
-      value: OPEN_SEARCH_USERNAME
+      value: ${OPEN_SEARCH_USERNAME}
     - name: OPENSEARCH_URL
-      value: OPEN_SEARCH_URI
+      value: ${OPEN_SEARCH_URI}
     - name: OPENSEARCH_PASSWORD
-      value: OPEN_SEARCH_PASSWORD
+      value: ${OPEN_SEARCH_PASSWORD}
     - name: KLASS_ENV_CLIENT_KLASS_MAIL_URL
       value: http://klass-mail
     - name: JAVA_TOOL_OPTIONS
