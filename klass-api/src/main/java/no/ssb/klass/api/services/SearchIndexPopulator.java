@@ -20,12 +20,19 @@ import java.util.concurrent.CompletableFuture;
 @Component
 @Profile({"!" + ConfigurationProfiles.SKIP_INDEXING + "&" + "!" + ConfigurationProfiles.MOCK_SEARCH})
 public class SearchIndexPopulator implements CommandLineRunner {
+
     private static final Logger log = LoggerFactory.getLogger(SearchIndexPopulator.class);
 
-    @Autowired
-    private ClassificationSeriesRepository classificationSeriesRepository;
-    @Autowired
-    private IndexService indexService;
+    private final ClassificationSeriesRepository classificationSeriesRepository;
+    private final IndexService indexService;
+
+    public SearchIndexPopulator(
+            ClassificationSeriesRepository classificationSeriesRepository,
+            IndexService indexService
+    ) {
+        this.classificationSeriesRepository = classificationSeriesRepository;
+        this.indexService = indexService;
+    }
 
     @Override
     public void run(String... args) {
