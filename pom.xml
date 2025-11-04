@@ -11,7 +11,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.6</version>
+        <version>3.5.7</version>
         <relativePath/>
     </parent>
 
@@ -37,23 +37,23 @@
         <sonar.projectKey>klass</sonar.projectKey>
         <sonar.projectName>klass</sonar.projectName>
 
-        <asciidoctor-version>2.2.4</asciidoctor-version>
+        <asciidoctor-version>3.2.0</asciidoctor-version>
         <commons-io-version>2.20.0</commons-io-version>
         <commons-lang3-version>3.19.0</commons-lang3-version>
         <guava-version>32.0.1-jre</guava-version>
-        <jakarta-rs-api-version>3.1.0</jakarta-rs-api-version>
-        <jaxb-api-version>4.0.0</jaxb-api-version>
+        <jakarta-rs-api-version>4.0.0</jakarta-rs-api-version>
+        <jaxb-api-version>4.0.4</jaxb-api-version>
         <maven-jaxb2-plugin-version>0.15.3</maven-jaxb2-plugin-version>
         <objenesis-version>2.4</objenesis-version>
         <rest-assured-version>5.5.6</rest-assured-version>
         <snakeyaml.version>2.5</snakeyaml.version>
         <solr-version>8.5.2</solr-version>
         <sonar.version>5.2.0.4988</sonar.version>
-        <spring-restdocs-version>3.0.1</spring-restdocs-version>
+        <spring-restdocs-version>3.0.5</spring-restdocs-version>
         <testcontainers.version>1.20.1</testcontainers.version>
         <tomcat7-maven-plugin-version>2.2</tomcat7-maven-plugin-version>
         <woodstox-version>4.4.1</woodstox-version>
-        <zonky.pg.version>2.1.0</zonky.pg.version>
+        <zonky.pg.version>2.6.0</zonky.pg.version>
         <zonky.version>2.5.1</zonky.version>
     </properties>
 
@@ -107,7 +107,7 @@
                 <plugin>
                     <groupId>com.spotify.fmt</groupId>
                     <artifactId>fmt-maven-plugin</artifactId>
-                    <version>2.27</version>
+                    <version>2.29</version>
                     <configuration>
                         <failOnError>false</failOnError>
                     </configuration>
@@ -122,7 +122,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-release-plugin</artifactId>
-                    <version>3.0.1</version>
+                    <version>3.1.1</version>
                     <configuration>
                         <releaseProfiles>documentation</releaseProfiles>
                         <autoVersionSubmodules>true</autoVersionSubmodules>
@@ -134,7 +134,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-deploy-plugin</artifactId>
-                    <version>3.1.1</version>
+                    <version>3.1.4</version>
                 </plugin>
             </plugins>
         </pluginManagement>
