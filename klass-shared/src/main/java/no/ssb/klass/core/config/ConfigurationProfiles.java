@@ -43,18 +43,6 @@ public final class ConfigurationProfiles {
     public static final String SMALL_IMPORT = "small-import";
 
     /**
-     * Profile that disables Active Directory login so the application can be ran
-     * offline.
-     */
-    public static final String AD_AUTHENTICATE_OFFLINE = "ad-offline";
-
-    /**
-     * This profile makes use of the h2 database implementation and store data
-     * locally.
-     */
-    public static final String H2 = "h2";
-
-    /**
      * Profile to be used during development, emails are logged and not sent via
      * mailserver
      */
@@ -66,8 +54,9 @@ public final class ConfigurationProfiles {
     public static final String MOCK_SEARCH = "mock-search";
 
     /**
-     * This profile makes use of the h2 database in memory feature, all data will be
-     * lost on restart.
+     * Profile to be used during the api documentation test
      */
-    public static final String H2_INMEMORY = "h2-inmemory";
+    public static final String API_DOCUMENTATION_TEST = "api-documentation-test";
+
+    public static final String OPEN_SEARCH_LOCAL = "open-search-local";
 }

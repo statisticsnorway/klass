@@ -12,7 +12,7 @@ public class ResourceUtilTest {
     @Test
     public void createSearchLinkUsingTemplate() {
         WebMvcLinkBuilder linkBuilder = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(ClassificationController.class)
-                .search("query", null, true, null, null));
+                .search("query", null, true, null));
         String link = ResourceUtil.createUriTemplate(linkBuilder, "query", "includeCodelists").toString();
         // For some reason, the link is different when running the test from command line and from IDE
         link = link.replace("http://localhost", "");

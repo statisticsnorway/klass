@@ -27,23 +27,6 @@ klass-forvaltning/target/klass-forvaltning-{Version}.war
 klass-solr/klass-solr-{Version}.zip (WiP)
 ```
 
-## Server configuration
-
-Klass was made with Tomcat in mind and configuration on servers are done in `tomcat.conf` (usually found in ~tomcat/conf)
-variables in `application properties` will be overridden/replaced with properties found in `tomcat.conf`
-ex. the value for `klass.env.mariadb.password` will be replaced with the value from `KLASS_ENV_MARIADB_PASSWORD`.
-
-please note that `.` is replaced with `_` in the tomcat config.
-
-A typical `tomcat.conf` would contain the following
-
-```
-SPRING_PROFILES_ACTIVE=mariadb
-KLASS_ENV_MARIADB_INSTANCE=mysql-server
-KLASS_ENV_MARIADB_PASSWORD=Password
-KLASS_ENV_LOGGING_PATH=/var/log/tomcat
-```
-
 ## Database
 
 Klass is configured to use Flyway for database initialising and migration.
@@ -134,29 +117,7 @@ Build the app: `make build-klass-api`
 
 #### Docker compose
 
-Service `klass-api` requires a prebuild tagged image.
-
-Run command in `klass-api` module:
-
-```
-docker build -t target-postgres-image:latest .
-```
-
-This service depends on a Postgresql db container.
-
-For testing with MariaDB build `klass-api` with `klass-shared` version `3.0.5-master-SNAPSHOT`.
-
-This will build klass-api without running tests:
-
-```
-mvn clean install -DskipTests -pl klass-api
-```
-
-And build mariadb image in klass-api module:
-
-```
-docker build -t source-mariadb-image:latest .
-```
+TODO
 
 ### Klass Forvaltning
 
@@ -172,13 +133,24 @@ Visit <http://127.0.0.1:8081/klassui>
 
 ### Spring profiles
 
-Klass API and Klass Forvaltning utilize Spring boot and heavily rely on Spring Profiles to make development and debugging easier. See _application.properties_ for the available profiles.
+Klass API and Klass Forvaltning utilize Spring boot and heavily rely on Spring Profiles to make development and debugging easier.
+below is a quick summary of the profiles available (see _application.properties_ for more details)
+
+```
+# Application profiles:
+#----------------------
+# Profiles for production
+#   production          = no test beans and only Active Directory login
+#
+# Profiles for development
+#   ad-offline          = will only use test/embeded AD (apacheDS) [Forvaltning only]
+#   small-import        = imports a small number of classifications from legacy system, useful during development
+#   mock-mailserver     = outgoing emails are only logged
+```
 
 ### Build profiles
 
-we have created custom profiles for time-consuming tests that can be toggled on and off to help speed up compile time during development.
 The profile named `documentation` will generate API documentation with AsciiDoc (default: enabled)
-We also have a custom profile (`testbench`) for running GUI tests using TestBench (Vaadin licensed product).
 
 ### Run / Debug
 
