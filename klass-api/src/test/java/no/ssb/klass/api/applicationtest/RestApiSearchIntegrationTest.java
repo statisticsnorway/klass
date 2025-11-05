@@ -83,7 +83,7 @@ public class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest
 
     @Test
     public void restServiceSearchClassificationsJSON() {
-        given().port(port).accept(ContentType.JSON).params("query", "kommune")
+        given().port(port).accept(ContentType.JSON).params("query", "kommuner")
                 .get(REQUEST_SEARCH)
                 .prettyPeek()
                 .then()
@@ -129,7 +129,7 @@ public class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest
                 .assertThat()
                 .statusCode(HttpStatus.OK.value())
                 .contentType(ContentType.JSON)
-                .body(JSON_PAGE + ".totalElements", equalTo(1));
+                .body(JSON_PAGE + ".totalElements", equalTo(2));
     }
 
     @Test
@@ -147,7 +147,7 @@ public class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest
 
     @Test
     public void restServiceSearchClassificationsXML() {
-        given().port(port).accept(ContentType.XML).params("query", "kommune")
+        given().port(port).accept(ContentType.XML).params("query", "kommuner")
                 .get(REQUEST_SEARCH)
                 .prettyPeek()
                 .then().assertThat()
@@ -176,6 +176,78 @@ public class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest
     }
 
     @Test
+    public void restServiceSearchExactClassificationsXML() {
+        given().port(port).accept(ContentType.XML).params("query", "kommuneinndeling")
+                .get(REQUEST_SEARCH)
+                .prettyPeek()
+                .then().assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .contentType(ContentType.XML)
+                .body(XML_SEARCH_RESULTS + ".size()", equalTo(2))
+                // result 1
+                .body(XML_SEARCH_RESULT1 + ".name", equalTo(TestDataProvider.KOMMUNEINNDELING_NAVN_NO))
+                .body(XML_SEARCH_RESULT1 + ".snippet", containsString("kommune"))
+                .body(XML_SEARCH_RESULT1 + ".searchScore.toFloat()", greaterThan(0.0f))
+                .body(XML_SEARCH_RESULT1 + ".link.rel", equalTo("self"))
+                .body(XML_SEARCH_RESULT1 + ".link.href", containsString(REQUEST + "/" + kommuneinndeling.getId()))
+                // footer
+                .body(XML_ROOT + ".link.href", containsString(REQUEST_SEARCH))
+                .body(XML_PAGE + ".size.toInteger();", equalTo(PAGE_SIZE))
+                .body(XML_PAGE + ".totalElements.toInteger();", equalTo(2))
+                .body(XML_PAGE + ".totalPages.toInteger();", equalTo(1))
+                .body(XML_PAGE + ".number.toInteger();", equalTo(0));
+
+    }
+
+    @Test
+    public void restServiceSearchPartExactClassificationsXML() {
+        given().port(port).accept(ContentType.XML).params("query", "kommuneinndelin")
+                .get(REQUEST_SEARCH)
+                .prettyPeek()
+                .then().assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .contentType(ContentType.XML)
+                .body(XML_SEARCH_RESULTS + ".size()", equalTo(1))
+                // result 1
+                .body(XML_SEARCH_RESULT1 + ".name", equalTo(TestDataProvider.KOMMUNEINNDELING_NAVN_NO))
+                .body(XML_SEARCH_RESULT1 + ".snippet", containsString("kommune"))
+                .body(XML_SEARCH_RESULT1 + ".searchScore.toFloat()", greaterThan(0.0f))
+                .body(XML_SEARCH_RESULT1 + ".link.rel", equalTo("self"))
+                .body(XML_SEARCH_RESULT1 + ".link.href", containsString(REQUEST + "/" + kommuneinndeling.getId()))
+                // footer
+                .body(XML_ROOT + ".link.href", containsString(REQUEST_SEARCH))
+                .body(XML_PAGE + ".size.toInteger();", equalTo(PAGE_SIZE))
+                .body(XML_PAGE + ".totalElements.toInteger();", equalTo(1))
+                .body(XML_PAGE + ".totalPages.toInteger();", equalTo(1))
+                .body(XML_PAGE + ".number.toInteger();", equalTo(0));
+
+    }
+
+    @Test
+    public void restServiceSearchLessPartExactClassificationsXML() {
+        given().port(port).accept(ContentType.XML).params("query", "kommune inndel")
+                .get(REQUEST_SEARCH)
+                .prettyPeek()
+                .then().assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .contentType(ContentType.XML)
+                .body(XML_SEARCH_RESULTS + ".size()", equalTo(2))
+                // result 1
+                .body(XML_SEARCH_RESULT1 + ".name", equalTo(TestDataProvider.KOMMUNEINNDELING_NAVN_NO))
+                .body(XML_SEARCH_RESULT1 + ".snippet", containsString("kommune"))
+                .body(XML_SEARCH_RESULT1 + ".searchScore.toFloat()", greaterThan(0.0f))
+                .body(XML_SEARCH_RESULT1 + ".link.rel", equalTo("self"))
+                .body(XML_SEARCH_RESULT1 + ".link.href", containsString(REQUEST + "/" + kommuneinndeling.getId()))
+                // footer
+                .body(XML_ROOT + ".link.href", containsString(REQUEST_SEARCH))
+                .body(XML_PAGE + ".size.toInteger();", equalTo(PAGE_SIZE))
+                .body(XML_PAGE + ".totalElements.toInteger();", equalTo(2))
+                .body(XML_PAGE + ".totalPages.toInteger();", equalTo(1))
+                .body(XML_PAGE + ".number.toInteger();", equalTo(0));
+
+    }
+
+    @Test
     public void restServiceSearchClassificationsShouldNotReturnCodelistsByDefaultJSON() {
         // no result expected when codelists are not included (default behavior)
         given().port(port).accept(ContentType.JSON).params("query", "familie")
@@ -184,8 +256,8 @@ public class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest
                 .then().assertThat()
                 .statusCode(HttpStatus.OK.value())
                 .contentType(ContentType.JSON)
-                .body(JSON_PAGE + ".totalElements", equalTo(1))
-                .body(JSON_PAGE + ".totalPages", equalTo(1))
+                .body(JSON_PAGE + ".totalElements", equalTo(0))
+                .body(JSON_PAGE + ".totalPages", equalTo(0))
                 .body(JSON_PAGE + ".number", equalTo(0));
     }
 
@@ -198,8 +270,8 @@ public class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest
                 .then().assertThat()
                 .statusCode(HttpStatus.OK.value())
                 .contentType(ContentType.XML)
-                .body(XML_PAGE + ".totalElements.toInteger();", equalTo(1))
-                .body(XML_PAGE + ".totalPages.toInteger();", equalTo(1))
+                .body(XML_PAGE + ".totalElements.toInteger();", equalTo(0))
+                .body(XML_PAGE + ".totalPages.toInteger();", equalTo(0))
                 .body(XML_PAGE + ".number.toInteger();", equalTo(0));
     }
 
@@ -213,7 +285,7 @@ public class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest
                 .then().assertThat()
                 .statusCode(HttpStatus.OK.value())
                 .contentType(ContentType.JSON)
-                .body(JSON_SEARCH_RESULTS + ".size()", equalTo(2))
+                .body(JSON_SEARCH_RESULTS + ".size()", equalTo(1))
                 // result 1
                 .body(JSON_SEARCH_RESULT1 + ".name", equalTo(TestDataProvider.FAMILIEGRUPPERING_NAVN_NO))
                 .body(JSON_SEARCH_RESULT1 + ".snippet", containsString("familie"))
@@ -232,7 +304,7 @@ public class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest
                 .then().assertThat()
                 .statusCode(HttpStatus.OK.value())
                 .contentType(ContentType.XML)
-                .body(XML_SEARCH_RESULTS + ".size()", equalTo(2))
+                .body(XML_SEARCH_RESULTS + ".size()", equalTo(1))
                 // result 1
                 .body(XML_SEARCH_RESULT1 + ".name", equalTo(TestDataProvider.FAMILIEGRUPPERING_NAVN_NO))
                 .body(XML_SEARCH_RESULT1 + ".snippet", containsString("familie"))
