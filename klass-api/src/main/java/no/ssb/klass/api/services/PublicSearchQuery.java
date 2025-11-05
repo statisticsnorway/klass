@@ -4,8 +4,11 @@ import no.ssb.klass.core.model.ClassificationType;
 import no.ssb.klass.core.model.Language;
 import org.opensearch.common.unit.Fuzziness;
 import org.opensearch.index.query.BoolQueryBuilder;
+import org.opensearch.index.query.MultiMatchQueryBuilder;
 import org.opensearch.index.query.Operator;
 import org.opensearch.index.query.QueryBuilders;
+import org.opensearch.index.query.functionscore.FunctionScoreQueryBuilder;
+import org.opensearch.index.query.functionscore.ScoreFunctionBuilders;
 import org.springframework.data.domain.Pageable;
 import org.opensearch.data.client.orhlc.NativeSearchQueryBuilder;
 
@@ -40,26 +43,31 @@ public class PublicSearchQuery {
             filterBuilder.must(QueryBuilders.termQuery("section", filterOnSection));
         }
 
-        /*BoolQueryBuilder finalQuery = QueryBuilders.boolQuery()
-                .must(QueryBuilders.queryStringQuery(query)
+        BoolQueryBuilder mainQuery = QueryBuilders.boolQuery()
+                .must(QueryBuilders.multiMatchQuery(query)
                         .field("title", 5.0f)
-                        .field("description", 2.0f)
-                        .field("codes", 1.0f)
-                        .defaultOperator(Operator.OR)
-                )
-                .filter(filterBuilder);*/
-
-        BoolQueryBuilder fuzzyQuery = QueryBuilders.boolQuery()
-                .should(QueryBuilders.matchQuery("title", query).boost(5.0f))
-                .should(QueryBuilders.matchQuery("description", query).boost(3.0f))
-                .should(QueryBuilders.matchQuery("codes", query).boost(2.0f))
-
-                .should(QueryBuilders.matchQuery("title", query).fuzziness(Fuzziness.AUTO).boost(1.0f))
-                .should(QueryBuilders.matchQuery("description", query).fuzziness(Fuzziness.AUTO).boost(0.5f))
-                .should(QueryBuilders.matchQuery("codes", query).fuzziness(Fuzziness.AUTO).boost(0.25f));
-
+                        .field("title.autocomplete", 2.5f)
+                        .field("description", 3.0f)
+                        .field("codes", 2.0f)
+                        .type(MultiMatchQueryBuilder.Type.BEST_FIELDS)
+                        .operator(Operator.OR))
+                .should(QueryBuilders.multiMatchQuery(query)
+                        .field("title", 1.0f)
+                        .field("title.autocomplete", 0.5f)
+                        .field("description", 0.5f)
+                        .field("codes", 0.25f)
+                        .fuzziness(Fuzziness.AUTO)
+                        .operator(Operator.OR));
+        FunctionScoreQueryBuilder functionScoreQuery = QueryBuilders.functionScoreQuery(
+                mainQuery,
+                new FunctionScoreQueryBuilder.FilterFunctionBuilder[]{
+                        new FunctionScoreQueryBuilder.FilterFunctionBuilder(
+                                ScoreFunctionBuilders.weightFactorFunction(2.0f)
+                        )
+                }
+        );
         BoolQueryBuilder finalQuery = QueryBuilders.boolQuery()
-                .must(fuzzyQuery)
+                .must(functionScoreQuery)
                 .filter(filterBuilder);
 
         NativeSearchQueryBuilder nativeQueryBuilder = new NativeSearchQueryBuilder()
