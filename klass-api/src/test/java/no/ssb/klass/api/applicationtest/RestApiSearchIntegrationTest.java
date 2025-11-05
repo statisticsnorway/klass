@@ -72,42 +72,7 @@ public class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest
             // Index might not exist yet, that's fine
         }
 
-        String indexDefinition = """
-            {
-              "settings": {
-                "number_of_shards": 1,
-                "number_of_replicas": 0,
-                "analysis": {
-                  "analyzer": {
-                    "norwegian": {
-                      "type": "norwegian"
-                    }
-                  }
-                }
-              },
-              "mappings": {
-                "properties": {
-                  "title": { "type": "text", "analyzer": "norwegian" },
-                  "description": { "type": "text", "analyzer": "norwegian" },
-                  "codes": { "type": "text", "analyzer": "norwegian" },
-                  "type": { "type": "keyword" },
-                  "published": { "type": "boolean" },
-                  "copyrighted": { "type": "boolean" },
-                  "itemid": { "type": "long" },
-                  "language": { "type": "keyword" },
-                  "section": { "type": "keyword" },
-                  "family": { "type": "text" },
-                  "uuid": { "type": "keyword" }
-                }
-              }
-            }
-            """;
-
-        org.opensearch.client.indices.CreateIndexRequest createRequest =
-            new org.opensearch.client.indices.CreateIndexRequest("klass")
-                .source(indexDefinition, org.opensearch.common.xcontent.XContentType.JSON);
-
-        opensearchClient.indices().create(createRequest, org.opensearch.client.RequestOptions.DEFAULT);
+        indexService.createIndexWithStemmingAnalyzer();
 
         indexService.indexSync(kommuneinndeling);
         indexService.indexSync(bydelsinndeling);
@@ -143,10 +108,46 @@ public class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest
                 .body(JSON_PAGE + ".number", equalTo(0));
     }
 
+    @Test
+    public void restServiceSearchPartialWord() {
+        given().port(port).accept(ContentType.JSON).params("query", "kommun")
+                .get(REQUEST_SEARCH)
+                .prettyPeek()
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .contentType(ContentType.JSON)
+                .body(JSON_PAGE + ".totalElements", equalTo(2));
+    }
+
+    @Test
+    public void restServiceSearchExactWord() {
+        given().port(port).accept(ContentType.JSON).params("query", "bydelsinndeling")
+                .get(REQUEST_SEARCH)
+                .prettyPeek()
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .contentType(ContentType.JSON)
+                .body(JSON_PAGE + ".totalElements", equalTo(1));
+    }
+
+    @Test
+    public void restServiceSearchSpaceWord() {
+        given().port(port).accept(ContentType.JSON).params("query", "bydel")
+                .get(REQUEST_SEARCH)
+                .prettyPeek()
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .contentType(ContentType.JSON)
+                .body(JSON_PAGE + ".totalElements", equalTo(1));
+    }
+
 
     @Test
     public void restServiceSearchClassificationsXML() {
-        given().port(port).accept(ContentType.XML).params("query", "kommuner")
+        given().port(port).accept(ContentType.XML).params("query", "kommune")
                 .get(REQUEST_SEARCH)
                 .prettyPeek()
                 .then().assertThat()
@@ -183,8 +184,8 @@ public class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest
                 .then().assertThat()
                 .statusCode(HttpStatus.OK.value())
                 .contentType(ContentType.JSON)
-                .body(JSON_PAGE + ".totalElements", equalTo(0))
-                .body(JSON_PAGE + ".totalPages", equalTo(0))
+                .body(JSON_PAGE + ".totalElements", equalTo(1))
+                .body(JSON_PAGE + ".totalPages", equalTo(1))
                 .body(JSON_PAGE + ".number", equalTo(0));
     }
 
@@ -197,9 +198,8 @@ public class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest
                 .then().assertThat()
                 .statusCode(HttpStatus.OK.value())
                 .contentType(ContentType.XML)
-                .body(XML_SEARCH_RESULTS + ".size()", equalTo(0))
-                .body(XML_PAGE + ".totalElements.toInteger();", equalTo(0))
-                .body(XML_PAGE + ".totalPages.toInteger();", equalTo(0))
+                .body(XML_PAGE + ".totalElements.toInteger();", equalTo(1))
+                .body(XML_PAGE + ".totalPages.toInteger();", equalTo(1))
                 .body(XML_PAGE + ".number.toInteger();", equalTo(0));
     }
 
@@ -213,7 +213,7 @@ public class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest
                 .then().assertThat()
                 .statusCode(HttpStatus.OK.value())
                 .contentType(ContentType.JSON)
-                .body(JSON_SEARCH_RESULTS + ".size()", equalTo(1))
+                .body(JSON_SEARCH_RESULTS + ".size()", equalTo(2))
                 // result 1
                 .body(JSON_SEARCH_RESULT1 + ".name", equalTo(TestDataProvider.FAMILIEGRUPPERING_NAVN_NO))
                 .body(JSON_SEARCH_RESULT1 + ".snippet", containsString("familie"))
@@ -232,7 +232,7 @@ public class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest
                 .then().assertThat()
                 .statusCode(HttpStatus.OK.value())
                 .contentType(ContentType.XML)
-                .body(XML_SEARCH_RESULTS + ".size()", equalTo(1))
+                .body(XML_SEARCH_RESULTS + ".size()", equalTo(2))
                 // result 1
                 .body(XML_SEARCH_RESULT1 + ".name", equalTo(TestDataProvider.FAMILIEGRUPPERING_NAVN_NO))
                 .body(XML_SEARCH_RESULT1 + ".snippet", containsString("familie"))
