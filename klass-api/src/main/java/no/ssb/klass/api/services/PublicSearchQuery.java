@@ -2,6 +2,7 @@ package no.ssb.klass.api.services;
 
 import no.ssb.klass.core.model.ClassificationType;
 import no.ssb.klass.core.model.Language;
+import org.opensearch.common.unit.Fuzziness;
 import org.opensearch.index.query.BoolQueryBuilder;
 import org.opensearch.index.query.Operator;
 import org.opensearch.index.query.QueryBuilders;
@@ -39,13 +40,28 @@ public class PublicSearchQuery {
             filterBuilder.must(QueryBuilders.termQuery("section", filterOnSection));
         }
 
-        BoolQueryBuilder finalQuery = QueryBuilders.boolQuery()
+       /* BoolQueryBuilder finalQuery = QueryBuilders.boolQuery()
                 .must(QueryBuilders.queryStringQuery(query)
+                        //.field("title", 5.0f)
                         .field("title", 3.0f)
                         .field("description", 2.0f)
                         .field("codes", 1.0f)
                         .defaultOperator(Operator.OR)
                 )
+                .filter(filterBuilder);*/
+
+        BoolQueryBuilder fuzzyQuery = QueryBuilders.boolQuery()
+                .should(QueryBuilders.matchQuery("title", query).boost(5.0f))
+                .should(QueryBuilders.matchQuery("description", query).boost(3.0f))
+                .should(QueryBuilders.matchQuery("codes", query).boost(2.0f));
+
+                // Fuzzy matches (lower boost)
+                /*.should(QueryBuilders.matchQuery("title", query).fuzziness(Fuzziness.AUTO).boost(1.0f))
+                .should(QueryBuilders.matchQuery("description", query).fuzziness(Fuzziness.AUTO).boost(0.5f))
+                .should(QueryBuilders.matchQuery("codes", query).fuzziness(Fuzziness.AUTO).boost(0.25f));
+*/
+        BoolQueryBuilder finalQuery = QueryBuilders.boolQuery()
+                .must(fuzzyQuery)
                 .filter(filterBuilder);
 
         NativeSearchQueryBuilder nativeQueryBuilder = new NativeSearchQueryBuilder()
