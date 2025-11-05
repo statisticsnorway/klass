@@ -88,8 +88,12 @@ public class IndexServiceImpl implements IndexService {
             var indexOps = elasticsearchOperations.indexOps(getIndexCoordinates());
 
             if (indexOps.exists()) {
-                log.info("Index '{}' already exists — skipping creation.", elasticsearchIndex);
-                return;
+                log.info("Index '{}' exists — deletes index.", elasticsearchIndex);
+                boolean deleted = indexOps.delete();
+                if (!deleted) {
+                    log.warn("Failed to delete existing index '{}'. Aborting recreation.", elasticsearchIndex);
+                    return;
+                }
             }
 
             Map<String, Object> settings =

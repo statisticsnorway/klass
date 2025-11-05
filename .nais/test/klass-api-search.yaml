@@ -46,7 +46,7 @@ spec:
         - application: klass-mail
   openSearch:
     access: readwrite
-    instance: klass-search
+    instance: klass-search-new
 
   prometheus:
     enabled: true
