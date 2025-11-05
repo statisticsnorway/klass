@@ -32,6 +32,48 @@ public class KlassApiSearchForClassificationsJsonTest extends AbstractKlassApiSe
     }
 
     @Test
+    void searchPartial1() {
+
+        String path = getSearchPath();
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsQuery2, null);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsQuery2, null);
+
+        assertApiResponseIsNotNull(sourceResponse);
+
+        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+
+        if (sourceResponse.getStatusCode() != 200) {
+            assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
+
+        } else {
+            validateObject(sourceResponse, targetResponse, PAGE);
+            validateObject(sourceResponse, targetResponse, LINKS_SELF_HREF);
+
+        }
+    }
+
+    @Test
+    void search3() {
+
+        String path = getSearchPath();
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsQuery3, null);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsQuery3, null);
+
+        assertApiResponseIsNotNull(sourceResponse);
+
+        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+
+        if (sourceResponse.getStatusCode() != 200) {
+            assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
+
+        } else {
+            validateObject(sourceResponse, targetResponse, PAGE);
+            validateObject(sourceResponse, targetResponse, LINKS_SELF_HREF);
+
+        }
+    }
+
+    @Test
     void searchIncludeCodeLists() {
 
         String path = getSearchPath();
