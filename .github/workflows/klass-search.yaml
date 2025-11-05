@@ -5,7 +5,7 @@ on:
     paths:
       - "klass-api/**"
       - "klass-shared/**"
-      - ".nais/**/klass-api.yaml"
+      - ".nais/**/klass-api-search.yaml"
       - ".github/workflows/klass-search.yaml"
 
 jobs:
@@ -36,12 +36,12 @@ jobs:
         id: changed-files
         uses: "nais/what-changed@main"
         with:
-          files: .nais/**/klass-api.yaml
+          files: .nais/**/klass-api-search.yaml
       - name: Check for test config changes
         id: test-config-changed
         uses: "nais/what-changed@main"
         with:
-          files: .nais/test/klass-api.yaml
+          files: .nais/test/klass-api-search.yaml
 
       - name: Build with Maven
         if: steps.changed-files.outputs.changed != 'only-inputs' || github.event.inputs.cluster == 'test'
@@ -75,7 +75,7 @@ jobs:
       - uses: nais/deploy/actions/deploy@v2
         env:
           CLUSTER: test
-          RESOURCE: .nais/test/klass-search.yaml
+          RESOURCE: .nais/test/klass-api-search.yaml
           DEPLOY_SERVER: deploy.ssb.cloud.nais.io:443
           WORKLOAD_IMAGE: ${{ needs.build.outputs.image }}
           TELEMETRY: ${{ needs.build.outputs.telemetry }}
