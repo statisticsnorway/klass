@@ -1,4 +1,4 @@
-name: Klass-api build and deploy
+name: Klass search
 
 on:
   push:
