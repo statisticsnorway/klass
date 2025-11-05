@@ -1,11 +1,12 @@
 package no.ssb.klass.api.services;
 
 import no.ssb.klass.core.model.ClassificationSeries;
-import org.opensearch.index.reindex.ReindexRequest;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.transaction.annotation.Transactional;
 
 public interface IndexService {
+
+    void createIndexWithStemmingAnalyzer();
 
     /**
      * Indexes a classification and makes it searchable.

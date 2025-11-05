@@ -77,8 +77,117 @@ public class IndexServiceImpl implements IndexService {
         return IndexCoordinates.of(elasticsearchIndex);
     }
 
+
+    /*@Override
     @PostConstruct
-    private void createIndexWithStemmingAnalyzer() {
+    public void createIndexWithStemmingAnalyzer() {
+        try {
+            var indexOps = elasticsearchOperations.indexOps(getIndexCoordinates());
+
+            if (indexOps.exists()) {
+                log.info("Index '{}' already exists — skipping creation.", elasticsearchIndex);
+                return;
+            }
+
+            Map<String, Object> settings = Map.of(
+                    "analysis",
+                    Map.of(
+                            "analyzer",
+                            Map.of(
+                                    OpenSearchConfig.NORWEGIAN_STEMMER_ANALYZER,
+                                    Map.of(
+                                            "type", "custom",
+                                            "tokenizer", "standard",
+                                            "filter", List.of("lowercase", "norwegian_stemmer")
+                                    ),
+                                    "autocomplete_analyzer",
+                                    Map.of(
+                                            "type", "custom",
+                                            "tokenizer", "autocomplete_tokenizer",
+                                            "filter", List.of("lowercase")
+                                    )
+                            ),
+                            "tokenizer",
+                            Map.of(
+                                    "autocomplete_tokenizer",
+                                    Map.of(
+                                            "type", "edge_ngram",
+                                            "min_gram", 3,
+                                            "max_gram", 20,
+                                            "token_chars", List.of("letter", "digit")
+                                    )
+                            ),
+                            "filter",
+                            Map.of(
+                                    "norwegian_stemmer",
+                                    Map.of("type", "stemmer", "name", "norwegian")
+                            )
+                    )
+            );
+
+            Map<String, Object> mappings = Map.of(
+                    "properties",
+                    Map.of(
+                            TITLE,
+                            Map.of(
+                                    "type", "text",
+                                    ANALYZER, OpenSearchConfig.NORWEGIAN_STEMMER_ANALYZER,
+                                    SEARCH_ANALYZER, OpenSearchConfig.NORWEGIAN_STEMMER_ANALYZER,
+                                    "fields", Map.of(
+                                            "autocomplete", Map.of(
+                                                    "type", "text",
+                                                    "analyzer", "autocomplete_analyzer",
+                                                    "search_analyzer", "standard"
+                                            )
+                                    )
+                            ),
+                            DESCRIPTION,
+                            Map.of(
+                                    "type", "text",
+                                    ANALYZER, OpenSearchConfig.NORWEGIAN_STEMMER_ANALYZER,
+                                    SEARCH_ANALYZER, OpenSearchConfig.NORWEGIAN_STEMMER_ANALYZER,
+                                    "fields", Map.of(
+                                            "autocomplete", Map.of(
+                                                    "type", "text",
+                                                    "analyzer", "autocomplete_analyzer",
+                                                    "search_analyzer", "standard"
+                                            )
+                                    )
+                            ),
+                            CODES,
+                            Map.of(
+                                    "type", "text",
+                                    ANALYZER, OpenSearchConfig.NORWEGIAN_STEMMER_ANALYZER,
+                                    SEARCH_ANALYZER, OpenSearchConfig.NORWEGIAN_STEMMER_ANALYZER,
+                                    "fields", Map.of(
+                                            "autocomplete", Map.of(
+                                                    "type", "text",
+                                                    "analyzer", "autocomplete_analyzer",
+                                                    "search_analyzer", "standard"
+                                            )
+                                    )
+                            ),
+                            FAMILY, Map.of("type", "keyword"),
+                            SECTION, Map.of("type", "keyword")
+                    )
+            );
+
+            boolean created = indexOps.create(settings);
+            if (created) {
+                indexOps.putMapping(Document.from(mappings));
+                log.info("Created index '{}' with Norwegian stemming analyzer + n-gram autocomplete.", elasticsearchIndex);
+            } else {
+                log.warn("Failed to create index '{}'", elasticsearchIndex);
+            }
+
+        } catch (Exception e) {
+            log.error("Error creating index '{}': {}", elasticsearchIndex, e.getMessage(), e);
+        }
+    }*/
+
+    @Override
+    @PostConstruct
+    public void createIndexWithStemmingAnalyzer() {
 
         try {
             var indexOps = elasticsearchOperations.indexOps(getIndexCoordinates());
@@ -88,60 +197,54 @@ public class IndexServiceImpl implements IndexService {
                 return;
             }
 
+                Map<String, Object> settings = Map.of(
 
-            Map<String, Object> settings =
-                    Map.of(
-                            "analysis",
-                            Map.of(
-                                    ANALYZER,
-                                            Map.of(
-                                                    OpenSearchConfig.NORWEGIAN_STEMMER_ANALYZER,
-                                                    Map.of(
-                                                            "type", "custom",
-                                                            "tokenizer", "standard",
-                                                            "filter",
-                                                                    List.of(
-                                                                            "lowercase",
-                                                                            "norwegian_stemmer"))),
-                                    "filter",
-                                            Map.of(
-                                                    "norwegian_stemmer",
-                                                    Map.of(
-                                                            "type", "stemmer",
-                                                            "name", "norwegian"))));
+                        "analysis",
+                                Map.of(
+                                        "tokenizer",
+                                        Map.of(
+                                                "edge_ngram_tokenizer", Map.of(
+                                                        "type", "edge_ngram",
+                                                        "min_gram", 3,
+                                                        "max_gram", 5,
+                                                        "token_chars", List.of("letter", "digit")
+                                                )
+                                        ),
+                                        "analyzer", Map.of(
+                                                "ngram_analyzer", Map.of(
+                                                        "type", "custom",
+                                                        "tokenizer", "edge_ngram_tokenizer",
+                                                        "filter", List.of("lowercase")
+                                                )
+                                        )
+                                )
+                );
 
             Map<String, Object> mappings =
                     Map.of(
                             "properties",
                             Map.of(
-                                    TITLE,
-                                            Map.of(
-                                                    "type", "text",
-                                                    ANALYZER,
-                                                            OpenSearchConfig
-                                                                    .NORWEGIAN_STEMMER_ANALYZER,
-                                                    SEARCH_ANALYZER,
-                                                            OpenSearchConfig
-                                                                    .NORWEGIAN_STEMMER_ANALYZER),
-                                    DESCRIPTION,
-                                            Map.of(
-                                                    "type", "text", ANALYZER,
-                                                            OpenSearchConfig
-                                                                    .NORWEGIAN_STEMMER_ANALYZER,
-                                                    SEARCH_ANALYZER,
-                                                            OpenSearchConfig
-                                                                    .NORWEGIAN_STEMMER_ANALYZER),
-                                    CODES,
-                                            Map.of(
-                                                    "type", "text",
-                                                    ANALYZER,
-                                                            OpenSearchConfig
-                                                                    .NORWEGIAN_STEMMER_ANALYZER,
-                                                    "",
-                                                            OpenSearchConfig
-                                                                    .NORWEGIAN_STEMMER_ANALYZER),
+                                   TITLE, Map.of(
+                                            "type", "text",
+                                            "analyzer", "ngram_analyzer",
+                                            "search_analyzer", "ngram_analyzer"
+                                    ),
+                                    DESCRIPTION, Map.of(
+                                            "type", "text",
+                                            "analyzer", "ngram_analyzer",
+                                            "search_analyzer", "ngram_analyzer"
+                                    ),
+                                    CODES, Map.of(
+                                            "type", "text",
+                                            "analyzer", "ngram_analyzer",
+                                            "search_analyzer", "ngram_analyzer"
+                                    ),
                                     FAMILY, Map.of("type", "keyword"),
-                                    SECTION, Map.of("type", "keyword")));
+                                    SECTION, Map.of("type", "keyword")
+                                    )
+
+                                    );
+
 
             boolean created = indexOps.create(settings);
             if (created) {
