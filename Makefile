@@ -128,3 +128,11 @@ start-klass-api-open-search-docker:
 .PHONY: stop-klass-api-open-search-docker
 stop-klass-api-open-search-docker:
 	docker compose $(COMPOSE_FILE) --profile open-search down -v
+
+.PHONY: check-klass-api-open-search-docker
+check-klass-api-open-search-docker:
+	docker compose $(COMPOSE_FILE) --profile open-search ps
+
+.PHONY: logs-klass-api-open-search
+logs-klass-api-open-search:
+	docker compose $(COMPOSE_FILE) --profile open-search logs --tail=100 -f klass-api-open-search
