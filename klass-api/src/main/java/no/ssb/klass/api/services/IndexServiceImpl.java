@@ -34,6 +34,8 @@ public class IndexServiceImpl implements IndexService {
 
     private static final String ANALYZER = "analyzer";
     private static final String SEARCH_ANALYZER = "search_analyzer";
+    private static final  String TOKENIZER = "tokenizer";
+    private static final  String FILTER = "filter";
 
     private static final String ITEM_ID = "itemid";
     private static final String UUID = "uuid";
@@ -197,7 +199,89 @@ public class IndexServiceImpl implements IndexService {
                 return;
             }
 
-                Map<String, Object> settings = Map.of(
+            Map<String, Object> settings =
+                    Map.of(
+                            "analysis", Map.of(
+                                    ANALYZER,
+                                    Map.of(
+                                            OpenSearchConfig.NORWEGIAN_STEMMER_ANALYZER, Map.of(
+                                                    "type", "custom",
+                                                    "tokenizer", "standard",
+                                                    "filter",
+                                                    List.of(
+                                                            "lowercase",
+                                                            "norwegian_stemmer"
+                                                            )
+                                                    ),
+                                            "autocomplete", Map.of(
+                                                    "tokenizer","autocomplete_tokenizer",
+                                                    "filter", List.of("lowercase")
+                                            )
+                                    ),
+                                    TOKENIZER,
+                                    Map.of(
+                                                    "autocomplete_tokenizer", Map.of(
+                                                            "type", "edge_ngram",
+                                                            "min_gram", 5,
+                                                            "max_gram", 10,
+                                                            "token_chars", List.of("letter")
+                                                    )
+
+                                            ),
+                                    FILTER,
+                                    Map.of(
+                                            "norwegian_stemmer",
+                                            Map.of(
+                                                    "type", "stemmer",
+                                                    "name", "norwegian"
+                                            ),
+                                            "norwegian_decompounder",
+                                            Map.of(
+                                                    "type", "dictionary_decompounder",
+                                                    "word_list", List.of(
+                                                            "kommune",
+                                                            "inndeling",
+                                                            "bydel",
+                                                            "region",
+                                                            "fylke")
+
+                                            )
+                                    )
+                            )
+                    );
+
+            Map<String, Object> mappings =
+                    Map.of(
+                            "properties",
+                            Map.of(
+                                    TITLE,
+                                    Map.of(
+                                            "type", "text",
+                                            ANALYZER,
+                                            OpenSearchConfig
+                                                    .NORWEGIAN_STEMMER_ANALYZER,
+                                            SEARCH_ANALYZER,  "autocomplete"),
+                                    DESCRIPTION,
+                                    Map.of(
+                                            "type", "text", ANALYZER,
+                                            OpenSearchConfig
+                                                    .NORWEGIAN_STEMMER_ANALYZER,
+                                            SEARCH_ANALYZER,
+                                            OpenSearchConfig
+                                                    .NORWEGIAN_STEMMER_ANALYZER),
+                                    CODES,
+                                    Map.of(
+                                            "type", "text",
+                                            ANALYZER,
+                                            OpenSearchConfig
+                                                    .NORWEGIAN_STEMMER_ANALYZER,
+                                            "",
+                                            OpenSearchConfig
+                                                    .NORWEGIAN_STEMMER_ANALYZER),
+                                    FAMILY, Map.of("type", "keyword"),
+                                    SECTION, Map.of("type", "keyword")));
+
+                /*Map<String, Object> settings = Map.of(
 
                         "analysis",
                                 Map.of(
@@ -243,7 +327,7 @@ public class IndexServiceImpl implements IndexService {
                                     SECTION, Map.of("type", "keyword")
                                     )
 
-                                    );
+                                    );*/
 
 
             boolean created = indexOps.create(settings);
