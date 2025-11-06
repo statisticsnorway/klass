@@ -86,7 +86,7 @@ public class RestApiClassificationFamilyIntegrationTest extends AbstractRestApiA
                 .assertThat().statusCode(HttpStatus.OK.value())
                 .assertThat().contentType(ContentType.JSON)
                 .assertThat().body("name", equalTo(classificationFamily.getName()))
-                .assertThat().body("classifications.size()", equalTo(2))
+                .assertThat().body("classifications.size()", equalTo(4))
                 .body(JSON_LINKS + ".self.href", containsString(urlParts));
     }
 
@@ -102,7 +102,7 @@ public class RestApiClassificationFamilyIntegrationTest extends AbstractRestApiA
                 .assertThat().statusCode(HttpStatus.OK.value())
                 .assertThat().contentType(ContentType.JSON)
                 .assertThat().body("name", equalTo(classificationFamily.getName()))
-                .assertThat().body("classifications.size()", equalTo(2))
+                .assertThat().body("classifications.size()", equalTo(4))
                 .body(JSON_LINKS + ".self.href", containsString(urlParts));
     }
 

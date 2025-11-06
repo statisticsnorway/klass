@@ -94,6 +94,7 @@ public abstract class AbstractRestApiApplicationTest {
     public static final String JSON_CLASSIFICATION2 = "_embedded.classifications[1]";
     public static final String JSON_CLASSIFICATION3 = "_embedded.classifications[2]";
     public static final String JSON_CLASSIFICATION4 = "_embedded.classifications[3]";
+    public static final String JSON_CLASSIFICATION5 = "_embedded.classifications[4]";
 
     public static final String XML_CLASSIFICATIONS = "PagedResources.contents.content";
     public static final String XML_CLASSIFICATION1 = "PagedResources.contents.content[0]";
