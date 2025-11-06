@@ -77,8 +77,9 @@ public class IndexServiceImpl implements IndexService {
         return IndexCoordinates.of(elasticsearchIndex);
     }
 
+    @Override
     @PostConstruct
-    private void createIndexWithStemmingAnalyzer() {
+    public void createIndexWithStemmingAnalyzer() {
 
         try {
             var indexOps = elasticsearchOperations.indexOps(getIndexCoordinates());

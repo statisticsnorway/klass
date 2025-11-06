@@ -37,7 +37,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import static io.zonky.test.db.AutoConfigureEmbeddedDatabase.DatabaseProvider.ZONKY;
-import static no.ssb.klass.core.config.ConfigurationProfiles.MOCK_SEARCH;
 
 @Testcontainers
 @ExtendWith(SpringExtension.class)
@@ -78,9 +77,13 @@ public abstract class AbstractRestApiApplicationTest {
 
     public static final String REQUEST_WITH_ID_AND_CHANGES = REQUEST + "/{classificationId}/changes";
 
+    public static final String QUERY = "query";
+    public static final String INCLUDE_CODE_LISTS = "includeCodelists";
+    public static final String TRUE = "true";
     public static final String JSON_SEARCH_RESULTS = "_embedded.searchResults";
     public static final String JSON_SEARCH_RESULT1 = "_embedded.searchResults[0]";
     public static final String JSON_SEARCH_RESULT2 = "_embedded.searchResults[1]";
+    public static final String JSON_SEARCH_RESULT3 = "_embedded.searchResults[2]";
 
     public static final String XML_SEARCH_RESULTS = "PagedResources.contents.content";
     public static final String XML_SEARCH_RESULT1 = "PagedResources.contents.content[0]";
@@ -128,6 +131,8 @@ public abstract class AbstractRestApiApplicationTest {
     protected ClassificationFamily classificationFamily;
     protected CorrespondenceTable correspondenceTable;
     protected ClassificationSeries badmintonCodelist;
+    protected ClassificationSeries badminton;
+    protected ClassificationSeries sport;
 
     @Autowired
     protected ApplicationTestUtil applicationTestUtil;
@@ -170,9 +175,19 @@ public abstract class AbstractRestApiApplicationTest {
         classificationFamily.addClassificationSeries(familieGrupperingCodelist);
         classificationService.saveAndIndexClassification(familieGrupperingCodelist);
 
-        badmintonCodelist = TestDataProvider.createBadmintonCodelist(user, user2, user3);
+        badmintonCodelist = TestDataProvider.createBadmintonCodeList(user, user2, user3);
         classificationFamily.addClassificationSeries(badmintonCodelist);
         classificationService.saveAndIndexClassification(badmintonCodelist);
+
+        badminton = TestDataProvider.createBadmintonClassification(user);
+        badminton.setContactPerson(user);
+        classificationFamily.addClassificationSeries(badminton);
+        badminton = classificationService.saveAndIndexClassification(badminton);
+
+        sport = TestDataProvider.createSportClassification(user);
+        sport.setContactPerson(user);
+        classificationFamily.addClassificationSeries(sport);
+        sport = classificationService.saveAndIndexClassification(sport);
 
         kommuneinndeling = classificationService.saveAndIndexClassification(kommuneinndeling);
         bydelsinndeling = classificationService.saveAndIndexClassification(bydelsinndeling);

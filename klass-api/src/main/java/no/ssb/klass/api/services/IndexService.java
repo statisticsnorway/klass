@@ -7,6 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 public interface IndexService {
 
+    void createIndexWithStemmingAnalyzer();
+
     /**
      * Indexes a classification and makes it searchable.
      *
