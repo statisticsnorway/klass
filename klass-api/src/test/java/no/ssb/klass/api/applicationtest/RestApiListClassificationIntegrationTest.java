@@ -108,15 +108,12 @@ public class RestApiListClassificationIntegrationTest extends AbstractRestApiApp
                 .prettyPeek().then()
                 .statusCode(HttpStatus.OK.value())
                 .contentType(ContentType.XML)
-                .body(XML_CLASSIFICATIONS + ".size()", equalTo(2))
+                .body(XML_CLASSIFICATIONS + ".size()", equalTo(4))
                 // result 1
-                .body(XML_CLASSIFICATION1 + ".name", equalTo(TestDataProvider.KOMMUNEINNDELING_NAVN_NO))
-                .body(XML_CLASSIFICATION1 + ".link.rel", equalTo("self"))
-                .body(XML_CLASSIFICATION1 + ".link.href", containsString(REQUEST + "/" + kommuneinndeling.getId()))
-                //result 2
-                .body(XML_CLASSIFICATION2 + ".name", equalTo(TestDataProvider.BYDELSINNDELING_NAVN_NO))
-                .body(XML_CLASSIFICATION2 + ".link.rel", equalTo("self"))
-                .body(XML_CLASSIFICATION2 + ".link.href", containsString(REQUEST + "/" + bydelsinndeling.getId()))
+                .body(XML_CLASSIFICATION3 + ".name", equalTo(TestDataProvider.KOMMUNEINNDELING_NAVN_NO))
+                .body(XML_CLASSIFICATION3 + ".link.rel", equalTo("self"))
+                .body(XML_CLASSIFICATION3 + ".link.href", containsString(REQUEST + "/" + kommuneinndeling.getId()))
+
                 // links
                 .body(XML_ROOT + ".link[0].rel", equalTo("self"))
                 .body(XML_ROOT + ".link[0].href", containsString(REQUEST))
@@ -124,7 +121,7 @@ public class RestApiListClassificationIntegrationTest extends AbstractRestApiApp
                 .body(XML_ROOT + ".link[1].href", containsString(REQUEST_SEARCH))
                 // paging
                 .body(XML_PAGE + ".size.toInteger();", equalTo(20))
-                .body(XML_PAGE + ".totalElements.toInteger();", equalTo(2))
+                .body(XML_PAGE + ".totalElements.toInteger();", equalTo(4))
                 .body(XML_PAGE + ".totalPages.toInteger();", equalTo(1))
                 .body(XML_PAGE + ".number.toInteger();", equalTo(0));
     }
@@ -137,19 +134,15 @@ public class RestApiListClassificationIntegrationTest extends AbstractRestApiApp
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .contentType(ContentType.XML)
-                .body(XML_CLASSIFICATIONS + ".size()", equalTo(4))
+                .body(XML_CLASSIFICATIONS + ".size()", equalTo(6))
                 // result 1
                 .body(XML_CLASSIFICATION1 + ".name", equalTo(TestDataProvider.FAMILIEGRUPPERING_NAVN_NO))
                 .body(XML_CLASSIFICATION1 + ".link.rel", equalTo("self"))
                 .body(XML_CLASSIFICATION1 + ".link.href", containsString(REQUEST + "/" + familieGrupperingCodelist.getId()))
                 //result 2
-                .body(XML_CLASSIFICATION3 + ".name", equalTo(TestDataProvider.KOMMUNEINNDELING_NAVN_NO))
-                .body(XML_CLASSIFICATION3 + ".link.rel", equalTo("self"))
-                .body(XML_CLASSIFICATION3 + ".link.href", containsString(REQUEST + "/" + kommuneinndeling.getId()))
-                //result 3
-                .body(XML_CLASSIFICATION4 + ".name", equalTo(TestDataProvider.BYDELSINNDELING_NAVN_NO))
-                .body(XML_CLASSIFICATION4 + ".link.rel", equalTo("self"))
-                .body(XML_CLASSIFICATION4 + ".link.href", containsString(REQUEST + "/" + bydelsinndeling.getId()))
+                .body(XML_CLASSIFICATION5 + ".name", equalTo(TestDataProvider.KOMMUNEINNDELING_NAVN_NO))
+                .body(XML_CLASSIFICATION5 + ".link.rel", equalTo("self"))
+                .body(XML_CLASSIFICATION5 + ".link.href", containsString(REQUEST + "/" + kommuneinndeling.getId()))
 
                 // links
                 .body(XML_ROOT + ".link[0].rel", equalTo("self"))
@@ -158,7 +151,7 @@ public class RestApiListClassificationIntegrationTest extends AbstractRestApiApp
                 .body(XML_ROOT + ".link[1].href", containsString(REQUEST_SEARCH))
                 // paging
                 .body(XML_PAGE + ".size.toInteger();", equalTo(20))
-                .body(XML_PAGE + ".totalElements.toInteger();", equalTo(4))
+                .body(XML_PAGE + ".totalElements.toInteger();", equalTo(6))
                 .body(XML_PAGE + ".totalPages.toInteger();", equalTo(1))
                 .body(XML_PAGE + ".number.toInteger();", equalTo(0));
     }

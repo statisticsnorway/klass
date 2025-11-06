@@ -101,6 +101,7 @@ public abstract class AbstractRestApiApplicationTest {
     public static final String XML_CLASSIFICATION2 = "PagedResources.contents.content[1]";
     public static final String XML_CLASSIFICATION3 = "PagedResources.contents.content[2]";
     public static final String XML_CLASSIFICATION4 = "PagedResources.contents.content[3]";
+    public static final String XML_CLASSIFICATION5 = "PagedResources.contents.content[4]";
 
     public static final String JSON_PAGE = "page";
     public static final String XML_PAGE = "PagedResources.page";
