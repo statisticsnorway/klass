@@ -87,7 +87,7 @@ public class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest
     @Test
     public void restServiceSearchClassificationsJSON() {
         // Should rank name with 'kommune' over bydel
-        given().port(port).accept(ContentType.JSON).params(QUERY, "kommune")
+        given().port(port).accept(ContentType.JSON).param(QUERY, "kommune")
                 .get(REQUEST_SEARCH)
                 .prettyPeek()
                 .then()
@@ -115,7 +115,7 @@ public class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest
     @Test
     public void restServiceSearchPartialWord() {
         // This should be able to find the stem? or is it only for ..
-        given().port(port).accept(ContentType.JSON).params(QUERY, "kommun")
+        given().port(port).accept(ContentType.JSON).param(QUERY, "kommun")
                 .get(REQUEST_SEARCH)
                 .prettyPeek()
                 .then()
@@ -127,7 +127,7 @@ public class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest
 
     @Test
     public void restServiceSearchExactWord() {
-        given().port(port).accept(ContentType.JSON).params(QUERY, "bydelsinndeling")
+        given().port(port).accept(ContentType.JSON).param(QUERY, "bydelsinndeling")
                 .get(REQUEST_SEARCH)
                 .prettyPeek()
                 .then()
@@ -139,7 +139,7 @@ public class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest
 
     @Test
     public void restServiceSearchGetClassificationAndNotCodeList() {
-        given().port(port).accept(ContentType.JSON).params(QUERY, "badminton")
+        given().port(port).accept(ContentType.JSON).param(QUERY, "badminton")
                 .get(REQUEST_SEARCH)
                 .prettyPeek()
                 .then()
@@ -154,7 +154,7 @@ public class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest
     @Test
     public void restServiceSearchGetClassificationAndCodeList() {
         // Should classification rank over codeList?
-        given().port(port).accept(ContentType.JSON).params(QUERY, "badminton").param(INCLUDE_CODE_LISTS, "true")
+        given().port(port).accept(ContentType.JSON).param(QUERY, "badminton").param(INCLUDE_CODE_LISTS, "true")
                 .get(REQUEST_SEARCH)
                 .prettyPeek()
                 .then()
@@ -171,7 +171,7 @@ public class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest
     @Test
     public void restServiceSearchClassificationsXML() {
         // When searching for 'kommuner' bydelsinndeling is not a hit because the classification contains only 'kommune'
-        given().port(port).accept(ContentType.XML).params(QUERY, "kommuner")
+        given().port(port).accept(ContentType.XML).param(QUERY, "kommuner")
                 .get(REQUEST_SEARCH)
                 .prettyPeek()
                 .then().assertThat()
@@ -196,7 +196,7 @@ public class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest
     @Test
     public void restServiceSearchClassificationsShouldNotReturnCodelistsByDefaultJSON() {
         // no result expected when codelists are not included (default behavior)
-        given().port(port).accept(ContentType.JSON).params(QUERY, "familie")
+        given().port(port).accept(ContentType.JSON).param(QUERY, "familie")
                 .get(REQUEST_SEARCH)
 //                .prettyPeek()
                 .then().assertThat()
@@ -210,7 +210,7 @@ public class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest
     @Test
     public void restServiceSearchClassificationsShouldNotReturnCodeListsByDefaultXML() {
         // no result expected when  codelists are not included (default behavior)
-        given().port(port).accept(ContentType.XML).params(QUERY, "familie")
+        given().port(port).accept(ContentType.XML).param(QUERY, "familie")
                 .get(REQUEST_SEARCH)
 //                .prettyPeek()
                 .then().assertThat()
@@ -226,10 +226,9 @@ public class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest
     public void restServiceSearchClassificationsWithCodelistJSON() {
 
         // one result expected when  codelists are  included
-        // null ?
-        given().port(port).accept(ContentType.JSON).param("query", "familie").param("includeCodelists", "true")
+        // null ved bruk av "familie" og ikke 0
+        given().port(port).accept(ContentType.JSON).param(QUERY, "familier").param(INCLUDE_CODE_LISTS, TRUE)
                 .get(REQUEST_SEARCH)
-//                .prettyPeek()
                 .then().assertThat()
                 .statusCode(HttpStatus.OK.value())
                 .contentType(ContentType.JSON)
