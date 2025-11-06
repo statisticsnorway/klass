@@ -203,7 +203,6 @@ public class IndexServiceImpl implements IndexService {
     public void indexAsync(Long classificationSeriesId) {
         checkNotNull(classificationSeriesId);
         try {
-            indexService.createIndexWithStemmingAnalyzer();
             ClassificationSeries classification =
                     classificationRepository.getOne(classificationSeriesId);
             indexService.indexSync(classification);
