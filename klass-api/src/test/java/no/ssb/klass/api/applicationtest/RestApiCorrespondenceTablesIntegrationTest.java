@@ -1,11 +1,15 @@
 package no.ssb.klass.api.applicationtest;
 
+import static io.restassured.RestAssured.given;
+
+import static org.hamcrest.Matchers.*;
+
 import io.restassured.http.ContentType;
+
+import no.ssb.klass.api.util.RestConstants;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
-
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.*;
 
 public class RestApiCorrespondenceTablesIntegrationTest extends AbstractRestApiApplicationTest {
     // @formatter:off
@@ -80,11 +84,11 @@ public class RestApiCorrespondenceTablesIntegrationTest extends AbstractRestApiA
 
     @Test
     public void restServiceCorrespondenceTablesCSV() {
-        given().port(port).accept(CONTENT_TYPE_CSV)
+        given().port(port).accept(RestConstants.CONTENT_TYPE_CSV)
                 .get(REQUEST_CORRESPONDENCE_TABLES, correspondenceTable.getId())
                 .then()
                 .statusCode(HttpStatus.OK.value())
-                .contentType(CONTENT_TYPE_CSV)
+                .contentType(RestConstants.CONTENT_TYPE_CSV)
                 .body(containsString(
                         "\"sourceCode\";\"sourceName\";\"targetCode\";\"targetName\"\n" +
                                 "\"0301\";\"Oslo\";\"030101\";\"Gamle Oslo\"\n" +

@@ -1,12 +1,24 @@
 package no.ssb.klass.api;
 
+import static org.mockito.Mockito.*;
+import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.relaxedResponseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 import no.ssb.klass.api.config.MockConfig;
 import no.ssb.klass.api.config.TestConfig;
-import no.ssb.klass.api.services.SearchService;
 import no.ssb.klass.api.services.OpenSearchResult;
+import no.ssb.klass.api.services.SearchService;
 import no.ssb.klass.api.util.RestConstants;
 import no.ssb.klass.core.config.ConfigurationProfiles;
 import no.ssb.klass.core.model.*;
@@ -26,6 +38,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchDataAutoConfiguration;
+import org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchRestClientAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.data.domain.Page;
@@ -45,44 +59,35 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.util.UriComponentsBuilder;
-import org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchDataAutoConfiguration;
-import org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchRestClientAutoConfiguration;
 
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static org.mockito.Mockito.*;
-import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.relaxedResponseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 @ExtendWith({SpringExtension.class, RestDocumentationExtension.class})
 @SpringBootTest(
         classes = {TestConfig.class, MockConfig.class},
         webEnvironment = WebEnvironment.RANDOM_PORT,
         properties = {
-                "spring.main.allow-circular-references=true",
-                "spring.main.allow-bean-definition-overriding=true",
-                "spring.cloud.gcp.core.enabled=false",
-                "spring.cloud.gcp.config.enabled=false",
-                "spring.cloud.gcp.pubsub.enabled=false",
-                "spring.flyway.enabled=false",
-        }
-)
-@ActiveProfiles({ ConfigurationProfiles.API_DOCUMENTATION_TEST, ConfigurationProfiles.POSTGRES_EMBEDDED, ConfigurationProfiles.MOCK_MAILSERVER, ConfigurationProfiles.MOCK_SEARCH})
-@EnableAutoConfiguration(exclude = {
-        ElasticsearchRestClientAutoConfiguration.class,
-        ElasticsearchDataAutoConfiguration.class
+            "spring.main.allow-circular-references=true",
+            "spring.main.allow-bean-definition-overriding=true",
+            "spring.cloud.gcp.core.enabled=false",
+            "spring.cloud.gcp.config.enabled=false",
+            "spring.cloud.gcp.pubsub.enabled=false",
+            "spring.flyway.enabled=false",
+        })
+@ActiveProfiles({
+    ConfigurationProfiles.API_DOCUMENTATION_TEST,
+    ConfigurationProfiles.POSTGRES_EMBEDDED,
+    ConfigurationProfiles.MOCK_MAILSERVER,
+    ConfigurationProfiles.MOCK_SEARCH
 })
+@EnableAutoConfiguration(
+        exclude = {
+            ElasticsearchRestClientAutoConfiguration.class,
+            ElasticsearchDataAutoConfiguration.class
+        })
 public class ApiDocumentation {
     private static final int CLASS_ID_FAMILIEGRUPPERING = 17;
     private static final int CLASS_ID_GREENHOUSE_GASES = 84;
@@ -130,17 +135,60 @@ public class ApiDocumentation {
     }
 
     @Test
-    public void errorExample() throws Exception {
+    public void errorExampleXml() throws Exception {
         when(classificationServiceMock.getClassificationSeries(any()))
                 .thenThrow(
                         new KlassResourceNotFoundException(
                                 "Classification not found with id = 99999"));
-        // @formatter:off
         this.mockMvc
                 .perform(getWithContext("/classifications/99999"))
                 .andExpect(status().isNotFound())
-                .andExpect(content().string("Classification not found with id = 99999"));
+                .andExpect(
+                        content()
+                                .xml(
+"""
+<problem xmlns="urn:ietf:rfc:7807">
+    <type>about:blank</type>
+    <title>Not Found</title>
+    <status>404</status>
+    <detail>Classification not found with id = 99999</detail>
+    <instance>/api/klass/v1/classifications/99999</instance>
+</problem>
+"""));
         // @formatter:on
+    }
+
+    @Test
+    public void errorExampleJson() throws Exception {
+        when(classificationServiceMock.getClassificationSeries(any()))
+                .thenThrow(
+                        new KlassResourceNotFoundException(
+                                "Classification not found with id = 99999"));
+        this.mockMvc
+                .perform(
+                        getWithContext("/classifications/99999").accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(
+                        content()
+                                .json(
+"""
+{"type":"about:blank","title":"Not Found","status":404,"detail":"Classification not found with id = 99999","instance":"/api/klass/v1/classifications/99999"}
+"""));
+    }
+
+    @Test
+    public void errorExampleCsv() throws Exception {
+        when(classificationServiceMock.findClassificationCodes(any(), any(), any(), any()))
+                .thenThrow(
+                        new KlassResourceNotFoundException(
+                                "Classification not found with id = 99999"));
+        this.mockMvc
+                .perform(
+                        getWithContextUri(
+                                        "/classifications/99999/codes?from=2020-01-01&to=2021-01-01&csvSeparator=;")
+                                .accept(RestConstants.CONTENT_TYPE_CSV))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("Classification not found with id = 99999"));
     }
 
     @Test
@@ -397,8 +445,8 @@ public class ApiDocumentation {
 
     @Test
     public void classificationExample() throws Exception {
-        when(classificationServiceMock.getClassificationSeries(anyLong())).thenReturn(
-                createClassificationKommuneinndeling());
+        when(classificationServiceMock.getClassificationSeries(anyLong()))
+                .thenReturn(createClassificationKommuneinndeling());
         // @formatter:off
         this.mockMvc
                 .perform(

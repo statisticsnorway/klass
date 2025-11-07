@@ -1,6 +1,9 @@
 package no.ssb.klass.api.applicationtest;
 
+import static io.zonky.test.db.AutoConfigureEmbeddedDatabase.DatabaseProvider.ZONKY;
+
 import io.zonky.test.db.AutoConfigureEmbeddedDatabase;
+
 import no.ssb.klass.api.applicationtest.config.ApplicationTestConfig;
 import no.ssb.klass.api.applicationtest.utils.ApplicationTestUtil;
 import no.ssb.klass.api.util.RestConstants;
@@ -19,6 +22,7 @@ import no.ssb.klass.core.util.TranslatablePersistenceConverter;
 import no.ssb.klass.testutil.ConstantClockSource;
 import no.ssb.klass.testutil.TestDataProvider;
 import no.ssb.klass.testutil.TestUtil;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,9 +40,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static io.zonky.test.db.AutoConfigureEmbeddedDatabase.DatabaseProvider.ZONKY;
-import static no.ssb.klass.core.config.ConfigurationProfiles.MOCK_SEARCH;
-
 @Testcontainers
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = {ApplicationTestConfig.class}, webEnvironment = WebEnvironment.RANDOM_PORT, properties = {
@@ -51,8 +52,6 @@ import static no.ssb.klass.core.config.ConfigurationProfiles.MOCK_SEARCH;
 @AutoConfigureEmbeddedDatabase(provider = ZONKY, type = AutoConfigureEmbeddedDatabase.DatabaseType.POSTGRES)
 @ComponentScan(basePackageClasses = TranslatablePersistenceConverter.class)
 public abstract class AbstractRestApiApplicationTest {
-
-    public static final String CONTENT_TYPE_CSV = "text/csv";
 
     public static final String REQUEST = RestConstants.CONTEXT_AND_VERSION_V1 + "/classifications";
     public static final String REQUEST_WITH_ID = REQUEST + "/{classificationId}";
