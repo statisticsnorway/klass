@@ -9,7 +9,10 @@ import io.restassured.http.Header;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.stream.Stream;
 
 /**
  * Tests for general technical details in the API, which are not related to data or business logic,
@@ -42,7 +45,7 @@ class RestApiTechnicalDetailsTest extends AbstractRestApiApplicationTest {
     }
 
     @Test
-    public void restServiceAllowCors() {
+    void restServiceAllowCors() {
 
         given().port(port)
                 .accept(ContentType.JSON)
@@ -54,17 +57,44 @@ class RestApiTechnicalDetailsTest extends AbstractRestApiApplicationTest {
                 .header("Access-Control-Allow-Origin", equalTo("*"));
     }
 
+    private static Stream<Arguments> validPathExtensionContentTypes() {
+        return Stream.of(
+                Arguments.of(".xml", "application/xml"),
+                Arguments.of(".json", "application/json"),
+                Arguments.of(".csv", "text/csv;charset=ISO-8859-1"));
+    }
+
     @ParameterizedTest
-    @ValueSource(strings = {".xml", ".json", ".csv"})
-    public void pathExtensionContentNegotiation(String pathExtension) {
+    @MethodSource("validPathExtensionContentTypes")
+    void pathExtensionContentNegotiation(String pathExtension, String expectedContentType) {
         given().port(port)
                 .noContentType() // Make sure the path extension is the sole specifier
+                .param("from", "2014-01-01")
+                .param("to", "2015-01-01")
                 .when()
                 .get(REQUEST_WITH_ID_AND_CODES + pathExtension, kommuneinndeling.getId())
                 .prettyPeek()
                 .then()
                 .statusCode(200)
-                .contentType("application/" + pathExtension.replace(".", ""))
+                .contentType(expectedContentType)
                 .body(notNullValue());
+    }
+
+    private static Stream<Arguments> invalidPathExtensionContentTypes() {
+        return Stream.of(Arguments.of(".pdf"), Arguments.of(".html"));
+    }
+
+    @ParameterizedTest
+    @MethodSource("invalidPathExtensionContentTypes")
+    void pathExtensionContentNegotiationInvalid(String pathExtension) {
+        given().port(port)
+                .noContentType() // Make sure the path extension is the sole specifier
+                .param("from", "2014-01-01")
+                .param("to", "2015-01-01")
+                .when()
+                .get(REQUEST_WITH_ID_AND_CODES + pathExtension, kommuneinndeling.getId())
+                .prettyPeek()
+                .then()
+                .statusCode(404);
     }
 }
