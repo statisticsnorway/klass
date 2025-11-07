@@ -1,7 +1,10 @@
 package no.ssb.klass.api.config;
 
+import no.ssb.klass.api.util.RestConstants;
+
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
+import org.springframework.web.accept.HeaderContentNegotiationStrategy;
 import org.springframework.web.accept.PathExtensionContentNegotiationStrategy;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
@@ -33,11 +36,12 @@ public class WebConfiguration implements WebMvcConfigurer {
     public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
         configurer.strategies(
                 List.of(
+                        new HeaderContentNegotiationStrategy(),
                         new PathExtensionContentNegotiationStrategy(
                                 // Only these path extensions are allowed.
                                 Map.of(
                                         ".csv",
-                                        MediaType.parseMediaType("text/csv"),
+                                        MediaType.parseMediaType(RestConstants.CONTENT_TYPE_CSV),
                                         ".json",
                                         MediaType.APPLICATION_JSON,
                                         ".xml",
