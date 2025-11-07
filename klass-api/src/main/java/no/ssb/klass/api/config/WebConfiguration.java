@@ -40,11 +40,11 @@ public class WebConfiguration implements WebMvcConfigurer {
                         new PathExtensionContentNegotiationStrategy(
                                 // Only these path extensions are allowed.
                                 Map.of(
-                                        ".csv",
+                                        "csv",
                                         MediaType.parseMediaType(RestConstants.CONTENT_TYPE_CSV),
-                                        ".json",
+                                        "json",
                                         MediaType.APPLICATION_JSON,
-                                        ".xml",
+                                        "xml",
                                         MediaType.APPLICATION_XML))));
     }
 }

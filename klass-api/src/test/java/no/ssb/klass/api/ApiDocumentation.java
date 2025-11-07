@@ -140,7 +140,6 @@ public class ApiDocumentation {
                 .thenThrow(
                         new KlassResourceNotFoundException(
                                 "Classification not found with id = 99999"));
-        // @formatter:off
         this.mockMvc
                 .perform(getWithContext("/classifications/99999"))
                 .andExpect(status().isNotFound())
