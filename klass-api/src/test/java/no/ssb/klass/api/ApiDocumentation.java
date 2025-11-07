@@ -135,7 +135,7 @@ public class ApiDocumentation {
     }
 
     @Test
-    public void errorExample() throws Exception {
+    public void errorExampleXml() throws Exception {
         when(classificationServiceMock.getClassificationSeries(any()))
                 .thenThrow(
                         new KlassResourceNotFoundException(
@@ -157,6 +157,39 @@ public class ApiDocumentation {
 </problem>
 """));
         // @formatter:on
+    }
+
+    @Test
+    public void errorExampleJson() throws Exception {
+        when(classificationServiceMock.getClassificationSeries(any()))
+                .thenThrow(
+                        new KlassResourceNotFoundException(
+                                "Classification not found with id = 99999"));
+        this.mockMvc
+                .perform(
+                        getWithContext("/classifications/99999").accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(
+                        content()
+                                .json(
+"""
+{"type":"about:blank","title":"Not Found","status":404,"detail":"Classification not found with id = 99999","instance":"/api/klass/v1/classifications/99999"}
+"""));
+    }
+
+    @Test
+    public void errorExampleCsv() throws Exception {
+        when(classificationServiceMock.findClassificationCodes(any(), any(), any(), any()))
+                .thenThrow(
+                        new KlassResourceNotFoundException(
+                                "Classification not found with id = 99999"));
+        this.mockMvc
+                .perform(
+                        getWithContextUri(
+                                        "/classifications/99999/codes?from=2020-01-01&to=2021-01-01&csvSeparator=;")
+                                .accept(RestConstants.CONTENT_TYPE_CSV))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("Classification not found with id = 99999"));
     }
 
     @Test
