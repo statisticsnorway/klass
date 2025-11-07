@@ -7,10 +7,13 @@ import static org.hamcrest.Matchers.*;
 import io.restassured.http.ContentType;
 import io.restassured.http.Header;
 
+import no.ssb.klass.api.util.RestConstants;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.springframework.http.MediaType;
 
 import java.util.stream.Stream;
 
@@ -59,9 +62,9 @@ class RestApiTechnicalDetailsTest extends AbstractRestApiApplicationTest {
 
     private static Stream<Arguments> validPathExtensionContentTypes() {
         return Stream.of(
-                Arguments.of(".xml", "application/xml"),
-                Arguments.of(".json", "application/json"),
-                Arguments.of(".csv", "text/csv;charset=ISO-8859-1"));
+                Arguments.of(".xml", MediaType.APPLICATION_XML_VALUE),
+                Arguments.of(".json", MediaType.APPLICATION_JSON_VALUE),
+                Arguments.of(".csv", RestConstants.CONTENT_TYPE_CSV));
     }
 
     @ParameterizedTest

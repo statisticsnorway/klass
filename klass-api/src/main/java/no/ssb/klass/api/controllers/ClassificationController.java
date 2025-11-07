@@ -40,6 +40,7 @@ import org.springframework.hateoas.*;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
@@ -70,6 +71,8 @@ public class ClassificationController {
     private final StatisticsService statisticsService;
     private final CsvFieldsValidator csvFieldsValidator;
 
+    private static final String EXCEPTION_HANDLER_LOG_MESSAGE_TEMPLATE = "{}. For request: {}";
+
     @Autowired
     public ClassificationController(
             ClassificationService classificationService,
@@ -84,38 +87,94 @@ public class ClassificationController {
         this.csvFieldsValidator = csvFieldsValidator;
     }
 
-    @ExceptionHandler
+    @ExceptionHandler(
+            exception = KlassResourceNotFoundException.class,
+            produces = {MediaType.TEXT_PLAIN_VALUE, RestConstants.CONTENT_TYPE_CSV})
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String resourceNotFoundExceptionHandler(KlassResourceNotFoundException exception) {
-        log.info(exception.getMessage() + ". For request: " + getCurrentRequest());
+    public String resourceNotFoundTextExceptionHandler(KlassResourceNotFoundException exception) {
+        log.info(
+                EXCEPTION_HANDLER_LOG_MESSAGE_TEMPLATE,
+                exception.getMessage(),
+                getCurrentRequest());
         return exception.getMessage();
     }
 
-    @ExceptionHandler
+    @ExceptionHandler(
+            exception = KlassResourceNotFoundException.class,
+            produces = {
+                MediaType.APPLICATION_JSON_VALUE,
+                MediaType.APPLICATION_PROBLEM_JSON_VALUE,
+                MediaType.TEXT_XML_VALUE,
+                MediaType.APPLICATION_XML_VALUE,
+                MediaType.APPLICATION_PROBLEM_XML_VALUE
+            })
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ProblemDetail resourceNotFoundProblemDetailExceptionHandler(
+            KlassResourceNotFoundException exception) {
+        log.info(
+                EXCEPTION_HANDLER_LOG_MESSAGE_TEMPLATE,
+                exception.getMessage(),
+                getCurrentRequest());
+        return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, exception.getMessage());
+    }
+
+    @ExceptionHandler(
+            exception = {
+                RestClientException.class,
+                MethodArgumentTypeMismatchException.class,
+                IllegalArgumentException.class
+            },
+            produces = {MediaType.TEXT_PLAIN_VALUE, RestConstants.CONTENT_TYPE_CSV})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String badRequestExceptionHandler(RestClientException exception) {
-        log.info(exception.getMessage() + ". For request: " + getCurrentRequest());
+    public String badRequestTextExceptionHandler(Exception exception) {
         return exception.getMessage();
     }
 
-    @ExceptionHandler
+    @ExceptionHandler(
+            exception = {
+                RestClientException.class,
+                MethodArgumentTypeMismatchException.class,
+                IllegalArgumentException.class
+            },
+            produces = {
+                MediaType.APPLICATION_JSON_VALUE,
+                MediaType.APPLICATION_PROBLEM_JSON_VALUE,
+                MediaType.TEXT_XML_VALUE,
+                MediaType.APPLICATION_XML_VALUE,
+                MediaType.APPLICATION_PROBLEM_XML_VALUE
+            })
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String argumentTypeMismatchExceptionHandler(
-            MethodArgumentTypeMismatchException exception) {
-        return exception.getMessage();
-    }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String argumentTypeMismatchExceptionHandler(IllegalArgumentException exception) {
-        return exception.getMessage();
+    public ProblemDetail badRequestProblemDetailExceptionHandler(Exception exception) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, exception.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public String serverErrorExceptionHandler(Exception exception) {
-        log.warn(exception.getMessage() + ". For request: " + getCurrentRequest(), exception);
+    public String serverErrorTextExceptionHandler(Exception exception) {
+        log.warn(
+                EXCEPTION_HANDLER_LOG_MESSAGE_TEMPLATE,
+                exception.getMessage(),
+                getCurrentRequest(),
+                exception);
         return exception.getMessage();
+    }
+
+    @ExceptionHandler(
+            produces = {
+                MediaType.APPLICATION_JSON_VALUE,
+                MediaType.APPLICATION_PROBLEM_JSON_VALUE,
+                MediaType.TEXT_XML_VALUE,
+                MediaType.APPLICATION_XML_VALUE,
+                MediaType.APPLICATION_PROBLEM_XML_VALUE
+            })
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ProblemDetail serverErrorProblemDetailExceptionHandler(Exception exception) {
+        log.warn(
+                EXCEPTION_HANDLER_LOG_MESSAGE_TEMPLATE,
+                exception.getMessage(),
+                getCurrentRequest(),
+                exception);
+        return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, exception.getMessage());
     }
 
     /** Redirect root to docs for convenience */
@@ -130,7 +189,11 @@ public class ClassificationController {
     @Tag(name = OpenApiConstants.Tags.CLASSIFICATION_FAMILIES_TAG)
     @GetMapping(
             value = "/classificationfamilies",
-            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+            produces = {
+                MediaType.APPLICATION_JSON_VALUE,
+                MediaType.TEXT_XML_VALUE,
+                MediaType.APPLICATION_XML_VALUE
+            })
     public CollectionModel<ClassificationFamilySummaryResource> classificationFamilies(
             // @formatter:off
             @RequestParam(value = "ssbSection", required = false) String ssbSection,
@@ -155,7 +218,11 @@ public class ClassificationController {
     @Tag(name = OpenApiConstants.Tags.CLASSIFICATION_FAMILIES_TAG)
     @GetMapping(
             value = "/classificationfamilies/{id}",
-            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+            produces = {
+                MediaType.APPLICATION_JSON_VALUE,
+                MediaType.TEXT_XML_VALUE,
+                MediaType.APPLICATION_XML_VALUE
+            })
     public ClassificationFamilyResource classificationFamily(
             // @formatter:off
             @PathVariable Long id,
@@ -175,7 +242,11 @@ public class ClassificationController {
     @Tag(name = OpenApiConstants.Tags.SSB_SECTIONS_TAG)
     @GetMapping(
             value = "/ssbsections",
-            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+            produces = {
+                MediaType.APPLICATION_JSON_VALUE,
+                MediaType.TEXT_XML_VALUE,
+                MediaType.APPLICATION_XML_VALUE
+            })
     public CollectionModel<SsbSectionResource> ssbsections() {
         List<SsbSectionResource> ssbSectionResources =
                 classificationService.findResponsibleSectionsWithPublishedVersions().stream()
@@ -189,7 +260,11 @@ public class ClassificationController {
     @Tag(name = OpenApiConstants.Tags.CLASSIFICATIONS_TAG)
     @GetMapping(
             value = "/classifications",
-            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+            produces = {
+                MediaType.APPLICATION_JSON_VALUE,
+                MediaType.TEXT_XML_VALUE,
+                MediaType.APPLICATION_XML_VALUE
+            })
     public KlassPagedResources<ClassificationSummaryResource> classifications(
             // @formatter:off
             @RequestParam(value = "includeCodelists", defaultValue = "false")
@@ -216,7 +291,11 @@ public class ClassificationController {
     @Tag(name = OpenApiConstants.Tags.SEARCH_TAG)
     @GetMapping(
             value = "/classifications/search",
-            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+            produces = {
+                MediaType.APPLICATION_JSON_VALUE,
+                MediaType.TEXT_XML_VALUE,
+                MediaType.APPLICATION_XML_VALUE
+            })
     public KlassPagedResources<SearchResultResource> search(
             // @formatter:off
             @RequestParam(value = "query") String query,
@@ -254,7 +333,11 @@ public class ClassificationController {
     @Tag(name = OpenApiConstants.Tags.CLASSIFICATIONS_TAG)
     @GetMapping(
             value = "/classifications/{id}",
-            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+            produces = {
+                MediaType.APPLICATION_JSON_VALUE,
+                MediaType.TEXT_XML_VALUE,
+                MediaType.APPLICATION_XML_VALUE
+            })
     public ClassificationResource classification(
             @PathVariable Long id,
             @RequestParam(value = "language", defaultValue = "nb") Language language,
@@ -274,6 +357,7 @@ public class ClassificationController {
             produces = {
                 MediaType.APPLICATION_JSON_VALUE,
                 MediaType.APPLICATION_XML_VALUE,
+                MediaType.TEXT_XML_VALUE,
                 RestConstants.CONTENT_TYPE_CSV
             })
     public ClassificationVersionResource versions(
@@ -300,6 +384,7 @@ public class ClassificationController {
             produces = {
                 MediaType.APPLICATION_JSON_VALUE,
                 MediaType.APPLICATION_XML_VALUE,
+                MediaType.TEXT_XML_VALUE,
                 RestConstants.CONTENT_TYPE_CSV
             })
     public CorrespondenceTableResource correspondenceTables(
@@ -318,6 +403,7 @@ public class ClassificationController {
             produces = {
                 MediaType.APPLICATION_JSON_VALUE,
                 MediaType.APPLICATION_XML_VALUE,
+                MediaType.TEXT_XML_VALUE,
                 RestConstants.CONTENT_TYPE_CSV
             })
     public ClassificationVariantResource variants(
@@ -336,6 +422,7 @@ public class ClassificationController {
             produces = {
                 MediaType.APPLICATION_JSON_VALUE,
                 MediaType.APPLICATION_XML_VALUE,
+                MediaType.TEXT_XML_VALUE,
                 RestConstants.CONTENT_TYPE_CSV
             })
     public CodeList codes(
@@ -380,6 +467,7 @@ public class ClassificationController {
             produces = {
                 MediaType.APPLICATION_JSON_VALUE,
                 MediaType.APPLICATION_XML_VALUE,
+                MediaType.TEXT_XML_VALUE,
                 RestConstants.CONTENT_TYPE_CSV
             })
     public CodeList codesAt(
@@ -450,6 +538,7 @@ public class ClassificationController {
             produces = {
                 MediaType.APPLICATION_JSON_VALUE,
                 MediaType.APPLICATION_XML_VALUE,
+                MediaType.TEXT_XML_VALUE,
                 RestConstants.CONTENT_TYPE_CSV
             })
     public CodeChangeList changes(
@@ -491,6 +580,7 @@ public class ClassificationController {
             produces = {
                 MediaType.APPLICATION_JSON_VALUE,
                 MediaType.APPLICATION_XML_VALUE,
+                MediaType.TEXT_XML_VALUE,
                 RestConstants.CONTENT_TYPE_CSV
             })
     public CodeList variant(
@@ -538,6 +628,7 @@ public class ClassificationController {
             produces = {
                 MediaType.APPLICATION_JSON_VALUE,
                 MediaType.APPLICATION_XML_VALUE,
+                MediaType.TEXT_XML_VALUE,
                 RestConstants.CONTENT_TYPE_CSV
             })
     public CodeList variantAt(
@@ -610,6 +701,7 @@ public class ClassificationController {
             produces = {
                 MediaType.APPLICATION_JSON_VALUE,
                 MediaType.APPLICATION_XML_VALUE,
+                MediaType.TEXT_XML_VALUE,
                 RestConstants.CONTENT_TYPE_CSV
             })
     public CorrespondenceItemList corresponds(
@@ -651,6 +743,7 @@ public class ClassificationController {
             produces = {
                 MediaType.APPLICATION_JSON_VALUE,
                 MediaType.APPLICATION_XML_VALUE,
+                MediaType.TEXT_XML_VALUE,
                 RestConstants.CONTENT_TYPE_CSV
             })
     public CorrespondenceItemList correspondsAt(
