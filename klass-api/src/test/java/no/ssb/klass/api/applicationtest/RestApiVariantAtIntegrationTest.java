@@ -1,13 +1,17 @@
 package no.ssb.klass.api.applicationtest;
 
-import io.restassured.http.ContentType;
-import no.ssb.klass.testutil.TestDataProvider;
-import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpStatus;
-
 import static io.restassured.RestAssured.given;
+
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
+
+import io.restassured.http.ContentType;
+
+import no.ssb.klass.api.util.RestConstants;
+import no.ssb.klass.testutil.TestDataProvider;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
 
 /**
  * @author Mads Lundemo, SSB.
@@ -147,13 +151,13 @@ public class RestApiVariantAtIntegrationTest extends AbstractRestApiApplicationT
 
     @Test
     public void restServiceVariantAtCSV() {
-        given().port(port).accept(CONTENT_TYPE_CSV).param("variantName", "Variant - Tilleggsinndeling for familier")
+        given().port(port).accept(RestConstants.CONTENT_TYPE_CSV).param("variantName", "Variant - Tilleggsinndeling for familier")
                 .param("date", "2015-01-01")
                 .get(REQUEST_WITH_ID_AND_VARIANT_AT, familieGrupperingCodelist.getId())
 //                .prettyPeek()
                 .then()
                 .statusCode(HttpStatus.OK.value())
-                .contentType(CONTENT_TYPE_CSV)
+                .contentType(RestConstants.CONTENT_TYPE_CSV)
                 .body(containsString(
                         "\"code\",\"parentCode\",\"level\",\"name\",\"shortName\",\"presentationName\",\"validFrom\",\"validTo\",\"notes\"\n"
                                 + "\"A\",,\"1\",\"Enpersonfamilie\",\"\",\"\",,,\"\"\n"
@@ -167,13 +171,13 @@ public class RestApiVariantAtIntegrationTest extends AbstractRestApiApplicationT
 
     @Test
     public void restServiceVariantAtIncludedFutureVersionsCSV() {
-        given().port(port).accept(CONTENT_TYPE_CSV).param("variantName", "Variant - Tilleggsinndeling for familier")
+        given().port(port).accept(RestConstants.CONTENT_TYPE_CSV).param("variantName", "Variant - Tilleggsinndeling for familier")
                 .param("date", TestDataProvider.TEN_YEARS_LATER_DATE).param("includeFuture", true)
                 .get(REQUEST_WITH_ID_AND_VARIANT_AT, familieGrupperingCodelist.getId())
 //                .prettyPeek()
                 .then()
                 .statusCode(HttpStatus.OK.value())
-                .contentType(CONTENT_TYPE_CSV)
+                .contentType(RestConstants.CONTENT_TYPE_CSV)
                 .body(containsString(
                         "\"code\",\"parentCode\",\"level\",\"name\",\"shortName\",\"presentationName\",\"validFrom\",\"validTo\",\"notes\"\n"
                                 + "\"C\",,\"1\",\"Enslig person med barn\",\"\",\"\",,,\"\"\n"
@@ -187,13 +191,13 @@ public class RestApiVariantAtIntegrationTest extends AbstractRestApiApplicationT
     public void restServiceVariantAtCSVFullVariantName() {
         String name = "Variant - Tilleggsinndeling for familier 2006"
                 + "  - variant av Standard for gruppering av familier 2006";
-        given().port(port).accept(CONTENT_TYPE_CSV)
+        given().port(port).accept(RestConstants.CONTENT_TYPE_CSV)
                 .param("variantName", name)
                 .param("date", "2015-01-01")
                 .get(REQUEST_WITH_ID_AND_VARIANT_AT, familieGrupperingCodelist.getId())
                 .then()
                 .statusCode(HttpStatus.OK.value())
-                .contentType(CONTENT_TYPE_CSV)
+                .contentType(RestConstants.CONTENT_TYPE_CSV)
                 .body(containsString(
                         "\"code\",\"parentCode\",\"level\",\"name\",\"shortName\",\"presentationName\",\"validFrom\",\"validTo\",\"notes\"\n"
                                 + "\"A\",,\"1\",\"Enpersonfamilie\",\"\",\"\",,,\"\"\n"
@@ -208,7 +212,7 @@ public class RestApiVariantAtIntegrationTest extends AbstractRestApiApplicationT
     @Test
     public void restServiceVariantAtCSVFullVariantNameFutureVersion() {
         String name = "Variant - Tilleggsinndeling for familier";
-        given().port(port).accept(CONTENT_TYPE_CSV)
+        given().port(port).accept(RestConstants.CONTENT_TYPE_CSV)
                 .param("variantName", name)
                 .param("date", TestDataProvider.TEN_YEARS_LATER_DATE)
                 .param("includeFuture", true)
@@ -216,7 +220,7 @@ public class RestApiVariantAtIntegrationTest extends AbstractRestApiApplicationT
 //                .prettyPeek()
                 .then()
                 .statusCode(HttpStatus.OK.value())
-                .contentType(CONTENT_TYPE_CSV)
+                .contentType(RestConstants.CONTENT_TYPE_CSV)
                 .body(containsString(
                         "\"code\",\"parentCode\",\"level\",\"name\",\"shortName\",\"presentationName\",\"validFrom\",\"validTo\",\"notes\"\n"
                                 + "\"C\",,\"1\",\"Enslig person med barn\",\"\",\"\",,,\"\"\n"

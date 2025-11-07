@@ -1,14 +1,16 @@
 package no.ssb.klass.api.applicationtest;
 
 import static io.restassured.RestAssured.*;
+
 import static org.hamcrest.Matchers.*;
 
+import io.restassured.http.ContentType;
+
+import no.ssb.klass.api.util.RestConstants;
 import no.ssb.klass.testutil.TestDataProvider;
-import org.junit.jupiter.api.Disabled;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
-
-import io.restassured.http.ContentType;
 
 /**
  * @author Mads Lundemo, SSB.
@@ -167,7 +169,7 @@ public class RestApiCorrespondsIntegrationTest extends AbstractRestApiApplicatio
 
     @Test
     public void restServiceCorrespondsCSV() {
-        given().port(port).accept(CONTENT_TYPE_CSV)
+        given().port(port).accept(RestConstants.CONTENT_TYPE_CSV)
                 .param("targetClassificationId", bydelsinndeling.getId())
                 .param("from", "2015-01-01")
                 .get(REQUEST_WITH_ID_AND_CORRESPONDS, kommuneinndeling.getId())
@@ -186,7 +188,7 @@ public class RestApiCorrespondsIntegrationTest extends AbstractRestApiApplicatio
 
     @Test
     public void restServiceCorrespondsIncludeFutureVersionCSV() {
-        given().port(port).accept(CONTENT_TYPE_CSV).param("includeFuture", true)
+        given().port(port).accept(RestConstants.CONTENT_TYPE_CSV).param("includeFuture", true)
                 .param("targetClassificationId", bydelsinndeling.getId())
                 .param("from", "2015-01-01")
                 .get(REQUEST_WITH_ID_AND_CORRESPONDS, kommuneinndeling.getId())
