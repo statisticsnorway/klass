@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.http.MediaType;
 
 import java.util.stream.Stream;
@@ -99,5 +100,16 @@ class RestApiTechnicalDetailsTest extends AbstractRestApiApplicationTest {
                 .prettyPeek()
                 .then()
                 .statusCode(404);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"/swagger-ui/index.html", "/v3/api-docs", "/v1/api-guide.html"})
+    void apiDocsAvailable(String path) {
+        given().port(port)
+                .accept(ContentType.JSON)
+                .when()
+                .get(RestConstants.CONTEXT_PATH + path)
+                .then()
+                .statusCode(200);
     }
 }
