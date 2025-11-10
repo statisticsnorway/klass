@@ -41,8 +41,7 @@ public class PublicSearchQuery {
         }
 
         BoolQueryBuilder finalQuery = QueryBuilders.boolQuery()
-                .should(QueryBuilders.matchPhraseQuery("title", query).boost(20.0f))
-
+                .should(QueryBuilders.matchPhrasePrefixQuery("title", query).boost(20.0f))
                 .should(QueryBuilders.matchQuery("title", query)
                         .fuzziness(Fuzziness.fromEdits(1))
                         .prefixLength(2)
@@ -51,20 +50,8 @@ public class PublicSearchQuery {
                 .should(QueryBuilders.multiMatchQuery(query)
                         .field("description", 2.0f)
                         .field("codes", 0.5f)
-                        .fuzziness(Fuzziness.fromEdits(1))
-                        .prefixLength(2)
-                        .maxExpansions(30)
                         .operator(Operator.OR)
                         .boost(2.0f))
-                /*.must(QueryBuilders.multiMatchQuery(query)
-                        .field("title", 5.0f)
-                        .field("description", 2.0f)
-                        .field("codes", 0.5f)
-                        .fuzziness(Fuzziness.fromEdits(1))
-                        .prefixLength(2)
-                        .maxExpansions(30)
-                        .operator(Operator.OR)
-                )*/
                 .filter(filterBuilder)
                 .minimumShouldMatch(1);
 
