@@ -14,7 +14,6 @@ import org.springframework.http.HttpStatus;
  * @author Mads Lundemo, SSB.
  */
 public class RestApiVariantAtIntegrationTest extends AbstractRestApiApplicationTest {
-  // @formatter:off
   @Test
   public void restServiceVariantAtJSON() {
     given()
@@ -240,5 +239,4 @@ public class RestApiVariantAtIntegrationTest extends AbstractRestApiApplicationT
                     + "\"CA\",\"C\",\"2\",\"Enslig person med barn 0-5 år\",\"\",\"\",,,\"\"\n"
                     + "\"CB\",\"C\",\"2\",\"Enslig person med barn 6-17 år\",\"\",\"\",,,\"\""));
   }
-  // @formatter:on
 }

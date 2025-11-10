@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
 public class RestApiClassificationFamilyIntegrationTest extends AbstractRestApiApplicationTest {
-  // @formatter:off
   @Test
   public void restServiceReturnClassificationFamily() {
     String urlParts = REQUEST_CLASSIFICATION_FAMILY + "/" + classificationFamily.getId();
@@ -142,6 +141,4 @@ public class RestApiClassificationFamilyIntegrationTest extends AbstractRestApiA
         .body("classifications.size()", equalTo(2))
         .body(JSON_LINKS + ".self.href", containsString(urlParts));
   }
-
-  // @formatter:on
 }

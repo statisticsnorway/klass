@@ -39,7 +39,6 @@ import org.testcontainers.utility.DockerImageName;
     },
     inheritProfiles = false)
 public class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest {
-  // @formatter:off
 
   @Container
   @SuppressWarnings("resource") // Managed by Testcontainers
@@ -278,5 +277,4 @@ public class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest
             XML_SEARCH_RESULT1 + ".link.href",
             containsString(REQUEST + "/" + familieGrupperingCodelist.getId()));
   }
-  // @formatter:on
 }

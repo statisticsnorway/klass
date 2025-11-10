@@ -90,7 +90,6 @@ public class ClassificationFamily extends BaseEntity {
 
   public List<ClassificationSeries> getClassificationSeriesBySectionAndClassificationType(
       String section, ClassificationType classificationType, boolean publicOnly) {
-    // @formatter:off
     List<ClassificationSeries> list =
         publicOnly ? getPublicClassificationSeries() : getClassificationSeries();
     return list.stream()
@@ -102,6 +101,5 @@ public class ClassificationFamily extends BaseEntity {
                 classificationType == null
                     || classificationType.equals(classification.getClassificationType()))
         .collect(toList());
-    // @formatter:on
   }
 }

@@ -13,7 +13,6 @@ import org.springframework.http.HttpStatus;
  *     <p>Testsuite that test the list (all) classifications (tests with JSON and XML)
  */
 public class RestApiListClassificationIntegrationTest extends AbstractRestApiApplicationTest {
-  // @formatter:off
   @Test
   public void restServiceListClassificationsJSON() {
     given()
@@ -228,5 +227,4 @@ public class RestApiListClassificationIntegrationTest extends AbstractRestApiApp
         .body(XML_PAGE + ".totalPages.toInteger();", equalTo(1))
         .body(XML_PAGE + ".number.toInteger();", equalTo(0));
   }
-  // @formatter:on
 }

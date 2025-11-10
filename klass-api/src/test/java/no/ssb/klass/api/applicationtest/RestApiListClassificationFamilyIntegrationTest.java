@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 
 /** Testsuite that test the list (all) classificationFamilies */
 public class RestApiListClassificationFamilyIntegrationTest extends AbstractRestApiApplicationTest {
-  // @formatter:off
   @Test
   public void restServiceListClassificationFamilies() {
     given()
@@ -82,5 +81,4 @@ public class RestApiListClassificationFamilyIntegrationTest extends AbstractRest
         // links
         .body(JSON_LINKS + ".self.href", containsString(REQUEST_CLASSIFICATION_FAMILY));
   }
-  // @formatter:on
 }

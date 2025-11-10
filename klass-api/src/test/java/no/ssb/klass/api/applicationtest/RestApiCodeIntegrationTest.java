@@ -14,7 +14,6 @@ import org.springframework.http.HttpStatus;
  * @author Mads Lundemo, SSB.
  */
 public class RestApiCodeIntegrationTest extends AbstractRestApiApplicationTest {
-  // @formatter:off
   @Test
   public void restServiceCodesJSON() {
     given()
@@ -320,6 +319,4 @@ public class RestApiCodeIntegrationTest extends AbstractRestApiApplicationTest {
         .contentType(ContentType.JSON)
         .body("codes.size()", equalTo(0));
   }
-
-  // @formatter:on
 }

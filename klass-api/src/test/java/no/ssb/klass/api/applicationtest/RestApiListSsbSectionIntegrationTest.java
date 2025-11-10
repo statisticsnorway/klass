@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 
 /** Testsuite that test the list (all) ssb sections */
 public class RestApiListSsbSectionIntegrationTest extends AbstractRestApiApplicationTest {
-  // @formatter:off
   @Test
   public void restServiceListSsbSectionsFamilies() {
     given()
@@ -25,5 +24,4 @@ public class RestApiListSsbSectionIntegrationTest extends AbstractRestApiApplica
         // links
         .body(JSON_LINKS + ".self.href", containsString(REQUEST_SSB_SECTION));
   }
-  // @formatter:on
 }

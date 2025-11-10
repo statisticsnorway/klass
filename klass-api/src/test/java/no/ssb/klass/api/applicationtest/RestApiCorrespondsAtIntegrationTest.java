@@ -14,7 +14,6 @@ import org.springframework.http.HttpStatus;
  * @author Mads Lundemo, SSB.
  */
 public class RestApiCorrespondsAtIntegrationTest extends AbstractRestApiApplicationTest {
-  // @formatter:off
   @Test
   public void restServiceCorrespondsAtJSON() {
     given()
@@ -45,7 +44,6 @@ public class RestApiCorrespondsAtIntegrationTest extends AbstractRestApiApplicat
         .body(JSON_CORRESPONDENCES + "[2].targetShortName", equalTo(""));
   }
 
-  // @formatter:off
   @Test
   public void restServiceCorrespondsAtInvertedJSON() {
     given()
@@ -207,5 +205,4 @@ public class RestApiCorrespondsAtIntegrationTest extends AbstractRestApiApplicat
                     + "\"0301\",\"Oslo\",\"\",\"030102\",\"Grünerløkka\",\"\"\n"
                     + "\"0301\",\"Oslo\",\"\",\"030103\",\"Sagene ny\",\"\""));
   }
-  // @formatter:on
 }

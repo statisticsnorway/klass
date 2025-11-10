@@ -65,7 +65,6 @@ public class RestApiDraftIntegrationTest extends AbstractRestApiApplicationTest 
         TestDataProvider.createAndAddChangeCorrespondenceTable(kommuneinndeling));
   }
 
-  // @formatter:off
   @Test
   public void testThatDraftVersionIsNotExposed() {
     given()
@@ -164,5 +163,4 @@ public class RestApiDraftIntegrationTest extends AbstractRestApiApplicationTest 
         // links
         .body("correspondenceTables", hasSize(0));
   }
-  // @formatter:on
 }

@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
 public class RestApiCorrespondenceTablesIntegrationTest extends AbstractRestApiApplicationTest {
-  // @formatter:off
   @Test
   public void restServiceCorrespondenceTablesJSON() {
     given()
@@ -121,5 +120,4 @@ public class RestApiCorrespondenceTablesIntegrationTest extends AbstractRestApiA
                     + "\"0301\";\"Oslo\";\"030102\";\"Grünerløkka\"\n"
                     + "\"0301\";\"Oslo\";\"030103\";\"Sagene\""));
   }
-  // @formatter:on
 }

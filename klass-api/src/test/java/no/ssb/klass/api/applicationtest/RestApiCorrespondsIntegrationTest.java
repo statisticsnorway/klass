@@ -13,7 +13,6 @@ import org.springframework.http.HttpStatus;
  * @author Mads Lundemo, SSB.
  */
 public class RestApiCorrespondsIntegrationTest extends AbstractRestApiApplicationTest {
-  // @formatter:off
   @Test
   public void restServiceCorrespondsJSON() {
     given()
@@ -216,5 +215,4 @@ public class RestApiCorrespondsIntegrationTest extends AbstractRestApiApplicatio
                     + TestDataProvider.TEN_YEARS_LATER_DATE
                     + "\","));
   }
-  // @formatter:on
 }

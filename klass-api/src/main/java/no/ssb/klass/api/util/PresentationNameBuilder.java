@@ -15,7 +15,6 @@ public class PresentationNameBuilder {
       return "";
     }
 
-    // @formatter:off
     return pattern
         .replace("{code}", code)
         .replace("{name}", name)
@@ -29,6 +28,5 @@ public class PresentationNameBuilder {
         .replace("{capitalize(code)}", StringUtils.capitalize(code))
         .replace("{capitalize(name)}", StringUtils.capitalize(name))
         .replace("{capitalize(shortname)}", StringUtils.capitalize(shortName));
-    // @formatter:on
   }
 }
