@@ -658,9 +658,8 @@ public class ClassificationServiceImpl implements ClassificationService {
                                 table ->
                                         table.getNameInPrimaryLanguage()
                                                 + " ID="
-                                                + table
-                                                        .getId()) // Also returns ID for error
-                                                                  // printing
+                                                + table.getId()) // Also returns ID for error
+                        // printing
                         .collect(toSet()));
 
         return result;
