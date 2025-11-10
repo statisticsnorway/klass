@@ -2,6 +2,7 @@ package no.ssb.klass.api.services;
 
 import no.ssb.klass.core.model.ClassificationType;
 import no.ssb.klass.core.model.Language;
+import org.opensearch.common.unit.Fuzziness;
 import org.opensearch.index.query.BoolQueryBuilder;
 import org.opensearch.index.query.Operator;
 import org.opensearch.index.query.QueryBuilders;
@@ -40,13 +41,32 @@ public class PublicSearchQuery {
         }
 
         BoolQueryBuilder finalQuery = QueryBuilders.boolQuery()
-                .must(QueryBuilders.queryStringQuery(query)
-                        .field("title", 3.0f)
+                .should(QueryBuilders.matchPhraseQuery("title", query).boost(20.0f))
+
+                .should(QueryBuilders.matchQuery("title", query)
+                        .fuzziness(Fuzziness.fromEdits(1))
+                        .prefixLength(2)
+                        .maxExpansions(30)
+                        .boost(10.0f))
+                .should(QueryBuilders.multiMatchQuery(query)
                         .field("description", 2.0f)
                         .field("codes", 0.5f)
-                        .defaultOperator(Operator.OR)
-                )
-                .filter(filterBuilder);
+                        .fuzziness(Fuzziness.fromEdits(1))
+                        .prefixLength(2)
+                        .maxExpansions(30)
+                        .operator(Operator.OR)
+                        .boost(2.0f))
+                /*.must(QueryBuilders.multiMatchQuery(query)
+                        .field("title", 5.0f)
+                        .field("description", 2.0f)
+                        .field("codes", 0.5f)
+                        .fuzziness(Fuzziness.fromEdits(1))
+                        .prefixLength(2)
+                        .maxExpansions(30)
+                        .operator(Operator.OR)
+                )*/
+                .filter(filterBuilder)
+                .minimumShouldMatch(1);
 
         NativeSearchQueryBuilder nativeQueryBuilder = new NativeSearchQueryBuilder()
                 .withQuery(finalQuery)
