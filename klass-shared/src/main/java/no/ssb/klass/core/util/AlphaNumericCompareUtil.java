@@ -1,6 +1,5 @@
 package no.ssb.klass.core.util;
 
-
 /**
  * @author Mads Lundemo, SSB.
  */
