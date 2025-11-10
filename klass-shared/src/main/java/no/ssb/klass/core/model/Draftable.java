@@ -5,5 +5,5 @@ package no.ssb.klass.core.model;
  */
 public interface Draftable {
 
-    boolean isDraft();
+  boolean isDraft();
 }

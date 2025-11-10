@@ -1,110 +1,105 @@
 package no.ssb.klass.api.migration.dataintegrity.corresponds;
 
+import static no.ssb.klass.api.migration.MigrationTestConstants.*;
+import static no.ssb.klass.api.migration.MigrationTestUtils.*;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-
-import static no.ssb.klass.api.migration.MigrationTestConstants.*;
-import static no.ssb.klass.api.migration.MigrationTestUtils.*;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-
 public class KlassApiCorrespondenceTablesByIdJsonTest extends AbstractKlassApiCorrespondsTest {
 
-    @Test
-    void getOneCorrespondenceTableById() {
-        int correspondenceTableId = 1111;
+  @Test
+  void getOneCorrespondenceTableById() {
+    int correspondenceTableId = 1111;
 
-        String path = getCorrespondenceTableByIdPath(correspondenceTableId);
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi( path, null,null);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi( path, null,null);
+    String path = getCorrespondenceTableByIdPath(correspondenceTableId);
+    Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, null, null);
+    Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, null, null);
 
-        assertThat(sourceResponse).withFailMessage("source api returned no content").isNotNull();
+    assertThat(sourceResponse).withFailMessage("source api returned no content").isNotNull();
 
-        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+    assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
-        if(sourceResponse.getStatusCode() != 200) {
-            System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
-            assertThat(compareError(correspondenceTableId, sourceResponse, targetResponse)).isTrue();
-        }
-        else{
-            validateItems(sourceResponse, targetResponse, pathNamesCorrespondenceTable);
-            validateList(sourceResponse, targetResponse, CORRESPONDENCE_MAPS);
-            validateList(sourceResponse, targetResponse, CHANGELOGS);
-            validateList(sourceResponse, targetResponse, PUBLISHED);
-        }
+    if (sourceResponse.getStatusCode() != 200) {
+      System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
+      assertThat(compareError(correspondenceTableId, sourceResponse, targetResponse)).isTrue();
+    } else {
+      validateItems(sourceResponse, targetResponse, pathNamesCorrespondenceTable);
+      validateList(sourceResponse, targetResponse, CORRESPONDENCE_MAPS);
+      validateList(sourceResponse, targetResponse, CHANGELOGS);
+      validateList(sourceResponse, targetResponse, PUBLISHED);
     }
+  }
 
-    @ParameterizedTest
-    @MethodSource("correspondenceIdRangeProvider")
-    void getCorrespondenceTable(Integer correspondenceTableId) {
+  @ParameterizedTest
+  @MethodSource("correspondenceIdRangeProvider")
+  void getCorrespondenceTable(Integer correspondenceTableId) {
 
-        String path = getCorrespondenceTableByIdPath(correspondenceTableId);
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, null,null);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, null,null);
+    String path = getCorrespondenceTableByIdPath(correspondenceTableId);
+    Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, null, null);
+    Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, null, null);
 
-        assertApiResponseIsNotNull(sourceResponse);
+    assertApiResponseIsNotNull(sourceResponse);
 
-        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+    assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
-        if(sourceResponse.getStatusCode() != 200) {
-            assertThat(compareError(correspondenceTableId, sourceResponse, targetResponse)).isTrue();
-        }
-        else{
-            validateItems(sourceResponse, targetResponse, pathNamesCorrespondenceTable);
-            validateList(sourceResponse, targetResponse, CORRESPONDENCE_MAPS);
-            validateList(sourceResponse, targetResponse, CHANGELOGS);
-            validateList(sourceResponse, targetResponse, PUBLISHED);
-        }
+    if (sourceResponse.getStatusCode() != 200) {
+      assertThat(compareError(correspondenceTableId, sourceResponse, targetResponse)).isTrue();
+    } else {
+      validateItems(sourceResponse, targetResponse, pathNamesCorrespondenceTable);
+      validateList(sourceResponse, targetResponse, CORRESPONDENCE_MAPS);
+      validateList(sourceResponse, targetResponse, CHANGELOGS);
+      validateList(sourceResponse, targetResponse, PUBLISHED);
     }
+  }
 
+  @ParameterizedTest
+  @MethodSource("correspondenceIdRangeProvider")
+  void getCorrespondenceTableLanguageEn(int correspondenceTableId) {
+    String path = getCorrespondenceTableByIdPath(correspondenceTableId);
+    Response sourceResponse =
+        klassApiMigrationClient.getFromSourceApi(path, paramsLanguageEn, null);
+    Response targetResponse =
+        klassApiMigrationClient.getFromTargetApi(path, paramsLanguageEn, null);
 
-    @ParameterizedTest
-    @MethodSource("correspondenceIdRangeProvider")
-    void getCorrespondenceTableLanguageEn(int correspondenceTableId) {
-        String path = getCorrespondenceTableByIdPath(correspondenceTableId);
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageEn,null);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageEn,null);
+    assertApiResponseIsNotNull(sourceResponse);
 
-        assertApiResponseIsNotNull(sourceResponse);
+    assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
-        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
-
-        if(sourceResponse.getStatusCode() != 200) {
-            assertThat(compareError(correspondenceTableId, sourceResponse, targetResponse)).isTrue();
-        }
-        else{
-            validateItems(sourceResponse, targetResponse, pathNamesCorrespondenceTable);
-            validateList(sourceResponse, targetResponse, CORRESPONDENCE_MAPS);
-            validateList(sourceResponse, targetResponse, CHANGELOGS);
-            validateList(sourceResponse, targetResponse, PUBLISHED);
-        }
+    if (sourceResponse.getStatusCode() != 200) {
+      assertThat(compareError(correspondenceTableId, sourceResponse, targetResponse)).isTrue();
+    } else {
+      validateItems(sourceResponse, targetResponse, pathNamesCorrespondenceTable);
+      validateList(sourceResponse, targetResponse, CORRESPONDENCE_MAPS);
+      validateList(sourceResponse, targetResponse, CHANGELOGS);
+      validateList(sourceResponse, targetResponse, PUBLISHED);
     }
+  }
 
+  @ParameterizedTest
+  @MethodSource("correspondenceIdRangeProvider")
+  void getCorrespondenceTableLanguageNn(int correspondenceTableId) {
 
+    String path = getCorrespondenceTableByIdPath(correspondenceTableId);
+    Response sourceResponse =
+        klassApiMigrationClient.getFromSourceApi(path, paramsLanguageNn, null);
+    Response targetResponse =
+        klassApiMigrationClient.getFromTargetApi(path, paramsLanguageNn, null);
 
-    @ParameterizedTest
-    @MethodSource("correspondenceIdRangeProvider")
-    void getCorrespondenceTableLanguageNn(int correspondenceTableId) {
+    assertApiResponseIsNotNull(sourceResponse);
 
-        String path = getCorrespondenceTableByIdPath(correspondenceTableId);
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageNn,null);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageNn,null);
+    assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
-        assertApiResponseIsNotNull(sourceResponse);
-
-        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
-
-        if(sourceResponse.getStatusCode() != 200) {
-            assertThat(compareError(correspondenceTableId, sourceResponse, targetResponse)).isTrue();
-        }
-        else{
-            validateItems(sourceResponse, targetResponse, pathNamesCorrespondenceTable);
-            validateList(sourceResponse, targetResponse, CORRESPONDENCE_MAPS);
-            validateList(sourceResponse, targetResponse, CHANGELOGS);
-            validateList(sourceResponse, targetResponse, PUBLISHED);
-        }
-
+    if (sourceResponse.getStatusCode() != 200) {
+      assertThat(compareError(correspondenceTableId, sourceResponse, targetResponse)).isTrue();
+    } else {
+      validateItems(sourceResponse, targetResponse, pathNamesCorrespondenceTable);
+      validateList(sourceResponse, targetResponse, CORRESPONDENCE_MAPS);
+      validateList(sourceResponse, targetResponse, CHANGELOGS);
+      validateList(sourceResponse, targetResponse, PUBLISHED);
     }
+  }
 }

@@ -1,5 +1,9 @@
 package no.ssb.klass.core.repository;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import jakarta.transaction.Transactional;
+import java.util.List;
 import no.ssb.klass.core.config.ConfigurationProfiles;
 import no.ssb.klass.core.model.ClassificationSeries;
 import no.ssb.klass.core.model.StatisticalUnit;
@@ -23,94 +27,86 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import jakarta.transaction.Transactional;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @ActiveProfiles({ConfigurationProfiles.POSTGRES_EMBEDDED, ConfigurationProfiles.MOCK_MAILSERVER})
 @Transactional
 public class StatisticalUnitRepositoryTest {
 
-    @Autowired
-    private UserRepository userRepository;
+  @Autowired private UserRepository userRepository;
 
-    @Autowired
-    private ClassificationFamilyRepository classificationFamilyRepository;
+  @Autowired private ClassificationFamilyRepository classificationFamilyRepository;
 
-    @Autowired
-    private StatisticalUnitRepository statisticalUnitRepository;
+  @Autowired private StatisticalUnitRepository statisticalUnitRepository;
 
-    @Autowired
-    private ClassificationSeriesRepository classificationSeriesRepository;
+  @Autowired private ClassificationSeriesRepository classificationSeriesRepository;
 
-    private User user;
+  private User user;
 
-    @BeforeEach
-    public void setup() {
-        user = userRepository.save(TestUtil.createUser());
-    }
+  @BeforeEach
+  public void setup() {
+    user = userRepository.save(TestUtil.createUser());
+  }
 
-    @Test
-    public void getStaticalUnitsOverViewTest() {
-        makeTestData();
-        Page<StatisticalEntity> result = statisticalUnitRepository.getStaticalUnitsOverView(PageRequest.of(0,
-                Integer.MAX_VALUE));
-        assertEquals(2, result.getContent().size());
-        List<StatisticalEntity> resultList = result.getContent();
-        assertEquals("Dingseboms", resultList.get(0).getName());
-        assertEquals(Long.valueOf(1), resultList.get(0).getCount());
-        assertEquals("Duppeditt", resultList.get(1).getName());
-        assertEquals(Long.valueOf(2), resultList.get(1).getCount());
-    }
+  @Test
+  public void getStaticalUnitsOverViewTest() {
+    makeTestData();
+    Page<StatisticalEntity> result =
+        statisticalUnitRepository.getStaticalUnitsOverView(PageRequest.of(0, Integer.MAX_VALUE));
+    assertEquals(2, result.getContent().size());
+    List<StatisticalEntity> resultList = result.getContent();
+    assertEquals("Dingseboms", resultList.get(0).getName());
+    assertEquals(Long.valueOf(1), resultList.get(0).getCount());
+    assertEquals("Duppeditt", resultList.get(1).getName());
+    assertEquals(Long.valueOf(2), resultList.get(1).getCount());
+  }
 
-    @Test
-    public void getAllClassificationSeriesForStaticalUnitTest() {
-        StatisticalUnit statisticalUnit = makeTestData();
-        List<ClassificationReportDto> result = statisticalUnitRepository.getAllClassificationSeriesForStaticalUnit(
-                statisticalUnit);
-        assertEquals(2, result.size());
-        assertEquals("Test1", result.get(0).getName());
-        assertEquals("Test2", result.get(1).getName());
-    }
+  @Test
+  public void getAllClassificationSeriesForStaticalUnitTest() {
+    StatisticalUnit statisticalUnit = makeTestData();
+    List<ClassificationReportDto> result =
+        statisticalUnitRepository.getAllClassificationSeriesForStaticalUnit(statisticalUnit);
+    assertEquals(2, result.size());
+    assertEquals("Test1", result.get(0).getName());
+    assertEquals("Test2", result.get(1).getName());
+  }
 
-    private StatisticalUnit makeTestData() {
-        ClassificationSeries classificationSeries1 = ClassificationSeriesRepositoryTest
-                .createClassificationSeriesWithVersion(user, "Test1");
-        StatisticalUnit statisticalUnit1 = makeStatisticalUnit("Duppeditt");
-        StatisticalUnit statisticalUnit2 = makeStatisticalUnit("Dingseboms");
-        classificationSeries1.getStatisticalUnits().add(statisticalUnit1);
-        classificationSeries1.getStatisticalUnits().add(statisticalUnit2);
-        classificationFamilyRepository.save(TestUtil.createClassificationFamily("name1")).addClassificationSeries(
-                classificationSeries1);
+  private StatisticalUnit makeTestData() {
+    ClassificationSeries classificationSeries1 =
+        ClassificationSeriesRepositoryTest.createClassificationSeriesWithVersion(user, "Test1");
+    StatisticalUnit statisticalUnit1 = makeStatisticalUnit("Duppeditt");
+    StatisticalUnit statisticalUnit2 = makeStatisticalUnit("Dingseboms");
+    classificationSeries1.getStatisticalUnits().add(statisticalUnit1);
+    classificationSeries1.getStatisticalUnits().add(statisticalUnit2);
+    classificationFamilyRepository
+        .save(TestUtil.createClassificationFamily("name1"))
+        .addClassificationSeries(classificationSeries1);
 
-        ClassificationSeries classificationSeries2 = ClassificationSeriesRepositoryTest
-                .createClassificationSeriesWithVersion(user, "Test2");
-        classificationSeries2.getStatisticalUnits().add(statisticalUnit1);
-        classificationFamilyRepository.save(TestUtil.createClassificationFamily("name2")).addClassificationSeries(
-                classificationSeries2);
+    ClassificationSeries classificationSeries2 =
+        ClassificationSeriesRepositoryTest.createClassificationSeriesWithVersion(user, "Test2");
+    classificationSeries2.getStatisticalUnits().add(statisticalUnit1);
+    classificationFamilyRepository
+        .save(TestUtil.createClassificationFamily("name2"))
+        .addClassificationSeries(classificationSeries2);
 
-        classificationFamilyRepository.flush();
-        classificationSeriesRepository.save(classificationSeries1);
-        classificationSeriesRepository.save(classificationSeries2);
-        classificationSeriesRepository.flush();
-        return statisticalUnit1;
-    }
+    classificationFamilyRepository.flush();
+    classificationSeriesRepository.save(classificationSeries1);
+    classificationSeriesRepository.save(classificationSeries2);
+    classificationSeriesRepository.flush();
+    return statisticalUnit1;
+  }
 
-    private StatisticalUnit makeStatisticalUnit(String name) {
-        Translatable statisticalUnitName = new Translatable(name, null, null);
-        StatisticalUnit statisticalUnit = new StatisticalUnit(statisticalUnitName);
-        statisticalUnitRepository.save(statisticalUnit);
-        statisticalUnitRepository.flush();
-        return statisticalUnit;
-    }
+  private StatisticalUnit makeStatisticalUnit(String name) {
+    Translatable statisticalUnitName = new Translatable(name, null, null);
+    StatisticalUnit statisticalUnit = new StatisticalUnit(statisticalUnitName);
+    statisticalUnitRepository.save(statisticalUnit);
+    statisticalUnitRepository.flush();
+    return statisticalUnit;
+  }
 
-    @Configuration
-    @EnableAutoConfiguration
-    @EntityScan(basePackageClasses = {StatisticalUnit.class, ClassificationSeries.class})
-    @ComponentScan(basePackageClasses = TranslatablePersistenceConverter.class)
-    static class Config {
-    }
+  @Configuration
+  @EnableAutoConfiguration
+  @EntityScan(basePackageClasses = {StatisticalUnit.class, ClassificationSeries.class})
+  @ComponentScan(basePackageClasses = TranslatablePersistenceConverter.class)
+  static class Config {}
 }

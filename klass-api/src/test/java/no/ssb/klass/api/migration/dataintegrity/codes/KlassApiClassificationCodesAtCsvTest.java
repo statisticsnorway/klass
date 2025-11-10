@@ -1,257 +1,259 @@
 package no.ssb.klass.api.migration.dataintegrity.codes;
 
-import io.restassured.response.Response;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
-
-import java.time.Instant;
-import java.util.HashMap;
-import java.util.Map;
-
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 import static no.ssb.klass.api.migration.MigrationTestUtils.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
+import io.restassured.response.Response;
+import java.time.Instant;
+import java.util.HashMap;
+import java.util.Map;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+
 public class KlassApiClassificationCodesAtCsvTest extends AbstractKlassApiCodesTest {
 
-    @Test
-    void getOneClassificationCodesAt(){
-        int classificationId = gender_standard_id;
-        date = "2001-01-01";
+  @Test
+  void getOneClassificationCodesAt() {
+    int classificationId = gender_standard_id;
+    date = "2001-01-01";
 
-        Map<String, Object> paramDate = new HashMap<>();
-        paramDate.put(DATE, date);
+    Map<String, Object> paramDate = new HashMap<>();
+    paramDate.put(DATE, date);
 
-        System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
+    System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
 
-        String path = getCodesAtPath(classificationId);
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramDate,TEXT_CSV);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramDate,TEXT_CSV);
+    String path = getCodesAtPath(classificationId);
+    Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramDate, TEXT_CSV);
+    Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramDate, TEXT_CSV);
 
-        assertApiResponseIsNotNull(sourceResponse);
+    assertApiResponseIsNotNull(sourceResponse);
 
-        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+    assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
-        if(sourceResponse.getStatusCode() != 200) {
-            assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
-        }
-        else{
-            validateCSVDocument(path, sourceResponse, targetResponse);
-        }
+    if (sourceResponse.getStatusCode() != 200) {
+      assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
+    } else {
+      validateCSVDocument(path, sourceResponse, targetResponse);
+    }
+  }
+
+  @ParameterizedTest
+  @MethodSource("rangeProviderClassificationIds")
+  void getClassificationCodesAt(Integer classificationId) {
+
+    System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
+
+    String path = getCodesAtPath(classificationId);
+    Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDate, TEXT_CSV);
+    Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDate, TEXT_CSV);
+
+    assertApiResponseIsNotNull(sourceResponse);
+
+    assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+
+    if (sourceResponse.getStatusCode() != 200) {
+      assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
+    } else {
+      validateCSVDocument(path, sourceResponse, targetResponse);
     }
 
-    @ParameterizedTest
-    @MethodSource("rangeProviderClassificationIds")
-    void getClassificationCodesAt(Integer classificationId) {
+    System.out.println("End test for ID " + classificationId + " at " + Instant.now());
+  }
 
-        System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
+  @Test
+  void getClassificationCodesAtLanguageEn() {
 
-        String path = getCodesAtPath(classificationId);
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDate,TEXT_CSV);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDate,TEXT_CSV);
+    int classificationId = 11;
 
-        assertApiResponseIsNotNull(sourceResponse);
+    String path = getCodesAtPath(classificationId);
+    Response sourceResponse =
+        klassApiMigrationClient.getFromSourceApi(path, paramsLanguageEnAt, TEXT_CSV);
+    Response targetResponse =
+        klassApiMigrationClient.getFromTargetApi(path, paramsLanguageEnAt, TEXT_CSV);
 
-        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+    assertApiResponseIsNotNull(sourceResponse);
 
-        if(sourceResponse.getStatusCode() != 200) {
-            assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
-        }
-        else{
-            validateCSVDocument(path, sourceResponse, targetResponse);
-        }
+    assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
-        System.out.println("End test for ID " + classificationId + " at " + Instant.now());
-
+    if (sourceResponse.getStatusCode() != 200) {
+      assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
+    } else {
+      validateCSVDocument(path, sourceResponse, targetResponse);
     }
+  }
 
-    @Test
-    void getClassificationCodesAtLanguageEn() {
+  @Test
+  void getClassificationCodesAtLanguageNn() {
+    int classificationId = industry_classification_standard;
 
-        int classificationId = 11;
+    String path = getCodesAtPath(classificationId);
+    Response sourceResponse =
+        klassApiMigrationClient.getFromSourceApi(path, paramsLanguageNnAt, TEXT_CSV);
+    Response targetResponse =
+        klassApiMigrationClient.getFromTargetApi(path, paramsLanguageNnAt, TEXT_CSV);
 
-        String path = getCodesAtPath(classificationId);
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageEnAt,TEXT_CSV);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageEnAt,TEXT_CSV);
+    assertApiResponseIsNotNull(sourceResponse);
 
-        assertApiResponseIsNotNull(sourceResponse);
+    assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
-        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
-
-        if(sourceResponse.getStatusCode() != 200) {
-            assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
-        }
-        else{
-            validateCSVDocument(path, sourceResponse, targetResponse);
-        }
+    if (sourceResponse.getStatusCode() != 200) {
+      assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
+    } else {
+      validateCSVDocument(path, sourceResponse, targetResponse);
     }
+  }
 
-    @Test
-    void getClassificationCodesAtLanguageNn() {
-        int classificationId = industry_classification_standard;
+  @Test
+  void getClassificationCodesAtIncludeFuture() {
 
-        String path = getCodesAtPath(classificationId);
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageNnAt,TEXT_CSV);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageNnAt,TEXT_CSV);
+    int classificationId = industry_classification_standard;
 
-        assertApiResponseIsNotNull(sourceResponse);
+    String path = getCodesAtPath(classificationId);
+    Response sourceResponse =
+        klassApiMigrationClient.getFromSourceApi(path, paramsIncludeFutureAt, TEXT_CSV);
+    Response targetResponse =
+        klassApiMigrationClient.getFromTargetApi(path, paramsIncludeFutureAt, TEXT_CSV);
 
-        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+    assertApiResponseIsNotNull(sourceResponse);
 
-        if(sourceResponse.getStatusCode() != 200) {
-            assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
-        }
-        else{
-            validateCSVDocument(path, sourceResponse, targetResponse);
-        }
+    assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+
+    if (sourceResponse.getStatusCode() != 200) {
+      assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
+    } else {
+      validateCSVDocument(path, sourceResponse, targetResponse);
     }
+  }
 
-    @Test
-    void getClassificationCodesAtIncludeFuture() {
+  @Test
+  void getClassificationCodesAtSelectCode() {
 
-        int classificationId = industry_classification_standard;
+    int classificationId = 131;
 
-        String path = getCodesAtPath(classificationId);
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsIncludeFutureAt,TEXT_CSV);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsIncludeFutureAt,TEXT_CSV);
+    String path = getCodesAtPath(classificationId);
+    Response sourceResponse =
+        klassApiMigrationClient.getFromSourceApi(path, paramsSelectCodeAt, TEXT_CSV);
+    Response targetResponse =
+        klassApiMigrationClient.getFromTargetApi(path, paramsSelectCodeAt, TEXT_CSV);
 
-        assertApiResponseIsNotNull(sourceResponse);
+    assertApiResponseIsNotNull(sourceResponse);
 
-        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+    assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
-        if(sourceResponse.getStatusCode() != 200) {
-            assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
-        }
-        else{
-            validateCSVDocument(path, sourceResponse, targetResponse);
-        }
+    if (sourceResponse.getStatusCode() != 200) {
+      assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
+    } else {
+      validateCSVDocument(path, sourceResponse, targetResponse);
     }
+  }
 
-    @Test
-    void getClassificationCodesAtSelectCode() {
+  @Test
+  void getClassificationCodesAtSelectCodes() {
 
-        int classificationId = 131;
+    int classificationId = 131;
 
-        String path = getCodesAtPath(classificationId);
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsSelectCodeAt,TEXT_CSV);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsSelectCodeAt,TEXT_CSV);
+    String path = getCodesAtPath(classificationId);
+    Response sourceResponse =
+        klassApiMigrationClient.getFromSourceApi(path, paramsSelectCodesAt, TEXT_CSV);
+    Response targetResponse =
+        klassApiMigrationClient.getFromTargetApi(path, paramsSelectCodesAt, TEXT_CSV);
 
-        assertApiResponseIsNotNull(sourceResponse);
+    assertApiResponseIsNotNull(sourceResponse);
 
-        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+    assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
-        if(sourceResponse.getStatusCode() != 200) {
-            assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
-        }
-        else{
-            validateCSVDocument(path, sourceResponse, targetResponse);
-        }
+    if (sourceResponse.getStatusCode() != 200) {
+      assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
+    } else {
+      validateCSVDocument(path, sourceResponse, targetResponse);
     }
+  }
 
-    @Test
-    void getClassificationCodesAtSelectCodes() {
+  @Test
+  void getClassificationCodesAtSelectLevel() {
 
-        int classificationId = 131;
+    int classificationId = 17;
 
-        String path = getCodesAtPath(classificationId);
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsSelectCodesAt,TEXT_CSV);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsSelectCodesAt,TEXT_CSV);
+    String path = getCodesAtPath(classificationId);
+    Response sourceResponse =
+        klassApiMigrationClient.getFromSourceApi(path, paramsSelectLevelAt, TEXT_CSV);
+    Response targetResponse =
+        klassApiMigrationClient.getFromTargetApi(path, paramsSelectLevelAt, TEXT_CSV);
 
-        assertApiResponseIsNotNull(sourceResponse);
+    assertApiResponseIsNotNull(sourceResponse);
 
-        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+    assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
-        if(sourceResponse.getStatusCode() != 200) {
-            assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
-        }
-        else{
-            validateCSVDocument(path, sourceResponse, targetResponse);
-        }
+    if (sourceResponse.getStatusCode() != 200) {
+      assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
+    } else {
+      validateCSVDocument(path, sourceResponse, targetResponse);
     }
+  }
 
-    @Test
-    void getClassificationCodesAtSelectLevel() {
+  @Test
+  void getClassificationCodesAtCsvSeparator() {
+    int classificationId = industry_classification_standard;
 
-        int classificationId = 17;
+    String path = getCodesAtPath(classificationId);
+    Response sourceResponse =
+        klassApiMigrationClient.getFromSourceApi(path, paramsCsvSeparatorAt, TEXT_CSV);
+    Response targetResponse =
+        klassApiMigrationClient.getFromTargetApi(path, paramsCsvSeparatorAt, TEXT_CSV);
 
-        String path = getCodesAtPath(classificationId);
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsSelectLevelAt,TEXT_CSV);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsSelectLevelAt,TEXT_CSV);
+    assertApiResponseIsNotNull(sourceResponse);
 
-        assertApiResponseIsNotNull(sourceResponse);
+    assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
-        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
-
-        if(sourceResponse.getStatusCode() != 200) {
-            assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
-        }
-        else{
-            validateCSVDocument(path, sourceResponse, targetResponse);
-        }
+    if (sourceResponse.getStatusCode() != 200) {
+      assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
+    } else {
+      validateCSVDocument(path, sourceResponse, targetResponse);
     }
+  }
 
-    @Test
-    void getClassificationCodesAtCsvSeparator() {
-        int classificationId = industry_classification_standard;
+  @Test
+  void getClassificationCodesAtCsvFields() {
+    int classificationId = industry_classification_standard;
 
-        String path = getCodesAtPath(classificationId);
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsCsvSeparatorAt,TEXT_CSV);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsCsvSeparatorAt,TEXT_CSV);
+    String path = getCodesAtPath(classificationId);
+    Response sourceResponse =
+        klassApiMigrationClient.getFromSourceApi(path, paramsCsvFieldsAt, TEXT_CSV);
+    Response targetResponse =
+        klassApiMigrationClient.getFromTargetApi(path, paramsCsvFieldsAt, TEXT_CSV);
 
-        assertApiResponseIsNotNull(sourceResponse);
+    assertApiResponseIsNotNull(sourceResponse);
 
-        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+    assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
-        if(sourceResponse.getStatusCode() != 200) {
-            assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
-        }
-        else{
-            validateCSVDocument(path, sourceResponse, targetResponse);
-        }
+    if (sourceResponse.getStatusCode() != 200) {
+      assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
+    } else {
+      validateCSVDocument(path, sourceResponse, targetResponse);
     }
+  }
 
+  // Nb the presentation name pattern has no values
+  @Test
+  void getClassificationCodesAtPresentationPattern() {
+    int classificationId = 131;
 
-    @Test
-    void getClassificationCodesAtCsvFields() {
-        int classificationId = industry_classification_standard;
+    String path = getCodesAtPath(classificationId);
+    Response sourceResponse =
+        klassApiMigrationClient.getFromSourceApi(path, paramsPresentationCodePatternAt, TEXT_CSV);
+    Response targetResponse =
+        klassApiMigrationClient.getFromTargetApi(path, paramsPresentationCodePatternAt, TEXT_CSV);
 
-        String path = getCodesAtPath(classificationId);
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsCsvFieldsAt,TEXT_CSV);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsCsvFieldsAt,TEXT_CSV);
+    assertApiResponseIsNotNull(sourceResponse);
 
-        assertApiResponseIsNotNull(sourceResponse);
+    assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
-        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
-
-        if(sourceResponse.getStatusCode() != 200) {
-            assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
-        }
-        else{
-            validateCSVDocument(path, sourceResponse, targetResponse);
-        }
+    if (sourceResponse.getStatusCode() != 200) {
+      assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
+    } else {
+      validateCSVDocument(path, sourceResponse, targetResponse);
     }
-
-
-    // Nb the presentation name pattern has no values
-    @Test
-    void getClassificationCodesAtPresentationPattern() {
-        int classificationId = 131;
-
-        String path = getCodesAtPath(classificationId);
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsPresentationCodePatternAt,TEXT_CSV);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsPresentationCodePatternAt,TEXT_CSV);
-
-        assertApiResponseIsNotNull(sourceResponse);
-
-        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
-
-        if(sourceResponse.getStatusCode() != 200) {
-            assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
-        }
-        else{
-            validateCSVDocument(path, sourceResponse, targetResponse);
-        }
-    }
-
+  }
 }

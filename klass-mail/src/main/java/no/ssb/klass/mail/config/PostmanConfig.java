@@ -8,34 +8,33 @@ import org.springframework.validation.annotation.Validated;
 @ConfigurationProperties(prefix = "messaging.postman")
 public class PostmanConfig {
 
-    private String publisherAppName;
+  private String publisherAppName;
 
-    private String pubsubTopicIncoming;
+  private String pubsubTopicIncoming;
 
-    private String fromDisplayName;
+  private String fromDisplayName;
 
-    public @NonNull String getPublisherAppName() {
-        return publisherAppName;
-    }
+  public @NonNull String getPublisherAppName() {
+    return publisherAppName;
+  }
 
-    public void setPublisherAppName(String publisherAppName) {
-        this.publisherAppName = publisherAppName;
-    }
+  public void setPublisherAppName(String publisherAppName) {
+    this.publisherAppName = publisherAppName;
+  }
 
-    public @NonNull String getPubsubTopicIncoming() {
-        return pubsubTopicIncoming;
-    }
+  public @NonNull String getPubsubTopicIncoming() {
+    return pubsubTopicIncoming;
+  }
 
-    public void setPubsubTopicIncoming(String pubsubTopicIncoming) {
-        this.pubsubTopicIncoming = pubsubTopicIncoming;
-    }
+  public void setPubsubTopicIncoming(String pubsubTopicIncoming) {
+    this.pubsubTopicIncoming = pubsubTopicIncoming;
+  }
 
-    public @NonNull String getFromDisplayName() {
-        return fromDisplayName;
-    }
+  public @NonNull String getFromDisplayName() {
+    return fromDisplayName;
+  }
 
-    public void setFromDisplayName(String fromDisplayName) {
-        this.fromDisplayName = fromDisplayName;
-    }
-
+  public void setFromDisplayName(String fromDisplayName) {
+    this.fromDisplayName = fromDisplayName;
+  }
 }

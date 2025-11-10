@@ -11,11 +11,10 @@ import org.springframework.stereotype.Service;
 @Primary
 public class TestMailService implements MailService {
 
-    private static final Logger log = LoggerFactory.getLogger(TestMailService.class);
+  private static final Logger log = LoggerFactory.getLogger(TestMailService.class);
 
-    @Override
-    public void sendMail(Email email) {
-        log.info("Sending email {}", email);
-    }
-
+  @Override
+  public void sendMail(Email email) {
+    log.info("Sending email {}", email);
+  }
 }

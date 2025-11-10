@@ -2,40 +2,39 @@ package no.ssb.klass.core.model;
 
 import static com.google.common.base.Preconditions.*;
 
-import java.util.Date;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-
+import java.util.Date;
 import no.ssb.klass.core.util.TimeUtil;
 
 @Entity
 public class Changelog extends BaseEntity {
-    @Column(nullable = false)
-    private Date changeOccured;
-    @Column(nullable = false)
-    private String changedBy;
-    @Column(length = 4096, nullable = false)
-    private String description;
+  @Column(nullable = false)
+  private Date changeOccured;
 
-    public Changelog(String changedBy, String description) {
-        this.changeOccured = TimeUtil.now();
-        this.changedBy = checkNotNull(changedBy);
-        this.description = checkNotNull(description);
-    }
+  @Column(nullable = false)
+  private String changedBy;
 
-    protected Changelog() {
-    }
+  @Column(length = 4096, nullable = false)
+  private String description;
 
-    public Date getChangeOccured() {
-        return changeOccured;
-    }
+  public Changelog(String changedBy, String description) {
+    this.changeOccured = TimeUtil.now();
+    this.changedBy = checkNotNull(changedBy);
+    this.description = checkNotNull(description);
+  }
 
-    public String getChangedBy() {
-        return changedBy;
-    }
+  protected Changelog() {}
 
-    public String getDescription() {
-        return description;
-    }
+  public Date getChangeOccured() {
+    return changeOccured;
+  }
+
+  public String getChangedBy() {
+    return changedBy;
+  }
+
+  public String getDescription() {
+    return description;
+  }
 }

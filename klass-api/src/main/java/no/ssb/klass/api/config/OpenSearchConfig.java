@@ -1,5 +1,6 @@
 package no.ssb.klass.api.config;
 
+import java.time.Duration;
 import no.ssb.klass.core.config.ConfigurationProfiles;
 import org.opensearch.client.RestHighLevelClient;
 import org.opensearch.data.client.orhlc.AbstractOpenSearchConfiguration;
@@ -11,47 +12,46 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
-import java.time.Duration;
-
 @Configuration
 @Profile("!" + ConfigurationProfiles.MOCK_SEARCH)
 public class OpenSearchConfig extends AbstractOpenSearchConfiguration {
-    @Value("${opensearch.url}")
-    private String opensearchUri;
+  @Value("${opensearch.url}")
+  private String opensearchUri;
 
-    @Value("${opensearch.username}")
-    private String username;
+  @Value("${opensearch.username}")
+  private String username;
 
-    @Value("${opensearch.password}")
-    private String password;
+  @Value("${opensearch.password}")
+  private String password;
 
-    @Value("${opensearch.ssl}")
-    private boolean ssl;
+  @Value("${opensearch.ssl}")
+  private boolean ssl;
 
-    //Constant for the stemmer
-    public static final String NORWEGIAN_STEMMER_ANALYZER = "norwegian_stemmer_analyzer";
+  // Constant for the stemmer
+  public static final String NORWEGIAN_STEMMER_ANALYZER = "norwegian_stemmer_analyzer";
 
-    @Override
-    @Bean(destroyMethod = "close")
-    public RestHighLevelClient opensearchClient() {
-        ClientConfiguration clientConfiguration = (ssl
+  @Override
+  @Bean(destroyMethod = "close")
+  public RestHighLevelClient opensearchClient() {
+    ClientConfiguration clientConfiguration =
+        (ssl
                 ? ClientConfiguration.builder()
-                .connectedTo(opensearchUri.replace("https://", ""))
-                .usingSsl()
-                .withBasicAuth(username, password)
-                .withConnectTimeout(Duration.ofSeconds(10))
-                .withSocketTimeout(Duration.ofSeconds(5))
+                    .connectedTo(opensearchUri.replace("https://", ""))
+                    .usingSsl()
+                    .withBasicAuth(username, password)
+                    .withConnectTimeout(Duration.ofSeconds(10))
+                    .withSocketTimeout(Duration.ofSeconds(5))
                 : ClientConfiguration.builder()
-                .connectedTo(opensearchUri.replace("https://", "").replace("http://", ""))
-                .withConnectTimeout(Duration.ofSeconds(10))
-                .withSocketTimeout(Duration.ofSeconds(5))
-        ).build();
+                    .connectedTo(opensearchUri.replace("https://", "").replace("http://", ""))
+                    .withConnectTimeout(Duration.ofSeconds(10))
+                    .withSocketTimeout(Duration.ofSeconds(5)))
+            .build();
 
-        return RestClients.create(clientConfiguration).rest();
-    }
+    return RestClients.create(clientConfiguration).rest();
+  }
 
-    @Bean
-    public OpenSearchRestTemplate opensearchRestTemplate() {
-        return new OpenSearchRestTemplate(opensearchClient());
-    }
+  @Bean
+  public OpenSearchRestTemplate opensearchRestTemplate() {
+    return new OpenSearchRestTemplate(opensearchClient());
+  }
 }

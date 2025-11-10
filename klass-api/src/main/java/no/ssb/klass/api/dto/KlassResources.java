@@ -1,28 +1,25 @@
 package no.ssb.klass.api.dto;
 
-import java.util.Arrays;
-import java.util.Collection;
-
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import jakarta.xml.bind.annotation.XmlAnyElement;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlRootElement;
-
+import java.util.Arrays;
+import java.util.Collection;
 import org.springframework.core.ResolvableType;
-import org.springframework.hateoas.Link;
 import org.springframework.hateoas.CollectionModel;
-
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Links;
 
 /**
- * This class overrides the XML anotations for content and links, We do this so we can change tag names and distinguish
- * a list of elements from the elements within the list
- * <p>
- * ex.
- * 
+ * This class overrides the XML anotations for content and links, We do this so we can change tag
+ * names and distinguish a list of elements from the elements within the list
+ *
+ * <p>ex.
+ *
  * <pre>
  *   links
  *     - link
@@ -34,23 +31,23 @@ import org.springframework.hateoas.Links;
 @XmlRootElement(name = "entities")
 public class KlassResources<T> extends CollectionModel<T> {
 
-    public KlassResources(Iterable<T> content, Link... links) {
-        super(content, (Iterable) Arrays.asList(links), (ResolvableType) null);
-    }
+  public KlassResources(Iterable<T> content, Link... links) {
+    super(content, (Iterable) Arrays.asList(links), (ResolvableType) null);
+  }
 
-    @Override
-    @XmlAnyElement
-    @XmlElementWrapper
-    @JacksonXmlElementWrapper(localName = "contents")
-    public Collection<T> getContent() {
-        return super.getContent();
-    }
+  @Override
+  @XmlAnyElement
+  @XmlElementWrapper
+  @JacksonXmlElementWrapper(localName = "contents")
+  public Collection<T> getContent() {
+    return super.getContent();
+  }
 
-    @Override
-    @XmlElement(name = "link", namespace = Link.ATOM_NAMESPACE)
-    @JacksonXmlElementWrapper(localName = "links")
-    @JacksonXmlProperty(localName = "link")
-    public Links getLinks() {
-        return super.getLinks();
-    }
+  @Override
+  @XmlElement(name = "link", namespace = Link.ATOM_NAMESPACE)
+  @JacksonXmlElementWrapper(localName = "links")
+  @JacksonXmlProperty(localName = "link")
+  public Links getLinks() {
+    return super.getLinks();
+  }
 }

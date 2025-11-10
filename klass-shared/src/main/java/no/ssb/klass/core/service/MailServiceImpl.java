@@ -18,27 +18,26 @@ import org.springframework.web.util.DefaultUriBuilderFactory;
 @Service
 @Profile("!" + ConfigurationProfiles.MOCK_MAILSERVER)
 public class MailServiceImpl implements MailService {
-    private static final Logger log = LoggerFactory.getLogger(MailServiceImpl.class);
+  private static final Logger log = LoggerFactory.getLogger(MailServiceImpl.class);
 
-    private final RestTemplate klassMail;
+  private final RestTemplate klassMail;
 
-    private final String mailPath = "/mail";
+  private final String mailPath = "/mail";
 
+  public MailServiceImpl(
+      @NonNull @Value("${klass.env.client.klass-mail.url}") String klassMailUrl,
+      RestTemplateBuilder restTemplateBuilder) {
+    Assert.notNull(klassMailUrl, "URL for klass-mail must not be null");
+    klassMail =
+        restTemplateBuilder.uriTemplateHandler(new DefaultUriBuilderFactory(klassMailUrl)).build();
+    log.info("Created MailService for URL {}", klassMail.getUriTemplateHandler().expand(mailPath));
+  }
 
-    public MailServiceImpl(
-            @NonNull
-            @Value("${klass.env.client.klass-mail.url}")
-            String klassMailUrl,
-            RestTemplateBuilder restTemplateBuilder
-    ) {
-        Assert.notNull(klassMailUrl, "URL for klass-mail must not be null");
-        klassMail = restTemplateBuilder.uriTemplateHandler(new DefaultUriBuilderFactory(klassMailUrl)).build();
-        log.info("Created MailService for URL {}", klassMail.getUriTemplateHandler().expand(mailPath));
-    }
-
-    @Override
-    public void sendMail(String to, String subject, String body) {
-        ResponseEntity<Void> response = klassMail.exchange(RequestEntity.post(mailPath).body(new Email(to, subject, body)), Void.class);
-        log.info("Sent mail {} to {}, result: {}", subject, to, response.getStatusCodeValue());
-    }
+  @Override
+  public void sendMail(String to, String subject, String body) {
+    ResponseEntity<Void> response =
+        klassMail.exchange(
+            RequestEntity.post(mailPath).body(new Email(to, subject, body)), Void.class);
+    log.info("Sent mail {} to {}, result: {}", subject, to, response.getStatusCodeValue());
+  }
 }

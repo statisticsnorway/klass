@@ -1,82 +1,82 @@
 package no.ssb.klass.core.model;
 
 import jakarta.persistence.Column;
-import no.ssb.klass.core.util.AlphaNumericCompareUtil;
-
-import java.time.LocalDate;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
-
+import java.time.LocalDate;
+import no.ssb.klass.core.util.AlphaNumericCompareUtil;
 
 @Entity
-public abstract class ClassificationItem extends BaseEntity implements Comparable<ClassificationItem> {
-    @ManyToOne
-    private ClassificationItem parent;
-    @ManyToOne(optional = false)
-    private Level level;
+public abstract class ClassificationItem extends BaseEntity
+    implements Comparable<ClassificationItem> {
+  @ManyToOne private ClassificationItem parent;
 
-    protected ClassificationItem() {
-    }
+  @ManyToOne(optional = false)
+  private Level level;
 
-    void setParent(ClassificationItem parent) {
-        this.parent = parent;
-    }
+  protected ClassificationItem() {}
 
-    /**
-     * @return code, never null
-     */
-    @Column(nullable = false)
-    public abstract String getCode();
+  void setParent(ClassificationItem parent) {
+    this.parent = parent;
+  }
 
-    /**
-     * @return official name for specified language, if none empty string is returned, never null
-     */
-    public abstract String getOfficialName(Language language);
+  /**
+   * @return code, never null
+   */
+  @Column(nullable = false)
+  public abstract String getCode();
 
-    /**
-     * @return short name for specified language, if none empty string is returned, never null
-     */
-    public abstract String getShortName(Language language);
+  /**
+   * @return official name for specified language, if none empty string is returned, never null
+   */
+  public abstract String getOfficialName(Language language);
 
-    public Level getLevel() {
-        return level;
-    }
+  /**
+   * @return short name for specified language, if none empty string is returned, never null
+   */
+  public abstract String getShortName(Language language);
 
-    void setLevel(Level level) {
-        this.level = level;
-    }
+  public Level getLevel() {
+    return level;
+  }
 
-    public ClassificationItem getParent() {
-        return parent;
-    }
+  void setLevel(Level level) {
+    this.level = level;
+  }
 
-    public abstract String getNotes(Language language);
+  public ClassificationItem getParent() {
+    return parent;
+  }
 
-    public abstract LocalDate getValidTo();
+  public abstract String getNotes(Language language);
 
-    public abstract LocalDate getValidFrom();
+  public abstract LocalDate getValidTo();
 
-    public abstract ClassificationItem copy();
+  public abstract LocalDate getValidFrom();
 
-    public abstract boolean isReference();
+  public abstract ClassificationItem copy();
 
-    @Override
-    public String toString() {
-        return "ClassificationItem [code=" + getCode() + ", officialName=" + getOfficialName(Language.NB) + "]";
-    }
+  public abstract boolean isReference();
 
-    public boolean isDeleted() {
-        return getLevel().isDeleted();
-    }
+  @Override
+  public String toString() {
+    return "ClassificationItem [code="
+        + getCode()
+        + ", officialName="
+        + getOfficialName(Language.NB)
+        + "]";
+  }
 
-    @Override
-    public int compareTo(ClassificationItem other) {
-        return AlphaNumericCompareUtil.compare(getCode(), other.getCode());
-    }
+  public boolean isDeleted() {
+    return getLevel().isDeleted();
+  }
 
-    abstract boolean hasNotes();
+  @Override
+  public int compareTo(ClassificationItem other) {
+    return AlphaNumericCompareUtil.compare(getCode(), other.getCode());
+  }
 
-    abstract boolean hasShortName();
+  abstract boolean hasNotes();
 
+  abstract boolean hasShortName();
 }

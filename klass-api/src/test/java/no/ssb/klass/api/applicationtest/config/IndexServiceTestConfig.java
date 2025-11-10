@@ -11,15 +11,17 @@ import org.springframework.context.annotation.Primary;
 @TestConfiguration
 public class IndexServiceTestConfig {
 
-    @Bean
-    public OpenSearchRestTemplate openSearchRestTemplate(org.opensearch.client.RestHighLevelClient client) {
-        return new OpenSearchRestTemplate(client);
-    }
+  @Bean
+  public OpenSearchRestTemplate openSearchRestTemplate(
+      org.opensearch.client.RestHighLevelClient client) {
+    return new OpenSearchRestTemplate(client);
+  }
 
-    @Bean
-    @Primary
-    public IndexService indexService(ClassificationSeriesRepository seriesRepository,
-                                       OpenSearchRestTemplate openSearchRestTemplate) {
-        return new IndexServiceImpl(seriesRepository, openSearchRestTemplate);
-    }
+  @Bean
+  @Primary
+  public IndexService indexService(
+      ClassificationSeriesRepository seriesRepository,
+      OpenSearchRestTemplate openSearchRestTemplate) {
+    return new IndexServiceImpl(seriesRepository, openSearchRestTemplate);
+  }
 }

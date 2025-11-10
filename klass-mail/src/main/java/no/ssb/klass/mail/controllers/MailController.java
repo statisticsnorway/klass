@@ -6,18 +6,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-
 @RestController()
 public class MailController {
 
-    private final MailService mailService;
+  private final MailService mailService;
 
-    public MailController(MailService mailService) {
-        this.mailService = mailService;
-    }
+  public MailController(MailService mailService) {
+    this.mailService = mailService;
+  }
 
-    @PostMapping("/mail")
-    public void sendMail(@RequestBody Email email) {
-        mailService.sendMail(email);
-    }
+  @PostMapping("/mail")
+  public void sendMail(@RequestBody Email email) {
+    mailService.sendMail(email);
+  }
 }

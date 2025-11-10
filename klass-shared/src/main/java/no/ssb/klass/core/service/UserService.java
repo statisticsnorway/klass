@@ -1,23 +1,22 @@
 package no.ssb.klass.core.service;
 
 import java.util.List;
-
 import no.ssb.klass.core.model.User;
 
 public interface UserService {
-    User saveUser(User user);
+  User saveUser(User user);
 
-    List<User> getAllUsers();
-    
-    long getUsersCount();
+  List<User> getAllUsers();
 
-    long countUsersWithClassifications();
+  long getUsersCount();
 
-    List<User> getUsersWithClassifications();
+  long countUsersWithClassifications();
 
-    User getUserByFullName(String fullName);
-    
-    User getUserByUserName(String userName);
+  List<User> getUsersWithClassifications();
 
-    User getUserById(long userId);
+  User getUserByFullName(String fullName);
+
+  User getUserByUserName(String userName);
+
+  User getUserById(long userId);
 }
