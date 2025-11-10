@@ -135,4 +135,4 @@ check-klass-api-open-search-docker:
 
 .PHONY: logs-klass-api-open-search
 logs-klass-api-open-search:
-	docker compose $(COMPOSE_FILE) --profile open-search logs --tail=100 -f klass-api-open-search
+	docker compose $(COMPOSE_FILE) --profile open-search logs --tail=100 -f
