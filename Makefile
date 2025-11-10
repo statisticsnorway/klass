@@ -123,7 +123,9 @@ stop-klass-api-docker:
 
 .PHONY: start-klass-api-open-search-docker
 start-klass-api-open-search-docker:
-	docker compose $(COMPOSE_FILE) --profile open-search up --build -d
+	docker compose $(COMPOSE_FILE) --profile open-search build --no-cache
+	docker compose $(COMPOSE_FILE) --profile open-search up -d
+	#docker compose $(COMPOSE_FILE) --profile open-search up --build -d
 
 .PHONY: stop-klass-api-open-search-docker
 stop-klass-api-open-search-docker:

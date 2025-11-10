@@ -75,8 +75,10 @@ public abstract class AbstractKlassApiDataIntegrityTest {
     @BeforeAll
     static void beforeAll() {
 
-        sourceHost = MigrationTestConfig.getSourceHost();
-        targetHost = MigrationTestConfig.getTargetHost();
+        //sourceHost = MigrationTestConfig.getSourceHost();
+        //targetHost = MigrationTestConfig.getTargetHost();
+        sourceHost = NAIS_TEST_HOST;
+        targetHost = LOCAL_TARGET_HOST;
 
         klassApiMigrationClient = new KlassApiMigrationClient();
 

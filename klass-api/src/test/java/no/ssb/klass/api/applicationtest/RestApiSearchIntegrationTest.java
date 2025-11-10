@@ -122,7 +122,7 @@ public class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest
                 .assertThat()
                 .statusCode(HttpStatus.OK.value())
                 .contentType(ContentType.JSON)
-                .body(JSON_PAGE + ".totalElements", equalTo(2));
+                .body(JSON_PAGE + ".totalElements", equalTo(1));
     }
 
     @Test
@@ -171,13 +171,13 @@ public class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest
     @Test
     public void restServiceSearchClassificationsXML() {
         // When searching for 'kommuner' bydelsinndeling is not a hit because the classification contains only 'kommune'
-        given().port(port).accept(ContentType.XML).param(QUERY, "kommuner")
+        given().port(port).accept(ContentType.XML).param(QUERY, "kommune")
                 .get(REQUEST_SEARCH)
                 .prettyPeek()
                 .then().assertThat()
                 .statusCode(HttpStatus.OK.value())
                 .contentType(ContentType.XML)
-                .body(XML_SEARCH_RESULTS + ".size()", equalTo(1))
+                .body(XML_SEARCH_RESULTS + ".size()", equalTo(2))
                 // result 1
                 .body(XML_SEARCH_RESULT1 + ".name", equalTo(TestDataProvider.KOMMUNEINNDELING_NAVN_NO))
                 .body(XML_SEARCH_RESULT1 + ".snippet", containsString("kommune"))
@@ -187,7 +187,32 @@ public class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest
                 // footer
                 .body(XML_ROOT + ".link.href", containsString(REQUEST_SEARCH))
                 .body(XML_PAGE + ".size.toInteger();", equalTo(PAGE_SIZE))
-                .body(XML_PAGE + ".totalElements.toInteger();", equalTo(1))
+                .body(XML_PAGE + ".totalElements.toInteger();", equalTo(2))
+                .body(XML_PAGE + ".totalPages.toInteger();", equalTo(1))
+                .body(XML_PAGE + ".number.toInteger();", equalTo(0));
+
+    }
+
+    @Test
+    public void restServiceSearchClassificationsXMLKommuner() {
+        // When searching for 'kommuner' bydelsinndeling is not a hit because the classification contains only 'kommune'
+        given().port(port).accept(ContentType.XML).param(QUERY, "kommune")
+                .get(REQUEST_SEARCH)
+                .prettyPeek()
+                .then().assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .contentType(ContentType.XML)
+                .body(XML_SEARCH_RESULTS + ".size()", equalTo(2))
+                // result 1
+                .body(XML_SEARCH_RESULT1 + ".name", equalTo(TestDataProvider.KOMMUNEINNDELING_NAVN_NO))
+                .body(XML_SEARCH_RESULT1 + ".snippet", containsString("kommune"))
+                .body(XML_SEARCH_RESULT1 + ".searchScore.toFloat()", greaterThan(0.0f))
+                .body(XML_SEARCH_RESULT1 + ".link.rel", equalTo("self"))
+                .body(XML_SEARCH_RESULT1 + ".link.href", containsString(REQUEST + "/" + kommuneinndeling.getId()))
+                // footer
+                .body(XML_ROOT + ".link.href", containsString(REQUEST_SEARCH))
+                .body(XML_PAGE + ".size.toInteger();", equalTo(PAGE_SIZE))
+                .body(XML_PAGE + ".totalElements.toInteger();", equalTo(2))
                 .body(XML_PAGE + ".totalPages.toInteger();", equalTo(1))
                 .body(XML_PAGE + ".number.toInteger();", equalTo(0));
 
@@ -246,7 +271,8 @@ public class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest
 
         // one result expected when  codelists are  included
         // result 0
-        given().port(port).accept(ContentType.XML).param(QUERY, "familie").param(INCLUDE_CODE_LISTS, TRUE)
+        // no just 'familie'
+        given().port(port).accept(ContentType.XML).param(QUERY, "familier").param(INCLUDE_CODE_LISTS, TRUE)
                 .get(REQUEST_SEARCH)
 //                .prettyPeek()
                 .then().assertThat()
