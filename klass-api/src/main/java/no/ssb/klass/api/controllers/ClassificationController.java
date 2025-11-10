@@ -3,17 +3,11 @@ package no.ssb.klass.api.controllers;
 import static java.util.stream.Collectors.toList;
 
 import com.google.common.base.Strings;
+
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.beans.PropertyEditorSupport;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+
 import no.ssb.klass.api.controllers.validators.CsvFieldsValidator;
 import no.ssb.klass.api.dto.*;
 import no.ssb.klass.api.dto.hal.*;
@@ -33,6 +27,7 @@ import no.ssb.klass.core.util.AlphaNumericalComparator;
 import no.ssb.klass.core.util.ClientException;
 import no.ssb.klass.core.util.DateRange;
 import no.ssb.klass.core.util.KlassResourceNotFoundException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,758 +51,790 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.beans.PropertyEditorSupport;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+
 @CrossOrigin
 @RestController
 @RequestMapping(value = {RestConstants.API_VERSION_V1})
 public class ClassificationController {
-  private static final Logger log = LoggerFactory.getLogger(ClassificationController.class);
-  private final ClassificationService classificationService;
-  private final SubscriberService subscriberService;
-  private final SearchService searchService;
-  private final StatisticsService statisticsService;
-  private final CsvFieldsValidator csvFieldsValidator;
+    private static final Logger log = LoggerFactory.getLogger(ClassificationController.class);
+    private final ClassificationService classificationService;
+    private final SubscriberService subscriberService;
+    private final SearchService searchService;
+    private final StatisticsService statisticsService;
+    private final CsvFieldsValidator csvFieldsValidator;
 
-  private static final String EXCEPTION_HANDLER_LOG_MESSAGE_TEMPLATE = "{}. For request: {}";
+    private static final String EXCEPTION_HANDLER_LOG_MESSAGE_TEMPLATE = "{}. For request: {}";
 
-  @Autowired
-  public ClassificationController(
-      ClassificationService classificationService,
-      SubscriberService subscriberService,
-      SearchService searchService,
-      StatisticsService statisticsService,
-      CsvFieldsValidator csvFieldsValidator) {
-    this.classificationService = classificationService;
-    this.subscriberService = subscriberService;
-    this.searchService = searchService;
-    this.statisticsService = statisticsService;
-    this.csvFieldsValidator = csvFieldsValidator;
-  }
-
-  @ExceptionHandler(
-      exception = KlassResourceNotFoundException.class,
-      produces = {MediaType.TEXT_PLAIN_VALUE, RestConstants.CONTENT_TYPE_CSV})
-  @ResponseStatus(HttpStatus.NOT_FOUND)
-  public String resourceNotFoundTextExceptionHandler(KlassResourceNotFoundException exception) {
-    log.info(EXCEPTION_HANDLER_LOG_MESSAGE_TEMPLATE, exception.getMessage(), getCurrentRequest());
-    return exception.getMessage();
-  }
-
-  @ExceptionHandler(
-      exception = KlassResourceNotFoundException.class,
-      produces = {
-        MediaType.APPLICATION_JSON_VALUE,
-        MediaType.APPLICATION_PROBLEM_JSON_VALUE,
-        MediaType.TEXT_XML_VALUE,
-        MediaType.APPLICATION_XML_VALUE,
-        MediaType.APPLICATION_PROBLEM_XML_VALUE
-      })
-  @ResponseStatus(HttpStatus.NOT_FOUND)
-  public ProblemDetail resourceNotFoundProblemDetailExceptionHandler(
-      KlassResourceNotFoundException exception) {
-    log.info(EXCEPTION_HANDLER_LOG_MESSAGE_TEMPLATE, exception.getMessage(), getCurrentRequest());
-    return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, exception.getMessage());
-  }
-
-  @ExceptionHandler(
-      exception = {
-        RestClientException.class,
-        MethodArgumentTypeMismatchException.class,
-        IllegalArgumentException.class
-      },
-      produces = {MediaType.TEXT_PLAIN_VALUE, RestConstants.CONTENT_TYPE_CSV})
-  @ResponseStatus(HttpStatus.BAD_REQUEST)
-  public String badRequestTextExceptionHandler(Exception exception) {
-    return exception.getMessage();
-  }
-
-  @ExceptionHandler(
-      exception = {
-        RestClientException.class,
-        MethodArgumentTypeMismatchException.class,
-        IllegalArgumentException.class
-      },
-      produces = {
-        MediaType.APPLICATION_JSON_VALUE,
-        MediaType.APPLICATION_PROBLEM_JSON_VALUE,
-        MediaType.TEXT_XML_VALUE,
-        MediaType.APPLICATION_XML_VALUE,
-        MediaType.APPLICATION_PROBLEM_XML_VALUE
-      })
-  @ResponseStatus(HttpStatus.BAD_REQUEST)
-  public ProblemDetail badRequestProblemDetailExceptionHandler(Exception exception) {
-    return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, exception.getMessage());
-  }
-
-  @ExceptionHandler
-  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-  public String serverErrorTextExceptionHandler(Exception exception) {
-    log.warn(
-        EXCEPTION_HANDLER_LOG_MESSAGE_TEMPLATE,
-        exception.getMessage(),
-        getCurrentRequest(),
-        exception);
-    return exception.getMessage();
-  }
-
-  @ExceptionHandler(
-      produces = {
-        MediaType.APPLICATION_JSON_VALUE,
-        MediaType.APPLICATION_PROBLEM_JSON_VALUE,
-        MediaType.TEXT_XML_VALUE,
-        MediaType.APPLICATION_XML_VALUE,
-        MediaType.APPLICATION_PROBLEM_XML_VALUE
-      })
-  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-  public ProblemDetail serverErrorProblemDetailExceptionHandler(Exception exception) {
-    log.warn(
-        EXCEPTION_HANDLER_LOG_MESSAGE_TEMPLATE,
-        exception.getMessage(),
-        getCurrentRequest(),
-        exception);
-    return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, exception.getMessage());
-  }
-
-  /** Redirect root to docs for convenience */
-  @Hidden // We don't want to document this
-  @GetMapping("/")
-  public RedirectView localRedirect() {
-    RedirectView redirectView = new RedirectView();
-    redirectView.setUrl("api-guide.html");
-    return redirectView;
-  }
-
-  @Tag(name = OpenApiConstants.Tags.CLASSIFICATION_FAMILIES_TAG)
-  @GetMapping(
-      value = "/classificationfamilies",
-      produces = {
-        MediaType.APPLICATION_JSON_VALUE,
-        MediaType.TEXT_XML_VALUE,
-        MediaType.APPLICATION_XML_VALUE
-      })
-  public CollectionModel<ClassificationFamilySummaryResource> classificationFamilies(
-      @RequestParam(value = "ssbSection", required = false) String ssbSection,
-      @RequestParam(value = "includeCodelists", defaultValue = "false") boolean includeCodelists,
-      @RequestParam(value = "language", defaultValue = "nb") Language language) {
-    ClassificationType classificationType = extractClassificationType(includeCodelists);
-    ssbSection = extractSsbSection(ssbSection);
-    List<ClassificationFamilySummary> summaries =
-        classificationService.findPublicClassificationFamilySummaries(
-            ssbSection, classificationType);
-    List<ClassificationFamilySummaryResource> summaryResources =
-        summaries.stream()
-            .map(summary -> new ClassificationFamilySummaryResource(summary, language))
-            .collect(toList());
-
-    return new KlassResources<>(
-        summaryResources, Link.of(getCurrentRequest(), IanaLinkRelations.SELF));
-  }
-
-  @Tag(name = OpenApiConstants.Tags.CLASSIFICATION_FAMILIES_TAG)
-  @GetMapping(
-      value = "/classificationfamilies/{id}",
-      produces = {
-        MediaType.APPLICATION_JSON_VALUE,
-        MediaType.TEXT_XML_VALUE,
-        MediaType.APPLICATION_XML_VALUE
-      })
-  public ClassificationFamilyResource classificationFamily(
-      @PathVariable Long id,
-      @RequestParam(value = "ssbSection", required = false) String ssbSection,
-      @RequestParam(value = "includeCodelists", defaultValue = "false") Boolean includeCodelists,
-      @RequestParam(value = "language", defaultValue = "nb") Language language) {
-    ClassificationType classificationType = extractClassificationType(includeCodelists);
-    ssbSection = extractSsbSection(ssbSection);
-    ClassificationFamily classificationFamily = classificationService.getClassificationFamily(id);
-    return new ClassificationFamilyResource(
-        classificationFamily, language, ssbSection, classificationType);
-  }
-
-  @Tag(name = OpenApiConstants.Tags.SSB_SECTIONS_TAG)
-  @GetMapping(
-      value = "/ssbsections",
-      produces = {
-        MediaType.APPLICATION_JSON_VALUE,
-        MediaType.TEXT_XML_VALUE,
-        MediaType.APPLICATION_XML_VALUE
-      })
-  public CollectionModel<SsbSectionResource> ssbsections() {
-    List<SsbSectionResource> ssbSectionResources =
-        classificationService.findResponsibleSectionsWithPublishedVersions().stream()
-            .sorted()
-            .map(SsbSectionResource::new)
-            .collect(toList());
-    return new KlassResources<>(
-        ssbSectionResources, Link.of(getCurrentRequest(), IanaLinkRelations.SELF));
-  }
-
-  @Tag(name = OpenApiConstants.Tags.CLASSIFICATIONS_TAG)
-  @GetMapping(
-      value = "/classifications",
-      produces = {
-        MediaType.APPLICATION_JSON_VALUE,
-        MediaType.TEXT_XML_VALUE,
-        MediaType.APPLICATION_XML_VALUE
-      })
-  public KlassPagedResources<ClassificationSummaryResource> classifications(
-      @RequestParam(value = "includeCodelists", defaultValue = "false") boolean includeCodelists,
-      @RequestParam(value = "changedSince", required = false)
-          @DateTimeFormat(iso = ISO.DATE_TIME, fallbackPatterns = "yyyy-MM-dd'T'HH:mm:ss.ssZ")
-          Date changedSince,
-      @Parameter(hidden = true) Pageable pageable,
-      @Parameter(hidden = true) PagedResourcesAssembler<ClassificationSeries> assembler) {
-
-    Page<ClassificationSeries> classifications =
-        classificationService.findAllPublic(includeCodelists, changedSince, pageable);
-
-    Link self = Link.of(getCurrentRequest(), IanaLinkRelations.SELF);
-    PagedModel<ClassificationSummaryResource> response =
-        assembler.toModel(classifications, ClassificationSummaryResource::new, self);
-    addSearchLink(response);
-    return new KlassPagedResources<>(response);
-  }
-
-  @Tag(name = OpenApiConstants.Tags.SEARCH_TAG)
-  @GetMapping(
-      value = "/classifications/search",
-      produces = {
-        MediaType.APPLICATION_JSON_VALUE,
-        MediaType.TEXT_XML_VALUE,
-        MediaType.APPLICATION_XML_VALUE
-      })
-  public KlassPagedResources<SearchResultResource> search(
-      @RequestParam(value = "query") String query,
-      @RequestParam(value = "ssbSection", required = false) String ssbSection,
-      @RequestParam(value = "includeCodelists", defaultValue = "false") boolean includeCodelists,
-      @Parameter(hidden = true) Pageable pageable) {
-    Link self = Link.of(getCurrentRequest(), IanaLinkRelations.SELF);
-    ssbSection = extractSsbSection(ssbSection);
-
-    Page<OpenSearchResult> results =
-        searchService.publicSearch(query, pageable, ssbSection, includeCodelists);
-
-    List<SearchResultResource> searchResources =
-        results.getContent().stream()
-            .map(result -> new SearchResultResource(result, Collections.emptyMap()))
-            .collect(toList());
-
-    boolean hit = !results.isEmpty();
-    statisticsService.addSearchWord(query, hit);
-
-    PagedModel.PageMetadata pageMetadata =
-        new PagedModel.PageMetadata(
-            pageable.getPageSize(),
-            results.getNumber(),
-            results.getTotalElements(),
-            results.getTotalPages());
-
-    PagedModel<SearchResultResource> pagedModel =
-        PagedModel.of(searchResources, pageMetadata, self);
-    return new KlassPagedResources<>(pagedModel);
-  }
-
-  @Tag(name = OpenApiConstants.Tags.CLASSIFICATIONS_TAG)
-  @GetMapping(
-      value = "/classifications/{id}",
-      produces = {
-        MediaType.APPLICATION_JSON_VALUE,
-        MediaType.TEXT_XML_VALUE,
-        MediaType.APPLICATION_XML_VALUE
-      })
-  public ClassificationResource classification(
-      @PathVariable Long id,
-      @RequestParam(value = "language", defaultValue = "nb") Language language,
-      @RequestParam(value = "includeFuture", defaultValue = "false") Boolean includeFuture) {
-    ClassificationSeries classification = classificationService.getClassificationSeries(id);
-    statisticsService.addUseForClassification(classification);
-    String owningSectionName =
-        classificationService.resolveSectionName(
-            classification.getContactPerson().getSection(), language);
-    return new ClassificationResource(classification, language, includeFuture, owningSectionName);
-  }
-
-  @Tag(name = OpenApiConstants.Tags.VERSIONS_TAG)
-  @GetMapping(
-      value = "/versions/{id}",
-      produces = {
-        MediaType.APPLICATION_JSON_VALUE,
-        MediaType.APPLICATION_XML_VALUE,
-        MediaType.TEXT_XML_VALUE,
-        RestConstants.CONTENT_TYPE_CSV
-      })
-  public ClassificationVersionResource versions(
-      @PathVariable Long id,
-      @RequestParam(value = "language", defaultValue = "nb") Language language,
-      @RequestParam(value = "includeFuture", defaultValue = "false") Boolean includeFuture) {
-    ClassificationVersion version = classificationService.getClassificationVersion(id);
-    List<CorrespondenceTable> corrTableVersionIsTarget =
-        classificationService.findPublicCorrespondenceTablesWithTarget(version).stream()
-            .sorted(
-                AlphaNumericalComparator.comparing(
-                    CorrespondenceTable::getNameInPrimaryLanguage, true))
-            .collect(toList());
-    String owningSectionName =
-        classificationService.resolveSectionName(version.getContactPerson().getSection(), language);
-    return new ClassificationVersionResource(
-        version, language, corrTableVersionIsTarget, includeFuture, owningSectionName);
-  }
-
-  @Tag(name = OpenApiConstants.Tags.CORRESPONDENCE_TABLES_TAG)
-  @GetMapping(
-      value = "/correspondencetables/{id}",
-      produces = {
-        MediaType.APPLICATION_JSON_VALUE,
-        MediaType.APPLICATION_XML_VALUE,
-        MediaType.TEXT_XML_VALUE,
-        RestConstants.CONTENT_TYPE_CSV
-      })
-  public CorrespondenceTableResource correspondenceTables(
-      @PathVariable Long id,
-      @RequestParam(value = "language", defaultValue = "nb") Language language) {
-    CorrespondenceTable table = classificationService.getCorrespondenceTable(id);
-    String owningSectionName =
-        classificationService.resolveSectionName(table.getContactPerson().getSection(), language);
-    return new CorrespondenceTableResource(table, language, owningSectionName);
-  }
-
-  @Tag(name = OpenApiConstants.Tags.VARIANTS_TAG)
-  @GetMapping(
-      value = "/variants/{id}",
-      produces = {
-        MediaType.APPLICATION_JSON_VALUE,
-        MediaType.APPLICATION_XML_VALUE,
-        MediaType.TEXT_XML_VALUE,
-        RestConstants.CONTENT_TYPE_CSV
-      })
-  public ClassificationVariantResource variants(
-      @PathVariable Long id,
-      @RequestParam(value = "language", defaultValue = "nb") Language language) {
-    ClassificationVariant variant = classificationService.getClassificationVariant(id);
-    String owningSectionName =
-        classificationService.resolveSectionName(variant.getContactPerson().getSection(), language);
-    return new ClassificationVariantResource(variant, language, owningSectionName);
-  }
-
-  @Tag(name = OpenApiConstants.Tags.CODES_TAG)
-  @GetMapping(
-      value = "/classifications/{id}/codes",
-      produces = {
-        MediaType.APPLICATION_JSON_VALUE,
-        MediaType.APPLICATION_XML_VALUE,
-        MediaType.TEXT_XML_VALUE,
-        RestConstants.CONTENT_TYPE_CSV
-      })
-  public CodeList codes(
-      @PathVariable Long id,
-      @RequestParam(value = "from") @DateTimeFormat(pattern = RestConstants.DATE_FORMAT)
-          LocalDate from,
-      @RequestParam(value = "to", required = false)
-          @DateTimeFormat(pattern = RestConstants.DATE_FORMAT)
-          LocalDate to,
-      @RequestParam(value = "csvSeparator", defaultValue = ",") String csvSeparator,
-      @RequestParam(value = "csvFields", defaultValue = "") String csvFields,
-      @RequestParam(value = "selectLevel", required = false) String selectLevel,
-      @RequestParam(value = "selectCodes", required = false) String selectCodes,
-      @RequestParam(value = "presentationNamePattern", required = false)
-          String presentationNamePattern,
-      @RequestParam(value = "language", defaultValue = "nb") Language language,
-      @RequestParam(value = "includeFuture", defaultValue = "false") Boolean includeFuture) {
-    CodeList codeList =
-        codesInternal(
-            id,
-            new DateRangeHolder(from, to),
-            csvSeparator,
-            selectLevel,
-            selectCodes,
-            presentationNamePattern,
-            language,
-            includeFuture);
-
-    if (!csvFields.isEmpty()) {
-      List<String> csvFieldsList = getCsvFieldsList(csvFields);
-      csvFieldsValidator.validateFieldsCodeItem(csvFieldsList);
-      codeList.setCsvFields(csvFieldsList);
-    }
-    return codeList;
-  }
-
-  @Tag(name = OpenApiConstants.Tags.CODES_TAG)
-  @GetMapping(
-      value = "/classifications/{id}/codesAt",
-      produces = {
-        MediaType.APPLICATION_JSON_VALUE,
-        MediaType.APPLICATION_XML_VALUE,
-        MediaType.TEXT_XML_VALUE,
-        RestConstants.CONTENT_TYPE_CSV
-      })
-  public CodeList codesAt(
-      @PathVariable Long id,
-      @RequestParam(value = "date") @DateTimeFormat(pattern = RestConstants.DATE_FORMAT)
-          LocalDate date,
-      @RequestParam(value = "csvSeparator", defaultValue = ",") String csvSeparator,
-      @RequestParam(value = "csvFields", defaultValue = "") String csvFields,
-      @RequestParam(value = "selectLevel", required = false) String selectLevel,
-      @RequestParam(value = "selectCodes", required = false) String selectCodes,
-      @RequestParam(value = "presentationNamePattern", required = false)
-          String presentationNamePattern,
-      @RequestParam(value = "language", defaultValue = "nb") Language language,
-      @RequestParam(value = "includeFuture", defaultValue = "false") Boolean includeFuture) {
-
-    CodeList codeList =
-        codesInternal(
-            id,
-            new DateRangeHolder(date),
-            csvSeparator,
-            selectLevel,
-            selectCodes,
-            presentationNamePattern,
-            language,
-            includeFuture);
-
-    if (!csvFields.isEmpty()) {
-      List<String> csvFieldsList = getCsvFieldsList(csvFields);
-      csvFieldsValidator.validateFieldsCodeItem(csvFieldsList);
-      codeList.setCsvFields(csvFieldsList);
-    }
-    return codeList;
-  }
-
-  private CodeList codesInternal(
-      Long id,
-      DateRangeHolder dateRangeHolder,
-      String csvSeparator,
-      String selectLevel,
-      String selectCodes,
-      String presentationNamePattern,
-      Language language,
-      Boolean includeFuture) {
-    List<CodeDto> codes =
-        classificationService.findClassificationCodes(
-            id, dateRangeHolder.dateRange, language, includeFuture);
-    CodeList codeList =
-        new CodeList(
-                csvSeparator, dateRangeHolder.withRange, dateRangeHolder.dateRange, includeFuture)
-            .convert(codes);
-    return codeList
-        .filterValidity(dateRangeHolder.dateRange)
-        .limit(dateRangeHolder.dateRange)
-        .compress()
-        .filterOnLevel(selectLevel)
-        .filterOnCodes(selectCodes)
-        .presentationNames(presentationNamePattern)
-        .sort();
-  }
-
-  @Tag(name = OpenApiConstants.Tags.CODES_TAG)
-  @GetMapping(
-      value = "/classifications/{id}/changes",
-      produces = {
-        MediaType.APPLICATION_JSON_VALUE,
-        MediaType.APPLICATION_XML_VALUE,
-        MediaType.TEXT_XML_VALUE,
-        RestConstants.CONTENT_TYPE_CSV
-      })
-  public CodeChangeList changes(
-      @PathVariable Long id,
-      @RequestParam(value = "from") @DateTimeFormat(pattern = RestConstants.DATE_FORMAT)
-          LocalDate from,
-      @RequestParam(value = "to", required = false)
-          @DateTimeFormat(pattern = RestConstants.DATE_FORMAT)
-          LocalDate to,
-      @RequestParam(value = "csvSeparator", defaultValue = ",") String csvSeparator,
-      @RequestParam(value = "csvFields", defaultValue = "") String csvFields,
-      @RequestParam(value = "language", defaultValue = "nb") Language language,
-      @RequestParam(value = "includeFuture", defaultValue = "false") Boolean includeFuture) {
-    DateRange dateRange = DateRange.create(from, to);
-    ClassificationSeries classification = classificationService.getClassificationSeries(id);
-    List<CorrespondenceTable> changeTables =
-        classification.getChangeTables(dateRange, includeFuture).stream()
-            .filter(correspondenceTable -> correspondenceTable.isPublished(language))
-            .collect(toList());
-    CodeChangeList codeChanges = new CodeChangeList(csvSeparator);
-    for (CorrespondenceTable changeTable : changeTables) {
-      codeChanges = codeChanges.merge(codeChanges.convert(changeTable, language));
+    @Autowired
+    public ClassificationController(
+            ClassificationService classificationService,
+            SubscriberService subscriberService,
+            SearchService searchService,
+            StatisticsService statisticsService,
+            CsvFieldsValidator csvFieldsValidator) {
+        this.classificationService = classificationService;
+        this.subscriberService = subscriberService;
+        this.searchService = searchService;
+        this.statisticsService = statisticsService;
+        this.csvFieldsValidator = csvFieldsValidator;
     }
 
-    if (!csvFields.isEmpty()) {
-      List<String> csvFieldsList = getCsvFieldsList(csvFields);
-      csvFieldsValidator.validateFieldsChangeItemSchema(csvFieldsList);
-      codeChanges.setCsvFields(csvFieldsList);
+    @ExceptionHandler(
+            exception = KlassResourceNotFoundException.class,
+            produces = {MediaType.TEXT_PLAIN_VALUE, RestConstants.CONTENT_TYPE_CSV})
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public String resourceNotFoundTextExceptionHandler(KlassResourceNotFoundException exception) {
+        log.info(
+                EXCEPTION_HANDLER_LOG_MESSAGE_TEMPLATE,
+                exception.getMessage(),
+                getCurrentRequest());
+        return exception.getMessage();
     }
 
-    return codeChanges;
-  }
-
-  @Tag(name = OpenApiConstants.Tags.VARIANTS_TAG)
-  @GetMapping(
-      value = "/classifications/{id}/variant",
-      produces = {
-        MediaType.APPLICATION_JSON_VALUE,
-        MediaType.APPLICATION_XML_VALUE,
-        MediaType.TEXT_XML_VALUE,
-        RestConstants.CONTENT_TYPE_CSV
-      })
-  public CodeList variant(
-      @PathVariable Long id,
-      @RequestParam(value = "variantName") String variantName,
-      @RequestParam(value = "from") @DateTimeFormat(pattern = RestConstants.DATE_FORMAT)
-          LocalDate from,
-      @RequestParam(value = "to", required = false)
-          @DateTimeFormat(pattern = RestConstants.DATE_FORMAT)
-          LocalDate to,
-      @RequestParam(value = "csvSeparator", defaultValue = ",") String csvSeparator,
-      @RequestParam(value = "csvFields", defaultValue = "") String csvFields,
-      @RequestParam(value = "level", required = false) String selectLevel,
-      @RequestParam(value = "selectCodes", required = false) String selectCodes,
-      @RequestParam(value = "presentationNamePattern", required = false)
-          String presentationNamePattern,
-      @RequestParam(value = "language", defaultValue = "nb") Language language,
-      @RequestParam(value = "includeFuture", defaultValue = "false") Boolean includeFuture) {
-    CodeList codeList =
-        variantInternal(
-            id,
-            variantName,
-            new DateRangeHolder(from, to),
-            csvSeparator,
-            selectLevel,
-            selectCodes,
-            presentationNamePattern,
-            language,
-            includeFuture);
-
-    if (!csvFields.isEmpty()) {
-      List<String> csvFieldsList = getCsvFieldsList(csvFields);
-      csvFieldsValidator.validateFieldsCodeItem(csvFieldsList);
-      codeList.setCsvFields(csvFieldsList);
+    @ExceptionHandler(
+            exception = KlassResourceNotFoundException.class,
+            produces = {
+                MediaType.APPLICATION_JSON_VALUE,
+                MediaType.APPLICATION_PROBLEM_JSON_VALUE,
+                MediaType.TEXT_XML_VALUE,
+                MediaType.APPLICATION_XML_VALUE,
+                MediaType.APPLICATION_PROBLEM_XML_VALUE
+            })
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ProblemDetail resourceNotFoundProblemDetailExceptionHandler(
+            KlassResourceNotFoundException exception) {
+        log.info(
+                EXCEPTION_HANDLER_LOG_MESSAGE_TEMPLATE,
+                exception.getMessage(),
+                getCurrentRequest());
+        return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, exception.getMessage());
     }
 
-    return codeList;
-  }
-
-  @Tag(name = OpenApiConstants.Tags.VARIANTS_TAG)
-  @GetMapping(
-      value = "/classifications/{id}/variantAt",
-      produces = {
-        MediaType.APPLICATION_JSON_VALUE,
-        MediaType.APPLICATION_XML_VALUE,
-        MediaType.TEXT_XML_VALUE,
-        RestConstants.CONTENT_TYPE_CSV
-      })
-  public CodeList variantAt(
-      @PathVariable Long id,
-      @RequestParam(value = "variantName") String variantName,
-      @RequestParam(value = "date", required = false)
-          @DateTimeFormat(pattern = RestConstants.DATE_FORMAT)
-          LocalDate date,
-      @RequestParam(value = "csvSeparator", defaultValue = ",") String csvSeparator,
-      @RequestParam(value = "csvFields", defaultValue = "") String csvFields,
-      @RequestParam(value = "level", required = false) String selectLevel,
-      @RequestParam(value = "selectCodes", required = false) String selectCodes,
-      @RequestParam(value = "presentationNamePattern", required = false)
-          String presentationNamePattern,
-      @RequestParam(value = "language", defaultValue = "nb") Language language,
-      @RequestParam(value = "includeFuture", defaultValue = "false") Boolean includeFuture) {
-    CodeList codeList =
-        variantInternal(
-            id,
-            variantName,
-            new DateRangeHolder(date),
-            csvSeparator,
-            selectLevel,
-            selectCodes,
-            presentationNamePattern,
-            language,
-            includeFuture);
-
-    if (!csvFields.isEmpty()) {
-      List<String> csvFieldsList = getCsvFieldsList(csvFields);
-      csvFieldsValidator.validateFieldsCodeItem(csvFieldsList);
-      codeList.setCsvFields(csvFieldsList);
+    @ExceptionHandler(
+            exception = {
+                RestClientException.class,
+                MethodArgumentTypeMismatchException.class,
+                IllegalArgumentException.class
+            },
+            produces = {MediaType.TEXT_PLAIN_VALUE, RestConstants.CONTENT_TYPE_CSV})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String badRequestTextExceptionHandler(Exception exception) {
+        return exception.getMessage();
     }
 
-    return codeList;
-  }
-
-  private CodeList variantInternal(
-      Long id,
-      String variantName,
-      DateRangeHolder dateRangeHolder,
-      String csvSeparator,
-      String selectLevel,
-      String selectCodes,
-      String presentationNamePattern,
-      Language language,
-      Boolean includeFuture) {
-    List<CodeDto> codes =
-        classificationService.findVariantClassificationCodes(
-            id, variantName, language, dateRangeHolder.dateRange, includeFuture);
-    return new CodeList(
-            csvSeparator, dateRangeHolder.withRange, dateRangeHolder.dateRange, includeFuture)
-        .convert(codes)
-        .limit(dateRangeHolder.dateRange)
-        .compress()
-        .filterOnLevel(selectLevel)
-        .filterOnCodes(selectCodes)
-        .presentationNames(presentationNamePattern)
-        .sort();
-  }
-
-  @Tag(name = OpenApiConstants.Tags.CORRESPONDENCE_TABLES_TAG)
-  @GetMapping(
-      value = "/classifications/{id}/corresponds",
-      produces = {
-        MediaType.APPLICATION_JSON_VALUE,
-        MediaType.APPLICATION_XML_VALUE,
-        MediaType.TEXT_XML_VALUE,
-        RestConstants.CONTENT_TYPE_CSV
-      })
-  public CorrespondenceItemList corresponds(
-      @PathVariable Long id,
-      @RequestParam(value = "targetClassificationId") Long targetClassificationId,
-      @RequestParam(value = "from") @DateTimeFormat(pattern = RestConstants.DATE_FORMAT)
-          LocalDate from,
-      @RequestParam(value = "to", required = false)
-          @DateTimeFormat(pattern = RestConstants.DATE_FORMAT)
-          LocalDate to,
-      @RequestParam(value = "csvSeparator", defaultValue = ",") String csvSeparator,
-      @RequestParam(value = "csvFields", defaultValue = "") String csvFields,
-      @RequestParam(value = "language", defaultValue = "nb") Language language,
-      @RequestParam(value = "includeFuture", defaultValue = "false") Boolean includeFuture) {
-    CorrespondenceItemList correspondenceList =
-        correspondsInternal(
-            id,
-            targetClassificationId,
-            new DateRangeHolder(from, to),
-            csvSeparator,
-            language,
-            includeFuture,
-            false);
-
-    if (!csvFields.isEmpty()) {
-      List<String> csvFieldsList = getCsvFieldsList(csvFields);
-      csvFieldsValidator.validateFieldsCorrespondenceItem(csvFieldsList);
-      correspondenceList.setCsvFields(csvFieldsList);
+    @ExceptionHandler(
+            exception = {
+                RestClientException.class,
+                MethodArgumentTypeMismatchException.class,
+                IllegalArgumentException.class
+            },
+            produces = {
+                MediaType.APPLICATION_JSON_VALUE,
+                MediaType.APPLICATION_PROBLEM_JSON_VALUE,
+                MediaType.TEXT_XML_VALUE,
+                MediaType.APPLICATION_XML_VALUE,
+                MediaType.APPLICATION_PROBLEM_XML_VALUE
+            })
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ProblemDetail badRequestProblemDetailExceptionHandler(Exception exception) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, exception.getMessage());
     }
 
-    return correspondenceList;
-  }
-
-  @Tag(name = OpenApiConstants.Tags.CORRESPONDENCE_TABLES_TAG)
-  @GetMapping(
-      value = "/classifications/{id}/correspondsAt",
-      produces = {
-        MediaType.APPLICATION_JSON_VALUE,
-        MediaType.APPLICATION_XML_VALUE,
-        MediaType.TEXT_XML_VALUE,
-        RestConstants.CONTENT_TYPE_CSV
-      })
-  public CorrespondenceItemList correspondsAt(
-      @PathVariable Long id,
-      @RequestParam(value = "targetClassificationId") Long targetClassificationId,
-      @RequestParam(value = "date", required = false)
-          @DateTimeFormat(pattern = RestConstants.DATE_FORMAT)
-          LocalDate date,
-      @RequestParam(value = "csvSeparator", defaultValue = ",") String csvSeparator,
-      @RequestParam(value = "csvFields", defaultValue = "") String csvFields,
-      @RequestParam(value = "language", defaultValue = "nb") Language language,
-      @RequestParam(value = "includeFuture", defaultValue = "false") Boolean includeFuture,
-      @RequestParam(value = "inverted", defaultValue = "false") Boolean inverted) {
-    CorrespondenceItemList correspondenceList =
-        correspondsInternal(
-            id,
-            targetClassificationId,
-            new DateRangeHolder(date),
-            csvSeparator,
-            language,
-            includeFuture,
-            inverted);
-
-    if (!csvFields.isEmpty()) {
-      List<String> csvFieldsList = getCsvFieldsList(csvFields);
-      csvFieldsValidator.validateFieldsCorrespondenceItem(csvFieldsList);
-      correspondenceList.setCsvFields(csvFieldsList);
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public String serverErrorTextExceptionHandler(Exception exception) {
+        log.warn(
+                EXCEPTION_HANDLER_LOG_MESSAGE_TEMPLATE,
+                exception.getMessage(),
+                getCurrentRequest(),
+                exception);
+        return exception.getMessage();
     }
 
-    return correspondenceList;
-  }
-
-  private CorrespondenceItemList correspondsInternal(
-      Long id,
-      Long targetClassificationId,
-      DateRangeHolder dateRangeHolder,
-      String csvSeparator,
-      Language language,
-      Boolean includeFuture,
-      Boolean inverted) {
-    List<CorrespondenceDto> correspondences =
-        classificationService.findCorrespondences(
-            id,
-            targetClassificationId,
-            dateRangeHolder.dateRange,
-            language,
-            includeFuture,
-            inverted);
-    return new CorrespondenceItemList(csvSeparator, dateRangeHolder.withRange, includeFuture)
-        .convert(correspondences)
-        .removeOutside(dateRangeHolder.dateRange)
-        .limit(dateRangeHolder.dateRange)
-        .group()
-        .sort();
-  }
-
-  @Hidden // We don't want to document this
-  @Transactional(rollbackFor = {KlassEmailException.class, MalformedURLException.class})
-  @PostMapping(value = "/classifications/{classificationId}/trackChanges")
-  public ResponseEntity<SubscribeResponse> trackChanges(
-      @PathVariable Long classificationId, @RequestParam(value = "email") String email) {
-    ClassificationSeries classification =
-        classificationService.getClassificationSeries(classificationId);
-    if (subscriberService.containsTracking(email, classification)) {
-      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(SubscribeResponse.EXISTS);
+    @ExceptionHandler(
+            produces = {
+                MediaType.APPLICATION_JSON_VALUE,
+                MediaType.APPLICATION_PROBLEM_JSON_VALUE,
+                MediaType.TEXT_XML_VALUE,
+                MediaType.APPLICATION_XML_VALUE,
+                MediaType.APPLICATION_PROBLEM_XML_VALUE
+            })
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ProblemDetail serverErrorProblemDetailExceptionHandler(Exception exception) {
+        log.warn(
+                EXCEPTION_HANDLER_LOG_MESSAGE_TEMPLATE,
+                exception.getMessage(),
+                getCurrentRequest(),
+                exception);
+        return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, exception.getMessage());
     }
-    try {
-      URL endSubscriptionUrl =
-          WebMvcLinkBuilder.linkTo(
-                  WebMvcLinkBuilder.methodOn(ClassificationController.class)
-                      .removeTracking(classificationId, email))
-              .toUri()
-              .toURL();
 
-      String token = subscriberService.trackChanges(email, classification, endSubscriptionUrl);
-
-      URL verifySubscriptionUrl =
-          WebMvcLinkBuilder.linkTo(
-                  WebMvcLinkBuilder.methodOn(ClassificationController.class)
-                      .verifyTracking(email, token))
-              .toUri()
-              .toURL();
-
-      subscriberService.sendVerificationMail(email, verifySubscriptionUrl, classification);
-    } catch (KlassEmailException | MalformedURLException e) {
-      log.error(e.getMessage(), e);
-      // rollback to avoid people signing up without getting verification mail
-      // TODO: we should probably make a way to resend verification email instead.
-      TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-          .body(SubscribeResponse.EMAIL_PROBLEM);
+    /** Redirect root to docs for convenience */
+    @Hidden // We don't want to document this
+    @GetMapping("/")
+    public RedirectView localRedirect() {
+        RedirectView redirectView = new RedirectView();
+        redirectView.setUrl("api-guide.html");
+        return redirectView;
     }
-    return ResponseEntity.ok(SubscribeResponse.CREATED);
-  }
 
-  @Hidden // We don't want to document this
-  @GetMapping(
-      value = "/classifications/{classificationId}/removeTracking",
-      produces = MediaType.TEXT_HTML_VALUE)
-  public ResponseEntity<String> removeTracking(
-      @PathVariable Long classificationId, @RequestParam(value = "email") String email) {
-    try {
-      ClassificationSeries classification =
-          classificationService.getClassificationSeries(classificationId);
-      subscriberService.removeTracking(email, classification);
-    } catch (ClientException e) {
-      throw new RestClientException(e.getMessage());
+    @Tag(name = OpenApiConstants.Tags.CLASSIFICATION_FAMILIES_TAG)
+    @GetMapping(
+            value = "/classificationfamilies",
+            produces = {
+                MediaType.APPLICATION_JSON_VALUE,
+                MediaType.TEXT_XML_VALUE,
+                MediaType.APPLICATION_XML_VALUE
+            })
+    public CollectionModel<ClassificationFamilySummaryResource> classificationFamilies(
+            @RequestParam(value = "ssbSection", required = false) String ssbSection,
+            @RequestParam(value = "includeCodelists", defaultValue = "false")
+                    boolean includeCodelists,
+            @RequestParam(value = "language", defaultValue = "nb") Language language) {
+        ClassificationType classificationType = extractClassificationType(includeCodelists);
+        ssbSection = extractSsbSection(ssbSection);
+        List<ClassificationFamilySummary> summaries =
+                classificationService.findPublicClassificationFamilySummaries(
+                        ssbSection, classificationType);
+        List<ClassificationFamilySummaryResource> summaryResources =
+                summaries.stream()
+                        .map(summary -> new ClassificationFamilySummaryResource(summary, language))
+                        .collect(toList());
+
+        return new KlassResources<>(
+                summaryResources, Link.of(getCurrentRequest(), IanaLinkRelations.SELF));
     }
-    return ResponseEntity.ok(
-        """
+
+    @Tag(name = OpenApiConstants.Tags.CLASSIFICATION_FAMILIES_TAG)
+    @GetMapping(
+            value = "/classificationfamilies/{id}",
+            produces = {
+                MediaType.APPLICATION_JSON_VALUE,
+                MediaType.TEXT_XML_VALUE,
+                MediaType.APPLICATION_XML_VALUE
+            })
+    public ClassificationFamilyResource classificationFamily(
+            @PathVariable Long id,
+            @RequestParam(value = "ssbSection", required = false) String ssbSection,
+            @RequestParam(value = "includeCodelists", defaultValue = "false")
+                    Boolean includeCodelists,
+            @RequestParam(value = "language", defaultValue = "nb") Language language) {
+        ClassificationType classificationType = extractClassificationType(includeCodelists);
+        ssbSection = extractSsbSection(ssbSection);
+        ClassificationFamily classificationFamily =
+                classificationService.getClassificationFamily(id);
+        return new ClassificationFamilyResource(
+                classificationFamily, language, ssbSection, classificationType);
+    }
+
+    @Tag(name = OpenApiConstants.Tags.SSB_SECTIONS_TAG)
+    @GetMapping(
+            value = "/ssbsections",
+            produces = {
+                MediaType.APPLICATION_JSON_VALUE,
+                MediaType.TEXT_XML_VALUE,
+                MediaType.APPLICATION_XML_VALUE
+            })
+    public CollectionModel<SsbSectionResource> ssbsections() {
+        List<SsbSectionResource> ssbSectionResources =
+                classificationService.findResponsibleSectionsWithPublishedVersions().stream()
+                        .sorted()
+                        .map(SsbSectionResource::new)
+                        .collect(toList());
+        return new KlassResources<>(
+                ssbSectionResources, Link.of(getCurrentRequest(), IanaLinkRelations.SELF));
+    }
+
+    @Tag(name = OpenApiConstants.Tags.CLASSIFICATIONS_TAG)
+    @GetMapping(
+            value = "/classifications",
+            produces = {
+                MediaType.APPLICATION_JSON_VALUE,
+                MediaType.TEXT_XML_VALUE,
+                MediaType.APPLICATION_XML_VALUE
+            })
+    public KlassPagedResources<ClassificationSummaryResource> classifications(
+            @RequestParam(value = "includeCodelists", defaultValue = "false")
+                    boolean includeCodelists,
+            @RequestParam(value = "changedSince", required = false)
+                    @DateTimeFormat(
+                            iso = ISO.DATE_TIME,
+                            fallbackPatterns = "yyyy-MM-dd'T'HH:mm:ss.ssZ")
+                    Date changedSince,
+            @Parameter(hidden = true) Pageable pageable,
+            @Parameter(hidden = true) PagedResourcesAssembler<ClassificationSeries> assembler) {
+
+        Page<ClassificationSeries> classifications =
+                classificationService.findAllPublic(includeCodelists, changedSince, pageable);
+
+        Link self = Link.of(getCurrentRequest(), IanaLinkRelations.SELF);
+        PagedModel<ClassificationSummaryResource> response =
+                assembler.toModel(classifications, ClassificationSummaryResource::new, self);
+        addSearchLink(response);
+        return new KlassPagedResources<>(response);
+    }
+
+    @Tag(name = OpenApiConstants.Tags.SEARCH_TAG)
+    @GetMapping(
+            value = "/classifications/search",
+            produces = {
+                MediaType.APPLICATION_JSON_VALUE,
+                MediaType.TEXT_XML_VALUE,
+                MediaType.APPLICATION_XML_VALUE
+            })
+    public KlassPagedResources<SearchResultResource> search(
+            @RequestParam(value = "query") String query,
+            @RequestParam(value = "ssbSection", required = false) String ssbSection,
+            @RequestParam(value = "includeCodelists", defaultValue = "false")
+                    boolean includeCodelists,
+            @Parameter(hidden = true) Pageable pageable) {
+        Link self = Link.of(getCurrentRequest(), IanaLinkRelations.SELF);
+        ssbSection = extractSsbSection(ssbSection);
+
+        Page<OpenSearchResult> results =
+                searchService.publicSearch(query, pageable, ssbSection, includeCodelists);
+
+        List<SearchResultResource> searchResources =
+                results.getContent().stream()
+                        .map(result -> new SearchResultResource(result, Collections.emptyMap()))
+                        .collect(toList());
+
+        boolean hit = !results.isEmpty();
+        statisticsService.addSearchWord(query, hit);
+
+        PagedModel.PageMetadata pageMetadata =
+                new PagedModel.PageMetadata(
+                        pageable.getPageSize(),
+                        results.getNumber(),
+                        results.getTotalElements(),
+                        results.getTotalPages());
+
+        PagedModel<SearchResultResource> pagedModel =
+                PagedModel.of(searchResources, pageMetadata, self);
+        return new KlassPagedResources<>(pagedModel);
+    }
+
+    @Tag(name = OpenApiConstants.Tags.CLASSIFICATIONS_TAG)
+    @GetMapping(
+            value = "/classifications/{id}",
+            produces = {
+                MediaType.APPLICATION_JSON_VALUE,
+                MediaType.TEXT_XML_VALUE,
+                MediaType.APPLICATION_XML_VALUE
+            })
+    public ClassificationResource classification(
+            @PathVariable Long id,
+            @RequestParam(value = "language", defaultValue = "nb") Language language,
+            @RequestParam(value = "includeFuture", defaultValue = "false") Boolean includeFuture) {
+        ClassificationSeries classification = classificationService.getClassificationSeries(id);
+        statisticsService.addUseForClassification(classification);
+        String owningSectionName =
+                classificationService.resolveSectionName(
+                        classification.getContactPerson().getSection(), language);
+        return new ClassificationResource(
+                classification, language, includeFuture, owningSectionName);
+    }
+
+    @Tag(name = OpenApiConstants.Tags.VERSIONS_TAG)
+    @GetMapping(
+            value = "/versions/{id}",
+            produces = {
+                MediaType.APPLICATION_JSON_VALUE,
+                MediaType.APPLICATION_XML_VALUE,
+                MediaType.TEXT_XML_VALUE,
+                RestConstants.CONTENT_TYPE_CSV
+            })
+    public ClassificationVersionResource versions(
+            @PathVariable Long id,
+            @RequestParam(value = "language", defaultValue = "nb") Language language,
+            @RequestParam(value = "includeFuture", defaultValue = "false") Boolean includeFuture) {
+        ClassificationVersion version = classificationService.getClassificationVersion(id);
+        List<CorrespondenceTable> corrTableVersionIsTarget =
+                classificationService.findPublicCorrespondenceTablesWithTarget(version).stream()
+                        .sorted(
+                                AlphaNumericalComparator.comparing(
+                                        CorrespondenceTable::getNameInPrimaryLanguage, true))
+                        .collect(toList());
+        String owningSectionName =
+                classificationService.resolveSectionName(
+                        version.getContactPerson().getSection(), language);
+        return new ClassificationVersionResource(
+                version, language, corrTableVersionIsTarget, includeFuture, owningSectionName);
+    }
+
+    @Tag(name = OpenApiConstants.Tags.CORRESPONDENCE_TABLES_TAG)
+    @GetMapping(
+            value = "/correspondencetables/{id}",
+            produces = {
+                MediaType.APPLICATION_JSON_VALUE,
+                MediaType.APPLICATION_XML_VALUE,
+                MediaType.TEXT_XML_VALUE,
+                RestConstants.CONTENT_TYPE_CSV
+            })
+    public CorrespondenceTableResource correspondenceTables(
+            @PathVariable Long id,
+            @RequestParam(value = "language", defaultValue = "nb") Language language) {
+        CorrespondenceTable table = classificationService.getCorrespondenceTable(id);
+        String owningSectionName =
+                classificationService.resolveSectionName(
+                        table.getContactPerson().getSection(), language);
+        return new CorrespondenceTableResource(table, language, owningSectionName);
+    }
+
+    @Tag(name = OpenApiConstants.Tags.VARIANTS_TAG)
+    @GetMapping(
+            value = "/variants/{id}",
+            produces = {
+                MediaType.APPLICATION_JSON_VALUE,
+                MediaType.APPLICATION_XML_VALUE,
+                MediaType.TEXT_XML_VALUE,
+                RestConstants.CONTENT_TYPE_CSV
+            })
+    public ClassificationVariantResource variants(
+            @PathVariable Long id,
+            @RequestParam(value = "language", defaultValue = "nb") Language language) {
+        ClassificationVariant variant = classificationService.getClassificationVariant(id);
+        String owningSectionName =
+                classificationService.resolveSectionName(
+                        variant.getContactPerson().getSection(), language);
+        return new ClassificationVariantResource(variant, language, owningSectionName);
+    }
+
+    @Tag(name = OpenApiConstants.Tags.CODES_TAG)
+    @GetMapping(
+            value = "/classifications/{id}/codes",
+            produces = {
+                MediaType.APPLICATION_JSON_VALUE,
+                MediaType.APPLICATION_XML_VALUE,
+                MediaType.TEXT_XML_VALUE,
+                RestConstants.CONTENT_TYPE_CSV
+            })
+    public CodeList codes(
+            @PathVariable Long id,
+            @RequestParam(value = "from") @DateTimeFormat(pattern = RestConstants.DATE_FORMAT)
+                    LocalDate from,
+            @RequestParam(value = "to", required = false)
+                    @DateTimeFormat(pattern = RestConstants.DATE_FORMAT)
+                    LocalDate to,
+            @RequestParam(value = "csvSeparator", defaultValue = ",") String csvSeparator,
+            @RequestParam(value = "csvFields", defaultValue = "") String csvFields,
+            @RequestParam(value = "selectLevel", required = false) String selectLevel,
+            @RequestParam(value = "selectCodes", required = false) String selectCodes,
+            @RequestParam(value = "presentationNamePattern", required = false)
+                    String presentationNamePattern,
+            @RequestParam(value = "language", defaultValue = "nb") Language language,
+            @RequestParam(value = "includeFuture", defaultValue = "false") Boolean includeFuture) {
+        CodeList codeList =
+                codesInternal(
+                        id,
+                        new DateRangeHolder(from, to),
+                        csvSeparator,
+                        selectLevel,
+                        selectCodes,
+                        presentationNamePattern,
+                        language,
+                        includeFuture);
+
+        if (!csvFields.isEmpty()) {
+            List<String> csvFieldsList = getCsvFieldsList(csvFields);
+            csvFieldsValidator.validateFieldsCodeItem(csvFieldsList);
+            codeList.setCsvFields(csvFieldsList);
+        }
+        return codeList;
+    }
+
+    @Tag(name = OpenApiConstants.Tags.CODES_TAG)
+    @GetMapping(
+            value = "/classifications/{id}/codesAt",
+            produces = {
+                MediaType.APPLICATION_JSON_VALUE,
+                MediaType.APPLICATION_XML_VALUE,
+                MediaType.TEXT_XML_VALUE,
+                RestConstants.CONTENT_TYPE_CSV
+            })
+    public CodeList codesAt(
+            @PathVariable Long id,
+            @RequestParam(value = "date") @DateTimeFormat(pattern = RestConstants.DATE_FORMAT)
+                    LocalDate date,
+            @RequestParam(value = "csvSeparator", defaultValue = ",") String csvSeparator,
+            @RequestParam(value = "csvFields", defaultValue = "") String csvFields,
+            @RequestParam(value = "selectLevel", required = false) String selectLevel,
+            @RequestParam(value = "selectCodes", required = false) String selectCodes,
+            @RequestParam(value = "presentationNamePattern", required = false)
+                    String presentationNamePattern,
+            @RequestParam(value = "language", defaultValue = "nb") Language language,
+            @RequestParam(value = "includeFuture", defaultValue = "false") Boolean includeFuture) {
+
+        CodeList codeList =
+                codesInternal(
+                        id,
+                        new DateRangeHolder(date),
+                        csvSeparator,
+                        selectLevel,
+                        selectCodes,
+                        presentationNamePattern,
+                        language,
+                        includeFuture);
+
+        if (!csvFields.isEmpty()) {
+            List<String> csvFieldsList = getCsvFieldsList(csvFields);
+            csvFieldsValidator.validateFieldsCodeItem(csvFieldsList);
+            codeList.setCsvFields(csvFieldsList);
+        }
+        return codeList;
+    }
+
+    private CodeList codesInternal(
+            Long id,
+            DateRangeHolder dateRangeHolder,
+            String csvSeparator,
+            String selectLevel,
+            String selectCodes,
+            String presentationNamePattern,
+            Language language,
+            Boolean includeFuture) {
+        List<CodeDto> codes =
+                classificationService.findClassificationCodes(
+                        id, dateRangeHolder.dateRange, language, includeFuture);
+        CodeList codeList =
+                new CodeList(
+                                csvSeparator,
+                                dateRangeHolder.withRange,
+                                dateRangeHolder.dateRange,
+                                includeFuture)
+                        .convert(codes);
+        return codeList.filterValidity(dateRangeHolder.dateRange)
+                .limit(dateRangeHolder.dateRange)
+                .compress()
+                .filterOnLevel(selectLevel)
+                .filterOnCodes(selectCodes)
+                .presentationNames(presentationNamePattern)
+                .sort();
+    }
+
+    @Tag(name = OpenApiConstants.Tags.CODES_TAG)
+    @GetMapping(
+            value = "/classifications/{id}/changes",
+            produces = {
+                MediaType.APPLICATION_JSON_VALUE,
+                MediaType.APPLICATION_XML_VALUE,
+                MediaType.TEXT_XML_VALUE,
+                RestConstants.CONTENT_TYPE_CSV
+            })
+    public CodeChangeList changes(
+            @PathVariable Long id,
+            @RequestParam(value = "from") @DateTimeFormat(pattern = RestConstants.DATE_FORMAT)
+                    LocalDate from,
+            @RequestParam(value = "to", required = false)
+                    @DateTimeFormat(pattern = RestConstants.DATE_FORMAT)
+                    LocalDate to,
+            @RequestParam(value = "csvSeparator", defaultValue = ",") String csvSeparator,
+            @RequestParam(value = "csvFields", defaultValue = "") String csvFields,
+            @RequestParam(value = "language", defaultValue = "nb") Language language,
+            @RequestParam(value = "includeFuture", defaultValue = "false") Boolean includeFuture) {
+        DateRange dateRange = DateRange.create(from, to);
+        ClassificationSeries classification = classificationService.getClassificationSeries(id);
+        List<CorrespondenceTable> changeTables =
+                classification.getChangeTables(dateRange, includeFuture).stream()
+                        .filter(correspondenceTable -> correspondenceTable.isPublished(language))
+                        .collect(toList());
+        CodeChangeList codeChanges = new CodeChangeList(csvSeparator);
+        for (CorrespondenceTable changeTable : changeTables) {
+            codeChanges = codeChanges.merge(codeChanges.convert(changeTable, language));
+        }
+
+        if (!csvFields.isEmpty()) {
+            List<String> csvFieldsList = getCsvFieldsList(csvFields);
+            csvFieldsValidator.validateFieldsChangeItemSchema(csvFieldsList);
+            codeChanges.setCsvFields(csvFieldsList);
+        }
+
+        return codeChanges;
+    }
+
+    @Tag(name = OpenApiConstants.Tags.VARIANTS_TAG)
+    @GetMapping(
+            value = "/classifications/{id}/variant",
+            produces = {
+                MediaType.APPLICATION_JSON_VALUE,
+                MediaType.APPLICATION_XML_VALUE,
+                MediaType.TEXT_XML_VALUE,
+                RestConstants.CONTENT_TYPE_CSV
+            })
+    public CodeList variant(
+            @PathVariable Long id,
+            @RequestParam(value = "variantName") String variantName,
+            @RequestParam(value = "from") @DateTimeFormat(pattern = RestConstants.DATE_FORMAT)
+                    LocalDate from,
+            @RequestParam(value = "to", required = false)
+                    @DateTimeFormat(pattern = RestConstants.DATE_FORMAT)
+                    LocalDate to,
+            @RequestParam(value = "csvSeparator", defaultValue = ",") String csvSeparator,
+            @RequestParam(value = "csvFields", defaultValue = "") String csvFields,
+            @RequestParam(value = "level", required = false) String selectLevel,
+            @RequestParam(value = "selectCodes", required = false) String selectCodes,
+            @RequestParam(value = "presentationNamePattern", required = false)
+                    String presentationNamePattern,
+            @RequestParam(value = "language", defaultValue = "nb") Language language,
+            @RequestParam(value = "includeFuture", defaultValue = "false") Boolean includeFuture) {
+        CodeList codeList =
+                variantInternal(
+                        id,
+                        variantName,
+                        new DateRangeHolder(from, to),
+                        csvSeparator,
+                        selectLevel,
+                        selectCodes,
+                        presentationNamePattern,
+                        language,
+                        includeFuture);
+
+        if (!csvFields.isEmpty()) {
+            List<String> csvFieldsList = getCsvFieldsList(csvFields);
+            csvFieldsValidator.validateFieldsCodeItem(csvFieldsList);
+            codeList.setCsvFields(csvFieldsList);
+        }
+
+        return codeList;
+    }
+
+    @Tag(name = OpenApiConstants.Tags.VARIANTS_TAG)
+    @GetMapping(
+            value = "/classifications/{id}/variantAt",
+            produces = {
+                MediaType.APPLICATION_JSON_VALUE,
+                MediaType.APPLICATION_XML_VALUE,
+                MediaType.TEXT_XML_VALUE,
+                RestConstants.CONTENT_TYPE_CSV
+            })
+    public CodeList variantAt(
+            @PathVariable Long id,
+            @RequestParam(value = "variantName") String variantName,
+            @RequestParam(value = "date", required = false)
+                    @DateTimeFormat(pattern = RestConstants.DATE_FORMAT)
+                    LocalDate date,
+            @RequestParam(value = "csvSeparator", defaultValue = ",") String csvSeparator,
+            @RequestParam(value = "csvFields", defaultValue = "") String csvFields,
+            @RequestParam(value = "level", required = false) String selectLevel,
+            @RequestParam(value = "selectCodes", required = false) String selectCodes,
+            @RequestParam(value = "presentationNamePattern", required = false)
+                    String presentationNamePattern,
+            @RequestParam(value = "language", defaultValue = "nb") Language language,
+            @RequestParam(value = "includeFuture", defaultValue = "false") Boolean includeFuture) {
+        CodeList codeList =
+                variantInternal(
+                        id,
+                        variantName,
+                        new DateRangeHolder(date),
+                        csvSeparator,
+                        selectLevel,
+                        selectCodes,
+                        presentationNamePattern,
+                        language,
+                        includeFuture);
+
+        if (!csvFields.isEmpty()) {
+            List<String> csvFieldsList = getCsvFieldsList(csvFields);
+            csvFieldsValidator.validateFieldsCodeItem(csvFieldsList);
+            codeList.setCsvFields(csvFieldsList);
+        }
+
+        return codeList;
+    }
+
+    private CodeList variantInternal(
+            Long id,
+            String variantName,
+            DateRangeHolder dateRangeHolder,
+            String csvSeparator,
+            String selectLevel,
+            String selectCodes,
+            String presentationNamePattern,
+            Language language,
+            Boolean includeFuture) {
+        List<CodeDto> codes =
+                classificationService.findVariantClassificationCodes(
+                        id, variantName, language, dateRangeHolder.dateRange, includeFuture);
+        return new CodeList(
+                        csvSeparator,
+                        dateRangeHolder.withRange,
+                        dateRangeHolder.dateRange,
+                        includeFuture)
+                .convert(codes)
+                .limit(dateRangeHolder.dateRange)
+                .compress()
+                .filterOnLevel(selectLevel)
+                .filterOnCodes(selectCodes)
+                .presentationNames(presentationNamePattern)
+                .sort();
+    }
+
+    @Tag(name = OpenApiConstants.Tags.CORRESPONDENCE_TABLES_TAG)
+    @GetMapping(
+            value = "/classifications/{id}/corresponds",
+            produces = {
+                MediaType.APPLICATION_JSON_VALUE,
+                MediaType.APPLICATION_XML_VALUE,
+                MediaType.TEXT_XML_VALUE,
+                RestConstants.CONTENT_TYPE_CSV
+            })
+    public CorrespondenceItemList corresponds(
+            @PathVariable Long id,
+            @RequestParam(value = "targetClassificationId") Long targetClassificationId,
+            @RequestParam(value = "from") @DateTimeFormat(pattern = RestConstants.DATE_FORMAT)
+                    LocalDate from,
+            @RequestParam(value = "to", required = false)
+                    @DateTimeFormat(pattern = RestConstants.DATE_FORMAT)
+                    LocalDate to,
+            @RequestParam(value = "csvSeparator", defaultValue = ",") String csvSeparator,
+            @RequestParam(value = "csvFields", defaultValue = "") String csvFields,
+            @RequestParam(value = "language", defaultValue = "nb") Language language,
+            @RequestParam(value = "includeFuture", defaultValue = "false") Boolean includeFuture) {
+        CorrespondenceItemList correspondenceList =
+                correspondsInternal(
+                        id,
+                        targetClassificationId,
+                        new DateRangeHolder(from, to),
+                        csvSeparator,
+                        language,
+                        includeFuture,
+                        false);
+
+        if (!csvFields.isEmpty()) {
+            List<String> csvFieldsList = getCsvFieldsList(csvFields);
+            csvFieldsValidator.validateFieldsCorrespondenceItem(csvFieldsList);
+            correspondenceList.setCsvFields(csvFieldsList);
+        }
+
+        return correspondenceList;
+    }
+
+    @Tag(name = OpenApiConstants.Tags.CORRESPONDENCE_TABLES_TAG)
+    @GetMapping(
+            value = "/classifications/{id}/correspondsAt",
+            produces = {
+                MediaType.APPLICATION_JSON_VALUE,
+                MediaType.APPLICATION_XML_VALUE,
+                MediaType.TEXT_XML_VALUE,
+                RestConstants.CONTENT_TYPE_CSV
+            })
+    public CorrespondenceItemList correspondsAt(
+            @PathVariable Long id,
+            @RequestParam(value = "targetClassificationId") Long targetClassificationId,
+            @RequestParam(value = "date", required = false)
+                    @DateTimeFormat(pattern = RestConstants.DATE_FORMAT)
+                    LocalDate date,
+            @RequestParam(value = "csvSeparator", defaultValue = ",") String csvSeparator,
+            @RequestParam(value = "csvFields", defaultValue = "") String csvFields,
+            @RequestParam(value = "language", defaultValue = "nb") Language language,
+            @RequestParam(value = "includeFuture", defaultValue = "false") Boolean includeFuture,
+            @RequestParam(value = "inverted", defaultValue = "false") Boolean inverted) {
+        CorrespondenceItemList correspondenceList =
+                correspondsInternal(
+                        id,
+                        targetClassificationId,
+                        new DateRangeHolder(date),
+                        csvSeparator,
+                        language,
+                        includeFuture,
+                        inverted);
+
+        if (!csvFields.isEmpty()) {
+            List<String> csvFieldsList = getCsvFieldsList(csvFields);
+            csvFieldsValidator.validateFieldsCorrespondenceItem(csvFieldsList);
+            correspondenceList.setCsvFields(csvFieldsList);
+        }
+
+        return correspondenceList;
+    }
+
+    private CorrespondenceItemList correspondsInternal(
+            Long id,
+            Long targetClassificationId,
+            DateRangeHolder dateRangeHolder,
+            String csvSeparator,
+            Language language,
+            Boolean includeFuture,
+            Boolean inverted) {
+        List<CorrespondenceDto> correspondences =
+                classificationService.findCorrespondences(
+                        id,
+                        targetClassificationId,
+                        dateRangeHolder.dateRange,
+                        language,
+                        includeFuture,
+                        inverted);
+        return new CorrespondenceItemList(csvSeparator, dateRangeHolder.withRange, includeFuture)
+                .convert(correspondences)
+                .removeOutside(dateRangeHolder.dateRange)
+                .limit(dateRangeHolder.dateRange)
+                .group()
+                .sort();
+    }
+
+    @Hidden // We don't want to document this
+    @Transactional(rollbackFor = {KlassEmailException.class, MalformedURLException.class})
+    @PostMapping(value = "/classifications/{classificationId}/trackChanges")
+    public ResponseEntity<SubscribeResponse> trackChanges(
+            @PathVariable Long classificationId, @RequestParam(value = "email") String email) {
+        ClassificationSeries classification =
+                classificationService.getClassificationSeries(classificationId);
+        if (subscriberService.containsTracking(email, classification)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(SubscribeResponse.EXISTS);
+        }
+        try {
+            URL endSubscriptionUrl =
+                    WebMvcLinkBuilder.linkTo(
+                                    WebMvcLinkBuilder.methodOn(ClassificationController.class)
+                                            .removeTracking(classificationId, email))
+                            .toUri()
+                            .toURL();
+
+            String token =
+                    subscriberService.trackChanges(email, classification, endSubscriptionUrl);
+
+            URL verifySubscriptionUrl =
+                    WebMvcLinkBuilder.linkTo(
+                                    WebMvcLinkBuilder.methodOn(ClassificationController.class)
+                                            .verifyTracking(email, token))
+                            .toUri()
+                            .toURL();
+
+            subscriberService.sendVerificationMail(email, verifySubscriptionUrl, classification);
+        } catch (KlassEmailException | MalformedURLException e) {
+            log.error(e.getMessage(), e);
+            // rollback to avoid people signing up without getting verification mail
+            // TODO: we should probably make a way to resend verification email instead.
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(SubscribeResponse.EMAIL_PROBLEM);
+        }
+        return ResponseEntity.ok(SubscribeResponse.CREATED);
+    }
+
+    @Hidden // We don't want to document this
+    @GetMapping(
+            value = "/classifications/{classificationId}/removeTracking",
+            produces = MediaType.TEXT_HTML_VALUE)
+    public ResponseEntity<String> removeTracking(
+            @PathVariable Long classificationId, @RequestParam(value = "email") String email) {
+        try {
+            ClassificationSeries classification =
+                    classificationService.getClassificationSeries(classificationId);
+            subscriberService.removeTracking(email, classification);
+        } catch (ClientException e) {
+            throw new RestClientException(e.getMessage());
+        }
+        return ResponseEntity.ok(
+                """
                 <!DOCTYPE html>
                 <html>
                     <head><title>Klass subscription</title></head>
@@ -819,21 +846,21 @@ public class ClassificationController {
                     </body>
                 </html>
                 """);
-  }
-
-  @Hidden // We don't want to document this
-  @GetMapping(
-      value = "/classifications/verifyTracking/{email}/{token}",
-      produces = MediaType.TEXT_HTML_VALUE)
-  public ResponseEntity<String> verifyTracking(
-      @PathVariable String email, @PathVariable String token) {
-    try {
-      subscriberService.verifyTracking(email, token);
-    } catch (ClientException e) {
-      throw new RestClientException(e.getMessage());
     }
-    return ResponseEntity.ok(
-        """
+
+    @Hidden // We don't want to document this
+    @GetMapping(
+            value = "/classifications/verifyTracking/{email}/{token}",
+            produces = MediaType.TEXT_HTML_VALUE)
+    public ResponseEntity<String> verifyTracking(
+            @PathVariable String email, @PathVariable String token) {
+        try {
+            subscriberService.verifyTracking(email, token);
+        } catch (ClientException e) {
+            throw new RestClientException(e.getMessage());
+        }
+        return ResponseEntity.ok(
+                """
                 <!DOCTYPE html>
                 <html>
                     <head><title>Klass subscription</title></head>
@@ -845,85 +872,86 @@ public class ClassificationController {
                     </body>
                 </html>
                 """);
-  }
-
-  private void addSearchLink(PagedModel<ClassificationSummaryResource> response) {
-    WebMvcLinkBuilder linkBuilder =
-        WebMvcLinkBuilder.linkTo(
-            WebMvcLinkBuilder.methodOn(ClassificationController.class)
-                .search("query", null, true, null));
-    response.add(
-        Link.of(
-            ResourceUtil.createUriTemplate(linkBuilder, "query", "includeCodelists"), "search"));
-  }
-
-  private String getCurrentRequest() {
-    return ServletUriComponentsBuilder.fromCurrentRequest().build().toString();
-  }
-
-  private ClassificationType extractClassificationType(boolean includeCodelists) {
-    return includeCodelists ? null : ClassificationType.CLASSIFICATION;
-  }
-
-  /**
-   * Extracts the first section identifier from an SSB section string. Returns {@code null} if the
-   * input is null or empty.
-   *
-   * <p>Example: "210 - Seksjon for nasjonalregnskap" → "210" Example: "210 - National accounts" ->
-   * "210" Example: "210 " -> "210"
-   */
-  private String extractSsbSection(String ssbSection) {
-    if (Strings.isNullOrEmpty(ssbSection)) {
-      return null;
-    }
-    String s = ssbSection.trim();
-    String[] parts = s.split(" - ", 2);
-    return parts[0];
-  }
-
-  private List<String> getCsvFieldsList(String csvFields) {
-    return Arrays.asList(csvFields.split(","));
-  }
-
-  @InitBinder
-  public void initBinder(WebDataBinder binder) {
-    binder.registerCustomEditor(Language.class, new CaseInsensitiveConverter<>(Language.class));
-  }
-
-  private static class DateRangeHolder {
-    private final DateRange dateRange;
-    private final boolean withRange;
-
-    DateRangeHolder(LocalDate from, LocalDate to) {
-      this.dateRange = DateRange.create(from, to);
-      this.withRange = true;
     }
 
-    DateRangeHolder(LocalDate date) {
-      this.dateRange = DateRange.create(date, date.plusDays(1));
-      this.withRange = false;
+    private void addSearchLink(PagedModel<ClassificationSummaryResource> response) {
+        WebMvcLinkBuilder linkBuilder =
+                WebMvcLinkBuilder.linkTo(
+                        WebMvcLinkBuilder.methodOn(ClassificationController.class)
+                                .search("query", null, true, null));
+        response.add(
+                Link.of(
+                        ResourceUtil.createUriTemplate(linkBuilder, "query", "includeCodelists"),
+                        "search"));
     }
 
-    @Override
-    public String toString() {
-      return "DateRangeHolder{" + "dateRange=" + dateRange + ", withRange=" + withRange + '}';
-    }
-  }
-
-  private static class CaseInsensitiveConverter<T extends Enum<T>> extends PropertyEditorSupport {
-
-    private final Class<T> typeParameterClass;
-
-    CaseInsensitiveConverter(Class<T> typeParameterClass) {
-      super();
-      this.typeParameterClass = typeParameterClass;
+    private String getCurrentRequest() {
+        return ServletUriComponentsBuilder.fromCurrentRequest().build().toString();
     }
 
-    @Override
-    public void setAsText(final String text) throws IllegalArgumentException {
-      String upper = text.toUpperCase(); // or something more robust
-      T value = T.valueOf(typeParameterClass, upper);
-      setValue(value);
+    private ClassificationType extractClassificationType(boolean includeCodelists) {
+        return includeCodelists ? null : ClassificationType.CLASSIFICATION;
     }
-  }
+
+    /**
+     * Extracts the first section identifier from an SSB section string. Returns {@code null} if the
+     * input is null or empty.
+     *
+     * <p>Example: "210 - Seksjon for nasjonalregnskap" → "210" Example: "210 - National accounts"
+     * -> "210" Example: "210 " -> "210"
+     */
+    private String extractSsbSection(String ssbSection) {
+        if (Strings.isNullOrEmpty(ssbSection)) {
+            return null;
+        }
+        String s = ssbSection.trim();
+        String[] parts = s.split(" - ", 2);
+        return parts[0];
+    }
+
+    private List<String> getCsvFieldsList(String csvFields) {
+        return Arrays.asList(csvFields.split(","));
+    }
+
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        binder.registerCustomEditor(Language.class, new CaseInsensitiveConverter<>(Language.class));
+    }
+
+    private static class DateRangeHolder {
+        private final DateRange dateRange;
+        private final boolean withRange;
+
+        DateRangeHolder(LocalDate from, LocalDate to) {
+            this.dateRange = DateRange.create(from, to);
+            this.withRange = true;
+        }
+
+        DateRangeHolder(LocalDate date) {
+            this.dateRange = DateRange.create(date, date.plusDays(1));
+            this.withRange = false;
+        }
+
+        @Override
+        public String toString() {
+            return "DateRangeHolder{" + "dateRange=" + dateRange + ", withRange=" + withRange + '}';
+        }
+    }
+
+    private static class CaseInsensitiveConverter<T extends Enum<T>> extends PropertyEditorSupport {
+
+        private final Class<T> typeParameterClass;
+
+        CaseInsensitiveConverter(Class<T> typeParameterClass) {
+            super();
+            this.typeParameterClass = typeParameterClass;
+        }
+
+        @Override
+        public void setAsText(final String text) throws IllegalArgumentException {
+            String upper = text.toUpperCase(); // or something more robust
+            T value = T.valueOf(typeParameterClass, upper);
+            setValue(value);
+        }
+    }
 }

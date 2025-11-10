@@ -2,33 +2,36 @@ package no.ssb.klass.api.migration.dataintegrity.variant;
 
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 import static no.ssb.klass.api.migration.MigrationTestUtils.*;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import io.restassured.response.Response;
+
 import org.junit.jupiter.api.Test;
 
 public class KlassApiVariantByIdJsonTest extends AbstractKlassApiVariantTest {
 
-  @Test
-  void getOneVariantById() {
-    int variantId = 1111;
-    String path = getVariantByIdPath(variantId);
-    Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, null, null);
-    Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, null, null);
+    @Test
+    void getOneVariantById() {
+        int variantId = 1111;
+        String path = getVariantByIdPath(variantId);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, null, null);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, null, null);
 
-    assertApiResponseIsNotNull(sourceResponse);
+        assertApiResponseIsNotNull(sourceResponse);
 
-    assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+        assertStatusCodesEqual(
+                sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
-    if (sourceResponse.getStatusCode() != 200) {
-      assertThat(compareError(variantId, sourceResponse, targetResponse)).isTrue();
-    } else {
-      validateItems(sourceResponse, targetResponse, pathNamesVariantById);
-      validateList(sourceResponse, targetResponse, PUBLISHED);
-      validateList(sourceResponse, targetResponse, CORRESPONDENCE_TABLES);
-      validateList(sourceResponse, targetResponse, CHANGELOGS);
-      validateList(sourceResponse, targetResponse, LEVELS);
-      validateList(sourceResponse, targetResponse, CLASSIFICATION_ITEMS);
+        if (sourceResponse.getStatusCode() != 200) {
+            assertThat(compareError(variantId, sourceResponse, targetResponse)).isTrue();
+        } else {
+            validateItems(sourceResponse, targetResponse, pathNamesVariantById);
+            validateList(sourceResponse, targetResponse, PUBLISHED);
+            validateList(sourceResponse, targetResponse, CORRESPONDENCE_TABLES);
+            validateList(sourceResponse, targetResponse, CHANGELOGS);
+            validateList(sourceResponse, targetResponse, LEVELS);
+            validateList(sourceResponse, targetResponse, CLASSIFICATION_ITEMS);
+        }
     }
-  }
 }

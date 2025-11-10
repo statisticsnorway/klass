@@ -2,216 +2,230 @@ package no.ssb.klass.api.migration.dataintegrity.codes;
 
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 import static no.ssb.klass.api.migration.MigrationTestUtils.*;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import io.restassured.response.Response;
-import java.time.Instant;
-import java.util.HashMap;
-import java.util.Map;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.time.Instant;
+import java.util.HashMap;
+import java.util.Map;
+
 public class KlassApiClassificationCodesAtJsonTest extends AbstractKlassApiCodesTest {
 
-  @Test
-  void getOneClassificationCodesAt() {
-    int classificationId = gender_standard_id;
-    date = "2001-01-01";
+    @Test
+    void getOneClassificationCodesAt() {
+        int classificationId = gender_standard_id;
+        date = "2001-01-01";
 
-    Map<String, Object> paramDate = new HashMap<>();
-    paramDate.put(DATE, date);
+        Map<String, Object> paramDate = new HashMap<>();
+        paramDate.put(DATE, date);
 
-    System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
+        System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
 
-    String path = getCodesAtPath(classificationId);
-    Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramDate, null);
-    Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramDate, null);
+        String path = getCodesAtPath(classificationId);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramDate, null);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramDate, null);
 
-    assertApiResponseIsNotNull(sourceResponse);
+        assertApiResponseIsNotNull(sourceResponse);
 
-    assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+        assertStatusCodesEqual(
+                sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
-    if (sourceResponse.getStatusCode() != 200) {
-      assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
-    } else {
-      validateList(sourceResponse, targetResponse, CODES);
-    }
-  }
-
-  @ParameterizedTest
-  @MethodSource("rangeProviderClassificationIds")
-  void getClassificationCodesAt(Integer classificationId) {
-
-    System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
-
-    String path = getCodesAtPath(classificationId);
-    Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDate, null);
-    Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDate, null);
-
-    assertApiResponseIsNotNull(sourceResponse);
-
-    assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
-
-    if (sourceResponse.getStatusCode() != 200) {
-      assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
-    } else {
-      validateList(sourceResponse, targetResponse, CODES);
+        if (sourceResponse.getStatusCode() != 200) {
+            assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
+        } else {
+            validateList(sourceResponse, targetResponse, CODES);
+        }
     }
 
-    System.out.println("End test for ID " + classificationId + " at " + Instant.now());
-  }
+    @ParameterizedTest
+    @MethodSource("rangeProviderClassificationIds")
+    void getClassificationCodesAt(Integer classificationId) {
 
-  @Test
-  void getClassificationCodesAtLanguageEn() {
+        System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
 
-    int classificationId = 11;
+        String path = getCodesAtPath(classificationId);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsDate, null);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsDate, null);
 
-    String path = getCodesAtPath(classificationId);
-    Response sourceResponse =
-        klassApiMigrationClient.getFromSourceApi(path, paramsLanguageEnAt, null);
-    Response targetResponse =
-        klassApiMigrationClient.getFromTargetApi(path, paramsLanguageEnAt, null);
+        assertApiResponseIsNotNull(sourceResponse);
 
-    assertApiResponseIsNotNull(sourceResponse);
+        assertStatusCodesEqual(
+                sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
-    assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+        if (sourceResponse.getStatusCode() != 200) {
+            assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
+        } else {
+            validateList(sourceResponse, targetResponse, CODES);
+        }
 
-    if (sourceResponse.getStatusCode() != 200) {
-      assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
-    } else {
-      validateList(sourceResponse, targetResponse, CODES);
+        System.out.println("End test for ID " + classificationId + " at " + Instant.now());
     }
-  }
 
-  @Test
-  void getClassificationCodesAtLanguageNn() {
-    int classificationId = industry_classification_standard;
+    @Test
+    void getClassificationCodesAtLanguageEn() {
 
-    String path = getCodesAtPath(classificationId);
-    Response sourceResponse =
-        klassApiMigrationClient.getFromSourceApi(path, paramsLanguageNnAt, null);
-    Response targetResponse =
-        klassApiMigrationClient.getFromTargetApi(path, paramsLanguageNnAt, null);
+        int classificationId = 11;
 
-    assertApiResponseIsNotNull(sourceResponse);
+        String path = getCodesAtPath(classificationId);
+        Response sourceResponse =
+                klassApiMigrationClient.getFromSourceApi(path, paramsLanguageEnAt, null);
+        Response targetResponse =
+                klassApiMigrationClient.getFromTargetApi(path, paramsLanguageEnAt, null);
 
-    assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+        assertApiResponseIsNotNull(sourceResponse);
 
-    if (sourceResponse.getStatusCode() != 200) {
-      assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
-    } else {
-      validateList(sourceResponse, targetResponse, CODES);
+        assertStatusCodesEqual(
+                sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+
+        if (sourceResponse.getStatusCode() != 200) {
+            assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
+        } else {
+            validateList(sourceResponse, targetResponse, CODES);
+        }
     }
-  }
 
-  @Test
-  void getClassificationCodesAtIncludeFuture() {
+    @Test
+    void getClassificationCodesAtLanguageNn() {
+        int classificationId = industry_classification_standard;
 
-    int classificationId = industry_classification_standard;
+        String path = getCodesAtPath(classificationId);
+        Response sourceResponse =
+                klassApiMigrationClient.getFromSourceApi(path, paramsLanguageNnAt, null);
+        Response targetResponse =
+                klassApiMigrationClient.getFromTargetApi(path, paramsLanguageNnAt, null);
 
-    String path = getCodesAtPath(classificationId);
-    Response sourceResponse =
-        klassApiMigrationClient.getFromSourceApi(path, paramsIncludeFutureAt, null);
-    Response targetResponse =
-        klassApiMigrationClient.getFromTargetApi(path, paramsIncludeFutureAt, null);
+        assertApiResponseIsNotNull(sourceResponse);
 
-    assertApiResponseIsNotNull(sourceResponse);
+        assertStatusCodesEqual(
+                sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
-    assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
-
-    if (sourceResponse.getStatusCode() != 200) {
-      assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
-    } else {
-      validateList(sourceResponse, targetResponse, CODES);
+        if (sourceResponse.getStatusCode() != 200) {
+            assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
+        } else {
+            validateList(sourceResponse, targetResponse, CODES);
+        }
     }
-  }
 
-  @Test
-  void getClassificationCodesAtSelectCode() {
+    @Test
+    void getClassificationCodesAtIncludeFuture() {
 
-    int classificationId = 131;
+        int classificationId = industry_classification_standard;
 
-    String path = getCodesAtPath(classificationId);
-    Response sourceResponse =
-        klassApiMigrationClient.getFromSourceApi(path, paramsSelectCodeAt, null);
-    Response targetResponse =
-        klassApiMigrationClient.getFromTargetApi(path, paramsSelectCodeAt, null);
+        String path = getCodesAtPath(classificationId);
+        Response sourceResponse =
+                klassApiMigrationClient.getFromSourceApi(path, paramsIncludeFutureAt, null);
+        Response targetResponse =
+                klassApiMigrationClient.getFromTargetApi(path, paramsIncludeFutureAt, null);
 
-    assertApiResponseIsNotNull(sourceResponse);
+        assertApiResponseIsNotNull(sourceResponse);
 
-    assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+        assertStatusCodesEqual(
+                sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
-    if (sourceResponse.getStatusCode() != 200) {
-      assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
-    } else {
-      validateList(sourceResponse, targetResponse, CODES);
+        if (sourceResponse.getStatusCode() != 200) {
+            assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
+        } else {
+            validateList(sourceResponse, targetResponse, CODES);
+        }
     }
-  }
 
-  @Test
-  void getClassificationCodesAtSelectCodes() {
+    @Test
+    void getClassificationCodesAtSelectCode() {
 
-    int classificationId = 131;
+        int classificationId = 131;
 
-    String path = getCodesAtPath(classificationId);
-    Response sourceResponse =
-        klassApiMigrationClient.getFromSourceApi(path, paramsSelectCodesAt, null);
-    Response targetResponse =
-        klassApiMigrationClient.getFromTargetApi(path, paramsSelectCodesAt, null);
+        String path = getCodesAtPath(classificationId);
+        Response sourceResponse =
+                klassApiMigrationClient.getFromSourceApi(path, paramsSelectCodeAt, null);
+        Response targetResponse =
+                klassApiMigrationClient.getFromTargetApi(path, paramsSelectCodeAt, null);
 
-    assertApiResponseIsNotNull(sourceResponse);
+        assertApiResponseIsNotNull(sourceResponse);
 
-    assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+        assertStatusCodesEqual(
+                sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
-    if (sourceResponse.getStatusCode() != 200) {
-      assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
-    } else {
-      validateList(sourceResponse, targetResponse, CODES);
+        if (sourceResponse.getStatusCode() != 200) {
+            assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
+        } else {
+            validateList(sourceResponse, targetResponse, CODES);
+        }
     }
-  }
 
-  @Test
-  void getClassificationCodesAtSelectLevel() {
+    @Test
+    void getClassificationCodesAtSelectCodes() {
 
-    int classificationId = 17;
+        int classificationId = 131;
 
-    String path = getCodesAtPath(classificationId);
-    Response sourceResponse =
-        klassApiMigrationClient.getFromSourceApi(path, paramsSelectLevelAt, null);
-    Response targetResponse =
-        klassApiMigrationClient.getFromTargetApi(path, paramsSelectLevelAt, null);
+        String path = getCodesAtPath(classificationId);
+        Response sourceResponse =
+                klassApiMigrationClient.getFromSourceApi(path, paramsSelectCodesAt, null);
+        Response targetResponse =
+                klassApiMigrationClient.getFromTargetApi(path, paramsSelectCodesAt, null);
 
-    assertApiResponseIsNotNull(sourceResponse);
+        assertApiResponseIsNotNull(sourceResponse);
 
-    assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+        assertStatusCodesEqual(
+                sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
-    if (sourceResponse.getStatusCode() != 200) {
-      assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
-    } else {
-      validateList(sourceResponse, targetResponse, CODES);
+        if (sourceResponse.getStatusCode() != 200) {
+            assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
+        } else {
+            validateList(sourceResponse, targetResponse, CODES);
+        }
     }
-  }
 
-  // Nb the presentation name pattern has no values
-  @Test
-  void getClassificationCodesAtPresentationPattern() {
-    int classificationId = 131;
+    @Test
+    void getClassificationCodesAtSelectLevel() {
 
-    String path = getCodesAtPath(classificationId);
-    Response sourceResponse =
-        klassApiMigrationClient.getFromSourceApi(path, paramsPresentationCodePatternAt, null);
-    Response targetResponse =
-        klassApiMigrationClient.getFromTargetApi(path, paramsPresentationCodePatternAt, null);
+        int classificationId = 17;
 
-    assertApiResponseIsNotNull(sourceResponse);
+        String path = getCodesAtPath(classificationId);
+        Response sourceResponse =
+                klassApiMigrationClient.getFromSourceApi(path, paramsSelectLevelAt, null);
+        Response targetResponse =
+                klassApiMigrationClient.getFromTargetApi(path, paramsSelectLevelAt, null);
 
-    assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+        assertApiResponseIsNotNull(sourceResponse);
 
-    if (sourceResponse.getStatusCode() != 200) {
-      assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
-    } else {
-      validateList(sourceResponse, targetResponse, CODES);
+        assertStatusCodesEqual(
+                sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+
+        if (sourceResponse.getStatusCode() != 200) {
+            assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
+        } else {
+            validateList(sourceResponse, targetResponse, CODES);
+        }
     }
-  }
+
+    // Nb the presentation name pattern has no values
+    @Test
+    void getClassificationCodesAtPresentationPattern() {
+        int classificationId = 131;
+
+        String path = getCodesAtPath(classificationId);
+        Response sourceResponse =
+                klassApiMigrationClient.getFromSourceApi(
+                        path, paramsPresentationCodePatternAt, null);
+        Response targetResponse =
+                klassApiMigrationClient.getFromTargetApi(
+                        path, paramsPresentationCodePatternAt, null);
+
+        assertApiResponseIsNotNull(sourceResponse);
+
+        assertStatusCodesEqual(
+                sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+
+        if (sourceResponse.getStatusCode() != 200) {
+            assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
+        } else {
+            validateList(sourceResponse, targetResponse, CODES);
+        }
+    }
 }

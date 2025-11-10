@@ -3,13 +3,13 @@ package no.ssb.klass.core.repository;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import jakarta.transaction.Transactional;
-import java.net.URL;
-import java.util.List;
+
 import no.ssb.klass.core.config.ConfigurationProfiles;
 import no.ssb.klass.core.model.ClassificationSeries;
 import no.ssb.klass.core.model.Subscriber;
 import no.ssb.klass.core.util.TranslatablePersistenceConverter;
 import no.ssb.klass.testutil.TestUtil;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,85 +22,87 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.net.URL;
+import java.util.List;
+
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @ActiveProfiles({ConfigurationProfiles.POSTGRES_EMBEDDED, ConfigurationProfiles.MOCK_MAILSERVER})
 @Transactional
 public class SubscriberRepositoryTest {
 
-  static final String EMAIL = "email@server.com";
+    static final String EMAIL = "email@server.com";
 
-  @Autowired private SubscriberRepository subject;
+    @Autowired private SubscriberRepository subject;
 
-  @Autowired private ClassificationSeriesRepository classificationSeriesRepository;
+    @Autowired private ClassificationSeriesRepository classificationSeriesRepository;
 
-  @Autowired private ClassificationFamilyRepository classificationFamilyRepository;
+    @Autowired private ClassificationFamilyRepository classificationFamilyRepository;
 
-  @Autowired private UserRepository userRepository;
+    @Autowired private UserRepository userRepository;
 
-  private Subscriber subscriber;
-  private Long subscriberId;
+    private Subscriber subscriber;
+    private Long subscriberId;
 
-  @BeforeEach
-  public void init() {
-    subscriber = new Subscriber(EMAIL);
-    subject.save(subscriber);
-    subscriberId = subscriber.getId();
-    subject.flush();
-  }
+    @BeforeEach
+    public void init() {
+        subscriber = new Subscriber(EMAIL);
+        subject.save(subscriber);
+        subscriberId = subscriber.getId();
+        subject.flush();
+    }
 
-  @Test
-  public void testEntity() {
-    // when
-    Subscriber result =
-        subject
-            .findById(subscriberId)
-            .orElseThrow(() -> new RuntimeException("Subscriber not found"));
-    // then
-    assertEquals(subscriberId, result.getId());
-  }
+    @Test
+    public void testEntity() {
+        // when
+        Subscriber result =
+                subject.findById(subscriberId)
+                        .orElseThrow(() -> new RuntimeException("Subscriber not found"));
+        // then
+        assertEquals(subscriberId, result.getId());
+    }
 
-  @Test
-  public void findVerifiedSubscribersOfClassification() throws Exception {
-    // given
-    ClassificationSeries classification = createAndSaveClassification();
-    String token = subscriber.addSubscription(classification, new URL("http://test.url"));
-    subscriber.verify(token);
-    subject.save(subscriber);
+    @Test
+    public void findVerifiedSubscribersOfClassification() throws Exception {
+        // given
+        ClassificationSeries classification = createAndSaveClassification();
+        String token = subscriber.addSubscription(classification, new URL("http://test.url"));
+        subscriber.verify(token);
+        subject.save(subscriber);
 
-    // when
-    List<Subscriber> result = subject.findVerifiedSubscribersOfClassification(classification);
+        // when
+        List<Subscriber> result = subject.findVerifiedSubscribersOfClassification(classification);
 
-    // then
-    assertEquals(1, result.size());
-  }
+        // then
+        assertEquals(1, result.size());
+    }
 
-  @Test
-  public void excludeNotVerifiedSubscribersOfClassification() throws Exception {
-    ClassificationSeries classification = createAndSaveClassification();
-    subscriber.addSubscription(classification, new URL("http://test.url"));
-    subject.save(subscriber);
+    @Test
+    public void excludeNotVerifiedSubscribersOfClassification() throws Exception {
+        ClassificationSeries classification = createAndSaveClassification();
+        subscriber.addSubscription(classification, new URL("http://test.url"));
+        subject.save(subscriber);
 
-    // when
-    List<Subscriber> result = subject.findVerifiedSubscribersOfClassification(classification);
+        // when
+        List<Subscriber> result = subject.findVerifiedSubscribersOfClassification(classification);
 
-    // then
-    assertEquals(0, result.size());
-  }
+        // then
+        assertEquals(0, result.size());
+    }
 
-  private ClassificationSeries createAndSaveClassification() {
-    ClassificationSeries classification = TestUtil.createClassification("anyclassification");
-    classification.setContactPerson(userRepository.save(TestUtil.createUser()));
-    classificationFamilyRepository
-        .save(TestUtil.createClassificationFamily("anyfamily"))
-        .addClassificationSeries(classification);
-    classificationSeriesRepository.save(classification);
-    return classification;
-  }
+    private ClassificationSeries createAndSaveClassification() {
+        ClassificationSeries classification = TestUtil.createClassification("anyclassification");
+        classification.setContactPerson(userRepository.save(TestUtil.createUser()));
+        classificationFamilyRepository
+                .save(TestUtil.createClassificationFamily("anyfamily"))
+                .addClassificationSeries(classification);
+        classificationSeriesRepository.save(classification);
+        return classification;
+    }
 
-  @Configuration
-  @EnableAutoConfiguration
-  @EntityScan(basePackageClasses = {Subscriber.class, TranslatablePersistenceConverter.class})
-  @ComponentScan(basePackageClasses = TranslatablePersistenceConverter.class)
-  static class Config {}
+    @Configuration
+    @EnableAutoConfiguration
+    @EntityScan(basePackageClasses = {Subscriber.class, TranslatablePersistenceConverter.class})
+    @ComponentScan(basePackageClasses = TranslatablePersistenceConverter.class)
+    static class Config {}
 }

@@ -1,17 +1,17 @@
 package no.ssb.klass.core.model;
 
 public interface ClassificationEntityOperations extends SoftDeletable {
-  User getContactPerson();
+    User getContactPerson();
 
-  boolean isPublishedInAnyLanguage();
+    boolean isPublishedInAnyLanguage();
 
-  String getNameInPrimaryLanguage();
+    String getNameInPrimaryLanguage();
 
-  Language getPrimaryLanguage();
+    Language getPrimaryLanguage();
 
-  String getCategoryName();
+    String getCategoryName();
 
-  ClassificationSeries getOwnerClassification();
+    ClassificationSeries getOwnerClassification();
 
-  String getUuid();
+    String getUuid();
 }

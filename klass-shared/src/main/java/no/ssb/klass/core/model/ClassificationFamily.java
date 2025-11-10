@@ -1,6 +1,7 @@
 package no.ssb.klass.core.model;
 
 import static com.google.common.base.Preconditions.*;
+
 import static java.util.stream.Collectors.*;
 
 import jakarta.persistence.Column;
@@ -10,96 +11,102 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.Index;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import java.util.ArrayList;
-import java.util.List;
+
 import no.ssb.klass.core.util.Translatable;
 import no.ssb.klass.core.util.TranslatablePersistenceConverter;
+
 import org.hibernate.Hibernate;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(indexes = {@Index(columnList = "name", name = "cf_name_idx", unique = true)})
 public class ClassificationFamily extends BaseEntity {
-  public static final String BASE_ICON_PATH = "/icons/";
+    public static final String BASE_ICON_PATH = "/icons/";
 
-  @Column(nullable = false)
-  @Convert(converter = TranslatablePersistenceConverter.class)
-  private Translatable name;
+    @Column(nullable = false)
+    @Convert(converter = TranslatablePersistenceConverter.class)
+    private Translatable name;
 
-  @Column(nullable = false)
-  private String iconName;
+    @Column(nullable = false)
+    private String iconName;
 
-  @OneToMany(mappedBy = "classificationFamily", fetch = FetchType.LAZY)
-  private List<ClassificationSeries> classificationSeriesList;
+    @OneToMany(mappedBy = "classificationFamily", fetch = FetchType.LAZY)
+    private List<ClassificationSeries> classificationSeriesList;
 
-  public ClassificationFamily() {}
+    public ClassificationFamily() {}
 
-  public ClassificationFamily(Translatable name, String iconName) {
-    this.name = checkNotNull(name);
-    checkArgument(!name.isEmpty(), "Name is empty");
-    this.iconName = checkNotNull(iconName);
-    this.classificationSeriesList = new ArrayList<>();
-  }
-
-  public void addClassificationSeries(ClassificationSeries classification) {
-    checkNotNull(classification);
-    if (Hibernate.isInitialized(classificationSeriesList)) {
-      classificationSeriesList.add(classification);
+    public ClassificationFamily(Translatable name, String iconName) {
+        this.name = checkNotNull(name);
+        checkArgument(!name.isEmpty(), "Name is empty");
+        this.iconName = checkNotNull(iconName);
+        this.classificationSeriesList = new ArrayList<>();
     }
-    classification.setClassificationFamily(this);
-  }
 
-  public void removeClassificationSeries(ClassificationSeries classification) {
-    classificationSeriesList.remove(classification);
-  }
+    public void addClassificationSeries(ClassificationSeries classification) {
+        checkNotNull(classification);
+        if (Hibernate.isInitialized(classificationSeriesList)) {
+            classificationSeriesList.add(classification);
+        }
+        classification.setClassificationFamily(this);
+    }
 
-  public String getName() {
-    return getName(Language.getDefault());
-  }
+    public void removeClassificationSeries(ClassificationSeries classification) {
+        classificationSeriesList.remove(classification);
+    }
 
-  public Translatable getTranslatableName() {
-    return name;
-  }
+    public String getName() {
+        return getName(Language.getDefault());
+    }
 
-  public String getName(Language language) {
-    return name.getString(language);
-  }
+    public Translatable getTranslatableName() {
+        return name;
+    }
 
-  public List<ClassificationSeries> getClassificationSeries() {
-    return classificationSeriesList.stream()
-        .filter(classification -> !classification.isDeleted())
-        .collect(toList());
-  }
+    public String getName(Language language) {
+        return name.getString(language);
+    }
 
-  public List<ClassificationSeries> getPublicClassificationSeries() {
-    return classificationSeriesList.stream()
-        .filter(classification -> !classification.isDeleted())
-        .filter(classification -> !classification.isCopyrighted())
-        .filter(ClassificationSeries::isPublishedInAnyLanguage)
-        .collect(toList());
-  }
+    public List<ClassificationSeries> getClassificationSeries() {
+        return classificationSeriesList.stream()
+                .filter(classification -> !classification.isDeleted())
+                .collect(toList());
+    }
 
-  public String getIconPath() {
-    return BASE_ICON_PATH + iconName;
-  }
+    public List<ClassificationSeries> getPublicClassificationSeries() {
+        return classificationSeriesList.stream()
+                .filter(classification -> !classification.isDeleted())
+                .filter(classification -> !classification.isCopyrighted())
+                .filter(ClassificationSeries::isPublishedInAnyLanguage)
+                .collect(toList());
+    }
 
-  public List<ClassificationSeries> getClassificationSeriesBySectionAndClassificationType(
-      String section, ClassificationType classificationType) {
-    return getClassificationSeriesBySectionAndClassificationType(
-        section, classificationType, false);
-  }
+    public String getIconPath() {
+        return BASE_ICON_PATH + iconName;
+    }
 
-  public List<ClassificationSeries> getClassificationSeriesBySectionAndClassificationType(
-      String section, ClassificationType classificationType, boolean publicOnly) {
-    List<ClassificationSeries> list =
-        publicOnly ? getPublicClassificationSeries() : getClassificationSeries();
-    return list.stream()
-        .filter(
-            classification ->
-                section == null || section.equals(classification.getContactPerson().getSection()))
-        .filter(
-            classification ->
-                classificationType == null
-                    || classificationType.equals(classification.getClassificationType()))
-        .collect(toList());
-  }
+    public List<ClassificationSeries> getClassificationSeriesBySectionAndClassificationType(
+            String section, ClassificationType classificationType) {
+        return getClassificationSeriesBySectionAndClassificationType(
+                section, classificationType, false);
+    }
+
+    public List<ClassificationSeries> getClassificationSeriesBySectionAndClassificationType(
+            String section, ClassificationType classificationType, boolean publicOnly) {
+        List<ClassificationSeries> list =
+                publicOnly ? getPublicClassificationSeries() : getClassificationSeries();
+        return list.stream()
+                .filter(
+                        classification ->
+                                section == null
+                                        || section.equals(
+                                                classification.getContactPerson().getSection()))
+                .filter(
+                        classification ->
+                                classificationType == null
+                                        || classificationType.equals(
+                                                classification.getClassificationType()))
+                .collect(toList());
+    }
 }

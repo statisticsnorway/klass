@@ -8,7 +8,7 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 @ConfigurationPropertiesScan
 public class KlassMailService {
 
-  public static void main(String[] args) {
-    SpringApplication.run(KlassMailService.class, args);
-  }
+    public static void main(String[] args) {
+        SpringApplication.run(KlassMailService.class, args);
+    }
 }

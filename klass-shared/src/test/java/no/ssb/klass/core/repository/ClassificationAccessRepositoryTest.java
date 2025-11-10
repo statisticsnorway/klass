@@ -4,8 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
-import java.util.Date;
-import java.util.List;
+
 import no.ssb.klass.core.config.ConfigurationProfiles;
 import no.ssb.klass.core.model.ClassificationAccessCounter;
 import no.ssb.klass.core.model.ClassificationSeries;
@@ -15,6 +14,7 @@ import no.ssb.klass.core.util.TimeUtil;
 import no.ssb.klass.core.util.TranslatablePersistenceConverter;
 import no.ssb.klass.testutil.IncrementableClockSource;
 import no.ssb.klass.testutil.TestUtil;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,81 +29,87 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.Date;
+import java.util.List;
+
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @ActiveProfiles({ConfigurationProfiles.POSTGRES_EMBEDDED, ConfigurationProfiles.MOCK_MAILSERVER})
 @Transactional
 public class ClassificationAccessRepositoryTest {
 
-  private IncrementableClockSource clockSource;
-  private User user;
+    private IncrementableClockSource clockSource;
+    private User user;
 
-  @Autowired private ClassificationAccessRepository classificationAccessRepository;
+    @Autowired private ClassificationAccessRepository classificationAccessRepository;
 
-  @Autowired private ClassificationSeriesRepository classificationSeriesRepository;
+    @Autowired private ClassificationSeriesRepository classificationSeriesRepository;
 
-  @Autowired private ClassificationFamilyRepository classificationFamilyRepository;
+    @Autowired private ClassificationFamilyRepository classificationFamilyRepository;
 
-  @Autowired private UserRepository userRepository;
+    @Autowired private UserRepository userRepository;
 
-  @Autowired private EntityManager entityManager;
+    @Autowired private EntityManager entityManager;
 
-  @BeforeEach
-  public void setup() {
-    clockSource = new IncrementableClockSource(new Date().getTime());
-    TimeUtil.setClockSource(clockSource);
-    user = userRepository.save(TestUtil.createUser());
-  }
+    @BeforeEach
+    public void setup() {
+        clockSource = new IncrementableClockSource(new Date().getTime());
+        TimeUtil.setClockSource(clockSource);
+        user = userRepository.save(TestUtil.createUser());
+    }
 
-  @Test
-  public void getAccessSumTest() {
-    createClassificationSeries("Test1");
-    createClassificationSeries("Test2");
-    int i =
-        classificationAccessRepository.getAccessSum(
-            SearchWordsRepositoryTest.getFromDate(), SearchWordsRepositoryTest.getToDate());
-    assertEquals(4, i);
-  }
+    @Test
+    public void getAccessSumTest() {
+        createClassificationSeries("Test1");
+        createClassificationSeries("Test2");
+        int i =
+                classificationAccessRepository.getAccessSum(
+                        SearchWordsRepositoryTest.getFromDate(),
+                        SearchWordsRepositoryTest.getToDate());
+        assertEquals(4, i);
+    }
 
-  @Test
-  public void getClassificationsCountTest() {
-    createClassificationSeries("Test1");
-    createClassificationSeries("Test2");
-    Page<StatisticalEntity> getClassificationsCount =
-        classificationAccessRepository.getClassificationsCount(
-            SearchWordsRepositoryTest.getFromDate(),
-            SearchWordsRepositoryTest.getToDate(),
-            PageRequest.of(0, 100));
-    assertEquals(2, getClassificationsCount.getTotalElements());
-    List<StatisticalEntity> resultList = getClassificationsCount.getContent();
-    assertEquals("Test1", resultList.get(0).getName());
-    assertEquals(Long.valueOf(2), resultList.get(0).getCount());
-    assertEquals("Test2", resultList.get(1).getName());
-    assertEquals(Long.valueOf(2), resultList.get(1).getCount());
-  }
+    @Test
+    public void getClassificationsCountTest() {
+        createClassificationSeries("Test1");
+        createClassificationSeries("Test2");
+        Page<StatisticalEntity> getClassificationsCount =
+                classificationAccessRepository.getClassificationsCount(
+                        SearchWordsRepositoryTest.getFromDate(),
+                        SearchWordsRepositoryTest.getToDate(),
+                        PageRequest.of(0, 100));
+        assertEquals(2, getClassificationsCount.getTotalElements());
+        List<StatisticalEntity> resultList = getClassificationsCount.getContent();
+        assertEquals("Test1", resultList.get(0).getName());
+        assertEquals(Long.valueOf(2), resultList.get(0).getCount());
+        assertEquals("Test2", resultList.get(1).getName());
+        assertEquals(Long.valueOf(2), resultList.get(1).getCount());
+    }
 
-  @Configuration
-  @EnableAutoConfiguration
-  @EntityScan(basePackageClasses = {ClassificationAccessCounter.class, ClassificationSeries.class})
-  @ComponentScan(basePackageClasses = TranslatablePersistenceConverter.class)
-  static class Config {}
+    @Configuration
+    @EnableAutoConfiguration
+    @EntityScan(
+            basePackageClasses = {ClassificationAccessCounter.class, ClassificationSeries.class})
+    @ComponentScan(basePackageClasses = TranslatablePersistenceConverter.class)
+    static class Config {}
 
-  private void createClassificationSeries(String name) {
-    ClassificationSeries classification =
-        ClassificationSeriesRepositoryTest.createClassificationSeriesWithVersion(user, name);
-    classificationFamilyRepository
-        .save(TestUtil.createClassificationFamily(name))
-        .addClassificationSeries(classification);
-    classificationSeriesRepository.save(classification);
-    classificationSeriesRepository.flush();
-    entityManager.detach(classification);
-    ClassificationAccessCounter classificationAccessCounter1 =
-        new ClassificationAccessCounter(classification);
-    ClassificationAccessCounter classificationAccessCounter2 =
-        new ClassificationAccessCounter(classification);
+    private void createClassificationSeries(String name) {
+        ClassificationSeries classification =
+                ClassificationSeriesRepositoryTest.createClassificationSeriesWithVersion(
+                        user, name);
+        classificationFamilyRepository
+                .save(TestUtil.createClassificationFamily(name))
+                .addClassificationSeries(classification);
+        classificationSeriesRepository.save(classification);
+        classificationSeriesRepository.flush();
+        entityManager.detach(classification);
+        ClassificationAccessCounter classificationAccessCounter1 =
+                new ClassificationAccessCounter(classification);
+        ClassificationAccessCounter classificationAccessCounter2 =
+                new ClassificationAccessCounter(classification);
 
-    classificationAccessRepository.save(classificationAccessCounter1);
-    classificationAccessRepository.save(classificationAccessCounter2);
-    classificationAccessRepository.flush();
-  }
+        classificationAccessRepository.save(classificationAccessCounter1);
+        classificationAccessRepository.save(classificationAccessCounter2);
+        classificationAccessRepository.flush();
+    }
 }

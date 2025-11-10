@@ -4,14 +4,14 @@ import org.springframework.hateoas.server.core.Relation;
 
 @Relation(collectionRelation = "ssbSections")
 public class SsbSectionResource extends KlassResource {
-  private final String name;
+    private final String name;
 
-  public SsbSectionResource(String name) {
-    super(null);
-    this.name = name;
-  }
+    public SsbSectionResource(String name) {
+        super(null);
+        this.name = name;
+    }
 
-  public String getName() {
-    return name;
-  }
+    public String getName() {
+        return name;
+    }
 }

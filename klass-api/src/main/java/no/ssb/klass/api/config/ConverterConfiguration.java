@@ -12,6 +12,7 @@ import no.ssb.klass.api.dto.CorrespondenceItemList;
 import no.ssb.klass.api.dto.hal.ClassificationVariantResource;
 import no.ssb.klass.api.dto.hal.ClassificationVersionResource;
 import no.ssb.klass.api.dto.hal.CorrespondenceTableResource;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -19,33 +20,33 @@ import org.springframework.http.converter.HttpMessageConverter;
 @Configuration
 public class ConverterConfiguration {
 
-  @Bean
-  public HttpMessageConverter<CorrespondenceTableResource> correspondenceTableCsvConverter() {
-    return new CorrespondenceTableCsvConverter();
-  }
+    @Bean
+    public HttpMessageConverter<CorrespondenceTableResource> correspondenceTableCsvConverter() {
+        return new CorrespondenceTableCsvConverter();
+    }
 
-  @Bean
-  public HttpMessageConverter<ClassificationVersionResource> classificationVersionCsvConverter() {
-    return new ClassificationVersionCsvConverter();
-  }
+    @Bean
+    public HttpMessageConverter<ClassificationVersionResource> classificationVersionCsvConverter() {
+        return new ClassificationVersionCsvConverter();
+    }
 
-  @Bean
-  public HttpMessageConverter<ClassificationVariantResource> classificationVariantCsvConverter() {
-    return new ClassificationVariantCsvConverter();
-  }
+    @Bean
+    public HttpMessageConverter<ClassificationVariantResource> classificationVariantCsvConverter() {
+        return new ClassificationVariantCsvConverter();
+    }
 
-  @Bean
-  public HttpMessageConverter<CodeList> codeListCsvConverter() {
-    return new CodeListCsvConverter();
-  }
+    @Bean
+    public HttpMessageConverter<CodeList> codeListCsvConverter() {
+        return new CodeListCsvConverter();
+    }
 
-  @Bean
-  public HttpMessageConverter<CodeChangeList> codeChangeListCsvConverter() {
-    return new CodeChangeListCsvConverter();
-  }
+    @Bean
+    public HttpMessageConverter<CodeChangeList> codeChangeListCsvConverter() {
+        return new CodeChangeListCsvConverter();
+    }
 
-  @Bean
-  public HttpMessageConverter<CorrespondenceItemList> correspondenceItemListCsvConverter() {
-    return new CorrespondenceItemListCsvConverter();
-  }
+    @Bean
+    public HttpMessageConverter<CorrespondenceItemList> correspondenceItemListCsvConverter() {
+        return new CorrespondenceItemListCsvConverter();
+    }
 }

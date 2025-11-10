@@ -3,18 +3,18 @@ package no.ssb.klass.testutil;
 import no.ssb.klass.core.util.ClockSource;
 
 public class IncrementableClockSource implements ClockSource {
-  private long timeMillis;
+    private long timeMillis;
 
-  public IncrementableClockSource(long timeMillis) {
-    this.timeMillis = timeMillis;
-  }
+    public IncrementableClockSource(long timeMillis) {
+        this.timeMillis = timeMillis;
+    }
 
-  @Override
-  public long currentTimeMillis() {
-    return timeMillis;
-  }
+    @Override
+    public long currentTimeMillis() {
+        return timeMillis;
+    }
 
-  public void increment() {
-    timeMillis++;
-  }
+    public void increment() {
+        timeMillis++;
+    }
 }

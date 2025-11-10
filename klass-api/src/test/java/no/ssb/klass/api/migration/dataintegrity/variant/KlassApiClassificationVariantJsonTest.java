@@ -2,34 +2,38 @@ package no.ssb.klass.api.migration.dataintegrity.variant;
 
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 import static no.ssb.klass.api.migration.MigrationTestUtils.*;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import io.restassured.response.Response;
-import java.time.Instant;
+
 import org.junit.jupiter.api.Test;
+
+import java.time.Instant;
 
 public class KlassApiClassificationVariantJsonTest extends AbstractKlassApiVariantTest {
 
-  @Test
-  void getOneClassificationVariant() {
-    Integer classificationId = 84;
-    System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
+    @Test
+    void getOneClassificationVariant() {
+        Integer classificationId = 84;
+        System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
 
-    String path = getVariantPath(classificationId);
+        String path = getVariantPath(classificationId);
 
-    Response sourceResponse =
-        klassApiMigrationClient.getFromSourceApi(path, paramsVariantDateFrom, null);
-    Response targetResponse =
-        klassApiMigrationClient.getFromTargetApi(path, paramsVariantDateFrom, null);
+        Response sourceResponse =
+                klassApiMigrationClient.getFromSourceApi(path, paramsVariantDateFrom, null);
+        Response targetResponse =
+                klassApiMigrationClient.getFromTargetApi(path, paramsVariantDateFrom, null);
 
-    assertApiResponseIsNotNull(sourceResponse);
+        assertApiResponseIsNotNull(sourceResponse);
 
-    assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+        assertStatusCodesEqual(
+                sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
-    if (sourceResponse.getStatusCode() != 200) {
-      assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
-    } else {
-      validateList(sourceResponse, targetResponse, CODES);
+        if (sourceResponse.getStatusCode() != 200) {
+            assertThat(compareError(classificationId, sourceResponse, targetResponse)).isTrue();
+        } else {
+            validateList(sourceResponse, targetResponse, CODES);
+        }
     }
-  }
 }

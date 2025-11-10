@@ -1,6 +1,7 @@
 package no.ssb.klass.initializer;
 
 import no.ssb.klass.initializer.stabas.StabasInitializer;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.Ordered;
@@ -18,24 +19,24 @@ import org.springframework.stereotype.Service;
 // HIGHEST_PRECEDENCE so that it is run before the SearchIndexPopulator
 @Order(value = Ordered.HIGHEST_PRECEDENCE)
 public class MainInitializer implements CommandLineRunner {
-  private final StabasInitializer stabasInitializer;
-  private final StatisticalUnitInitializer statisticalUnitInitializer;
-  private final ClassificationFamilyInitializer classificationFamilyInitializer;
+    private final StabasInitializer stabasInitializer;
+    private final StatisticalUnitInitializer statisticalUnitInitializer;
+    private final ClassificationFamilyInitializer classificationFamilyInitializer;
 
-  @Autowired
-  public MainInitializer(
-      StabasInitializer stabasInitializer,
-      StatisticalUnitInitializer statisticalUnitInitializer,
-      ClassificationFamilyInitializer classificationFamilyInitializer) {
-    this.stabasInitializer = stabasInitializer;
-    this.statisticalUnitInitializer = statisticalUnitInitializer;
-    this.classificationFamilyInitializer = classificationFamilyInitializer;
-  }
+    @Autowired
+    public MainInitializer(
+            StabasInitializer stabasInitializer,
+            StatisticalUnitInitializer statisticalUnitInitializer,
+            ClassificationFamilyInitializer classificationFamilyInitializer) {
+        this.stabasInitializer = stabasInitializer;
+        this.statisticalUnitInitializer = statisticalUnitInitializer;
+        this.classificationFamilyInitializer = classificationFamilyInitializer;
+    }
 
-  @Override
-  public void run(String... args) throws Exception {
-    statisticalUnitInitializer.run();
-    classificationFamilyInitializer.run();
-    stabasInitializer.run();
-  }
+    @Override
+    public void run(String... args) throws Exception {
+        statisticalUnitInitializer.run();
+        classificationFamilyInitializer.run();
+        stabasInitializer.run();
+    }
 }

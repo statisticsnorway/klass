@@ -1,10 +1,10 @@
 package no.ssb.klass.core.model;
 
 public enum Role {
-  ADMINISTRATOR,
-  STANDARD;
+    ADMINISTRATOR,
+    STANDARD;
 
-  public static Role getStandard() {
-    return STANDARD;
-  }
+    public static Role getStandard() {
+        return STANDARD;
+    }
 }

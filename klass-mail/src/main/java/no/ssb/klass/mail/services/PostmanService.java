@@ -5,158 +5,161 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.cloud.spring.pubsub.core.publisher.PubSubPublisherTemplate;
 import com.google.protobuf.ByteString;
 import com.google.pubsub.v1.PubsubMessage;
-import java.util.concurrent.TimeUnit;
+
 import no.ssb.klass.mail.config.PostmanConfig;
 import no.ssb.klass.mail.models.Email;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.concurrent.TimeUnit;
+
 @Service
 public class PostmanService implements MailService {
 
-  private static final Logger log = LoggerFactory.getLogger(PostmanService.class);
+    private static final Logger log = LoggerFactory.getLogger(PostmanService.class);
 
-  private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
-  private final PostmanConfig postmanConfig;
-  private final PubSubPublisherTemplate pubSubPublisher;
+    private final PostmanConfig postmanConfig;
+    private final PubSubPublisherTemplate pubSubPublisher;
 
-  @Autowired
-  public PostmanService(PostmanConfig postmanConfig, PubSubPublisherTemplate pubSubPublisher) {
-    this.postmanConfig = postmanConfig;
-    this.pubSubPublisher = pubSubPublisher;
+    @Autowired
+    public PostmanService(PostmanConfig postmanConfig, PubSubPublisherTemplate pubSubPublisher) {
+        this.postmanConfig = postmanConfig;
+        this.pubSubPublisher = pubSubPublisher;
 
-    log.info(
-        "Using Postman - publishing emails for app {} and topic {}",
-        postmanConfig.getPublisherAppName(),
-        postmanConfig.getPubsubTopicIncoming());
-  }
-
-  @Override
-  public void sendMail(Email email) {
-    log.info("Sending mail to {} with subject {}", email.to(), email.subject());
-    EmailRequest emailRequest = new EmailRequest(email, postmanConfig.getFromDisplayName());
-    String topic = postmanConfig.getPubsubTopicIncoming();
-    PubsubMessage message = pubsubMessageOf(new MessageRequest(emailRequest));
-    try {
-      pubSubPublisher.publish(topic, message).get(10L, TimeUnit.SECONDS);
-    } catch (Exception e) {
-      log.error("Could not publish message to topic to send email", e);
-      throw new RuntimeException(e);
-    }
-    log.debug("Postman published {} to topic {}", message.getMessageId(), topic);
-  }
-
-  /** Create a pubsub message from the given message request. */
-  private PubsubMessage pubsubMessageOf(MessageRequest messageRequest) {
-    TopicEntry topicEntry = new TopicEntry(messageRequest);
-    return PubsubMessage.newBuilder()
-        .putAttributes("PUBLISHER_APP_NAME", postmanConfig.getPublisherAppName())
-        .setData(topicEntry.toByteString())
-        .build();
-  }
-
-  public static class EmailRequest {
-    String message;
-    String subject;
-    String receiverEmailAddress;
-    FromType fromType;
-    String fromDisplayName;
-    Boolean includeLogo;
-
-    public EmailRequest(Email email, String fromDisplayName) {
-      this.message = email.body();
-      this.subject = email.subject();
-      this.receiverEmailAddress = email.to();
-      this.fromType = FromType.NO_REPLY;
-      this.fromDisplayName = fromDisplayName;
-      this.includeLogo = true;
+        log.info(
+                "Using Postman - publishing emails for app {} and topic {}",
+                postmanConfig.getPublisherAppName(),
+                postmanConfig.getPubsubTopicIncoming());
     }
 
-    public String getMessage() {
-      return message;
+    @Override
+    public void sendMail(Email email) {
+        log.info("Sending mail to {} with subject {}", email.to(), email.subject());
+        EmailRequest emailRequest = new EmailRequest(email, postmanConfig.getFromDisplayName());
+        String topic = postmanConfig.getPubsubTopicIncoming();
+        PubsubMessage message = pubsubMessageOf(new MessageRequest(emailRequest));
+        try {
+            pubSubPublisher.publish(topic, message).get(10L, TimeUnit.SECONDS);
+        } catch (Exception e) {
+            log.error("Could not publish message to topic to send email", e);
+            throw new RuntimeException(e);
+        }
+        log.debug("Postman published {} to topic {}", message.getMessageId(), topic);
     }
 
-    public String getSubject() {
-      return subject;
+    /** Create a pubsub message from the given message request. */
+    private PubsubMessage pubsubMessageOf(MessageRequest messageRequest) {
+        TopicEntry topicEntry = new TopicEntry(messageRequest);
+        return PubsubMessage.newBuilder()
+                .putAttributes("PUBLISHER_APP_NAME", postmanConfig.getPublisherAppName())
+                .setData(topicEntry.toByteString())
+                .build();
     }
 
-    public String getReceiverEmailAddress() {
-      return receiverEmailAddress;
+    public static class EmailRequest {
+        String message;
+        String subject;
+        String receiverEmailAddress;
+        FromType fromType;
+        String fromDisplayName;
+        Boolean includeLogo;
+
+        public EmailRequest(Email email, String fromDisplayName) {
+            this.message = email.body();
+            this.subject = email.subject();
+            this.receiverEmailAddress = email.to();
+            this.fromType = FromType.NO_REPLY;
+            this.fromDisplayName = fromDisplayName;
+            this.includeLogo = true;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+
+        public String getSubject() {
+            return subject;
+        }
+
+        public String getReceiverEmailAddress() {
+            return receiverEmailAddress;
+        }
+
+        public FromType getFromType() {
+            return fromType;
+        }
+
+        public String getFromDisplayName() {
+            return fromDisplayName;
+        }
+
+        public Boolean getIncludeLogo() {
+            return includeLogo;
+        }
     }
 
-    public FromType getFromType() {
-      return fromType;
+    public enum FromType {
+        NO_REPLY,
+        REPLY
     }
 
-    public String getFromDisplayName() {
-      return fromDisplayName;
+    public enum MessageChannel {
+        EMAIL,
+        SMS
     }
 
-    public Boolean getIncludeLogo() {
-      return includeLogo;
-    }
-  }
+    public static class MessageRequest {
 
-  public enum FromType {
-    NO_REPLY,
-    REPLY
-  }
+        private final String id;
 
-  public enum MessageChannel {
-    EMAIL,
-    SMS
-  }
+        private final MessageChannel messageChannel = MessageChannel.EMAIL;
 
-  public static class MessageRequest {
+        private final EmailRequest emailRequest;
 
-    private final String id;
+        public MessageRequest(EmailRequest emailRequest) {
+            this.id =
+                    String.format(
+                            "klass-subscriber-%s-%s",
+                            emailRequest.receiverEmailAddress, emailRequest.message.hashCode());
+            this.emailRequest = emailRequest;
+        }
 
-    private final MessageChannel messageChannel = MessageChannel.EMAIL;
+        public String getId() {
+            return id;
+        }
 
-    private final EmailRequest emailRequest;
+        public MessageChannel getMessageChannel() {
+            return messageChannel;
+        }
 
-    public MessageRequest(EmailRequest emailRequest) {
-      this.id =
-          String.format(
-              "klass-subscriber-%s-%s",
-              emailRequest.receiverEmailAddress, emailRequest.message.hashCode());
-      this.emailRequest = emailRequest;
+        public EmailRequest getEmailRequest() {
+            return emailRequest;
+        }
     }
 
-    public String getId() {
-      return id;
-    }
+    public static class TopicEntry {
+        MessageRequest data;
 
-    public MessageChannel getMessageChannel() {
-      return messageChannel;
-    }
+        public TopicEntry(MessageRequest messageRequest) {
+            data = messageRequest;
+        }
 
-    public EmailRequest getEmailRequest() {
-      return emailRequest;
-    }
-  }
+        public ByteString toByteString() {
+            try {
+                return ByteString.copyFrom(OBJECT_MAPPER.writeValueAsBytes(this));
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(
+                        "Error mapping " + this.getClass().getSimpleName() + " object to JSON", e);
+            }
+        }
 
-  public static class TopicEntry {
-    MessageRequest data;
-
-    public TopicEntry(MessageRequest messageRequest) {
-      data = messageRequest;
+        public MessageRequest getData() {
+            return data;
+        }
     }
-
-    public ByteString toByteString() {
-      try {
-        return ByteString.copyFrom(OBJECT_MAPPER.writeValueAsBytes(this));
-      } catch (JsonProcessingException e) {
-        throw new RuntimeException(
-            "Error mapping " + this.getClass().getSimpleName() + " object to JSON", e);
-      }
-    }
-
-    public MessageRequest getData() {
-      return data;
-    }
-  }
 }

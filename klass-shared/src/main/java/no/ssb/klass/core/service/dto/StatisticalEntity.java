@@ -1,7 +1,7 @@
 package no.ssb.klass.core.service.dto;
 
 public interface StatisticalEntity {
-  String getName();
+    String getName();
 
-  Long getCount();
+    Long getCount();
 }

@@ -5,7 +5,7 @@ package no.ssb.klass.core.model;
  * not actually removed from database.
  */
 public interface SoftDeletable {
-  void setDeleted();
+    void setDeleted();
 
-  boolean isDeleted();
+    boolean isDeleted();
 }

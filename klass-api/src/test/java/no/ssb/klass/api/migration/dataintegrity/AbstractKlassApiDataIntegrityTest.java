@@ -3,106 +3,112 @@ package no.ssb.klass.api.migration.dataintegrity;
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 
 import io.restassured.response.Response;
+
+import no.ssb.klass.api.migration.KlassApiMigrationClient;
+import no.ssb.klass.api.migration.MigrationTestConfig;
+
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.BeforeAll;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
-import no.ssb.klass.api.migration.KlassApiMigrationClient;
-import no.ssb.klass.api.migration.MigrationTestConfig;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.Assumptions;
-import org.junit.jupiter.api.BeforeAll;
 
 public abstract class AbstractKlassApiDataIntegrityTest {
 
-  protected static KlassApiMigrationClient klassApiMigrationClient;
+    protected static KlassApiMigrationClient klassApiMigrationClient;
 
-  static Response sourceResponseClassifications;
-  static Response targetResponseClassifications;
+    static Response sourceResponseClassifications;
+    static Response targetResponseClassifications;
 
-  static Response ssbSectionResponse;
+    static Response ssbSectionResponse;
 
-  protected static List<Integer> sourceResponseIdentifiers = new ArrayList<>();
+    protected static List<Integer> sourceResponseIdentifiers = new ArrayList<>();
 
-  protected static int lastClassificationId;
+    protected static int lastClassificationId;
 
-  protected static int gender_standard_id = 2;
-  protected static int marital_status_standard_id = 19;
-  protected static int industry_classification_standard = 6;
-  protected static String section320 = "320 - Seksjon for befolkningsstatistikk";
+    protected static int gender_standard_id = 2;
+    protected static int marital_status_standard_id = 19;
+    protected static int industry_classification_standard = 6;
+    protected static String section320 = "320 - Seksjon for befolkningsstatistikk";
 
-  public static String sourceHost;
-  public static String targetHost;
+    public static String sourceHost;
+    public static String targetHost;
 
-  protected static List<String> ssbSectionNames = new ArrayList<>();
+    protected static List<String> ssbSectionNames = new ArrayList<>();
 
-  protected static Map<String, Object> paramsLanguageNn = new HashMap<>();
-  protected static Map<String, Object> paramsLanguageEn = new HashMap<>();
-  protected static Map<String, Object> paramsIncludeFuture = new HashMap<>();
-  protected static Map<String, Object> paramsIncludeCodeLists = new HashMap<>();
+    protected static Map<String, Object> paramsLanguageNn = new HashMap<>();
+    protected static Map<String, Object> paramsLanguageEn = new HashMap<>();
+    protected static Map<String, Object> paramsIncludeFuture = new HashMap<>();
+    protected static Map<String, Object> paramsIncludeCodeLists = new HashMap<>();
 
-  protected static Stream<Integer> rangeProviderClassificationIds() {
-    return IntStream.rangeClosed(0, lastClassificationId).boxed();
-  }
-
-  private static void setSourceResponseIdentifiers() {
-    int totalPages = sourceResponseClassifications.path(PAGE_TOTAL_ELEMENTS);
-    for (int i = 0; i < totalPages; i++) {
-      List<Integer> pageIdentifiers =
-          new ArrayList<>(sourceResponseClassifications.path(EMBEDDED_CLASSIFICATIONS_ID));
-      sourceResponseIdentifiers.addAll(pageIdentifiers);
-
-      if (sourceResponseClassifications.path(LINKS_NEXT_HREF) == null) {
-        return;
-      }
-      sourceResponseClassifications =
-          klassApiMigrationClient.getFromSourceApi(
-              sourceResponseClassifications.path(LINKS_NEXT_HREF), null, null);
+    protected static Stream<Integer> rangeProviderClassificationIds() {
+        return IntStream.rangeClosed(0, lastClassificationId).boxed();
     }
-  }
 
-  private static void setSsbSectionNames() {
-    List<?> ssbSections = ssbSectionResponse.path(EMBEDDED_SSB_SECTIONS);
-    for (int i = 0; i < ssbSections.size(); i++) {
-      List<String> names = new ArrayList<>(ssbSectionResponse.path(EMBEDDED_SSB_SECTIONS_NAME));
-      ssbSectionNames.addAll(names);
+    private static void setSourceResponseIdentifiers() {
+        int totalPages = sourceResponseClassifications.path(PAGE_TOTAL_ELEMENTS);
+        for (int i = 0; i < totalPages; i++) {
+            List<Integer> pageIdentifiers =
+                    new ArrayList<>(
+                            sourceResponseClassifications.path(EMBEDDED_CLASSIFICATIONS_ID));
+            sourceResponseIdentifiers.addAll(pageIdentifiers);
+
+            if (sourceResponseClassifications.path(LINKS_NEXT_HREF) == null) {
+                return;
+            }
+            sourceResponseClassifications =
+                    klassApiMigrationClient.getFromSourceApi(
+                            sourceResponseClassifications.path(LINKS_NEXT_HREF), null, null);
+        }
     }
-  }
 
-  @BeforeAll
-  static void beforeAll() {
+    private static void setSsbSectionNames() {
+        List<?> ssbSections = ssbSectionResponse.path(EMBEDDED_SSB_SECTIONS);
+        for (int i = 0; i < ssbSections.size(); i++) {
+            List<String> names =
+                    new ArrayList<>(ssbSectionResponse.path(EMBEDDED_SSB_SECTIONS_NAME));
+            ssbSectionNames.addAll(names);
+        }
+    }
 
-    sourceHost = MigrationTestConfig.getSourceHost();
-    targetHost = MigrationTestConfig.getTargetHost();
+    @BeforeAll
+    static void beforeAll() {
 
-    klassApiMigrationClient = new KlassApiMigrationClient();
+        sourceHost = MigrationTestConfig.getSourceHost();
+        targetHost = MigrationTestConfig.getTargetHost();
 
-    paramsLanguageEn.put(LANGUAGE, EN);
-    paramsLanguageNn.put(LANGUAGE, NN);
-    paramsIncludeFuture.put(INCLUDE_FUTURE, TRUE);
-    paramsIncludeCodeLists.put(INCLUDE_CODE_LISTS, TRUE);
+        klassApiMigrationClient = new KlassApiMigrationClient();
 
-    boolean sourceUp = klassApiMigrationClient.isApiAvailable(sourceHost);
-    boolean targetUp = klassApiMigrationClient.isApiAvailable(targetHost);
+        paramsLanguageEn.put(LANGUAGE, EN);
+        paramsLanguageNn.put(LANGUAGE, NN);
+        paramsIncludeFuture.put(INCLUDE_FUTURE, TRUE);
+        paramsIncludeCodeLists.put(INCLUDE_CODE_LISTS, TRUE);
 
-    Assumptions.assumeTrue(
-        sourceUp && targetUp, "One or both APIs are not available, skipping tests.");
+        boolean sourceUp = klassApiMigrationClient.isApiAvailable(sourceHost);
+        boolean targetUp = klassApiMigrationClient.isApiAvailable(targetHost);
 
-    sourceResponseClassifications =
-        klassApiMigrationClient.getFromSourceApi(CLASSIFICATIONS_PATH, null, null);
-    targetResponseClassifications =
-        klassApiMigrationClient.getFromTargetApi(CLASSIFICATIONS_PATH, null, null);
+        Assumptions.assumeTrue(
+                sourceUp && targetUp, "One or both APIs are not available, skipping tests.");
 
-    setSourceResponseIdentifiers();
-    lastClassificationId = sourceResponseIdentifiers.get(sourceResponseIdentifiers.size() - 1);
-    ssbSectionResponse = klassApiMigrationClient.getFromSourceApi("/" + SSB_SECTIONS, null, null);
-    setSsbSectionNames();
-  }
+        sourceResponseClassifications =
+                klassApiMigrationClient.getFromSourceApi(CLASSIFICATIONS_PATH, null, null);
+        targetResponseClassifications =
+                klassApiMigrationClient.getFromTargetApi(CLASSIFICATIONS_PATH, null, null);
 
-  @AfterAll
-  public static void cleanUp() {
-    System.out.println("Cleanup after tests");
-  }
+        setSourceResponseIdentifiers();
+        lastClassificationId = sourceResponseIdentifiers.get(sourceResponseIdentifiers.size() - 1);
+        ssbSectionResponse =
+                klassApiMigrationClient.getFromSourceApi("/" + SSB_SECTIONS, null, null);
+        setSsbSectionNames();
+    }
+
+    @AfterAll
+    public static void cleanUp() {
+        System.out.println("Cleanup after tests");
+    }
 }

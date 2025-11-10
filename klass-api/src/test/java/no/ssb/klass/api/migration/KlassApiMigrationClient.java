@@ -9,60 +9,65 @@ import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+
+import no.ssb.klass.api.util.RestConstants;
+
 import java.util.Map;
 import java.util.Objects;
-import no.ssb.klass.api.util.RestConstants;
 
 public class KlassApiMigrationClient {
 
-  private final RequestSpecification sourceApi;
-  private final RequestSpecification targetApi;
+    private final RequestSpecification sourceApi;
+    private final RequestSpecification targetApi;
 
-  public KlassApiMigrationClient() {
-    this.sourceApi =
-        new RequestSpecBuilder()
-            .setBaseUri(sourceHost)
-            .setBasePath(RestConstants.CONTEXT_AND_VERSION_V1)
-            .build();
+    public KlassApiMigrationClient() {
+        this.sourceApi =
+                new RequestSpecBuilder()
+                        .setBaseUri(sourceHost)
+                        .setBasePath(RestConstants.CONTEXT_AND_VERSION_V1)
+                        .build();
 
-    this.targetApi =
-        new RequestSpecBuilder()
-            .setBaseUri(targetHost)
-            .setBasePath(RestConstants.CONTEXT_AND_VERSION_V1)
-            .build();
-  }
-
-  public boolean isApiAvailable(String host) {
-    try {
-      return RestAssured.get(host + RestConstants.CONTEXT_AND_VERSION_V1 + CLASSIFICATIONS_PATH)
-              .getStatusCode()
-          == 200;
-    } catch (Exception e) {
-      return false;
+        this.targetApi =
+                new RequestSpecBuilder()
+                        .setBaseUri(targetHost)
+                        .setBasePath(RestConstants.CONTEXT_AND_VERSION_V1)
+                        .build();
     }
-  }
 
-  public Response getFromSourceApi(
-      String path, Map<String, ?> queryParams, String headerAcceptType) {
-    RequestSpecification request = RestAssured.given().spec(sourceApi);
-    if (queryParams != null && !queryParams.isEmpty()) {
-      request.queryParams(queryParams);
+    public boolean isApiAvailable(String host) {
+        try {
+            return RestAssured.get(
+                                    host
+                                            + RestConstants.CONTEXT_AND_VERSION_V1
+                                            + CLASSIFICATIONS_PATH)
+                            .getStatusCode()
+                    == 200;
+        } catch (Exception e) {
+            return false;
+        }
     }
-    String contentTypeValue;
-    contentTypeValue = Objects.requireNonNullElse(headerAcceptType, "application/json");
-    request.log().all();
-    return request.header(ACCEPT, contentTypeValue).get(path);
-  }
 
-  public Response getFromTargetApi(
-      String path, Map<String, ?> queryParams, String headerAcceptType) {
-    RequestSpecification request = RestAssured.given().spec(targetApi);
-    if (queryParams != null && !queryParams.isEmpty()) {
-      request.queryParams(queryParams);
+    public Response getFromSourceApi(
+            String path, Map<String, ?> queryParams, String headerAcceptType) {
+        RequestSpecification request = RestAssured.given().spec(sourceApi);
+        if (queryParams != null && !queryParams.isEmpty()) {
+            request.queryParams(queryParams);
+        }
+        String contentTypeValue;
+        contentTypeValue = Objects.requireNonNullElse(headerAcceptType, "application/json");
+        request.log().all();
+        return request.header(ACCEPT, contentTypeValue).get(path);
     }
-    String contentTypeValue;
-    contentTypeValue = Objects.requireNonNullElse(headerAcceptType, "application/json");
-    request.log().all();
-    return request.header(ACCEPT, contentTypeValue).get(path);
-  }
+
+    public Response getFromTargetApi(
+            String path, Map<String, ?> queryParams, String headerAcceptType) {
+        RequestSpecification request = RestAssured.given().spec(targetApi);
+        if (queryParams != null && !queryParams.isEmpty()) {
+            request.queryParams(queryParams);
+        }
+        String contentTypeValue;
+        contentTypeValue = Objects.requireNonNullElse(headerAcceptType, "application/json");
+        request.log().all();
+        return request.header(ACCEPT, contentTypeValue).get(path);
+    }
 }
