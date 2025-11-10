@@ -43,8 +43,8 @@ public class OpenSearchConfig extends AbstractOpenSearchConfiguration {
                 .withSocketTimeout(Duration.ofSeconds(5))
                 : ClientConfiguration.builder()
                 .connectedTo(opensearchUri.replace("https://", "").replace("http://", ""))
-                .withConnectTimeout(Duration.ofSeconds(10))
-                .withSocketTimeout(Duration.ofSeconds(5))
+                .withConnectTimeout(Duration.ofSeconds(15))
+                .withSocketTimeout(Duration.ofSeconds(60))
         ).build();
 
         return RestClients.create(clientConfiguration).rest();
