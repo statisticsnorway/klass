@@ -1,13 +1,17 @@
 package no.ssb.klass.api.applicationtest;
 
-import io.restassured.http.ContentType;
-import no.ssb.klass.testutil.TestDataProvider;
-import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpStatus;
-
 import static io.restassured.RestAssured.given;
+
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
+
+import io.restassured.http.ContentType;
+
+import no.ssb.klass.api.util.RestConstants;
+import no.ssb.klass.testutil.TestDataProvider;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
 
 /**
  * @author Mads Lundemo, SSB.
@@ -198,12 +202,12 @@ public class RestApiCodeAtIntegrationTest extends AbstractRestApiApplicationTest
 
     @Test
     public void restServiceCodesAt2015CSV() {
-        given().port(port).accept(CONTENT_TYPE_CSV).param("date", "2015-01-01")
+        given().port(port).accept(RestConstants.CONTENT_TYPE_CSV).param("date", "2015-01-01")
                 .get(REQUEST_WITH_ID_AND_CODES_AT, kommuneinndeling.getId())
 //                .prettyPeek()
                 .then()
                 .statusCode(HttpStatus.OK.value())
-                .contentType(CONTENT_TYPE_CSV)
+                .contentType(RestConstants.CONTENT_TYPE_CSV)
 
                 .body(containsString(
                         "\"code\",\"parentCode\",\"level\",\"name\",\"shortName\",\"presentationName\",\"validFrom\",\"validTo\",\"notes\"\n"
@@ -218,12 +222,12 @@ public class RestApiCodeAtIntegrationTest extends AbstractRestApiApplicationTest
 
     @Test
     public void restServiceCodesAtFutureDateIncludedFutureVersionCSV() {
-        given().port(port).accept(CONTENT_TYPE_CSV).param("date", TestDataProvider.TEN_YEARS_LATER_DATE).param("includeFuture", true)
+        given().port(port).accept(RestConstants.CONTENT_TYPE_CSV).param("date", TestDataProvider.TEN_YEARS_LATER_DATE).param("includeFuture", true)
                 .get(REQUEST_WITH_ID_AND_CODES_AT, kommuneinndeling.getId())
                 //.prettyPeek()
                 .then()
                 .statusCode(HttpStatus.OK.value())
-                .contentType(CONTENT_TYPE_CSV)
+                .contentType(RestConstants.CONTENT_TYPE_CSV)
 
                 .body(containsString(
                         "\"code\",\"parentCode\",\"level\",\"name\",\"shortName\",\"presentationName\",\"validFrom\",\"validTo\",\"notes\"\n"
@@ -243,12 +247,12 @@ public class RestApiCodeAtIntegrationTest extends AbstractRestApiApplicationTest
      */
     @Test
     public void restServiceCodesAt2012CSV() {
-        given().port(port).accept(CONTENT_TYPE_CSV).param("date", "2012-01-01")
+        given().port(port).accept(RestConstants.CONTENT_TYPE_CSV).param("date", "2012-01-01")
                 .get(REQUEST_WITH_ID_AND_CODES_AT, kommuneinndeling.getId())
 //                .prettyPeek()
                 .then()
                 .statusCode(HttpStatus.OK.value())
-                .contentType(CONTENT_TYPE_CSV)
+                .contentType(RestConstants.CONTENT_TYPE_CSV)
 
                 .body(containsString(
                         "\"code\",\"parentCode\",\"level\",\"name\",\"shortName\",\"presentationName\",\"validFrom\",\"validTo\",\"notes\"\n"                                + "\"0101\",,\"1\",\"Halden\",\"\",\"\",,,\"\"\n"
@@ -267,12 +271,12 @@ public class RestApiCodeAtIntegrationTest extends AbstractRestApiApplicationTest
      */
     @Test
     public void restServiceCodesAtAlternativeCSVSeparator() {
-        given().port(port).accept(CONTENT_TYPE_CSV).param("date", "2012-01-01").param("csvSeparator", ";")
+        given().port(port).accept(RestConstants.CONTENT_TYPE_CSV).param("date", "2012-01-01").param("csvSeparator", ";")
                 .get(REQUEST_WITH_ID_AND_CODES_AT, kommuneinndeling.getId())
 //                .prettyPeek()
                 .then()
                 .statusCode(HttpStatus.OK.value())
-                .contentType(CONTENT_TYPE_CSV)
+                .contentType(RestConstants.CONTENT_TYPE_CSV)
 
                 .body(containsString(
                         "\"code\";\"parentCode\";\"level\";\"name\";\"shortName\";\"presentationName\";\"validFrom\";\"validTo\";\"notes\"\n"

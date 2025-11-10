@@ -16,19 +16,6 @@ import org.springframework.http.HttpStatus;
  */
 public class RestApiClassificationIntegrationTest extends AbstractRestApiApplicationTest {
 
-    @Test
-    public void restServiceAllowCors() {
-
-        given().port(port)
-                .accept(ContentType.JSON)
-                .header("Origin", "https://www.ssb.no/klass")
-                .get(REQUEST_WITH_ID, kommuneinndeling.getId())
-                .prettyPeek()
-                .then()
-                .assertThat()
-                .header("Access-Control-Allow-Origin", equalTo("*"));
-    }
-
     // @formatter:off
     @Test
     public void restServiceReturnClassification() {

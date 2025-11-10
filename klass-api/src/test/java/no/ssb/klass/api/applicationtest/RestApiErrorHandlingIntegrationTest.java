@@ -2,64 +2,61 @@ package no.ssb.klass.api.applicationtest;
 
 import static io.restassured.RestAssured.*;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpStatus;
-
 import io.restassured.http.ContentType;
+
+import no.ssb.klass.api.util.RestConstants;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+
+import java.util.stream.Stream;
 
 /**
  * @author Mads Lundemo, SSB.
- *         <p>
- *         Testsuite that test how the Rest Api handles unexpected sutuations (tests with JSON and XML)
+ *     <p>Testsuite that test how the Rest Api handles unexpected sutuations (tests with JSON and
+ *     XML)
  */
-public class RestApiErrorHandlingIntegrationTest extends AbstractRestApiApplicationTest {
-    // @formatter:off
-    @Test
-    public void restServiceShouldReturn404WhenClassificationNotFoundJSON() {
-        given()
-                .port(port)
-                .accept(ContentType.JSON)
+class RestApiErrorHandlingIntegrationTest extends AbstractRestApiApplicationTest {
+
+    private static Stream<Arguments> contentTypes() {
+        return Stream.of(
+                Arguments.of(MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_XML_VALUE),
+                Arguments.of(MediaType.TEXT_XML_VALUE, MediaType.TEXT_XML_VALUE),
+                Arguments.of(MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_JSON_VALUE),
+                Arguments.of(RestConstants.CONTENT_TYPE_CSV, RestConstants.CONTENT_TYPE_CSV));
+    }
+
+    @ParameterizedTest
+    @MethodSource("contentTypes")
+    void classificationNotFound(String acceptedContentType, String responseContentType) {
+        given().port(port)
+                .accept(acceptedContentType)
+                .param("from", "2014-01-01")
+                .param("to", "2015-01-01")
                 .when()
-                .get(REQUEST_WITH_ID, -1)
+                .get(REQUEST_WITH_ID_AND_CODES, -1)
+                .prettyPeek()
                 .then()
                 .statusCode(HttpStatus.NOT_FOUND.value())
-                .contentType(ContentType.JSON);
+                .contentType(responseContentType);
     }
 
-    @Test
-    public void restServiceShouldReturn404WhenClassificationNotFoundXML() {
-        given()
-                .port(port)
-                .accept(ContentType.XML)
+    @ParameterizedTest
+    @MethodSource("contentTypes")
+    void invalidPathParameter(String acceptedContentType, String responseContentType) {
+        given().port(port)
+                .accept(acceptedContentType)
+                .param("from", "2014-01-01")
+                .param("to", "2015-01-01")
                 .when()
-                .get(REQUEST_WITH_ID, -1)
-                .then()
-                .statusCode(HttpStatus.NOT_FOUND.value())
-                .contentType(ContentType.XML);
-    }
-
-    @Test
-    public void restServiceShouldReturn400AndErrorWhenRequestIsMalformedJSON() {
-        given()
-                .port(port)
-                .accept(ContentType.JSON)
-                .when()
-                .get(REQUEST_WITH_ID, "bogusInput")
+                .get(REQUEST_WITH_ID_AND_CODES, "bogusInput")
+                .prettyPeek()
                 .then()
                 .statusCode(HttpStatus.BAD_REQUEST.value())
-                .contentType(ContentType.JSON);
+                .contentType(responseContentType);
     }
-
-    @Test
-    public void restServiceShouldReturn400AndErrorWhenRequestIsMalformedXML() {
-        given()
-                .port(port)
-                .accept(ContentType.XML)
-                .when()
-                .get(REQUEST_WITH_ID, "bogusInput")
-                .then()
-                .statusCode(HttpStatus.BAD_REQUEST.value())
-                .contentType(ContentType.XML);
-    }
-// @formatter:on
 }

@@ -11,8 +11,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import no.ssb.klass.api.controllers.validators.CsvFieldsValidator;
 import no.ssb.klass.api.dto.*;
 import no.ssb.klass.api.dto.hal.*;
-import no.ssb.klass.api.services.SearchService;
 import no.ssb.klass.api.services.OpenSearchResult;
+import no.ssb.klass.api.services.SearchService;
 import no.ssb.klass.api.util.OpenApiConstants;
 import no.ssb.klass.api.util.RestConstants;
 import no.ssb.klass.core.exception.KlassEmailException;
@@ -40,6 +40,7 @@ import org.springframework.hateoas.*;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
@@ -61,9 +62,7 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping(
-        value = {RestConstants.API_VERSION_V1},
-        produces = {MediaTypes.HAL_JSON_VALUE, "application/*", "text/csv"})
+@RequestMapping(value = {RestConstants.API_VERSION_V1})
 public class ClassificationController {
     private static final Logger log = LoggerFactory.getLogger(ClassificationController.class);
     private final ClassificationService classificationService;
@@ -71,6 +70,8 @@ public class ClassificationController {
     private final SearchService searchService;
     private final StatisticsService statisticsService;
     private final CsvFieldsValidator csvFieldsValidator;
+
+    private static final String EXCEPTION_HANDLER_LOG_MESSAGE_TEMPLATE = "{}. For request: {}";
 
     @Autowired
     public ClassificationController(
@@ -86,38 +87,94 @@ public class ClassificationController {
         this.csvFieldsValidator = csvFieldsValidator;
     }
 
-    @ExceptionHandler
+    @ExceptionHandler(
+            exception = KlassResourceNotFoundException.class,
+            produces = {MediaType.TEXT_PLAIN_VALUE, RestConstants.CONTENT_TYPE_CSV})
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String resourceNotFoundExceptionHandler(KlassResourceNotFoundException exception) {
-        log.info(exception.getMessage() + ". For request: " + getCurrentRequest());
+    public String resourceNotFoundTextExceptionHandler(KlassResourceNotFoundException exception) {
+        log.info(
+                EXCEPTION_HANDLER_LOG_MESSAGE_TEMPLATE,
+                exception.getMessage(),
+                getCurrentRequest());
         return exception.getMessage();
     }
 
-    @ExceptionHandler
+    @ExceptionHandler(
+            exception = KlassResourceNotFoundException.class,
+            produces = {
+                MediaType.APPLICATION_JSON_VALUE,
+                MediaType.APPLICATION_PROBLEM_JSON_VALUE,
+                MediaType.TEXT_XML_VALUE,
+                MediaType.APPLICATION_XML_VALUE,
+                MediaType.APPLICATION_PROBLEM_XML_VALUE
+            })
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ProblemDetail resourceNotFoundProblemDetailExceptionHandler(
+            KlassResourceNotFoundException exception) {
+        log.info(
+                EXCEPTION_HANDLER_LOG_MESSAGE_TEMPLATE,
+                exception.getMessage(),
+                getCurrentRequest());
+        return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, exception.getMessage());
+    }
+
+    @ExceptionHandler(
+            exception = {
+                RestClientException.class,
+                MethodArgumentTypeMismatchException.class,
+                IllegalArgumentException.class
+            },
+            produces = {MediaType.TEXT_PLAIN_VALUE, RestConstants.CONTENT_TYPE_CSV})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String badRequestExceptionHandler(RestClientException exception) {
-        log.info(exception.getMessage() + ". For request: " + getCurrentRequest());
+    public String badRequestTextExceptionHandler(Exception exception) {
         return exception.getMessage();
     }
 
-    @ExceptionHandler
+    @ExceptionHandler(
+            exception = {
+                RestClientException.class,
+                MethodArgumentTypeMismatchException.class,
+                IllegalArgumentException.class
+            },
+            produces = {
+                MediaType.APPLICATION_JSON_VALUE,
+                MediaType.APPLICATION_PROBLEM_JSON_VALUE,
+                MediaType.TEXT_XML_VALUE,
+                MediaType.APPLICATION_XML_VALUE,
+                MediaType.APPLICATION_PROBLEM_XML_VALUE
+            })
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String argumentTypeMismatchExceptionHandler(
-            MethodArgumentTypeMismatchException exception) {
-        return exception.getMessage();
-    }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String argumentTypeMismatchExceptionHandler(IllegalArgumentException exception) {
-        return exception.getMessage();
+    public ProblemDetail badRequestProblemDetailExceptionHandler(Exception exception) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, exception.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public String serverErrorExceptionHandler(Exception exception) {
-        log.warn(exception.getMessage() + ". For request: " + getCurrentRequest(), exception);
+    public String serverErrorTextExceptionHandler(Exception exception) {
+        log.warn(
+                EXCEPTION_HANDLER_LOG_MESSAGE_TEMPLATE,
+                exception.getMessage(),
+                getCurrentRequest(),
+                exception);
         return exception.getMessage();
+    }
+
+    @ExceptionHandler(
+            produces = {
+                MediaType.APPLICATION_JSON_VALUE,
+                MediaType.APPLICATION_PROBLEM_JSON_VALUE,
+                MediaType.TEXT_XML_VALUE,
+                MediaType.APPLICATION_XML_VALUE,
+                MediaType.APPLICATION_PROBLEM_XML_VALUE
+            })
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ProblemDetail serverErrorProblemDetailExceptionHandler(Exception exception) {
+        log.warn(
+                EXCEPTION_HANDLER_LOG_MESSAGE_TEMPLATE,
+                exception.getMessage(),
+                getCurrentRequest(),
+                exception);
+        return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, exception.getMessage());
     }
 
     /** Redirect root to docs for convenience */
@@ -130,7 +187,13 @@ public class ClassificationController {
     }
 
     @Tag(name = OpenApiConstants.Tags.CLASSIFICATION_FAMILIES_TAG)
-    @RequestMapping(value = "/classificationfamilies", method = RequestMethod.GET)
+    @GetMapping(
+            value = "/classificationfamilies",
+            produces = {
+                MediaType.APPLICATION_JSON_VALUE,
+                MediaType.TEXT_XML_VALUE,
+                MediaType.APPLICATION_XML_VALUE
+            })
     public CollectionModel<ClassificationFamilySummaryResource> classificationFamilies(
             // @formatter:off
             @RequestParam(value = "ssbSection", required = false) String ssbSection,
@@ -153,7 +216,13 @@ public class ClassificationController {
     }
 
     @Tag(name = OpenApiConstants.Tags.CLASSIFICATION_FAMILIES_TAG)
-    @RequestMapping(value = "/classificationfamilies/{id}", method = RequestMethod.GET)
+    @GetMapping(
+            value = "/classificationfamilies/{id}",
+            produces = {
+                MediaType.APPLICATION_JSON_VALUE,
+                MediaType.TEXT_XML_VALUE,
+                MediaType.APPLICATION_XML_VALUE
+            })
     public ClassificationFamilyResource classificationFamily(
             // @formatter:off
             @PathVariable Long id,
@@ -171,7 +240,13 @@ public class ClassificationController {
     }
 
     @Tag(name = OpenApiConstants.Tags.SSB_SECTIONS_TAG)
-    @RequestMapping(value = "/ssbsections", method = RequestMethod.GET)
+    @GetMapping(
+            value = "/ssbsections",
+            produces = {
+                MediaType.APPLICATION_JSON_VALUE,
+                MediaType.TEXT_XML_VALUE,
+                MediaType.APPLICATION_XML_VALUE
+            })
     public CollectionModel<SsbSectionResource> ssbsections() {
         List<SsbSectionResource> ssbSectionResources =
                 classificationService.findResponsibleSectionsWithPublishedVersions().stream()
@@ -183,7 +258,13 @@ public class ClassificationController {
     }
 
     @Tag(name = OpenApiConstants.Tags.CLASSIFICATIONS_TAG)
-    @RequestMapping(value = "/classifications", method = RequestMethod.GET)
+    @GetMapping(
+            value = "/classifications",
+            produces = {
+                MediaType.APPLICATION_JSON_VALUE,
+                MediaType.TEXT_XML_VALUE,
+                MediaType.APPLICATION_XML_VALUE
+            })
     public KlassPagedResources<ClassificationSummaryResource> classifications(
             // @formatter:off
             @RequestParam(value = "includeCodelists", defaultValue = "false")
@@ -208,44 +289,55 @@ public class ClassificationController {
     }
 
     @Tag(name = OpenApiConstants.Tags.SEARCH_TAG)
-    @RequestMapping(value = "/classifications/search", method = RequestMethod.GET)
+    @GetMapping(
+            value = "/classifications/search",
+            produces = {
+                MediaType.APPLICATION_JSON_VALUE,
+                MediaType.TEXT_XML_VALUE,
+                MediaType.APPLICATION_XML_VALUE
+            })
     public KlassPagedResources<SearchResultResource> search(
             // @formatter:off
-                @RequestParam(value = "query") String query,
-                @RequestParam(value = "ssbSection", required = false) String ssbSection,
-                @RequestParam(value = "includeCodelists", defaultValue = "false") boolean includeCodelists,
-                @Parameter(hidden = true) Pageable pageable) {
-            // @formatter:on
+            @RequestParam(value = "query") String query,
+            @RequestParam(value = "ssbSection", required = false) String ssbSection,
+            @RequestParam(value = "includeCodelists", defaultValue = "false")
+                    boolean includeCodelists,
+            @Parameter(hidden = true) Pageable pageable) {
+        // @formatter:on
         Link self = Link.of(getCurrentRequest(), IanaLinkRelations.SELF);
         ssbSection = extractSsbSection(ssbSection);
 
-        Page<OpenSearchResult> results = searchService.publicSearch(
-                query,
-                pageable,
-                ssbSection,
-                includeCodelists
-        );
+        Page<OpenSearchResult> results =
+                searchService.publicSearch(query, pageable, ssbSection, includeCodelists);
 
-        List<SearchResultResource> searchResources = results.getContent().stream()
-                .map(result -> new SearchResultResource(result, Collections.emptyMap()))
-                .collect(toList());
+        List<SearchResultResource> searchResources =
+                results.getContent().stream()
+                        .map(result -> new SearchResultResource(result, Collections.emptyMap()))
+                        .collect(toList());
 
         boolean hit = !results.isEmpty();
         statisticsService.addSearchWord(query, hit);
 
-        PagedModel.PageMetadata pageMetadata = new PagedModel.PageMetadata(
-                pageable.getPageSize(),
-                results.getNumber(),
-                results.getTotalElements(),
-                results.getTotalPages()
-        );
+        PagedModel.PageMetadata pageMetadata =
+                new PagedModel.PageMetadata(
+                        pageable.getPageSize(),
+                        results.getNumber(),
+                        results.getTotalElements(),
+                        results.getTotalPages());
 
-        PagedModel<SearchResultResource> pagedModel = PagedModel.of(searchResources, pageMetadata, self);
+        PagedModel<SearchResultResource> pagedModel =
+                PagedModel.of(searchResources, pageMetadata, self);
         return new KlassPagedResources<>(pagedModel);
     }
 
     @Tag(name = OpenApiConstants.Tags.CLASSIFICATIONS_TAG)
-    @RequestMapping(value = "/classifications/{id}", method = RequestMethod.GET)
+    @GetMapping(
+            value = "/classifications/{id}",
+            produces = {
+                MediaType.APPLICATION_JSON_VALUE,
+                MediaType.TEXT_XML_VALUE,
+                MediaType.APPLICATION_XML_VALUE
+            })
     public ClassificationResource classification(
             @PathVariable Long id,
             @RequestParam(value = "language", defaultValue = "nb") Language language,
@@ -260,7 +352,14 @@ public class ClassificationController {
     }
 
     @Tag(name = OpenApiConstants.Tags.VERSIONS_TAG)
-    @RequestMapping(value = "/versions/{id}", method = RequestMethod.GET)
+    @GetMapping(
+            value = "/versions/{id}",
+            produces = {
+                MediaType.APPLICATION_JSON_VALUE,
+                MediaType.APPLICATION_XML_VALUE,
+                MediaType.TEXT_XML_VALUE,
+                RestConstants.CONTENT_TYPE_CSV
+            })
     public ClassificationVersionResource versions(
             @PathVariable Long id,
             @RequestParam(value = "language", defaultValue = "nb") Language language,
@@ -280,7 +379,14 @@ public class ClassificationController {
     }
 
     @Tag(name = OpenApiConstants.Tags.CORRESPONDENCE_TABLES_TAG)
-    @RequestMapping(value = "/correspondencetables/{id}", method = RequestMethod.GET)
+    @GetMapping(
+            value = "/correspondencetables/{id}",
+            produces = {
+                MediaType.APPLICATION_JSON_VALUE,
+                MediaType.APPLICATION_XML_VALUE,
+                MediaType.TEXT_XML_VALUE,
+                RestConstants.CONTENT_TYPE_CSV
+            })
     public CorrespondenceTableResource correspondenceTables(
             @PathVariable Long id,
             @RequestParam(value = "language", defaultValue = "nb") Language language) {
@@ -292,7 +398,14 @@ public class ClassificationController {
     }
 
     @Tag(name = OpenApiConstants.Tags.VARIANTS_TAG)
-    @RequestMapping(value = "/variants/{id}", method = RequestMethod.GET)
+    @GetMapping(
+            value = "/variants/{id}",
+            produces = {
+                MediaType.APPLICATION_JSON_VALUE,
+                MediaType.APPLICATION_XML_VALUE,
+                MediaType.TEXT_XML_VALUE,
+                RestConstants.CONTENT_TYPE_CSV
+            })
     public ClassificationVariantResource variants(
             @PathVariable Long id,
             @RequestParam(value = "language", defaultValue = "nb") Language language) {
@@ -304,7 +417,14 @@ public class ClassificationController {
     }
 
     @Tag(name = OpenApiConstants.Tags.CODES_TAG)
-    @RequestMapping(value = "/classifications/{id}/codes", method = RequestMethod.GET)
+    @GetMapping(
+            value = "/classifications/{id}/codes",
+            produces = {
+                MediaType.APPLICATION_JSON_VALUE,
+                MediaType.APPLICATION_XML_VALUE,
+                MediaType.TEXT_XML_VALUE,
+                RestConstants.CONTENT_TYPE_CSV
+            })
     public CodeList codes(
             @PathVariable Long id,
             // @formatter:off
@@ -342,7 +462,14 @@ public class ClassificationController {
     }
 
     @Tag(name = OpenApiConstants.Tags.CODES_TAG)
-    @RequestMapping(value = "/classifications/{id}/codesAt", method = RequestMethod.GET)
+    @GetMapping(
+            value = "/classifications/{id}/codesAt",
+            produces = {
+                MediaType.APPLICATION_JSON_VALUE,
+                MediaType.APPLICATION_XML_VALUE,
+                MediaType.TEXT_XML_VALUE,
+                RestConstants.CONTENT_TYPE_CSV
+            })
     public CodeList codesAt(
             @PathVariable Long id,
             // @formatter:off
@@ -406,7 +533,14 @@ public class ClassificationController {
     }
 
     @Tag(name = OpenApiConstants.Tags.CODES_TAG)
-    @RequestMapping(value = "/classifications/{id}/changes", method = RequestMethod.GET)
+    @GetMapping(
+            value = "/classifications/{id}/changes",
+            produces = {
+                MediaType.APPLICATION_JSON_VALUE,
+                MediaType.APPLICATION_XML_VALUE,
+                MediaType.TEXT_XML_VALUE,
+                RestConstants.CONTENT_TYPE_CSV
+            })
     public CodeChangeList changes(
             @PathVariable Long id,
             // @formatter:off
@@ -441,7 +575,14 @@ public class ClassificationController {
     }
 
     @Tag(name = OpenApiConstants.Tags.VARIANTS_TAG)
-    @RequestMapping(value = "/classifications/{id}/variant", method = RequestMethod.GET)
+    @GetMapping(
+            value = "/classifications/{id}/variant",
+            produces = {
+                MediaType.APPLICATION_JSON_VALUE,
+                MediaType.APPLICATION_XML_VALUE,
+                MediaType.TEXT_XML_VALUE,
+                RestConstants.CONTENT_TYPE_CSV
+            })
     public CodeList variant(
             @PathVariable Long id,
             // @formatter:off
@@ -482,7 +623,14 @@ public class ClassificationController {
     }
 
     @Tag(name = OpenApiConstants.Tags.VARIANTS_TAG)
-    @RequestMapping(value = "/classifications/{id}/variantAt", method = RequestMethod.GET)
+    @GetMapping(
+            value = "/classifications/{id}/variantAt",
+            produces = {
+                MediaType.APPLICATION_JSON_VALUE,
+                MediaType.APPLICATION_XML_VALUE,
+                MediaType.TEXT_XML_VALUE,
+                RestConstants.CONTENT_TYPE_CSV
+            })
     public CodeList variantAt(
             @PathVariable Long id,
             // @formatter:off
@@ -548,7 +696,14 @@ public class ClassificationController {
     }
 
     @Tag(name = OpenApiConstants.Tags.CORRESPONDENCE_TABLES_TAG)
-    @RequestMapping(value = "/classifications/{id}/corresponds", method = RequestMethod.GET)
+    @GetMapping(
+            value = "/classifications/{id}/corresponds",
+            produces = {
+                MediaType.APPLICATION_JSON_VALUE,
+                MediaType.APPLICATION_XML_VALUE,
+                MediaType.TEXT_XML_VALUE,
+                RestConstants.CONTENT_TYPE_CSV
+            })
     public CorrespondenceItemList corresponds(
             @PathVariable Long id,
             // @formatter:off
@@ -583,7 +738,14 @@ public class ClassificationController {
     }
 
     @Tag(name = OpenApiConstants.Tags.CORRESPONDENCE_TABLES_TAG)
-    @RequestMapping(value = "/classifications/{id}/correspondsAt", method = RequestMethod.GET)
+    @GetMapping(
+            value = "/classifications/{id}/correspondsAt",
+            produces = {
+                MediaType.APPLICATION_JSON_VALUE,
+                MediaType.APPLICATION_XML_VALUE,
+                MediaType.TEXT_XML_VALUE,
+                RestConstants.CONTENT_TYPE_CSV
+            })
     public CorrespondenceItemList correspondsAt(
             @PathVariable Long id,
             // @formatter:off
@@ -735,8 +897,14 @@ public class ClassificationController {
     }
 
     private void addSearchLink(PagedModel<ClassificationSummaryResource> response) {
-        WebMvcLinkBuilder linkBuilder = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(ClassificationController.class).search("query", null, true, null));
-        response.add(Link.of(ResourceUtil.createUriTemplate(linkBuilder, "query", "includeCodelists"), "search"));
+        WebMvcLinkBuilder linkBuilder =
+                WebMvcLinkBuilder.linkTo(
+                        WebMvcLinkBuilder.methodOn(ClassificationController.class)
+                                .search("query", null, true, null));
+        response.add(
+                Link.of(
+                        ResourceUtil.createUriTemplate(linkBuilder, "query", "includeCodelists"),
+                        "search"));
     }
 
     private String getCurrentRequest() {
