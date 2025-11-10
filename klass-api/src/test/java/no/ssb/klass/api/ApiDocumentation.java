@@ -141,12 +141,13 @@ public class ApiDocumentation {
                         new KlassResourceNotFoundException(
                                 "Classification not found with id = 99999"));
         this.mockMvc
-                .perform(getWithContext("/classifications/99999"))
+                .perform(getWithContext("/classifications/99999").accept(MediaType.APPLICATION_XML))
                 .andExpect(status().isNotFound())
                 .andExpect(
                         content()
                                 .xml(
 """
+<?xml version="1.0" encoding="UTF-8"?>
 <problem xmlns="urn:ietf:rfc:7807">
     <type>about:blank</type>
     <title>Not Found</title>
