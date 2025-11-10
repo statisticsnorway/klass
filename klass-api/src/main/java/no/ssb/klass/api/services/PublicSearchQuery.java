@@ -43,7 +43,7 @@ public class PublicSearchQuery {
                 .must(QueryBuilders.queryStringQuery(query)
                         .field("title", 3.0f)
                         .field("description", 2.0f)
-                        .field("codes", 1.0f)
+                        .field("codes", 0.5f)
                         .defaultOperator(Operator.OR)
                 )
                 .filter(filterBuilder);

@@ -162,8 +162,8 @@ public class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest
                 .statusCode(HttpStatus.OK.value())
                 .contentType(ContentType.JSON)
                 .body(JSON_PAGE + ".totalElements", equalTo(3))
-                .body(JSON_SEARCH_RESULT1 + ".name", equalTo(TestDataProvider.BADMINTON_NAVN_NO))
-                .body(JSON_SEARCH_RESULT2 + ".name", equalTo(TestDataProvider.BADMINTON_KODELISTE_NAVN))
+                .body(JSON_SEARCH_RESULT1 + ".name", equalTo(TestDataProvider.BADMINTON_KODELISTE_NAVN))
+                .body(JSON_SEARCH_RESULT2 + ".name", equalTo(TestDataProvider.BADMINTON_NAVN_NO))
                 .body(JSON_SEARCH_RESULT3 + ".name", equalTo(TestDataProvider.SPORT_NAVN_NO))
                 .body(JSON_SEARCH_RESULT2 + ".snippet", containsString("badminton"));
     }
