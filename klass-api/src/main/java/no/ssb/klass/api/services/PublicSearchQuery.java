@@ -40,6 +40,9 @@ public class PublicSearchQuery {
             filterBuilder.must(QueryBuilders.termQuery("section", filterOnSection));
         }
 
+        // Building a query of multiple conditions
+        // Boosting pure match on title as top match
+        // Adding fuzziness on title to accept incomplete search words
         BoolQueryBuilder finalQuery = QueryBuilders.boolQuery()
                 .should(QueryBuilders.matchPhrasePrefixQuery("title", query).boost(20.0f))
                 .should(QueryBuilders.matchQuery("title", query)
