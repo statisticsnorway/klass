@@ -16,11 +16,11 @@ import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
-public class KlassApiClassificationCodesAtJsonTest extends AbstractKlassApiCodesTest {
+class KlassApiClassificationCodesAtJsonTest extends AbstractKlassApiCodesTest {
 
     @Test
     void getOneClassificationCodesAt() {
-        int classificationId = gender_standard_id;
+        int classificationId = genderStandardId;
         date = "2001-01-01";
 
         Map<String, Object> paramDate = new HashMap<>();
@@ -94,7 +94,7 @@ public class KlassApiClassificationCodesAtJsonTest extends AbstractKlassApiCodes
 
     @Test
     void getClassificationCodesAtLanguageNn() {
-        int classificationId = industry_classification_standard;
+        int classificationId = industryClassificationStandard;
 
         String path = getCodesAtPath(classificationId);
         Response sourceResponse =
@@ -117,7 +117,7 @@ public class KlassApiClassificationCodesAtJsonTest extends AbstractKlassApiCodes
     @Test
     void getClassificationCodesAtIncludeFuture() {
 
-        int classificationId = industry_classification_standard;
+        int classificationId = industryClassificationStandard;
 
         String path = getCodesAtPath(classificationId);
         Response sourceResponse =

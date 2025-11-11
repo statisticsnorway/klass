@@ -210,7 +210,6 @@ public abstract class AbstractRestApiApplicationTest {
         classificationFamily.addClassificationSeries(icd);
         icd = classificationService.saveAndIndexClassification(icd);
 
-
         correspondenceTable =
                 TestDataProvider.createAndAddCorrespondenceTable(kommuneinndeling, bydelsinndeling);
         correspondenceTableRepository.save(correspondenceTable);

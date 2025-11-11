@@ -15,11 +15,11 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.time.Instant;
 
-public class KlassApiClassificationCodesCsvTest extends AbstractKlassApiCodesTest {
+class KlassApiClassificationCodesCsvTest extends AbstractKlassApiCodesTest {
 
     @Test
     void getOneClassificationWithCodesCsv() {
-        int classificationId = industry_classification_standard;
+        int classificationId = industryClassificationStandard;
 
         String path = getCodesPath(classificationId);
         Response sourceResponse =
@@ -67,7 +67,7 @@ public class KlassApiClassificationCodesCsvTest extends AbstractKlassApiCodesTes
 
     @Test
     void getClassificationWithCodesCsvSeparator() {
-        int classificationId = industry_classification_standard;
+        int classificationId = industryClassificationStandard;
 
         String path = getCodesPath(classificationId);
         Response sourceResponse =
@@ -89,7 +89,7 @@ public class KlassApiClassificationCodesCsvTest extends AbstractKlassApiCodesTes
 
     @Test
     void getClassificationWithCodesCsvFields() {
-        int classificationId = industry_classification_standard;
+        int classificationId = industryClassificationStandard;
 
         String path = getCodesPath(classificationId);
         Response sourceResponse =

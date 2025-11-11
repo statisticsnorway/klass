@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-public class KlassApiClassificationByIdJsonTest extends AbstractKlassApiClassificationTest {
+class KlassApiClassificationByIdJsonTest extends AbstractKlassApiClassificationTest {
 
     @Test
     void getOneClassification() {
@@ -93,7 +93,7 @@ public class KlassApiClassificationByIdJsonTest extends AbstractKlassApiClassifi
     @Test
     void getOneClassificationEnglish() {
 
-        int classificationId = marital_status_standard_id;
+        int classificationId = maritalStatusStandardId;
         String path = getClassificationByIdPath(classificationId);
 
         Response sourceResponse =
@@ -146,7 +146,7 @@ public class KlassApiClassificationByIdJsonTest extends AbstractKlassApiClassifi
     @Test
     void getOneClassificationNewNorwegian() {
 
-        int classificationId = gender_standard_id;
+        int classificationId = genderStandardId;
         String path = CLASSIFICATIONS_PATH + "/" + classificationId;
 
         Response sourceResponse =
@@ -198,7 +198,7 @@ public class KlassApiClassificationByIdJsonTest extends AbstractKlassApiClassifi
     @Test
     void getOneClassificationIncludeFuture() {
 
-        int classificationId = gender_standard_id;
+        int classificationId = genderStandardId;
         String path = getClassificationByIdPath(classificationId);
         Response sourceResponse =
                 klassApiMigrationClient.getFromSourceApi(path, paramsIncludeFuture, null);

@@ -3,8 +3,8 @@ package no.ssb.klass.api.services;
 import no.ssb.klass.core.model.ClassificationType;
 import no.ssb.klass.core.model.Language;
 
-import org.opensearch.data.client.orhlc.NativeSearchQueryBuilder;
 import org.opensearch.common.unit.Fuzziness;
+import org.opensearch.data.client.orhlc.NativeSearchQueryBuilder;
 import org.opensearch.index.query.BoolQueryBuilder;
 import org.opensearch.index.query.Operator;
 import org.opensearch.index.query.QueryBuilders;
@@ -44,20 +44,23 @@ public class PublicSearchQuery {
         // Building a query of multiple conditions
         // Boosting pure match on title as top match
         // Adding fuzziness on title to accept incomplete search words
-        BoolQueryBuilder finalQuery = QueryBuilders.boolQuery()
-                .should(QueryBuilders.matchPhrasePrefixQuery("title", query).boost(20.0f))
-                .should(QueryBuilders.matchQuery("title", query)
-                        .fuzziness(Fuzziness.fromEdits(1))
-                        .prefixLength(2)
-                        .maxExpansions(30)
-                        .boost(10.0f))
-                .should(QueryBuilders.multiMatchQuery(query)
-                        .field("description", 2.0f)
-                        .field("codes", 0.5f)
-                        .operator(Operator.OR)
-                        .boost(2.0f))
-                .filter(filterBuilder)
-                .minimumShouldMatch(1);
+        BoolQueryBuilder finalQuery =
+                QueryBuilders.boolQuery()
+                        .should(QueryBuilders.matchPhrasePrefixQuery("title", query).boost(20.0f))
+                        .should(
+                                QueryBuilders.matchQuery("title", query)
+                                        .fuzziness(Fuzziness.fromEdits(1))
+                                        .prefixLength(2)
+                                        .maxExpansions(30)
+                                        .boost(10.0f))
+                        .should(
+                                QueryBuilders.multiMatchQuery(query)
+                                        .field("description", 2.0f)
+                                        .field("codes", 0.5f)
+                                        .operator(Operator.OR)
+                                        .boost(2.0f))
+                        .filter(filterBuilder)
+                        .minimumShouldMatch(1);
 
         NativeSearchQueryBuilder nativeQueryBuilder =
                 new NativeSearchQueryBuilder()

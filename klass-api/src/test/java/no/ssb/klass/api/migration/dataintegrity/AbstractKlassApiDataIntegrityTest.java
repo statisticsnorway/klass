@@ -5,8 +5,8 @@ import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 import io.restassured.response.Response;
 
 import no.ssb.klass.api.migration.KlassApiMigrationClient;
-import no.ssb.klass.api.migration.MigrationTestConfig;
 
+import no.ssb.klass.api.migration.MigrationTestConfig;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeAll;
@@ -34,9 +34,9 @@ public abstract class AbstractKlassApiDataIntegrityTest {
 
     protected static int lastClassificationId;
 
-    protected static int gender_standard_id = 2;
-    protected static int marital_status_standard_id = 19;
-    protected static int industry_classification_standard = 6;
+    protected static int genderStandardId = 2;
+    protected static int maritalStatusStandardId = 19;
+    protected static int industryClassificationStandard = 6;
     protected static String section320 = "320 - Seksjon for befolkningsstatistikk";
 
     public static String sourceHost;
@@ -82,10 +82,8 @@ public abstract class AbstractKlassApiDataIntegrityTest {
     @BeforeAll
     static void beforeAll() {
 
-        //sourceHost = MigrationTestConfig.getSourceHost();
-        //targetHost = MigrationTestConfig.getTargetHost();
-        sourceHost = NAIS_TEST_HOST;
-        targetHost = LOCAL_TARGET_HOST;
+        sourceHost = MigrationTestConfig.getSourceHost();
+        targetHost = MigrationTestConfig.getTargetHost();
 
         klassApiMigrationClient = new KlassApiMigrationClient();
 

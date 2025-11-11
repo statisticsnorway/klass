@@ -12,9 +12,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
 /** Testsuite that test the list (all) classificationFamilies */
-public class RestApiListClassificationFamilyIntegrationTest extends AbstractRestApiApplicationTest {
+class RestApiListClassificationFamilyIntegrationTest extends AbstractRestApiApplicationTest {
     @Test
-    public void restServiceListClassificationFamilies() {
+    void restServiceListClassificationFamilies() {
         given().port(port)
                 .accept(ContentType.JSON)
                 .get(REQUEST_CLASSIFICATION_FAMILY)
@@ -38,7 +38,7 @@ public class RestApiListClassificationFamilyIntegrationTest extends AbstractRest
     }
 
     @Test
-    public void restServiceListClassificationFamiliesFiltersClassificationType() {
+    void restServiceListClassificationFamiliesFiltersClassificationType() {
         given().port(port)
                 .accept(ContentType.JSON)
                 .param("includeCodelists", "true")
@@ -48,7 +48,9 @@ public class RestApiListClassificationFamilyIntegrationTest extends AbstractRest
                 .statusCode(HttpStatus.OK.value())
                 .contentType(ContentType.JSON)
                 .body("_embedded.classificationFamilies.size()", equalTo(1))
-                .body("_embedded.classificationFamilies[0].name", equalTo(classificationFamily.getName()))
+                .body(
+                        "_embedded.classificationFamilies[0].name",
+                        equalTo(classificationFamily.getName()))
                 // does not return copyrighted - one test data is copyrighted
                 .body(
                         "_embedded.classificationFamilies[0].name",
@@ -57,15 +59,16 @@ public class RestApiListClassificationFamilyIntegrationTest extends AbstractRest
                         "_embedded.classificationFamilies[0].numberOfClassifications",
                         equalTo(
                                 classificationFamily
-                                        .getClassificationSeriesBySectionAndClassificationType(
-                                                null, null)
-                                        .size()-1))
+                                                .getClassificationSeriesBySectionAndClassificationType(
+                                                        null, null)
+                                                .size()
+                                        - 1))
                 // links
                 .body(JSON_LINKS + ".self.href", containsString(REQUEST_CLASSIFICATION_FAMILY));
     }
 
     @Test
-    public void restServiceListClassificationFamiliesFiltersSsbSection() {
+    void restServiceListClassificationFamiliesFiltersSsbSection() {
         final String ssbSection = "section";
 
         given().port(port)
