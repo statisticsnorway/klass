@@ -1,10 +1,8 @@
 package no.ssb.klass.core.model;
 
 import static com.google.common.base.Preconditions.*;
-import static java.util.stream.Collectors.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import static java.util.stream.Collectors.*;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -13,27 +11,31 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.Index;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import no.ssb.klass.core.util.TranslatablePersistenceConverter;
-import org.hibernate.Hibernate;
 
 import no.ssb.klass.core.util.Translatable;
+import no.ssb.klass.core.util.TranslatablePersistenceConverter;
+
+import org.hibernate.Hibernate;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Table(indexes = {
-        @Index(columnList = "name", name = "cf_name_idx", unique = true)
-})
+@Table(indexes = {@Index(columnList = "name", name = "cf_name_idx", unique = true)})
 public class ClassificationFamily extends BaseEntity {
     public static final String BASE_ICON_PATH = "/icons/";
+
     @Column(nullable = false)
     @Convert(converter = TranslatablePersistenceConverter.class)
     private Translatable name;
+
     @Column(nullable = false)
     private String iconName;
+
     @OneToMany(mappedBy = "classificationFamily", fetch = FetchType.LAZY)
     private List<ClassificationSeries> classificationSeriesList;
 
-    public ClassificationFamily() {
-    }
+    public ClassificationFamily() {}
 
     public ClassificationFamily(Translatable name, String iconName) {
         this.name = checkNotNull(name);
@@ -67,8 +69,9 @@ public class ClassificationFamily extends BaseEntity {
     }
 
     public List<ClassificationSeries> getClassificationSeries() {
-        return classificationSeriesList.stream().filter(classification -> !classification.isDeleted()).collect(
-                toList());
+        return classificationSeriesList.stream()
+                .filter(classification -> !classification.isDeleted())
+                .collect(toList());
     }
 
     public List<ClassificationSeries> getPublicClassificationSeries() {
@@ -85,17 +88,25 @@ public class ClassificationFamily extends BaseEntity {
 
     public List<ClassificationSeries> getClassificationSeriesBySectionAndClassificationType(
             String section, ClassificationType classificationType) {
-        return getClassificationSeriesBySectionAndClassificationType(section, classificationType, false);
+        return getClassificationSeriesBySectionAndClassificationType(
+                section, classificationType, false);
     }
 
-    public List<ClassificationSeries> getClassificationSeriesBySectionAndClassificationType(String section,
-            ClassificationType classificationType, boolean publicOnly) {
-        // @formatter:off
-        List<ClassificationSeries> list = publicOnly ?  getPublicClassificationSeries() : getClassificationSeries();
+    public List<ClassificationSeries> getClassificationSeriesBySectionAndClassificationType(
+            String section, ClassificationType classificationType, boolean publicOnly) {
+        List<ClassificationSeries> list =
+                publicOnly ? getPublicClassificationSeries() : getClassificationSeries();
         return list.stream()
-                .filter(classification -> section == null || section.equals(classification.getContactPerson().getSection()))
-                .filter(classification -> classificationType == null || classificationType.equals(classification.getClassificationType()))
+                .filter(
+                        classification ->
+                                section == null
+                                        || section.equals(
+                                                classification.getContactPerson().getSection()))
+                .filter(
+                        classification ->
+                                classificationType == null
+                                        || classificationType.equals(
+                                                classification.getClassificationType()))
                 .collect(toList());
-        // @formatter:on
     }
 }

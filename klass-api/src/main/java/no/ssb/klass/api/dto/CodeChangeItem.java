@@ -1,18 +1,26 @@
 package no.ssb.klass.api.dto;
 
-import java.time.LocalDate;
-import java.util.Optional;
-
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+import no.ssb.klass.api.util.CustomLocalDateSerializer;
 import no.ssb.klass.core.model.ClassificationItem;
 import no.ssb.klass.core.model.CorrespondenceMap;
 import no.ssb.klass.core.model.Language;
-import no.ssb.klass.api.util.CustomLocalDateSerializer;
 
-@JsonPropertyOrder(value = { "oldCode", "oldName", "oldShortName", "newCode", "newName", "newShortName",
-        "changeOccurred" })
+import java.time.LocalDate;
+import java.util.Optional;
+
+@JsonPropertyOrder(
+        value = {
+            "oldCode",
+            "oldName",
+            "oldShortName",
+            "newCode",
+            "newName",
+            "newShortName",
+            "changeOccurred"
+        })
 public class CodeChangeItem {
     private final String oldCode;
     private final String oldName;
@@ -22,7 +30,10 @@ public class CodeChangeItem {
     private final String newShortName;
     private final LocalDate changeOccurred;
 
-    public CodeChangeItem(CorrespondenceMap correspondenceMap, boolean isTargetOldest, LocalDate changeOccurred,
+    public CodeChangeItem(
+            CorrespondenceMap correspondenceMap,
+            boolean isTargetOldest,
+            LocalDate changeOccurred,
             Language language) {
         ClassificationItem oldItem = getOldItem(correspondenceMap, isTargetOldest);
         this.oldCode = oldItem == null ? null : oldItem.getCode();
@@ -37,15 +48,17 @@ public class CodeChangeItem {
         this.changeOccurred = changeOccurred;
     }
 
-    private ClassificationItem getOldItem(CorrespondenceMap correspondenceMap, boolean isTargetOldest) {
-        Optional<ClassificationItem> classificationItem = isTargetOldest ? correspondenceMap.getTarget()
-                : correspondenceMap.getSource();
+    private ClassificationItem getOldItem(
+            CorrespondenceMap correspondenceMap, boolean isTargetOldest) {
+        Optional<ClassificationItem> classificationItem =
+                isTargetOldest ? correspondenceMap.getTarget() : correspondenceMap.getSource();
         return classificationItem.orElse(null);
     }
 
-    private ClassificationItem getNewItem(CorrespondenceMap correspondenceMap, boolean isTargetOldest) {
-        Optional<ClassificationItem> classificationItem = isTargetOldest ? correspondenceMap.getSource()
-                : correspondenceMap.getTarget();
+    private ClassificationItem getNewItem(
+            CorrespondenceMap correspondenceMap, boolean isTargetOldest) {
+        Optional<ClassificationItem> classificationItem =
+                isTargetOldest ? correspondenceMap.getSource() : correspondenceMap.getTarget();
         return classificationItem.orElse(null);
     }
 

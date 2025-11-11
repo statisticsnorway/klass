@@ -1,15 +1,14 @@
 package no.ssb.klass.core.util;
 
 import static com.google.common.base.Preconditions.*;
+
+import com.google.common.collect.Lists;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
-import com.google.common.collect.Lists;
 
-/**
- * Represents a date range.
- * From is inclusive and to is exclusive.
- */
+/** Represents a date range. From is inclusive and to is exclusive. */
 public final class DateRange {
     private final LocalDate from;
     private final LocalDate to;
@@ -19,14 +18,16 @@ public final class DateRange {
         checkNotNull(from);
         checkNotNull(to);
         if (from.equals(to) || from.isAfter(to)) {
-            throw new IllegalArgumentException("From is equal or after to. From: " + from + " To: " + to);
+            throw new IllegalArgumentException(
+                    "From is equal or after to. From: " + from + " To: " + to);
         }
         this.from = from;
         this.to = to;
     }
 
     public Boolean isCurrentVersion() {
-        return (LocalDate.now().isEqual(from) || LocalDate.now().isAfter(from)) && (LocalDate.now().isBefore(to));
+        return (LocalDate.now().isEqual(from) || LocalDate.now().isAfter(from))
+                && (LocalDate.now().isBefore(to));
     }
 
     public boolean overlaps(DateRange other) {
@@ -48,7 +49,8 @@ public final class DateRange {
 
     public DateRange subRange(DateRange other) {
         if (!overlaps(other)) {
-            throw new IllegalArgumentException("dateRanges do not overlap. This: " + this + ". Other: " + other);
+            throw new IllegalArgumentException(
+                    "dateRanges do not overlap. This: " + this + ". Other: " + other);
         }
         LocalDate highestFrom = TimeUtil.max(Lists.newArrayList(from, other.getFrom()));
         LocalDate lowestTo = TimeUtil.min(Lists.newArrayList(to, other.getTo()));
@@ -66,9 +68,10 @@ public final class DateRange {
 
     @Override
     public boolean equals(Object obj) {
-        return obj != null && getClass() == obj.getClass() &&
-                Objects.equals(this.from, ((DateRange) obj).from) &&
-                Objects.equals(this.to, ((DateRange) obj).to);
+        return obj != null
+                && getClass() == obj.getClass()
+                && Objects.equals(this.from, ((DateRange) obj).from)
+                && Objects.equals(this.to, ((DateRange) obj).to);
     }
 
     @Override
@@ -89,9 +92,7 @@ public final class DateRange {
         return new DateRange(from, to);
     }
 
-    /**
-     * From and to are specified in format yyyy-MM-dd
-     */
+    /** From and to are specified in format yyyy-MM-dd */
     public static DateRange create(String from, String to) {
         return create(TimeUtil.createDate(from), TimeUtil.createDate(to));
     }

@@ -1,23 +1,28 @@
 package no.ssb.klass.api.dto;
 
-import java.time.LocalDate;
-import java.util.Objects;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ComparisonChain;
 
+import no.ssb.klass.api.util.CustomLocalDateSerializer;
 import no.ssb.klass.core.service.dto.CorrespondenceDto;
 import no.ssb.klass.core.util.DateRange;
 import no.ssb.klass.core.util.TimeUtil;
-import no.ssb.klass.api.util.CustomLocalDateSerializer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-@JsonPropertyOrder(value = { "sourceCode", "sourceName", "sourceShortName", "targetCode", "targetName",
-        "targetShortName" })
+import java.time.LocalDate;
+import java.util.Objects;
+
+@JsonPropertyOrder(
+        value = {
+            "sourceCode",
+            "sourceName",
+            "sourceShortName",
+            "targetCode",
+            "targetName",
+            "targetShortName"
+        })
 public class CorrespondenceItem implements Comparable<CorrespondenceItem> {
 
     private final String sourceCode;
@@ -27,9 +32,13 @@ public class CorrespondenceItem implements Comparable<CorrespondenceItem> {
     private final String targetName;
     private final String targetShortName;
 
-    public CorrespondenceItem(String sourceCode, String sourceName, String sourceShortName,
-                              String targetCode, String targetName, String targetShortName)
-    {
+    public CorrespondenceItem(
+            String sourceCode,
+            String sourceName,
+            String sourceShortName,
+            String targetCode,
+            String targetName,
+            String targetShortName) {
         this.sourceCode = sourceCode;
         this.sourceName = sourceName;
         this.sourceShortName = sourceShortName;
@@ -87,11 +96,12 @@ public class CorrespondenceItem implements Comparable<CorrespondenceItem> {
 
     @Override
     public boolean equals(Object obj) {
-        return obj != null && getClass() == obj.getClass() &&
-                Objects.equals(this.sourceCode, ((CorrespondenceItem) obj).sourceCode) &&
-                Objects.equals(this.sourceName, ((CorrespondenceItem) obj).sourceName) &&
-                Objects.equals(this.targetCode, ((CorrespondenceItem) obj).targetCode) &&
-                Objects.equals(this.targetName, ((CorrespondenceItem) obj).targetName);
+        return obj != null
+                && getClass() == obj.getClass()
+                && Objects.equals(this.sourceCode, ((CorrespondenceItem) obj).sourceCode)
+                && Objects.equals(this.sourceName, ((CorrespondenceItem) obj).sourceName)
+                && Objects.equals(this.targetCode, ((CorrespondenceItem) obj).targetCode)
+                && Objects.equals(this.targetName, ((CorrespondenceItem) obj).targetName);
     }
 
     @Override
@@ -100,14 +110,22 @@ public class CorrespondenceItem implements Comparable<CorrespondenceItem> {
                 .compare(this.sourceCode, other.sourceCode)
                 .compare(this.sourceName, other.sourceName)
                 .compare(this.targetCode, other.targetCode)
-                .compare(this.targetName, other.targetName).result();
+                .compare(this.targetName, other.targetName)
+                .result();
     }
 
-    /**
-     * A CorrespondenceItem that has a validity range
-     */
-    @JsonPropertyOrder(value = { "sourceCode", "sourceName", "sourceShortName", "targetCode", "targetName",
-            "targetShortName", "validFrom", "validTo" })
+    /** A CorrespondenceItem that has a validity range */
+    @JsonPropertyOrder(
+            value = {
+                "sourceCode",
+                "sourceName",
+                "sourceShortName",
+                "targetCode",
+                "targetName",
+                "targetShortName",
+                "validFrom",
+                "validTo"
+            })
     public static class RangedCorrespondenceItem extends CorrespondenceItem {
         private final DateRange validRange;
 
@@ -116,7 +134,8 @@ public class CorrespondenceItem implements Comparable<CorrespondenceItem> {
             this.validRange = Preconditions.checkNotNull(correspondence.getValidRange());
         }
 
-        public RangedCorrespondenceItem(CorrespondenceItem correspondenceItem, DateRange dateRange) {
+        public RangedCorrespondenceItem(
+                CorrespondenceItem correspondenceItem, DateRange dateRange) {
             super(correspondenceItem);
             this.validRange = Preconditions.checkNotNull(dateRange);
         }
@@ -140,13 +159,22 @@ public class CorrespondenceItem implements Comparable<CorrespondenceItem> {
 
         @Override
         public String toString() {
-            return "RangedCorrespondenceItem{" +
-                    "sourceCode='" + super.sourceCode + '\'' +
-                    ", sourceName='" + super.sourceName + '\'' +
-                    ", targetCode='" + super.targetCode + '\'' +
-                    ", targetName='" + super.targetName + '\'' +
-                    ", validRange=" + validRange +
-                    '}';
+            return "RangedCorrespondenceItem{"
+                    + "sourceCode='"
+                    + super.sourceCode
+                    + '\''
+                    + ", sourceName='"
+                    + super.sourceName
+                    + '\''
+                    + ", targetCode='"
+                    + super.targetCode
+                    + '\''
+                    + ", targetName='"
+                    + super.targetName
+                    + '\''
+                    + ", validRange="
+                    + validRange
+                    + '}';
         }
     }
 }

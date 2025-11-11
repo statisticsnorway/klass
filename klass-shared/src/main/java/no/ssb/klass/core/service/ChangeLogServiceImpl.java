@@ -1,10 +1,10 @@
 package no.ssb.klass.core.service;
 
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import no.ssb.klass.core.model.Changelog;
 import no.ssb.klass.core.repository.ChangelogRepository;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author Mads Lundemo, SSB.
@@ -23,5 +23,4 @@ public class ChangeLogServiceImpl implements ChangeLogService {
     public void deleteChangelog(Changelog changelog) {
         changelogRepository.delete(changelog);
     }
-
 }

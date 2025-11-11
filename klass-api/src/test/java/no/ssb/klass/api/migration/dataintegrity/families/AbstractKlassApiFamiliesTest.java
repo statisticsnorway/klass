@@ -1,15 +1,16 @@
 package no.ssb.klass.api.migration.dataintegrity.families;
 
+import static no.ssb.klass.api.migration.MigrationTestConstants.*;
+import static no.ssb.klass.api.migration.MigrationTestUtils.generateRandomId;
+
 import no.ssb.klass.api.migration.dataintegrity.AbstractKlassApiDataIntegrityTest;
+
 import org.junit.jupiter.api.BeforeAll;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
-
-import static no.ssb.klass.api.migration.MigrationTestConstants.*;
-import static no.ssb.klass.api.migration.MigrationTestUtils.generateRandomId;
 
 public abstract class AbstractKlassApiFamiliesTest extends AbstractKlassApiDataIntegrityTest {
 
@@ -20,6 +21,7 @@ public abstract class AbstractKlassApiFamiliesTest extends AbstractKlassApiDataI
     String getClassificationFamilyByIdPath(Integer id) {
         return "/" + CLASSIFICATION_FAMILIES + "/" + id;
     }
+
     String getClassificationFamiliesPath() {
         return "/" + CLASSIFICATION_FAMILIES;
     }

@@ -15,10 +15,10 @@ spec:
     max: 1
   resources:
     requests:
-      cpu: 200m
-      memory: 1200Mi
+      cpu: 400m
+      memory: 2Gi
     limits:
-      memory: 1400Mi
+      memory: 2Gi
   gcp:
     sqlInstances:
       - type: POSTGRES_17
@@ -37,7 +37,7 @@ spec:
     - name: KLASS_ENV_CLIENT_KLASS_MAIL_URL
       value: http://klass-mail
     - name: JAVA_TOOL_OPTIONS
-      value: "-XX:InitialRAMPercentage=50.0 -XX:MaxRAMPercentage=75.0"
+      value: "-XX:InitialRAMPercentage=50.0 -XX:MaxRAMPercentage=50.0"
 
   accessPolicy:
     outbound:

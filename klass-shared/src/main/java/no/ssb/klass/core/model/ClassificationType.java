@@ -6,10 +6,8 @@ import no.ssb.klass.core.util.Translatable;
  * @author Mads Lundemo, SSB.
  */
 public enum ClassificationType {
-    CODELIST(
-            new Translatable("Kodeliste", "Kodeliste", "Codelist")),
-    CLASSIFICATION(
-            new Translatable("Klassifikasjon", "Klassifikasjon", "Classification"));
+    CODELIST(new Translatable("Kodeliste", "Kodeliste", "Codelist")),
+    CLASSIFICATION(new Translatable("Klassifikasjon", "Klassifikasjon", "Classification"));
 
     private final Translatable displayName;
 

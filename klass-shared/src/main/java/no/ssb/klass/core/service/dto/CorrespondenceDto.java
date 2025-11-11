@@ -15,8 +15,11 @@ public class CorrespondenceDto {
     private final String targetShortName;
     private final DateRange validRange;
 
-    public CorrespondenceDto(ClassificationItem source, ClassificationItem target, DateRange validRange,
-                             Language language) {
+    public CorrespondenceDto(
+            ClassificationItem source,
+            ClassificationItem target,
+            DateRange validRange,
+            Language language) {
         checkNotNull(validRange);
         checkNotNull(language);
         checkState(source != null || target != null, "Both source and target is null");
@@ -59,11 +62,18 @@ public class CorrespondenceDto {
 
     @Override
     public String toString() {
-        return "CorrespondenceDto{" +
-                "sourceCode='" + sourceCode + '\'' +
-                ", sourceName='" + sourceName + '\'' +
-                ", targetCode='" + targetName + '\'' +
-                ", validRange=" + validRange +
-                '}';
+        return "CorrespondenceDto{"
+                + "sourceCode='"
+                + sourceCode
+                + '\''
+                + ", sourceName='"
+                + sourceName
+                + '\''
+                + ", targetCode='"
+                + targetName
+                + '\''
+                + ", validRange="
+                + validRange
+                + '}';
     }
 }

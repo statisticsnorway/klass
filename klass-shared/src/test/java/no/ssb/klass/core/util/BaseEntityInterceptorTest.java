@@ -2,10 +2,10 @@ package no.ssb.klass.core.util;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import no.ssb.klass.core.model.ClassificationSeries;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import no.ssb.klass.core.model.ClassificationSeries;
 
 public class BaseEntityInterceptorTest {
     private BaseEntityInterceptor subject;

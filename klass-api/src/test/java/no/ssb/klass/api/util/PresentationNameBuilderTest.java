@@ -9,7 +9,8 @@ public class PresentationNameBuilderTest {
     @Test
     public void replace() {
         // given
-        PresentationNameBuilder subject = new PresentationNameBuilder("{code} - {name} - {shortname}");
+        PresentationNameBuilder subject =
+                new PresentationNameBuilder("{code} - {name} - {shortname}");
 
         // when
         String result = subject.presentationName("newcode", "newname", "newshortname");
@@ -21,8 +22,9 @@ public class PresentationNameBuilderTest {
     @Test
     public void lowercase() {
         // given
-        PresentationNameBuilder subject = new PresentationNameBuilder(
-                "{lowercase(code)} - {lowercase(name)} - {lowercase(shortname)}");
+        PresentationNameBuilder subject =
+                new PresentationNameBuilder(
+                        "{lowercase(code)} - {lowercase(name)} - {lowercase(shortname)}");
 
         // when
         String result = subject.presentationName("CODE", "NAME", "SHORTname");
@@ -34,8 +36,9 @@ public class PresentationNameBuilderTest {
     @Test
     public void uppercase() {
         // given
-        PresentationNameBuilder subject = new PresentationNameBuilder(
-                "{uppercase(code)} - {uppercase(name)} - {uppercase(shortname)}");
+        PresentationNameBuilder subject =
+                new PresentationNameBuilder(
+                        "{uppercase(code)} - {uppercase(name)} - {uppercase(shortname)}");
 
         // when
         String result = subject.presentationName("code", "name", "shortname");
@@ -47,8 +50,9 @@ public class PresentationNameBuilderTest {
     @Test
     public void capitalize() {
         // given
-        PresentationNameBuilder subject = new PresentationNameBuilder(
-                "{capitalize(code)} - {capitalize(name)} - {capitalize(shortname)}");
+        PresentationNameBuilder subject =
+                new PresentationNameBuilder(
+                        "{capitalize(code)} - {capitalize(name)} - {capitalize(shortname)}");
 
         // when
         String result = subject.presentationName("code", "name", "shortname");

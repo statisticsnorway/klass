@@ -2,12 +2,12 @@ package no.ssb.klass.api.dto.hal;
 
 import static java.util.stream.Collectors.*;
 
-import java.util.Date;
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import no.ssb.klass.core.model.Changelog;
+
+import java.util.Date;
+import java.util.List;
 
 public class ChangelogResource {
     private final Date changeOccured;
@@ -28,6 +28,8 @@ public class ChangelogResource {
     }
 
     public static List<ChangelogResource> convert(List<Changelog> changelogs) {
-        return changelogs.stream().map(changelog -> new ChangelogResource(changelog)).collect(toList());
+        return changelogs.stream()
+                .map(changelog -> new ChangelogResource(changelog))
+                .collect(toList());
     }
 }

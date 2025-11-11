@@ -2,15 +2,14 @@ package no.ssb.klass.core.model;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.time.LocalDate;
-
-import no.ssb.klass.core.util.ClientException;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-
 import no.ssb.klass.core.util.DateRange;
 import no.ssb.klass.core.util.TimeUtil;
 import no.ssb.klass.testutil.TestUtil;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.time.LocalDate;
 
 public class CorrespondenceTableTest {
     private static final int ALL_LEVELS = 0;
@@ -40,8 +39,9 @@ public class CorrespondenceTableTest {
     @Test
     public void correspondenceTableWithNotExistingSourceLevel() {
         // given
-        Assertions.assertThrows(IllegalArgumentException.class, () ->
-                createCorrespondenceTable(NOT_EXISTING_LEVEL, EXISTING_LEVEL));
+        Assertions.assertThrows(
+                IllegalArgumentException.class,
+                () -> createCorrespondenceTable(NOT_EXISTING_LEVEL, EXISTING_LEVEL));
 
         // then expect exception
     }
@@ -49,8 +49,9 @@ public class CorrespondenceTableTest {
     @Test
     public void correspondenceTableWithNotExistingTargetLevel() {
         // given
-        Assertions.assertThrows(IllegalArgumentException.class, () ->
-                createCorrespondenceTable(EXISTING_LEVEL, NOT_EXISTING_LEVEL));
+        Assertions.assertThrows(
+                IllegalArgumentException.class,
+                () -> createCorrespondenceTable(EXISTING_LEVEL, NOT_EXISTING_LEVEL));
 
         // then expect exception
     }
@@ -96,6 +97,8 @@ public class CorrespondenceTableTest {
     }
 
     /**
+     *
+     *
      * <pre>
      *    source   |--------------|
      *    target          |------------|
@@ -118,6 +121,8 @@ public class CorrespondenceTableTest {
     }
 
     /**
+     *
+     *
      * <pre>
      *    source          |--------------|
      *    target     |------------|
@@ -140,6 +145,8 @@ public class CorrespondenceTableTest {
     }
 
     /**
+     *
+     *
      * <pre>
      *    source    |------------------|
      *    target          |-------|
@@ -162,6 +169,8 @@ public class CorrespondenceTableTest {
     }
 
     /**
+     *
+     *
      * <pre>
      *    source    |---------|
      *    target              |-------|
@@ -172,8 +181,9 @@ public class CorrespondenceTableTest {
     public void getDateRangeNotOverlaping() {
         final DateRange sourceDateRange = DateRange.create("2010-01-01", "2012-01-01");
         final DateRange targetDateRange = DateRange.create("2012-01-01", "2014-01-01");
-        Assertions.assertThrows(IllegalArgumentException.class, () ->
-                createCorrespondenceTable(sourceDateRange, targetDateRange));
+        Assertions.assertThrows(
+                IllegalArgumentException.class,
+                () -> createCorrespondenceTable(sourceDateRange, targetDateRange));
     }
 
     @Test
@@ -198,8 +208,9 @@ public class CorrespondenceTableTest {
         }
 
         // when
-        Assertions.assertThrows(IllegalStateException.class, () ->
-                subject.addChangelog(new Changelog("user", "description")));
+        Assertions.assertThrows(
+                IllegalStateException.class,
+                () -> subject.addChangelog(new Changelog("user", "description")));
 
         // then expect exception
     }
@@ -211,8 +222,9 @@ public class CorrespondenceTableTest {
         subject.addCorrespondenceMap(createCorrespondenceMap("source", "target"));
 
         // when
-        Assertions.assertThrows(IllegalArgumentException.class, () ->
-                subject.addCorrespondenceMap(createCorrespondenceMap("source", "target")));
+        Assertions.assertThrows(
+                IllegalArgumentException.class,
+                () -> subject.addCorrespondenceMap(createCorrespondenceMap("source", "target")));
 
         // then expect exception
     }
@@ -242,8 +254,9 @@ public class CorrespondenceTableTest {
         ClassificationItem sourceItem = TestUtil.createClassificationItem("source", "source");
 
         // when
-        Assertions.assertThrows(IllegalArgumentException.class, () ->
-                subject.updateCorrespondenceMapSource(correspondenceMap, sourceItem));
+        Assertions.assertThrows(
+                IllegalArgumentException.class,
+                () -> subject.updateCorrespondenceMapSource(correspondenceMap, sourceItem));
 
         // then expect exception
     }
@@ -252,13 +265,15 @@ public class CorrespondenceTableTest {
     public void updateCorrespondenceMapSourceDoesNotAllowBothSourceAndTargetToBeNull() {
         // given
         CorrespondenceTable subject = createCorrespondenceTable();
-        CorrespondenceMap correspondenceMap = new CorrespondenceMap(TestUtil.createClassificationItem("code",
-                "officialName"), null);
+        CorrespondenceMap correspondenceMap =
+                new CorrespondenceMap(
+                        TestUtil.createClassificationItem("code", "officialName"), null);
         subject.addCorrespondenceMap(correspondenceMap);
 
         // when
-        Assertions.assertThrows(IllegalArgumentException.class, () ->
-                subject.updateCorrespondenceMapSource(correspondenceMap, null));
+        Assertions.assertThrows(
+                IllegalArgumentException.class,
+                () -> subject.updateCorrespondenceMapSource(correspondenceMap, null));
 
         // then expect exception
     }
@@ -288,8 +303,9 @@ public class CorrespondenceTableTest {
         ClassificationItem targetItem = TestUtil.createClassificationItem("target", "target");
 
         // when
-        Assertions.assertThrows(IllegalArgumentException.class, () ->
-                subject.updateCorrespondenceMapTarget(correspondenceMap, targetItem));
+        Assertions.assertThrows(
+                IllegalArgumentException.class,
+                () -> subject.updateCorrespondenceMapTarget(correspondenceMap, targetItem));
 
         // then expect exception
     }
@@ -298,13 +314,15 @@ public class CorrespondenceTableTest {
     public void updateCorrespondenceMapTargetDoesNotAllowBothSourceAndTargetToBeNull() {
         // given
         CorrespondenceTable subject = createCorrespondenceTable();
-        CorrespondenceMap correspondenceMap = new CorrespondenceMap(null, TestUtil.createClassificationItem("code",
-                "officialName"));
+        CorrespondenceMap correspondenceMap =
+                new CorrespondenceMap(
+                        null, TestUtil.createClassificationItem("code", "officialName"));
         subject.addCorrespondenceMap(correspondenceMap);
 
         // when
-        Assertions.assertThrows(IllegalArgumentException.class, () ->
-                subject.updateCorrespondenceMapTarget(correspondenceMap, null));
+        Assertions.assertThrows(
+                IllegalArgumentException.class,
+                () -> subject.updateCorrespondenceMapTarget(correspondenceMap, null));
 
         // then expect exception
     }
@@ -332,17 +350,22 @@ public class CorrespondenceTableTest {
         return createCorrespondenceTable("2011-01-01", "2012-01-01");
     }
 
-    private CorrespondenceTable createCorrespondenceTable(int sourceLevelNumber, int targetLevelNumber) {
-        ClassificationVersion source = TestUtil.createClassificationVersion(TestUtil.anyDateRange());
+    private CorrespondenceTable createCorrespondenceTable(
+            int sourceLevelNumber, int targetLevelNumber) {
+        ClassificationVersion source =
+                TestUtil.createClassificationVersion(TestUtil.anyDateRange());
         TestUtil.createClassification("source").addClassificationVersion(source);
         source.addNextLevel();
-        ClassificationVersion target = TestUtil.createClassificationVersion(TestUtil.anyDateRange());
+        ClassificationVersion target =
+                TestUtil.createClassificationVersion(TestUtil.anyDateRange());
         TestUtil.createClassification("target").addClassificationVersion(target);
         target.addNextLevel();
-        return TestUtil.createCorrespondenceTable("description", source, sourceLevelNumber, target, targetLevelNumber);
+        return TestUtil.createCorrespondenceTable(
+                "description", source, sourceLevelNumber, target, targetLevelNumber);
     }
 
-    private CorrespondenceTable createCorrespondenceTable(DateRange sourceDateRange, DateRange targetDateRange) {
+    private CorrespondenceTable createCorrespondenceTable(
+            DateRange sourceDateRange, DateRange targetDateRange) {
         ClassificationVersion source = TestUtil.createClassificationVersion(sourceDateRange);
         TestUtil.createClassification("source").addClassificationVersion(source);
         ClassificationVersion target = TestUtil.createClassificationVersion(targetDateRange);
@@ -351,7 +374,8 @@ public class CorrespondenceTableTest {
     }
 
     private CorrespondenceTable createCorrespondenceTable(String sourceFrom, String targetFrom) {
-        return createCorrespondenceTable(DateRange.create(sourceFrom, "2014-01-01"), DateRange.create(targetFrom,
-                "2014-01-01"));
+        return createCorrespondenceTable(
+                DateRange.create(sourceFrom, "2014-01-01"),
+                DateRange.create(targetFrom, "2014-01-01"));
     }
 }

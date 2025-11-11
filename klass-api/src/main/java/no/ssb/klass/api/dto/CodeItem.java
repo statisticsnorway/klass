@@ -3,6 +3,7 @@ package no.ssb.klass.api.dto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import no.ssb.klass.api.util.CustomLocalDateSerializer;
 import no.ssb.klass.api.util.PresentationNameBuilder;
 import no.ssb.klass.core.service.dto.CodeDto;
@@ -12,8 +13,18 @@ import no.ssb.klass.core.util.TimeUtil;
 import java.time.LocalDate;
 import java.util.Objects;
 
-@JsonPropertyOrder(value = { "code", "parentCode", "level", "name", "shortName", "presentationName", "validFrom",
-        "validTo", "notes" })
+@JsonPropertyOrder(
+        value = {
+            "code",
+            "parentCode",
+            "level",
+            "name",
+            "shortName",
+            "presentationName",
+            "validFrom",
+            "validTo",
+            "notes"
+        })
 public class CodeItem implements Comparable<CodeItem> {
     private final String code;
     private final String parentCode;
@@ -31,8 +42,9 @@ public class CodeItem implements Comparable<CodeItem> {
         this.shortName = codeItem.getShortName();
         this.level = codeItem.getLevel();
         this.validity = codeItem.getValidity();
-        this.presentationName = builder.presentationName(codeItem.getCode(), codeItem.getName(), codeItem
-                .getShortName());
+        this.presentationName =
+                builder.presentationName(
+                        codeItem.getCode(), codeItem.getName(), codeItem.getShortName());
         this.notes = codeItem.getNotes();
     }
 
@@ -55,7 +67,8 @@ public class CodeItem implements Comparable<CodeItem> {
         this.level = codeItem.getLevel();
         this.validity = codeItem.getValidity();
         this.presentationName = codeItem.getPresentationName();
-        this.notes = convertNotes ? codeItem.convertNotesNewlineDoubleQuotes() : codeItem.getNotes();
+        this.notes =
+                convertNotes ? codeItem.convertNotesNewlineDoubleQuotes() : codeItem.getNotes();
     }
 
     public CodeItem(CodeDto code) {
@@ -93,20 +106,23 @@ public class CodeItem implements Comparable<CodeItem> {
         return name;
     }
 
-    public String getNotes() { return notes; }
-
-    public String convertNotesNewlineDoubleQuotes() {
-        return this.notes == null ? null :
-                this.notes.replaceAll("\\r\\n|\\r|\\n", " ").replaceAll("\"", "'");
+    public String getNotes() {
+        return notes;
     }
 
-//    @JsonInclude(JsonInclude.Include.NON_NULL)
+    public String convertNotesNewlineDoubleQuotes() {
+        return this.notes == null
+                ? null
+                : this.notes.replaceAll("\\r\\n|\\r|\\n", " ").replaceAll("\"", "'");
+    }
+
+    //    @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonSerialize(using = CustomLocalDateSerializer.class)
     public LocalDate getValidFrom() {
         return validity == null ? null : validity.getFrom();
     }
 
-//    @JsonInclude(JsonInclude.Include.NON_NULL)
+    //    @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonSerialize(using = CustomLocalDateSerializer.class)
     public LocalDate getValidTo() {
         if (validity == null || TimeUtil.isMaxDate(validity.getTo())) {
@@ -137,8 +153,7 @@ public class CodeItem implements Comparable<CodeItem> {
         CodeItem other = (CodeItem) obj;
         return Objects.equals(this.code, other.code)
                 && Objects.equals(this.name, other.name)
-                && Objects.equals(this.level, other.level)
-                ;
+                && Objects.equals(this.level, other.level);
     }
 
     @Override
@@ -146,16 +161,21 @@ public class CodeItem implements Comparable<CodeItem> {
         return code.compareTo(other.code);
     }
 
-    /**
-     * A CodeItem with date range information (version validity mapped to request range)
-     */
-    @JsonPropertyOrder(value = { "code", "parentCode", "level", "name", "shortName", "presentationName",
-            "validFrom",
-            "validTo",
-            "validFromInRequestedRange",
-            "validToInRequestedRange",
-            "notes"
-    })
+    /** A CodeItem with date range information (version validity mapped to request range) */
+    @JsonPropertyOrder(
+            value = {
+                "code",
+                "parentCode",
+                "level",
+                "name",
+                "shortName",
+                "presentationName",
+                "validFrom",
+                "validTo",
+                "validFromInRequestedRange",
+                "validToInRequestedRange",
+                "notes"
+            })
     public static class RangedCodeItem extends CodeItem {
         private final DateRange RequestPeriodRange;
 

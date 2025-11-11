@@ -2,11 +2,11 @@ package no.ssb.klass.core.model;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.List;
+import com.google.common.collect.Lists;
 
 import org.junit.jupiter.api.Test;
 
-import com.google.common.collect.Lists;
+import java.util.List;
 
 public class LanguageTest {
 

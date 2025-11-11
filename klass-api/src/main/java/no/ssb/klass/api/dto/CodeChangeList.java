@@ -2,10 +2,6 @@ package no.ssb.klass.api.dto;
 
 import static java.util.stream.Collectors.*;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
@@ -13,6 +9,10 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 import no.ssb.klass.core.model.CorrespondenceTable;
 import no.ssb.klass.core.model.Language;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @JacksonXmlRootElement(localName = "codeChangeList")
 public class CodeChangeList {
@@ -56,11 +56,23 @@ public class CodeChangeList {
 
     public CodeChangeList convert(CorrespondenceTable correspondenceTable, Language language) {
         LocalDate changeOccurred = correspondenceTable.getOccured();
-        boolean isTargetOldest = correspondenceTable.getTarget().getDateRange().getFrom().isBefore(correspondenceTable
-                .getSource().getDateRange().getFrom());
-        return new CodeChangeList(csvSeparator, correspondenceTable.getCorrespondenceMaps().stream().map(
-                correspondenceMap -> new CodeChangeItem(correspondenceMap, isTargetOldest, changeOccurred, language))
-                .collect(toList()));
+        boolean isTargetOldest =
+                correspondenceTable
+                        .getTarget()
+                        .getDateRange()
+                        .getFrom()
+                        .isBefore(correspondenceTable.getSource().getDateRange().getFrom());
+        return new CodeChangeList(
+                csvSeparator,
+                correspondenceTable.getCorrespondenceMaps().stream()
+                        .map(
+                                correspondenceMap ->
+                                        new CodeChangeItem(
+                                                correspondenceMap,
+                                                isTargetOldest,
+                                                changeOccurred,
+                                                language))
+                        .collect(toList()));
     }
 
     public CodeChangeList merge(CodeChangeList other) {

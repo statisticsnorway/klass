@@ -156,7 +156,6 @@ public class ApiDocumentation {
     <instance>/api/klass/v1/classifications/99999</instance>
 </problem>
 """));
-        // @formatter:on
     }
 
     @Test
@@ -203,7 +202,6 @@ public class ApiDocumentation {
                                         Translatable.create("Befolkning", Language.getDefault()),
                                         "iconName",
                                         1)));
-        // @formatter:off
         this.mockMvc
                 .perform(
                         getWithContext("/classificationfamilies")
@@ -228,7 +226,6 @@ public class ApiDocumentation {
                                                 .description(
                                                         "<<classification-families-links,Links>> to other resources"))))
                 .andExpect(status().isOk());
-        // @formatter:on
         verify(classificationServiceMock)
                 .findPublicClassificationFamilySummaries(
                         isNull(), eq(ClassificationType.CLASSIFICATION));
@@ -239,7 +236,6 @@ public class ApiDocumentation {
         when(classificationServiceMock.findAllClassificationFamilySummaries(
                         any(String.class), any(ClassificationType.class)))
                 .thenReturn(new ArrayList<>());
-        // @formatter:off
         this.mockMvc
                 .perform(
                         getWithContext(
@@ -252,14 +248,12 @@ public class ApiDocumentation {
                                         includeCodelistsParameterDescription("counting number of"),
                                         languageDescription())))
                 .andExpect(status().isOk());
-        // @formatter:on
     }
 
     @Test
     public void classificationFamilyExample() throws Exception {
         ClassificationFamily family = createClassificationFamily();
         when(classificationServiceMock.getClassificationFamily(any(Long.class))).thenReturn(family);
-        // @formatter:off
         this.mockMvc
                 .perform(
                         getWithContext("/classificationfamilies/" + CLASS_FAMILY_BEFOLKNING)
@@ -278,14 +272,12 @@ public class ApiDocumentation {
                                                 .description(
                                                         "<<classification-family-links,Links>> to operations on classificationFamily"))))
                 .andExpect(status().isOk());
-        // @formatter:on
     }
 
     @Test
     public void classificationFamilyOptionalParametersExample() throws Exception {
         ClassificationFamily family = createClassificationFamily();
         when(classificationServiceMock.getClassificationFamily(any(Long.class))).thenReturn(family);
-        // @formatter:off
         this.mockMvc
                 .perform(
                         getWithContext(
@@ -300,14 +292,12 @@ public class ApiDocumentation {
                                         includeCodelistsParameterDescription("listing"),
                                         languageDescription())))
                 .andExpect(status().isOk());
-        // @formatter:on
     }
 
     @Test
     public void ssbSectionsExample() throws Exception {
         when(classificationServiceMock.findResponsibleSectionsWithPublishedVersions())
                 .thenReturn(Sets.newHashSet("Seksjon for primærnæringsstatistikk (420)"));
-        // @formatter:off
         this.mockMvc
                 .perform(getWithContext("/ssbsections").accept(MediaType.APPLICATION_JSON))
                 .andDo(
@@ -324,7 +314,6 @@ public class ApiDocumentation {
                                                 .description(
                                                         "<<ssb-sections-links,Links>> to operations on ssb sections"))))
                 .andExpect(status().isOk());
-        // @formatter:on
     }
 
     @Test
@@ -336,7 +325,6 @@ public class ApiDocumentation {
                         createClassificationFamiliegruppering(TestUtil.createUser()));
         when(classificationServiceMock.findAllPublic(anyBoolean(), isNull(), any(Pageable.class)))
                 .then(i -> createPage(i.getArgument(2, Pageable.class), classifications));
-        // @formatter:off
         this.mockMvc
                 .perform(getWithContext("/classifications").accept(MediaType.APPLICATION_JSON))
                 .andDo(
@@ -363,7 +351,6 @@ public class ApiDocumentation {
                                                 .description(
                                                         "Describes number of classifications returned, see <<_page, page>>"))))
                 .andExpect(status().isOk());
-        // @formatter:on
     }
 
     @Test
@@ -371,7 +358,6 @@ public class ApiDocumentation {
         when(classificationServiceMock.findAllPublic(
                         anyBoolean(), any(Date.class), any(Pageable.class)))
                 .then(i -> createPage(i.getArgument(2, Pageable.class), new ArrayList<>()));
-        // @formatter:off
         this.mockMvc
                 .perform(
                         getWithContext(
@@ -382,7 +368,6 @@ public class ApiDocumentation {
                                 queryParameters(
                                         includeCodelistsDescription(), changedSinceDescription())))
                 .andExpect(status().isOk());
-        // @formatter:on
     }
 
     @Test
@@ -390,7 +375,6 @@ public class ApiDocumentation {
         when(searchServiceMock.publicSearch(
                         any(String.class), any(Pageable.class), isNull(), anyBoolean()))
                 .then(i -> createSearchPage(Pageable.unpaged()));
-        // @formatter:off
         this.mockMvc
                 .perform(
                         getWithContext("/classifications/search?query=kommuner")
@@ -419,7 +403,6 @@ public class ApiDocumentation {
                                                 .description(
                                                         "Describes number of classifications returned, see <<_page, page>>"))))
                 .andExpect(status().isOk());
-        // @formatter:on
     }
 
     @Test
@@ -427,7 +410,6 @@ public class ApiDocumentation {
         when(searchServiceMock.publicSearch(
                         any(String.class), any(Pageable.class), any(String.class), anyBoolean()))
                 .then(i -> createSearchPage(i.getArgument(1, Pageable.class)));
-        // @formatter:off
         this.mockMvc
                 .perform(
                         getWithContext(
@@ -441,14 +423,12 @@ public class ApiDocumentation {
                                         includeCodelistsDescription(),
                                         ssbSectionParameterDescription("searching"))))
                 .andExpect(status().isOk());
-        // @formatter:on
     }
 
     @Test
     public void classificationExample() throws Exception {
         when(classificationServiceMock.getClassificationSeries(anyLong()))
                 .thenReturn(createClassificationKommuneinndeling());
-        // @formatter:off
         this.mockMvc
                 .perform(
                         getWithContext("/classifications/" + CLASS_ID_KOMMUNEINNDELING)
@@ -515,14 +495,12 @@ public class ApiDocumentation {
                                                 .description(
                                                         "<<classification-links,Links>> to operations on classification"))))
                 .andExpect(status().isOk());
-        // @formatter:on
     }
 
     @Test
     public void classificationOptionalParametersExample() throws Exception {
         when(classificationServiceMock.getClassificationSeries(any()))
                 .thenReturn(createClassificationKommuneinndeling());
-        // @formatter:off
 
         this.mockMvc
                 .perform(
@@ -536,7 +514,6 @@ public class ApiDocumentation {
                                 queryParameters(
                                         languageDescription(), includeFutureDescription(""))))
                 .andExpect(status().isOk());
-        // @formatter:on
     }
 
     @Test
@@ -545,7 +522,6 @@ public class ApiDocumentation {
                 createClassificationKommuneinndeling().getClassificationVersions().get(1);
         when(classificationServiceMock.getClassificationVersion(any(Long.class)))
                 .thenReturn(version);
-        // @formatter:off
         this.mockMvc
                 .perform(
                         getWithContext("/versions/" + CLASS_ID_KOMMUNEINNDELING)
@@ -587,7 +563,6 @@ public class ApiDocumentation {
                                                 .description(
                                                         "Links to operations on the version"))))
                 .andExpect(status().isOk());
-        // @formatter:on
     }
 
     @Test
@@ -596,7 +571,6 @@ public class ApiDocumentation {
                 createClassificationKommuneinndeling().getClassificationVersions().get(1);
         when(classificationServiceMock.getClassificationVersion(any(Long.class)))
                 .thenReturn(version);
-        // @formatter:off
         this.mockMvc
                 .perform(
                         getWithContext(
@@ -609,7 +583,6 @@ public class ApiDocumentation {
                                 queryParameters(
                                         languageDescription(), includeFutureDescription(""))))
                 .andExpect(status().isOk());
-        // @formatter:on
     }
 
     @Test
@@ -618,7 +591,6 @@ public class ApiDocumentation {
                 createClassificationKommuneinndeling().getClassificationVersions().get(1);
         when(classificationServiceMock.getClassificationVersion(any(Long.class)))
                 .thenReturn(version);
-        // @formatter:off
         this.mockMvc
                 .perform(
                         getWithContext("/versions/" + CLASS_ID_KOMMUNEINNDELING)
@@ -630,7 +602,6 @@ public class ApiDocumentation {
                                         preprocessRequest(prettyPrint()),
                                         preprocessResponse(/*prettyPrint()*/ )))
                 .andExpect(status().isOk());
-        // @formatter:on
     }
 
     @Test
@@ -639,7 +610,6 @@ public class ApiDocumentation {
         List<CodeDto> codes = createKommuneInndelingCodes(dateRange);
         when(classificationServiceMock.findClassificationCodes(any(), any(), any(), any()))
                 .thenReturn(codes);
-        // @formatter:off
         this.mockMvc
                 .perform(
                         getWithContext(
@@ -648,7 +618,6 @@ public class ApiDocumentation {
                                                 + "/codes?from=2020-01-01&to=2021-01-01&csvSeparator=;")
                                 .header("Accept", MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
-        // @formatter:on
     }
 
     @Test
@@ -657,7 +626,6 @@ public class ApiDocumentation {
         List<CodeDto> codes = createKommuneInndelingCodes(dateRange);
         when(classificationServiceMock.findClassificationCodes(any(), any(), any(), any()))
                 .thenReturn(codes);
-        // @formatter:off
         this.mockMvc
                 .perform(
                         getWithContext(
@@ -672,7 +640,6 @@ public class ApiDocumentation {
                                         preprocessRequest(prettyPrint()),
                                         preprocessResponse(/*prettyPrint()*/ )))
                 .andExpect(status().isOk());
-        // @formatter:on
     }
 
     @Test
@@ -681,7 +648,6 @@ public class ApiDocumentation {
         List<CodeDto> codes = createKommuneInndelingCodes(dateRange);
         when(classificationServiceMock.findClassificationCodes(any(), any(), any(), any()))
                 .thenReturn(codes);
-        // @formatter:off
         this.mockMvc
                 .perform(
                         getWithContextUri(
@@ -703,7 +669,6 @@ public class ApiDocumentation {
                                         languageDescription(),
                                         includeFutureDescription("codes from the"))))
                 .andExpect(status().isOk());
-        // @formatter:on
     }
 
     @Test
@@ -712,7 +677,6 @@ public class ApiDocumentation {
         List<CodeDto> codes = createFylkeInndelingCodes(dateRange);
         when(classificationServiceMock.findClassificationCodes(any(), any(), any(), any()))
                 .thenReturn(codes);
-        // @formatter:off
         this.mockMvc
                 .perform(
                         getWithContext(
@@ -727,7 +691,6 @@ public class ApiDocumentation {
                                         preprocessRequest(prettyPrint()),
                                         preprocessResponse(/*prettyPrint()*/ )))
                 .andExpect(status().isOk());
-        // @formatter:on
     }
 
     @Test
@@ -736,7 +699,6 @@ public class ApiDocumentation {
         List<CodeDto> codes = createFylkeInndelingCodes(dateRange);
         when(classificationServiceMock.findClassificationCodes(any(), any(), any(), any()))
                 .thenReturn(codes);
-        // @formatter:off
         this.mockMvc
                 .perform(
                         getWithContext(
@@ -745,7 +707,6 @@ public class ApiDocumentation {
                                                 + "/codesAt?date=2020-01-01")
                                 .header("Accept", MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
-        // @formatter:on
     }
 
     @Test
@@ -754,7 +715,6 @@ public class ApiDocumentation {
         List<CodeDto> codes = createKommuneInndelingCodes(dateRange);
         when(classificationServiceMock.findClassificationCodes(any(), any(), any(), any()))
                 .thenReturn(codes);
-        // @formatter:off
         this.mockMvc
                 .perform(
                         getWithContextUri(
@@ -775,7 +735,6 @@ public class ApiDocumentation {
                                         languageDescription(),
                                         includeFutureDescription("variants of the"))))
                 .andExpect(status().isOk());
-        // @formatter:on
     }
 
     @Test
@@ -785,7 +744,6 @@ public class ApiDocumentation {
         when(classificationServiceMock.findVariantClassificationCodes(
                         any(), any(), any(), any(), any()))
                 .thenReturn(codes);
-        // @formatter:off
         this.mockMvc
                 .perform(
                         getWithContext(
@@ -800,7 +758,6 @@ public class ApiDocumentation {
                                         preprocessRequest(prettyPrint()),
                                         preprocessResponse(/*prettyPrint()*/ )))
                 .andExpect(status().isOk());
-        // @formatter:on
     }
 
     @Test
@@ -810,7 +767,6 @@ public class ApiDocumentation {
         when(classificationServiceMock.findVariantClassificationCodes(
                         any(), any(), any(), any(), any()))
                 .thenReturn(codes);
-        // @formatter:off
         this.mockMvc
                 .perform(
                         getWithContext(
@@ -819,7 +775,6 @@ public class ApiDocumentation {
                                                 + "/variant?variantName=Klimagasser&from=2020-01-01&to=2021-01-01")
                                 .header("Accept", MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
-        // @formatter:on
     }
 
     @Test
@@ -828,7 +783,6 @@ public class ApiDocumentation {
         when(classificationServiceMock.findVariantClassificationCodes(
                         any(), any(), any(), any(), any()))
                 .thenReturn(createFamilieInndelingCodes(dateRange));
-        // @formatter:off
         this.mockMvc
                 .perform(
                         getWithContextUri(
@@ -858,7 +812,6 @@ public class ApiDocumentation {
                                         languageDescription(),
                                         includeFutureDescription("variants of the"))))
                 .andExpect(status().isOk());
-        // @formatter:on
     }
 
     @Test
@@ -867,7 +820,6 @@ public class ApiDocumentation {
         when(classificationServiceMock.findVariantClassificationCodes(
                         any(), any(), any(), any(), any()))
                 .thenReturn(createGreenhouseGasesCodes(dateRange));
-        // @formatter:off
         this.mockMvc
                 .perform(
                         getWithContext(
@@ -882,7 +834,6 @@ public class ApiDocumentation {
                                         preprocessRequest(prettyPrint()),
                                         preprocessResponse(/*prettyPrint()*/ )))
                 .andExpect(status().isOk());
-        // @formatter:on
     }
 
     @Test
@@ -891,7 +842,6 @@ public class ApiDocumentation {
         when(classificationServiceMock.findVariantClassificationCodes(
                         any(), any(), any(), any(), any()))
                 .thenReturn(createGreenhouseGasesCodes(dateRange));
-        // @formatter:off
         this.mockMvc
                 .perform(
                         getWithContext(
@@ -900,7 +850,6 @@ public class ApiDocumentation {
                                                 + "/variantAt?variantName=Klimagasser&date=2015-01-01")
                                 .header("Accept", MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
-        // @formatter:on
     }
 
     @Test
@@ -909,7 +858,6 @@ public class ApiDocumentation {
         when(classificationServiceMock.findVariantClassificationCodes(
                         any(), any(), any(), any(), any()))
                 .thenReturn(createGreenhouseGasesCodes(dateRange));
-        // @formatter:off
         this.mockMvc
                 .perform(
                         getWithContextUri(
@@ -938,7 +886,6 @@ public class ApiDocumentation {
                                         languageDescription(),
                                         includeFutureDescription("variants of the"))))
                 .andExpect(status().isOk());
-        // @formatter:on
     }
 
     @Test
@@ -951,7 +898,6 @@ public class ApiDocumentation {
                         .get(0);
         when(classificationServiceMock.getClassificationVariant(any(Long.class)))
                 .thenReturn(variant);
-        // @formatter:off
         this.mockMvc
                 .perform(getWithContext("/variants/" + 1111L).accept(MediaType.APPLICATION_JSON))
                 .andDo(
@@ -989,7 +935,6 @@ public class ApiDocumentation {
                                                 .description(
                                                         "Links to operations on the variant"))))
                 .andExpect(status().isOk());
-        // @formatter:on
     }
 
     @Test
@@ -1002,14 +947,12 @@ public class ApiDocumentation {
                         .get(0);
         when(classificationServiceMock.getClassificationVariant(any(Long.class)))
                 .thenReturn(variant);
-        // @formatter:off
         this.mockMvc
                 .perform(
                         getWithContext("/variants/" + 1111L + "?language=nb")
                                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(this.documentationHandler.document(queryParameters(languageDescription())))
                 .andExpect(status().isOk());
-        // @formatter:on
     }
 
     @Test
@@ -1022,7 +965,6 @@ public class ApiDocumentation {
                         .get(0);
         when(classificationServiceMock.getClassificationVariant(any(Long.class)))
                 .thenReturn(variant);
-        // @formatter:off
         this.mockMvc
                 .perform(
                         getWithContext("/variants/" + 1111L)
@@ -1034,7 +976,6 @@ public class ApiDocumentation {
                                         preprocessRequest(prettyPrint()),
                                         preprocessResponse(/*prettyPrint()*/ )))
                 .andExpect(status().isOk());
-        // @formatter:on
     }
 
     @Test
@@ -1044,7 +985,6 @@ public class ApiDocumentation {
                         any(), any(), any(), any(), any(), any()))
                 .thenReturn(createKommuneToBydelCorrespondences(dateRange));
 
-        // @formatter:off
         this.mockMvc
                 .perform(
                         getWithContext(
@@ -1061,7 +1001,6 @@ public class ApiDocumentation {
                                         preprocessRequest(prettyPrint()),
                                         preprocessResponse(/*prettyPrint()*/ )))
                 .andExpect(status().isOk());
-        // @formatter:on
     }
 
     @Test
@@ -1070,7 +1009,6 @@ public class ApiDocumentation {
         when(classificationServiceMock.findCorrespondences(
                         any(), any(), any(), any(), any(), any()))
                 .thenReturn(createKommuneToBydelCorrespondences(dateRange));
-        // @formatter:off
         this.mockMvc
                 .perform(
                         getWithContext(
@@ -1098,7 +1036,6 @@ public class ApiDocumentation {
                                         languageDescription(),
                                         includeFutureDescription(""))))
                 .andExpect(status().isOk());
-        // @formatter:on
     }
 
     @Test
@@ -1107,7 +1044,6 @@ public class ApiDocumentation {
         when(classificationServiceMock.findCorrespondences(
                         any(), any(), any(), any(), any(), any()))
                 .thenReturn(createKommuneToBydelCorrespondences(dateRange));
-        // @formatter:off
         this.mockMvc
                 .perform(
                         getWithContext(
@@ -1124,7 +1060,6 @@ public class ApiDocumentation {
                                         preprocessRequest(prettyPrint()),
                                         preprocessResponse(/*prettyPrint()*/ )))
                 .andExpect(status().isOk());
-        // @formatter:on
     }
 
     @Test
@@ -1133,7 +1068,6 @@ public class ApiDocumentation {
         when(classificationServiceMock.findCorrespondences(
                         any(), any(), any(), any(), any(), any()))
                 .thenReturn(createKommuneToBydelCorrespondences(dateRange));
-        // @formatter:off
         this.mockMvc
                 .perform(
                         getWithContext(
@@ -1160,14 +1094,12 @@ public class ApiDocumentation {
                                         languageDescription(),
                                         includeFutureDescription(""))))
                 .andExpect(status().isOk());
-        // @formatter:on
     }
 
     @Test
     public void correspondenceTablesExampleCsv() throws Exception {
         when(classificationServiceMock.getCorrespondenceTable(any(Long.class)))
                 .thenReturn(createCorrespondenceTable(1L));
-        // @formatter:off
         this.mockMvc
                 .perform(
                         getWithContext("/correspondencetables/" + 1L)
@@ -1179,14 +1111,12 @@ public class ApiDocumentation {
                                         preprocessRequest(prettyPrint()),
                                         preprocessResponse(/*prettyPrint()*/ )))
                 .andExpect(status().isOk());
-        // @formatter:on
     }
 
     @Test
     public void correspondenceTablesExampleJson() throws Exception {
         when(classificationServiceMock.getCorrespondenceTable(any(Long.class)))
                 .thenReturn(createCorrespondenceTable(1L));
-        // @formatter:off
         this.mockMvc
                 .perform(
                         getWithContext("/correspondencetables/" + 1L)
@@ -1247,28 +1177,24 @@ public class ApiDocumentation {
                                                 .description(
                                                         "<<correspondence-tables-links,links>> to operations on classificationFamily"))))
                 .andExpect(status().isOk());
-        // @formatter:on
     }
 
     @Test
     public void correspondenceTablesOptionalParametersExample() throws Exception {
         when(classificationServiceMock.getCorrespondenceTable(any(Long.class)))
                 .thenReturn(createCorrespondenceTable(1L));
-        // @formatter:off
         this.mockMvc
                 .perform(
                         getWithContext("/correspondencetables/" + 1L + "?language=nb")
                                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(this.documentationHandler.document(queryParameters(languageDescription())))
                 .andExpect(status().isOk());
-        // @formatter:on
     }
 
     @Test
     public void changesExample() throws Exception {
         when(classificationServiceMock.getClassificationSeries(any()))
                 .thenReturn(createClassificationKommuneinndeling());
-        // @formatter:off
         this.mockMvc
                 .perform(
                         getWithContext(
@@ -1283,14 +1209,12 @@ public class ApiDocumentation {
                                         preprocessRequest(prettyPrint()),
                                         preprocessResponse(/*prettyPrint()*/ )))
                 .andExpect(status().isOk());
-        // @formatter:on
     }
 
     @Test
     public void changesOptionalParametersExample() throws Exception {
         when(classificationServiceMock.getClassificationSeries(any()))
                 .thenReturn(createClassificationKommuneinndeling());
-        // @formatter:off
         this.mockMvc
                 .perform(
                         getWithContext(
@@ -1313,7 +1237,6 @@ public class ApiDocumentation {
                                         languageDescription(),
                                         includeFutureDescription(""))))
                 .andExpect(status().isOk());
-        // @formatter:on
     }
 
     @Test
@@ -1321,7 +1244,6 @@ public class ApiDocumentation {
         DateRange dateRange = DateRange.create("2020-01-01", "2021-01-01");
         when(classificationServiceMock.findClassificationCodes(any(), any(), any(), any()))
                 .thenReturn(createKommuneInndelingCodes(dateRange));
-        // @formatter:off
         this.mockMvc
                 .perform(
                         getWithContext(
@@ -1336,7 +1258,6 @@ public class ApiDocumentation {
                                         preprocessRequest(prettyPrint()),
                                         preprocessResponse(/*prettyPrint()*/ )))
                 .andExpect(status().isOk());
-        // @formatter:on
     }
 
     @Test
@@ -1344,7 +1265,6 @@ public class ApiDocumentation {
         DateRange dateRange = DateRange.create("2020-01-01", "2021-01-01");
         when(classificationServiceMock.findClassificationCodes(any(), any(), any(), any()))
                 .thenReturn(createKommuneInndelingCodes(dateRange));
-        // @formatter:off
         this.mockMvc
                 .perform(
                         getWithContext(
@@ -1359,7 +1279,6 @@ public class ApiDocumentation {
                                         preprocessRequest(prettyPrint()),
                                         preprocessResponse(/*prettyPrint()*/ )))
                 .andExpect(status().isOk());
-        // @formatter:on
     }
 
     @Test
@@ -1367,7 +1286,6 @@ public class ApiDocumentation {
         DateRange dateRange = DateRange.create("2020-01-01", "2021-01-01");
         when(classificationServiceMock.findClassificationCodes(any(), any(), any(), any()))
                 .thenReturn(createKommuneInndelingCodes(dateRange));
-        // @formatter:off
         this.mockMvc
                 .perform(
                         getWithContext(
@@ -1382,7 +1300,6 @@ public class ApiDocumentation {
                                         preprocessRequest(prettyPrint()),
                                         preprocessResponse(/*prettyPrint()*/ )))
                 .andExpect(status().isOk());
-        // @formatter:on
     }
 
     @Test
@@ -1390,7 +1307,6 @@ public class ApiDocumentation {
         DateRange dateRange = DateRange.create("2020-01-01", "2021-01-01");
         when(classificationServiceMock.findClassificationCodes(any(), any(), any(), any()))
                 .thenReturn(createFamilieInndelingCodes(dateRange));
-        // @formatter:off
         this.mockMvc
                 .perform(
                         getWithContext(
@@ -1405,7 +1321,6 @@ public class ApiDocumentation {
                                         preprocessRequest(prettyPrint()),
                                         preprocessResponse(/*prettyPrint()*/ )))
                 .andExpect(status().isOk());
-        // @formatter:on
     }
 
     @Test
@@ -1413,7 +1328,6 @@ public class ApiDocumentation {
         DateRange dateRange = DateRange.create("2020-01-01", "2021-01-01");
         when(classificationServiceMock.findClassificationCodes(any(), any(), any(), any()))
                 .thenReturn(createKommuneInndelingCodes(dateRange));
-        // @formatter:off
         this.mockMvc
                 .perform(
                         getWithContextUri(
@@ -1428,7 +1342,6 @@ public class ApiDocumentation {
                                         preprocessRequest(prettyPrint()),
                                         preprocessResponse(/*prettyPrint()*/ )))
                 .andExpect(status().isOk());
-        // @formatter:on
     }
 
     @Test
@@ -1443,13 +1356,11 @@ public class ApiDocumentation {
                         anyBoolean(), any(Date.class), any(Pageable.class)))
                 .then(i -> createPage(i.getArgument(2, Pageable.class), classifications));
 
-        // @formatter:off
         this.mockMvc
                 .perform(
                         getWithContext("/classifications?changedSince=2015-03-01T01:30:00.000-0200")
                                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
-        // @formatter:on
     }
 
     @Test
@@ -1464,7 +1375,6 @@ public class ApiDocumentation {
 
         when(classificationServiceMock.findClassificationCodes(any(), any(), any(), any()))
                 .thenReturn(codes);
-        // @formatter:off
         this.mockMvc
                 .perform(
                         getWithContext(
@@ -1479,7 +1389,6 @@ public class ApiDocumentation {
                                         preprocessRequest(prettyPrint()),
                                         preprocessResponse(/*prettyPrint()*/ )))
                 .andExpect(status().isOk());
-        // @formatter:on
     }
 
     @Test
@@ -1500,7 +1409,6 @@ public class ApiDocumentation {
 
         when(classificationServiceMock.findClassificationCodes(any(), any(), any(), any()))
                 .thenReturn(codes);
-        // @formatter:off
         this.mockMvc
                 .perform(
                         getWithContext(
@@ -1515,7 +1423,6 @@ public class ApiDocumentation {
                                         preprocessRequest(prettyPrint()),
                                         preprocessResponse(/*prettyPrint()*/ )))
                 .andExpect(status().isOk());
-        // @formatter:on
     }
 
     @Test
@@ -1531,7 +1438,6 @@ public class ApiDocumentation {
         codes.add(createCode(1, "3418", "Åsnes", dateRange));
         when(classificationServiceMock.findClassificationCodes(any(), any(), any(), any()))
                 .thenReturn(codes);
-        // @formatter:off
         this.mockMvc
                 .perform(
                         getWithContext(
@@ -1546,7 +1452,6 @@ public class ApiDocumentation {
                                         preprocessRequest(prettyPrint()),
                                         preprocessResponse(/*prettyPrint()*/ )))
                 .andExpect(status().isOk());
-        // @formatter:on
     }
 
     @Test
@@ -1557,7 +1462,6 @@ public class ApiDocumentation {
         codes.add(createCode(1, "0304", "Oslo", dateRange));
         when(classificationServiceMock.findClassificationCodes(any(), any(), any(), any()))
                 .thenReturn(codes);
-        // @formatter:off
         this.mockMvc
                 .perform(
                         getWithContext(
@@ -1566,7 +1470,6 @@ public class ApiDocumentation {
                                                 + "/codes?from=2015-01-01&to=2016-01-01&selectCodes=0301-0305,01*")
                                 .accept(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
-        // @formatter:on
     }
 
     @Test
@@ -1575,7 +1478,6 @@ public class ApiDocumentation {
         List<CodeDto> codes = createKommuneInndelingCodes(dateRange);
         when(classificationServiceMock.findClassificationCodes(any(), any(), any(), any()))
                 .thenReturn(codes);
-        // @formatter:off
         this.mockMvc
                 .perform(
                         getWithContext(
@@ -1590,7 +1492,6 @@ public class ApiDocumentation {
                                         preprocessRequest(prettyPrint()),
                                         preprocessResponse(/*prettyPrint()*/ )))
                 .andExpect(status().isOk());
-        // @formatter:on
     }
 
     @Test
@@ -1604,7 +1505,6 @@ public class ApiDocumentation {
                         any(Boolean.class), isNull(), any(Pageable.class)))
                 .then(i -> createPage(i.getArgument(2, Pageable.class), classifications));
 
-        // @formatter:off
         this.mockMvc
                 .perform(
                         getWithContext("/classifications?size=2")
@@ -1631,7 +1531,6 @@ public class ApiDocumentation {
                                                 .description("Total number of pages"),
                                         fieldWithPath("page.number").description("Page number"))))
                 .andExpect(status().isOk());
-        // @formatter:on
     }
 
     private ParameterDescriptor includeCodelistsDescription() {

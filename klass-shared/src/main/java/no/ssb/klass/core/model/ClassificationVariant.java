@@ -8,9 +8,7 @@ import jakarta.persistence.ManyToOne;
 
 import no.ssb.klass.core.util.Translatable;
 
-/**
- * A ClassificationVariant supports 2 levels only. The 2 levels are created when constructed.
- */
+/** A ClassificationVariant supports 2 levels only. The 2 levels are created when constructed. */
 @Entity
 @DiscriminatorValue("variant")
 public class ClassificationVariant extends StatisticalClassification {
@@ -19,15 +17,11 @@ public class ClassificationVariant extends StatisticalClassification {
     private static final String VARIANT_NAME_SEPERATOR_NN = " - variant av ";
     private static final String VARIANT_NAME_SEPERATOR_EN = " - variant of ";
 
-    @ManyToOne
-    private ClassificationVersion classificationVersion;
+    @ManyToOne private ClassificationVersion classificationVersion;
     private Translatable name;
-    @ManyToOne
-    private User contactPerson;
+    @ManyToOne private User contactPerson;
 
-    /**
-     * Creates a ClassificationVariant. Note that 2 levels are added.
-     */
+    /** Creates a ClassificationVariant. Note that 2 levels are added. */
     public ClassificationVariant(Translatable name, User contactPerson) {
         super(Translatable.empty());
         this.name = checkNotNull(name);
@@ -37,8 +31,7 @@ public class ClassificationVariant extends StatisticalClassification {
         super.addLevel(new Level(2));
     }
 
-    protected ClassificationVariant() {
-    }
+    protected ClassificationVariant() {}
 
     public void setClassificationVersion(ClassificationVersion classificationVersion) {
         this.classificationVersion = classificationVersion;
@@ -83,14 +76,14 @@ public class ClassificationVariant extends StatisticalClassification {
 
     public static String getVariantPostfix(Language language) {
         switch (language) {
-        case NB:
-            return VARIANT_NAME_SEPERATOR_NB;
-        case NN:
-            return VARIANT_NAME_SEPERATOR_NN;
-        case EN:
-            return VARIANT_NAME_SEPERATOR_EN;
-        default:
-            return "";
+            case NB:
+                return VARIANT_NAME_SEPERATOR_NB;
+            case NN:
+                return VARIANT_NAME_SEPERATOR_NN;
+            case EN:
+                return VARIANT_NAME_SEPERATOR_EN;
+            default:
+                return "";
         }
     }
 

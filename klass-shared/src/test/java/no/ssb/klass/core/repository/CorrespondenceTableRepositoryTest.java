@@ -1,10 +1,16 @@
 package no.ssb.klass.core.repository;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.google.common.collect.Lists;
+
+import jakarta.transaction.Transactional;
+
 import no.ssb.klass.core.config.ConfigurationProfiles;
 import no.ssb.klass.core.model.*;
 import no.ssb.klass.core.util.TranslatablePersistenceConverter;
 import no.ssb.klass.testutil.TestUtil;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,31 +23,25 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import jakarta.transaction.Transactional;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @ActiveProfiles({ConfigurationProfiles.POSTGRES_EMBEDDED, ConfigurationProfiles.MOCK_MAILSERVER})
 @Transactional
 public class CorrespondenceTableRepositoryTest {
-    @Autowired
-    private CorrespondenceTableRepository correspondenceTableRepository;
-    @Autowired
-    private ClassificationSeriesRepository classificationSeriesRepository;
-    @Autowired
-    private ClassificationFamilyRepository classificationFamilyRepository;
-    @Autowired
-    private UserRepository userRepository;
+    @Autowired private CorrespondenceTableRepository correspondenceTableRepository;
+    @Autowired private ClassificationSeriesRepository classificationSeriesRepository;
+    @Autowired private ClassificationFamilyRepository classificationFamilyRepository;
+    @Autowired private UserRepository userRepository;
     private User user;
     private ClassificationFamily classificationFamily;
 
     @BeforeEach
     public void setup() {
         user = userRepository.save(TestUtil.createUser());
-        classificationFamily = classificationFamilyRepository.save(TestUtil.createClassificationFamily("family"));
+        classificationFamily =
+                classificationFamilyRepository.save(TestUtil.createClassificationFamily("family"));
     }
 
     @Test
@@ -50,7 +50,8 @@ public class CorrespondenceTableRepositoryTest {
         CorrespondenceTable correspondenceTable = createAndSaveCorrespondenceTable("name");
 
         // when
-        List<CorrespondenceTable> result = correspondenceTableRepository.findBySource(correspondenceTable.getSource());
+        List<CorrespondenceTable> result =
+                correspondenceTableRepository.findBySource(correspondenceTable.getSource());
 
         // then
         assertEquals(1, result.size());
@@ -63,7 +64,8 @@ public class CorrespondenceTableRepositoryTest {
         ClassificationVersion notSourceVersion = correspondenceTable.getTarget();
 
         // when
-        List<CorrespondenceTable> result = correspondenceTableRepository.findBySource(notSourceVersion);
+        List<CorrespondenceTable> result =
+                correspondenceTableRepository.findBySource(notSourceVersion);
 
         // then
         assertEquals(0, result.size());
@@ -75,7 +77,8 @@ public class CorrespondenceTableRepositoryTest {
         CorrespondenceTable correspondenceTable = createAndSaveCorrespondenceTable("name");
 
         // when
-        List<CorrespondenceTable> result = correspondenceTableRepository.findByTarget(correspondenceTable.getTarget());
+        List<CorrespondenceTable> result =
+                correspondenceTableRepository.findByTarget(correspondenceTable.getTarget());
 
         // then
         assertEquals(1, result.size());
@@ -85,11 +88,13 @@ public class CorrespondenceTableRepositoryTest {
     public void findBySourceInAndTargetIn() {
         // given
         CorrespondenceTable correspondenceTable = createAndSaveCorrespondenceTable("name");
-        List<ClassificationVersion> versions = Lists.newArrayList(correspondenceTable.getSource(), correspondenceTable
-                .getTarget());
+        List<ClassificationVersion> versions =
+                Lists.newArrayList(
+                        correspondenceTable.getSource(), correspondenceTable.getTarget());
 
         // when
-        List<CorrespondenceTable> result = correspondenceTableRepository.findBySourceInAndTargetIn(versions, versions);
+        List<CorrespondenceTable> result =
+                correspondenceTableRepository.findBySourceInAndTargetIn(versions, versions);
 
         // then
         assertEquals(1, result.size());
@@ -102,7 +107,8 @@ public class CorrespondenceTableRepositoryTest {
         List<ClassificationVersion> versions = Lists.newArrayList(correspondenceTable.getSource());
 
         // when
-        List<CorrespondenceTable> result = correspondenceTableRepository.findBySourceInAndTargetIn(versions, versions);
+        List<CorrespondenceTable> result =
+                correspondenceTableRepository.findBySourceInAndTargetIn(versions, versions);
 
         // then
         assertEquals(0, result.size());
@@ -111,13 +117,16 @@ public class CorrespondenceTableRepositoryTest {
     private CorrespondenceTable createAndSaveCorrespondenceTable(String name) {
         ClassificationVersion source = createAndSaveClassificationWithVersion(name + 1);
         ClassificationVersion target = createAndSaveClassificationWithVersion(name + 2);
-        CorrespondenceTable correspondenceTable = TestUtil.createCorrespondenceTable(source, target);
+        CorrespondenceTable correspondenceTable =
+                TestUtil.createCorrespondenceTable(source, target);
         return correspondenceTableRepository.save(correspondenceTable);
     }
 
-    private ClassificationVersion createAndSaveClassificationWithVersion(String classificationName) {
+    private ClassificationVersion createAndSaveClassificationWithVersion(
+            String classificationName) {
         ClassificationSeries classification = TestUtil.createClassification(classificationName);
-        ClassificationVersion version = TestUtil.createClassificationVersion(TestUtil.anyDateRange());
+        ClassificationVersion version =
+                TestUtil.createClassificationVersion(TestUtil.anyDateRange());
         classification.addClassificationVersion(version);
         classification.setContactPerson(user);
         classificationFamily.addClassificationSeries(classification);
@@ -129,6 +138,5 @@ public class CorrespondenceTableRepositoryTest {
     @EnableAutoConfiguration
     @EntityScan(basePackageClasses = {CorrespondenceTable.class})
     @ComponentScan(basePackageClasses = TranslatablePersistenceConverter.class)
-    static class Config {
-    }
+    static class Config {}
 }

@@ -1,20 +1,22 @@
 package no.ssb.klass.api.applicationtest;
 
-import io.restassured.http.ContentType;
-import no.ssb.klass.api.util.RestConstants;
-import no.ssb.klass.testutil.TestDataProvider;
-import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpStatus;
-
 import static io.restassured.RestAssured.given;
+
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
+
+import io.restassured.http.ContentType;
+
+import no.ssb.klass.api.util.RestConstants;
+import no.ssb.klass.testutil.TestDataProvider;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
 
 /**
  * @author Mads Lundemo, SSB.
  */
 public class RestApiVariantIntegrationTest extends AbstractRestApiApplicationTest {
-    // @formatter:off
     @Test
     public void restServiceVariantJSON() {
         given().port(port)
@@ -320,5 +322,4 @@ public class RestApiVariantIntegrationTest extends AbstractRestApiApplicationTes
                                         + TestDataProvider.TEN_YEARS_LATER_DATE
                                         + "\",,\"\""));
     }
-    // @formatter:on
 }

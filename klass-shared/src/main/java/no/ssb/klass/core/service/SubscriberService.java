@@ -12,12 +12,14 @@ public interface SubscriberService {
 
     boolean removeTracking(String email, ClassificationSeries classification);
 
-    void sendVerificationMail(String email, URL verifySubscriptionUrl, ClassificationSeries classification) throws KlassEmailException;
+    void sendVerificationMail(
+            String email, URL verifySubscriptionUrl, ClassificationSeries classification)
+            throws KlassEmailException;
 
     Verification verifyTracking(String email, String token);
 
-    void informSubscribersOfUpdatedClassification(ClassificationSeries classification, String whatChanged,
-                                                  String descriptionOfChange);
+    void informSubscribersOfUpdatedClassification(
+            ClassificationSeries classification, String whatChanged, String descriptionOfChange);
 
     boolean containsTracking(String email, ClassificationSeries classification);
 }

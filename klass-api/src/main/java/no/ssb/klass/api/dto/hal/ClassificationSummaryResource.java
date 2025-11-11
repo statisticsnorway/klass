@@ -1,20 +1,21 @@
 package no.ssb.klass.api.dto.hal;
 
-import static java.util.stream.Collectors.*;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
-import java.util.Date;
-import java.util.List;
+import static java.util.stream.Collectors.*;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+import no.ssb.klass.api.controllers.ClassificationController;
+import no.ssb.klass.core.model.ClassificationSeries;
+import no.ssb.klass.core.model.Language;
+
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.core.Relation;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
-import no.ssb.klass.core.model.ClassificationSeries;
-import no.ssb.klass.core.model.Language;
-import no.ssb.klass.api.controllers.ClassificationController;
+import java.util.Date;
+import java.util.List;
 
 @Relation(collectionRelation = "classifications")
 @JsonPropertyOrder({"name", "id", "classificationType", "lastModified", "links"})
@@ -23,7 +24,8 @@ public class ClassificationSummaryResource extends KlassResource {
     private final String classificationType;
     private final Date lastModified;
 
-    protected ClassificationSummaryResource(Language language, ClassificationSeries classification) {
+    protected ClassificationSummaryResource(
+            Language language, ClassificationSeries classification) {
         super(classification.getId());
         this.name = classification.getName(language);
         this.classificationType = classification.getClassificationType().getDisplayName(language);
@@ -36,7 +38,9 @@ public class ClassificationSummaryResource extends KlassResource {
     }
 
     private Link createSelfLink(Long id) {
-        return linkTo(methodOn(ClassificationController.class).classification(id, null, null)).withSelfRel().expand();
+        return linkTo(methodOn(ClassificationController.class).classification(id, null, null))
+                .withSelfRel()
+                .expand();
     }
 
     public String getClassificationType() {
@@ -52,9 +56,10 @@ public class ClassificationSummaryResource extends KlassResource {
         return lastModified;
     }
 
-    public static List<ClassificationSummaryResource> convert(List<ClassificationSeries> classifications,
-            Language language) {
-        return classifications.stream().map(classification -> new ClassificationSummaryResource(language,
-                classification)).collect(toList());
+    public static List<ClassificationSummaryResource> convert(
+            List<ClassificationSeries> classifications, Language language) {
+        return classifications.stream()
+                .map(classification -> new ClassificationSummaryResource(language, classification))
+                .collect(toList());
     }
 }

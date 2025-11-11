@@ -1,8 +1,5 @@
 package no.ssb.klass.core.model;
 
-import java.util.Date;
-import java.util.UUID;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,17 +10,22 @@ import jakarta.persistence.Version;
 
 import no.ssb.klass.core.util.TimeUtil;
 
+import java.util.Date;
+import java.util.UUID;
+
 @MappedSuperclass
 public abstract class BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(nullable = false)
     private final String uuid;
+
     @Column(nullable = false)
     private Date lastModified;
-    @Version
-    private int version;
+
+    @Version private int version;
 
     protected BaseEntity() {
         uuid = UUID.randomUUID().toString();
@@ -72,9 +74,8 @@ public abstract class BaseEntity {
     }
 
     /**
-     * Any initialisation needed after Hibernate has recreated instance. Typically
-     * initialise any transient fields.
+     * Any initialisation needed after Hibernate has recreated instance. Typically initialise any
+     * transient fields.
      */
-    public void init() {
-    }
+    public void init() {}
 }

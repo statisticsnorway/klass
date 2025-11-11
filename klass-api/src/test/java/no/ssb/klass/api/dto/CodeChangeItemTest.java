@@ -1,13 +1,16 @@
 package no.ssb.klass.api.dto;
 
 import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.Test;
-import java.time.LocalDate;
+
 import no.ssb.klass.core.model.ClassificationItem;
 import no.ssb.klass.core.model.ConcreteClassificationItem;
 import no.ssb.klass.core.model.CorrespondenceMap;
 import no.ssb.klass.core.model.Language;
 import no.ssb.klass.core.util.Translatable;
+
+import org.junit.jupiter.api.Test;
+
+import java.time.LocalDate;
 
 public class CodeChangeItemTest {
     private static final String TARGET_CODE = "target";
@@ -20,8 +23,9 @@ public class CodeChangeItemTest {
         CorrespondenceMap correspondenceMap = createCorrespondenceMap();
 
         // when
-        CodeChangeItem subject = new CodeChangeItem(correspondenceMap, targetIsOldest, LocalDate.now(), Language
-                .getDefault());
+        CodeChangeItem subject =
+                new CodeChangeItem(
+                        correspondenceMap, targetIsOldest, LocalDate.now(), Language.getDefault());
 
         // then
         assertEquals(SOURCE_CODE, subject.getNewCode());
@@ -35,8 +39,9 @@ public class CodeChangeItemTest {
         CorrespondenceMap correspondenceMap = createCorrespondenceMap();
 
         // when
-        CodeChangeItem subject = new CodeChangeItem(correspondenceMap, sourceIsOldest, LocalDate.now(), Language
-                .getDefault());
+        CodeChangeItem subject =
+                new CodeChangeItem(
+                        correspondenceMap, sourceIsOldest, LocalDate.now(), Language.getDefault());
 
         // then
         assertEquals(SOURCE_CODE, subject.getOldCode());
@@ -50,7 +55,7 @@ public class CodeChangeItemTest {
     }
 
     private ClassificationItem createClassificationItem(String code) {
-        return new ConcreteClassificationItem(code, Translatable.create("name", Language.getDefault()), Translatable
-                .empty());
+        return new ConcreteClassificationItem(
+                code, Translatable.create("name", Language.getDefault()), Translatable.empty());
     }
 }

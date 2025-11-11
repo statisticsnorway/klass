@@ -1,9 +1,10 @@
 package no.ssb.klass.api.util;
 
-import com.google.common.base.Strings;
-import org.junit.jupiter.api.Test;
-
 import static org.assertj.core.api.Assertions.assertThat;
+
+import com.google.common.base.Strings;
+
+import org.junit.jupiter.api.Test;
 
 public class ExtractSsbSectionTest {
 

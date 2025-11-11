@@ -1,15 +1,14 @@
 package no.ssb.klass.core.service;
 
+import no.ssb.klass.core.model.User;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import no.ssb.klass.core.model.User;
-import no.ssb.klass.core.service.UserService;
-
-//@Service
+// @Service
 public class UserServiceMock implements UserService {
     private final Set<User> users;
 
@@ -29,6 +28,7 @@ public class UserServiceMock implements UserService {
     public List<User> getAllUsers() {
         return new ArrayList<>(users);
     }
+
     @Override
     public long getUsersCount() {
         return 1337;

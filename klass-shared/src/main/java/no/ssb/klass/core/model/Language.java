@@ -15,7 +15,6 @@ public enum Language {
         return name().toLowerCase();
     }
 
-
     Language(String displayName) {
         this.displayName = displayName;
     }
@@ -30,14 +29,14 @@ public enum Language {
 
     public static Language[] getPrioritizedOrder(Language primaryLanguage) {
         switch (primaryLanguage) {
-        case NB:
-            return new Language[] { NB, NN, EN };
-        case NN:
-            return new Language[] { NN, NB, EN };
-        case EN:
-            return new Language[] { EN, NB, NN };
-        default:
-            throw new IllegalArgumentException("Unknown language: " + primaryLanguage);
+            case NB:
+                return new Language[] {NB, NN, EN};
+            case NN:
+                return new Language[] {NN, NB, EN};
+            case EN:
+                return new Language[] {EN, NB, NN};
+            default:
+                throw new IllegalArgumentException("Unknown language: " + primaryLanguage);
         }
     }
 
@@ -52,5 +51,4 @@ public enum Language {
     public static Language getThirdLanguage(Language primaryLanguage) {
         return getPrioritizedOrder(primaryLanguage)[2];
     }
-
 }

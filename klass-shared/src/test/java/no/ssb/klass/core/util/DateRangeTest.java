@@ -1,15 +1,17 @@
 package no.ssb.klass.core.util;
 
-
-import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
+
 public class DateRangeTest {
 
     /**
+     *
+     *
      * <pre>
      *    subject   |------|
      *    other         |------|
@@ -29,6 +31,8 @@ public class DateRangeTest {
     }
 
     /**
+     *
+     *
      * <pre>
      *    subject   |------|
      *    other            |------|
@@ -48,6 +52,8 @@ public class DateRangeTest {
     }
 
     /**
+     *
+     *
      * <pre>
      *    subject          |------|
      *    other     |------|
@@ -68,6 +74,8 @@ public class DateRangeTest {
     }
 
     /**
+     *
+     *
      * <pre>
      *    subject       |------|
      *    other     |------|
@@ -89,6 +97,8 @@ public class DateRangeTest {
     }
 
     /**
+     *
+     *
      * <pre>
      *    subject   |---------|
      *    other      |-----|
@@ -110,6 +120,8 @@ public class DateRangeTest {
     }
 
     /**
+     *
+     *
      * <pre>
      *    subject    |-----|
      *    other    |--------|
@@ -131,6 +143,8 @@ public class DateRangeTest {
     }
 
     /**
+     *
+     *
      * <pre>
      *    subject   |------|
      *    other            |------|
@@ -139,11 +153,13 @@ public class DateRangeTest {
      */
     @Test
     public void subRangeNoOverlapTest() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            DateRange subject = DateRange.create("2012-01-01", "2014-01-01");
-            DateRange other = DateRange.create("2014-01-01", "2016-01-01");
-            subject.subRange(other);
-        });
+        Assertions.assertThrows(
+                IllegalArgumentException.class,
+                () -> {
+                    DateRange subject = DateRange.create("2012-01-01", "2014-01-01");
+                    DateRange other = DateRange.create("2014-01-01", "2016-01-01");
+                    subject.subRange(other);
+                });
     }
 
     @Test
@@ -163,19 +179,25 @@ public class DateRangeTest {
 
     @Test
     public void fromAfterTo() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            DateRange.create("2018-01-01", "2016-01-01");
-        });
+        Assertions.assertThrows(
+                IllegalArgumentException.class,
+                () -> {
+                    DateRange.create("2018-01-01", "2016-01-01");
+                });
     }
 
     @Test
     public void fromEqualTo() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            DateRange.create("2016-01-01", "2016-01-01");
-        });
+        Assertions.assertThrows(
+                IllegalArgumentException.class,
+                () -> {
+                    DateRange.create("2016-01-01", "2016-01-01");
+                });
     }
 
     /**
+     *
+     *
      * <pre>
      *    prev     |------|
      *    next            |------|
@@ -198,6 +220,8 @@ public class DateRangeTest {
     }
 
     /**
+     *
+     *
      * <pre>
      *    prev     |------|
      *    next              |------|
@@ -218,6 +242,8 @@ public class DateRangeTest {
     }
 
     /**
+     *
+     *
      * <pre>
      *    prev     |------|
      *    next          |------|

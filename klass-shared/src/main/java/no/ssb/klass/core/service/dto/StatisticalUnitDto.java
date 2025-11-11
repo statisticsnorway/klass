@@ -6,7 +6,7 @@ import no.ssb.klass.core.model.StatisticalUnit;
 public class StatisticalUnitDto implements StatisticalEntity {
     private final StatisticalUnit statisticalUnit;
     private final Long count;
-    
+
     public StatisticalUnitDto(StatisticalUnit statisticalUnit, Long count) {
         this.statisticalUnit = statisticalUnit;
         this.count = count;
@@ -19,7 +19,7 @@ public class StatisticalUnitDto implements StatisticalEntity {
     public Long getCount() {
         return count;
     }
-    
+
     public StatisticalUnit getStatisticalUnit() {
         return statisticalUnit;
     }

@@ -14,8 +14,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class ApplicationTestUtil {
 
-    @Autowired
-    private EntityManager entityManager;
+    @Autowired private EntityManager entityManager;
 
     @Autowired(required = false)
     private OpenSearchRestTemplate openSearchRestTemplate;
@@ -42,8 +41,16 @@ public class ApplicationTestUtil {
     public void clearSearch() {
         if (openSearchRestTemplate != null) {
             try {
-                openSearchRestTemplate.indexOps(org.springframework.data.elasticsearch.core.mapping.IndexCoordinates.of(indexName)).delete();
-                openSearchRestTemplate.indexOps(org.springframework.data.elasticsearch.core.mapping.IndexCoordinates.of(indexName)).create();
+                openSearchRestTemplate
+                        .indexOps(
+                                org.springframework.data.elasticsearch.core.mapping.IndexCoordinates
+                                        .of(indexName))
+                        .delete();
+                openSearchRestTemplate
+                        .indexOps(
+                                org.springframework.data.elasticsearch.core.mapping.IndexCoordinates
+                                        .of(indexName))
+                        .create();
             } catch (Exception e) {
                 // Ignore if mock or not configured
             }

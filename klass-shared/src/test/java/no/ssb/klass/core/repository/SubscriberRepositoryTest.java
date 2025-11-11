@@ -1,10 +1,15 @@
 package no.ssb.klass.core.repository;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import jakarta.transaction.Transactional;
+
 import no.ssb.klass.core.config.ConfigurationProfiles;
 import no.ssb.klass.core.model.ClassificationSeries;
 import no.ssb.klass.core.model.Subscriber;
 import no.ssb.klass.core.util.TranslatablePersistenceConverter;
 import no.ssb.klass.testutil.TestUtil;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,11 +22,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import jakarta.transaction.Transactional;
 import java.net.URL;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -31,17 +33,13 @@ public class SubscriberRepositoryTest {
 
     static final String EMAIL = "email@server.com";
 
-    @Autowired
-    private SubscriberRepository subject;
+    @Autowired private SubscriberRepository subject;
 
-    @Autowired
-    private ClassificationSeriesRepository classificationSeriesRepository;
+    @Autowired private ClassificationSeriesRepository classificationSeriesRepository;
 
-    @Autowired
-    private ClassificationFamilyRepository classificationFamilyRepository;
+    @Autowired private ClassificationFamilyRepository classificationFamilyRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+    @Autowired private UserRepository userRepository;
 
     private Subscriber subscriber;
     private Long subscriberId;
@@ -57,8 +55,9 @@ public class SubscriberRepositoryTest {
     @Test
     public void testEntity() {
         // when
-        Subscriber result = subject.findById(subscriberId).orElseThrow(() ->
-                new RuntimeException("Subscriber not found"));
+        Subscriber result =
+                subject.findById(subscriberId)
+                        .orElseThrow(() -> new RuntimeException("Subscriber not found"));
         // then
         assertEquals(subscriberId, result.getId());
     }
@@ -94,8 +93,9 @@ public class SubscriberRepositoryTest {
     private ClassificationSeries createAndSaveClassification() {
         ClassificationSeries classification = TestUtil.createClassification("anyclassification");
         classification.setContactPerson(userRepository.save(TestUtil.createUser()));
-        classificationFamilyRepository.save(TestUtil.createClassificationFamily("anyfamily")).addClassificationSeries(
-                classification);
+        classificationFamilyRepository
+                .save(TestUtil.createClassificationFamily("anyfamily"))
+                .addClassificationSeries(classification);
         classificationSeriesRepository.save(classification);
         return classification;
     }
@@ -104,8 +104,5 @@ public class SubscriberRepositoryTest {
     @EnableAutoConfiguration
     @EntityScan(basePackageClasses = {Subscriber.class, TranslatablePersistenceConverter.class})
     @ComponentScan(basePackageClasses = TranslatablePersistenceConverter.class)
-    static class Config {
-
-    }
-
+    static class Config {}
 }

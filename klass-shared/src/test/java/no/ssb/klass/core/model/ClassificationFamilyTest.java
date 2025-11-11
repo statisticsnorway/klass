@@ -2,12 +2,12 @@ package no.ssb.klass.core.model;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import no.ssb.klass.testutil.TestUtil;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.io.ClassPathResource;
-
-import no.ssb.klass.testutil.TestUtil;
 
 public class ClassificationFamilyTest {
     private ClassificationFamily subject;
@@ -34,21 +34,31 @@ public class ClassificationFamilyTest {
         // given
         final String allSections = null;
         final ClassificationType allClassificationTypes = null;
-        ClassificationFamily classificationFamily = TestUtil.createClassificationFamily("classificationFamily");
+        ClassificationFamily classificationFamily =
+                TestUtil.createClassificationFamily("classificationFamily");
         ClassificationSeries classification = TestUtil.createClassification("classification");
         classificationFamily.addClassificationSeries(classification);
 
         // then
         assertEquals(1, getClassificationSeries(allSections, allClassificationTypes));
-        assertEquals(1, getClassificationSeries(allSections, classification.getClassificationType()));
-        assertEquals(0, getClassificationSeries(allSections, TestUtil.oppositeClassificationType(classification
-                .getClassificationType())));
-        assertEquals(1, getClassificationSeries(classification.getContactPerson().getSection(),
-                allClassificationTypes));
+        assertEquals(
+                1, getClassificationSeries(allSections, classification.getClassificationType()));
+        assertEquals(
+                0,
+                getClassificationSeries(
+                        allSections,
+                        TestUtil.oppositeClassificationType(
+                                classification.getClassificationType())));
+        assertEquals(
+                1,
+                getClassificationSeries(
+                        classification.getContactPerson().getSection(), allClassificationTypes));
         assertEquals(0, getClassificationSeries("unknown section", allClassificationTypes));
     }
 
     private long getClassificationSeries(String section, ClassificationType classificationType) {
-        return subject.getClassificationSeriesBySectionAndClassificationType(section, classificationType).size();
+        return subject.getClassificationSeriesBySectionAndClassificationType(
+                        section, classificationType)
+                .size();
     }
 }

@@ -1,7 +1,24 @@
 package no.ssb.klass.core.model;
 
 import static com.google.common.base.Preconditions.*;
+
 import static java.util.stream.Collectors.*;
+
+import com.google.common.base.Strings;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.OneToMany;
+
+import no.ssb.klass.core.util.DateRange;
+import no.ssb.klass.core.util.DraftUtil;
+import no.ssb.klass.core.util.TimeUtil;
+import no.ssb.klass.core.util.Translatable;
+import no.ssb.klass.core.util.TranslatablePersistenceConverter;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -12,38 +29,35 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.StringJoiner;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.OneToMany;
-
-import com.google.common.base.Strings;
-
-import no.ssb.klass.core.util.DateRange;
-import no.ssb.klass.core.util.DraftUtil;
-import no.ssb.klass.core.util.TimeUtil;
-import no.ssb.klass.core.util.Translatable;
-import no.ssb.klass.core.util.TranslatablePersistenceConverter;
-
 @Entity
-public abstract class StatisticalClassification extends BaseEntity implements ClassificationEntityOperations,
-        Publishable, Draftable {
+public abstract class StatisticalClassification extends BaseEntity
+        implements ClassificationEntityOperations, Publishable, Draftable {
     public static final int FIRST_LEVEL_NUMBER = 1;
+
     @Column(columnDefinition = "text", nullable = false)
     @Convert(converter = TranslatablePersistenceConverter.class)
     protected Translatable introduction;
+
     private Published published;
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "statisticalClassification")
+
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            mappedBy = "statisticalClassification")
     private final List<Level> levels;
+
     @OneToMany(mappedBy = "source")
     private final List<CorrespondenceTable> correspondenceTables;
+
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "statisticalclassification_changelog", joinColumns = @JoinColumn(name = "statisticalclassification_id"), inverseJoinColumns = @JoinColumn(name = "changelog_id"))
+    @JoinTable(
+            name = "statisticalclassification_changelog",
+            joinColumns = @JoinColumn(name = "statisticalclassification_id"),
+            inverseJoinColumns = @JoinColumn(name = "changelog_id"))
     private final List<Changelog> changelogs;
+
     private transient List<ClassificationItem> deletedClassificationItems;
+
     @Column(nullable = false)
     private boolean deleted;
 
@@ -113,8 +127,10 @@ public abstract class StatisticalClassification extends BaseEntity implements Cl
             }
         }
         // OwnerClassification is null during import
-        if (getOwnerClassification() != null && getOwnerClassification().getName(language).isEmpty()) {
-            stringJoiner.add(" Kodeverket må ha navn på ")
+        if (getOwnerClassification() != null
+                && getOwnerClassification().getName(language).isEmpty()) {
+            stringJoiner
+                    .add(" Kodeverket må ha navn på ")
                     .add(language.getDisplayName().toLowerCase())
                     .add(" før en tilhørende versjon kan publiseres med samme språk");
         }
@@ -126,8 +142,8 @@ public abstract class StatisticalClassification extends BaseEntity implements Cl
 
     public List<CorrespondenceTable> getCorrespondenceTables() {
         return correspondenceTables.stream()
-                .filter(correspondenceTable -> !correspondenceTable.isThisOrSourceOrTargetDeleted()).collect(
-                        toList());
+                .filter(correspondenceTable -> !correspondenceTable.isThisOrSourceOrTargetDeleted())
+                .collect(toList());
     }
 
     public List<CorrespondenceTable> getPublicCorrespondenceTables() {
@@ -145,7 +161,8 @@ public abstract class StatisticalClassification extends BaseEntity implements Cl
         correspondenceTables.add(correspondenceTable);
     }
 
-    public List<CorrespondenceTable> getCorrespondenceTablesWithTarget(ClassificationSeries classification) {
+    public List<CorrespondenceTable> getCorrespondenceTablesWithTarget(
+            ClassificationSeries classification) {
         checkNotNull(classification);
         List<CorrespondenceTable> tables = new ArrayList<>();
         for (CorrespondenceTable correspondenceTable : getCorrespondenceTables()) {
@@ -156,7 +173,8 @@ public abstract class StatisticalClassification extends BaseEntity implements Cl
         return tables;
     }
 
-    public List<CorrespondenceTable> getCorrespondenceTablesWithTargetVersion(ClassificationVersion version) {
+    public List<CorrespondenceTable> getCorrespondenceTablesWithTargetVersion(
+            ClassificationVersion version) {
         checkNotNull(version);
         List<CorrespondenceTable> tables = new ArrayList<>();
         for (CorrespondenceTable correspondenceTable : getCorrespondenceTables()) {
@@ -190,17 +208,21 @@ public abstract class StatisticalClassification extends BaseEntity implements Cl
     }
 
     public List<ClassificationItem> getAllClassificationItems() {
-        return levels.stream().flatMap(level -> level.getClassificationItems().stream()).sorted().collect(toList());
+        return levels.stream()
+                .flatMap(level -> level.getClassificationItems().stream())
+                .sorted()
+                .collect(toList());
     }
 
     // for the sake of find item performance
     private List<ClassificationItem> getAllClassificationItemsNoSort() {
-        return levels.parallelStream().flatMap(level -> level.getClassificationItems().stream()).collect(toList());
+        return levels.parallelStream()
+                .flatMap(level -> level.getClassificationItems().stream())
+                .collect(toList());
     }
 
     /**
-     * Gets classificationItems for level 1 first, then classificationItems for
-     * level 2, and so on
+     * Gets classificationItems for level 1 first, then classificationItems for level 2, and so on
      */
     public List<ClassificationItem> getAllClassificationItemsLevelForLevel() {
         List<ClassificationItem> items = new ArrayList<>();
@@ -214,18 +236,24 @@ public abstract class StatisticalClassification extends BaseEntity implements Cl
 
     public ClassificationItem findItem(String code) {
         checkNotNull(code);
-        return getAllClassificationItemsNoSort().stream().filter(item -> item.getCode().equals(code)).findFirst()
+        return getAllClassificationItemsNoSort().stream()
+                .filter(item -> item.getCode().equals(code))
+                .findFirst()
                 .orElseThrow(
-                        () -> new IllegalArgumentException("No item found with code: " + code
-                                + "in StatisticalClassification "
-                                + getId()));
+                        () ->
+                                new IllegalArgumentException(
+                                        "No item found with code: "
+                                                + code
+                                                + "in StatisticalClassification "
+                                                + getId()));
     }
 
     public void addLevel(Level newLevel) {
         checkNotNull(newLevel);
-        if (levels.stream().anyMatch(level -> level.getLevelNumber() == newLevel.getLevelNumber())) {
-            throw new IllegalArgumentException("A level is already present with level number: " + newLevel
-                    .getLevelNumber());
+        if (levels.stream()
+                .anyMatch(level -> level.getLevelNumber() == newLevel.getLevelNumber())) {
+            throw new IllegalArgumentException(
+                    "A level is already present with level number: " + newLevel.getLevelNumber());
         }
         levels.add(newLevel);
         newLevel.setStatisticalClassification(this);
@@ -240,24 +268,18 @@ public abstract class StatisticalClassification extends BaseEntity implements Cl
         return level;
     }
 
-    /**
-     * Finds level with levelNumber == 1
-     */
+    /** Finds level with levelNumber == 1 */
     public Optional<Level> getFirstLevel() {
         return levels.stream().filter(l -> l.getLevelNumber() == FIRST_LEVEL_NUMBER).findFirst();
     }
 
-    /**
-     * Finds level with levelNumber == level.levelNumber + 1
-     */
+    /** Finds level with levelNumber == level.levelNumber + 1 */
     public Optional<Level> getNextLevel(Level level) {
         int nextLevelNumber = level.getLevelNumber() + 1;
         return levels.stream().filter(l -> l.getLevelNumber() == nextLevelNumber).findFirst();
     }
 
-    /**
-     * Checks if level has highest levelNumber
-     */
+    /** Checks if level has highest levelNumber */
     public boolean isLastLevel(Level level) {
         return level.getLevelNumber() == getLastLevelNumber();
     }
@@ -273,47 +295,55 @@ public abstract class StatisticalClassification extends BaseEntity implements Cl
     /**
      * Deletes a level. Level must be empty, i.e. not have any classificationItems
      *
-     * @param level
-     *              level to delete
+     * @param level level to delete
      */
     public void deleteLevel(Level level) {
-        checkArgument(level.getClassificationItems().isEmpty(),
+        checkArgument(
+                level.getClassificationItems().isEmpty(),
                 "Can not remove level that has classification items, delete classification items first");
         levels.remove(level);
     }
 
-    /**
-     * Checks if first level
-     */
+    /** Checks if first level */
     public boolean isFirstLevel(Level level) {
         return level.getLevelNumber() == FIRST_LEVEL_NUMBER;
     }
 
     public boolean hasClassificationItem(String code) {
-        return getAllClassificationItemsNoSort().stream().anyMatch(item -> item.getCode().equals(code));
+        return getAllClassificationItemsNoSort().stream()
+                .anyMatch(item -> item.getCode().equals(code));
     }
 
     public Optional<ClassificationItem> getClassificationItem(String code) {
-        return getAllClassificationItemsNoSort().stream().filter(item -> item.getCode().equals(code)).findFirst();
+        return getAllClassificationItemsNoSort().stream()
+                .filter(item -> item.getCode().equals(code))
+                .findFirst();
     }
 
-    public void addClassificationItem(ClassificationItem classificationItem, int levelNumber,
-            ClassificationItem parent) {
+    public void addClassificationItem(
+            ClassificationItem classificationItem, int levelNumber, ClassificationItem parent) {
         if (hasClassificationItem(classificationItem.getCode())) {
-            throw new IllegalArgumentException("ClassificationItem already exist with code: " + classificationItem
-                    .getCode());
+            throw new IllegalArgumentException(
+                    "ClassificationItem already exist with code: " + classificationItem.getCode());
         }
 
         if (parent == null && levelNumber != FIRST_LEVEL_NUMBER) {
-            throw new IllegalArgumentException("ClassificationItem: " + classificationItem.getCode()
-                    + " with no parent must be at level " + FIRST_LEVEL_NUMBER + ", was level " + levelNumber);
+            throw new IllegalArgumentException(
+                    "ClassificationItem: "
+                            + classificationItem.getCode()
+                            + " with no parent must be at level "
+                            + FIRST_LEVEL_NUMBER
+                            + ", was level "
+                            + levelNumber);
         }
 
         if (parent != null && levelNumber == FIRST_LEVEL_NUMBER) {
-            throw new IllegalArgumentException("ClassificationItem with parent can not be at first level");
+            throw new IllegalArgumentException(
+                    "ClassificationItem with parent can not be at first level");
         }
         if (parent != null && Objects.equals(classificationItem.getCode(), parent.getCode())) {
-            throw new IllegalArgumentException("ClassificationItem and parent can not have the same code");
+            throw new IllegalArgumentException(
+                    "ClassificationItem and parent can not have the same code");
         }
 
         classificationItem.setParent(parent);
@@ -334,12 +364,14 @@ public abstract class StatisticalClassification extends BaseEntity implements Cl
         classificationItem.getLevel().removeClassificationItem(classificationItem);
     }
 
-    public List<ClassificationItem> getChildrenOfClassificationItem(ClassificationItem classificationItem) {
+    public List<ClassificationItem> getChildrenOfClassificationItem(
+            ClassificationItem classificationItem) {
         checkNotNull(classificationItem);
         Optional<Level> nextLevel = getNextLevel(classificationItem.getLevel());
         if (nextLevel.isPresent()) {
-            return nextLevel.get().getClassificationItems().stream().filter(item -> item.getParent()
-                    .equals(classificationItem)).collect(toList());
+            return nextLevel.get().getClassificationItems().stream()
+                    .filter(item -> item.getParent().equals(classificationItem))
+                    .collect(toList());
         }
         return Collections.emptyList();
     }
@@ -353,9 +385,16 @@ public abstract class StatisticalClassification extends BaseEntity implements Cl
     }
 
     public Level getLevel(int levelNumber) {
-        return levels.stream().filter(l -> l.getLevelNumber() == levelNumber).findAny().orElseThrow(
-                () -> new IllegalArgumentException("No level with levelNumber: " + levelNumber + ", in: "
-                        + getNameInPrimaryLanguage()));
+        return levels.stream()
+                .filter(l -> l.getLevelNumber() == levelNumber)
+                .findAny()
+                .orElseThrow(
+                        () ->
+                                new IllegalArgumentException(
+                                        "No level with levelNumber: "
+                                                + levelNumber
+                                                + ", in: "
+                                                + getNameInPrimaryLanguage()));
     }
 
     public abstract boolean isIncludeShortName();
@@ -384,8 +423,7 @@ public abstract class StatisticalClassification extends BaseEntity implements Cl
     }
 
     /**
-     * Checks if any concrete classificationItem has translation of officialName for
-     * given language.
+     * Checks if any concrete classificationItem has translation of officialName for given language.
      *
      * @param language
      * @return true if has any translation for language, false otherwise
@@ -459,7 +497,8 @@ public abstract class StatisticalClassification extends BaseEntity implements Cl
     }
 
     public Boolean isCurrentVersion() {
-        return !isDraft() && (LocalDate.now().isEqual(validFrom) || LocalDate.now().isAfter(validFrom))
+        return !isDraft()
+                && (LocalDate.now().isEqual(validFrom) || LocalDate.now().isAfter(validFrom))
                 && (LocalDate.now().isBefore(validTo));
     }
 }

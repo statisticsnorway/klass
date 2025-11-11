@@ -1,5 +1,9 @@
 package no.ssb.klass.api.migration;
 
+import static no.ssb.klass.api.migration.MigrationTestConstants.*;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
 import io.restassured.path.xml.XmlPath;
 import io.restassured.response.Response;
 
@@ -11,9 +15,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
-import static no.ssb.klass.api.migration.MigrationTestConstants.*;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class MigrationTestUtils {
 
@@ -31,11 +32,12 @@ public class MigrationTestUtils {
             URL sourceUrl = new URL(sourceHref);
             URL targetUrl = new URL(targetHref);
 
-            if(!sourceUrl.getPath().equals(targetUrl.getPath())){
+            if (!sourceUrl.getPath().equals(targetUrl.getPath())) {
                 System.out.println(
-                        "Url path comparison issue: \nsource url path: " +
-                                sourceUrl.getPath() + "\ntarget url path: " +
-                                targetUrl.getPath());
+                        "Url path comparison issue: \nsource url path: "
+                                + sourceUrl.getPath()
+                                + "\ntarget url path: "
+                                + targetUrl.getPath());
             }
             return sourceUrl.getPath().equals(targetUrl.getPath());
         } catch (Exception e) {
@@ -52,8 +54,9 @@ public class MigrationTestUtils {
      */
     private static String getDate(Object dateTime) {
         String dateTimeStr = Objects.toString(dateTime, "");
-        OffsetDateTime odt = OffsetDateTime.parse(dateTimeStr,
-                DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ"));
+        OffsetDateTime odt =
+                OffsetDateTime.parse(
+                        dateTimeStr, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ"));
 
         return odt.toLocalDate().format(formatter);
     }
@@ -71,11 +74,10 @@ public class MigrationTestUtils {
         return parts[0];
     }
 
-
     /**
      * Navigates a nested map using a dot-separated path and returns the value at that path.
      *
-     * @param map  the root map to search within
+     * @param map the root map to search within
      * @param path dot-separated keys indicating the nested path
      * @return the value found at the given path, or null if any key is missing or not a map
      */
@@ -95,30 +97,58 @@ public class MigrationTestUtils {
 
     /**
      * Compare error response from source and target API.
-     * <p>
-     * Print the status code.
+     *
+     * <p>Print the status code.
+     *
      * @param sourceResponse Response object from source Api
      * @param targetResponse Response object from target Api
      */
-    public static boolean compareError(Integer ID, Response sourceResponse, Response targetResponse) {
+    public static boolean compareError(
+            Integer ID, Response sourceResponse, Response targetResponse) {
         Object sourceBody = sourceResponse.getBody().asString();
         Object targetBody = targetResponse.getBody().asString();
         System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
-        if (sourceResponse.getStatusCode() != targetResponse.getStatusCode() || !sourceBody.equals(targetBody)){
-           String sourceError = (ID != null)? ("Source: ID: " + ID + ", Code: " + sourceResponse.getStatusCode() + ", " + sourceBody) : ("Source: " +  "Code: " + sourceResponse.getStatusCode() + ", " + sourceBody);
-            String targetError = (ID != null)? ("Target: ID: " + ID + ", Code: " + targetResponse.getStatusCode() + ", " + targetBody) : ("Target: " + "Code: " + targetResponse.getStatusCode() + ", " + targetBody);
+        if (sourceResponse.getStatusCode() != targetResponse.getStatusCode()
+                || !sourceBody.equals(targetBody)) {
+            String sourceError =
+                    (ID != null)
+                            ? ("Source: ID: "
+                                    + ID
+                                    + ", Code: "
+                                    + sourceResponse.getStatusCode()
+                                    + ", "
+                                    + sourceBody)
+                            : ("Source: "
+                                    + "Code: "
+                                    + sourceResponse.getStatusCode()
+                                    + ", "
+                                    + sourceBody);
+            String targetError =
+                    (ID != null)
+                            ? ("Target: ID: "
+                                    + ID
+                                    + ", Code: "
+                                    + targetResponse.getStatusCode()
+                                    + ", "
+                                    + targetBody)
+                            : ("Target: "
+                                    + "Code: "
+                                    + targetResponse.getStatusCode()
+                                    + ", "
+                                    + targetBody);
 
-            System.out.println(String.join(", ", sourceError) + "\n" + String.join(", ", targetError));
+            System.out.println(
+                    String.join(", ", sourceError) + "\n" + String.join(", ", targetError));
             return false;
         }
-       return true;
+        return true;
     }
 
     /**
      * Generates a random date between the given start and end dates (inclusive).
      *
      * @param startDate the start of the date range
-     * @param endDate   the end of the date range
+     * @param endDate the end of the date range
      * @return a random {@link LocalDate} between startDate and endDate
      */
     public static LocalDate generateRandomDate(LocalDate startDate, LocalDate endDate) {
@@ -127,7 +157,6 @@ public class MigrationTestUtils {
         long randomDay = random.nextLong(daysBetween + 1);
         return startDate.plusDays(randomDay);
     }
-
 
     /**
      * Generates a random integer between 0 (inclusive) and the specified upper bound (exclusive).
@@ -147,7 +176,8 @@ public class MigrationTestUtils {
      * @param targetStatusCode Status code value of request to targetHost
      * @param path Path to the request
      */
-    public static void assertStatusCodesEqual(int sourceStatusCode, int targetStatusCode, String path){
+    public static void assertStatusCodesEqual(
+            int sourceStatusCode, int targetStatusCode, String path) {
 
         assertThat(sourceStatusCode)
                 .withFailMessage(FAIL_MESSAGE, path, sourceStatusCode, targetStatusCode)
@@ -157,22 +187,21 @@ public class MigrationTestUtils {
     /**
      * Converts a list of maps into a map indexed by the specified field's value.
      *
-     * @param list  the list of maps to be transformed
+     * @param list the list of maps to be transformed
      * @param field the key to use as the new map's keys
-     * @return a map where each key is the value of the specified field from the list's items,
-     *         and the value is the corresponding map from the list
+     * @return a map where each key is the value of the specified field from the list's items, and
+     *     the value is the corresponding map from the list
      */
-    private static Map<Object, Map<String, Object>> mapByField(List<Map<String, Object>> list, String field) {
+    private static Map<Object, Map<String, Object>> mapByField(
+            List<Map<String, Object>> list, String field) {
         return list.stream()
                 .filter(item -> item.containsKey(field) && item.get(field) != null)
-                .collect(Collectors.toMap(
-                        item -> item.get(field),
-                        Function.identity()
-                ));
+                .collect(Collectors.toMap(item -> item.get(field), Function.identity()));
     }
 
     /**
      * Assert response is not null.
+     *
      * @param response Response object from Api
      */
     public static void assertApiResponseIsNotNull(Response response) {
@@ -181,11 +210,13 @@ public class MigrationTestUtils {
 
     /**
      * Validate one single path object.
+     *
      * @param sourceResponse Response object from source Api
      * @param targetResponse Response object from target Api
      * @param pathName Name for single path
      */
-    public static void validateObject(Response sourceResponse, Response targetResponse, String pathName) {
+    public static void validateObject(
+            Response sourceResponse, Response targetResponse, String pathName) {
         Object sourceField = sourceResponse.path(pathName);
         Object targetField = targetResponse.path(pathName);
 
@@ -198,17 +229,21 @@ public class MigrationTestUtils {
         if (pathName.equals(OWNING_SECTION)) {
             String sourceSectionNumber = getSectionNumber(sourceField);
             String targetSectionNumber = getSectionNumber(targetField);
-            System.out.println("Comparing owning section: " + sourceSectionNumber + " -> " + targetSectionNumber);
-            assertThat(sourceSectionNumber).withFailMessage(FAIL_MESSAGE,
-                            pathName, sourceField, targetField)
+            System.out.println(
+                    "Comparing owning section: "
+                            + sourceSectionNumber
+                            + " -> "
+                            + targetSectionNumber);
+            assertThat(sourceSectionNumber)
+                    .withFailMessage(FAIL_MESSAGE, pathName, sourceField, targetField)
                     .isEqualTo(targetSectionNumber);
-        }
-
-        else if (pathName.endsWith(HREF)) {
+        } else if (pathName.endsWith(HREF)) {
             String sourceHref = Objects.toString(sourceField, "");
             String targetHref = Objects.toString(targetField, "");
             if (sourceHref.isEmpty()) {
-                assertThat(sourceHref).withFailMessage(FAIL_MESSAGE, pathName, null, targetField).isEqualTo(targetHref);
+                assertThat(sourceHref)
+                        .withFailMessage(FAIL_MESSAGE, pathName, null, targetField)
+                        .isEqualTo(targetHref);
                 return;
             }
             System.out.println(sourceHref + " -> " + targetHref);
@@ -217,18 +252,22 @@ public class MigrationTestUtils {
                     .isTrue();
         } else {
             System.out.println(sourceField + "-> " + targetField);
-            assertThat(sourceField).withFailMessage(FAIL_MESSAGE, pathName, sourceField, targetField).isEqualTo(targetField);
+            assertThat(sourceField)
+                    .withFailMessage(FAIL_MESSAGE, pathName, sourceField, targetField)
+                    .isEqualTo(targetField);
         }
-
     }
 
     /**
-     * Validates that the list specified by [pathListName] from both API responses contains the same elements, regardless of order.
+     * Validates that the list specified by [pathListName] from both API responses contains the same
+     * elements, regardless of order.
+     *
      * @param sourceResponse Response object from source Api
      * @param targetResponse Response object from target Api
      * @param pathListName List of path names in nested list
      */
-    public static void validateList(Response sourceResponse, Response targetResponse, String pathListName) {
+    public static void validateList(
+            Response sourceResponse, Response targetResponse, String pathListName) {
 
         ArrayList<String> sourceList = sourceResponse.path(pathListName);
         ArrayList<String> targetList = targetResponse.path(pathListName);
@@ -249,30 +288,28 @@ public class MigrationTestUtils {
         System.out.println("List sizes: " + sourceList.size() + " -> " + targetList.size());
 
         assertThat(sourceList.size())
-                .withFailMessage(FAIL_MESSAGE,
-                        pathListName, sourceList.size(), targetList.size())
+                .withFailMessage(FAIL_MESSAGE, pathListName, sourceList.size(), targetList.size())
                 .isEqualTo(targetList.size());
 
         assertThat(sourceList.containsAll(targetList))
-                .withFailMessage(FAIL_MESSAGE,
-                        pathListName, sourceList, targetList)
+                .withFailMessage(FAIL_MESSAGE, pathListName, sourceList, targetList)
                 .isTrue();
 
         assertThat(targetList.containsAll(sourceList))
-                .withFailMessage(FAIL_MESSAGE,
-                        pathListName, sourceList, targetList)
+                .withFailMessage(FAIL_MESSAGE, pathListName, sourceList, targetList)
                 .isTrue();
     }
 
     /**
-     * Temporary validation for migrated section names.
-     * Ensure migrated sections follow the rules for migration.
-     * When core method fetches section name from code list this validation is unnecessary.
+     * Temporary validation for migrated section names. Ensure migrated sections follow the rules
+     * for migration. When core method fetches section name from code list this validation is
+     * unnecessary.
      */
-    public static void validateMigratedSsbSections(Response sourceResponse, Response targetResponse) {
+    public static void validateMigratedSsbSections(
+            Response sourceResponse, Response targetResponse) {
         String pathListName = EMBEDDED_SSB_SECTIONS;
         ArrayList<Map<String, Object>> sourceList = sourceResponse.path(pathListName);
-        ArrayList<Map<String, Object>>targetList = targetResponse.path(pathListName);
+        ArrayList<Map<String, Object>> targetList = targetResponse.path(pathListName);
 
         System.out.println("Checking pathname: " + pathListName);
 
@@ -290,33 +327,31 @@ public class MigrationTestUtils {
         System.out.println("List sizes: " + sourceList.size() + " -> " + targetList.size());
 
         assertThat(sourceList.size())
-                .withFailMessage(FAIL_MESSAGE,
-                        pathListName, sourceList.size(), targetList.size())
+                .withFailMessage(FAIL_MESSAGE, pathListName, sourceList.size(), targetList.size())
                 .isEqualTo(targetList.size());
 
-        for (int i = 0; i < sourceList.size(); i++){
+        for (int i = 0; i < sourceList.size(); i++) {
             String sourceName = getSectionNumber(sourceList.get(i).get("name").toString());
             String targetName = getSectionNumber(targetList.get(i).get("name").toString());
             System.out.println("Checking " + sourceName + " -> " + targetName);
-            if(sourceName != null){
-                assertThat(sourceName).withFailMessage(
-                        FAIL_MESSAGE,
-                        pathListName,
-                        sourceName,
-                        targetName).isEqualTo(targetName);
+            if (sourceName != null) {
+                assertThat(sourceName)
+                        .withFailMessage(FAIL_MESSAGE, pathListName, sourceName, targetName)
+                        .isEqualTo(targetName);
             }
         }
     }
 
-
     /**
-     *  Validates that the values of fields specified in [pathNames] from two API response bodies are equal.
-     *  Handles url paths.
+     * Validates that the values of fields specified in [pathNames] from two API response bodies are
+     * equal. Handles url paths.
+     *
      * @param sourceResponse Response object from source Api
      * @param targetResponse Response object from target Api
      * @param pathNames List of path names
      */
-    public static void validateItems(Response sourceResponse, Response targetResponse, List<String> pathNames) {
+    public static void validateItems(
+            Response sourceResponse, Response targetResponse, List<String> pathNames) {
 
         for (String pathName : pathNames) {
             System.out.println("Checking pathname: " + pathName);
@@ -330,20 +365,24 @@ public class MigrationTestUtils {
                         .isNull();
             }
 
-            if (pathName.equals(OWNING_SECTION)){
+            if (pathName.equals(OWNING_SECTION)) {
                 String sourceSectionNumber = getSectionNumber(sourceField);
                 String targetSectionNumber = getSectionNumber(targetField);
-                System.out.println("Comparing owning section: " + sourceSectionNumber + " -> " + targetSectionNumber);
-                assertThat(sourceSectionNumber).withFailMessage(FAIL_MESSAGE,
-                                pathName, sourceField, targetField)
+                System.out.println(
+                        "Comparing owning section: "
+                                + sourceSectionNumber
+                                + " -> "
+                                + targetSectionNumber);
+                assertThat(sourceSectionNumber)
+                        .withFailMessage(FAIL_MESSAGE, pathName, sourceField, targetField)
                         .isEqualTo(targetSectionNumber);
-            }
-
-            else if (pathName.endsWith(HREF)) {
+            } else if (pathName.endsWith(HREF)) {
                 String sourceHref = Objects.toString(sourceField, "");
                 String targetHref = Objects.toString(targetField, "");
                 if (sourceHref.isEmpty()) {
-                    assertThat(sourceHref).withFailMessage(FAIL_MESSAGE, pathName, null, targetField).isEqualTo(targetHref);
+                    assertThat(sourceHref)
+                            .withFailMessage(FAIL_MESSAGE, pathName, null, targetField)
+                            .isEqualTo(targetHref);
                     return;
                 }
                 System.out.println(sourceHref + " -> " + targetHref);
@@ -359,8 +398,8 @@ public class MigrationTestUtils {
         }
     }
 
-
-    public static void validateFilteredClassifications(Response sourceResponse, Response targetResponse) {
+    public static void validateFilteredClassifications(
+            Response sourceResponse, Response targetResponse) {
         List<Map<String, Object>> sourceList = sourceResponse.path(CLASSIFICATIONS);
         List<Map<String, Object>> targetList = targetResponse.path(CLASSIFICATIONS);
 
@@ -379,19 +418,28 @@ public class MigrationTestUtils {
         System.out.println("List sizes: " + sourceList.size() + " -> " + targetList.size());
 
         assertThat(sourceList.size())
-                .withFailMessage("Expected size to be <%d> but was <%d>", targetList.size(), sourceList.size())
+                .withFailMessage(
+                        "Expected size to be <%d> but was <%d>",
+                        targetList.size(), sourceList.size())
                 .isEqualTo(targetList.size());
     }
 
     /**
-     * Validates that path list [listName] with fields specified in [pathNames] from two API response bodies are equal.
+     * Validates that path list [listName] with fields specified in [pathNames] from two API
+     * response bodies are equal.
+     *
      * @param sourceResponse Response object from source Api
      * @param targetResponse Response object from target Api
      * @param listName Name of list element in path
      * @param pathNames List of fields in listName list
      * @param idField A unique key for list objects
      */
-    public static void validatePathListWithObjects(Response sourceResponse, Response targetResponse, String listName, List<String> pathNames, String idField) {
+    public static void validatePathListWithObjects(
+            Response sourceResponse,
+            Response targetResponse,
+            String listName,
+            List<String> pathNames,
+            String idField) {
         List<Map<String, Object>> sourceList = sourceResponse.path(listName);
         List<Map<String, Object>> targetList = targetResponse.path(listName);
 
@@ -410,7 +458,9 @@ public class MigrationTestUtils {
         System.out.println("List sizes: " + sourceList.size() + " -> " + targetList.size());
 
         assertThat(sourceList.size())
-                .withFailMessage("Expected size to be <%d> but was <%d>", sourceList.size(), targetList.size())
+                .withFailMessage(
+                        "Expected size to be <%d> but was <%d>",
+                        sourceList.size(), targetList.size())
                 .isEqualTo(targetList.size());
 
         Map<Object, Map<String, Object>> sourceById = mapByField(sourceList, idField);
@@ -430,14 +480,22 @@ public class MigrationTestUtils {
                 if (pathName.equals(OWNING_SECTION)) {
                     String sourceSectionNumber = getSectionNumber(sourceField);
                     String targetSectionNumber = getSectionNumber(targetField);
-                    System.out.println("Comparing owning section: " + sourceSectionNumber + " -> " + targetSectionNumber);
-                    assertThat(sourceSectionNumber).withFailMessage(FAIL_MESSAGE,
-                                    pathName, sourceField, targetField)
+                    System.out.println(
+                            "Comparing owning section: "
+                                    + sourceSectionNumber
+                                    + " -> "
+                                    + targetSectionNumber);
+                    assertThat(sourceSectionNumber)
+                            .withFailMessage(FAIL_MESSAGE, pathName, sourceField, targetField)
                             .isEqualTo(targetSectionNumber);
-                }
-                else if (pathName.endsWith(HREF)) {
-                    assertThat(sourceField == null && targetField == null ||
-                            sourceField != null && targetField != null && isPathEqualIgnoreHost(sourceField.toString(), targetField.toString()))
+                } else if (pathName.endsWith(HREF)) {
+                    assertThat(
+                                    sourceField == null && targetField == null
+                                            || sourceField != null
+                                                    && targetField != null
+                                                    && isPathEqualIgnoreHost(
+                                                            sourceField.toString(),
+                                                            targetField.toString()))
                             .withFailMessage(FAIL_MESSAGE, pathName, sourceField, targetField)
                             .isTrue();
                 } else {
@@ -451,21 +509,21 @@ public class MigrationTestUtils {
 
     private static XmlPath[] extractXmlPaths(Response source, Response target) {
         return new XmlPath[] {
-                new XmlPath(source.getBody().asString()),
-                new XmlPath(target.getBody().asString())
+            new XmlPath(source.getBody().asString()), new XmlPath(target.getBody().asString())
         };
     }
 
     /**
-     * Temporary validation for migrated section names.
-     * Ensure migrated sections follow the rules for migration.
-     * When core method fetches section name from code list this validation is unnecessary.
+     * Temporary validation for migrated section names. Ensure migrated sections follow the rules
+     * for migration. When core method fetches section name from code list this validation is
+     * unnecessary.
      */
-    public static void validateXmlItems(Response sourceResponse, Response targetResponse, List<String> pathNames)  {
+    public static void validateXmlItems(
+            Response sourceResponse, Response targetResponse, List<String> pathNames) {
         XmlPath xmlPathSource = extractXmlPaths(sourceResponse, targetResponse)[0];
         XmlPath xmlPathTarget = extractXmlPaths(sourceResponse, targetResponse)[1];
 
-        for(String pathName : pathNames) {
+        for (String pathName : pathNames) {
 
             System.out.println("Checking pathname: " + pathName);
 
@@ -476,71 +534,66 @@ public class MigrationTestUtils {
                 String sourceDate = getDate(sourcePath);
                 String targetDate = getDate(targetPath);
 
-                System.out.println("Comparing timestamp values: " + sourceDate + " -> " + targetDate);
+                System.out.println(
+                        "Comparing timestamp values: " + sourceDate + " -> " + targetDate);
 
-                assertThat(sourceDate).withFailMessage(FAIL_MESSAGE,
-                                pathName, sourceDate, targetDate)
+                assertThat(sourceDate)
+                        .withFailMessage(FAIL_MESSAGE, pathName, sourceDate, targetDate)
                         .isEqualTo(targetDate);
-            }
-
-            else if (pathName.equals(CLASSIFICATION_OWNING_SECTION)) {
+            } else if (pathName.equals(CLASSIFICATION_OWNING_SECTION)) {
                 String sourceSectionNumber = getSectionNumber(sourcePath);
                 String targetSectionNumber = getSectionNumber(targetPath);
-                System.out.println("Comparing owning section: " + sourceSectionNumber + " -> " + targetSectionNumber);
-                assertThat(sourceSectionNumber).withFailMessage(FAIL_MESSAGE,
-                                pathName, sourcePath, targetPath)
+                System.out.println(
+                        "Comparing owning section: "
+                                + sourceSectionNumber
+                                + " -> "
+                                + targetSectionNumber);
+                assertThat(sourceSectionNumber)
+                        .withFailMessage(FAIL_MESSAGE, pathName, sourcePath, targetPath)
                         .isEqualTo(targetSectionNumber);
-            }
-            else if (pathName.endsWith(HREF)) {
+            } else if (pathName.endsWith(HREF)) {
                 URI sourceUri = URI.create(pathName);
                 URI targetUri = URI.create(pathName);
 
                 String sourceUrl = sourceUri.getPath();
                 String targetUrl = targetUri.getPath();
 
-                assertThat(sourceUrl).withFailMessage(
-                        FAIL_MESSAGE,
-                        pathName,
-                        sourceUrl,
-                        targetUrl).isEqualTo(targetUrl);
+                assertThat(sourceUrl)
+                        .withFailMessage(FAIL_MESSAGE, pathName, sourceUrl, targetUrl)
+                        .isEqualTo(targetUrl);
             } else {
 
                 String sourceField = String.valueOf(sourcePath);
                 String targetField = String.valueOf(targetPath);
 
-                assertThat(sourceField).withFailMessage(
-                        FAIL_MESSAGE,
-                        pathName,
-                        sourcePath,
-                        targetPath).isEqualTo(targetField);
+                assertThat(sourceField)
+                        .withFailMessage(FAIL_MESSAGE, pathName, sourcePath, targetPath)
+                        .isEqualTo(targetField);
 
                 System.out.println("Source: " + xmlPathSource.get(pathName));
                 System.out.println("Target: " + xmlPathTarget.get(pathName));
             }
         }
-
     }
 
-    public static void validateXmlList(String path, Response sourceResponse, Response targetResponse, String pathName) {
+    public static void validateXmlList(
+            String path, Response sourceResponse, Response targetResponse, String pathName) {
         XmlPath xmlPathSource = extractXmlPaths(sourceResponse, targetResponse)[0];
         XmlPath xmlPathTarget = extractXmlPaths(sourceResponse, targetResponse)[1];
-
 
         List<String> sourceList = xmlPathSource.getList(pathName);
         List<String> targetList = xmlPathTarget.getList(pathName);
         System.out.println(sourceList.size() + " -> " + targetList.size());
 
-        for(int i = 0; i < sourceList.size(); i++) {
-            assertThat(sourceList.get(i)).withFailMessage(
-                    FAIL_MESSAGE,
-                    path,
-                    sourceList.get(i),
-                    targetList.get(i)).isEqualTo(targetList.get(i));
+        for (int i = 0; i < sourceList.size(); i++) {
+            assertThat(sourceList.get(i))
+                    .withFailMessage(FAIL_MESSAGE, path, sourceList.get(i), targetList.get(i))
+                    .isEqualTo(targetList.get(i));
         }
-
     }
 
-    public static void validateXmlMigratedSsbsections(String path, Response sourceResponse, Response targetResponse) {
+    public static void validateXmlMigratedSsbsections(
+            String path, Response sourceResponse, Response targetResponse) {
         XmlPath xmlPathSource = extractXmlPaths(sourceResponse, targetResponse)[0];
         XmlPath xmlPathTarget = extractXmlPaths(sourceResponse, targetResponse)[1];
 
@@ -549,21 +602,22 @@ public class MigrationTestUtils {
         List<String> targetList = xmlPathTarget.getList(pathName);
         System.out.println(sourceList.size() + " -> " + targetList.size());
 
-        for(int i = 0; i < sourceList.size(); i++) {
+        for (int i = 0; i < sourceList.size(); i++) {
             String sourceSection = getSectionNumber(sourceList.get(i));
             String targetSection = getSectionNumber(targetList.get(i));
-            if(sourceSection != null){
-                assertThat(sourceSection).withFailMessage(
-                        FAIL_MESSAGE,
-                        path,
-                        sourceSection,
-                        targetSection).startsWith(targetSection);
+            if (sourceSection != null) {
+                assertThat(sourceSection)
+                        .withFailMessage(FAIL_MESSAGE, path, sourceSection, targetSection)
+                        .startsWith(targetSection);
             }
         }
-
     }
 
-    public static void validatePathListWithObjectsXml(Response sourceResponse, Response targetResponse, String listName, List<String> pathNames) {
+    public static void validatePathListWithObjectsXml(
+            Response sourceResponse,
+            Response targetResponse,
+            String listName,
+            List<String> pathNames) {
         XmlPath xmlPathSource = extractXmlPaths(sourceResponse, targetResponse)[0];
         XmlPath xmlPathTarget = extractXmlPaths(sourceResponse, targetResponse)[1];
 
@@ -580,20 +634,28 @@ public class MigrationTestUtils {
                 System.out.printf("Source: [%s] (%d chars)%n", sourceField, sourceField.length());
                 System.out.printf("Target: [%s] (%d chars)%n", targetField, targetField.length());
 
-                if (pathName.equals(CLASSIFICATION_LAST_MODIFIED) || pathName.equals(LAST_MODIFIED)) {
+                if (pathName.equals(CLASSIFICATION_LAST_MODIFIED)
+                        || pathName.equals(LAST_MODIFIED)) {
                     String sourceDate = getDate(sourceField);
                     String targetDate = getDate(targetField);
-                    System.out.println("Comparing timestamp values: " + sourceDate + " -> " + targetDate);
+                    System.out.println(
+                            "Comparing timestamp values: " + sourceDate + " -> " + targetDate);
 
-                    assertThat(sourceDate).withFailMessage(FAIL_MESSAGE, pathName, sourceDate, targetDate)
+                    assertThat(sourceDate)
+                            .withFailMessage(FAIL_MESSAGE, pathName, sourceDate, targetDate)
                             .isEqualTo(targetDate);
 
                 } else if (pathName.equals(CLASSIFICATION_OWNING_SECTION)) {
                     String sourceSectionNumber = getSectionNumber(sourceField);
                     String targetSectionNumber = getSectionNumber(targetField);
-                    System.out.println("Comparing owning section: " + sourceSectionNumber + " -> " + targetSectionNumber);
+                    System.out.println(
+                            "Comparing owning section: "
+                                    + sourceSectionNumber
+                                    + " -> "
+                                    + targetSectionNumber);
 
-                    assertThat(sourceSectionNumber).withFailMessage(FAIL_MESSAGE, pathName, sourceField, targetField)
+                    assertThat(sourceSectionNumber)
+                            .withFailMessage(FAIL_MESSAGE, pathName, sourceField, targetField)
                             .isEqualTo(targetSectionNumber);
 
                 } else if (pathName.endsWith(HREF)) {
@@ -602,22 +664,31 @@ public class MigrationTestUtils {
 
                     String sourcePath = sourceUri.getPath();
                     String targetPath = targetUri.getPath();
-                    assertThat(sourcePath).withFailMessage(FAIL_MESSAGE, pathName, sourcePath, targetPath)
+                    assertThat(sourcePath)
+                            .withFailMessage(FAIL_MESSAGE, pathName, sourcePath, targetPath)
                             .isEqualTo(targetPath);
 
                 } else {
-                    assertThat(sourceField).withFailMessage(FAIL_MESSAGE, pathName, sourceField, targetField)
+                    assertThat(sourceField)
+                            .withFailMessage(FAIL_MESSAGE, pathName, sourceField, targetField)
                             .isEqualTo(targetField);
                 }
             }
         }
     }
 
-    public static void validateCSVDocument(String path, Response sourceResponse, Response targetResponse) {
-        System.out.println(sourceResponse.getBody().asString().length() + "-> " + targetResponse.getBody().asString().length());
-        assertThat(sourceResponse.getBody().asString()).withFailMessage(
-                FAIL_MESSAGE, path, sourceResponse.getBody().asString(),
-                targetResponse.getBody().asString()).isEqualTo(targetResponse.getBody().asString());
+    public static void validateCSVDocument(
+            String path, Response sourceResponse, Response targetResponse) {
+        System.out.println(
+                sourceResponse.getBody().asString().length()
+                        + "-> "
+                        + targetResponse.getBody().asString().length());
+        assertThat(sourceResponse.getBody().asString())
+                .withFailMessage(
+                        FAIL_MESSAGE,
+                        path,
+                        sourceResponse.getBody().asString(),
+                        targetResponse.getBody().asString())
+                .isEqualTo(targetResponse.getBody().asString());
     }
-
 }

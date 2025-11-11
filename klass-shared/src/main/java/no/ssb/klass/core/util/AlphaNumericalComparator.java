@@ -20,16 +20,16 @@ public class AlphaNumericalComparator implements Comparator {
             Function<? super T, ? extends U> keyExtractor, boolean ReverseNumberOrder) {
         Objects.requireNonNull(keyExtractor);
         AlphaNumericalComparator comparator = new AlphaNumericalComparator(ReverseNumberOrder);
-        return (Comparator<T> & Serializable) (c1, c2) -> comparator.compare(keyExtractor.apply(c1), keyExtractor.apply(
-                c2));
+        return (Comparator<T> & Serializable)
+                (c1, c2) -> comparator.compare(keyExtractor.apply(c1), keyExtractor.apply(c2));
     }
 
     public static <T, U extends Comparable<? super U>> Comparator<T> comparing(
             Function<? super T, ? extends U> keyExtractor) {
         Objects.requireNonNull(keyExtractor);
         AlphaNumericalComparator comparator = new AlphaNumericalComparator();
-        return (Comparator<T> & Serializable) (c1, c2) -> comparator.compare(keyExtractor.apply(c1), keyExtractor.apply(
-                c2));
+        return (Comparator<T> & Serializable)
+                (c1, c2) -> comparator.compare(keyExtractor.apply(c1), keyExtractor.apply(c2));
     }
 
     private boolean isNumber(char character) {
@@ -38,9 +38,9 @@ public class AlphaNumericalComparator implements Comparator {
 
     private String getBlock(String string, int length, int pos) {
         char firstChar = string.charAt(pos++);
-        return isNumber(firstChar) ? getNumberBlock(string, length, pos, firstChar)
+        return isNumber(firstChar)
+                ? getNumberBlock(string, length, pos, firstChar)
                 : getTextBlock(string, length, pos, firstChar);
-
     }
 
     private String getTextBlock(String string, int length, int pos, char character) {

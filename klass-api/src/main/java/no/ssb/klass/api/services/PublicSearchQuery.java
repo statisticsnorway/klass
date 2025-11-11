@@ -2,31 +2,30 @@ package no.ssb.klass.api.services;
 
 import no.ssb.klass.core.model.ClassificationType;
 import no.ssb.klass.core.model.Language;
+
+import org.opensearch.data.client.orhlc.NativeSearchQueryBuilder;
 import org.opensearch.common.unit.Fuzziness;
 import org.opensearch.index.query.BoolQueryBuilder;
 import org.opensearch.index.query.Operator;
 import org.opensearch.index.query.QueryBuilders;
 import org.springframework.data.domain.Pageable;
-import org.opensearch.data.client.orhlc.NativeSearchQueryBuilder;
 
 public class PublicSearchQuery {
 
     private PublicSearchQuery() {
-        throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
+        throw new UnsupportedOperationException(
+                "This is a utility class and cannot be instantiated");
     }
 
     public static org.springframework.data.elasticsearch.core.query.Query build(
-            String query,
-            Pageable pageable,
-            String filterOnSection,
-            boolean includeCodeLists
-    ) {
+            String query, Pageable pageable, String filterOnSection, boolean includeCodeLists) {
         BoolQueryBuilder filterBuilder = QueryBuilders.boolQuery();
         filterBuilder.must(QueryBuilders.termQuery("published", true));
 
         if (includeCodeLists) {
             BoolQueryBuilder typeFilterBuilder = QueryBuilders.boolQuery();
-            String classificationTypeName = ClassificationType.CLASSIFICATION.getDisplayName(Language.EN);
+            String classificationTypeName =
+                    ClassificationType.CLASSIFICATION.getDisplayName(Language.EN);
             String codelistTypeName = ClassificationType.CODELIST.getDisplayName(Language.EN);
             typeFilterBuilder.should(QueryBuilders.matchQuery("type", classificationTypeName));
             typeFilterBuilder.should(QueryBuilders.matchQuery("type", codelistTypeName));
@@ -60,11 +59,12 @@ public class PublicSearchQuery {
                 .filter(filterBuilder)
                 .minimumShouldMatch(1);
 
-        NativeSearchQueryBuilder nativeQueryBuilder = new NativeSearchQueryBuilder()
-                .withQuery(finalQuery)
-                .withSort(org.springframework.data.domain.Sort.by(
-                        org.springframework.data.domain.Sort.Order.desc("_score")
-                ));
+        NativeSearchQueryBuilder nativeQueryBuilder =
+                new NativeSearchQueryBuilder()
+                        .withQuery(finalQuery)
+                        .withSort(
+                                org.springframework.data.domain.Sort.by(
+                                        org.springframework.data.domain.Sort.Order.desc("_score")));
 
         if (pageable != null) {
             nativeQueryBuilder.withPageable(pageable);

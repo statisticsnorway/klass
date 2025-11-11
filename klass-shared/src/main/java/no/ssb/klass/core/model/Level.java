@@ -2,9 +2,6 @@ package no.ssb.klass.core.model;
 
 import static com.google.common.base.Preconditions.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -16,15 +13,25 @@ import jakarta.persistence.OneToMany;
 import no.ssb.klass.core.util.Translatable;
 import no.ssb.klass.core.util.TranslatablePersistenceConverter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 public class Level extends BaseEntity {
     @Column(nullable = false, length = 1000)
     @Convert(converter = TranslatablePersistenceConverter.class)
     private Translatable name;
+
     @Column(nullable = false)
     private final int levelNumber;
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "level", orphanRemoval = true)
+
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER,
+            mappedBy = "level",
+            orphanRemoval = true)
     private final List<ClassificationItem> classificationItems;
+
     @ManyToOne(optional = false)
     private StatisticalClassification statisticalClassification;
 
@@ -35,7 +42,10 @@ public class Level extends BaseEntity {
     }
 
     public Level(int levelNumber) {
-        this(levelNumber, new Translatable("Nivå " + levelNumber, "Nivå " + levelNumber, "Level " + levelNumber));
+        this(
+                levelNumber,
+                new Translatable(
+                        "Nivå " + levelNumber, "Nivå " + levelNumber, "Level " + levelNumber));
     }
 
     public Level(int levelNumber, Translatable name) {
@@ -46,17 +56,15 @@ public class Level extends BaseEntity {
     }
 
     /**
-     * @return name for specified language, if no name an empty string is returned,
-     *         never null
+     * @return name for specified language, if no name an empty string is returned, never null
      */
     public String getName(Language language) {
         return name.getString(language);
     }
 
     /**
-     * Not public since clients should add classificationItems through owning
-     * version/variant. This so that
-     * version/variant can enforce no duplicated codes.
+     * Not public since clients should add classificationItems through owning version/variant. This
+     * so that version/variant can enforce no duplicated codes.
      */
     void addClassificationItem(ClassificationItem classificationItem) {
         checkNotNull(classificationItem);

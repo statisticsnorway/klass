@@ -5,7 +5,9 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.dataformat.csv.CsvGenerator;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
+
 import no.ssb.klass.api.dto.hal.ClassificationItemResource;
+
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpOutputMessage;
 import org.springframework.http.MediaType;
@@ -31,23 +33,26 @@ public abstract class AbstractCsvConverter<T> extends AbstractHttpMessageConvert
     protected ObjectWriter createWriter(Class<?> clazz, char csvSeparator) {
         return createWriter(clazz, csvSeparator, null);
     }
+
     protected ObjectWriter createWriter(Class<?> clazz, char csvSeparator, List<String> csvFields) {
         CsvMapper mapper = new CsvMapper();
         CsvSchema schema;
         if (csvFields == null) {
-            schema = mapper
-                    .schemaFor(clazz)
-                    .withHeader()
-                    .withColumnSeparator(csvSeparator);
+            schema = mapper.schemaFor(clazz).withHeader().withColumnSeparator(csvSeparator);
         } else {
             mapper.enable(JsonGenerator.Feature.IGNORE_UNKNOWN);
-            schema = CsvSchema.builder()
-                    .addColumns(csvFields, CsvSchema.ColumnType.STRING)
-                    .build().withHeader().withColumnSeparator(csvSeparator);
+            schema =
+                    CsvSchema.builder()
+                            .addColumns(csvFields, CsvSchema.ColumnType.STRING)
+                            .build()
+                            .withHeader()
+                            .withColumnSeparator(csvSeparator);
         }
 
-        return mapper.writer(schema).withFeatures(CsvGenerator.Feature.ALWAYS_QUOTE_STRINGS,
-                CsvGenerator.Feature.OMIT_MISSING_TAIL_COLUMNS);
+        return mapper.writer(schema)
+                .withFeatures(
+                        CsvGenerator.Feature.ALWAYS_QUOTE_STRINGS,
+                        CsvGenerator.Feature.OMIT_MISSING_TAIL_COLUMNS);
     }
 
     protected Charset selectCharsetAndUpdateOutput(HttpOutputMessage outputMessage) {
@@ -70,17 +75,17 @@ public abstract class AbstractCsvConverter<T> extends AbstractHttpMessageConvert
     }
 
     /**
-     * Replaces newlines with space from the field notes as they can cause trouble for users trying to open CSV with MS
-     * Excel
+     * Replaces newlines with space from the field notes as they can cause trouble for users trying
+     * to open CSV with MS Excel
      *
-     * @param item
-     *            original item
+     * @param item original item
      * @return new item where notes no longer contains newlines
      */
     ClassificationItemResource replaceNewLines(ClassificationItemResource item) {
-        String notes = item.getNotes() == null ? null : item.getNotes()
-                .replaceAll("\\r\\n|\\r|\\n", " ")
-                .replaceAll("\"", "'");
+        String notes =
+                item.getNotes() == null
+                        ? null
+                        : item.getNotes().replaceAll("\\r\\n|\\r|\\n", " ").replaceAll("\"", "'");
         String code = item.getCode();
         String level = item.getLevel();
         String name = item.getName();
@@ -88,6 +93,7 @@ public abstract class AbstractCsvConverter<T> extends AbstractHttpMessageConvert
         String parentCode = item.getParentCode();
         LocalDate validFrom = item.getValidFrom();
         LocalDate validTo = item.getValidTo();
-        return new ClassificationItemResource(code, level, name, shortName, notes, parentCode, validFrom, validTo);
+        return new ClassificationItemResource(
+                code, level, name, shortName, notes, parentCode, validFrom, validTo);
     }
 }

@@ -1,9 +1,9 @@
 package no.ssb.klass.initializer.stabas;
 
+import no.ssb.klass.core.config.ConfigurationProfiles;
+
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-
-import no.ssb.klass.core.config.ConfigurationProfiles;
 
 @Configuration
 @Profile("!" + ConfigurationProfiles.SMALL_IMPORT)

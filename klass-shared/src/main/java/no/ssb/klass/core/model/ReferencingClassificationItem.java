@@ -2,15 +2,14 @@ package no.ssb.klass.core.model;
 
 import static com.google.common.base.Preconditions.*;
 
-import java.time.LocalDate;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToOne;
 
+import java.time.LocalDate;
+
 @Entity
 public class ReferencingClassificationItem extends ClassificationItem {
-    @OneToOne
-    private final ClassificationItem reference;
+    @OneToOne private final ClassificationItem reference;
 
     // For Hibernate
     protected ReferencingClassificationItem() {

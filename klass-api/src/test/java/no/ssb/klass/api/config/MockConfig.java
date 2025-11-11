@@ -1,16 +1,16 @@
-
 package no.ssb.klass.api.config;
+
+import static org.mockito.Mockito.*;
 
 import no.ssb.klass.api.controllers.ClassificationController;
 import no.ssb.klass.api.controllers.validators.CsvFieldsValidator;
 import no.ssb.klass.api.services.SearchService;
 import no.ssb.klass.core.config.ConfigurationProfiles;
 import no.ssb.klass.core.service.*;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-
-import static org.mockito.Mockito.*;
 
 @Configuration
 @Profile(ConfigurationProfiles.API_DOCUMENTATION_TEST)
@@ -35,7 +35,7 @@ public class MockConfig {
     public StatisticsService statisticsService() {
         return mock(StatisticsService.class);
     }
-    
+
     @Bean
     public UserService userService() {
         return mock(UserService.class);
@@ -53,7 +53,6 @@ public class MockConfig {
                 subscriberService(),
                 searchService(),
                 statisticsService(),
-                csvFieldsValidator()
-        );
+                csvFieldsValidator());
     }
 }

@@ -68,7 +68,9 @@ We use Sonarqube for linting. This runs a range of checks on code quality. It ru
 
 #### Formatting
 
-We use google-java-format for code formatting. This avoids unproductive discussions about minutiae of bracket placement etc. Make sure it runs in your IDE and you install the pre-commit hook
+We use google-java-format for code formatting. This avoids unproductive discussions about minutiae of bracket placement etc. Make sure the plugin is installed in your IDE (see [above](#pluginsextensions)).
+
+It's worth running `mvn fmt:format` before opening a PR to avoid any chance of a CI check complaining at you.
 
 ### Configuration
 

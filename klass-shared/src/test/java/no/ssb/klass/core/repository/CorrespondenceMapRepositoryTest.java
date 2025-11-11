@@ -1,10 +1,16 @@
 package no.ssb.klass.core.repository;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import jakarta.transaction.Transactional;
+
 import no.ssb.klass.core.config.ConfigurationProfiles;
 import no.ssb.klass.core.model.*;
 import no.ssb.klass.core.util.Translatable;
 import no.ssb.klass.core.util.TranslatablePersistenceConverter;
 import no.ssb.klass.testutil.TestUtil;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,11 +23,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import jakarta.transaction.Transactional;
 import java.util.Set;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Mads Lundemo, SSB.
@@ -32,16 +34,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @Transactional
 public class CorrespondenceMapRepositoryTest {
 
-    @Autowired
-    private CorrespondenceMapRepository correspondenceMapRepository;
-    @Autowired
-    private CorrespondenceTableRepository correspondenceTableRepository;
-    @Autowired
-    private ClassificationSeriesRepository classificationSeriesRepository;
-    @Autowired
-    private ClassificationFamilyRepository classificationFamilyRepository;
-    @Autowired
-    private UserRepository userRepository;
+    @Autowired private CorrespondenceMapRepository correspondenceMapRepository;
+    @Autowired private CorrespondenceTableRepository correspondenceTableRepository;
+    @Autowired private ClassificationSeriesRepository classificationSeriesRepository;
+    @Autowired private ClassificationFamilyRepository classificationFamilyRepository;
+    @Autowired private UserRepository userRepository;
     private User user;
     private ClassificationFamily classificationFamily;
 
@@ -54,7 +51,8 @@ public class CorrespondenceMapRepositoryTest {
     @BeforeEach
     public void setup() {
         user = userRepository.save(TestUtil.createUser());
-        classificationFamily = classificationFamilyRepository.save(TestUtil.createClassificationFamily("family"));
+        classificationFamily =
+                classificationFamilyRepository.save(TestUtil.createClassificationFamily("family"));
 
         normalCorrespondenceTable = createAndSaveCorrespondenceTable("normal", 12, false);
         deletedCorrespondenceTable = createAndSaveCorrespondenceTable("deleted", 10, true);
@@ -67,19 +65,29 @@ public class CorrespondenceMapRepositoryTest {
         ClassificationVersion deletedSource = deletedCorrespondenceTable.getSource();
         ClassificationVersion deletedTarget = deletedCorrespondenceTable.getTarget();
         // when
-        Set<CorrespondenceMap> sourceMapsUsingDeletedItems = correspondenceMapRepository.findAllMapsUsingDeletedItems(
-                deletedSource, deletedSource.getAllClassificationItems());
-        Set<CorrespondenceMap> targetMapsUsingDeletedItems = correspondenceMapRepository.findAllMapsUsingDeletedItems(
-                deletedTarget, deletedTarget.getAllClassificationItems());
+        Set<CorrespondenceMap> sourceMapsUsingDeletedItems =
+                correspondenceMapRepository.findAllMapsUsingDeletedItems(
+                        deletedSource, deletedSource.getAllClassificationItems());
+        Set<CorrespondenceMap> targetMapsUsingDeletedItems =
+                correspondenceMapRepository.findAllMapsUsingDeletedItems(
+                        deletedTarget, deletedTarget.getAllClassificationItems());
 
         // then
         assertThat(sourceMapsUsingDeletedItems.size()).isEqualTo(10);
         assertThat(targetMapsUsingDeletedItems.size()).isEqualTo(10);
 
-        sourceMapsUsingDeletedItems.forEach(map -> assertTrue(deletedSource.getAllClassificationItems().contains(map
-                .getSource().get())));
-        targetMapsUsingDeletedItems.forEach(map -> assertTrue(deletedTarget.getAllClassificationItems().contains(map
-                .getTarget().get())));
+        sourceMapsUsingDeletedItems.forEach(
+                map ->
+                        assertTrue(
+                                deletedSource
+                                        .getAllClassificationItems()
+                                        .contains(map.getSource().get())));
+        targetMapsUsingDeletedItems.forEach(
+                map ->
+                        assertTrue(
+                                deletedTarget
+                                        .getAllClassificationItems()
+                                        .contains(map.getTarget().get())));
     }
 
     @Test
@@ -87,16 +95,26 @@ public class CorrespondenceMapRepositoryTest {
         ClassificationVersion normalSource = normalCorrespondenceTable.getSource();
         ClassificationVersion normalTarget = normalCorrespondenceTable.getTarget();
         // when
-        Set<CorrespondenceMap> itemsUsingNormalSource = correspondenceMapRepository.findAllMapsUsingItems(normalSource);
-        Set<CorrespondenceMap> itemsUsingNormalTarget = correspondenceMapRepository.findAllMapsUsingItems(normalTarget);
+        Set<CorrespondenceMap> itemsUsingNormalSource =
+                correspondenceMapRepository.findAllMapsUsingItems(normalSource);
+        Set<CorrespondenceMap> itemsUsingNormalTarget =
+                correspondenceMapRepository.findAllMapsUsingItems(normalTarget);
 
         // then
         assertThat(itemsUsingNormalSource.size()).isEqualTo(12);
         assertThat(itemsUsingNormalTarget.size()).isEqualTo(12);
-        itemsUsingNormalSource.forEach(map -> assertTrue(normalSource.getAllClassificationItems().contains(map
-                .getSource().get())));
-        itemsUsingNormalSource.forEach(map -> assertTrue(normalSource.getAllClassificationItems().contains(map
-                .getSource().get())));
+        itemsUsingNormalSource.forEach(
+                map ->
+                        assertTrue(
+                                normalSource
+                                        .getAllClassificationItems()
+                                        .contains(map.getSource().get())));
+        itemsUsingNormalSource.forEach(
+                map ->
+                        assertTrue(
+                                normalSource
+                                        .getAllClassificationItems()
+                                        .contains(map.getSource().get())));
     }
 
     @Test
@@ -105,17 +123,18 @@ public class CorrespondenceMapRepositoryTest {
         ClassificationItem classificationItem = normalSource.getAllClassificationItems().get(0);
 
         ClassificationVersion deletedSource = deletedCorrespondenceTable.getSource();
-        ClassificationItem deletedClassificationItem = deletedSource.getAllClassificationItems().get(0);
+        ClassificationItem deletedClassificationItem =
+                deletedSource.getAllClassificationItems().get(0);
         // when
-        Set<CorrespondenceMap> deletedFromNormal = correspondenceMapRepository.findBySourceOrTarget(classificationItem,
-                true);
-        Set<CorrespondenceMap> normalFromNormal = correspondenceMapRepository.findBySourceOrTarget(classificationItem,
-                false);
+        Set<CorrespondenceMap> deletedFromNormal =
+                correspondenceMapRepository.findBySourceOrTarget(classificationItem, true);
+        Set<CorrespondenceMap> normalFromNormal =
+                correspondenceMapRepository.findBySourceOrTarget(classificationItem, false);
 
-        Set<CorrespondenceMap> deletedFromDeleted = correspondenceMapRepository.findBySourceOrTarget(
-                deletedClassificationItem, true);
-        Set<CorrespondenceMap> normalFromDeleted = correspondenceMapRepository.findBySourceOrTarget(
-                deletedClassificationItem, false);
+        Set<CorrespondenceMap> deletedFromDeleted =
+                correspondenceMapRepository.findBySourceOrTarget(deletedClassificationItem, true);
+        Set<CorrespondenceMap> normalFromDeleted =
+                correspondenceMapRepository.findBySourceOrTarget(deletedClassificationItem, false);
 
         // then
         assertThat(deletedFromNormal.size()).isEqualTo(0);
@@ -123,20 +142,20 @@ public class CorrespondenceMapRepositoryTest {
 
         assertThat(deletedFromDeleted.size()).isEqualTo(1);
         assertThat(normalFromDeleted.size()).isEqualTo(0);
-
     }
 
     @Configuration
     @EnableAutoConfiguration
     @EntityScan(basePackageClasses = {CorrespondenceTable.class})
     @ComponentScan(basePackageClasses = TranslatablePersistenceConverter.class)
-    static class Config {
-    }
+    static class Config {}
 
-    private CorrespondenceTable createAndSaveCorrespondenceTable(String name, int itemCount, boolean deleted) {
+    private CorrespondenceTable createAndSaveCorrespondenceTable(
+            String name, int itemCount, boolean deleted) {
         ClassificationVersion source = createAndSaveClassificationWithVersion(name + 1, itemCount);
         ClassificationVersion target = createAndSaveClassificationWithVersion(name + 2, itemCount);
-        CorrespondenceTable correspondenceTable = TestUtil.createCorrespondenceTable(source, target);
+        CorrespondenceTable correspondenceTable =
+                TestUtil.createCorrespondenceTable(source, target);
 
         for (int i = 0; i < itemCount; i++) {
             ClassificationItem sourceItem = source.getAllClassificationItems().get(i);
@@ -150,20 +169,22 @@ public class CorrespondenceMapRepositoryTest {
         return correspondenceTableRepository.save(correspondenceTable);
     }
 
-    private ClassificationVersion createAndSaveClassificationWithVersion(String classificationName, int itemCount) {
+    private ClassificationVersion createAndSaveClassificationWithVersion(
+            String classificationName, int itemCount) {
         ClassificationSeries classification = TestUtil.createClassification(classificationName);
-        ClassificationVersion version = TestUtil.createClassificationVersion(TestUtil.anyDateRange());
+        ClassificationVersion version =
+                TestUtil.createClassificationVersion(TestUtil.anyDateRange());
         classification.addClassificationVersion(version);
         classification.setContactPerson(user);
         version.addLevel(new Level(1));
         for (int i = 0; i < itemCount; i++) {
             Translatable name = Translatable.create(classificationName, Language.NB);
-            ConcreteClassificationItem item = new ConcreteClassificationItem(classificationName + i, name, name);
+            ConcreteClassificationItem item =
+                    new ConcreteClassificationItem(classificationName + i, name, name);
             version.addClassificationItem(item, 1, null);
         }
         classificationFamily.addClassificationSeries(classification);
         classificationSeriesRepository.save(classification);
         return version;
     }
-
 }

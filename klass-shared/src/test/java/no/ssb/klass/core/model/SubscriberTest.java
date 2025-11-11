@@ -2,14 +2,14 @@ package no.ssb.klass.core.model;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.net.URL;
+import no.ssb.klass.core.util.ClientException;
+import no.ssb.klass.testutil.TestUtil;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import no.ssb.klass.core.util.ClientException;
-import no.ssb.klass.testutil.TestUtil;
+import java.net.URL;
 
 public class SubscriberTest {
 
@@ -43,24 +43,26 @@ public class SubscriberTest {
         // when
 
         ClassificationSeries classification = TestUtil.createClassificationWithId(1, NAME);
-        Assertions.assertThrows(ClientException.class, () ->
-                subject.addSubscription(classification, new URL("http://test.url")));
+        Assertions.assertThrows(
+                ClientException.class,
+                () -> subject.addSubscription(classification, new URL("http://test.url")));
         // then exception
     }
 
     @Test
     public void addSubscriptionNull() {
         // when
-        Assertions.assertThrows(NullPointerException.class, () ->
-                subject.addSubscription(null, new URL("http://test.url")));
+        Assertions.assertThrows(
+                NullPointerException.class,
+                () -> subject.addSubscription(null, new URL("http://test.url")));
         // then exception
     }
 
     @Test
     public void addEndSubscriptionNull() {
         // when
-        Assertions.assertThrows(NullPointerException.class, () ->
-                subject.addSubscription(classification, null));
+        Assertions.assertThrows(
+                NullPointerException.class, () -> subject.addSubscription(classification, null));
         // then exception
     }
 
@@ -83,24 +85,23 @@ public class SubscriberTest {
     @Test
     public void removeSubscriptionNotFound() {
         // when
-        Assertions.assertThrows(ClientException.class, () ->
-                subject.removeSubscription(TestUtil.createClassification(NAME)));
+        Assertions.assertThrows(
+                ClientException.class,
+                () -> subject.removeSubscription(TestUtil.createClassification(NAME)));
         // then exception
     }
 
     @Test
     public void verifyNull() {
         // when
-        Assertions.assertThrows(NullPointerException.class, () ->
-                subject.verify(null));
+        Assertions.assertThrows(NullPointerException.class, () -> subject.verify(null));
         // then exception
     }
 
     @Test
     public void verifyNotFound() {
         // when
-        Assertions.assertThrows(ClientException.class, () ->
-                subject.verify(TOKEN));
+        Assertions.assertThrows(ClientException.class, () -> subject.verify(TOKEN));
         // then exception
     }
 }

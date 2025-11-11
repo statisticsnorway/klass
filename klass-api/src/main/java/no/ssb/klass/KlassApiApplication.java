@@ -40,7 +40,10 @@ Klass is Statistics Norway's system for documentation of classifications and cod
 
 Classifications are "official", and in a classification, the categories at each level must be mutually exclusive and complete, i.e. the classification contains all categories that belong to the area covered by the classification. Code lists are not "official". They may be adapted to a one particular statistic and do not have to be mutually exclusive or complete.
 """),
-        externalDocs = @ExternalDocumentation(description = "API Guide", url = RestConstants.CONTEXT_AND_VERSION_V1 + "/api-guide.html"),
+        externalDocs =
+                @ExternalDocumentation(
+                        description = "API Guide",
+                        url = RestConstants.CONTEXT_AND_VERSION_V1 + "/api-guide.html"),
         servers = {
             @Server(url = "https://data.ssb.no/api/klass", description = "Production"),
             @Server(url = "https://data.test.ssb.no/api/klass", description = "Test"),
@@ -83,10 +86,11 @@ To get a snapshot of codes valid at a specified date, use codesAt.
                     description =
                             "List Statistics Norway divisions responsible for at least one classification."),
         })
-@SpringBootApplication(exclude = {
-        ElasticsearchDataAutoConfiguration.class,
-        ElasticsearchRepositoriesAutoConfiguration.class,
-})
+@SpringBootApplication(
+        exclude = {
+            ElasticsearchDataAutoConfiguration.class,
+            ElasticsearchRepositoriesAutoConfiguration.class,
+        })
 @Import(TomcatServletWebServerFactoryCustomizer.class)
 @ConfigurationPropertiesScan
 @ServletComponentScan

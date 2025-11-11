@@ -2,18 +2,19 @@ package no.ssb.klass.core.model;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.Test;
-
 import no.ssb.klass.core.util.Translatable;
 import no.ssb.klass.testutil.TestUtil;
+
+import org.junit.jupiter.api.Test;
 
 public class ClassificationVariantTest {
 
     @Test
     public void hasTwoLevels() {
         // given
-        ClassificationVariant subject = new ClassificationVariant(Translatable.create("name", Language.NB),
-                TestUtil.createUser());
+        ClassificationVariant subject =
+                new ClassificationVariant(
+                        Translatable.create("name", Language.NB), TestUtil.createUser());
 
         // then
         assertEquals(2, subject.getLevels().size());
@@ -22,8 +23,9 @@ public class ClassificationVariantTest {
     @Test
     public void isIncludeShortName() {
         // given
-        ClassificationVariant subject = new ClassificationVariant(Translatable.create("name", Language.NB),
-                TestUtil.createUser());
+        ClassificationVariant subject =
+                new ClassificationVariant(
+                        Translatable.create("name", Language.NB), TestUtil.createUser());
 
         // then
         assertEquals(false, subject.isIncludeShortName());
@@ -32,8 +34,9 @@ public class ClassificationVariantTest {
     @Test
     public void isIncludeNotes() {
         // given
-        ClassificationVariant subject = new ClassificationVariant(Translatable.create("name", Language.NB),
-                TestUtil.createUser());
+        ClassificationVariant subject =
+                new ClassificationVariant(
+                        Translatable.create("name", Language.NB), TestUtil.createUser());
 
         // then
         assertEquals(false, subject.isIncludeNotes());
@@ -42,8 +45,9 @@ public class ClassificationVariantTest {
     @Test
     public void addLevel() {
         // given
-        ClassificationVariant subject = new ClassificationVariant(Translatable.create("name", Language.NB),
-                TestUtil.createUser());
+        ClassificationVariant subject =
+                new ClassificationVariant(
+                        Translatable.create("name", Language.NB), TestUtil.createUser());
 
         // when
         Level level = new Level(3);

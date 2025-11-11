@@ -1,26 +1,8 @@
 package no.ssb.klass.datadok;
 
 import static com.google.common.base.Preconditions.*;
+
 import static java.util.stream.Collectors.*;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.TreeMap;
-
-import org.apache.commons.lang3.StringUtils;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -34,7 +16,27 @@ import com.google.common.collect.Lists;
 
 import no.ssb.klass.core.model.Language;
 
-// This test is used for filtering codelists from datadok. Probably delete after migration from Datadok,
+import org.apache.commons.lang3.StringUtils;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.TreeMap;
+
+// This test is used for filtering codelists from datadok. Probably delete after migration from
+// Datadok,
 // if deleted remember to also delete resources datadoc_codes and datadok_metadata
 @Disabled
 public class DatadokTest {
@@ -47,30 +49,32 @@ public class DatadokTest {
         stabasCodelists.addAll(reader.readStabas(Language.EN));
         stabasCodelists.addAll(reader.readStabas(Language.NN));
         CodelistCollection codelists = createCodelists();
-        codelists = codelists
-                .printCount("Total")
-                .removeSingleCodes()
-                .removeDuplicates()
-                // .removeCodelistsWithNonNumericCodes()
-                .removeCodelistsWithNumericCodeTitles()
-                .removeCodelistWithCodeTitle("d")
-                .removeCodelistWithCodeTitle("2.")
-                .removeExtracts()
-                .removeAlmostExtracts()
-                .removeStabasExtracts(stabasCodelists)
-                .removeAlmostStabasExtracts(stabasCodelists)
-                .printCount("Reduced")
-                .printMostUsedCodes()
-                .printDistribution()
-                // .printCodelistsWithNumberOfCodes(3)
-                .printCodelistsByOwner();
+        codelists =
+                codelists
+                        .printCount("Total")
+                        .removeSingleCodes()
+                        .removeDuplicates()
+                        // .removeCodelistsWithNonNumericCodes()
+                        .removeCodelistsWithNumericCodeTitles()
+                        .removeCodelistWithCodeTitle("d")
+                        .removeCodelistWithCodeTitle("2.")
+                        .removeExtracts()
+                        .removeAlmostExtracts()
+                        .removeStabasExtracts(stabasCodelists)
+                        .removeAlmostStabasExtracts(stabasCodelists)
+                        .printCount("Reduced")
+                        .printMostUsedCodes()
+                        .printDistribution()
+                        // .printCodelistsWithNumberOfCodes(3)
+                        .printCodelistsByOwner();
     }
 
     private CodelistCollection createCodelists() throws Exception {
         File codefile = openFile("datadok/datadok_codes.csv");
         File metadataFile = openFile("datadok/datadok_metadata.csv");
-        CodelistCollection codelists = CodelistCollection.toCodelists(readCodefile(codefile), readMetadatafile(
-                metadataFile));
+        CodelistCollection codelists =
+                CodelistCollection.toCodelists(
+                        readCodefile(codefile), readMetadatafile(metadataFile));
         return codelists;
     }
 
@@ -86,8 +90,7 @@ public class DatadokTest {
     private List<Code> readCodefile(File codefile) throws Exception {
         CsvMapper mapper = new CsvMapper();
         CsvSchema schema = mapper.schemaFor(Code.class).withHeader();
-        ObjectReader reader = mapper.readerFor(Code.class).with(schema)
-                .withoutRootName();
+        ObjectReader reader = mapper.readerFor(Code.class).with(schema).withoutRootName();
         MappingIterator<Code> iterator = reader.readValues(codefile);
         return iterator.readAll();
     }
@@ -95,8 +98,7 @@ public class DatadokTest {
     private List<Metadata> readMetadatafile(File codefile) throws Exception {
         CsvMapper mapper = new CsvMapper();
         CsvSchema schema = mapper.schemaFor(Metadata.class).withHeader();
-        ObjectReader reader = mapper.readerFor(Metadata.class).with(schema)
-                .withoutRootName();
+        ObjectReader reader = mapper.readerFor(Metadata.class).with(schema).withoutRootName();
         MappingIterator<Metadata> iterator = reader.readValues(codefile);
         return iterator.readAll();
     }
@@ -111,9 +113,12 @@ public class DatadokTest {
         public CodelistCollection printCodelistsByOwner() {
             StringBuilder builder = new StringBuilder();
             for (Entry<String, List<Codelist>> codelistsByOwner : indexByOwner().entrySet()) {
-                builder.append("Seksjon: " + codelistsByOwner.getKey() + ", har antall kodelister: " + codelistsByOwner
-                        .getValue()
-                        .size() + "\n");
+                builder.append(
+                        "Seksjon: "
+                                + codelistsByOwner.getKey()
+                                + ", har antall kodelister: "
+                                + codelistsByOwner.getValue().size()
+                                + "\n");
                 codelistsByOwner.getValue().sort((c1, c2) -> Integer.compare(c1.size(), c2.size()));
                 for (Codelist codelist : codelistsByOwner.getValue()) {
                     builder.append(codelist.toString() + "\n");
@@ -125,8 +130,11 @@ public class DatadokTest {
         }
 
         public Map<String, List<Codelist>> indexByOwner() {
-            return codelists.parallelStream().collect(groupingBy(codelist -> codelist.getOwner(), mapping(
-                    codelist -> codelist, toList())));
+            return codelists.parallelStream()
+                    .collect(
+                            groupingBy(
+                                    codelist -> codelist.getOwner(),
+                                    mapping(codelist -> codelist, toList())));
         }
 
         @SuppressWarnings("unused")
@@ -139,22 +147,35 @@ public class DatadokTest {
 
         public CodelistCollection printMostUsedCodes() {
             log.info("Print most used codes");
-            List<Code> allCodes = codelists.stream().flatMap(codelist -> codelist.codes.stream()).collect(toList());
-            Map<String, Long> grouped = allCodes.stream().collect(groupingBy(code -> code.title, counting()));
-            grouped.entrySet().stream().sorted(Map.Entry.<String, Long> comparingByValue().reversed()).limit(100)
+            List<Code> allCodes =
+                    codelists.stream()
+                            .flatMap(codelist -> codelist.codes.stream())
+                            .collect(toList());
+            Map<String, Long> grouped =
+                    allCodes.stream().collect(groupingBy(code -> code.title, counting()));
+            grouped.entrySet().stream()
+                    .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
+                    .limit(100)
                     .forEach(System.out::println); // or any other terminal method
             log.info("Print most used codes end");
             return this;
         }
 
-        public static CodelistCollection toCodelists(List<Code> allcodes, List<Metadata> metadatas) {
-            Map<String, List<Code>> codeMap = allcodes.parallelStream().collect(groupingBy(code -> code.codelistId,
-                    mapping(code -> code, toList())));
+        public static CodelistCollection toCodelists(
+                List<Code> allcodes, List<Metadata> metadatas) {
+            Map<String, List<Code>> codeMap =
+                    allcodes.parallelStream()
+                            .collect(
+                                    groupingBy(
+                                            code -> code.codelistId,
+                                            mapping(code -> code, toList())));
             List<Codelist> codelists = new ArrayList<>();
             for (Entry<String, List<Code>> codesEntry : codeMap.entrySet()) {
-                Metadata metadataMatch = metadatas.parallelStream().filter(metadata -> metadata.codelistId.equals(
-                        codesEntry
-                                .getKey())).findAny().get();
+                Metadata metadataMatch =
+                        metadatas.parallelStream()
+                                .filter(metadata -> metadata.codelistId.equals(codesEntry.getKey()))
+                                .findAny()
+                                .get();
                 codelists.add(new Codelist(codesEntry.getValue(), metadataMatch));
             }
             return new CodelistCollection(codelists);
@@ -162,14 +183,20 @@ public class DatadokTest {
 
         @SuppressWarnings("unused")
         public CodelistCollection printCodelistsContainingCodeWithTitle(String title) {
-            codelists.parallelStream().filter(codelist -> codelist.hasCodeWithTitle(title)).collect(toList()).forEach(
-                    codelist -> log.info("Containing " + title + ". " + codelist));
+            codelists.parallelStream()
+                    .filter(codelist -> codelist.hasCodeWithTitle(title))
+                    .collect(toList())
+                    .forEach(codelist -> log.info("Containing " + title + ". " + codelist));
             return this;
         }
 
         private Map<Integer, List<Codelist>> index() {
-            return new TreeMap<>(codelists.parallelStream().collect(groupingBy(
-                    codelist -> codelist.size(), mapping(codelist -> codelist, toList()))));
+            return new TreeMap<>(
+                    codelists.parallelStream()
+                            .collect(
+                                    groupingBy(
+                                            codelist -> codelist.size(),
+                                            mapping(codelist -> codelist, toList()))));
         }
 
         public CodelistCollection printCount(String prefix) {
@@ -180,7 +207,8 @@ public class DatadokTest {
         public CodelistCollection printDistribution() {
             StringBuilder builder = new StringBuilder();
             for (Entry<Integer, List<Codelist>> entry : index().entrySet()) {
-                builder.append(entry.getKey() + " codes in " + entry.getValue().size() + " codelists\n");
+                builder.append(
+                        entry.getKey() + " codes in " + entry.getValue().size() + " codelists\n");
             }
             log.info("Distribution: \n" + builder.toString());
             return this;
@@ -193,92 +221,121 @@ public class DatadokTest {
         }
 
         public CodelistCollection removeSingleCodes() {
-            List<Codelist> singleCodes = codelists.parallelStream().filter(codelist -> codelist.size() < 2).collect(
-                    toList());
+            List<Codelist> singleCodes =
+                    codelists.parallelStream()
+                            .filter(codelist -> codelist.size() < 2)
+                            .collect(toList());
             log.info("Removing codelists with single code: " + singleCodes.size());
             return removeCodelists(singleCodes);
         }
 
         public CodelistCollection removeDuplicates() {
             Set<Codelist> uniqueCodelists = new HashSet<>(codelists);
-            log.info("Removing duplicated codelists: " + (codelists.size() - uniqueCodelists.size()));
+            log.info(
+                    "Removing duplicated codelists: "
+                            + (codelists.size() - uniqueCodelists.size()));
             return new CodelistCollection(uniqueCodelists);
         }
 
         public CodelistCollection removeCodelistWithCodeTitle(String title) {
-            List<Codelist> removed = codelists.parallelStream().filter(codelist -> codelist.hasCodeWithTitle(title))
-                    .collect(toList());
+            List<Codelist> removed =
+                    codelists.parallelStream()
+                            .filter(codelist -> codelist.hasCodeWithTitle(title))
+                            .collect(toList());
             log.info("Removing codelists having code with title '" + title + "':" + removed.size());
             return removeCodelists(removed);
         }
 
         public CodelistCollection removeCodelistsWithNumericCodeTitles() {
-            List<Codelist> removed = codelists.parallelStream().filter(codelist -> codelist.hasNumericCodeTitles())
-                    .collect(toList());
+            List<Codelist> removed =
+                    codelists.parallelStream()
+                            .filter(codelist -> codelist.hasNumericCodeTitles())
+                            .collect(toList());
             log.info("Removing codelists with numeric code titles: " + removed.size());
             return removeCodelists(removed);
         }
 
         @SuppressWarnings("unused")
         public CodelistCollection removeCodelistsWithNonNumericCodes() {
-            List<Codelist> removed = codelists.parallelStream().filter(codelist -> codelist.hasNonNumericCodes())
-                    .collect(
-                            toList());
+            List<Codelist> removed =
+                    codelists.parallelStream()
+                            .filter(codelist -> codelist.hasNonNumericCodes())
+                            .collect(toList());
             log.info("Removing codelists with non numeric codes: " + removed.size());
             return removeCodelists(removed);
         }
 
         public CodelistCollection removeExtracts() {
-            List<Codelist> removed = codelists.parallelStream().filter(codelist -> isExtractOfOther(codelist)).collect(
-                    toList());
+            List<Codelist> removed =
+                    codelists.parallelStream()
+                            .filter(codelist -> isExtractOfOther(codelist))
+                            .collect(toList());
             log.info("Removing extract codelists: " + removed.size());
             return removeCodelists(removed);
         }
 
         public CodelistCollection removeAlmostExtracts() {
-            List<Codelist> removed = codelists.parallelStream().filter(codelist -> isAlmostExtractOfOther(codelist))
-                    .collect(toList());
-            log.info("Removing codelist that has half or more codes matching another codelists: " + removed.size());
+            List<Codelist> removed =
+                    codelists.parallelStream()
+                            .filter(codelist -> isAlmostExtractOfOther(codelist))
+                            .collect(toList());
+            log.info(
+                    "Removing codelist that has half or more codes matching another codelists: "
+                            + removed.size());
             return removeCodelists(removed);
         }
 
         public CodelistCollection removeStabasExtracts(List<Codelist> stabasCodelists) {
-            List<Codelist> removed = codelists.parallelStream().filter(codelist -> isExtractOfStabasCodelists(codelist,
-                    stabasCodelists)).collect(toList());
+            List<Codelist> removed =
+                    codelists.parallelStream()
+                            .filter(
+                                    codelist ->
+                                            isExtractOfStabasCodelists(codelist, stabasCodelists))
+                            .collect(toList());
             log.info("Removing codelist that is extract from stabas: " + removed.size());
             return removeCodelists(removed);
         }
 
-        private boolean isExtractOfStabasCodelists(Codelist codelist, List<Codelist> stabasCodelists) {
-            return stabasCodelists.parallelStream().anyMatch(stabasCodelist -> stabasCodelist.containsAll(
-                    codelist.codes));
+        private boolean isExtractOfStabasCodelists(
+                Codelist codelist, List<Codelist> stabasCodelists) {
+            return stabasCodelists.parallelStream()
+                    .anyMatch(stabasCodelist -> stabasCodelist.containsAll(codelist.codes));
         }
 
-        private boolean isMostlyExtractOfStabasCodelists(Codelist codelist, List<Codelist> stabasCodelists) {
-            return stabasCodelists.parallelStream().anyMatch(stabasCodelist -> stabasCodelist.containsMost(
-                    codelist.codes));
+        private boolean isMostlyExtractOfStabasCodelists(
+                Codelist codelist, List<Codelist> stabasCodelists) {
+            return stabasCodelists.parallelStream()
+                    .anyMatch(stabasCodelist -> stabasCodelist.containsMost(codelist.codes));
         }
 
         public CodelistCollection removeAlmostStabasExtracts(List<Codelist> stabasCodelists) {
-            List<Codelist> removed = codelists.parallelStream().filter(codelist -> isMostlyExtractOfStabasCodelists(
-                    codelist, stabasCodelists)).collect(toList());
-            log.info("Removing codelist that has half or more codes matching a stabas classification: " + removed
-                    .size());
+            List<Codelist> removed =
+                    codelists.parallelStream()
+                            .filter(
+                                    codelist ->
+                                            isMostlyExtractOfStabasCodelists(
+                                                    codelist, stabasCodelists))
+                            .collect(toList());
+            log.info(
+                    "Removing codelist that has half or more codes matching a stabas classification: "
+                            + removed.size());
             return removeCodelists(removed);
         }
 
         private boolean isExtractOfOther(Codelist codelist) {
-            return findCodelistsWithEqualOrMoreCodesButNotSelf(codelist.size(), codelist).parallelStream().anyMatch(
-                    testCodelist -> testCodelist
-                            .containsAll(codelist.codes));
+            return findCodelistsWithEqualOrMoreCodesButNotSelf(codelist.size(), codelist)
+                    .parallelStream()
+                    .anyMatch(testCodelist -> testCodelist.containsAll(codelist.codes));
         }
 
         private boolean isAlmostExtractOfOther(Codelist codelist) {
-            return findCodelistsWithEqualOrMoreCodesButNotSelf(codelist.size(), codelist).parallelStream()
+            return findCodelistsWithEqualOrMoreCodesButNotSelf(codelist.size(), codelist)
+                    .parallelStream()
                     .anyMatch(testCodelist -> testCodelist.containsMost(codelist.codes));
         }
 
-        private List<Codelist> findCodelistsWithEqualOrMoreCodesButNotSelf(int countCodes, Codelist self) {
+        private List<Codelist> findCodelistsWithEqualOrMoreCodesButNotSelf(
+                int countCodes, Codelist self) {
             return codelists.parallelStream()
                     .filter(codelist -> codelist.size() >= countCodes)
                     .filter(codelist -> codelist != self)
@@ -299,44 +356,46 @@ public class DatadokTest {
         private static final List<String> SENTINEL;
 
         static {
-            SENTINEL = Lists.newArrayList("vet ikke",
-                    "uoppgitt",
-                    "vil ikke svare",
-                    "refusal",
-                    "dont know",
-                    "no answer",
-                    "nekter",
-                    "not applicable",
-                    "uaktuelt",
-                    "not available",
-                    "ikke besvart",
-                    "not stated",
-                    "don't know",
-                    "husker ikke",
-                    "andre grunner",
-                    "refused",
-                    "nekter å svare",
-                    "ukjent",
-                    "ikke relevant",
-                    "dont know, never saw r, no selected r",
-                    "upers",
-                    "don´t know",
-                    "ikke relevant",
-                    "uoppgitt/nekt",
-                    "ikke svare",
-                    "ubesvart",
-                    "blank",
-                    "io ønsker ikke å delta",
-                    "io er langvarig syk",
-                    "io er kortvarig syk",
-                    "io ikke å treffe av andre årsaker",
-                    "io er død",
-                    "andre nekter for io",
-                    "språkproblemer",
-                    "vet ikke/vil ikke svare",
-                    "kan ikke svare",
-                    "io selv",
-                    "not answered");
+            SENTINEL =
+                    Lists.newArrayList(
+                            "vet ikke",
+                            "uoppgitt",
+                            "vil ikke svare",
+                            "refusal",
+                            "dont know",
+                            "no answer",
+                            "nekter",
+                            "not applicable",
+                            "uaktuelt",
+                            "not available",
+                            "ikke besvart",
+                            "not stated",
+                            "don't know",
+                            "husker ikke",
+                            "andre grunner",
+                            "refused",
+                            "nekter å svare",
+                            "ukjent",
+                            "ikke relevant",
+                            "dont know, never saw r, no selected r",
+                            "upers",
+                            "don´t know",
+                            "ikke relevant",
+                            "uoppgitt/nekt",
+                            "ikke svare",
+                            "ubesvart",
+                            "blank",
+                            "io ønsker ikke å delta",
+                            "io er langvarig syk",
+                            "io er kortvarig syk",
+                            "io ikke å treffe av andre årsaker",
+                            "io er død",
+                            "andre nekter for io",
+                            "språkproblemer",
+                            "vet ikke/vil ikke svare",
+                            "kan ikke svare",
+                            "io selv",
+                            "not answered");
         }
 
         Codelist(List<Code> codes, Metadata metadata) {
@@ -349,8 +408,15 @@ public class DatadokTest {
             this.substammeOwner = Strings.nullToEmpty(metadata.substammeOwner).trim();
             this.stammeName = metadata.stammeName;
             this.stammeOwner = Strings.nullToEmpty(metadata.stammeOwner).trim();
-            this.codes = codes.parallelStream().map(code -> new Code(code)).filter(code -> !isSentinel(code)).filter(
-                    code -> !code.title.trim().isEmpty()).collect(toSet()).parallelStream().sorted().collect(toList());
+            this.codes =
+                    codes.parallelStream()
+                            .map(code -> new Code(code))
+                            .filter(code -> !isSentinel(code))
+                            .filter(code -> !code.title.trim().isEmpty())
+                            .collect(toSet())
+                            .parallelStream()
+                            .sorted()
+                            .collect(toList());
         }
 
         public boolean hasNonNumericCodes() {
@@ -398,17 +464,31 @@ public class DatadokTest {
         @Override
         public int hashCode() {
             return 1;
-
         }
 
         @Override
         public String toString() {
-            return stammeName + ":" + substammeName + ":" + filklasseName + ":" + generationName + ":" + codelistName
-                    + " ^ antall koder: " + codes.size() + " ^ " + codes;
+            return stammeName
+                    + ":"
+                    + substammeName
+                    + ":"
+                    + filklasseName
+                    + ":"
+                    + generationName
+                    + ":"
+                    + codelistName
+                    + " ^ antall koder: "
+                    + codes.size()
+                    + " ^ "
+                    + codes;
         }
 
         public boolean hasCodeWithTitle(String title) {
-            return codes.parallelStream().filter(code -> code.title.equals(title)).collect(toSet()).size() > 0;
+            return codes.parallelStream()
+                            .filter(code -> code.title.equals(title))
+                            .collect(toSet())
+                            .size()
+                    > 0;
         }
 
         public String getOwner() {
@@ -434,17 +514,18 @@ public class DatadokTest {
         }
     }
 
-    @JsonPropertyOrder({ "VARIABEL_ID", "KODE_VERDI", "KODE_NAVN" })
+    @JsonPropertyOrder({"VARIABEL_ID", "KODE_VERDI", "KODE_NAVN"})
     public static class Code implements Comparable<Code> {
         @JsonProperty("VARIABEL_ID")
         private String codelistId;
+
         @JsonProperty("KODE_VERDI")
         private String code;
+
         @JsonProperty("KODE_NAVN")
         private String title;
 
-        protected Code() {
-        }
+        protected Code() {}
 
         Code(String codelistId, String code, String title) {
             this.codelistId = codelistId;
@@ -479,8 +560,17 @@ public class DatadokTest {
         }
     }
 
-    @JsonPropertyOrder({ "VARIABEL_ID", "VARIABEL_NAME", "GENERASJON", "FILKLASSE", "FILEIER", "SUBSTAMME",
-            "SUBSTAMME_EIER", "STAMME", "STAMME_EIER" })
+    @JsonPropertyOrder({
+        "VARIABEL_ID",
+        "VARIABEL_NAME",
+        "GENERASJON",
+        "FILKLASSE",
+        "FILEIER",
+        "SUBSTAMME",
+        "SUBSTAMME_EIER",
+        "STAMME",
+        "STAMME_EIER"
+    })
     public static class Metadata {
         @JsonProperty("VARIABEL_ID")
         private String codelistId;
@@ -508,6 +598,5 @@ public class DatadokTest {
 
         @JsonProperty("STAMME_EIER")
         private String stammeOwner;
-
     }
 }

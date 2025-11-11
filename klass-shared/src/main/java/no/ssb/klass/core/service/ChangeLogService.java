@@ -7,5 +7,4 @@ import no.ssb.klass.core.model.Changelog;
  */
 public interface ChangeLogService {
     void deleteChangelog(Changelog changelog);
-
 }

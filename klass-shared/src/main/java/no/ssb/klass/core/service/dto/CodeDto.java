@@ -1,11 +1,11 @@
 package no.ssb.klass.core.service.dto;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import no.ssb.klass.core.model.ClassificationItem;
 import no.ssb.klass.core.model.Language;
 import no.ssb.klass.core.model.Level;
 import no.ssb.klass.core.util.DateRange;
-
-import static com.google.common.base.Preconditions.checkNotNull;
 
 public class CodeDto {
     private final String code;
@@ -29,9 +29,11 @@ public class CodeDto {
         this.shortName = item.getShortName(language);
         this.level = Integer.toString(level.getLevelNumber());
         this.dateRange = dateRange;
-        this.validity = item.getValidFrom() == null ? null : DateRange.create(item.getValidFrom(), item.getValidTo());
-        this.notes = item.getNotes(language).replace('\n',' ');
-
+        this.validity =
+                item.getValidFrom() == null
+                        ? null
+                        : DateRange.create(item.getValidFrom(), item.getValidTo());
+        this.notes = item.getNotes(language).replace('\n', ' ');
     }
 
     public String getCode() {
@@ -62,6 +64,7 @@ public class CodeDto {
         return validity;
     }
 
-    public String getNotes()  { return notes; }
-
+    public String getNotes() {
+        return notes;
+    }
 }

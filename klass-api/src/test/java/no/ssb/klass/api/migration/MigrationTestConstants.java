@@ -3,7 +3,6 @@ package no.ssb.klass.api.migration;
 import java.util.Arrays;
 import java.util.List;
 
-
 public final class MigrationTestConstants {
 
     // paths
@@ -29,7 +28,6 @@ public final class MigrationTestConstants {
 
     public static final String QUERY = "query";
 
-
     // Top level
     public static final String PAGE = "page";
 
@@ -39,13 +37,15 @@ public final class MigrationTestConstants {
     public static final String EMBEDDED_CLASSIFICATIONS_ID = "_embedded.classifications.id";
     public static final String EMBEDDED_SSB_SECTIONS = "_embedded.ssbSections";
     public static final String EMBEDDED_SSB_SECTIONS_NAME = "_embedded.ssbSections.name";
-    public static final String EMBEDDED_CLASSIFICATION_FAMILIES = "_embedded.classificationFamilies";
+    public static final String EMBEDDED_CLASSIFICATION_FAMILIES =
+            "_embedded.classificationFamilies";
     public static final String PUBLISHED_NB = "published.nb";
     public static final String PUBLISHED_EN = "published.en";
     public static final String PUBLISHED_NN = "published.nn";
     public static final String CLASSIFICATION_NAME = "classification.name";
     public static final String CLASSIFICATION_ID = "classification.id";
-    public static final String CLASSIFICATION_CLASSIFICATION_TYPE = "classification.classificationType";
+    public static final String CLASSIFICATION_CLASSIFICATION_TYPE =
+            "classification.classificationType";
     public static final String CLASSIFICATION_DESCRIPTION = "classification.description";
     public static final String CLASSIFICATION_LAST_MODIFIED = "classification.lastModified";
     public static final String CLASSIFICATION_PRIMARY_LANGUAGE = "classification.primaryLanguage";
@@ -91,8 +91,8 @@ public final class MigrationTestConstants {
     public static final String LINK_REL = "link.rel";
     public static final String LINK_HREF = "link.href";
     public static final String CORRESPONDENCE_TABLE_NAME = "correspondenceTable.name";
-    public static final String CORRESPONDENCE_TABLE_OWNING_SECTION = "correspondenceTable.owningSection";
-
+    public static final String CORRESPONDENCE_TABLE_OWNING_SECTION =
+            "correspondenceTable.owningSection";
 
     // Field of list type
     public static final String CLASSIFICATIONS = "classifications";
@@ -111,18 +111,22 @@ public final class MigrationTestConstants {
     public static final String CLASSIFICATIONS_VARIANTS = "classificationVariants";
 
     // Field list type xml
-    public static final String CLASSIFICATION_VERSION_PUBLISHED_LANGUAGES = "classificationVersion.publishedLanguages.published";
+    public static final String CLASSIFICATION_VERSION_PUBLISHED_LANGUAGES =
+            "classificationVersion.publishedLanguages.published";
 
     public static final String CLASSIFICATION_VERSION_LEVELS = "classificationVersion.levels.level";
-    public static final String CLASSIFICATION_VERSION_CLASSIFICATION_ITEMS = "classificationVersion.classificationItems.classificationItem";
+    public static final String CLASSIFICATION_VERSION_CLASSIFICATION_ITEMS =
+            "classificationVersion.classificationItems.classificationItem";
 
-    public static final String CLASSIFICATION_VARIANT_CLASSIFICATION_ITEMS = "classificationVariant.classificationItems.classificationItem";
+    public static final String CLASSIFICATION_VARIANT_CLASSIFICATION_ITEMS =
+            "classificationVariant.classificationItems.classificationItem";
 
     public static final String ENTITIES_CONTENTS_CONTENT_NAME = "entities.contents.content.name";
     public static final String ENTITIES_CONTENTS_CONTENT = "entities.contents.content";
     public static final String CODE_CHANGE_LIST_CODE_CHANGE_ITEM = "codeChangeList.codeChangeItem";
     public static final String CODE_LIST_CODE_ITEM = "codeList.codeItem";
-    public static final String CORRESPONDENCE_ITEM_LIST_CORRESPONDENCE_ITEM = "correspondenceItemList.correspondenceItem";
+    public static final String CORRESPONDENCE_ITEM_LIST_CORRESPONDENCE_ITEM =
+            "correspondenceItemList.correspondenceItem";
     public static final String PAGED_ENTITIES_CONTENTS_CONTENT = "pagedEntities.contents.content";
     public static final String PAGED_ENTITIES_PAGE = "pagedEntities.page";
     public static final String ENTITIES_LINK_REL = "entities.link.rel";
@@ -136,16 +140,26 @@ public final class MigrationTestConstants {
     public static final String CLASSIFICATION_VERSION_ID = "classificationVersion.id";
     public static final String CLASSIFICATION_VERSION_LINK_REL = "classificationVersion.link.rel";
     public static final String CLASSIFICATION_VERSION_LINK_HREF = "classificationVersion.link.href";
-    public static final String CLASSIFICATION_VERSION_VALID_FROM = "classificationVersion.validFrom";
-    public static final String CLASSIFICATION_VERSION_LAST_MODIFIED = "classificationVersion.lastModified";
-    public static final String CLASSIFICATION_VERSION_INTRODUCTION = "classificationVersion.introduction";
-    public static final String CLASSIFICATION_VERSION_CONTACT_PERSON_NAME = "classificationVersion.contactPerson.name";
-    public static final String CLASSIFICATION_VERSION_CONTACT_PERSON_EMAIL = "classificationVersion.contactPerson.email";
-    public static final String CLASSIFICATION_VERSION_CONTACT_PERSON_PHONE = "classificationVersion.contactPerson.phone";
-    public static final String CLASSIFICATION_VERSION_OWNING_SECTION = "classificationVersion.owningSection";
-    public static final String CLASSIFICATION_VERSION_PUBLICATIONS = "classificationVersion.publications";
-    public static final String CLASSIFICATION_VERSION_DERIVED_FROM = "classificationVersion.derivedFrom";
-    public static final String CLASSIFICATION_VERSION_LEGAL_BASE = "classificationVersion.legalBase";
+    public static final String CLASSIFICATION_VERSION_VALID_FROM =
+            "classificationVersion.validFrom";
+    public static final String CLASSIFICATION_VERSION_LAST_MODIFIED =
+            "classificationVersion.lastModified";
+    public static final String CLASSIFICATION_VERSION_INTRODUCTION =
+            "classificationVersion.introduction";
+    public static final String CLASSIFICATION_VERSION_CONTACT_PERSON_NAME =
+            "classificationVersion.contactPerson.name";
+    public static final String CLASSIFICATION_VERSION_CONTACT_PERSON_EMAIL =
+            "classificationVersion.contactPerson.email";
+    public static final String CLASSIFICATION_VERSION_CONTACT_PERSON_PHONE =
+            "classificationVersion.contactPerson.phone";
+    public static final String CLASSIFICATION_VERSION_OWNING_SECTION =
+            "classificationVersion.owningSection";
+    public static final String CLASSIFICATION_VERSION_PUBLICATIONS =
+            "classificationVersion.publications";
+    public static final String CLASSIFICATION_VERSION_DERIVED_FROM =
+            "classificationVersion.derivedFrom";
+    public static final String CLASSIFICATION_VERSION_LEGAL_BASE =
+            "classificationVersion.legalBase";
 
     // search
     public static final String SEARCH_RESULTS = "_embedded.searchResults";
@@ -179,7 +193,6 @@ public final class MigrationTestConstants {
     public static final String LINKS_TARGET_TEMPLATED = "_links.target.templated";
     public static final String LINKS_TARGET_HREF = "_links.target.href";
 
-
     // Params
     public static final String LANGUAGE = "language";
     public static final String INCLUDE_FUTURE = "includeFuture";
@@ -208,236 +221,186 @@ public final class MigrationTestConstants {
     public static final String LOG_MESSAGE_STATUS_CODE = "Status code: ";
     public static final String API_EMPTY_RESPONSE_MESSAGE = "Source api returned no content";
 
-
     // Lists
-    public static List<String> pathNamesClassification = Arrays.asList(
-            NAME,
-            ID,
-            CLASSIFICATION_TYPE,
-            DESCRIPTION,
-            LAST_MODIFIED,
-            PRIMARY_LANGUAGE,
-            COPYRIGHTED,
-            INCLUDE_SHORTNAME,
-            INCLUDE_NOTES,
-            CONTACT_PERSON,
-            OWNING_SECTION,
-            LINKS_SELF_HREF,
-            LINKS_CODES_HREF,
-            LINKS_CODES_TEMPLATED,
-            LINKS_CODES_AT_HREF,
-            LINKS_CODES_AT_TEMPLATED,
-            LINKS_VARIANT_HREF,
-            LINKS_VARIANT_TEMPLATED,
-            LINKS_VARIANT_AT_HREF,
-            LINKS_VARIANT_AT_TEMPLATED,
-            LINKS_CORRESPONDS_HREF,
-            LINKS_CORRESPONDS_TEMPLATED,
-            LINKS_CORRESPONDS_AT_HREF,
-            LINKS_CORRESPONDS_AT_TEMPLATED,
-            LINKS_CHANGES_HREF,
-            LINKS_CHANGES_TEMPLATED
-    );
+    public static List<String> pathNamesClassification =
+            Arrays.asList(
+                    NAME,
+                    ID,
+                    CLASSIFICATION_TYPE,
+                    DESCRIPTION,
+                    PRIMARY_LANGUAGE,
+                    COPYRIGHTED,
+                    INCLUDE_SHORTNAME,
+                    INCLUDE_NOTES,
+                    CONTACT_PERSON,
+                    OWNING_SECTION,
+                    LINKS_SELF_HREF,
+                    LINKS_CODES_HREF,
+                    LINKS_CODES_TEMPLATED,
+                    LINKS_CODES_AT_HREF,
+                    LINKS_CODES_AT_TEMPLATED,
+                    LINKS_VARIANT_HREF,
+                    LINKS_VARIANT_TEMPLATED,
+                    LINKS_VARIANT_AT_HREF,
+                    LINKS_VARIANT_AT_TEMPLATED,
+                    LINKS_CORRESPONDS_HREF,
+                    LINKS_CORRESPONDS_TEMPLATED,
+                    LINKS_CORRESPONDS_AT_HREF,
+                    LINKS_CORRESPONDS_AT_TEMPLATED,
+                    LINKS_CHANGES_HREF,
+                    LINKS_CHANGES_TEMPLATED);
 
-    public static List<String> pathNamesClassificationXml = Arrays.asList(
-            CLASSIFICATION_NAME,
-            CLASSIFICATION_ID,
-            CLASSIFICATION_CLASSIFICATION_TYPE,
-            CLASSIFICATION_DESCRIPTION,
-            CLASSIFICATION_LAST_MODIFIED,
-            CLASSIFICATION_PRIMARY_LANGUAGE,
-            CLASSIFICATION_COPYRIGHTED,
-            CLASSIFICATION_INCLUDE_SHORTNAME,
-            CLASSIFICATION_INCLUDE_NOTES,
-            CLASSIFICATION_CONTACT_PERSON,
-            CLASSIFICATION_OWNING_SECTION
-    );
+    public static List<String> pathNamesClassificationXml =
+            Arrays.asList(
+                    CLASSIFICATION_NAME,
+                    CLASSIFICATION_ID,
+                    CLASSIFICATION_CLASSIFICATION_TYPE,
+                    CLASSIFICATION_DESCRIPTION,
+                    CLASSIFICATION_LAST_MODIFIED,
+                    CLASSIFICATION_PRIMARY_LANGUAGE,
+                    CLASSIFICATION_COPYRIGHTED,
+                    CLASSIFICATION_INCLUDE_SHORTNAME,
+                    CLASSIFICATION_INCLUDE_NOTES,
+                    CLASSIFICATION_CONTACT_PERSON,
+                    CLASSIFICATION_OWNING_SECTION);
 
-    public static List<String> pathNamesClassificationVariants = Arrays.asList(
-            NAME,
-            ID,
-            CONTACT_PERSON,
-            OWNING_SECTION,
-            LAST_MODIFIED,
-            PUBLISHED_NB,
-            PUBLISHED_EN,
-            PUBLISHED_NN,
-            LINKS_SELF_HREF
-    );
+    public static List<String> pathNamesClassificationVariants =
+            Arrays.asList(
+                    NAME,
+                    ID,
+                    CONTACT_PERSON,
+                    OWNING_SECTION,
+                    PUBLISHED_NB,
+                    PUBLISHED_EN,
+                    PUBLISHED_NN,
+                    LINKS_SELF_HREF);
 
-    public static List<String> pathNamesClassificationVersionXml = Arrays.asList(
-            CLASSIFICATION_VERSION_NAME,
-            CLASSIFICATION_VERSION_ID,
-            CLASSIFICATION_VERSION_VALID_FROM,
-            CLASSIFICATION_VERSION_LAST_MODIFIED,
-            CLASSIFICATION_VERSION_INTRODUCTION,
-            CLASSIFICATION_VERSION_CONTACT_PERSON_NAME,
-            CLASSIFICATION_VERSION_CONTACT_PERSON_EMAIL,
-            CLASSIFICATION_VERSION_CONTACT_PERSON_PHONE,
-            CLASSIFICATION_VERSION_OWNING_SECTION,
-            CLASSIFICATION_VERSION_PUBLICATIONS,
-            CLASSIFICATION_VERSION_DERIVED_FROM,
-            CLASSIFICATION_VERSION_LEGAL_BASE,
-            CLASSIFICATION_VERSION_LINK_REL,
-            CLASSIFICATION_VERSION_LINK_HREF
-    );
+    public static List<String> pathNamesClassificationVersionXml =
+            Arrays.asList(
+                    CLASSIFICATION_VERSION_NAME,
+                    CLASSIFICATION_VERSION_ID,
+                    CLASSIFICATION_VERSION_VALID_FROM,
+                    CLASSIFICATION_VERSION_LAST_MODIFIED,
+                    CLASSIFICATION_VERSION_INTRODUCTION,
+                    CLASSIFICATION_VERSION_CONTACT_PERSON_NAME,
+                    CLASSIFICATION_VERSION_CONTACT_PERSON_EMAIL,
+                    CLASSIFICATION_VERSION_CONTACT_PERSON_PHONE,
+                    CLASSIFICATION_VERSION_OWNING_SECTION,
+                    CLASSIFICATION_VERSION_PUBLICATIONS,
+                    CLASSIFICATION_VERSION_DERIVED_FROM,
+                    CLASSIFICATION_VERSION_LEGAL_BASE,
+                    CLASSIFICATION_VERSION_LINK_REL,
+                    CLASSIFICATION_VERSION_LINK_HREF);
 
-    public static List<String> pathNamesClassificationsPage = Arrays.asList(
-            NAME,
-            ID,
-            CLASSIFICATION_TYPE,
-            LAST_MODIFIED,
-            LINKS_SELF_HREF
-    );
+    public static List<String> pathNamesClassificationsPage =
+            Arrays.asList(NAME, ID, CLASSIFICATION_TYPE, LAST_MODIFIED, LINKS_SELF_HREF);
 
-    public static List<String> pathNamesClassificationsPageXml = Arrays.asList(
-            NAME,
-            ID,
-            CLASSIFICATION_TYPE,
-            LAST_MODIFIED,
-            LINK_REL,
-            LINK_HREF
-    );
+    public static List<String> pathNamesClassificationsPageXml =
+            Arrays.asList(NAME, ID, CLASSIFICATION_TYPE, LAST_MODIFIED, LINK_REL, LINK_HREF);
 
-    public static List<String> pathNamesVersion = Arrays.asList(
-            NAME,
-            ID,
-            VALID_FROM,
-            VALID_TO,
-            LAST_MODIFIED,
-            PUBLISHED,
-            LINKS_SELF_HREF
-    );
+    public static List<String> pathNamesVersion =
+            Arrays.asList(
+                    NAME, ID, VALID_FROM, VALID_TO, LAST_MODIFIED, PUBLISHED, LINKS_SELF_HREF);
 
-    public static List<String> pathNamesClassificationFamilies = Arrays.asList(
-            NAME,
-            ID,
-            NUMBER_OF_CLASSIFICATIONS,
-            LINKS_SELF_HREF
-    );
+    public static List<String> pathNamesClassificationFamilies =
+            Arrays.asList(NAME, ID, NUMBER_OF_CLASSIFICATIONS, LINKS_SELF_HREF);
 
-    public static List<String> pathNamesClassificationFamilyById = Arrays.asList(
-            NAME,
-            ID,
-            LINKS_SELF_HREF
-    );
+    public static List<String> pathNamesClassificationFamilyById =
+            Arrays.asList(NAME, ID, LINKS_SELF_HREF);
 
-    public static List<String> pathNamesClassificationFamilyByIdXml = Arrays.asList(
-            CLASSIFICATION_FAMILY_NAME,
-            CLASSIFICATION_FAMILY_ID,
-            CLASSIFICATION_FAMILY_LINK_REL,
-            CLASSIFICATION_FAMILY_LINK_HREF
-    );
+    public static List<String> pathNamesClassificationFamilyByIdXml =
+            Arrays.asList(
+                    CLASSIFICATION_FAMILY_NAME,
+                    CLASSIFICATION_FAMILY_ID,
+                    CLASSIFICATION_FAMILY_LINK_REL,
+                    CLASSIFICATION_FAMILY_LINK_HREF);
 
-    public static List<String> pathNamesVersionsById = Arrays.asList(
-            NAME,
-            ID,
-            VALID_FROM,
-            VALID_TO,
-            LAST_MODIFIED,
-            INTRODUCTION,
-            LEGAL_BASE,
-            PUBLICATIONS,
-            DERIVED_FROM,
-            CONTACT_PERSON,
-            LINKS_SELF_HREF,
-            OWNING_SECTION
-    );
+    public static List<String> pathNamesVersionsById =
+            Arrays.asList(
+                    NAME,
+                    ID,
+                    VALID_FROM,
+                    VALID_TO,
+                    INTRODUCTION,
+                    LEGAL_BASE,
+                    PUBLICATIONS,
+                    DERIVED_FROM,
+                    CONTACT_PERSON,
+                    LINKS_SELF_HREF,
+                    OWNING_SECTION);
 
-    public static List<String> pathNamesVersionsClassificationItems = Arrays.asList(
-            CODE,
-            PARENT_CODE,
-            LEVEL,
-            NAME,
-            SHORT_NAME,
-            NOTES
-    );
+    public static List<String> pathNamesVersionsClassificationItems =
+            Arrays.asList(CODE, PARENT_CODE, LEVEL, NAME, SHORT_NAME, NOTES);
 
-    public static List<String> pathNamesCorrespondenceTableVersions = Arrays.asList(
-            NAME,
-            ID,
-            CONTACT_PERSON,
-            OWNING_SECTION,
-            SOURCE,
-            SOURCE_ID,
-            TARGET,
-            TARGET_ID,
-            CHANGE_TABLE,
-            LAST_MODIFIED,
-            SOURCE_LEVEL,
-            TARGET_LEVEL,
-            DESCRIPTION,
-            PUBLISHED_NB,
-            PUBLISHED_NN,
-            PUBLISHED_EN,
-            LINKS_SELF_HREF,
-            LINKS_SOURCE_HREF,
-            LINKS_SOURCE_TEMPLATED,
-            LINKS_TARGET_HREF,
-            LINKS_TARGET_TEMPLATED
-    );
+    public static List<String> pathNamesCorrespondenceTableVersions =
+            Arrays.asList(
+                    NAME,
+                    ID,
+                    CONTACT_PERSON,
+                    OWNING_SECTION,
+                    SOURCE,
+                    SOURCE_ID,
+                    TARGET,
+                    TARGET_ID,
+                    CHANGE_TABLE,
+                    SOURCE_LEVEL,
+                    TARGET_LEVEL,
+                    DESCRIPTION,
+                    PUBLISHED_NB,
+                    PUBLISHED_NN,
+                    PUBLISHED_EN,
+                    LINKS_SELF_HREF,
+                    LINKS_SOURCE_HREF,
+                    LINKS_SOURCE_TEMPLATED,
+                    LINKS_TARGET_HREF,
+                    LINKS_TARGET_TEMPLATED);
 
-    public static List<String> pathNamesCorrespondenceTable = Arrays.asList(
-            NAME,
-            ID,
-            CONTACT_PERSON,
-            OWNING_SECTION,
-            SOURCE,
-            SOURCE_ID,
-            TARGET,
-            TARGET_ID,
-            CHANGE_TABLE,
-            LAST_MODIFIED,
-            SOURCE_LEVEL,
-            TARGET_LEVEL,
-            DESCRIPTION,
-            LINKS_SELF_HREF,
-            LINKS_SOURCE_HREF,
-            LINKS_SOURCE_TEMPLATED,
-            LINKS_TARGET_HREF,
-            LINKS_TARGET_TEMPLATED
-    );
+    public static List<String> pathNamesCorrespondenceTable =
+            Arrays.asList(
+                    NAME,
+                    ID,
+                    CONTACT_PERSON,
+                    OWNING_SECTION,
+                    SOURCE,
+                    SOURCE_ID,
+                    TARGET,
+                    TARGET_ID,
+                    CHANGE_TABLE,
+                    SOURCE_LEVEL,
+                    TARGET_LEVEL,
+                    DESCRIPTION,
+                    LINKS_SELF_HREF,
+                    LINKS_SOURCE_HREF,
+                    LINKS_SOURCE_TEMPLATED,
+                    LINKS_TARGET_HREF,
+                    LINKS_TARGET_TEMPLATED);
 
-    public static List<String> pathNamesVariantById = Arrays.asList(
-            NAME,
-            ID,
-            CONTACT_PERSON,
-            OWNING_SECTION,
-            LAST_MODIFIED,
-            VALID_FROM,
-            VALID_TO,
-            INTRODUCTION,
-            LINKS_SELF_HREF
-    );
+    public static List<String> pathNamesVariantById =
+            Arrays.asList(
+                    NAME,
+                    ID,
+                    CONTACT_PERSON,
+                    OWNING_SECTION,
+                    VALID_FROM,
+                    VALID_TO,
+                    INTRODUCTION,
+                    LINKS_SELF_HREF);
 
-    public static List<String> pathNamesClassificationFamiliesXml = Arrays.asList(
-            NAME,
-            ID,
-            NUMBER_OF_CLASSIFICATIONS,
-            LINK_REL,
-            LINK_HREF
-    );
+    public static List<String> pathNamesClassificationFamiliesXml =
+            Arrays.asList(NAME, ID, NUMBER_OF_CLASSIFICATIONS, LINK_REL, LINK_HREF);
 
-    public static List<String> pathNamesClassificationsLinks = Arrays.asList(
-            LINKS_FIRST_HREF,
-            LINKS_SELF_HREF,
-            LINKS_NEXT_HREF,
-            LINKS_LAST_HREF,
-            LINKS_SEARCH_HREF,
-            LINKS_SEARCH_TEMPLATED
+    public static List<String> pathNamesClassificationsLinks =
+            Arrays.asList(
+                    LINKS_FIRST_HREF,
+                    LINKS_SELF_HREF,
+                    LINKS_NEXT_HREF,
+                    LINKS_LAST_HREF,
+                    LINKS_SEARCH_HREF,
+                    LINKS_SEARCH_TEMPLATED);
 
-    );
+    public static List<String> pathNamesXmlEntitiesLinks =
+            Arrays.asList(ENTITIES_LINK_REL, ENTITIES_LINK_HREF);
 
-    public static List<String> pathNamesXmlEntitiesLinks = Arrays.asList(
-            ENTITIES_LINK_REL,
-            ENTITIES_LINK_HREF
-
-    );
-
-    public static List<String> pathNamesCorrespondenceTableXml = Arrays.asList(
-            CORRESPONDENCE_TABLE_NAME,
-            CORRESPONDENCE_TABLE_OWNING_SECTION
-
-    );
-
+    public static List<String> pathNamesCorrespondenceTableXml =
+            Arrays.asList(CORRESPONDENCE_TABLE_NAME, CORRESPONDENCE_TABLE_OWNING_SECTION);
 }
