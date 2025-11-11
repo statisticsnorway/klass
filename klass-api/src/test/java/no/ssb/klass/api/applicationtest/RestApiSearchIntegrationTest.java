@@ -25,6 +25,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
 import static io.restassured.RestAssured.given;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.hamcrest.Matchers.*;
 
 
@@ -81,12 +82,13 @@ public class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest
         indexService.indexSync(badmintonCodelist);
         indexService.indexSync(badminton);
         indexService.indexSync(sport);
+        indexService.indexSync(icd);
         openSearchRestTemplate.indexOps(IndexCoordinates.of("klass")).refresh();
     }
 
     @Test
     public void restServiceSearchClassificationsJSON() {
-        // Should rank name with 'kommune' over bydel
+        // Should rank name with 'kommune' over 'kommune' in description
         given().port(port).accept(ContentType.JSON).param(QUERY, "kommune")
                 .get(REQUEST_SEARCH)
                 .prettyPeek()
@@ -123,6 +125,19 @@ public class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest
                 .statusCode(HttpStatus.OK.value())
                 .contentType(ContentType.JSON)
                 .body(JSON_PAGE + ".totalElements", equalTo(1));
+    }
+
+    @Test
+    public void restServiceSearchNotDisplayCopyrighted() {
+        assertThat(icd.isCopyrighted()).isTrue();
+        given().port(port).accept(ContentType.JSON).param(QUERY, "ICD").param(INCLUDE_CODE_LISTS, "true")
+                .get(REQUEST_SEARCH)
+                .prettyPeek()
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .contentType(ContentType.JSON)
+                .body(JSON_PAGE + ".totalElements", equalTo(0));
     }
 
     @Test

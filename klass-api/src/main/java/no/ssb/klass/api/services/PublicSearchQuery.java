@@ -39,6 +39,8 @@ public class PublicSearchQuery {
         if (filterOnSection != null) {
             filterBuilder.must(QueryBuilders.termQuery("section", filterOnSection));
         }
+        // Do not display copyrighted in search
+        filterBuilder.mustNot(QueryBuilders.termQuery("copyrighted", true));
 
         // Building a query of multiple conditions
         // Boosting pure match on title as top match

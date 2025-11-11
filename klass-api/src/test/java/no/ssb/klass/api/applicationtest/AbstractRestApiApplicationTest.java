@@ -135,6 +135,7 @@ public abstract class AbstractRestApiApplicationTest {
     protected ClassificationSeries badmintonCodelist;
     protected ClassificationSeries badminton;
     protected ClassificationSeries sport;
+    protected ClassificationSeries icd;
 
     @Autowired
     protected ApplicationTestUtil applicationTestUtil;
@@ -193,6 +194,10 @@ public abstract class AbstractRestApiApplicationTest {
 
         kommuneinndeling = classificationService.saveAndIndexClassification(kommuneinndeling);
         bydelsinndeling = classificationService.saveAndIndexClassification(bydelsinndeling);
+        icd = TestDataProvider.createCopyrightedCodeList(user);
+        classificationFamily.addClassificationSeries(icd);
+        icd = classificationService.saveAndIndexClassification(icd);
+
 
         correspondenceTable = TestDataProvider.createAndAddCorrespondenceTable(kommuneinndeling,
                 bydelsinndeling);

@@ -39,6 +39,9 @@ public final class TestDataProvider {
     public static final String BADMINTON_KODELISTE_NAVN = "Badminton";
     public static final String BADMINTON_KODELISTE_BESKRIVELSE = "Testing when version owning section is different from variant owning section badminton";
 
+    public static final String COPYRIGHTED_CODELIST_NAVN_NO = "Kodeliste for ICD-10";
+    public static final String COPYRIGHTED_CODELIST_BESKRIVELSE = "Den internasjonale statistiske klassifikasjonen av sykdommer og beslektede helseproblemer";
+
     public static final String FAMILIEGRUPPERING_NAVN_NO = "Standard for gruppering av familier";
     public static final String FAMILIEGRUPPERING_BESKRIVELSE_NO =
             "Standarden beskriver de ulike familietypene som i dag brukes i SSBs familistatistikk";
@@ -305,6 +308,20 @@ public final class TestDataProvider {
         version.publish(Language.NB);
         classification.addClassificationVersion(version);
 
+        return classification;
+    }
+
+    public static ClassificationSeries createCopyrightedCodeList(User user) {
+        ClassificationSeries classification = TestUtil.createCodelist(COPYRIGHTED_CODELIST_NAVN_NO, COPYRIGHTED_CODELIST_BESKRIVELSE);
+
+        classification.setContactPerson(user);
+        ClassificationVersion version = TestUtil.createClassificationVersion(DateRange.create("2025-01-01", null));
+        Level level = TestUtil.createLevel(1);
+        version.addLevel(level);
+        version.addClassificationItem(TestUtil.createClassificationItem("A00-B99", "Infeksjoner"),
+                level.getLevelNumber(), null);
+        classification.addClassificationVersion(version);
+        classification.setCopyrighted(true);
         return classification;
     }
 
