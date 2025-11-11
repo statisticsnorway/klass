@@ -41,8 +41,8 @@ public class OpenSearchConfig extends AbstractOpenSearchConfiguration {
                                         .connectedTo(opensearchUri.replace("https://", ""))
                                         .usingSsl()
                                         .withBasicAuth(username, password)
-                                        .withConnectTimeout(Duration.ofSeconds(10))
-                                        .withSocketTimeout(Duration.ofSeconds(5))
+                                        .withConnectTimeout(Duration.ofSeconds(15))
+                                        .withSocketTimeout(Duration.ofSeconds(60))
                                 : ClientConfiguration.builder()
                                         .connectedTo(
                                                 opensearchUri
