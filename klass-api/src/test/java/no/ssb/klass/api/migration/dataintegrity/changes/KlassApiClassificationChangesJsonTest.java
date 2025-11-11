@@ -7,6 +7,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import io.restassured.response.Response;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -35,6 +36,7 @@ public class KlassApiClassificationChangesJsonTest extends AbstractKlassApiChang
         }
     }
 
+    @Tag(COMPREHENSIVE)
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationIds")
     void getClassificationChanges(int classificationId) {
@@ -58,6 +60,7 @@ public class KlassApiClassificationChangesJsonTest extends AbstractKlassApiChang
         System.out.println("End test for ID " + classificationId + " at " + Instant.now());
     }
 
+    @Tag(COMPREHENSIVE)
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationIds")
     void getOneClassificationChangesDatesInRange(int classificationId) {
@@ -79,6 +82,7 @@ public class KlassApiClassificationChangesJsonTest extends AbstractKlassApiChang
         }
     }
 
+    @Tag(COMPREHENSIVE)
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationIds")
     void getClassificationChangesEnglish(int classificationId) {
@@ -100,6 +104,7 @@ public class KlassApiClassificationChangesJsonTest extends AbstractKlassApiChang
         }
     }
 
+    @Tag(COMPREHENSIVE)
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationIds")
     void getClassificationChangesNewNorwegian(int classificationId) {
@@ -121,6 +126,7 @@ public class KlassApiClassificationChangesJsonTest extends AbstractKlassApiChang
         }
     }
 
+    @Tag(COMPREHENSIVE)
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationIds")
     void getClassificationChangesIncludeFuture(int classificationId) {

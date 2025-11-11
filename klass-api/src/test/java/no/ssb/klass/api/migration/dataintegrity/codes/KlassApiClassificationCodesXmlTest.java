@@ -8,6 +8,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import io.restassured.response.Response;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -39,6 +40,8 @@ public class KlassApiClassificationCodesXmlTest extends AbstractKlassApiCodesTes
     }
 
     // Optional params
+
+    @Tag(COMPREHENSIVE)
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationIds")
     void getClassificationWithCodes(Integer classificationId) {
@@ -65,6 +68,7 @@ public class KlassApiClassificationCodesXmlTest extends AbstractKlassApiCodesTes
         System.out.println("End test for ID " + classificationId + " at " + Instant.now());
     }
 
+    @Tag(COMPREHENSIVE)
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationIds")
     void getClassificationWithCodesInRange(Integer classificationId) {

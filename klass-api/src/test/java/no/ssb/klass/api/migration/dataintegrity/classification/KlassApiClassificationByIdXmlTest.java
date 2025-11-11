@@ -7,6 +7,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import io.restassured.response.Response;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -36,6 +37,7 @@ public class KlassApiClassificationByIdXmlTest extends AbstractKlassApiClassific
         }
     }
 
+    @Tag(COMPREHENSIVE)
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationIds")
     void getClassificationXml(Integer classificationId) {
@@ -59,6 +61,7 @@ public class KlassApiClassificationByIdXmlTest extends AbstractKlassApiClassific
         }
     }
 
+    @Tag(COMPREHENSIVE)
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationIds")
     void getClassificationEnglishXml(Integer classificationId) {
@@ -82,6 +85,7 @@ public class KlassApiClassificationByIdXmlTest extends AbstractKlassApiClassific
         }
     }
 
+    @Tag(COMPREHENSIVE)
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationIds")
     void getClassificationNewNorwegianXml(Integer classificationId) {
@@ -105,6 +109,7 @@ public class KlassApiClassificationByIdXmlTest extends AbstractKlassApiClassific
         }
     }
 
+    @Tag(COMPREHENSIVE)
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationIds")
     void getClassificationIncludeFutureXml(Integer classificationId) {

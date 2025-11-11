@@ -375,7 +375,7 @@ public final class MigrationTestConstants {
                     NAME,
                     ID,
                     CONTACT_PERSON,
-                                        OWNING_SECTION,
+                    OWNING_SECTION,
                     VALID_FROM,
                     VALID_TO,
                     INTRODUCTION,
