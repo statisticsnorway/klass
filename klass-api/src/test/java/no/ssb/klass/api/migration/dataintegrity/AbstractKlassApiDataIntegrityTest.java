@@ -10,6 +10,7 @@ import no.ssb.klass.api.migration.MigrationTestConfig;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Tag;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,8 +19,10 @@ import java.util.Map;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+@Tag("data-integrity")
 public abstract class AbstractKlassApiDataIntegrityTest {
 
+    public static final String COMPREHENSIVE = "comprehensive";
     protected static KlassApiMigrationClient klassApiMigrationClient;
 
     static Response sourceResponseClassifications;

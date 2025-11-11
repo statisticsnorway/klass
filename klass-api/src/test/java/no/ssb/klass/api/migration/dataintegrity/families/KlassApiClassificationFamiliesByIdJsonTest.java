@@ -7,6 +7,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import io.restassured.response.Response;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -38,6 +39,7 @@ public class KlassApiClassificationFamiliesByIdJsonTest extends AbstractKlassApi
         }
     }
 
+    @Tag(COMPREHENSIVE)
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationFamilyIds")
     void getClassificationFamilyById(int classificationFamilyId) {
@@ -63,6 +65,7 @@ public class KlassApiClassificationFamiliesByIdJsonTest extends AbstractKlassApi
         }
     }
 
+    @Tag(COMPREHENSIVE)
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationFamilyIds")
     void getClassificationFamilyIncludeCodeLists(int classificationFamilyId) {
@@ -90,6 +93,7 @@ public class KlassApiClassificationFamiliesByIdJsonTest extends AbstractKlassApi
         }
     }
 
+    @Tag(COMPREHENSIVE)
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationFamilyIds")
     void getClassificationFamilyEnglish(int classificationFamilyId) {
@@ -117,6 +121,7 @@ public class KlassApiClassificationFamiliesByIdJsonTest extends AbstractKlassApi
         }
     }
 
+    @Tag(COMPREHENSIVE)
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationFamilyIds")
     void getClassificationFamilyNewNorwegian(int classificationFamilyId) {
@@ -144,6 +149,7 @@ public class KlassApiClassificationFamiliesByIdJsonTest extends AbstractKlassApi
         }
     }
 
+    @Tag(COMPREHENSIVE)
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationFamilyIds")
     void getClassificationFamilySsbSection(int classificationFamilyId) {

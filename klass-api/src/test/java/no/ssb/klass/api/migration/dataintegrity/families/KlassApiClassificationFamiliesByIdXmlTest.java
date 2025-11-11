@@ -7,6 +7,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import io.restassured.response.Response;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -34,6 +35,7 @@ public class KlassApiClassificationFamiliesByIdXmlTest extends AbstractKlassApiF
         }
     }
 
+    @Tag(COMPREHENSIVE)
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationFamilyIds")
     void getClassificationFamilyById(int classificationFamilyId) {
@@ -55,6 +57,7 @@ public class KlassApiClassificationFamiliesByIdXmlTest extends AbstractKlassApiF
         }
     }
 
+    @Tag(COMPREHENSIVE)
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationFamilyIds")
     void getClassificationFamilyIncludeCodeLists(int classificationFamilyId) {
@@ -78,6 +81,7 @@ public class KlassApiClassificationFamiliesByIdXmlTest extends AbstractKlassApiF
         }
     }
 
+    @Tag(COMPREHENSIVE)
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationFamilyIds")
     void getClassificationFamilyLanguageEn(int classificationFamilyId) {
@@ -99,6 +103,7 @@ public class KlassApiClassificationFamiliesByIdXmlTest extends AbstractKlassApiF
         }
     }
 
+    @Tag(COMPREHENSIVE)
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationFamilyIds")
     void getClassificationFamilyLanguageNn(int classificationFamilyId) {
@@ -120,6 +125,7 @@ public class KlassApiClassificationFamiliesByIdXmlTest extends AbstractKlassApiF
         }
     }
 
+    @Tag(COMPREHENSIVE)
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationFamilyIds")
     void getClassificationFamilySsbSection(int classificationFamilyId) {

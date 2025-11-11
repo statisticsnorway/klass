@@ -107,4 +107,6 @@ Set system property: `System.setProperty("<property name>", "<host name>");`
 
 ## Details and Running the Tests
 
-TODO @cbi
+To run tests on every resource discovered on the source host use the JUnit tag filtering `data-integrity & comprehensive`, to run a subset which will hit every endpoint use `data-integrity & !comprehensive`.
+
+There is an IntelliJ run configuration available in the project which can be used for running the tests.

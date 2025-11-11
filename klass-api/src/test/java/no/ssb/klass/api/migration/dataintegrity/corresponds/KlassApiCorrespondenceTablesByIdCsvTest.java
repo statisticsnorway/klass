@@ -7,6 +7,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import io.restassured.response.Response;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -35,6 +36,7 @@ public class KlassApiCorrespondenceTablesByIdCsvTest extends AbstractKlassApiCor
         }
     }
 
+    @Tag(COMPREHENSIVE)
     @ParameterizedTest
     @MethodSource("correspondenceIdRangeProvider")
     void getCorrespondenceTable(int correspondenceTableId) {
@@ -56,6 +58,7 @@ public class KlassApiCorrespondenceTablesByIdCsvTest extends AbstractKlassApiCor
         }
     }
 
+    @Tag(COMPREHENSIVE)
     @ParameterizedTest
     @MethodSource("correspondenceIdRangeProvider")
     void getCorrespondenceTableLanguageEn(int correspondenceTableId) {
@@ -78,6 +81,7 @@ public class KlassApiCorrespondenceTablesByIdCsvTest extends AbstractKlassApiCor
         }
     }
 
+    @Tag(COMPREHENSIVE)
     @ParameterizedTest
     @MethodSource("correspondenceIdRangeProvider")
     void getCorrespondenceTableLanguageNn(int correspondenceTableId) {

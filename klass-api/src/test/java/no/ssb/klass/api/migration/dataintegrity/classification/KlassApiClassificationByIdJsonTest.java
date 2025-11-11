@@ -7,6 +7,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import io.restassured.response.Response;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -37,6 +38,7 @@ public class KlassApiClassificationByIdJsonTest extends AbstractKlassApiClassifi
         }
     }
 
+    @Tag(COMPREHENSIVE)
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationIds")
     void getClassification(Integer classificationId) {
@@ -61,6 +63,7 @@ public class KlassApiClassificationByIdJsonTest extends AbstractKlassApiClassifi
         }
     }
 
+    @Tag(COMPREHENSIVE)
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationIds")
     void getClassificationEnglish(Integer classificationId) {
@@ -113,6 +116,7 @@ public class KlassApiClassificationByIdJsonTest extends AbstractKlassApiClassifi
         }
     }
 
+    @Tag(COMPREHENSIVE)
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationIds")
     void getClassificationNewNorwegian(Integer classificationId) {
@@ -165,6 +169,7 @@ public class KlassApiClassificationByIdJsonTest extends AbstractKlassApiClassifi
         }
     }
 
+    @Tag(COMPREHENSIVE)
     @ParameterizedTest
     @MethodSource("rangeProviderClassificationIds")
     void getClassificationIncludeFuture(Integer classificationId) {
