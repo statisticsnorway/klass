@@ -1,24 +1,29 @@
 package no.ssb.klass.api.migration.dataintegrity.search;
 
-import io.restassured.response.Response;
-import org.junit.jupiter.api.Test;
-
 import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 import static no.ssb.klass.api.migration.MigrationTestUtils.*;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public class KlassApiSearchForClassificationsXmlTest extends AbstractKlassApiSearchTest{
+import io.restassured.response.Response;
+
+import org.junit.jupiter.api.Test;
+
+public class KlassApiSearchForClassificationsXmlTest extends AbstractKlassApiSearchTest {
 
     @Test
     void search() {
 
         String path = getSearchPath();
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsQuery, APPLICATION_XML);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsQuery, APPLICATION_XML);
+        Response sourceResponse =
+                klassApiMigrationClient.getFromSourceApi(path, paramsQuery, APPLICATION_XML);
+        Response targetResponse =
+                klassApiMigrationClient.getFromTargetApi(path, paramsQuery, APPLICATION_XML);
 
         assertApiResponseIsNotNull(sourceResponse);
 
-        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+        assertStatusCodesEqual(
+                sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
         if (sourceResponse.getStatusCode() != 200) {
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
@@ -32,12 +37,17 @@ public class KlassApiSearchForClassificationsXmlTest extends AbstractKlassApiSea
     void searchIncludeCodeLists() {
 
         String path = getSearchPath();
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsQueryIncludeCodeLists, APPLICATION_XML);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsQueryIncludeCodeLists, APPLICATION_XML);
+        Response sourceResponse =
+                klassApiMigrationClient.getFromSourceApi(
+                        path, paramsQueryIncludeCodeLists, APPLICATION_XML);
+        Response targetResponse =
+                klassApiMigrationClient.getFromTargetApi(
+                        path, paramsQueryIncludeCodeLists, APPLICATION_XML);
 
         assertApiResponseIsNotNull(sourceResponse);
 
-        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+        assertStatusCodesEqual(
+                sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
         if (sourceResponse.getStatusCode() != 200) {
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();
@@ -51,12 +61,17 @@ public class KlassApiSearchForClassificationsXmlTest extends AbstractKlassApiSea
     void searchFilterSsbSection() {
 
         String path = getSearchPath();
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsQuerySsbSection, APPLICATION_XML);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsQuerySsbSection, APPLICATION_XML);
+        Response sourceResponse =
+                klassApiMigrationClient.getFromSourceApi(
+                        path, paramsQuerySsbSection, APPLICATION_XML);
+        Response targetResponse =
+                klassApiMigrationClient.getFromTargetApi(
+                        path, paramsQuerySsbSection, APPLICATION_XML);
 
         assertApiResponseIsNotNull(sourceResponse);
 
-        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+        assertStatusCodesEqual(
+                sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
         if (sourceResponse.getStatusCode() != 200) {
             assertThat(compareError(null, sourceResponse, targetResponse)).isTrue();

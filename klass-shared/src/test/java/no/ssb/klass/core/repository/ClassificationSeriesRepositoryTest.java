@@ -1,5 +1,10 @@
 package no.ssb.klass.core.repository;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
+
 import no.ssb.klass.core.config.ConfigurationProfiles;
 import no.ssb.klass.core.model.*;
 import no.ssb.klass.core.util.TimeUtil;
@@ -7,6 +12,7 @@ import no.ssb.klass.core.util.Translatable;
 import no.ssb.klass.core.util.TranslatablePersistenceConverter;
 import no.ssb.klass.testutil.IncrementableClockSource;
 import no.ssb.klass.testutil.TestUtil;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -23,26 +29,18 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import jakarta.persistence.EntityManager;
-import jakarta.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @ActiveProfiles({ConfigurationProfiles.POSTGRES_EMBEDDED, ConfigurationProfiles.MOCK_MAILSERVER})
 @Transactional
 public class ClassificationSeriesRepositoryTest {
-    @Autowired
-    private ClassificationSeriesRepository subject;
-    @Autowired
-    private ClassificationFamilyRepository classificationFamilyRepository;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private EntityManager entityManager;
+    @Autowired private ClassificationSeriesRepository subject;
+    @Autowired private ClassificationFamilyRepository classificationFamilyRepository;
+    @Autowired private UserRepository userRepository;
+    @Autowired private EntityManager entityManager;
     private IncrementableClockSource clockSource;
     private User user;
 
@@ -62,43 +60,54 @@ public class ClassificationSeriesRepositoryTest {
     public void verifyMapping() {
         // given
         ClassificationSeries classification = createClassificationSeriesWithVersion(user, "name");
-        classificationFamilyRepository.save(TestUtil.createClassificationFamily("family"))
-                .addClassificationSeries(
-                        classification);
+        classificationFamilyRepository
+                .save(TestUtil.createClassificationFamily("family"))
+                .addClassificationSeries(classification);
         subject.save(classification);
         subject.flush();
         entityManager.detach(classification);
 
         // when
-        ClassificationSeries result = subject.findById(classification.getId()).orElseThrow(() ->
-                new RuntimeException("ClassificationSeries not found"));
+        ClassificationSeries result =
+                subject.findById(classification.getId())
+                        .orElseThrow(() -> new RuntimeException("ClassificationSeries not found"));
 
         // then
         assertEquals(1, result.getClassificationVersions().size());
-        assertEquals(2, result.getClassificationVersions().get(0).getAllClassificationItems().size());
+        assertEquals(
+                2, result.getClassificationVersions().get(0).getAllClassificationItems().size());
     }
 
     @Test
     public void findAllCodelist() {
         // given
-        ClassificationSeries codelist = new ClassificationSeries(Translatable.create("name", Language.NB),
-                Translatable.create("description", Language.NB), false, Language.NB,
-                ClassificationType.CODELIST, user);
-        classificationFamilyRepository.save(TestUtil.createClassificationFamily("name"))
-                .addClassificationSeries(
-                        codelist);
+        ClassificationSeries codelist =
+                new ClassificationSeries(
+                        Translatable.create("name", Language.NB),
+                        Translatable.create("description", Language.NB),
+                        false,
+                        Language.NB,
+                        ClassificationType.CODELIST,
+                        user);
+        classificationFamilyRepository
+                .save(TestUtil.createClassificationFamily("name"))
+                .addClassificationSeries(codelist);
         subject.save(codelist);
 
-        ClassificationSeriesSpecification includeCodelistsSpecification = new ClassificationSeriesSpecification(
-                true,
-                null);
-        ClassificationSeriesSpecification excludeCodelistsSpecification = new ClassificationSeriesSpecification(
-                false,
-                null);
+        ClassificationSeriesSpecification includeCodelistsSpecification =
+                new ClassificationSeriesSpecification(true, null);
+        ClassificationSeriesSpecification excludeCodelistsSpecification =
+                new ClassificationSeriesSpecification(false, null);
 
         // then
-        assertEquals(1, subject.findAll(includeCodelistsSpecification, createPageable()).getTotalElements());
-        assertEquals(0, subject.findAll(excludeCodelistsSpecification, createPageable()).getTotalElements());
+        assertEquals(
+                1,
+                subject.findAll(includeCodelistsSpecification, createPageable())
+                        .getTotalElements());
+        assertEquals(
+                0,
+                subject.findAll(excludeCodelistsSpecification, createPageable())
+                        .getTotalElements());
     }
 
     @Test
@@ -106,40 +115,52 @@ public class ClassificationSeriesRepositoryTest {
         // given
         Date beforeCreated = TimeUtil.now();
         clockSource.increment();
-        ClassificationSeries classification = new ClassificationSeries(Translatable.create("name", Language.NB),
-                Translatable.create("description", Language.NB), false, Language.NB,
-                ClassificationType.CLASSIFICATION, user);
-        classificationFamilyRepository.save(TestUtil.createClassificationFamily("name"))
-                .addClassificationSeries(
-                        classification);
+        ClassificationSeries classification =
+                new ClassificationSeries(
+                        Translatable.create("name", Language.NB),
+                        Translatable.create("description", Language.NB),
+                        false,
+                        Language.NB,
+                        ClassificationType.CLASSIFICATION,
+                        user);
+        classificationFamilyRepository
+                .save(TestUtil.createClassificationFamily("name"))
+                .addClassificationSeries(classification);
         subject.save(classification);
         clockSource.increment();
         Date afterCreated = TimeUtil.now();
 
-        ClassificationSeriesSpecification beforeCreatedSpecification = new ClassificationSeriesSpecification(
-                true,
-                beforeCreated);
-        ClassificationSeriesSpecification afterCreatedSpecification = new ClassificationSeriesSpecification(
-                true,
-                afterCreated);
+        ClassificationSeriesSpecification beforeCreatedSpecification =
+                new ClassificationSeriesSpecification(true, beforeCreated);
+        ClassificationSeriesSpecification afterCreatedSpecification =
+                new ClassificationSeriesSpecification(true, afterCreated);
 
         // then
-        assertEquals(1, subject.findAll(beforeCreatedSpecification, createPageable()).getTotalElements());
-        assertEquals(0, subject.findAll(afterCreatedSpecification, createPageable()).getTotalElements());
+        assertEquals(
+                1,
+                subject.findAll(beforeCreatedSpecification, createPageable()).getTotalElements());
+        assertEquals(
+                0, subject.findAll(afterCreatedSpecification, createPageable()).getTotalElements());
     }
 
     @Test
     public void findAllCopyrightedExcluded() {
         // given
-        ClassificationSeries classification = new ClassificationSeries(Translatable.create("name", Language.NB),
-                Translatable.create("description", Language.NB), true, Language.NB,
-                ClassificationType.CLASSIFICATION, user);
-        classificationFamilyRepository.save(TestUtil.createClassificationFamily("name"))
-                .addClassificationSeries(
-                        classification);
+        ClassificationSeries classification =
+                new ClassificationSeries(
+                        Translatable.create("name", Language.NB),
+                        Translatable.create("description", Language.NB),
+                        true,
+                        Language.NB,
+                        ClassificationType.CLASSIFICATION,
+                        user);
+        classificationFamilyRepository
+                .save(TestUtil.createClassificationFamily("name"))
+                .addClassificationSeries(classification);
         subject.save(classification);
 
-        ClassificationSeriesSpecification specification = new ClassificationSeriesSpecification(true, null);
+        ClassificationSeriesSpecification specification =
+                new ClassificationSeriesSpecification(true, null);
 
         // then
         assertEquals(0, subject.findAll(specification, createPageable()).getTotalElements());
@@ -150,12 +171,13 @@ public class ClassificationSeriesRepositoryTest {
         // given
         ClassificationSeries classification = TestUtil.createClassification("name");
         classification.setContactPerson(user);
-        classificationFamilyRepository.save(TestUtil.createClassificationFamily("name"))
-                .addClassificationSeries(
-                        classification);
+        classificationFamilyRepository
+                .save(TestUtil.createClassificationFamily("name"))
+                .addClassificationSeries(classification);
         subject.save(classification);
 
-        ClassificationSeriesSpecification specification = new ClassificationSeriesSpecification(true, null);
+        ClassificationSeriesSpecification specification =
+                new ClassificationSeriesSpecification(true, null);
 
         // then
         assertEquals(1, subject.findAll(specification, createPageable()).getTotalElements());
@@ -166,41 +188,52 @@ public class ClassificationSeriesRepositoryTest {
 
     @Test
     public void testNumberOfClassifications() {
-        ClassificationSeries classification1 = createClassificationSeriesWithVersion(user, "Duppeditt");
+        ClassificationSeries classification1 =
+                createClassificationSeriesWithVersion(user, "Duppeditt");
         classification1.setContactPerson(user);
-        classificationFamilyRepository.save(TestUtil.createClassificationFamily("Duppeditt"))
-                .addClassificationSeries(
-                        classification1);
+        classificationFamilyRepository
+                .save(TestUtil.createClassificationFamily("Duppeditt"))
+                .addClassificationSeries(classification1);
         subject.save(classification1);
-        ClassificationSeries classification2 = createClassificationSeriesWithVersion(user, "Dingseboms");
+        ClassificationSeries classification2 =
+                createClassificationSeriesWithVersion(user, "Dingseboms");
         classification2.setContactPerson(user);
-        classificationFamilyRepository.save(TestUtil.createClassificationFamily("Dingseboms"))
-                .addClassificationSeries(
-                        classification2);
+        classificationFamilyRepository
+                .save(TestUtil.createClassificationFamily("Dingseboms"))
+                .addClassificationSeries(classification2);
         subject.save(classification2);
 
         int result = subject.finNumberOfClassifications(null, null);
         assertEquals(2, result);
-        result = subject.findNumberOfPublishedClassifications(ClassificationType.CLASSIFICATION,
-                user.getSection());
+        result =
+                subject.findNumberOfPublishedClassifications(
+                        ClassificationType.CLASSIFICATION, user.getSection());
         assertEquals(2, result);
         classification1.getClassificationVersions().get(0).unpublish(Language.getDefault());
         subject.save(classification1);
-        result = subject.findNumberOfPublishedClassifications(ClassificationType.CLASSIFICATION,
-                user.getSection());
+        result =
+                subject.findNumberOfPublishedClassifications(
+                        ClassificationType.CLASSIFICATION, user.getSection());
         assertEquals(1, result);
         result = subject.findNumberOfPublishedClassifications(null, null);
         assertEquals(1, result);
-        result = subject.findNumberOfPublishedClassifications(ClassificationType.CODELIST, user.getSection());
+        result =
+                subject.findNumberOfPublishedClassifications(
+                        ClassificationType.CODELIST, user.getSection());
         assertEquals(0, result);
-        result = subject.findNumberOfPublishedClassifications(ClassificationType.CLASSIFICATION, "007");
+        result =
+                subject.findNumberOfPublishedClassifications(
+                        ClassificationType.CLASSIFICATION, "007");
         assertEquals(0, result);
         classification2.setDeleted();
         subject.save(classification2);
-        result = subject.findNumberOfPublishedClassifications(ClassificationType.CLASSIFICATION,
-                user.getSection());
+        result =
+                subject.findNumberOfPublishedClassifications(
+                        ClassificationType.CLASSIFICATION, user.getSection());
         assertEquals(0, result);
-        result = subject.finNumberOfClassifications(ClassificationType.CLASSIFICATION, user.getSection());
+        result =
+                subject.finNumberOfClassifications(
+                        ClassificationType.CLASSIFICATION, user.getSection());
         assertEquals(1, result);
         result = subject.finNumberOfClassifications(ClassificationType.CLASSIFICATION, "007");
         assertEquals(0, result);
@@ -210,60 +243,73 @@ public class ClassificationSeriesRepositoryTest {
 
     @Test
     public void testNumberOfVersions() {
-        ClassificationSeries classification1 = createClassificationSeriesWithVersion(user, "Duppeditt");
+        ClassificationSeries classification1 =
+                createClassificationSeriesWithVersion(user, "Duppeditt");
         classification1.setContactPerson(user);
-        classificationFamilyRepository.save(TestUtil.createClassificationFamily("Duppeditt"))
-                .addClassificationSeries(
-                        classification1);
+        classificationFamilyRepository
+                .save(TestUtil.createClassificationFamily("Duppeditt"))
+                .addClassificationSeries(classification1);
         subject.save(classification1);
 
-        int result = subject.findNumberOfPublishedVersionsAnyLanguages(ClassificationType.CLASSIFICATION, user
-                .getSection());
+        int result =
+                subject.findNumberOfPublishedVersionsAnyLanguages(
+                        ClassificationType.CLASSIFICATION, user.getSection());
         assertEquals(1, result);
 
-        ClassificationSeries classification2 = createClassificationSeriesWithVersion(user, "Dingseboms");
+        ClassificationSeries classification2 =
+                createClassificationSeriesWithVersion(user, "Dingseboms");
         classification2.setContactPerson(user);
-        classificationFamilyRepository.save(TestUtil.createClassificationFamily("Dingseboms"))
-                .addClassificationSeries(
-                        classification2);
+        classificationFamilyRepository
+                .save(TestUtil.createClassificationFamily("Dingseboms"))
+                .addClassificationSeries(classification2);
         subject.save(classification2);
-        result = subject.findNumberOfPublishedVersionsAnyLanguages(ClassificationType.CLASSIFICATION, user
-                .getSection());
+        result =
+                subject.findNumberOfPublishedVersionsAnyLanguages(
+                        ClassificationType.CLASSIFICATION, user.getSection());
         assertEquals(2, result);
-        result = subject.findNumberOfPublishedVersionsAllLanguages(ClassificationType.CLASSIFICATION, user
-                .getSection());
+        result =
+                subject.findNumberOfPublishedVersionsAllLanguages(
+                        ClassificationType.CLASSIFICATION, user.getSection());
         assertEquals(0, result);
 
         classification1.getClassificationVersions().get(0).publish(Language.EN);
         classification1.getClassificationVersions().get(0).publish(Language.NN);
         subject.save(classification1);
-        result = subject.findNumberOfPublishedVersionsAllLanguages(ClassificationType.CLASSIFICATION, user
-                .getSection());
+        result =
+                subject.findNumberOfPublishedVersionsAllLanguages(
+                        ClassificationType.CLASSIFICATION, user.getSection());
         assertEquals(1, result);
         result = subject.findNumberOfPublishedVersionsAllLanguages(null, null);
         assertEquals(1, result);
-        result = subject.findNumberOfPublishedVersionsAllLanguages(ClassificationType.CLASSIFICATION, "007");
+        result =
+                subject.findNumberOfPublishedVersionsAllLanguages(
+                        ClassificationType.CLASSIFICATION, "007");
         assertEquals(0, result);
-        result = subject.findNumberOfPublishedVersionsAllLanguages(ClassificationType.CODELIST,
-                user.getSection());
+        result =
+                subject.findNumberOfPublishedVersionsAllLanguages(
+                        ClassificationType.CODELIST, user.getSection());
         assertEquals(0, result);
 
         classification1.getClassificationVersions().get(0).setDeleted();
         subject.save(classification1);
-        result = subject.findNumberOfPublishedVersionsAllLanguages(ClassificationType.CLASSIFICATION, user
-                .getSection());
+        result =
+                subject.findNumberOfPublishedVersionsAllLanguages(
+                        ClassificationType.CLASSIFICATION, user.getSection());
         assertEquals(0, result);
-        result = subject.findNumberOfPublishedVersionsAnyLanguages(ClassificationType.CLASSIFICATION, user
-                .getSection());
+        result =
+                subject.findNumberOfPublishedVersionsAnyLanguages(
+                        ClassificationType.CLASSIFICATION, user.getSection());
         assertEquals(1, result);
         result = subject.findNumberOfPublishedVersionsAnyLanguages(null, null);
         assertEquals(1, result);
-        result = subject.findNumberOfPublishedVersionsAnyLanguages(ClassificationType.CLASSIFICATION, "007");
+        result =
+                subject.findNumberOfPublishedVersionsAnyLanguages(
+                        ClassificationType.CLASSIFICATION, "007");
         assertEquals(0, result);
-        result = subject.findNumberOfPublishedVersionsAnyLanguages(ClassificationType.CODELIST,
-                user.getSection());
+        result =
+                subject.findNumberOfPublishedVersionsAnyLanguages(
+                        ClassificationType.CODELIST, user.getSection());
         assertEquals(0, result);
-
     }
 
     @Test()
@@ -470,10 +516,11 @@ public class ClassificationSeriesRepositoryTest {
     @Test
     public void findAllClassificationIds() {
         // given
-        ClassificationSeries classification = createClassificationSeriesWithVersion(user, "anyname");
-        classificationFamilyRepository.save(TestUtil.createClassificationFamily("name"))
-                .addClassificationSeries(
-                        classification);
+        ClassificationSeries classification =
+                createClassificationSeriesWithVersion(user, "anyname");
+        classificationFamilyRepository
+                .save(TestUtil.createClassificationFamily("name"))
+                .addClassificationSeries(classification);
         subject.save(classification);
 
         // when
@@ -487,19 +534,22 @@ public class ClassificationSeriesRepositoryTest {
     public void getNumberOfClassificationForUserAndUpdateUserTest() {
         User anotherUser = userRepository.save(new User("Donald", "Donald Duck", "section"));
 
-        ClassificationSeries classification = createClassificationSeriesWithVersion(user, "anyname");
-        ClassificationSeries classification2 = createClassificationSeriesWithVersion(user, "anyname2");
-        ClassificationSeries classification3 = createClassificationSeriesWithVersion(user, "anyname3");
+        ClassificationSeries classification =
+                createClassificationSeriesWithVersion(user, "anyname");
+        ClassificationSeries classification2 =
+                createClassificationSeriesWithVersion(user, "anyname2");
+        ClassificationSeries classification3 =
+                createClassificationSeriesWithVersion(user, "anyname3");
         classification3.setContactPerson(anotherUser);
-        classificationFamilyRepository.save(TestUtil.createClassificationFamily("name"))
-                .addClassificationSeries(
-                        classification);
-        classificationFamilyRepository.save(TestUtil.createClassificationFamily("name2"))
-                .addClassificationSeries(
-                        classification2);
-        classificationFamilyRepository.save(TestUtil.createClassificationFamily("name3"))
-                .addClassificationSeries(
-                        classification3);
+        classificationFamilyRepository
+                .save(TestUtil.createClassificationFamily("name"))
+                .addClassificationSeries(classification);
+        classificationFamilyRepository
+                .save(TestUtil.createClassificationFamily("name2"))
+                .addClassificationSeries(classification2);
+        classificationFamilyRepository
+                .save(TestUtil.createClassificationFamily("name3"))
+                .addClassificationSeries(classification3);
         subject.save(classification);
         subject.save(classification2);
         subject.save(classification3);
@@ -510,14 +560,18 @@ public class ClassificationSeriesRepositoryTest {
         assertEquals(0, subject.getNumberOfClassificationForUser(user));
     }
 
-    public static ClassificationSeries createClassificationSeriesWithVersion(User user, String classificationName) {
-        ClassificationVersion version = TestUtil.createClassificationVersion(TestUtil.anyDateRange());
+    public static ClassificationSeries createClassificationSeriesWithVersion(
+            User user, String classificationName) {
+        ClassificationVersion version =
+                TestUtil.createClassificationVersion(TestUtil.anyDateRange());
         Level level = TestUtil.createLevel(1);
         version.addLevel(level);
-        version.addClassificationItem(TestUtil.createClassificationItem("0001", "firstItem"),
+        version.addClassificationItem(
+                TestUtil.createClassificationItem("0001", "firstItem"),
                 level.getLevelNumber(),
                 null);
-        version.addClassificationItem(TestUtil.createClassificationItem("0002", "secondItem"),
+        version.addClassificationItem(
+                TestUtil.createClassificationItem("0002", "secondItem"),
                 level.getLevelNumber(),
                 null);
         ClassificationSeries classification = TestUtil.createClassification(classificationName);
@@ -532,8 +586,11 @@ public class ClassificationSeriesRepositoryTest {
 
     @Configuration
     @EnableAutoConfiguration
-    @EntityScan(basePackageClasses = {TranslatablePersistenceConverter.class, ClassificationSeries.class})
+    @EntityScan(
+            basePackageClasses = {
+                TranslatablePersistenceConverter.class,
+                ClassificationSeries.class
+            })
     @ComponentScan(basePackageClasses = TranslatablePersistenceConverter.class)
-    static class Config {
-    }
+    static class Config {}
 }

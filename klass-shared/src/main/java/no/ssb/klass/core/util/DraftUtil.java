@@ -7,11 +7,11 @@ import java.time.LocalDate;
  */
 public final class DraftUtil {
 
-    private DraftUtil() {
-    }
+    private DraftUtil() {}
 
     public static boolean isDraft(DateRange dateRange) {
-        return LocalDate.MIN.isEqual(dateRange.getFrom()) && LocalDate.MAX.isEqual(dateRange.getTo());
+        return LocalDate.MIN.isEqual(dateRange.getFrom())
+                && LocalDate.MAX.isEqual(dateRange.getTo());
     }
 
     public static boolean isDraft(LocalDate validFrom, LocalDate validTo) {

@@ -1,18 +1,21 @@
 package no.ssb.klass.api.applicationtest;
 
+import static io.restassured.RestAssured.given;
+
+import static org.hamcrest.Matchers.*;
+
 import io.restassured.http.ContentType;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
-
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.*;
 
 public class RestApiVersionsIntegrationTest extends AbstractRestApiApplicationTest {
     @Test
     public void restServiceVersionsJSON() {
-        given().port(port).accept(ContentType.JSON)
+        given().port(port)
+                .accept(ContentType.JSON)
                 .param("language", "nb")
-                .get(REQUEST_VERSIONS_WITH_ID , badmintonCodelist.getNewestVersion().getId())
+                .get(REQUEST_VERSIONS_WITH_ID, badmintonCodelist.getNewestVersion().getId())
                 .then()
                 .contentType(ContentType.JSON)
                 .statusCode(HttpStatus.OK.value())

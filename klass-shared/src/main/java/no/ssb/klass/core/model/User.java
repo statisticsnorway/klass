@@ -2,38 +2,41 @@ package no.ssb.klass.core.model;
 
 import static com.google.common.base.Preconditions.*;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(
         name = "\"user\"",
         indexes = {
-        @Index(columnList = "username", name = "user_username_idx", unique = true),
-        @Index(columnList = "fullname", name = "user_fullname_idx")
-})
+            @Index(columnList = "username", name = "user_username_idx", unique = true),
+            @Index(columnList = "fullname", name = "user_fullname_idx")
+        })
 public class User extends BaseEntity {
     @Column(nullable = false)
     private String username;
+
     @Column(nullable = false)
     private String fullname;
+
     @Column(nullable = false)
     private String section;
+
     @Column(nullable = false, columnDefinition = "integer")
     private Role role;
-    @Column
-    private String email;
-    @Column
-    private String phone;
+
+    @Column private String email;
+    @Column private String phone;
 
     @ManyToMany
-    // Uses Set instead of List, see http://lkumarjain.blogspot.no/2013/07/why-hibernate-does-delete-all-entries.html
+    // Uses Set instead of List, see
+    // http://lkumarjain.blogspot.no/2013/07/why-hibernate-does-delete-all-entries.html
     private Set<ClassificationSeries> favorites;
 
     public User(String username, String fullname, String section) {
@@ -44,8 +47,7 @@ public class User extends BaseEntity {
         this.favorites = new HashSet<>();
     }
 
-    protected User() {
-    }
+    protected User() {}
 
     public String getSection() {
         return section;

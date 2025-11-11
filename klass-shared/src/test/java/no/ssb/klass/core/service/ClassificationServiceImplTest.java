@@ -1,7 +1,14 @@
 package no.ssb.klass.core.service;
 
+import static no.ssb.klass.core.service.ClassificationServiceHelper.SSB_SECTION_NAME;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+
 import no.ssb.klass.core.exception.KlassMessageException;
 import no.ssb.klass.core.model.*;
 import no.ssb.klass.core.repository.*;
@@ -9,6 +16,7 @@ import no.ssb.klass.core.util.DateRange;
 import no.ssb.klass.core.util.KlassResourceNotFoundException;
 import no.ssb.klass.core.util.Translatable;
 import no.ssb.klass.testutil.TestUtil;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,11 +30,6 @@ import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 import java.util.*;
-
-import static no.ssb.klass.core.service.ClassificationServiceHelper.SSB_SECTION_NAME;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
 
 public class ClassificationServiceImplTest {
     private ClassificationServiceImpl subject;
@@ -48,29 +51,39 @@ public class ClassificationServiceImplTest {
         classificationVersionRepositoryMock = mock(ClassificationVersionRepository.class);
         classificationVariantRepositoryMock = mock(ClassificationVariantRepository.class);
         correspondenceTableRepositoryMock = mock(CorrespondenceTableRepository.class);
-        referencingClassificationItemRepositoryMock = mock(ReferencingClassificationItemRepository.class);
+        referencingClassificationItemRepositoryMock =
+                mock(ReferencingClassificationItemRepository.class);
         correspondenceMapRepositoryMock = mock(CorrespondenceMapRepository.class);
         statisticalUnitRepositoryMock = mock(StatisticalUnitRepository.class);
         userRepositoryMock = mock(UserRepository.class);
-        subject = new ClassificationServiceImpl(classificationFamilyRepositoryMock, classificationSeriesRepositoryMock,
-                classificationVersionRepositoryMock, classificationVariantRepositoryMock,
-                correspondenceTableRepositoryMock, referencingClassificationItemRepositoryMock,
-                correspondenceMapRepositoryMock, statisticalUnitRepositoryMock, userRepositoryMock, classificationFamilySummaryBuilder);
+        subject =
+                new ClassificationServiceImpl(
+                        classificationFamilyRepositoryMock,
+                        classificationSeriesRepositoryMock,
+                        classificationVersionRepositoryMock,
+                        classificationVariantRepositoryMock,
+                        correspondenceTableRepositoryMock,
+                        referencingClassificationItemRepositoryMock,
+                        correspondenceMapRepositoryMock,
+                        statisticalUnitRepositoryMock,
+                        userRepositoryMock,
+                        classificationFamilySummaryBuilder);
     }
 
     @Test
     public void findAll() {
         // given
         final Pageable pageable = createPageable();
-        when(classificationSeriesRepositoryMock.findAll(any(ClassificationSeriesSpecification.class), eq(pageable)))
+        when(classificationSeriesRepositoryMock.findAll(
+                        any(ClassificationSeriesSpecification.class), eq(pageable)))
                 .thenReturn(new PageImpl<>(new ArrayList<>()));
 
         // when
         Page<ClassificationSeries> result = subject.findAll(false, null, createPageable());
 
         // then
-        verify(classificationSeriesRepositoryMock, times(1)).findAll(any(ClassificationSeriesSpecification.class), eq(
-                pageable));
+        verify(classificationSeriesRepositoryMock, times(1))
+                .findAll(any(ClassificationSeriesSpecification.class), eq(pageable));
         assertEquals(0, result.getSize());
     }
 
@@ -79,7 +92,8 @@ public class ClassificationServiceImplTest {
         // given
         ClassificationSeries classification = TestUtil.createClassification("name");
         classification.setDeleted();
-        when(classificationSeriesRepositoryMock.findAll()).thenReturn(Lists.newArrayList(classification));
+        when(classificationSeriesRepositoryMock.findAll())
+                .thenReturn(Lists.newArrayList(classification));
 
         // when
         List<ClassificationSeries> result = subject.findAllClassificationSeries();
@@ -92,8 +106,8 @@ public class ClassificationServiceImplTest {
     public void getClassificationSeries() {
         // given
         final Long id = 1L;
-        when(classificationSeriesRepositoryMock.findById(id)).thenReturn(Optional.of(
-                TestUtil.createClassificationWithId(id, "name")));
+        when(classificationSeriesRepositoryMock.findById(id))
+                .thenReturn(Optional.of(TestUtil.createClassificationWithId(id, "name")));
 
         // when
         ClassificationSeries result = subject.getClassificationSeries(id);
@@ -109,11 +123,12 @@ public class ClassificationServiceImplTest {
         final Long id = 1L;
         ClassificationSeries classification = TestUtil.createClassificationWithId(id, "name");
         classification.setDeleted();
-        when(classificationSeriesRepositoryMock.findById(id)).thenReturn(Optional.of(classification));
+        when(classificationSeriesRepositoryMock.findById(id))
+                .thenReturn(Optional.of(classification));
 
         // when
-        Assertions.assertThrows(KlassResourceNotFoundException.class, () ->
-                subject.getClassificationSeries(id));
+        Assertions.assertThrows(
+                KlassResourceNotFoundException.class, () -> subject.getClassificationSeries(id));
 
         // then expect exception
     }
@@ -122,7 +137,8 @@ public class ClassificationServiceImplTest {
     public void getClassificationVariant() {
         // given
         final Long id = 1L;
-        ClassificationVariant variant = TestUtil.createClassificationVariant("name", TestUtil.createUser());
+        ClassificationVariant variant =
+                TestUtil.createClassificationVariant("name", TestUtil.createUser());
         variant.setId(id);
         createClassificationVersion().addClassificationVariant(variant);
         when(classificationVariantRepositoryMock.findById(id)).thenReturn(Optional.of(variant));
@@ -139,14 +155,15 @@ public class ClassificationServiceImplTest {
     public void getClassificationVariantFiltersDeleted() {
         // given
         final Long id = 1L;
-        ClassificationVariant variant = TestUtil.createClassificationVariant("name", TestUtil.createUser());
+        ClassificationVariant variant =
+                TestUtil.createClassificationVariant("name", TestUtil.createUser());
         variant.setId(id);
         variant.setDeleted();
         when(classificationVariantRepositoryMock.findById(id)).thenReturn(Optional.of(variant));
 
         // when
-        Assertions.assertThrows(KlassResourceNotFoundException.class, () ->
-                subject.getClassificationVariant(id));
+        Assertions.assertThrows(
+                KlassResourceNotFoundException.class, () -> subject.getClassificationVariant(id));
 
         // then expect exception
     }
@@ -171,14 +188,14 @@ public class ClassificationServiceImplTest {
     public void getClassificationVersionFiltersDeleted() {
         // given
         final Long id = 1L;
-        ClassificationVersion version = TestUtil.createClassificationVersionWithTable(id,
-                TestUtil.anyDateRange(), "name");
+        ClassificationVersion version =
+                TestUtil.createClassificationVersionWithTable(id, TestUtil.anyDateRange(), "name");
         version.setDeleted();
         when(classificationVersionRepositoryMock.findById(id)).thenReturn(Optional.of(version));
 
         // when
-        Assertions.assertThrows(KlassResourceNotFoundException.class, () ->
-                subject.getClassificationVersion(id));
+        Assertions.assertThrows(
+                KlassResourceNotFoundException.class, () -> subject.getClassificationVersion(id));
 
         // then expect exception
     }
@@ -187,10 +204,12 @@ public class ClassificationServiceImplTest {
     public void getCorrespondenceTable() {
         // given
         final Long id = 1L;
-        CorrespondenceTable correspondenceTable = TestUtil.createCorrespondenceTable(createClassificationVersion(),
-                createClassificationVersion());
+        CorrespondenceTable correspondenceTable =
+                TestUtil.createCorrespondenceTable(
+                        createClassificationVersion(), createClassificationVersion());
         correspondenceTable.setId(id);
-        when(correspondenceTableRepositoryMock.findById(id)).thenReturn(Optional.of(correspondenceTable));
+        when(correspondenceTableRepositoryMock.findById(id))
+                .thenReturn(Optional.of(correspondenceTable));
 
         // when
         CorrespondenceTable result = subject.getCorrespondenceTable(id);
@@ -204,15 +223,17 @@ public class ClassificationServiceImplTest {
     public void getCorrespondenceTableFiltersDeleted() {
         // given
         final Long id = 1L;
-        CorrespondenceTable correspondenceTable = TestUtil.createCorrespondenceTable(createClassificationVersion(),
-                createClassificationVersion());
+        CorrespondenceTable correspondenceTable =
+                TestUtil.createCorrespondenceTable(
+                        createClassificationVersion(), createClassificationVersion());
         correspondenceTable.setId(id);
         correspondenceTable.setDeleted();
-        when(correspondenceTableRepositoryMock.findById(id)).thenReturn(Optional.of(correspondenceTable));
+        when(correspondenceTableRepositoryMock.findById(id))
+                .thenReturn(Optional.of(correspondenceTable));
 
         // when
-        Assertions.assertThrows(KlassResourceNotFoundException.class, () ->
-                subject.getCorrespondenceTable(id));
+        Assertions.assertThrows(
+                KlassResourceNotFoundException.class, () -> subject.getCorrespondenceTable(id));
 
         // then expect exception
     }
@@ -221,14 +242,20 @@ public class ClassificationServiceImplTest {
     public void findByIdClassificationSeriesWithName() {
         // given
         ClassificationSeries classification = TestUtil.createClassification("name");
-        when(classificationSeriesRepositoryMock.findByNameNoIgnoreCase(anyString())).thenReturn(classification);
-        when(classificationSeriesRepositoryMock.findByNameNnIgnoreCase(anyString())).thenReturn(classification);
-        when(classificationSeriesRepositoryMock.findByNameEnIgnoreCase(anyString())).thenReturn(classification);
+        when(classificationSeriesRepositoryMock.findByNameNoIgnoreCase(anyString()))
+                .thenReturn(classification);
+        when(classificationSeriesRepositoryMock.findByNameNnIgnoreCase(anyString()))
+                .thenReturn(classification);
+        when(classificationSeriesRepositoryMock.findByNameEnIgnoreCase(anyString()))
+                .thenReturn(classification);
 
         // then
-        assertEquals(true, subject.findOneClassificationSeriesWithName("name", Language.NB).isPresent());
-        assertEquals(true, subject.findOneClassificationSeriesWithName("name", Language.NN).isPresent());
-        assertEquals(true, subject.findOneClassificationSeriesWithName("name", Language.EN).isPresent());
+        assertEquals(
+                true, subject.findOneClassificationSeriesWithName("name", Language.NB).isPresent());
+        assertEquals(
+                true, subject.findOneClassificationSeriesWithName("name", Language.NN).isPresent());
+        assertEquals(
+                true, subject.findOneClassificationSeriesWithName("name", Language.EN).isPresent());
     }
 
     @Test
@@ -236,14 +263,23 @@ public class ClassificationServiceImplTest {
         // given
         ClassificationSeries classification = TestUtil.createClassification("name");
         classification.setDeleted();
-        when(classificationSeriesRepositoryMock.findByNameNoIgnoreCase(anyString())).thenReturn(classification);
-        when(classificationSeriesRepositoryMock.findByNameNnIgnoreCase(anyString())).thenReturn(classification);
-        when(classificationSeriesRepositoryMock.findByNameEnIgnoreCase(anyString())).thenReturn(classification);
+        when(classificationSeriesRepositoryMock.findByNameNoIgnoreCase(anyString()))
+                .thenReturn(classification);
+        when(classificationSeriesRepositoryMock.findByNameNnIgnoreCase(anyString()))
+                .thenReturn(classification);
+        when(classificationSeriesRepositoryMock.findByNameEnIgnoreCase(anyString()))
+                .thenReturn(classification);
 
         // then
-        assertEquals(false, subject.findOneClassificationSeriesWithName("name", Language.NB).isPresent());
-        assertEquals(false, subject.findOneClassificationSeriesWithName("name", Language.NN).isPresent());
-        assertEquals(false, subject.findOneClassificationSeriesWithName("name", Language.EN).isPresent());
+        assertEquals(
+                false,
+                subject.findOneClassificationSeriesWithName("name", Language.NB).isPresent());
+        assertEquals(
+                false,
+                subject.findOneClassificationSeriesWithName("name", Language.NN).isPresent());
+        assertEquals(
+                false,
+                subject.findOneClassificationSeriesWithName("name", Language.EN).isPresent());
     }
 
     @Test
@@ -256,10 +292,12 @@ public class ClassificationServiceImplTest {
         when(classificationSeriesMock.getNameInPrimaryLanguage()).thenReturn("test");
         when(classificationSeriesMock.getCategoryName()).thenReturn("test");
         when(classificationSeriesMock.getContactPerson()).thenReturn(mockOwner);
-        when(classificationSeriesRepositoryMock.findById(any(Long.class))).thenReturn(Optional.of(classificationSeriesMock));
+        when(classificationSeriesRepositoryMock.findById(any(Long.class)))
+                .thenReturn(Optional.of(classificationSeriesMock));
         when(userRepositoryMock.findById(any(Long.class))).thenReturn(Optional.of(mockUser));
-        Assertions.assertThrows(KlassMessageException.class, () ->
-                subject.deleteNotIndexClassification(mockUser, classificationSeriesMock));
+        Assertions.assertThrows(
+                KlassMessageException.class,
+                () -> subject.deleteNotIndexClassification(mockUser, classificationSeriesMock));
     }
 
     @Test
@@ -271,10 +309,12 @@ public class ClassificationServiceImplTest {
         when(classificationSeriesMock.getNameInPrimaryLanguage()).thenReturn("test");
         when(classificationSeriesMock.getCategoryName()).thenReturn("test");
         when(classificationSeriesMock.isPublishedInAnyLanguage()).thenReturn(true);
-        when(classificationSeriesRepositoryMock.findById(any(Long.class))).thenReturn(Optional.of(classificationSeriesMock));
+        when(classificationSeriesRepositoryMock.findById(any(Long.class)))
+                .thenReturn(Optional.of(classificationSeriesMock));
         when(userRepositoryMock.findById(any(Long.class))).thenReturn(Optional.of(mockUser));
-        Assertions.assertThrows(KlassMessageException.class, () ->
-                subject.deleteNotIndexClassification(mockUser, classificationSeriesMock));
+        Assertions.assertThrows(
+                KlassMessageException.class,
+                () -> subject.deleteNotIndexClassification(mockUser, classificationSeriesMock));
     }
 
     @Test
@@ -288,7 +328,8 @@ public class ClassificationServiceImplTest {
         when(classification.getContactPerson()).thenReturn(mockOwner);
         when(classification.isPublishedInAnyLanguage()).thenReturn(false);
         when(classification.getOwnerClassification()).thenReturn(classification);
-        when(classificationSeriesRepositoryMock.findById(any(Long.class))).thenReturn(Optional.of(classification));
+        when(classificationSeriesRepositoryMock.findById(any(Long.class)))
+                .thenReturn(Optional.of(classification));
         when(classificationSeriesRepositoryMock.save(classification)).thenReturn(classification);
         when(userRepositoryMock.findById(any(Long.class))).thenReturn(Optional.of(mockUser));
         subject.deleteNotIndexClassification(mockUser, classification);
@@ -306,7 +347,8 @@ public class ClassificationServiceImplTest {
         when(classification.getContactPerson()).thenReturn(mockOwner);
         when(classification.getOwnerClassification()).thenReturn(classification);
         when(classification.isPublishedInAnyLanguage()).thenReturn(true);
-        when(classificationSeriesRepositoryMock.findById(any(Long.class))).thenReturn(Optional.of(classification));
+        when(classificationSeriesRepositoryMock.findById(any(Long.class)))
+                .thenReturn(Optional.of(classification));
         when(classificationSeriesRepositoryMock.save(classification)).thenReturn(classification);
         when(userRepositoryMock.findById(any(Long.class))).thenReturn(Optional.of(mockUser));
         subject.deleteNotIndexClassification(mockUser, classification);
@@ -321,13 +363,13 @@ public class ClassificationServiceImplTest {
         classification.setContactPerson(mockUser);
         classification.setId(1L);
 
-        when(classificationSeriesRepositoryMock.findById(any(Long.class))).thenReturn(Optional.of(classification));
+        when(classificationSeriesRepositoryMock.findById(any(Long.class)))
+                .thenReturn(Optional.of(classification));
         when(userRepositoryMock.findById(any(Long.class))).thenReturn(Optional.of(mockUser));
         when(classificationSeriesRepositoryMock.save(classification)).thenReturn(classification);
         subject.deleteNotIndexClassification(classification.getContactPerson(), classification);
         verify(classificationSeriesRepositoryMock, times(1)).save(classification);
     }
-
 
     @Test
     public void testThatSaveClassificationVersionUpdatesClassificationLastModified() {
@@ -339,7 +381,8 @@ public class ClassificationServiceImplTest {
 
         when(classificationVersionRepositoryMock.save(mock)).thenReturn(mock);
         subject.saveNotIndexVersion(mock);
-        verify(classificationSeriesRepositoryMock, times(1)).updateClassificationLastModified(eq(1L), any(Date.class));
+        verify(classificationSeriesRepositoryMock, times(1))
+                .updateClassificationLastModified(eq(1L), any(Date.class));
     }
 
     @Test
@@ -352,7 +395,8 @@ public class ClassificationServiceImplTest {
 
         when(classificationVariantRepositoryMock.save(mock)).thenReturn(mock);
         subject.saveNotIndexVariant(mock);
-        verify(classificationSeriesRepositoryMock, times(1)).updateClassificationLastModified(eq(1L), any(Date.class));
+        verify(classificationSeriesRepositoryMock, times(1))
+                .updateClassificationLastModified(eq(1L), any(Date.class));
     }
 
     @Test
@@ -365,29 +409,34 @@ public class ClassificationServiceImplTest {
 
         when(correspondenceTableRepositoryMock.save(mock)).thenReturn(mock);
         subject.saveNotIndexCorrespondenceTable(mock);
-        verify(classificationSeriesRepositoryMock, times(1)).updateClassificationLastModified(eq(1L), any(Date.class));
+        verify(classificationSeriesRepositoryMock, times(1))
+                .updateClassificationLastModified(eq(1L), any(Date.class));
     }
 
     @Test
     public void testSaveStatisticalUnit() {
-        StatisticalUnit input = new StatisticalUnit(Translatable.empty().withLanguage("test", Language.NN));
-        when(statisticalUnitRepositoryMock.save(any(StatisticalUnit.class))).thenAnswer(invocation -> {
-            StatisticalUnit answer = (StatisticalUnit) invocation.getArguments()[0];
-            answer.setId(1L);
-            return answer;
-        });
+        StatisticalUnit input =
+                new StatisticalUnit(Translatable.empty().withLanguage("test", Language.NN));
+        when(statisticalUnitRepositoryMock.save(any(StatisticalUnit.class)))
+                .thenAnswer(
+                        invocation -> {
+                            StatisticalUnit answer = (StatisticalUnit) invocation.getArguments()[0];
+                            answer.setId(1L);
+                            return answer;
+                        });
         assertThat(input.getId()).isNull();
         StatisticalUnit output = subject.saveStatisticalUnit(input);
         verify(statisticalUnitRepositoryMock, times(1)).save(input);
         assertThat(output.getId()).isEqualTo(1L);
         assertThat(output.getName(Language.NN)).isEqualTo("test");
-
     }
 
     @Test
     public void testFindAllStatisticalUnits() {
-        List<StatisticalUnit> statisticalUnitsValues = Arrays.asList(new StatisticalUnit(Translatable.create("name",
-                Language.NB)), new StatisticalUnit(Translatable.create("name", Language.NB)));
+        List<StatisticalUnit> statisticalUnitsValues =
+                Arrays.asList(
+                        new StatisticalUnit(Translatable.create("name", Language.NB)),
+                        new StatisticalUnit(Translatable.create("name", Language.NB)));
         when(statisticalUnitRepositoryMock.findAll()).thenReturn(statisticalUnitsValues);
 
         List<StatisticalUnit> statisticalUnits = subject.findAllStatisticalUnits();
@@ -402,14 +451,15 @@ public class ClassificationServiceImplTest {
         Translatable legalbase = new Translatable("Forordning", null, null);
         Translatable publications = new Translatable("Publikasjoner", null, null);
 
-        when(classificationVersionRepositoryMock.save(any(ClassificationVersion.class))).then(
-                new Answer<ClassificationVersion>() {
-                    @Override
-                    public ClassificationVersion answer(InvocationOnMock invocation) throws Throwable {
-                        return (ClassificationVersion) invocation.getArguments()[0];
-                    }
-
-                });
+        when(classificationVersionRepositoryMock.save(any(ClassificationVersion.class)))
+                .then(
+                        new Answer<ClassificationVersion>() {
+                            @Override
+                            public ClassificationVersion answer(InvocationOnMock invocation)
+                                    throws Throwable {
+                                return (ClassificationVersion) invocation.getArguments()[0];
+                            }
+                        });
 
         LocalDate from = LocalDate.of(2016, 1, 1);
         LocalDate to = LocalDate.of(2016, 3, 1);
@@ -435,21 +485,34 @@ public class ClassificationServiceImplTest {
         ClassificationItem item22 = TestUtil.createClassificationItem("2.2", "Test 2-2");
         classificationVersion.addClassificationItem(item21, 2, item11);
         classificationVersion.addClassificationItem(item22, 2, item12);
-        ClassificationSeries classificationSeries = new ClassificationSeries(Translatable.create("TEST", language),
-                Translatable.create("TST", language), false, Language.NB, ClassificationType.CLASSIFICATION,
-                new User("Donald", "Doanld Duck", "Gakk"));
+        ClassificationSeries classificationSeries =
+                new ClassificationSeries(
+                        Translatable.create("TEST", language),
+                        Translatable.create("TST", language),
+                        false,
+                        Language.NB,
+                        ClassificationType.CLASSIFICATION,
+                        new User("Donald", "Doanld Duck", "Gakk"));
         classificationSeries.addClassificationVersion(classificationVersion);
 
-        when(classificationVersionRepositoryMock.findById(any())).thenReturn(Optional.of(classificationVersion));
+        when(classificationVersionRepositoryMock.findById(any()))
+                .thenReturn(Optional.of(classificationVersion));
 
-        ClassificationVersion classificationVersionCopy = subject.copyClassificationVersion(classificationVersion,
-                rangeCopy);
+        ClassificationVersion classificationVersionCopy =
+                subject.copyClassificationVersion(classificationVersion, rangeCopy);
         assertEquals(rangeCopy, classificationVersionCopy.getDateRange());
         assertEquals(introduction, classificationVersionCopy.getIntroduction(Language.NB));
-        assertEquals(derived.getString(Language.NB), classificationVersionCopy.getDerivedFrom(Language.NB));
-        assertEquals(legalbase.getString(Language.NB), classificationVersionCopy.getLegalBase(Language.NB));
-        assertEquals(publications.getString(Language.NB), classificationVersionCopy.getPublications(Language.NB));
-        List<ClassificationItem> classificationItems = classificationVersionCopy.getAllClassificationItems();
+        assertEquals(
+                derived.getString(Language.NB),
+                classificationVersionCopy.getDerivedFrom(Language.NB));
+        assertEquals(
+                legalbase.getString(Language.NB),
+                classificationVersionCopy.getLegalBase(Language.NB));
+        assertEquals(
+                publications.getString(Language.NB),
+                classificationVersionCopy.getPublications(Language.NB));
+        List<ClassificationItem> classificationItems =
+                classificationVersionCopy.getAllClassificationItems();
         assertEquals(4, classificationItems.size());
         findEqualClassificationItem(classificationItems, item11);
         findEqualClassificationItem(classificationItems, item12);
@@ -462,7 +525,8 @@ public class ClassificationServiceImplTest {
         // given
 
         // when
-        Set<String> result = subject.findReferencesOfClassificationItem(createClassificationItemWithId());
+        Set<String> result =
+                subject.findReferencesOfClassificationItem(createClassificationItemWithId());
 
         // then
         assertEquals(0, result.size());
@@ -471,7 +535,8 @@ public class ClassificationServiceImplTest {
     @Test
     public void findReferencesOfClassificationItemReferencingItem() {
         // given
-        ReferencingClassificationItem item = new ReferencingClassificationItem(createClassificationItem());
+        ReferencingClassificationItem item =
+                new ReferencingClassificationItem(createClassificationItem());
         ClassificationVersion version = createClassificationVersion();
         version.addNextLevel();
         version.addClassificationItem(item, 1, null);
@@ -480,7 +545,8 @@ public class ClassificationServiceImplTest {
                 .thenReturn(Lists.newArrayList(item));
 
         // when
-        Set<String> result = subject.findReferencesOfClassificationItem(createClassificationItemWithId());
+        Set<String> result =
+                subject.findReferencesOfClassificationItem(createClassificationItemWithId());
 
         // then
         assertEquals(1, result.size());
@@ -491,14 +557,17 @@ public class ClassificationServiceImplTest {
         // given
         ClassificationVersion source = createClassificationVersion();
         ClassificationVersion target = createClassificationVersion();
-        CorrespondenceMap map = new CorrespondenceMap(createClassificationItem(), createClassificationItem());
+        CorrespondenceMap map =
+                new CorrespondenceMap(createClassificationItem(), createClassificationItem());
         TestUtil.createCorrespondenceTable(source, target).addCorrespondenceMap(map);
 
-        when(correspondenceMapRepositoryMock.findBySourceOrTarget(any(ClassificationItem.class), anyBoolean()))
+        when(correspondenceMapRepositoryMock.findBySourceOrTarget(
+                        any(ClassificationItem.class), anyBoolean()))
                 .thenReturn(Sets.newHashSet(map));
 
         // when
-        Set<String> result = subject.findReferencesOfClassificationItem(createClassificationItemWithId());
+        Set<String> result =
+                subject.findReferencesOfClassificationItem(createClassificationItemWithId());
 
         // then
         assertEquals(1, result.size());
@@ -509,14 +578,17 @@ public class ClassificationServiceImplTest {
         // given
         ClassificationVersion source = createClassificationVersion();
         ClassificationVersion target = createClassificationVersion();
-        CorrespondenceMap map = new CorrespondenceMap(createClassificationItem(), createClassificationItem());
+        CorrespondenceMap map =
+                new CorrespondenceMap(createClassificationItem(), createClassificationItem());
         TestUtil.createCorrespondenceTable(source, target).addCorrespondenceMap(map);
 
-        when(correspondenceMapRepositoryMock.findBySourceOrTarget(any(ClassificationItem.class), anyBoolean()))
+        when(correspondenceMapRepositoryMock.findBySourceOrTarget(
+                        any(ClassificationItem.class), anyBoolean()))
                 .thenReturn(Sets.newHashSet(map));
 
         // when
-        Set<String> result = subject.findReferencesOfClassificationItem(createClassificationItemWithId());
+        Set<String> result =
+                subject.findReferencesOfClassificationItem(createClassificationItemWithId());
 
         // then
         assertEquals(1, result.size());
@@ -526,10 +598,10 @@ public class ClassificationServiceImplTest {
     public void findCorrespondenceTablesWithSource() {
         // given
         ClassificationVersion source = createClassificationVersion();
-        CorrespondenceTable correspondenceTable = TestUtil.createCorrespondenceTable(source,
-                createClassificationVersion());
-        when(correspondenceTableRepositoryMock.findBySource(source)).thenReturn(Lists.newArrayList(
-                correspondenceTable));
+        CorrespondenceTable correspondenceTable =
+                TestUtil.createCorrespondenceTable(source, createClassificationVersion());
+        when(correspondenceTableRepositoryMock.findBySource(source))
+                .thenReturn(Lists.newArrayList(correspondenceTable));
 
         // when
         List<CorrespondenceTable> result = subject.findCorrespondenceTablesWithSource(source);
@@ -542,11 +614,11 @@ public class ClassificationServiceImplTest {
     public void findCorrespondenceTablesWithSourceFiltersDeleted() {
         // given
         ClassificationVersion source = createClassificationVersion();
-        CorrespondenceTable correspondenceTable = TestUtil.createCorrespondenceTable(source,
-                createClassificationVersion());
+        CorrespondenceTable correspondenceTable =
+                TestUtil.createCorrespondenceTable(source, createClassificationVersion());
         correspondenceTable.setDeleted();
-        when(correspondenceTableRepositoryMock.findBySource(source)).thenReturn(Lists.newArrayList(
-                correspondenceTable));
+        when(correspondenceTableRepositoryMock.findBySource(source))
+                .thenReturn(Lists.newArrayList(correspondenceTable));
 
         // when
         List<CorrespondenceTable> result = subject.findCorrespondenceTablesWithSource(source);
@@ -559,10 +631,10 @@ public class ClassificationServiceImplTest {
     public void findCorrespondenceTablesWithTarget() {
         // given
         ClassificationVersion target = createClassificationVersion();
-        CorrespondenceTable correspondenceTable = TestUtil.createCorrespondenceTable(createClassificationVersion(),
-                target);
-        when(correspondenceTableRepositoryMock.findByTarget(target)).thenReturn(Lists.newArrayList(
-                correspondenceTable));
+        CorrespondenceTable correspondenceTable =
+                TestUtil.createCorrespondenceTable(createClassificationVersion(), target);
+        when(correspondenceTableRepositoryMock.findByTarget(target))
+                .thenReturn(Lists.newArrayList(correspondenceTable));
 
         // when
         List<CorrespondenceTable> result = subject.findCorrespondenceTablesWithTarget(target);
@@ -575,11 +647,11 @@ public class ClassificationServiceImplTest {
     public void findCorrespondenceTablesWithTargetFiltersDeleted() {
         // given
         ClassificationVersion target = createClassificationVersion();
-        CorrespondenceTable correspondenceTable = TestUtil.createCorrespondenceTable(createClassificationVersion(),
-                target);
+        CorrespondenceTable correspondenceTable =
+                TestUtil.createCorrespondenceTable(createClassificationVersion(), target);
         correspondenceTable.setDeleted();
-        when(correspondenceTableRepositoryMock.findByTarget(target)).thenReturn(Lists.newArrayList(
-                correspondenceTable));
+        when(correspondenceTableRepositoryMock.findByTarget(target))
+                .thenReturn(Lists.newArrayList(correspondenceTable));
 
         // when
         List<CorrespondenceTable> result = subject.findCorrespondenceTablesWithTarget(target);
@@ -594,14 +666,15 @@ public class ClassificationServiceImplTest {
         // given
         ClassificationVersion sourceVersion = createClassificationVersion();
         ClassificationVersion targetVersion = createClassificationVersion();
-        CorrespondenceTable correspondenceTable = TestUtil.createCorrespondenceTable("description", sourceVersion, 0,
-                targetVersion, 0);
-        when(correspondenceTableRepositoryMock.findBySourceInAndTargetIn(anyList(), anyList())).thenReturn(Lists
-                .newArrayList(correspondenceTable));
+        CorrespondenceTable correspondenceTable =
+                TestUtil.createCorrespondenceTable(
+                        "description", sourceVersion, 0, targetVersion, 0);
+        when(correspondenceTableRepositoryMock.findBySourceInAndTargetIn(anyList(), anyList()))
+                .thenReturn(Lists.newArrayList(correspondenceTable));
 
         // when
-        List<CorrespondenceTable> result = subject.findCorrespondenceTablesBetween(sourceVersion, null, targetVersion,
-                null);
+        List<CorrespondenceTable> result =
+                subject.findCorrespondenceTablesBetween(sourceVersion, null, targetVersion, null);
 
         // then
         assertEquals(1, result.size());
@@ -615,14 +688,19 @@ public class ClassificationServiceImplTest {
         sourceVersion.addNextLevel();
         ClassificationVersion targetVersion = createClassificationVersion();
         targetVersion.addNextLevel();
-        CorrespondenceTable correspondenceTable = TestUtil.createCorrespondenceTable("description", sourceVersion, 1,
-                targetVersion, 1);
-        when(correspondenceTableRepositoryMock.findBySourceInAndTargetIn(anyList(), anyList())).thenReturn(Lists
-                .newArrayList(correspondenceTable));
+        CorrespondenceTable correspondenceTable =
+                TestUtil.createCorrespondenceTable(
+                        "description", sourceVersion, 1, targetVersion, 1);
+        when(correspondenceTableRepositoryMock.findBySourceInAndTargetIn(anyList(), anyList()))
+                .thenReturn(Lists.newArrayList(correspondenceTable));
 
         // when
-        List<CorrespondenceTable> result = subject.findCorrespondenceTablesBetween(sourceVersion, sourceVersion
-                .getFirstLevel().get(), targetVersion, targetVersion.getFirstLevel().get());
+        List<CorrespondenceTable> result =
+                subject.findCorrespondenceTablesBetween(
+                        sourceVersion,
+                        sourceVersion.getFirstLevel().get(),
+                        targetVersion,
+                        targetVersion.getFirstLevel().get());
 
         // then
         assertEquals(1, result.size());
@@ -636,15 +714,16 @@ public class ClassificationServiceImplTest {
         sourceVersion.addNextLevel();
         ClassificationVersion targetVersion = createClassificationVersion();
         targetVersion.addNextLevel();
-        CorrespondenceTable correspondenceTable = TestUtil.createCorrespondenceTable("description", sourceVersion, 1,
-                targetVersion, 1);
-        when(correspondenceTableRepositoryMock.findBySourceInAndTargetIn(anyList(), anyList())).thenReturn(Lists
-                .newArrayList(correspondenceTable));
+        CorrespondenceTable correspondenceTable =
+                TestUtil.createCorrespondenceTable(
+                        "description", sourceVersion, 1, targetVersion, 1);
+        when(correspondenceTableRepositoryMock.findBySourceInAndTargetIn(anyList(), anyList()))
+                .thenReturn(Lists.newArrayList(correspondenceTable));
 
         // when
-        List<CorrespondenceTable> result = subject.findCorrespondenceTablesBetween(sourceVersion, sourceVersion
-                .getFirstLevel()
-                .get(), targetVersion, null);
+        List<CorrespondenceTable> result =
+                subject.findCorrespondenceTablesBetween(
+                        sourceVersion, sourceVersion.getFirstLevel().get(), targetVersion, null);
 
         // then
         assertEquals(0, result.size());
@@ -658,14 +737,19 @@ public class ClassificationServiceImplTest {
         sourceVersion.addNextLevel();
         ClassificationVersion targetVersion = createClassificationVersion();
         targetVersion.addNextLevel();
-        CorrespondenceTable correspondenceTable = TestUtil.createCorrespondenceTable("description", sourceVersion, 1,
-                targetVersion, 1);
-        when(correspondenceTableRepositoryMock.findBySourceInAndTargetIn(anyList(), anyList())).thenReturn(Lists
-                .newArrayList(correspondenceTable));
+        CorrespondenceTable correspondenceTable =
+                TestUtil.createCorrespondenceTable(
+                        "description", sourceVersion, 1, targetVersion, 1);
+        when(correspondenceTableRepositoryMock.findBySourceInAndTargetIn(anyList(), anyList()))
+                .thenReturn(Lists.newArrayList(correspondenceTable));
 
         // when
-        List<CorrespondenceTable> result = subject.findCorrespondenceTablesBetween(targetVersion, targetVersion
-                .getFirstLevel().get(), sourceVersion, sourceVersion.getFirstLevel().get());
+        List<CorrespondenceTable> result =
+                subject.findCorrespondenceTablesBetween(
+                        targetVersion,
+                        targetVersion.getFirstLevel().get(),
+                        sourceVersion,
+                        sourceVersion.getFirstLevel().get());
 
         // then
         assertEquals(1, result.size());
@@ -675,12 +759,15 @@ public class ClassificationServiceImplTest {
     void findAllResponsibleSections() {
         String sectionMicroDataName = "Seksjon for mikrodata";
         String sectionMicroDataCode = "300";
-        String sectionPropertyName= "Seksjon for eiendoms-, areal- og primærnæringsstatistikk";
+        String sectionPropertyName = "Seksjon for eiendoms-, areal- og primærnæringsstatistikk";
         String sectionPropertyCode = "426";
 
-        ClassificationItem item1 = TestUtil.createClassificationItem(sectionMicroDataCode, sectionMicroDataName);
-        ClassificationItem item2 = TestUtil.createClassificationItem(sectionPropertyCode, sectionPropertyName);
-        ClassificationSeries series = TestUtil.createClassification(SSB_SECTION_NAME.getString(Language.NB));
+        ClassificationItem item1 =
+                TestUtil.createClassificationItem(sectionMicroDataCode, sectionMicroDataName);
+        ClassificationItem item2 =
+                TestUtil.createClassificationItem(sectionPropertyCode, sectionPropertyName);
+        ClassificationSeries series =
+                TestUtil.createClassification(SSB_SECTION_NAME.getString(Language.NB));
         DateRange dateRange = DateRange.create("2025-01-01", "2025-08-01");
         ClassificationVersion version = TestUtil.createClassificationVersion(dateRange);
         version.addNextLevel();
@@ -691,17 +778,22 @@ public class ClassificationServiceImplTest {
         Set<String> codes = Set.of(sectionMicroDataCode, sectionPropertyCode, "");
         when(classificationSeriesRepositoryMock.findAllResponsibleSections()).thenReturn(codes);
 
-        when(classificationSeriesRepositoryMock.findByNameNoIgnoreCase(SSB_SECTION_NAME.getString(Language.NB)))
+        when(classificationSeriesRepositoryMock.findByNameNoIgnoreCase(
+                        SSB_SECTION_NAME.getString(Language.NB)))
                 .thenReturn(series);
 
         Set<String> result = subject.findAllResponsibleSections();
 
-        assertThat(result).containsExactlyInAnyOrder(sectionPropertyCode + " - " + sectionPropertyName, sectionMicroDataCode + " - " +  sectionMicroDataName);
+        assertThat(result)
+                .containsExactlyInAnyOrder(
+                        sectionPropertyCode + " - " + sectionPropertyName,
+                        sectionMicroDataCode + " - " + sectionMicroDataName);
         assertThat(result).doesNotContain("");
     }
 
     private ClassificationVersion createClassificationVersion() {
-        ClassificationVersion version = TestUtil.createClassificationVersion(TestUtil.anyDateRange());
+        ClassificationVersion version =
+                TestUtil.createClassificationVersion(TestUtil.anyDateRange());
         ClassificationSeries classification = TestUtil.createClassification("name");
         classification.addClassificationVersion(version);
         return version;
@@ -717,9 +809,11 @@ public class ClassificationServiceImplTest {
         return item;
     }
 
-    private boolean findEqualClassificationItem(List<ClassificationItem> copyedItems, ClassificationItem item) {
+    private boolean findEqualClassificationItem(
+            List<ClassificationItem> copyedItems, ClassificationItem item) {
         for (ClassificationItem copyedItem : copyedItems) {
-            if (copyedItem.getCode().equals(item.getCode()) && copyedItem.getLevel() == item.getLevel()) {
+            if (copyedItem.getCode().equals(item.getCode())
+                    && copyedItem.getLevel() == item.getLevel()) {
                 return true;
             }
         }
@@ -729,5 +823,4 @@ public class ClassificationServiceImplTest {
     private Pageable createPageable() {
         return PageRequest.of(0, 3);
     }
-
 }

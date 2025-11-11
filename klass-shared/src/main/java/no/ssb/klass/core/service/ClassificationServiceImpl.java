@@ -1,6 +1,15 @@
 package no.ssb.klass.core.service;
 
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
+
+import static no.ssb.klass.core.service.ClassificationServiceHelper.SSB_SECTION_NAME;
+
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
+
 import com.google.common.collect.Lists;
+
 import no.ssb.klass.core.exception.KlassMessageException;
 import no.ssb.klass.core.model.*;
 import no.ssb.klass.core.repository.*;
@@ -10,6 +19,7 @@ import no.ssb.klass.core.util.DateRange;
 import no.ssb.klass.core.util.KlassResourceNotFoundException;
 import no.ssb.klass.core.util.TimeUtil;
 import no.ssb.klass.core.util.Translatable;
+
 import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,12 +30,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toSet;
-import static no.ssb.klass.core.service.ClassificationServiceHelper.SSB_SECTION_NAME;
 
 @Service
 @Transactional()
@@ -44,14 +48,17 @@ public class ClassificationServiceImpl implements ClassificationService {
     private final ClassificationFamilySummaryBuilder classificationFamilySummaryBuilder;
 
     @Autowired
-    public ClassificationServiceImpl(ClassificationFamilyRepository classificationFamilyRepository,
-                                     ClassificationSeriesRepository classificationRepository,
-                                     ClassificationVersionRepository classificationVersionRepository,
-                                     ClassificationVariantRepository classificationVariantRepository,
-                                     CorrespondenceTableRepository correspondenceTableRepository,
-                                     ReferencingClassificationItemRepository referencingClassificationItemRepository,
-                                     CorrespondenceMapRepository correspondenceMapRepository,
-                                     StatisticalUnitRepository statisticalUnitRepository, UserRepository userRepository, ClassificationFamilySummaryBuilder classificationFamilySummaryBuilder) {
+    public ClassificationServiceImpl(
+            ClassificationFamilyRepository classificationFamilyRepository,
+            ClassificationSeriesRepository classificationRepository,
+            ClassificationVersionRepository classificationVersionRepository,
+            ClassificationVariantRepository classificationVariantRepository,
+            CorrespondenceTableRepository correspondenceTableRepository,
+            ReferencingClassificationItemRepository referencingClassificationItemRepository,
+            CorrespondenceMapRepository correspondenceMapRepository,
+            StatisticalUnitRepository statisticalUnitRepository,
+            UserRepository userRepository,
+            ClassificationFamilySummaryBuilder classificationFamilySummaryBuilder) {
         this.classificationFamilyRepository = classificationFamilyRepository;
         this.classificationRepository = classificationRepository;
         this.classificationVersionRepository = classificationVersionRepository;
@@ -66,34 +73,43 @@ public class ClassificationServiceImpl implements ClassificationService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<ClassificationSeries> findAll(boolean includeCodelists, Date changedSince, Pageable pageable) {
+    public Page<ClassificationSeries> findAll(
+            boolean includeCodelists, Date changedSince, Pageable pageable) {
         // Note deleted ClassificationSeries are not returned. Ensured by
         // ClassificationSeriesSpecification.
-        return classificationRepository.findAll(new ClassificationSeriesSpecification(includeCodelists, changedSince),
+        return classificationRepository.findAll(
+                new ClassificationSeriesSpecification(includeCodelists, changedSince), pageable);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<ClassificationSeries> findAllPublic(
+            boolean includeCodelists, Date changedSince, Pageable pageable) {
+        // Note deleted ClassificationSeries are not returned. Ensured by
+        // ClassificationSeriesSpecification.
+        return classificationRepository.findAll(
+                new ClassificationSeriesSpecification(includeCodelists, changedSince, true),
                 pageable);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Page<ClassificationSeries> findAllPublic(boolean includeCodelists, Date changedSince, Pageable pageable) {
-        // Note deleted ClassificationSeries are not returned. Ensured by
-        // ClassificationSeriesSpecification.
-        return classificationRepository.findAll(
-                new ClassificationSeriesSpecification(includeCodelists, changedSince, true), pageable);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
     public List<ClassificationSeries> findAllClassificationSeries() {
-        return classificationRepository.findAll().stream().filter(classification -> !classification.isDeleted())
+        return classificationRepository.findAll().stream()
+                .filter(classification -> !classification.isDeleted())
                 .collect(toList());
     }
 
     @Override
     @Transactional(readOnly = true)
     public ClassificationSeries getClassificationSeries(Long id) {
-        ClassificationSeries classificationSeries = classificationRepository.findById(id).orElseThrow(() -> new
-                KlassResourceNotFoundException("Classification not found with id = " + id));
+        ClassificationSeries classificationSeries =
+                classificationRepository
+                        .findById(id)
+                        .orElseThrow(
+                                () ->
+                                        new KlassResourceNotFoundException(
+                                                "Classification not found with id = " + id));
         if (classificationSeries.isDeleted()) {
             throw new KlassResourceNotFoundException("Classification not found with id = " + id);
         }
@@ -116,10 +132,17 @@ public class ClassificationServiceImpl implements ClassificationService {
     @Override
     @Transactional(readOnly = true)
     public ClassificationVariant getClassificationVariant(Long id) {
-        ClassificationVariant variant = classificationVariantRepository.findById(id).orElseThrow(() -> new
-                KlassResourceNotFoundException("Classification Variant not found with id = " + id));
+        ClassificationVariant variant =
+                classificationVariantRepository
+                        .findById(id)
+                        .orElseThrow(
+                                () ->
+                                        new KlassResourceNotFoundException(
+                                                "Classification Variant not found with id = "
+                                                        + id));
         if (variant.isDeleted()) {
-            throw new KlassResourceNotFoundException("Classification Variant not found with id = " + id);
+            throw new KlassResourceNotFoundException(
+                    "Classification Variant not found with id = " + id);
         }
         Hibernate.initialize(variant.getLevels());
         Hibernate.initialize(variant.getChangelogs());
@@ -129,10 +152,17 @@ public class ClassificationServiceImpl implements ClassificationService {
     @Override
     @Transactional(readOnly = true)
     public ClassificationVersion getClassificationVersion(Long id) {
-        ClassificationVersion version = classificationVersionRepository.findById(id).orElseThrow(() -> new
-                KlassResourceNotFoundException("Classification Version not found with id = " + id));
+        ClassificationVersion version =
+                classificationVersionRepository
+                        .findById(id)
+                        .orElseThrow(
+                                () ->
+                                        new KlassResourceNotFoundException(
+                                                "Classification Version not found with id = "
+                                                        + id));
         if (version.isDeleted()) {
-            throw new KlassResourceNotFoundException("Classification Version not found with id = " + id);
+            throw new KlassResourceNotFoundException(
+                    "Classification Version not found with id = " + id);
         }
         Hibernate.initialize(version.getLevels());
         Hibernate.initialize(version.getCorrespondenceTables());
@@ -144,10 +174,16 @@ public class ClassificationServiceImpl implements ClassificationService {
     @Override
     @Transactional(readOnly = true)
     public CorrespondenceTable getCorrespondenceTable(long id) {
-        CorrespondenceTable correspondenceTable = correspondenceTableRepository.findById(id).orElseThrow(() -> new
-                KlassResourceNotFoundException("Correspondence Table not found with id = " + id));
+        CorrespondenceTable correspondenceTable =
+                correspondenceTableRepository
+                        .findById(id)
+                        .orElseThrow(
+                                () ->
+                                        new KlassResourceNotFoundException(
+                                                "Correspondence Table not found with id = " + id));
         if (correspondenceTable.isThisOrSourceOrTargetDeleted()) {
-            throw new KlassResourceNotFoundException("Correspondence Table not found with id = " + id);
+            throw new KlassResourceNotFoundException(
+                    "Correspondence Table not found with id = " + id);
         }
         Hibernate.initialize(correspondenceTable.getSource().getLevels());
         Hibernate.initialize(correspondenceTable.getTarget().getLevels());
@@ -159,8 +195,13 @@ public class ClassificationServiceImpl implements ClassificationService {
     @Override
     @Transactional(readOnly = true)
     public ClassificationFamily getClassificationFamily(long id) {
-        ClassificationFamily classificationFamily = classificationFamilyRepository.findById(id).orElseThrow(() -> new
-                KlassResourceNotFoundException("ClassificationFamily not found with id = " + id));
+        ClassificationFamily classificationFamily =
+                classificationFamilyRepository
+                        .findById(id)
+                        .orElseThrow(
+                                () ->
+                                        new KlassResourceNotFoundException(
+                                                "ClassificationFamily not found with id = " + id));
         Hibernate.initialize(classificationFamily.getClassificationSeries());
         return classificationFamily;
     }
@@ -194,7 +235,8 @@ public class ClassificationServiceImpl implements ClassificationService {
     }
 
     @Override
-    public CorrespondenceTable saveNotIndexCorrespondenceTable(CorrespondenceTable correspondenceTable) {
+    public CorrespondenceTable saveNotIndexCorrespondenceTable(
+            CorrespondenceTable correspondenceTable) {
         correspondenceTable = correspondenceTableRepository.save(correspondenceTable);
         updateClassificationLastModified(correspondenceTable.getOwnerClassification().getId());
         return correspondenceTable;
@@ -205,33 +247,40 @@ public class ClassificationServiceImpl implements ClassificationService {
     }
 
     /**
-     * Checks if there are any references to the deleted classificationItems. If the
-     * references are deleted, e.g.
-     * belonging to a deleted ClassificationVersion, the reference is deleted in
-     * order to avoid constraint violation.
+     * Checks if there are any references to the deleted classificationItems. If the references are
+     * deleted, e.g. belonging to a deleted ClassificationVersion, the reference is deleted in order
+     * to avoid constraint violation.
      */
     private void deleteAnyDeletedReferencesToClassificationItems(ClassificationVersion version) {
         Set<CorrespondenceMap> softDeletedMaps = new HashSet<>();
         List<ReferencingClassificationItem> softDeletedItems = new ArrayList<>();
 
-        List<ClassificationItem> deletedClassificationItems = version.getDeletedClassificationItems()
-                .stream().filter(item -> item.getId() != null).collect(toList());
+        List<ClassificationItem> deletedClassificationItems =
+                version.getDeletedClassificationItems().stream()
+                        .filter(item -> item.getId() != null)
+                        .collect(toList());
 
         // Important as SQL query will fail if no items are provided (using where ... IN
         // (collection))
         if (!deletedClassificationItems.isEmpty()) {
-            softDeletedMaps.addAll(correspondenceMapRepository.findAllMapsUsingDeletedItems(version,
-                    deletedClassificationItems));
-            softDeletedItems.addAll(referencingClassificationItemRepository.findByReferenceInList(
-                    deletedClassificationItems, true));
+            softDeletedMaps.addAll(
+                    correspondenceMapRepository.findAllMapsUsingDeletedItems(
+                            version, deletedClassificationItems));
+            softDeletedItems.addAll(
+                    referencingClassificationItemRepository.findByReferenceInList(
+                            deletedClassificationItems, true));
         }
         softDeletedMaps.forEach(map -> map.getCorrespondenceTable().removeCorrespondenceMap(map));
-        softDeletedItems.forEach(item -> item.getLevel().getStatisticalClassification().deleteClassificationItem(item));
+        softDeletedItems.forEach(
+                item ->
+                        item.getLevel()
+                                .getStatisticalClassification()
+                                .deleteClassificationItem(item));
         classificationRepository.flush();
     }
 
-    private Set<CorrespondenceMap> findCorrespondenceMapsReferencing(ClassificationItem classificationItem,
-                                                                     boolean deleted) {
+    private Set<CorrespondenceMap> findCorrespondenceMapsReferencing(
+            ClassificationItem classificationItem, boolean deleted) {
         return correspondenceMapRepository.findBySourceOrTarget(classificationItem, deleted);
     }
 
@@ -242,12 +291,14 @@ public class ClassificationServiceImpl implements ClassificationService {
 
     private List<ReferencingClassificationItem> findClassificationItemsReferencing(
             StatisticalClassification statisticalClassification, boolean deleted) {
-        return referencingClassificationItemRepository.findItemReferences(statisticalClassification, deleted);
+        return referencingClassificationItemRepository.findItemReferences(
+                statisticalClassification, deleted);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<ClassificationSeries> findOneClassificationSeriesWithName(String name, Language language) {
+    public Optional<ClassificationSeries> findOneClassificationSeriesWithName(
+            String name, Language language) {
         ClassificationSeries classification;
         switch (language) {
             case NB:
@@ -271,53 +322,76 @@ public class ClassificationServiceImpl implements ClassificationService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<CorrespondenceDto> findCorrespondences(Long sourceClassificationId, Long targetClassificationId,
-                                                       DateRange dateRange, Language language, Boolean includeFuture,
-                                                       Boolean inverted) {
+    public List<CorrespondenceDto> findCorrespondences(
+            Long sourceClassificationId,
+            Long targetClassificationId,
+            DateRange dateRange,
+            Language language,
+            Boolean includeFuture,
+            Boolean inverted) {
         checkNotNull(dateRange);
         checkNotNull(language);
         ClassificationSeries sourceClassification = getClassificationSeries(sourceClassificationId);
         ClassificationSeries targetClassification = getClassificationSeries(targetClassificationId);
-        List<CorrespondenceDto> correspondences = ClassificationServiceHelper.findCorrespondences(
-                sourceClassification, targetClassification, dateRange, language, includeFuture, inverted);
+        List<CorrespondenceDto> correspondences =
+                ClassificationServiceHelper.findCorrespondences(
+                        sourceClassification,
+                        targetClassification,
+                        dateRange,
+                        language,
+                        includeFuture,
+                        inverted);
         if (correspondences.isEmpty()) {
-            correspondences = ClassificationServiceHelper.findCorrespondences(
-                    targetClassification, sourceClassification, dateRange, language, includeFuture, !inverted);
+            correspondences =
+                    ClassificationServiceHelper.findCorrespondences(
+                            targetClassification,
+                            sourceClassification,
+                            dateRange,
+                            language,
+                            includeFuture,
+                            !inverted);
         }
         if (correspondences.isEmpty())
-            throw new KlassResourceNotFoundException(createCorrespondenceNotFoundErrorMessage(
-                    sourceClassification, targetClassification));
+            throw new KlassResourceNotFoundException(
+                    createCorrespondenceNotFoundErrorMessage(
+                            sourceClassification, targetClassification));
         return correspondences;
     }
 
-    public static String createCorrespondenceNotFoundErrorMessage(ClassificationSeries sourceClassification,
-                                                                  ClassificationSeries targetClassification) {
-        return "Classification '" + sourceClassification.getName(Language.getDefault())
-                + "' has no correspondence table with Classification '" + targetClassification.getName(Language
-                .getDefault())
+    public static String createCorrespondenceNotFoundErrorMessage(
+            ClassificationSeries sourceClassification, ClassificationSeries targetClassification) {
+        return "Classification '"
+                + sourceClassification.getName(Language.getDefault())
+                + "' has no correspondence table with Classification '"
+                + targetClassification.getName(Language.getDefault())
                 + "'";
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<CodeDto> findVariantClassificationCodes(Long id, String variantName, Language language,
-                                                        DateRange dateRange, Boolean includeFuture) {
+    public List<CodeDto> findVariantClassificationCodes(
+            Long id,
+            String variantName,
+            Language language,
+            DateRange dateRange,
+            Boolean includeFuture) {
         checkNotNull(variantName);
         checkNotNull(language);
         checkNotNull(dateRange);
         ClassificationSeries classification = getClassificationSeries(id);
-        return ClassificationServiceHelper.findVariantClassificationCodes(classification, variantName, language,
-                dateRange, includeFuture);
+        return ClassificationServiceHelper.findVariantClassificationCodes(
+                classification, variantName, language, dateRange, includeFuture);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<CodeDto> findClassificationCodes(Long id, DateRange dateRange, Language language,
-                                                 Boolean includeFuture) {
+    public List<CodeDto> findClassificationCodes(
+            Long id, DateRange dateRange, Language language, Boolean includeFuture) {
         checkNotNull(dateRange);
         checkNotNull(language);
         ClassificationSeries classification = getClassificationSeries(id);
-        return ClassificationServiceHelper.findClassificationCodes(classification, dateRange, language, includeFuture);
+        return ClassificationServiceHelper.findClassificationCodes(
+                classification, dateRange, language, includeFuture);
     }
 
     private boolean isPublishedInAnyLanguage(ClassificationEntityOperations entity) {
@@ -339,12 +413,14 @@ public class ClassificationServiceImpl implements ClassificationService {
     @Override
     @Transactional(readOnly = true)
     public List<StatisticalUnit> findClassificationStatisticalUnit(StatisticalUnit statUnit) {
-        return classificationRepository.findAllClassificationStatisticalUnits().stream().filter(
-                statisticalUnit -> statisticalUnit.equals(statUnit)).collect(toList());
+        return classificationRepository.findAllClassificationStatisticalUnits().stream()
+                .filter(statisticalUnit -> statisticalUnit.equals(statUnit))
+                .collect(toList());
     }
 
     @Override
-    public ClassificationFamily saveClassificationFamily(ClassificationFamily classificationFamily) {
+    public ClassificationFamily saveClassificationFamily(
+            ClassificationFamily classificationFamily) {
         return classificationFamilyRepository.save(classificationFamily);
     }
 
@@ -355,8 +431,11 @@ public class ClassificationServiceImpl implements ClassificationService {
 
     @Override
     public StatisticalUnit createAndSaveNewStatisticalUnit(StatisticalUnit unitDetails) {
-        Translatable name = new Translatable(unitDetails.getName(Language.NB), unitDetails.getName(Language.NN),
-                unitDetails.getName(Language.EN));
+        Translatable name =
+                new Translatable(
+                        unitDetails.getName(Language.NB),
+                        unitDetails.getName(Language.NN),
+                        unitDetails.getName(Language.EN));
         StatisticalUnit newStatUnit = new StatisticalUnit(name);
         return statisticalUnitRepository.save(newStatUnit);
     }
@@ -373,36 +452,45 @@ public class ClassificationServiceImpl implements ClassificationService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<ClassificationFamilySummary> findAllClassificationFamilySummaries(String section,
-                                                                                  ClassificationType classificationType) {
-        return classificationFamilySummaryBuilder.buildClassificationSummaries(section, classificationType);
+    public List<ClassificationFamilySummary> findAllClassificationFamilySummaries(
+            String section, ClassificationType classificationType) {
+        return classificationFamilySummaryBuilder.buildClassificationSummaries(
+                section, classificationType);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<ClassificationFamilySummary> findPublicClassificationFamilySummaries(
             String section, ClassificationType classificationType) {
-        return classificationFamilySummaryBuilder.buildPublicClassificationSummaries(section, classificationType);
+        return classificationFamilySummaryBuilder.buildPublicClassificationSummaries(
+                section, classificationType);
     }
 
     @Override
     @Transactional(readOnly = true)
     public Set<String> findAllResponsibleSections() {
-        return resolveResponsibleSectionNames(classificationRepository.findAllResponsibleSections());
+        return resolveResponsibleSectionNames(
+                classificationRepository.findAllResponsibleSections());
     }
 
     @Override
     @Transactional(readOnly = true)
     public Set<String> findResponsibleSectionsWithPublishedVersions() {
-        return resolveResponsibleSectionNames(classificationRepository.findResponsibleSectionsWithPublishedVersions());
+        return resolveResponsibleSectionNames(
+                classificationRepository.findResponsibleSectionsWithPublishedVersions());
     }
 
     @Override
     public void deleteNotIndexClassification(User user, ClassificationSeries classification)
             throws KlassMessageException {
         classification = reloadToAvoidLazyInitialization(classification);
-        user = userRepository.findById(user.getId()).orElseThrow(() ->
-                new RuntimeException("User not found")); // get attached object
+        user =
+                userRepository
+                        .findById(user.getId())
+                        .orElseThrow(
+                                () ->
+                                        new RuntimeException(
+                                                "User not found")); // get attached object
         checkAllowedToDelete(user, classification);
         classification.setDeleted();
         saveNotIndexClassification(classification);
@@ -410,7 +498,8 @@ public class ClassificationServiceImpl implements ClassificationService {
     }
 
     @Override
-    public void deleteNotIndexVariant(User user, ClassificationVariant variant) throws KlassMessageException {
+    public void deleteNotIndexVariant(User user, ClassificationVariant variant)
+            throws KlassMessageException {
         checkAllowedToDelete(user, variant);
         variant.setDeleted();
         saveNotIndexVariant(variant);
@@ -422,7 +511,8 @@ public class ClassificationServiceImpl implements ClassificationService {
     }
 
     @Override
-    public void deleteNotIndexVersion(User user, ClassificationVersion version) throws KlassMessageException {
+    public void deleteNotIndexVersion(User user, ClassificationVersion version)
+            throws KlassMessageException {
         version = reloadToAvoidLazyInitialization(version);
         checkAllowedToDelete(user, version);
         version.setDeleted();
@@ -430,14 +520,15 @@ public class ClassificationServiceImpl implements ClassificationService {
     }
 
     @Override
-    public void deleteNotIndexCorrespondenceTable(User user, CorrespondenceTable correspondenceTable)
-            throws KlassMessageException {
+    public void deleteNotIndexCorrespondenceTable(
+            User user, CorrespondenceTable correspondenceTable) throws KlassMessageException {
         checkAllowedToDelete(user, correspondenceTable);
         correspondenceTable.setDeleted();
         saveNotIndexCorrespondenceTable(correspondenceTable);
     }
 
-    private ClassificationSeries reloadToAvoidLazyInitialization(ClassificationSeries classification) {
+    private ClassificationSeries reloadToAvoidLazyInitialization(
+            ClassificationSeries classification) {
         return getClassificationSeries(classification.getId());
     }
 
@@ -445,14 +536,19 @@ public class ClassificationServiceImpl implements ClassificationService {
         return getClassificationVersion(version.getId());
     }
 
-    private void checkAllowedToDelete(User user, ClassificationEntityOperations entity) throws KlassMessageException {
+    private void checkAllowedToDelete(User user, ClassificationEntityOperations entity)
+            throws KlassMessageException {
         User owner = entity.getContactPerson();
         boolean isOwner = user.getUsername().equals(owner.getUsername());
         if (user.isAdministrator() || (isOwner && !isPublishedInAnyLanguage(entity))) {
             return;
         }
-        StringBuilder errorMsg = new StringBuilder("Kunne ikke slette ").append(entity.getCategoryName().toLowerCase())
-                .append(" \"").append(entity.getNameInPrimaryLanguage().toLowerCase()).append("\", ");
+        StringBuilder errorMsg =
+                new StringBuilder("Kunne ikke slette ")
+                        .append(entity.getCategoryName().toLowerCase())
+                        .append(" \"")
+                        .append(entity.getNameInPrimaryLanguage().toLowerCase())
+                        .append("\", ");
         if (!isOwner) {
             makeNotOwnerErrorMessage(user, entity, owner, errorMsg);
         } else {
@@ -461,26 +557,28 @@ public class ClassificationServiceImpl implements ClassificationService {
         throw new KlassMessageException(errorMsg.toString());
     }
 
-    private void makePublishedErrorMessage(ClassificationEntityOperations entity, StringBuilder errorMsg) {
+    private void makePublishedErrorMessage(
+            ClassificationEntityOperations entity, StringBuilder errorMsg) {
         errorMsg.append("siden den allerede er publisert.\nBare administrator kan slette denne.");
     }
 
-    private void makeNotOwnerErrorMessage(User user, ClassificationEntityOperations entity, User owner,
-                                          StringBuilder errorMsg) {
+    private void makeNotOwnerErrorMessage(
+            User user, ClassificationEntityOperations entity, User owner, StringBuilder errorMsg) {
         errorMsg.append("siden du er ikke eier av den\n");
         errorMsg.append("Bare eier og administrator kan slette denne.");
     }
 
     @Override
-    public ClassificationVersion copyClassificationVersion(ClassificationVersion originalVersion, DateRange dateRange) {
+    public ClassificationVersion copyClassificationVersion(
+            ClassificationVersion originalVersion, DateRange dateRange) {
         originalVersion = reloadToAvoidLazyInitialization(originalVersion);
 
-        ClassificationVersion newClassificationVersion = originalVersion.copyClassificationVersion(dateRange);
+        ClassificationVersion newClassificationVersion =
+                originalVersion.copyClassificationVersion(dateRange);
         originalVersion.getOwnerClassification().addClassificationVersion(newClassificationVersion);
         ClassificationVersion save = classificationVersionRepository.save(newClassificationVersion);
         updateClassificationLastModified(save.getOwnerClassification().getId());
         return save;
-
     }
 
     @Override
@@ -504,20 +602,30 @@ public class ClassificationServiceImpl implements ClassificationService {
             return new HashSet<>();
         }
 
-        List<ReferencingClassificationItem> items = findClassificationItemsReferencing(classificationItem, false);
+        List<ReferencingClassificationItem> items =
+                findClassificationItemsReferencing(classificationItem, false);
 
-        Set<String> result = items.stream().map(item -> item.getLevel().getStatisticalClassification()
-                .getNameInPrimaryLanguage()).collect(toSet());
+        Set<String> result =
+                items.stream()
+                        .map(
+                                item ->
+                                        item.getLevel()
+                                                .getStatisticalClassification()
+                                                .getNameInPrimaryLanguage())
+                        .collect(toSet());
 
-        result.addAll(findCorrespondenceMapsReferencing(classificationItem, false).stream().map(map -> map
-                .getCorrespondenceTable().getNameInPrimaryLanguage()).collect(toSet()));
+        result.addAll(
+                findCorrespondenceMapsReferencing(classificationItem, false).stream()
+                        .map(map -> map.getCorrespondenceTable().getNameInPrimaryLanguage())
+                        .collect(toSet()));
 
         return result;
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Set<String> findReferencesOfClassificationItems(StatisticalClassification statisticalClassification) {
+    public Set<String> findReferencesOfClassificationItems(
+            StatisticalClassification statisticalClassification) {
         checkNotNull(statisticalClassification);
         if (statisticalClassification.getId() == null) {
             // Not yet saved, hence no references possible
@@ -527,40 +635,58 @@ public class ClassificationServiceImpl implements ClassificationService {
         List<ReferencingClassificationItem> items = new LinkedList<>();
         items.addAll(findClassificationItemsReferencing(statisticalClassification, false));
 
-        Set<String> result = items.stream().map(item -> item.getLevel().getStatisticalClassification()
-                .getNameInPrimaryLanguage()).collect(toSet());
+        Set<String> result =
+                items.stream()
+                        .map(
+                                item ->
+                                        item.getLevel()
+                                                .getStatisticalClassification()
+                                                .getNameInPrimaryLanguage())
+                        .collect(toSet());
 
-        Set<CorrespondenceTable> referencingCorrespondenceTables = correspondenceMapRepository
-                .findAllMapsUsingItems(statisticalClassification)
-                .stream()
-                .map(map -> map.getCorrespondenceTable())
-                .filter(table -> !table.isThisOrSourceOrTargetDeleted())
-                .collect(toSet());
+        Set<CorrespondenceTable> referencingCorrespondenceTables =
+                correspondenceMapRepository
+                        .findAllMapsUsingItems(statisticalClassification)
+                        .stream()
+                        .map(map -> map.getCorrespondenceTable())
+                        .filter(table -> !table.isThisOrSourceOrTargetDeleted())
+                        .collect(toSet());
 
-        result.addAll(referencingCorrespondenceTables.stream().map(table -> table.getNameInPrimaryLanguage()
-                        + " ID=" + table.getId()) // Also returns ID for error printing
-                .collect(toSet()));
+        result.addAll(
+                referencingCorrespondenceTables.stream()
+                        .map(
+                                table ->
+                                        table.getNameInPrimaryLanguage()
+                                                + " ID="
+                                                + table.getId()) // Also returns ID for error
+                        // printing
+                        .collect(toSet()));
 
         return result;
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<CorrespondenceTable> findCorrespondenceTablesWithSource(ClassificationVersion source) {
-        return correspondenceTableRepository.findBySource(source).stream().filter(
-                correspondenceTable -> !correspondenceTable.isThisOrSourceOrTargetDeleted()).collect(toList());
+    public List<CorrespondenceTable> findCorrespondenceTablesWithSource(
+            ClassificationVersion source) {
+        return correspondenceTableRepository.findBySource(source).stream()
+                .filter(correspondenceTable -> !correspondenceTable.isThisOrSourceOrTargetDeleted())
+                .collect(toList());
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<CorrespondenceTable> findCorrespondenceTablesWithTarget(ClassificationVersion target) {
-        return correspondenceTableRepository.findByTarget(target).stream().filter(
-                correspondenceTable -> !correspondenceTable.isThisOrSourceOrTargetDeleted()).collect(toList());
+    public List<CorrespondenceTable> findCorrespondenceTablesWithTarget(
+            ClassificationVersion target) {
+        return correspondenceTableRepository.findByTarget(target).stream()
+                .filter(correspondenceTable -> !correspondenceTable.isThisOrSourceOrTargetDeleted())
+                .collect(toList());
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<CorrespondenceTable> findPublicCorrespondenceTablesWithTarget(ClassificationVersion target) {
+    public List<CorrespondenceTable> findPublicCorrespondenceTablesWithTarget(
+            ClassificationVersion target) {
         return correspondenceTableRepository.findByTarget(target).stream()
                 .filter(correspondenceTable -> !correspondenceTable.isThisOrSourceOrTargetDeleted())
                 .filter(CorrespondenceTable::isPublishedInAnyLanguage)
@@ -581,8 +707,11 @@ public class ClassificationServiceImpl implements ClassificationService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<CorrespondenceTable> findCorrespondenceTablesBetween(ClassificationVersion version1, Level level1,
-                                                                     ClassificationVersion version2, Level level2) {
+    public List<CorrespondenceTable> findCorrespondenceTablesBetween(
+            ClassificationVersion version1,
+            Level level1,
+            ClassificationVersion version2,
+            Level level2) {
         if (level1 != null) {
             checkArgument(version1.equals(level1.getStatisticalClassification()));
         }
@@ -593,8 +722,8 @@ public class ClassificationServiceImpl implements ClassificationService {
         List<ClassificationVersion> versions = Lists.newArrayList(version1, version2);
         Optional<Level> sourceLevel;
         Optional<Level> targetLevel;
-        for (CorrespondenceTable correspondenceTable : correspondenceTableRepository.findBySourceInAndTargetIn(versions,
-                versions)) {
+        for (CorrespondenceTable correspondenceTable :
+                correspondenceTableRepository.findBySourceInAndTargetIn(versions, versions)) {
             if (correspondenceTable.isThisOrSourceOrTargetDeleted()) {
                 continue;
             }
@@ -605,11 +734,10 @@ public class ClassificationServiceImpl implements ClassificationService {
                 sourceLevel = Optional.ofNullable(level2);
                 targetLevel = Optional.ofNullable(level1);
             }
-            if (correspondenceTable.getSourceLevel().equals(sourceLevel) && correspondenceTable
-                    .getTargetLevel().equals(targetLevel)) {
+            if (correspondenceTable.getSourceLevel().equals(sourceLevel)
+                    && correspondenceTable.getTargetLevel().equals(targetLevel)) {
                 matchingCorrespondenceTables.add(correspondenceTable);
             }
-
         }
         return matchingCorrespondenceTables;
     }
@@ -635,14 +763,16 @@ public class ClassificationServiceImpl implements ClassificationService {
 
     private Optional<String> findSectionLabel(String sectionCode, Language language) {
         return findOneClassificationSeriesWithName(SSB_SECTION_NAME.getString(language), language)
-                .flatMap(series -> series.getNewestVersion()
-                        .getAllClassificationItems()
-                        .stream()
-                        .filter(item -> item.getCode().equals(sectionCode))
-                        .map(item -> ClassificationServiceHelper.formatSectionLabel(item, language))
-                        .findFirst());
+                .flatMap(
+                        series ->
+                                series.getNewestVersion().getAllClassificationItems().stream()
+                                        .filter(item -> item.getCode().equals(sectionCode))
+                                        .map(
+                                                item ->
+                                                        ClassificationServiceHelper
+                                                                .formatSectionLabel(item, language))
+                                        .findFirst());
     }
-
 
     /**
      * Maps one section code to display name in the form "<code> - <officialName>".
@@ -667,11 +797,13 @@ public class ClassificationServiceImpl implements ClassificationService {
         }
 
         // Fallback to sectionCode
-        return label.orElseGet(() -> {
-            log.warn("No label found for sectionCode={} in lang={} (or NB). Returning sectionCode.",
-                    sectionCode, language);
-            return sectionCode;
-        });
+        return label.orElseGet(
+                () -> {
+                    log.warn(
+                            "No label found for sectionCode={} in lang={} (or NB). Returning sectionCode.",
+                            sectionCode,
+                            language);
+                    return sectionCode;
+                });
     }
-
 }

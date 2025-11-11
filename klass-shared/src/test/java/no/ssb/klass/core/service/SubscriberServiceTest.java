@@ -3,19 +3,19 @@ package no.ssb.klass.core.service;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import java.net.URL;
-import java.util.Optional;
-
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import no.ssb.klass.core.model.ClassificationSeries;
 import no.ssb.klass.core.model.Subscriber;
 import no.ssb.klass.core.model.Verification;
 import no.ssb.klass.core.repository.SubscriberRepository;
 import no.ssb.klass.core.util.ClientException;
 import no.ssb.klass.testutil.TestUtil;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.net.URL;
+import java.util.Optional;
 
 public class SubscriberServiceTest {
 
@@ -77,8 +77,8 @@ public class SubscriberServiceTest {
         ClassificationSeries classification = TestUtil.createClassificationWithId(1, NAME);
         Optional<Subscriber> opt = Optional.of(subscriber);
         when(subscriberRepositoryMock.findOneByEmail(EMAIL)).thenReturn(opt);
-        Assertions.assertThrows(ClientException.class, () ->
-                subject.removeTracking(EMAIL, classification));
+        Assertions.assertThrows(
+                ClientException.class, () -> subject.removeTracking(EMAIL, classification));
     }
 
     @Test
@@ -100,9 +100,7 @@ public class SubscriberServiceTest {
         // when
         Optional<Subscriber> opt = Optional.empty();
         when(subscriberRepositoryMock.findOneByEmail(EMAIL)).thenReturn(opt);
-        Assertions.assertThrows(RuntimeException.class, () ->
-                subject.verifyTracking(EMAIL, TOKEN));
+        Assertions.assertThrows(RuntimeException.class, () -> subject.verifyTracking(EMAIL, TOKEN));
         // then exception
     }
-
 }

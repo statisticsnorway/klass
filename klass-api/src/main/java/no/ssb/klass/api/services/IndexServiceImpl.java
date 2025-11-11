@@ -60,9 +60,7 @@ public class IndexServiceImpl implements IndexService {
     private final OpenSearchRestTemplate elasticsearchOperations;
     private final DocumentMapper documentMapper;
 
-    @Autowired
-    @Lazy
-    private IndexService indexService;
+    @Autowired @Lazy private IndexService indexService;
 
     @Autowired
     public IndexServiceImpl(
@@ -88,27 +86,26 @@ public class IndexServiceImpl implements IndexService {
                 return;
             }
 
-
             Map<String, Object> settings =
                     Map.of(
                             "analysis",
                             Map.of(
                                     ANALYZER,
+                                    Map.of(
+                                            OpenSearchConfig.NORWEGIAN_STEMMER_ANALYZER,
                                             Map.of(
-                                                    OpenSearchConfig.NORWEGIAN_STEMMER_ANALYZER,
-                                                    Map.of(
-                                                            "type", "custom",
-                                                            "tokenizer", "standard",
-                                                            "filter",
-                                                                    List.of(
-                                                                            "lowercase",
-                                                                            "norwegian_stemmer"))),
+                                                    "type", "custom",
+                                                    "tokenizer", "standard",
+                                                    "filter",
+                                                            List.of(
+                                                                    "lowercase",
+                                                                    "norwegian_stemmer"))),
                                     "filter",
+                                    Map.of(
+                                            "norwegian_stemmer",
                                             Map.of(
-                                                    "norwegian_stemmer",
-                                                    Map.of(
-                                                            "type", "stemmer",
-                                                            "name", "norwegian"))));
+                                                    "type", "stemmer",
+                                                    "name", "norwegian"))));
 
             Map<String, Object> mappings =
                     Map.of(
@@ -116,30 +113,28 @@ public class IndexServiceImpl implements IndexService {
                             Map.of(
                                     TITLE,
                                             Map.of(
-                                                    "type", "text",
+                                                    "type",
+                                                    "text",
                                                     ANALYZER,
-                                                            OpenSearchConfig
-                                                                    .NORWEGIAN_STEMMER_ANALYZER,
+                                                    OpenSearchConfig.NORWEGIAN_STEMMER_ANALYZER,
                                                     SEARCH_ANALYZER,
-                                                            OpenSearchConfig
-                                                                    .NORWEGIAN_STEMMER_ANALYZER),
+                                                    OpenSearchConfig.NORWEGIAN_STEMMER_ANALYZER),
                                     DESCRIPTION,
                                             Map.of(
-                                                    "type", "text", ANALYZER,
-                                                            OpenSearchConfig
-                                                                    .NORWEGIAN_STEMMER_ANALYZER,
+                                                    "type",
+                                                    "text",
+                                                    ANALYZER,
+                                                    OpenSearchConfig.NORWEGIAN_STEMMER_ANALYZER,
                                                     SEARCH_ANALYZER,
-                                                            OpenSearchConfig
-                                                                    .NORWEGIAN_STEMMER_ANALYZER),
+                                                    OpenSearchConfig.NORWEGIAN_STEMMER_ANALYZER),
                                     CODES,
                                             Map.of(
-                                                    "type", "text",
+                                                    "type",
+                                                    "text",
                                                     ANALYZER,
-                                                            OpenSearchConfig
-                                                                    .NORWEGIAN_STEMMER_ANALYZER,
+                                                    OpenSearchConfig.NORWEGIAN_STEMMER_ANALYZER,
                                                     "",
-                                                            OpenSearchConfig
-                                                                    .NORWEGIAN_STEMMER_ANALYZER),
+                                                    OpenSearchConfig.NORWEGIAN_STEMMER_ANALYZER),
                                     FAMILY, Map.of("type", "keyword"),
                                     SECTION, Map.of("type", "keyword")));
 

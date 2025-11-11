@@ -10,9 +10,8 @@ import java.util.List;
 
 /**
  * Supports mocking of clock source. Hence possible to control time returned for tests.
- * <p>
- * Use TimeUtil.now() instead of new Date() in source code in order to be able to mock the time.
- * 
+ *
+ * <p>Use TimeUtil.now() instead of new Date() in source code in order to be able to mock the time.
  */
 public final class TimeUtil {
     private static final ClockSource DEFAULT_CLOCKSOURCE = () -> System.currentTimeMillis();
@@ -22,9 +21,7 @@ public final class TimeUtil {
         // Utility class
     }
 
-    /**
-     * Gets the time now. Same as new Date(), but with this time can be mocked in tests.
-     */
+    /** Gets the time now. Same as new Date(), but with this time can be mocked in tests. */
     public static Date now() {
         return new Date(clockSource.currentTimeMillis());
     }
@@ -44,16 +41,12 @@ public final class TimeUtil {
         return LocalDate.parse(dateString, DateTimeFormatter.ISO_LOCAL_DATE);
     }
 
-    /**
-     * Set clock source. Use in test when control of time is required
-     */
+    /** Set clock source. Use in test when control of time is required */
     public static void setClockSource(ClockSource clockSource) {
         TimeUtil.clockSource = clockSource;
     }
 
-    /**
-     * Reverts clock source to original value. Call this when test is done
-     */
+    /** Reverts clock source to original value. Call this when test is done */
     public static void revertClockSource() {
         clockSource = DEFAULT_CLOCKSOURCE;
     }
@@ -115,5 +108,4 @@ public final class TimeUtil {
     public static LocalDate fistDayOfMonth(LocalDate date) {
         return date.equals(LocalDate.MAX) ? date : date.withDayOfMonth(1);
     }
-
 }

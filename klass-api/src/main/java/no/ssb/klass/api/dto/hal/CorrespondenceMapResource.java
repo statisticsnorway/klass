@@ -1,16 +1,22 @@
 package no.ssb.klass.api.dto.hal;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import no.ssb.klass.core.model.ClassificationItem;
 import no.ssb.klass.core.model.CorrespondenceMap;
 import no.ssb.klass.core.model.Language;
 
-@JsonPropertyOrder(value = { "sourceCode", "sourceName", "targetCode", "targetName", })
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+
+@JsonPropertyOrder(
+        value = {
+            "sourceCode",
+            "sourceName",
+            "targetCode",
+            "targetName",
+        })
 public class CorrespondenceMapResource {
     private final String sourceCode;
     private final String sourceName;
@@ -54,13 +60,18 @@ public class CorrespondenceMapResource {
     private String getNullSafeTargetCode() {
         return targetCode == null ? "" : targetCode;
     }
-    public static List<CorrespondenceMapResource> convert(List<CorrespondenceMap> correspondenceMaps,
-            Language language) {
+
+    public static List<CorrespondenceMapResource> convert(
+            List<CorrespondenceMap> correspondenceMaps, Language language) {
         return correspondenceMaps.stream()
-                .map(correspondenceMap -> new CorrespondenceMapResource(correspondenceMap, language))
+                .map(
+                        correspondenceMap ->
+                                new CorrespondenceMapResource(correspondenceMap, language))
                 .sorted(
                         Comparator.comparing(CorrespondenceMapResource::getNullSafeSourceCode)
-                                .thenComparing(Comparator.comparing(CorrespondenceMapResource::getNullSafeTargetCode)))
+                                .thenComparing(
+                                        Comparator.comparing(
+                                                CorrespondenceMapResource::getNullSafeTargetCode)))
                 .collect(Collectors.toList());
     }
 }

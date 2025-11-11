@@ -6,6 +6,7 @@ import no.ssb.klass.core.model.Subscriber;
 import no.ssb.klass.core.model.Verification;
 import no.ssb.klass.core.repository.SubscriberRepository;
 import no.ssb.klass.core.util.ClientException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +25,15 @@ public class SubscriberServiceImpl implements SubscriberService {
     private final MailService mailService;
 
     @Autowired
-    public SubscriberServiceImpl(SubscriberRepository subscriberRepository, MailService mailService) {
+    public SubscriberServiceImpl(
+            SubscriberRepository subscriberRepository, MailService mailService) {
         this.subscriberRepository = subscriberRepository;
         this.mailService = mailService;
     }
 
     @Override
-    public String trackChanges(String email, ClassificationSeries classification, URL endSubscriptionUrl) {
+    public String trackChanges(
+            String email, ClassificationSeries classification, URL endSubscriptionUrl) {
         Optional<Subscriber> opt = subscriberRepository.findOneByEmail(email);
         Subscriber subscriber = opt.orElse(new Subscriber(email));
         String token = subscriber.addSubscription(classification, endSubscriptionUrl);
@@ -47,11 +50,18 @@ public class SubscriberServiceImpl implements SubscriberService {
     }
 
     @Override
-    public void sendVerificationMail(String email, URL verifySubscriptionUrl, ClassificationSeries classification) throws KlassEmailException {
+    public void sendVerificationMail(
+            String email, URL verifySubscriptionUrl, ClassificationSeries classification)
+            throws KlassEmailException {
         String heading = "Verifiser abonnement på klassifikasjon";
-        String body = "<br/><br/>Verifiser ditt abonnement på klassifikasjonen  <em>" + classification.getNameInPrimaryLanguage() + "</em>";
-        body += "<br/><br/>Klikk følgende lenke innen 24 timer: <a href=\"" + verifySubscriptionUrl.toString()
-                + "\">Verifiser abonnement</a>";
+        String body =
+                "<br/><br/>Verifiser ditt abonnement på klassifikasjonen  <em>"
+                        + classification.getNameInPrimaryLanguage()
+                        + "</em>";
+        body +=
+                "<br/><br/>Klikk følgende lenke innen 24 timer: <a href=\""
+                        + verifySubscriptionUrl.toString()
+                        + "\">Verifiser abonnement</a>";
         try {
             mailService.sendMail(email, heading, body);
         } catch (Exception e) {
@@ -71,9 +81,10 @@ public class SubscriberServiceImpl implements SubscriberService {
     }
 
     @Override
-    public void informSubscribersOfUpdatedClassification(ClassificationSeries classification, String whatChanged,
-                                                         String descriptionOfChange) {
-        for (Subscriber subscriber : subscriberRepository.findVerifiedSubscribersOfClassification(classification)) {
+    public void informSubscribersOfUpdatedClassification(
+            ClassificationSeries classification, String whatChanged, String descriptionOfChange) {
+        for (Subscriber subscriber :
+                subscriberRepository.findVerifiedSubscribersOfClassification(classification)) {
             sendMailToSubscriber(classification, whatChanged, descriptionOfChange, subscriber);
         }
     }
@@ -81,24 +92,41 @@ public class SubscriberServiceImpl implements SubscriberService {
     @Override
     public boolean containsTracking(String email, ClassificationSeries classification) {
         Optional<Subscriber> subscriber = subscriberRepository.findOneByEmail(email);
-        return subscriber.map(subscriber1 -> subscriber1.subscriptionExist(classification)).orElse(false);
+        return subscriber
+                .map(subscriber1 -> subscriber1.subscriptionExist(classification))
+                .orElse(false);
     }
 
-    private void sendMailToSubscriber(ClassificationSeries classification, String whatChanged, String reasonForChange,
-                                      Subscriber subscriber) {
+    private void sendMailToSubscriber(
+            ClassificationSeries classification,
+            String whatChanged,
+            String reasonForChange,
+            Subscriber subscriber) {
         String mailSubject = classification.getNameInPrimaryLanguage() + " har blitt oppdatert";
-        String reasonForChangeParagraph = "<p>Grunn for endring<br/>-----------------------<pre>" + reasonForChange
-                + "</pre></p>";
+        String reasonForChangeParagraph =
+                "<p>Grunn for endring<br/>-----------------------<pre>"
+                        + reasonForChange
+                        + "</pre></p>";
         String signatureParagraph = "<br/>Melding generert av SSBs kodeverkssystem";
-        String unsubscribeParagraph = "<p><small>For å avslutte abonnement klikk følgende lenke: <a href=\""
-                + subscriber.getEndSubscriptionUrl(classification) + "\">Avslutt abonnement</a></small></p>";
-        String mailBody = whatChanged + reasonForChangeParagraph + signatureParagraph + unsubscribeParagraph;
+        String unsubscribeParagraph =
+                "<p><small>For å avslutte abonnement klikk følgende lenke: <a href=\""
+                        + subscriber.getEndSubscriptionUrl(classification)
+                        + "\">Avslutt abonnement</a></small></p>";
+        String mailBody =
+                whatChanged + reasonForChangeParagraph + signatureParagraph + unsubscribeParagraph;
         try {
             mailService.sendMail(subscriber.getEmail(), mailSubject, mailBody);
         } catch (Exception e) {
-            log.error("Failed to send email to subscriber: " + subscriber.getEmail() + ", for classification: "
-                    + classification.getNameInPrimaryLanguage() + "\nMail subject: " + mailSubject + "\nMail body:\n"
-                    + mailBody, e);
+            log.error(
+                    "Failed to send email to subscriber: "
+                            + subscriber.getEmail()
+                            + ", for classification: "
+                            + classification.getNameInPrimaryLanguage()
+                            + "\nMail subject: "
+                            + mailSubject
+                            + "\nMail body:\n"
+                            + mailBody,
+                    e);
         }
     }
 }

@@ -4,16 +4,16 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
+import no.ssb.klass.core.util.DateRange;
+import no.ssb.klass.core.util.Translatable;
+import no.ssb.klass.testutil.TestUtil;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import no.ssb.klass.core.util.DateRange;
-import no.ssb.klass.core.util.Translatable;
-import no.ssb.klass.testutil.TestUtil;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
 
 public class ClassificationVersionTest {
 
@@ -48,8 +48,7 @@ public class ClassificationVersionTest {
         ClassificationVersion subject = createVersionWithLevels();
 
         // when
-        Assertions.assertThrows(IllegalArgumentException.class, () ->
-                subject.findItem("unknown"));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> subject.findItem("unknown"));
 
         // then expect exception
     }
@@ -59,11 +58,13 @@ public class ClassificationVersionTest {
         // given
         ClassificationVersion subject = createVersionWithLevels();
         ClassificationVersion target = createVersionWithLevels();
-        CorrespondenceTable correspondenceTable = TestUtil.createCorrespondenceTable(subject, target);
+        CorrespondenceTable correspondenceTable =
+                TestUtil.createCorrespondenceTable(subject, target);
         subject.addCorrespondenceTable(correspondenceTable);
 
         // when
-        List<CorrespondenceTable> result = subject.getCorrespondenceTablesWithTarget(target.getClassification());
+        List<CorrespondenceTable> result =
+                subject.getCorrespondenceTablesWithTarget(target.getClassification());
 
         // then
         assertEquals(1, result.size());
@@ -74,7 +75,8 @@ public class ClassificationVersionTest {
         // given
         ClassificationVersion subject = createVersionWithLevels();
         ClassificationVersion target = createVersionWithLevels();
-        CorrespondenceTable correspondenceTable = TestUtil.createCorrespondenceTable(subject, target);
+        CorrespondenceTable correspondenceTable =
+                TestUtil.createCorrespondenceTable(subject, target);
         subject.addCorrespondenceTable(correspondenceTable);
 
         // when
@@ -89,7 +91,8 @@ public class ClassificationVersionTest {
         // given
         final String variantName = "variantName";
         ClassificationVersion subject = createVersion();
-        ClassificationVariant variant = TestUtil.createClassificationVariant(variantName, TestUtil.createUser());
+        ClassificationVariant variant =
+                TestUtil.createClassificationVariant(variantName, TestUtil.createUser());
         subject.addClassificationVariant(variant);
 
         // when
@@ -105,7 +108,8 @@ public class ClassificationVersionTest {
         final String variantName = "variantName";
         final String variantFullName = "variantName 2006  - variant av Name 2012";
         ClassificationVersion subject = createVersion();
-        ClassificationVariant variant = TestUtil.createClassificationVariant(variantName, TestUtil.createUser());
+        ClassificationVariant variant =
+                TestUtil.createClassificationVariant(variantName, TestUtil.createUser());
         subject.addClassificationVariant(variant);
 
         // when
@@ -120,7 +124,8 @@ public class ClassificationVersionTest {
         // given
         final String variantName = "variantName";
         ClassificationVersion subject = createVersion();
-        ClassificationVariant variant = TestUtil.createClassificationVariant(variantName, TestUtil.createUser());
+        ClassificationVariant variant =
+                TestUtil.createClassificationVariant(variantName, TestUtil.createUser());
         variant.setDeleted();
         subject.addClassificationVariant(variant);
 
@@ -134,7 +139,8 @@ public class ClassificationVersionTest {
     public void findVariantNotFound() {
         // given
         ClassificationVersion subject = createVersionWithLevels();
-        ClassificationVariant variant = TestUtil.createClassificationVariant("variantName", TestUtil.createUser());
+        ClassificationVariant variant =
+                TestUtil.createClassificationVariant("variantName", TestUtil.createUser());
         subject.addClassificationVariant(variant);
 
         // when
@@ -175,8 +181,8 @@ public class ClassificationVersionTest {
         version.addNextLevel();
 
         // when
-        Assertions.assertThrows(IllegalArgumentException.class, () ->
-                version.addLevel(TestUtil.createLevel(1)));
+        Assertions.assertThrows(
+                IllegalArgumentException.class, () -> version.addLevel(TestUtil.createLevel(1)));
 
         // then expect exception
     }
@@ -215,7 +221,8 @@ public class ClassificationVersionTest {
         ClassificationVersion version = createVersion();
         Level level = TestUtil.createLevel(1);
         version.addLevel(level);
-        ClassificationItem classificationItem = TestUtil.createClassificationItem("code", "officialName");
+        ClassificationItem classificationItem =
+                TestUtil.createClassificationItem("code", "officialName");
 
         // when
         version.addClassificationItem(classificationItem, level.getLevelNumber(), null);
@@ -230,12 +237,16 @@ public class ClassificationVersionTest {
         ClassificationVersion version = createVersion();
         Level level = TestUtil.createLevel(1);
         version.addLevel(level);
-        ClassificationItem classificationItem = TestUtil.createClassificationItem("code", "officialName");
+        ClassificationItem classificationItem =
+                TestUtil.createClassificationItem("code", "officialName");
         ClassificationItem parent = TestUtil.createClassificationItem("parent", "officialName");
 
         // when
-        Assertions.assertThrows(IllegalArgumentException.class, () ->
-                version.addClassificationItem(classificationItem, level.getLevelNumber(), parent));
+        Assertions.assertThrows(
+                IllegalArgumentException.class,
+                () ->
+                        version.addClassificationItem(
+                                classificationItem, level.getLevelNumber(), parent));
 
         // then expect exception
     }
@@ -246,11 +257,13 @@ public class ClassificationVersionTest {
         ClassificationVersion version = createVersion();
         version.addNextLevel();
         version.addNextLevel();
-        ClassificationItem classificationItem = TestUtil.createClassificationItem("code", "officialName");
+        ClassificationItem classificationItem =
+                TestUtil.createClassificationItem("code", "officialName");
 
         // when
-        Assertions.assertThrows(IllegalArgumentException.class, () ->
-                version.addClassificationItem(classificationItem, 2, null));
+        Assertions.assertThrows(
+                IllegalArgumentException.class,
+                () -> version.addClassificationItem(classificationItem, 2, null));
 
         // then expect exception
     }
@@ -261,7 +274,8 @@ public class ClassificationVersionTest {
         ClassificationVersion version = createVersion();
         Level level = TestUtil.createLevel(1);
         version.addLevel(level);
-        ClassificationItem classificationItem = TestUtil.createClassificationItem("code", "officialName");
+        ClassificationItem classificationItem =
+                TestUtil.createClassificationItem("code", "officialName");
         version.addClassificationItem(classificationItem, level.getLevelNumber(), null);
 
         // when
@@ -275,11 +289,16 @@ public class ClassificationVersionTest {
     @Test
     public void getNameInPrimaryLanguage() {
 
-        DateRange dateRangeMatch1 = DateRange.create(LocalDate.of(2016, 2, 1), LocalDate.of(2016, 6, 1));
-        DateRange dateRangeMatch2 = DateRange.create(LocalDate.of(2016, 7, 1), LocalDate.of(2016, 10, 1));
-        DateRange dateRangeMatch3 = DateRange.create(LocalDate.of(2016, 11, 1), LocalDate.of(2017, 2, 1));
-        DateRange dateRangeNoMatch1 = DateRange.create(LocalDate.of(2015, 1, 1), LocalDate.of(2016, 1, 1));
-        DateRange dateRangeNoMatch2 = DateRange.create(LocalDate.of(2017, 3, 1), LocalDate.of(2017, 12, 1));
+        DateRange dateRangeMatch1 =
+                DateRange.create(LocalDate.of(2016, 2, 1), LocalDate.of(2016, 6, 1));
+        DateRange dateRangeMatch2 =
+                DateRange.create(LocalDate.of(2016, 7, 1), LocalDate.of(2016, 10, 1));
+        DateRange dateRangeMatch3 =
+                DateRange.create(LocalDate.of(2016, 11, 1), LocalDate.of(2017, 2, 1));
+        DateRange dateRangeNoMatch1 =
+                DateRange.create(LocalDate.of(2015, 1, 1), LocalDate.of(2016, 1, 1));
+        DateRange dateRangeNoMatch2 =
+                DateRange.create(LocalDate.of(2017, 3, 1), LocalDate.of(2017, 12, 1));
         Translatable translatable = Translatable.create("Test", Language.NB);
 
         ClassificationVersion classificationVersion1 = new ClassificationVersion(dateRangeMatch1);
@@ -287,8 +306,14 @@ public class ClassificationVersionTest {
         ClassificationVersion classificationVersion3 = new ClassificationVersion(dateRangeMatch2);
         ClassificationVersion classificationVersion4 = new ClassificationVersion(dateRangeNoMatch2);
         ClassificationVersion classificationVersion5 = new ClassificationVersion(dateRangeMatch3);
-        ClassificationSeries subject = new ClassificationSeries(translatable, new Translatable("no", "nn", "en"),
-                false, Language.NB, ClassificationType.CLASSIFICATION, TestUtil.createUser());
+        ClassificationSeries subject =
+                new ClassificationSeries(
+                        translatable,
+                        new Translatable("no", "nn", "en"),
+                        false,
+                        Language.NB,
+                        ClassificationType.CLASSIFICATION,
+                        TestUtil.createUser());
         subject.addClassificationVersion(classificationVersion1);
         subject.addClassificationVersion(classificationVersion2);
         subject.addClassificationVersion(classificationVersion3);
@@ -308,12 +333,12 @@ public class ClassificationVersionTest {
         ClassificationVersion version = createVersion();
         Level level = TestUtil.createLevel(1);
         version.addLevel(level);
-        ClassificationItem classificationItem = TestUtil.createClassificationItem("code", "officialName");
+        ClassificationItem classificationItem =
+                TestUtil.createClassificationItem("code", "officialName");
         version.addClassificationItem(classificationItem, level.getLevelNumber(), null);
 
         // when
-        Assertions.assertThrows(IllegalArgumentException.class, () ->
-                version.deleteLevel(level));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> version.deleteLevel(level));
 
         // then expect exception
     }
@@ -369,8 +394,11 @@ public class ClassificationVersionTest {
         // given
         ClassificationVersion version = createVersion();
         version.addNextLevel();
-        version.addClassificationItem(new ConcreteClassificationItem("code", new Translatable("name", "name", null),
-                Translatable.empty()), 1, null);
+        version.addClassificationItem(
+                new ConcreteClassificationItem(
+                        "code", new Translatable("name", "name", null), Translatable.empty()),
+                1,
+                null);
 
         // then
         assertEquals(true, version.hasTranslations(Language.NB));
@@ -408,7 +436,8 @@ public class ClassificationVersionTest {
     public void getClassificationVariants() {
         // given
         ClassificationVersion version = createVersion();
-        ClassificationVariant variant = TestUtil.createClassificationVariant("name", TestUtil.createUser());
+        ClassificationVariant variant =
+                TestUtil.createClassificationVariant("name", TestUtil.createUser());
         version.addClassificationVariant(variant);
 
         // when
@@ -422,7 +451,8 @@ public class ClassificationVersionTest {
     public void getClassificationVariantsFiltersDeleted() {
         // given
         ClassificationVersion version = createVersion();
-        ClassificationVariant variant = TestUtil.createClassificationVariant("name", TestUtil.createUser());
+        ClassificationVariant variant =
+                TestUtil.createClassificationVariant("name", TestUtil.createUser());
         variant.setDeleted();
         version.addClassificationVariant(variant);
 
@@ -454,7 +484,8 @@ public class ClassificationVersionTest {
         // given
         ClassificationVersion version = createVersion();
         version.addNextLevel();
-        version.addClassificationItem(TestUtil.createClassificationItem("code", "officialName"), 1, null);
+        version.addClassificationItem(
+                TestUtil.createClassificationItem("code", "officialName"), 1, null);
 
         // when
         boolean result = version.hasNotes();
@@ -468,7 +499,8 @@ public class ClassificationVersionTest {
         // given
         ClassificationVersion version = createVersion();
         version.addNextLevel();
-        version.addClassificationItem(TestUtil.createClassificationItem("code", "officialName", "shortName"), 1, null);
+        version.addClassificationItem(
+                TestUtil.createClassificationItem("code", "officialName", "shortName"), 1, null);
 
         // when
         boolean result = version.hasShortNames();
@@ -482,7 +514,8 @@ public class ClassificationVersionTest {
         // given
         ClassificationVersion version = createVersion();
         version.addNextLevel();
-        version.addClassificationItem(TestUtil.createClassificationItem("code", "officialName"), 1, null);
+        version.addClassificationItem(
+                TestUtil.createClassificationItem("code", "officialName"), 1, null);
 
         // when
         boolean result = version.hasShortNames();
@@ -512,7 +545,8 @@ public class ClassificationVersionTest {
 
     private ClassificationVersion createVersion() {
         ClassificationSeries classification = TestUtil.createClassification("name");
-        ClassificationVersion version = TestUtil.createClassificationVersion(TestUtil.anyDateRange());
+        ClassificationVersion version =
+                TestUtil.createClassificationVersion(TestUtil.anyDateRange());
         classification.addClassificationVersion(version);
         return version;
     }

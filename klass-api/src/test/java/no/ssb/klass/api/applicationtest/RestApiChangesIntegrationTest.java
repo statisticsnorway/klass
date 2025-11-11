@@ -15,7 +15,6 @@ import org.springframework.http.HttpStatus;
  * @author Mads Lundemo, SSB.
  */
 public class RestApiChangesIntegrationTest extends AbstractRestApiApplicationTest {
-    // @formatter:off
     @Test
     public void restServiceChangesJSON() {
         given().port(port)

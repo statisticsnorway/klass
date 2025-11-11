@@ -2,10 +2,6 @@ package no.ssb.klass.core.model;
 
 import static com.google.common.base.Preconditions.*;
 
-import java.net.URL;
-import java.util.Date;
-import java.util.UUID;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -15,6 +11,10 @@ import jakarta.persistence.ManyToOne;
 import no.ssb.klass.core.util.ClientException;
 import no.ssb.klass.core.util.TimeUtil;
 
+import java.net.URL;
+import java.util.Date;
+import java.util.UUID;
+
 @Entity
 public class Subscription extends BaseEntity {
 
@@ -23,19 +23,20 @@ public class Subscription extends BaseEntity {
 
     @Column(nullable = false)
     private Date expiryDate;
+
     @Column(nullable = false)
     private String token;
+
     @Column(nullable = false)
     private URL endSubscriptionUrl;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Verification verification;
 
-    @ManyToOne
-    private ClassificationSeries classification;
+    @ManyToOne private ClassificationSeries classification;
 
-    public Subscription() {
-    }
+    public Subscription() {}
 
     public Subscription(ClassificationSeries classification, URL endSubscriptionUrl) {
         this.classification = checkNotNull(classification);

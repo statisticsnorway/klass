@@ -1,15 +1,15 @@
 package no.ssb.klass.initializer.stabas;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.google.common.base.Strings;
 
 import no.ssb.klass.core.model.ClassificationItem;
 import no.ssb.klass.core.model.ClassificationVersion;
 import no.ssb.klass.core.model.Language;
 import no.ssb.klass.core.model.Level;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ClassificationVersionWrapper {
     private final String stabasVersionId;
@@ -32,9 +32,11 @@ public class ClassificationVersionWrapper {
     public void addClassificationItems(List<ClassificationItemWrapper> classificationItems) {
         for (ClassificationItemWrapper classificationItem : classificationItems) {
             ClassificationItem parent = getParent(classificationItem.getParentStabasId());
-            version.addClassificationItem(classificationItem.getItem(), classificationItem.getLevelNumber(), parent);
+            version.addClassificationItem(
+                    classificationItem.getItem(), classificationItem.getLevelNumber(), parent);
             if (itemsMap.put(classificationItem.getStabasId(), classificationItem) != null) {
-                throw new IllegalStateException("Code is not unique: " + classificationItem.getStabasId());
+                throw new IllegalStateException(
+                        "Code is not unique: " + classificationItem.getStabasId());
             }
         }
     }
@@ -82,7 +84,9 @@ public class ClassificationVersionWrapper {
     public void publish() {
         for (Language language : Language.values()) {
             // TODO kmgv verifiser at dette fungerer.
-            // Bruk http://www.byranettet.ssb.no/metadata/statusrapporter/rapporter/stabas_reports_report4.html for å
+            // Bruk
+            // http://www.byranettet.ssb.no/metadata/statusrapporter/rapporter/stabas_reports_report4.html
+            // for å
             // verifisere
             if (version.canPublish(language).isEmpty()) {
                 version.publish(language);
@@ -112,7 +116,8 @@ public class ClassificationVersionWrapper {
         private final int levelNumber;
         private final String parentStabasId;
 
-        ClassificationItemWrapper(String stabasId, ClassificationItem item, int levelNumber, String parentStabasId) {
+        ClassificationItemWrapper(
+                String stabasId, ClassificationItem item, int levelNumber, String parentStabasId) {
             // stabasId has levelId-itemId. Removing levelId
             this.stabasId = stabasId.substring(stabasId.lastIndexOf('-') + 1);
             this.item = item;

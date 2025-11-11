@@ -1,12 +1,13 @@
 package no.ssb.klass.api.migration.dataintegrity.search;
 
+import static no.ssb.klass.api.migration.MigrationTestConstants.*;
+
 import no.ssb.klass.api.migration.dataintegrity.AbstractKlassApiDataIntegrityTest;
+
 import org.junit.jupiter.api.BeforeAll;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 
 public abstract class AbstractKlassApiSearchTest extends AbstractKlassApiDataIntegrityTest {
 
@@ -26,15 +27,11 @@ public abstract class AbstractKlassApiSearchTest extends AbstractKlassApiDataInt
         paramsQueryIncludeCodeLists.putAll(
                 Map.of(
                         QUERY, searchWord,
-                        INCLUDE_CODE_LISTS, TRUE
+                        INCLUDE_CODE_LISTS, TRUE));
 
-                )
-        );
         paramsQuerySsbSection.putAll(
                 Map.of(
-                QUERY, searchWord,
-                SSB_SECTION, section320
-                )
-        );
+                        QUERY, searchWord,
+                        SSB_SECTION, section320));
     }
 }

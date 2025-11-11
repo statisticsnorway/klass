@@ -1,5 +1,13 @@
 package no.ssb.klass.initializer.stabas;
 
+import com.google.common.base.Strings;
+
+import no.ssb.klass.core.util.Translatable;
+import no.ssb.klass.core.util.TranslatablePersistenceConverter;
+import no.ssb.ns.meta.common.StringLangType;
+
+import org.apache.commons.io.FileUtils;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -7,16 +15,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-
-import org.apache.commons.io.FileUtils;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
-
-import com.google.common.base.Strings;
-
-import no.ssb.klass.core.util.Translatable;
-import no.ssb.klass.core.util.TranslatablePersistenceConverter;
-import no.ssb.ns.meta.common.StringLangType;
 
 public final class StabasUtils {
     private static final String STABAS_EN_LANGUAGE = "en";
@@ -30,7 +28,8 @@ public final class StabasUtils {
     private static File copyToTempDir(String filePath) throws IOException {
         File baseDir = new File(System.getProperty("java.io.tmpdir"));
         File dest = new File(baseDir + "/" + new File(filePath).getName());
-        InputStream resourceAsStream = StabasUtils.class.getClassLoader().getResourceAsStream(filePath);
+        InputStream resourceAsStream =
+                StabasUtils.class.getClassLoader().getResourceAsStream(filePath);
         FileUtils.copyInputStreamToFile(resourceAsStream, dest);
         return dest;
     }
@@ -44,7 +43,8 @@ public final class StabasUtils {
     }
 
     public static TranslatablePersistenceConverter createTranslatableConverter() {
-        return new TranslatablePersistenceConverter(STABAS_NO_LANGUAGE, STABAS_NN_LANGUAGE, STABAS_EN_LANGUAGE);
+        return new TranslatablePersistenceConverter(
+                STABAS_NO_LANGUAGE, STABAS_NN_LANGUAGE, STABAS_EN_LANGUAGE);
     }
 
     public static String parseUrn(String urn) {
@@ -55,12 +55,16 @@ public final class StabasUtils {
     }
 
     public static Translatable createTranslatable(List<StringLangType> translations) {
-        return createTranslatable(getString(translations, StabasUtils.STABAS_NO_LANGUAGE), getString(translations,
-                StabasUtils.STABAS_NN_LANGUAGE), getString(translations, StabasUtils.STABAS_EN_LANGUAGE));
+        return createTranslatable(
+                getString(translations, StabasUtils.STABAS_NO_LANGUAGE),
+                getString(translations, StabasUtils.STABAS_NN_LANGUAGE),
+                getString(translations, StabasUtils.STABAS_EN_LANGUAGE));
     }
 
     public static Translatable createTranslatable(String no, String nn, String en) {
-        return new Translatable(replaceGreaterThanAndSmallerThan(no), replaceGreaterThanAndSmallerThan(nn),
+        return new Translatable(
+                replaceGreaterThanAndSmallerThan(no),
+                replaceGreaterThanAndSmallerThan(nn),
                 replaceGreaterThanAndSmallerThan(en));
     }
 
@@ -84,8 +88,7 @@ public final class StabasUtils {
         if (Strings.isNullOrEmpty(string)) {
             return string;
         }
-        return string
-                .replace("&gt;", ">")
+        return string.replace("&gt;", ">")
                 .replace("&amp;gt;", ">")
                 .replace("&lt;", "<")
                 .replace("&It;", "<")

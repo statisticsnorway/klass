@@ -7,8 +7,10 @@ import jakarta.persistence.Embeddable;
 public class Published {
     @Column(nullable = false)
     private final boolean published_no;
+
     @Column(nullable = false)
     private final boolean published_nn;
+
     @Column(nullable = false)
     private final boolean published_en;
 
@@ -41,31 +43,31 @@ public class Published {
         boolean tmpEn = published_en;
 
         switch (language) {
-        case NB:
-            tmpNo = publish;
-            break;
-        case NN:
-            tmpNn = publish;
-            break;
-        case EN:
-            tmpEn = publish;
-            break;
-        default:
-            throw new IllegalArgumentException("Unsupported language: " + language);
+            case NB:
+                tmpNo = publish;
+                break;
+            case NN:
+                tmpNn = publish;
+                break;
+            case EN:
+                tmpEn = publish;
+                break;
+            default:
+                throw new IllegalArgumentException("Unsupported language: " + language);
         }
         return new Published(tmpNo, tmpNn, tmpEn);
     }
 
     public boolean isPublished(Language language) {
         switch (language) {
-        case NB:
-            return published_no;
-        case NN:
-            return published_nn;
-        case EN:
-            return published_en;
-        default:
-            throw new IllegalArgumentException("Unsupported language: " + language);
+            case NB:
+                return published_no;
+            case NN:
+                return published_nn;
+            case EN:
+                return published_en;
+            default:
+                throw new IllegalArgumentException("Unsupported language: " + language);
         }
     }
 
@@ -80,7 +82,13 @@ public class Published {
 
     @Override
     public String toString() {
-        return "Published [no=" + published_no + ", nn=" + published_nn + ", en=" + published_en + "]";
+        return "Published [no="
+                + published_no
+                + ", nn="
+                + published_nn
+                + ", en="
+                + published_en
+                + "]";
     }
 
     public static Published none() {

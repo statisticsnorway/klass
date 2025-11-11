@@ -1,12 +1,12 @@
 package no.ssb.klass.core.model;
 
-import java.util.Date;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+
+import java.util.Date;
 
 @Entity
 public class SearchWords {
@@ -23,8 +23,7 @@ public class SearchWords {
     @Column(nullable = false)
     String searchString;
 
-    public SearchWords() {
-    }
+    public SearchWords() {}
 
     public SearchWords(String searchString, boolean hit) {
         this.timeStamp = new Date();

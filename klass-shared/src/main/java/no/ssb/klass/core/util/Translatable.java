@@ -2,12 +2,12 @@ package no.ssb.klass.core.util;
 
 import static com.google.common.base.Preconditions.*;
 
-import java.io.Serializable;
-import java.util.Objects;
-
 import com.google.common.base.Strings;
 
 import no.ssb.klass.core.model.Language;
+
+import java.io.Serializable;
+import java.util.Objects;
 
 public class Translatable implements Serializable {
     private final String no;
@@ -37,14 +37,14 @@ public class Translatable implements Serializable {
     private String getStringInternal(Language language) {
         checkNotNull(language);
         switch (language) {
-        case NB:
-            return no;
-        case NN:
-            return nn;
-        case EN:
-            return en;
-        default:
-            throw new IllegalArgumentException("Unsupported language: " + language);
+            case NB:
+                return no;
+            case NN:
+                return nn;
+            case EN:
+                return en;
+            default:
+                throw new IllegalArgumentException("Unsupported language: " + language);
         }
     }
 
@@ -53,17 +53,17 @@ public class Translatable implements Serializable {
         String tmpNn = nn;
         String tmpEn = en;
         switch (language) {
-        case NB:
-            tmpNo = string;
-            break;
-        case NN:
-            tmpNn = string;
-            break;
-        case EN:
-            tmpEn = string;
-            break;
-        default:
-            throw new IllegalArgumentException("Unsupported language: " + language);
+            case NB:
+                tmpNo = string;
+                break;
+            case NN:
+                tmpNn = string;
+                break;
+            case EN:
+                tmpEn = string;
+                break;
+            default:
+                throw new IllegalArgumentException("Unsupported language: " + language);
         }
 
         return new Translatable(tmpNo, tmpNn, tmpEn);
@@ -104,7 +104,8 @@ public class Translatable implements Serializable {
         }
 
         Translatable other = (Translatable) obj;
-        return Objects.equals(this.no, other.no) && Objects.equals(this.nn, other.nn) && Objects.equals(this.en,
-                other.en);
+        return Objects.equals(this.no, other.no)
+                && Objects.equals(this.nn, other.nn)
+                && Objects.equals(this.en, other.en);
     }
 }

@@ -109,7 +109,8 @@
                     <artifactId>fmt-maven-plugin</artifactId>
                     <version>2.27</version>
                     <configuration>
-                        <failOnError>false</failOnError>
+                        <!-- Use this for better backwards compatibility -->
+                        <style>aosp</style>
                     </configuration>
                     <executions>
                         <execution>

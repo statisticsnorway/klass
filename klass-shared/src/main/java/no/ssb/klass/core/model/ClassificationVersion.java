@@ -1,10 +1,8 @@
 package no.ssb.klass.core.model;
 
 import static com.google.common.base.Preconditions.*;
-import static java.util.stream.Collectors.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import static java.util.stream.Collectors.*;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -14,17 +12,19 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
-import org.springframework.util.StringUtils;
-
 import no.ssb.klass.core.util.DateRange;
 import no.ssb.klass.core.util.Translatable;
 import no.ssb.klass.core.util.TranslatablePersistenceConverter;
 
+import org.springframework.util.StringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @DiscriminatorValue("version")
 public class ClassificationVersion extends StatisticalClassification {
-    @ManyToOne
-    private ClassificationSeries classification;
+    @ManyToOne private ClassificationSeries classification;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "classificationVersion")
     private List<ClassificationVariant> classificationVariants;
@@ -32,26 +32,37 @@ public class ClassificationVersion extends StatisticalClassification {
     @Column(length = 4000)
     @Convert(converter = TranslatablePersistenceConverter.class)
     private Translatable legalBase;
+
     @Column(length = 4000)
     @Convert(converter = TranslatablePersistenceConverter.class)
     private Translatable publications;
+
     @Column(length = 4000)
     @Convert(converter = TranslatablePersistenceConverter.class)
     private Translatable derivedFrom;
+
     @Column(length = 4000)
     @Convert(converter = TranslatablePersistenceConverter.class)
     private Translatable alias;
 
     // For Hibernate
-    protected ClassificationVersion() {
-    }
+    protected ClassificationVersion() {}
 
     public ClassificationVersion(DateRange dateRange) {
-        this(dateRange, Translatable.empty(), Translatable.empty(), Translatable.empty(), Translatable.empty());
+        this(
+                dateRange,
+                Translatable.empty(),
+                Translatable.empty(),
+                Translatable.empty(),
+                Translatable.empty());
     }
 
-    public ClassificationVersion(DateRange dateRange, Translatable introduction, Translatable legalBase,
-            Translatable publications, Translatable derivedFrom) {
+    public ClassificationVersion(
+            DateRange dateRange,
+            Translatable introduction,
+            Translatable legalBase,
+            Translatable publications,
+            Translatable derivedFrom) {
         super(introduction);
         checkNotNull(dateRange);
         this.validFrom = checkNotNull(dateRange.getFrom());
@@ -64,7 +75,9 @@ public class ClassificationVersion extends StatisticalClassification {
     }
 
     public List<ClassificationVariant> getClassificationVariants() {
-        return classificationVariants.stream().filter(variant -> !variant.isDeleted()).collect(toList());
+        return classificationVariants.stream()
+                .filter(variant -> !variant.isDeleted())
+                .collect(toList());
     }
 
     public List<ClassificationVariant> getPublicClassificationVariants() {
@@ -91,10 +104,13 @@ public class ClassificationVersion extends StatisticalClassification {
             newClassificationVersion.addLevel(new Level(originalLevel.getLevelNumber()));
             for (ClassificationItem originalItem : originalLevel.getClassificationItems()) {
                 ClassificationItem newItem = originalItem.copy();
-                ClassificationItem parent = originalItem.getParent() == null ? null
-                        : newClassificationVersion.findItem(originalItem.getParent().getCode());
-                newClassificationVersion.addClassificationItem(newItem, originalItem.getLevel().getLevelNumber(),
-                        parent);
+                ClassificationItem parent =
+                        originalItem.getParent() == null
+                                ? null
+                                : newClassificationVersion.findItem(
+                                        originalItem.getParent().getCode());
+                newClassificationVersion.addClassificationItem(
+                        newItem, originalItem.getLevel().getLevelNumber(), parent);
             }
         }
         return newClassificationVersion;
@@ -109,13 +125,17 @@ public class ClassificationVersion extends StatisticalClassification {
     }
 
     public ClassificationVariant findVariantByNameBase(String variantName, Language language) {
-        return getClassificationVariants().stream().filter(variant -> variantName.equals(variant.getNameBase(language)))
-                .findFirst().orElse(null);
+        return getClassificationVariants().stream()
+                .filter(variant -> variantName.equals(variant.getNameBase(language)))
+                .findFirst()
+                .orElse(null);
     }
 
     public ClassificationVariant findVariantByFullName(String variantName, Language language) {
-        return getClassificationVariants().stream().filter(variant -> variantName.equals(variant.getFullName(language)))
-                .findFirst().orElse(null);
+        return getClassificationVariants().stream()
+                .filter(variant -> variantName.equals(variant.getFullName(language)))
+                .findFirst()
+                .orElse(null);
     }
 
     @Override
@@ -137,11 +157,9 @@ public class ClassificationVersion extends StatisticalClassification {
     }
 
     /**
-     * Use this method for displaying version (formatted output) When more than one
-     * given version exists for a given
-     * year, the year is prefixed with the month (Exs: Bydeler 03-2014), note that
-     * if given version contains an alias
-     * value then this will be returned instead.
+     * Use this method for displaying version (formatted output) When more than one given version
+     * exists for a given year, the year is prefixed with the month (Exs: Bydeler 03-2014), note
+     * that if given version contains an alias value then this will be returned instead.
      *
      * @return Formatted name
      */
@@ -151,12 +169,13 @@ public class ClassificationVersion extends StatisticalClassification {
         } else {
             return getGeneratedName(language);
         }
-
     }
 
     private String getGeneratedName(Language language) {
         String datePostfix = getDatePostfix(validFrom, validTo);
-        return StringUtils.capitalize(classification.getNameWithoutPrefix(language)) + ' ' + datePostfix;
+        return StringUtils.capitalize(classification.getNameWithoutPrefix(language))
+                + ' '
+                + datePostfix;
     }
 
     @Override

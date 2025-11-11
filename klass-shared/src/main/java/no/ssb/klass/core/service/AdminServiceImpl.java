@@ -1,12 +1,12 @@
 package no.ssb.klass.core.service;
 
+import no.ssb.klass.core.model.User;
+import no.ssb.klass.core.repository.ClassificationSeriesRepository;
 import no.ssb.klass.core.repository.ClassificationVariantRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import no.ssb.klass.core.model.User;
-import no.ssb.klass.core.repository.ClassificationSeriesRepository;
 
 @Service
 @Transactional
@@ -16,7 +16,9 @@ public class AdminServiceImpl implements AdminService {
     private final ClassificationVariantRepository variantRepository;
 
     @Autowired
-    public AdminServiceImpl(ClassificationSeriesRepository classificationRepository, ClassificationVariantRepository variantRepository) {
+    public AdminServiceImpl(
+            ClassificationSeriesRepository classificationRepository,
+            ClassificationVariantRepository variantRepository) {
         this.classificationRepository = classificationRepository;
         this.variantRepository = variantRepository;
     }
@@ -30,6 +32,5 @@ public class AdminServiceImpl implements AdminService {
     public void updateUser(User oldUser, User newUser) {
         classificationRepository.updateUser(oldUser, newUser);
         variantRepository.updateUser(oldUser, newUser);
-
     }
 }

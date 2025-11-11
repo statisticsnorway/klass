@@ -1,25 +1,34 @@
 package no.ssb.klass.api.dto.hal;
 
-import static java.util.stream.Collectors.*;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+
+import static java.util.stream.Collectors.*;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+
+import no.ssb.klass.api.controllers.ClassificationController;
+import no.ssb.klass.core.model.ClassificationVariant;
+import no.ssb.klass.core.model.Language;
+
+import org.springframework.hateoas.Link;
 
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import org.springframework.hateoas.Link;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-
-import no.ssb.klass.core.model.ClassificationVariant;
-import no.ssb.klass.core.model.Language;
-import no.ssb.klass.api.controllers.ClassificationController;
-
-@JsonPropertyOrder({"name", "id", "contactPerson", "owningSection", "lastModified", "published", "links"})
+@JsonPropertyOrder({
+    "name",
+    "id",
+    "contactPerson",
+    "owningSection",
+    "lastModified",
+    "published",
+    "links"
+})
 public class ClassificationVariantSummaryResource extends KlassResource {
     private final String name;
     private final ContactPersonResource contactPerson;
@@ -28,22 +37,24 @@ public class ClassificationVariantSummaryResource extends KlassResource {
     private final List<String> published;
 
     protected ClassificationVariantSummaryResource(
-            ClassificationVariant variant,
-            Language language) {
+            ClassificationVariant variant, Language language) {
         super(variant.getId());
         this.name = variant.getFullName(language);
         this.lastModified = variant.getLastModified();
         this.contactPerson = new ContactPersonResource(variant.getContactPerson());
         this.owningSection = variant.getContactPerson().getSection();
-        this.published = Arrays.stream(Language.getDefaultPrioritizedOrder())
-                .filter(variant::isPublished)
-                .map(Language::getLanguageCode)
-                .collect(toList());
+        this.published =
+                Arrays.stream(Language.getDefaultPrioritizedOrder())
+                        .filter(variant::isPublished)
+                        .map(Language::getLanguageCode)
+                        .collect(toList());
         addLink(createSelfLink(variant.getId()));
     }
 
     private Link createSelfLink(long id) {
-        return linkTo(methodOn(ClassificationController.class).variants(id, null)).withSelfRel().expand();
+        return linkTo(methodOn(ClassificationController.class).variants(id, null))
+                .withSelfRel()
+                .expand();
     }
 
     public String getName() {
@@ -69,9 +80,10 @@ public class ClassificationVariantSummaryResource extends KlassResource {
         return lastModified;
     }
 
-    public static List<ClassificationVariantSummaryResource> convert(List<ClassificationVariant> variants,
-            Language language) {
-        return variants.stream().map(variant -> new ClassificationVariantSummaryResource(variant, language)).collect(
-                Collectors.toList());
+    public static List<ClassificationVariantSummaryResource> convert(
+            List<ClassificationVariant> variants, Language language) {
+        return variants.stream()
+                .map(variant -> new ClassificationVariantSummaryResource(variant, language))
+                .collect(Collectors.toList());
     }
 }

@@ -1,5 +1,9 @@
 package no.ssb.klass.core.repository;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import jakarta.transaction.Transactional;
+
 import no.ssb.klass.core.config.ConfigurationProfiles;
 import no.ssb.klass.core.model.ClassificationSeries;
 import no.ssb.klass.core.model.StatisticalUnit;
@@ -9,6 +13,7 @@ import no.ssb.klass.core.service.dto.StatisticalEntity;
 import no.ssb.klass.core.util.Translatable;
 import no.ssb.klass.core.util.TranslatablePersistenceConverter;
 import no.ssb.klass.testutil.TestUtil;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,10 +28,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import jakarta.transaction.Transactional;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -34,17 +36,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @Transactional
 public class StatisticalUnitRepositoryTest {
 
-    @Autowired
-    private UserRepository userRepository;
+    @Autowired private UserRepository userRepository;
 
-    @Autowired
-    private ClassificationFamilyRepository classificationFamilyRepository;
+    @Autowired private ClassificationFamilyRepository classificationFamilyRepository;
 
-    @Autowired
-    private StatisticalUnitRepository statisticalUnitRepository;
+    @Autowired private StatisticalUnitRepository statisticalUnitRepository;
 
-    @Autowired
-    private ClassificationSeriesRepository classificationSeriesRepository;
+    @Autowired private ClassificationSeriesRepository classificationSeriesRepository;
 
     private User user;
 
@@ -56,8 +54,9 @@ public class StatisticalUnitRepositoryTest {
     @Test
     public void getStaticalUnitsOverViewTest() {
         makeTestData();
-        Page<StatisticalEntity> result = statisticalUnitRepository.getStaticalUnitsOverView(PageRequest.of(0,
-                Integer.MAX_VALUE));
+        Page<StatisticalEntity> result =
+                statisticalUnitRepository.getStaticalUnitsOverView(
+                        PageRequest.of(0, Integer.MAX_VALUE));
         assertEquals(2, result.getContent().size());
         List<StatisticalEntity> resultList = result.getContent();
         assertEquals("Dingseboms", resultList.get(0).getName());
@@ -69,28 +68,33 @@ public class StatisticalUnitRepositoryTest {
     @Test
     public void getAllClassificationSeriesForStaticalUnitTest() {
         StatisticalUnit statisticalUnit = makeTestData();
-        List<ClassificationReportDto> result = statisticalUnitRepository.getAllClassificationSeriesForStaticalUnit(
-                statisticalUnit);
+        List<ClassificationReportDto> result =
+                statisticalUnitRepository.getAllClassificationSeriesForStaticalUnit(
+                        statisticalUnit);
         assertEquals(2, result.size());
         assertEquals("Test1", result.get(0).getName());
         assertEquals("Test2", result.get(1).getName());
     }
 
     private StatisticalUnit makeTestData() {
-        ClassificationSeries classificationSeries1 = ClassificationSeriesRepositoryTest
-                .createClassificationSeriesWithVersion(user, "Test1");
+        ClassificationSeries classificationSeries1 =
+                ClassificationSeriesRepositoryTest.createClassificationSeriesWithVersion(
+                        user, "Test1");
         StatisticalUnit statisticalUnit1 = makeStatisticalUnit("Duppeditt");
         StatisticalUnit statisticalUnit2 = makeStatisticalUnit("Dingseboms");
         classificationSeries1.getStatisticalUnits().add(statisticalUnit1);
         classificationSeries1.getStatisticalUnits().add(statisticalUnit2);
-        classificationFamilyRepository.save(TestUtil.createClassificationFamily("name1")).addClassificationSeries(
-                classificationSeries1);
+        classificationFamilyRepository
+                .save(TestUtil.createClassificationFamily("name1"))
+                .addClassificationSeries(classificationSeries1);
 
-        ClassificationSeries classificationSeries2 = ClassificationSeriesRepositoryTest
-                .createClassificationSeriesWithVersion(user, "Test2");
+        ClassificationSeries classificationSeries2 =
+                ClassificationSeriesRepositoryTest.createClassificationSeriesWithVersion(
+                        user, "Test2");
         classificationSeries2.getStatisticalUnits().add(statisticalUnit1);
-        classificationFamilyRepository.save(TestUtil.createClassificationFamily("name2")).addClassificationSeries(
-                classificationSeries2);
+        classificationFamilyRepository
+                .save(TestUtil.createClassificationFamily("name2"))
+                .addClassificationSeries(classificationSeries2);
 
         classificationFamilyRepository.flush();
         classificationSeriesRepository.save(classificationSeries1);
@@ -111,6 +115,5 @@ public class StatisticalUnitRepositoryTest {
     @EnableAutoConfiguration
     @EntityScan(basePackageClasses = {StatisticalUnit.class, ClassificationSeries.class})
     @ComponentScan(basePackageClasses = TranslatablePersistenceConverter.class)
-    static class Config {
-    }
+    static class Config {}
 }

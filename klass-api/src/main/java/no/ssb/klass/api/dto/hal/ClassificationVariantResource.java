@@ -1,8 +1,5 @@
 package no.ssb.klass.api.dto.hal;
 
-import java.time.LocalDate;
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -10,14 +7,32 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
+import no.ssb.klass.api.util.CustomLocalDateSerializer;
 import no.ssb.klass.core.model.ClassificationVariant;
 import no.ssb.klass.core.model.Language;
-import no.ssb.klass.api.util.CustomLocalDateSerializer;
+
+import java.time.LocalDate;
+import java.util.List;
 
 @JacksonXmlRootElement(localName = "classificationVariant")
-@JsonPropertyOrder({"name", "id", "contactPerson", "owningSection", "lastModified", "published", "validFrom", "validTo",
-        "introduction", "contactPerson", "owningSection", "correspondenceTables", "changelogs", "levels",
-        "classificationItems", "links"})
+@JsonPropertyOrder({
+    "name",
+    "id",
+    "contactPerson",
+    "owningSection",
+    "lastModified",
+    "published",
+    "validFrom",
+    "validTo",
+    "introduction",
+    "contactPerson",
+    "owningSection",
+    "correspondenceTables",
+    "changelogs",
+    "levels",
+    "classificationItems",
+    "links"
+})
 public class ClassificationVariantResource extends ClassificationVariantSummaryResource {
     private final LocalDate validFrom;
     private final LocalDate validTo;
@@ -31,9 +46,7 @@ public class ClassificationVariantResource extends ClassificationVariantSummaryR
     private final List<ClassificationItemResource> classificationItems;
 
     public ClassificationVariantResource(
-            ClassificationVariant variant,
-            Language language,
-            String owningSectionName) {
+            ClassificationVariant variant, Language language, String owningSectionName) {
         super(variant, language);
         this.validFrom = variant.getDateRange().getFrom();
         LocalDate to = variant.getDateRange().getTo();
@@ -43,8 +56,9 @@ public class ClassificationVariantResource extends ClassificationVariantSummaryR
         this.owningSection = owningSectionName;
 
         this.levels = LevelResource.convert(variant.getLevels(), language);
-        this.correspondenceTables = CorrespondenceTableSummaryResource.convert(variant.getCorrespondenceTables(),
-                language);
+        this.correspondenceTables =
+                CorrespondenceTableSummaryResource.convert(
+                        variant.getCorrespondenceTables(), language);
         this.classificationItems = ClassificationItemResource.convert(variant, language);
         this.changelogs = ChangelogResource.convert(variant.getChangelogs());
     }

@@ -1,20 +1,22 @@
 package no.ssb.klass.api.applicationtest;
 
-import io.restassured.http.ContentType;
-import no.ssb.klass.api.util.RestConstants;
-import no.ssb.klass.testutil.TestDataProvider;
-import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpStatus;
-
 import static io.restassured.RestAssured.given;
+
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
+
+import io.restassured.http.ContentType;
+
+import no.ssb.klass.api.util.RestConstants;
+import no.ssb.klass.testutil.TestDataProvider;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
 
 /**
  * @author Mads Lundemo, SSB.
  */
 public class RestApiCodeIntegrationTest extends AbstractRestApiApplicationTest {
-    // @formatter:off
     @Test
     public void restServiceCodesJSON() {
         given().port(port)
@@ -316,6 +318,4 @@ public class RestApiCodeIntegrationTest extends AbstractRestApiApplicationTest {
                 .contentType(ContentType.JSON)
                 .body("codes.size()", equalTo(0));
     }
-
-    // @formatter:on
 }

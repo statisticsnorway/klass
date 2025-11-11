@@ -2,16 +2,17 @@ package no.ssb.klass.api.dto.hal;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
-import java.util.List;
-import java.util.Map;
-import java.util.StringJoiner;
-
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+import no.ssb.klass.api.controllers.ClassificationController;
 import no.ssb.klass.api.services.OpenSearchResult;
+
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.core.Relation;
 
-import no.ssb.klass.api.controllers.ClassificationController;
+import java.util.List;
+import java.util.Map;
+import java.util.StringJoiner;
 
 @Relation(collectionRelation = "searchResults")
 @JsonPropertyOrder({"name", "id", "snippet", "searchScore", "links"})
@@ -21,7 +22,8 @@ public class SearchResultResource extends KlassResource {
     private String snippet;
     private Double searchScore;
 
-    public SearchResultResource(OpenSearchResult searchResult, Map<String, List<String>> highlights) {
+    public SearchResultResource(
+            OpenSearchResult searchResult, Map<String, List<String>> highlights) {
         super(searchResult.getItemId());
         this.name = searchResult.getTitle();
         this.snippet = searchResult.getDescription();
@@ -37,7 +39,7 @@ public class SearchResultResource extends KlassResource {
                     return;
                 }
             }
-            
+
             List<String> codesHighlights = highlights.get("codes");
             if (codesHighlights != null && !codesHighlights.isEmpty()) {
                 String snipplet = codesHighlights.get(0);
@@ -51,7 +53,9 @@ public class SearchResultResource extends KlassResource {
     }
 
     private Link createSelfLink(Long id) {
-        return linkTo(methodOn(ClassificationController.class).classification(id, null, null)).withSelfRel().expand();
+        return linkTo(methodOn(ClassificationController.class).classification(id, null, null))
+                .withSelfRel()
+                .expand();
     }
 
     public String getName() {

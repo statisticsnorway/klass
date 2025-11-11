@@ -1,21 +1,19 @@
 package no.ssb.klass.core.util;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import com.google.common.base.Strings;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 
+import no.ssb.klass.core.model.Language;
+
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.stereotype.Component;
 
-import com.google.common.base.Strings;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import no.ssb.klass.core.model.Language;
-
-/**
- * Used by Hibernate to persists {@link Translatable}s
- */
+/** Used by Hibernate to persists {@link Translatable}s */
 @Component
 @Converter(autoApply = true)
 public class TranslatablePersistenceConverter implements AttributeConverter<Translatable, String> {
@@ -28,9 +26,15 @@ public class TranslatablePersistenceConverter implements AttributeConverter<Tran
     }
 
     public TranslatablePersistenceConverter(String no, String nn, String en) {
-        this.noPattern = Pattern.compile("<" + no + ">(.*)</" + no + ">", Pattern.MULTILINE | Pattern.DOTALL);
-        this.nnPattern = Pattern.compile("<" + nn + ">(.*)</" + nn + ">", Pattern.MULTILINE | Pattern.DOTALL);
-        this.enPattern = Pattern.compile("<" + en + ">(.*)</" + en + ">", Pattern.MULTILINE | Pattern.DOTALL);
+        this.noPattern =
+                Pattern.compile(
+                        "<" + no + ">(.*)</" + no + ">", Pattern.MULTILINE | Pattern.DOTALL);
+        this.nnPattern =
+                Pattern.compile(
+                        "<" + nn + ">(.*)</" + nn + ">", Pattern.MULTILINE | Pattern.DOTALL);
+        this.enPattern =
+                Pattern.compile(
+                        "<" + en + ">(.*)</" + en + ">", Pattern.MULTILINE | Pattern.DOTALL);
     }
 
     @Override
@@ -41,15 +45,18 @@ public class TranslatablePersistenceConverter implements AttributeConverter<Tran
         StringBuilder builder = new StringBuilder();
         if (translatable != null) {
             if (translatable.hasLanguage(Language.NB)) {
-                builder.append("<no>").append(StringEscapeUtils.escapeXml11(translatable.getString(Language.NB)))
+                builder.append("<no>")
+                        .append(StringEscapeUtils.escapeXml11(translatable.getString(Language.NB)))
                         .append("</no>");
             }
             if (translatable.hasLanguage(Language.NN)) {
-                builder.append("<nn>").append(StringEscapeUtils.escapeXml11(translatable.getString(Language.NN)))
+                builder.append("<nn>")
+                        .append(StringEscapeUtils.escapeXml11(translatable.getString(Language.NN)))
                         .append("</nn>");
             }
             if (translatable.hasLanguage(Language.EN)) {
-                builder.append("<en>").append(StringEscapeUtils.escapeXml11(translatable.getString(Language.EN)))
+                builder.append("<en>")
+                        .append(StringEscapeUtils.escapeXml11(translatable.getString(Language.EN)))
                         .append("</en>");
             }
         }

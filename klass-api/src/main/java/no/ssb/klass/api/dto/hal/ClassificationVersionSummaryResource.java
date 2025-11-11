@@ -1,15 +1,21 @@
 package no.ssb.klass.api.dto.hal;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+
+import static java.util.stream.Collectors.*;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-import no.ssb.klass.core.model.ClassificationVersion;
-import no.ssb.klass.core.model.Language;
+
 import no.ssb.klass.api.controllers.ClassificationController;
 import no.ssb.klass.api.util.CustomLocalDateSerializer;
+import no.ssb.klass.core.model.ClassificationVersion;
+import no.ssb.klass.core.model.Language;
+
 import org.springframework.hateoas.Link;
 
 import java.time.LocalDate;
@@ -17,9 +23,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static java.util.stream.Collectors.*;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 @JsonPropertyOrder({"name", "id", "validFrom", "validTo", "lastModified", "published", "links"})
 public class ClassificationVersionSummaryResource extends KlassResource {
@@ -29,17 +32,22 @@ public class ClassificationVersionSummaryResource extends KlassResource {
     private final Date lastModified;
     private final List<String> published;
 
-    protected ClassificationVersionSummaryResource(ClassificationVersion version, Language language, Boolean includeFuture) {
+    protected ClassificationVersionSummaryResource(
+            ClassificationVersion version, Language language, Boolean includeFuture) {
         super(version.getId());
         this.name = version.getName(language);
         this.validFrom = version.getDateRange().getFrom();
         LocalDate to = version.getDateRange().getTo();
-        this.validTo = (to.isEqual(LocalDate.MAX) ||(version.isCurrentVersion() && !includeFuture)) ? null : to;
+        this.validTo =
+                (to.isEqual(LocalDate.MAX) || (version.isCurrentVersion() && !includeFuture))
+                        ? null
+                        : to;
         this.lastModified = version.getLastModified();
-        this.published = Arrays.stream(Language.getDefaultPrioritizedOrder())
-                .filter(version::isPublished)
-                .map(Language::getLanguageCode)
-                .collect(toList());
+        this.published =
+                Arrays.stream(Language.getDefaultPrioritizedOrder())
+                        .filter(version::isPublished)
+                        .map(Language::getLanguageCode)
+                        .collect(toList());
         addLink(createSelfLink(version.getId()));
     }
 
@@ -55,7 +63,9 @@ public class ClassificationVersionSummaryResource extends KlassResource {
     }
 
     private Link createSelfLink(long id) {
-        return linkTo(methodOn(ClassificationController.class).versions(id, null, null)).withSelfRel().expand();
+        return linkTo(methodOn(ClassificationController.class).versions(id, null, null))
+                .withSelfRel()
+                .expand();
     }
 
     @JacksonXmlElementWrapper(localName = "publishedLanguages")
@@ -73,11 +83,14 @@ public class ClassificationVersionSummaryResource extends KlassResource {
         return lastModified;
     }
 
-    public static List<ClassificationVersionSummaryResource> convert(List<ClassificationVersion> versions,
-                                                                     Language language, Boolean includeFuture) {
+    public static List<ClassificationVersionSummaryResource> convert(
+            List<ClassificationVersion> versions, Language language, Boolean includeFuture) {
         return versions.stream()
                 .filter(version -> version.showVersion(includeFuture))
-                .map(version -> new ClassificationVersionSummaryResource(version, language, includeFuture)).collect(
-                        Collectors.toList());
+                .map(
+                        version ->
+                                new ClassificationVersionSummaryResource(
+                                        version, language, includeFuture))
+                .collect(Collectors.toList());
     }
 }

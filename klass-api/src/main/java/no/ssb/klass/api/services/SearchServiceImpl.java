@@ -34,8 +34,9 @@ public class SearchServiceImpl implements SearchService {
     private final OpenSearchRestTemplate elasticsearchOperations;
 
     @Autowired
-    public SearchServiceImpl(ClassificationSeriesRepository classificationRepository,
-                             OpenSearchRestTemplate elasticsearchOperations) {
+    public SearchServiceImpl(
+            ClassificationSeriesRepository classificationRepository,
+            OpenSearchRestTemplate elasticsearchOperations) {
         this.elasticsearchOperations = elasticsearchOperations;
     }
 
@@ -44,35 +45,35 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public Page<OpenSearchResult> publicSearch(String query, Pageable pageable, String filterOnSection,
-                                               boolean includeCodeLists) {
+    public Page<OpenSearchResult> publicSearch(
+            String query, Pageable pageable, String filterOnSection, boolean includeCodeLists) {
         return search(PublicSearchQuery.build(query, pageable, filterOnSection, includeCodeLists));
     }
 
     private Page<OpenSearchResult> search(Query query) {
         Date start = TimeUtil.now();
-        SearchHits<OpenSearchResult> searchHits = elasticsearchOperations.search(
+        SearchHits<OpenSearchResult> searchHits =
+                elasticsearchOperations.search(
+                        query, OpenSearchResult.class, getIndexCoordinates());
+
+        List<OpenSearchResult> results =
+                searchHits.getSearchHits().stream()
+                        .map(
+                                hit -> {
+                                    OpenSearchResult result = hit.getContent();
+                                    result.setScore(hit.getScore());
+                                    return result;
+                                })
+                        .toList();
+
+        Page<OpenSearchResult> searchResults =
+                new PageImpl<>(results, query.getPageable(), searchHits.getTotalHits());
+
+        log.info(
+                "Search for: '{}' resulted in {} hits. Took (ms): {}",
                 query,
-                OpenSearchResult.class,
-                getIndexCoordinates()
-        );
-
-        List<OpenSearchResult> results = searchHits.getSearchHits().stream()
-                .map(hit -> {
-                    OpenSearchResult result = hit.getContent();
-                    result.setScore(hit.getScore());
-                    return result;
-                })
-                .toList();
-
-        Page<OpenSearchResult> searchResults = new PageImpl<>(
-                results,
-                query.getPageable(),
-                searchHits.getTotalHits()
-        );
-
-        log.info("Search for: '{}' resulted in {} hits. Took (ms): {}",
-                query, searchResults.getTotalElements(), TimeUtil.millisecondsSince(start));
+                searchResults.getTotalElements(),
+                TimeUtil.millisecondsSince(start));
         return searchResults;
     }
 }

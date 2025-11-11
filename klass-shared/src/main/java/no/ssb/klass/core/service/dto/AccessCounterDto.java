@@ -3,7 +3,7 @@ package no.ssb.klass.core.service.dto;
 public class AccessCounterDto implements StatisticalEntity {
     private final String entityName;
     private final Long count;
-    
+
     public AccessCounterDto(String entityName, Long count) {
         this.entityName = entityName;
         this.count = count;
@@ -16,6 +16,4 @@ public class AccessCounterDto implements StatisticalEntity {
     public Long getCount() {
         return count;
     }
-    
-    
 }

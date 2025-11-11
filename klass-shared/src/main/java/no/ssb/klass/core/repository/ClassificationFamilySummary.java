@@ -10,7 +10,10 @@ public class ClassificationFamilySummary {
     private final String iconPath;
     private final int numberOfClassifications;
 
-    public ClassificationFamilySummary(Long id, Translatable classificationFamilyName, String iconName,
+    public ClassificationFamilySummary(
+            Long id,
+            Translatable classificationFamilyName,
+            String iconName,
             long numberOfClassifications) {
         if (!iconName.startsWith(ClassificationFamily.BASE_ICON_PATH)) {
             iconName = ClassificationFamily.BASE_ICON_PATH + iconName;

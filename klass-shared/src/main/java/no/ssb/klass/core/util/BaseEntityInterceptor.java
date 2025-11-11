@@ -1,22 +1,22 @@
 package no.ssb.klass.core.util;
 
-import java.io.Serializable;
-import java.util.Map;
-import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
+import no.ssb.klass.core.model.BaseEntity;
 
 import org.hibernate.Interceptor;
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
 
-import no.ssb.klass.core.model.BaseEntity;
+import java.io.Serializable;
+import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * A hibernate interceptor used to instantiate entities. This to avoid JPAs requirement that entities must have a no
- * argument constructor. Hence by using this interceptor the entities do not require a no argument constructor.
- * 
- * @author karsten.vileid
+ * A hibernate interceptor used to instantiate entities. This to avoid JPAs requirement that
+ * entities must have a no argument constructor. Hence by using this interceptor the entities do not
+ * require a no argument constructor.
  *
+ * @author karsten.vileid
  */
 public class BaseEntityInterceptor implements Interceptor {
     private final Objenesis objenesis;

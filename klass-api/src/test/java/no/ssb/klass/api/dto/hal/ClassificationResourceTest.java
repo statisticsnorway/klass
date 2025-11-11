@@ -17,7 +17,8 @@ public class ClassificationResourceTest {
 
     @BeforeEach
     public void setup() {
-        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(new MockHttpServletRequest()));
+        RequestContextHolder.setRequestAttributes(
+                new ServletRequestAttributes(new MockHttpServletRequest()));
     }
 
     @Test
@@ -27,21 +28,37 @@ public class ClassificationResourceTest {
         final String name = "name";
 
         // when
-        ClassificationResource subject = new ClassificationResource(createClassification(id, name), Language
-                .getDefault(), null, "320");
+        ClassificationResource subject =
+                new ClassificationResource(
+                        createClassification(id, name), Language.getDefault(), null, "320");
 
         // then
         assertEquals(name, subject.getName());
-        assertEquals("http://localhost" + RestConstants.API_VERSION_V1 + "/classifications/" + id, subject.getLink("self").orElseThrow(() ->
-                new RuntimeException("No link found")).getHref());
-        assertEquals("http://localhost" + RestConstants.API_VERSION_V1 + "/classifications/" + id + "/variant"
+        assertEquals(
+                "http://localhost" + RestConstants.API_VERSION_V1 + "/classifications/" + id,
+                subject.getLink("self")
+                        .orElseThrow(() -> new RuntimeException("No link found"))
+                        .getHref());
+        assertEquals(
+                "http://localhost"
+                        + RestConstants.API_VERSION_V1
+                        + "/classifications/"
+                        + id
+                        + "/variant"
                         + "{?variantName,from=<yyyy-MM-dd>,to=<yyyy-MM-dd>,csvSeparator,level,selectCodes,presentationNamePattern}",
-                subject.getLink("variant").orElseThrow(() ->
-                        new RuntimeException("No link found")).getHref());
-        assertEquals("http://localhost" + RestConstants.API_VERSION_V1 + "/classifications/" + id + "/variantAt"
+                subject.getLink("variant")
+                        .orElseThrow(() -> new RuntimeException("No link found"))
+                        .getHref());
+        assertEquals(
+                "http://localhost"
+                        + RestConstants.API_VERSION_V1
+                        + "/classifications/"
+                        + id
+                        + "/variantAt"
                         + "{?variantName,date=<yyyy-MM-dd>,csvSeparator,level,selectCodes,presentationNamePattern}",
-                subject.getLink("variantAt").orElseThrow(() ->
-                        new RuntimeException("No link found")).getHref());
+                subject.getLink("variantAt")
+                        .orElseThrow(() -> new RuntimeException("No link found"))
+                        .getHref());
         assertEquals(0, subject.getVersions().size());
     }
 

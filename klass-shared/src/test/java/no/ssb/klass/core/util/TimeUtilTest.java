@@ -2,16 +2,16 @@ package no.ssb.klass.core.util;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.google.common.collect.Lists;
+
+import no.ssb.klass.testutil.ConstantClockSource;
+
+import org.junit.jupiter.api.Test;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
-
-import org.junit.jupiter.api.Test;
-
-import com.google.common.collect.Lists;
-
-import no.ssb.klass.testutil.ConstantClockSource;
 
 public class TimeUtilTest {
 

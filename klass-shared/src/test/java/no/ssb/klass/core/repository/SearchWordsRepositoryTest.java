@@ -1,9 +1,14 @@
 package no.ssb.klass.core.repository;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import jakarta.transaction.Transactional;
+
 import no.ssb.klass.core.config.ConfigurationProfiles;
 import no.ssb.klass.core.model.SearchWords;
 import no.ssb.klass.core.service.dto.StatisticalEntity;
 import no.ssb.klass.core.util.TranslatablePersistenceConverter;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +22,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -31,8 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @Transactional
 public class SearchWordsRepositoryTest {
 
-    @Autowired
-    private SearchWordsRepository searchWordsRepository;
+    @Autowired private SearchWordsRepository searchWordsRepository;
 
     @Test
     public void findNumberOfSearchWordsTest() {
@@ -65,8 +66,9 @@ public class SearchWordsRepositoryTest {
         makeSerarchWord("C", false);
         makeSerarchWord("A", true);
 
-        Page<StatisticalEntity> result = searchWordsRepository.getSearchWords(getFromDate(), getToDate(),
-                PageRequest.of(0, 100));
+        Page<StatisticalEntity> result =
+                searchWordsRepository.getSearchWords(
+                        getFromDate(), getToDate(), PageRequest.of(0, 100));
         assertEquals(3, result.getTotalElements());
         List<StatisticalEntity> resultList = result.getContent();
         assertEquals("A", resultList.get(0).getName());
@@ -87,8 +89,9 @@ public class SearchWordsRepositoryTest {
         makeSerarchWord("C", false);
         makeSerarchWord("B", false);
 
-        Page<StatisticalEntity> result = searchWordsRepository.getSearchWords(false, getFromDate(), getToDate(),
-                PageRequest.of(0, 100));
+        Page<StatisticalEntity> result =
+                searchWordsRepository.getSearchWords(
+                        false, getFromDate(), getToDate(), PageRequest.of(0, 100));
         assertEquals(2, result.getTotalElements());
         List<StatisticalEntity> resultList = result.getContent();
         assertEquals("B", resultList.get(0).getName());
@@ -121,7 +124,5 @@ public class SearchWordsRepositoryTest {
     @EnableAutoConfiguration
     @EntityScan(basePackageClasses = {SearchWords.class})
     @ComponentScan(basePackageClasses = TranslatablePersistenceConverter.class)
-    static class Config {
-    }
-
+    static class Config {}
 }

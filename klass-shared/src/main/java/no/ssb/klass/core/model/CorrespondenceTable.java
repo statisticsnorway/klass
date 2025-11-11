@@ -1,12 +1,10 @@
 package no.ssb.klass.core.model;
 
 import static com.google.common.base.Preconditions.*;
+
 import static java.util.stream.Collectors.*;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import com.google.common.collect.Lists;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -20,61 +18,83 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
-import com.google.common.collect.Lists;
-
 import no.ssb.klass.core.util.DateRange;
 import no.ssb.klass.core.util.TimeUtil;
 import no.ssb.klass.core.util.Translatable;
 import no.ssb.klass.core.util.TranslatablePersistenceConverter;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 @Entity
-@Table(indexes = { @Index(columnList = "source_id", name = "ct_source_idx"),
-        @Index(columnList = "target_id", name = "ct_target_idx") })
-public class CorrespondenceTable extends BaseEntity implements ClassificationEntityOperations, Publishable, Draftable {
+@Table(
+        indexes = {
+            @Index(columnList = "source_id", name = "ct_source_idx"),
+            @Index(columnList = "target_id", name = "ct_target_idx")
+        })
+public class CorrespondenceTable extends BaseEntity
+        implements ClassificationEntityOperations, Publishable, Draftable {
     @Column(columnDefinition = "text", nullable = false)
     @Convert(converter = TranslatablePersistenceConverter.class)
     private Translatable description;
+
     private Published published;
+
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private ClassificationVersion source;
+
     private int sourceLevelNumber;
+
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private ClassificationVersion target;
+
     private int targetLevelNumber;
+
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "correspondenceTable")
     private List<CorrespondenceMap> correspondenceMaps;
+
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "correspondencetable_changelog", joinColumns = @JoinColumn(name = "correspondencetable_id"), inverseJoinColumns = @JoinColumn(name = "changelog_id"))
+    @JoinTable(
+            name = "correspondencetable_changelog",
+            joinColumns = @JoinColumn(name = "correspondencetable_id"),
+            inverseJoinColumns = @JoinColumn(name = "changelog_id"))
     private List<Changelog> changelogs;
+
     @Column(nullable = false)
     private boolean deleted;
+
     @Column(nullable = false)
     private boolean draft;
 
-    protected CorrespondenceTable() {
-    }
+    protected CorrespondenceTable() {}
 
     /**
      * Creates a CorrespondenceTable
      *
      * @param description
      * @param source
-     * @param sourceLevelNumber
-     *                          0 means all levels from source version
+     * @param sourceLevelNumber 0 means all levels from source version
      * @param target
-     * @param targetLevelNumber
-     *                          0 means all levels from target version
+     * @param targetLevelNumber 0 means all levels from target version
      */
-    public CorrespondenceTable(Translatable description, ClassificationVersion source, int sourceLevelNumber,
-            ClassificationVersion target, int targetLevelNumber) {
+    public CorrespondenceTable(
+            Translatable description,
+            ClassificationVersion source,
+            int sourceLevelNumber,
+            ClassificationVersion target,
+            int targetLevelNumber) {
         this.description = checkNotNull(description);
         this.published = Published.none();
         this.source = checkNotNull(source);
-        checkArgument(sourceLevelNumber == 0 || source.hasLevel(sourceLevelNumber),
+        checkArgument(
+                sourceLevelNumber == 0 || source.hasLevel(sourceLevelNumber),
                 "Source version does not have level: " + sourceLevelNumber);
         this.sourceLevelNumber = sourceLevelNumber;
         this.target = checkNotNull(target);
-        checkArgument(targetLevelNumber == 0 || target.hasLevel(targetLevelNumber),
+        checkArgument(
+                targetLevelNumber == 0 || target.hasLevel(targetLevelNumber),
                 "Target version does not have level: " + targetLevelNumber);
         this.targetLevelNumber = targetLevelNumber;
         this.correspondenceMaps = new ArrayList<>();
@@ -179,31 +199,36 @@ public class CorrespondenceTable extends BaseEntity implements ClassificationEnt
     }
 
     public void updateCorrespondenceMapSource(CorrespondenceMap map, ClassificationItem newSource) {
-        verifyNotAlreadyContainsIdenticalMap(new CorrespondenceMap(newSource, map.getTarget().orElse(null)));
+        verifyNotAlreadyContainsIdenticalMap(
+                new CorrespondenceMap(newSource, map.getTarget().orElse(null)));
         map.setSource(newSource);
     }
 
     public void updateCorrespondenceMapTarget(CorrespondenceMap map, ClassificationItem newTarget) {
-        verifyNotAlreadyContainsIdenticalMap(new CorrespondenceMap(map.getSource().orElse(null), newTarget));
+        verifyNotAlreadyContainsIdenticalMap(
+                new CorrespondenceMap(map.getSource().orElse(null), newTarget));
         map.setTarget(newTarget);
     }
 
     private void verifyNotAlreadyContainsIdenticalMap(CorrespondenceMap map) {
         if (alreadyContainsIdenticalMap(map)) {
-            throw new IllegalArgumentException("Correspondence table already contains identical map " + map);
+            throw new IllegalArgumentException(
+                    "Correspondence table already contains identical map " + map);
         }
     }
 
     /**
-     * Checks if already contains a correspondenceMap with identical source and
-     * target mapping.
+     * Checks if already contains a correspondenceMap with identical source and target mapping.
      *
      * @param map
-     * @return true if already contains a correspondenceMap with identical source
-     *         and target mapping, false otherwise
+     * @return true if already contains a correspondenceMap with identical source and target
+     *     mapping, false otherwise
      */
     public boolean alreadyContainsIdenticalMap(CorrespondenceMap map) {
-        return correspondenceMaps.stream().filter(m -> m.hasSameSourceAndTarget(map)).findAny().map(present -> true)
+        return correspondenceMaps.stream()
+                .filter(m -> m.hasSameSourceAndTarget(map))
+                .findAny()
+                .map(present -> true)
                 .orElse(false);
     }
 
@@ -211,31 +236,41 @@ public class CorrespondenceTable extends BaseEntity implements ClassificationEnt
         correspondenceMaps.remove(map);
     }
 
-    /**
-     * Gets latest from time for source and target classification versions
-     */
+    /** Gets latest from time for source and target classification versions */
     public LocalDate getOccured() {
-        return TimeUtil.max(Lists.newArrayList(getSource().getDateRange().getFrom(), getTarget().getDateRange()
-                .getFrom()));
+        return TimeUtil.max(
+                Lists.newArrayList(
+                        getSource().getDateRange().getFrom(),
+                        getTarget().getDateRange().getFrom()));
     }
 
     public DateRange getDateRange() {
         verifyDateRangesAreOverlaping();
-        LocalDate from = TimeUtil.max(Lists.newArrayList(source.getDateRange().getFrom(), target.getDateRange()
-                .getFrom()));
-        LocalDate to = TimeUtil.min(Lists.newArrayList(source.getDateRange().getTo(), target.getDateRange().getTo()));
+        LocalDate from =
+                TimeUtil.max(
+                        Lists.newArrayList(
+                                source.getDateRange().getFrom(), target.getDateRange().getFrom()));
+        LocalDate to =
+                TimeUtil.min(
+                        Lists.newArrayList(
+                                source.getDateRange().getTo(), target.getDateRange().getTo()));
         return DateRange.create(from, to);
     }
 
     private void verifyDateRangesAreOverlaping() {
         if (!hasSameClassification()) {
             if (!source.getDateRange().overlaps(target.getDateRange())) {
-                throw new IllegalArgumentException("CorrespondenceTable: " + getNameInPrimaryLanguage()
-                        + ". dateRanges of source and target classification version does not overlap. Source: " + source
-                                .getNameInPrimaryLanguage()
-                        + " " + source.getDateRange() + ". Target: " + target
-                                .getNameInPrimaryLanguage()
-                        + " " + target.getDateRange());
+                throw new IllegalArgumentException(
+                        "CorrespondenceTable: "
+                                + getNameInPrimaryLanguage()
+                                + ". dateRanges of source and target classification version does not overlap. Source: "
+                                + source.getNameInPrimaryLanguage()
+                                + " "
+                                + source.getDateRange()
+                                + ". Target: "
+                                + target.getNameInPrimaryLanguage()
+                                + " "
+                                + target.getDateRange());
             }
         }
     }
@@ -277,10 +312,14 @@ public class CorrespondenceTable extends BaseEntity implements ClassificationEnt
     public String canPublish(Language language) {
         StringBuilder fieldList = new StringBuilder();
         if (isDraft()) {
-            fieldList.append("Du kan ikke publisere en korrespondansetabell som er markert som utkast");
+            fieldList.append(
+                    "Du kan ikke publisere en korrespondansetabell som er markert som utkast");
         }
         if (!source.isPublished(language)) {
-            fieldList.append("Publiser kilde versjon '").append(source.getName(language)).append("'");
+            fieldList
+                    .append("Publiser kilde versjon '")
+                    .append(source.getName(language))
+                    .append("'");
         }
         if (!target.isPublished(language)) {
             fieldList.append("Publiser mål versjon '").append(target.getName(language)).append("'");

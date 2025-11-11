@@ -1,7 +1,19 @@
 package no.ssb.klass.api.dto.hal;
 
-import static java.util.stream.Collectors.*;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+
+import static java.util.stream.Collectors.*;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+
+import no.ssb.klass.api.controllers.ClassificationController;
+import no.ssb.klass.core.model.CorrespondenceTable;
+import no.ssb.klass.core.model.Language;
+
+import org.springframework.hateoas.Link;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -9,19 +21,22 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import org.springframework.hateoas.Link;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-
-import no.ssb.klass.core.model.CorrespondenceTable;
-import no.ssb.klass.core.model.Language;
-import no.ssb.klass.api.controllers.ClassificationController;
-
-@JsonPropertyOrder({"name", "id", "contactPerson", "owningSection", "source", "sourceId", "target", "targetId", "changeTable",
-        "lastModified", "published", "sourceLevel", "targetLevel", "links"})
+@JsonPropertyOrder({
+    "name",
+    "id",
+    "contactPerson",
+    "owningSection",
+    "source",
+    "sourceId",
+    "target",
+    "targetId",
+    "changeTable",
+    "lastModified",
+    "published",
+    "sourceLevel",
+    "targetLevel",
+    "links"
+})
 public class CorrespondenceTableSummaryResource extends KlassResource {
     private final String name;
     private final ContactPersonResource contactPerson;
@@ -37,8 +52,7 @@ public class CorrespondenceTableSummaryResource extends KlassResource {
     private final LevelResource targetLevel;
 
     protected CorrespondenceTableSummaryResource(
-            CorrespondenceTable correspondenceTable,
-            Language language) {
+            CorrespondenceTable correspondenceTable, Language language) {
         super(correspondenceTable.getId());
         this.name = correspondenceTable.getName(language);
         this.contactPerson = new ContactPersonResource(correspondenceTable.getContactPerson());
@@ -47,32 +61,43 @@ public class CorrespondenceTableSummaryResource extends KlassResource {
         this.sourceId = correspondenceTable.getSource().getId();
         this.target = correspondenceTable.getTarget().getName(language);
         this.targetId = correspondenceTable.getTarget().getId();
-        this.changeTable = Objects.equals(correspondenceTable.getSource().getClassification(), correspondenceTable
-                .getTarget().getClassification());
+        this.changeTable =
+                Objects.equals(
+                        correspondenceTable.getSource().getClassification(),
+                        correspondenceTable.getTarget().getClassification());
         this.lastModified = correspondenceTable.getLastModified();
-        this.published = Arrays.stream(Language.getDefaultPrioritizedOrder())
-                .filter(correspondenceTable::isPublished)
-                .map(Language::getLanguageCode)
-                .collect(toList());
-        this.sourceLevel = correspondenceTable.getSourceLevel().isPresent() ? new LevelResource(correspondenceTable
-                .getSourceLevel().get(), language) : null;
-        this.targetLevel = correspondenceTable.getTargetLevel().isPresent() ? new LevelResource(correspondenceTable
-                .getTargetLevel().get(), language) : null;
+        this.published =
+                Arrays.stream(Language.getDefaultPrioritizedOrder())
+                        .filter(correspondenceTable::isPublished)
+                        .map(Language::getLanguageCode)
+                        .collect(toList());
+        this.sourceLevel =
+                correspondenceTable.getSourceLevel().isPresent()
+                        ? new LevelResource(correspondenceTable.getSourceLevel().get(), language)
+                        : null;
+        this.targetLevel =
+                correspondenceTable.getTargetLevel().isPresent()
+                        ? new LevelResource(correspondenceTable.getTargetLevel().get(), language)
+                        : null;
         addLink(createSelfLink(correspondenceTable.getId()));
         addLink(createSourceLink(correspondenceTable.getSource().getId()));
         addLink(createTargetLink(correspondenceTable.getTarget().getId()));
     }
 
     private Link createSelfLink(long id) {
-        return linkTo(methodOn(ClassificationController.class).correspondenceTables(id, null)).withSelfRel().expand();
+        return linkTo(methodOn(ClassificationController.class).correspondenceTables(id, null))
+                .withSelfRel()
+                .expand();
     }
 
     private Link createSourceLink(long id) {
-        return linkTo(methodOn(ClassificationController.class).versions(id, null, null)).withRel("source");
+        return linkTo(methodOn(ClassificationController.class).versions(id, null, null))
+                .withRel("source");
     }
 
     private Link createTargetLink(long id) {
-        return linkTo(methodOn(ClassificationController.class).versions(id, null, null)).withRel("target");
+        return linkTo(methodOn(ClassificationController.class).versions(id, null, null))
+                .withRel("target");
     }
 
     public String getName() {
@@ -126,9 +151,10 @@ public class CorrespondenceTableSummaryResource extends KlassResource {
         return lastModified;
     }
 
-    public static List<CorrespondenceTableSummaryResource> convert(List<CorrespondenceTable> correspondenceTables,
-            Language language) {
-        return correspondenceTables.stream().map(c -> new CorrespondenceTableSummaryResource(c, language)).collect(
-                Collectors.toList());
+    public static List<CorrespondenceTableSummaryResource> convert(
+            List<CorrespondenceTable> correspondenceTables, Language language) {
+        return correspondenceTables.stream()
+                .map(c -> new CorrespondenceTableSummaryResource(c, language))
+                .collect(Collectors.toList());
     }
 }

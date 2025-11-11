@@ -5,8 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.cloud.spring.pubsub.core.publisher.PubSubPublisherTemplate;
 import com.google.protobuf.ByteString;
 import com.google.pubsub.v1.PubsubMessage;
+
 import no.ssb.klass.mail.config.PostmanConfig;
 import no.ssb.klass.mail.models.Email;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,13 +27,12 @@ public class PostmanService implements MailService {
     private final PubSubPublisherTemplate pubSubPublisher;
 
     @Autowired
-    public PostmanService(
-            PostmanConfig postmanConfig,
-            PubSubPublisherTemplate pubSubPublisher) {
+    public PostmanService(PostmanConfig postmanConfig, PubSubPublisherTemplate pubSubPublisher) {
         this.postmanConfig = postmanConfig;
         this.pubSubPublisher = pubSubPublisher;
 
-        log.info("Using Postman - publishing emails for app {} and topic {}",
+        log.info(
+                "Using Postman - publishing emails for app {} and topic {}",
                 postmanConfig.getPublisherAppName(),
                 postmanConfig.getPubsubTopicIncoming());
     }
@@ -51,16 +52,14 @@ public class PostmanService implements MailService {
         log.debug("Postman published {} to topic {}", message.getMessageId(), topic);
     }
 
-    /**
-     * Create a pubsub message from the given message request.
-     */
+    /** Create a pubsub message from the given message request. */
     private PubsubMessage pubsubMessageOf(MessageRequest messageRequest) {
         TopicEntry topicEntry = new TopicEntry(messageRequest);
-        return PubsubMessage.newBuilder().putAttributes("PUBLISHER_APP_NAME", postmanConfig.getPublisherAppName())
+        return PubsubMessage.newBuilder()
+                .putAttributes("PUBLISHER_APP_NAME", postmanConfig.getPublisherAppName())
                 .setData(topicEntry.toByteString())
                 .build();
     }
-
 
     public static class EmailRequest {
         String message;
@@ -105,11 +104,13 @@ public class PostmanService implements MailService {
     }
 
     public enum FromType {
-        NO_REPLY, REPLY
+        NO_REPLY,
+        REPLY
     }
 
     public enum MessageChannel {
-        EMAIL, SMS
+        EMAIL,
+        SMS
     }
 
     public static class MessageRequest {
@@ -121,7 +122,10 @@ public class PostmanService implements MailService {
         private final EmailRequest emailRequest;
 
         public MessageRequest(EmailRequest emailRequest) {
-            this.id = String.format("klass-subscriber-%s-%s", emailRequest.receiverEmailAddress, emailRequest.message.hashCode());
+            this.id =
+                    String.format(
+                            "klass-subscriber-%s-%s",
+                            emailRequest.receiverEmailAddress, emailRequest.message.hashCode());
             this.emailRequest = emailRequest;
         }
 
@@ -138,7 +142,6 @@ public class PostmanService implements MailService {
         }
     }
 
-
     public static class TopicEntry {
         MessageRequest data;
 
@@ -150,7 +153,8 @@ public class PostmanService implements MailService {
             try {
                 return ByteString.copyFrom(OBJECT_MAPPER.writeValueAsBytes(this));
             } catch (JsonProcessingException e) {
-                throw new RuntimeException("Error mapping " + this.getClass().getSimpleName() + " object to JSON", e);
+                throw new RuntimeException(
+                        "Error mapping " + this.getClass().getSimpleName() + " object to JSON", e);
             }
         }
 
@@ -158,5 +162,4 @@ public class PostmanService implements MailService {
             return data;
         }
     }
-
 }

@@ -2,18 +2,16 @@ package no.ssb.klass.initializer.stabas;
 
 import static com.google.common.base.Preconditions.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import com.google.common.collect.ImmutableMap;
 
 import no.ssb.klass.core.model.Language;
 import no.ssb.klass.core.model.StatisticalUnit;
 
-/**
- * Maps statisticalUnits between Stabas and Klass
- */
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+/** Maps statisticalUnits between Stabas and Klass */
 class StatisticalUnitsMapper {
     private final Map<String, List<StatisticalUnit>> stabasToKlassMap;
     private final List<StatisticalUnit> allKlassStatisticalUnits;
@@ -27,14 +25,14 @@ class StatisticalUnitsMapper {
         checkNotNull(stabasStatisticalUnit);
         List<StatisticalUnit> klassStatisticalUnits = stabasToKlassMap.get(stabasStatisticalUnit);
         if (klassStatisticalUnits == null) {
-            throw new IllegalArgumentException("No mapping to Klass statisticalUnits found for: "
-                    + stabasStatisticalUnit);
+            throw new IllegalArgumentException(
+                    "No mapping to Klass statisticalUnits found for: " + stabasStatisticalUnit);
         }
         return klassStatisticalUnits;
     }
 
     private Map<String, List<StatisticalUnit>> createStatisticalUnitMap() {
-        return ImmutableMap.<String, List<StatisticalUnit>> builder()
+        return ImmutableMap.<String, List<StatisticalUnit>>builder()
                 .put("Aktiviteter", select("Person"))
                 .put("Alkoholholdige drikkevarer", select("Produkt/vare"))
                 .put("Arbeidsoppgaver", select("Person"))
@@ -47,7 +45,8 @@ class StatisticalUnitsMapper {
                 .put("Dyr", select("Dyr"))
                 .put("Economic activities", select("Foretak"))
                 .put("Eiendomstyper", select("Eiendom/areal"))
-                .put("En varegruppering som beskriver ulike varers klassifisering etter forskjellige anvendelsesområder.",
+                .put(
+                        "En varegruppering som beskriver ulike varers klassifisering etter forskjellige anvendelsesområder.",
                         select("Produkt/vare"))
                 .put("Familier", select("Familie"))
                 .put("Fangstarter (sjø)", select("Dyr"))
@@ -55,7 +54,8 @@ class StatisticalUnitsMapper {
                 .put("Førerkort", select("Person"))
                 .put("Havner", select("Region"))
                 .put("Helseregioner", select("Region"))
-                .put("Her er varene gruppert etter bearbeidingsnivå (råvarer, halvfabrikata og ferdigvarer).",
+                .put(
+                        "Her er varene gruppert etter bearbeidingsnivå (råvarer, halvfabrikata og ferdigvarer).",
                         select("Produkt/vare"))
                 .put("Husdyr", select("Dyr"))
                 .put("Husholdninger", select("Husholdning"))
@@ -72,10 +72,13 @@ class StatisticalUnitsMapper {
                 .put("Kjøretøy", select("Kjøretøy"))
                 .put("Kommuner", select("Region"))
                 .put("Land", select("Region"))
-                .put("Land (oftest opprinnelses og bestemmelsesland) i utenrikshandelsstatistikken.", select(
-                        "Region"))
-                .put("Land eller statsborgerskap.  Et land er her definert som et avgrenset territorium som ofte oppfattes som en egen enhet.  "
-                        + "Et land er altså ikke nødvendigvis en selvstendig stat.", select("Person", "Region"))
+                .put(
+                        "Land (oftest opprinnelses og bestemmelsesland) i utenrikshandelsstatistikken.",
+                        select("Region"))
+                .put(
+                        "Land eller statsborgerskap.  Et land er her definert som et avgrenset territorium som ofte oppfattes som en egen enhet.  "
+                                + "Et land er altså ikke nødvendigvis en selvstendig stat.",
+                        select("Person", "Region"))
                 .put("Omsetningstyper", select("Foretak"))
                 .put("Oppvarmingskilder", select("Bolig", "Bygning"))
                 .put("Ordrereserve", select("Foretak", "Region"))
@@ -99,8 +102,9 @@ class StatisticalUnitsMapper {
                 .put("Tiltak", select("Person"))
                 .put("Trafikkenheter", select("Ulykke"))
                 .put("Treslag og sortiment", select("Produkt/vare"))
-                .put("Utdanningsaktiviteter som har en formell skolemessig ramme, innrettet mot en systematisk formidling av "
-                        + "kunnskap og ferdigheter, og som har en viss lengde.",
+                .put(
+                        "Utdanningsaktiviteter som har en formell skolemessig ramme, innrettet mot en systematisk formidling av "
+                                + "kunnskap og ferdigheter, og som har en viss lengde.",
                         select("Utdanning/kurs"))
                 .put("Varegrupper", select("Produkt/vare"))
                 .put("Vareslag", select("Produkt/vare"))
@@ -108,18 +112,21 @@ class StatisticalUnitsMapper {
                 .put("yrkestitler", select("Person"))
                 .put("Økonomiske virksomheter", select("Foretak"))
                 .put("Økonomisk transaksjon", select("Økonomisk transaksjon"))
-
                 .build();
     }
 
     private List<StatisticalUnit> select(String... statisticalUnits) {
         List<StatisticalUnit> result = new ArrayList<>();
         for (String statisticalUnit : statisticalUnits) {
-            result.add(allKlassStatisticalUnits.stream()
-                    .filter(unit -> unit.getName(Language.NB).equals(statisticalUnit))
-                    .findAny()
-                    .orElseThrow(() -> new IllegalArgumentException("Klass has no statisticalUnit with name: "
-                            + statisticalUnit)));
+            result.add(
+                    allKlassStatisticalUnits.stream()
+                            .filter(unit -> unit.getName(Language.NB).equals(statisticalUnit))
+                            .findAny()
+                            .orElseThrow(
+                                    () ->
+                                            new IllegalArgumentException(
+                                                    "Klass has no statisticalUnit with name: "
+                                                            + statisticalUnit)));
         }
         return result;
     }

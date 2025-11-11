@@ -1,23 +1,22 @@
 package no.ssb.klass.core.model;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
+
 import no.ssb.klass.core.util.AlphaNumericCompareUtil;
 
 import java.time.LocalDate;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
-
-
 @Entity
-public abstract class ClassificationItem extends BaseEntity implements Comparable<ClassificationItem> {
-    @ManyToOne
-    private ClassificationItem parent;
+public abstract class ClassificationItem extends BaseEntity
+        implements Comparable<ClassificationItem> {
+    @ManyToOne private ClassificationItem parent;
+
     @ManyToOne(optional = false)
     private Level level;
 
-    protected ClassificationItem() {
-    }
+    protected ClassificationItem() {}
 
     void setParent(ClassificationItem parent) {
         this.parent = parent;
@@ -63,7 +62,11 @@ public abstract class ClassificationItem extends BaseEntity implements Comparabl
 
     @Override
     public String toString() {
-        return "ClassificationItem [code=" + getCode() + ", officialName=" + getOfficialName(Language.NB) + "]";
+        return "ClassificationItem [code="
+                + getCode()
+                + ", officialName="
+                + getOfficialName(Language.NB)
+                + "]";
     }
 
     public boolean isDeleted() {
@@ -78,5 +81,4 @@ public abstract class ClassificationItem extends BaseEntity implements Comparabl
     abstract boolean hasNotes();
 
     abstract boolean hasShortName();
-
 }

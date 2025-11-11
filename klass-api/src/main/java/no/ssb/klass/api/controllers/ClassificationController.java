@@ -195,12 +195,10 @@ public class ClassificationController {
                 MediaType.APPLICATION_XML_VALUE
             })
     public CollectionModel<ClassificationFamilySummaryResource> classificationFamilies(
-            // @formatter:off
             @RequestParam(value = "ssbSection", required = false) String ssbSection,
             @RequestParam(value = "includeCodelists", defaultValue = "false")
                     boolean includeCodelists,
             @RequestParam(value = "language", defaultValue = "nb") Language language) {
-        // @formatter:on
         ClassificationType classificationType = extractClassificationType(includeCodelists);
         ssbSection = extractSsbSection(ssbSection);
         List<ClassificationFamilySummary> summaries =
@@ -224,13 +222,11 @@ public class ClassificationController {
                 MediaType.APPLICATION_XML_VALUE
             })
     public ClassificationFamilyResource classificationFamily(
-            // @formatter:off
             @PathVariable Long id,
             @RequestParam(value = "ssbSection", required = false) String ssbSection,
             @RequestParam(value = "includeCodelists", defaultValue = "false")
                     Boolean includeCodelists,
             @RequestParam(value = "language", defaultValue = "nb") Language language) {
-        // @formatter:on
         ClassificationType classificationType = extractClassificationType(includeCodelists);
         ssbSection = extractSsbSection(ssbSection);
         ClassificationFamily classificationFamily =
@@ -266,7 +262,6 @@ public class ClassificationController {
                 MediaType.APPLICATION_XML_VALUE
             })
     public KlassPagedResources<ClassificationSummaryResource> classifications(
-            // @formatter:off
             @RequestParam(value = "includeCodelists", defaultValue = "false")
                     boolean includeCodelists,
             @RequestParam(value = "changedSince", required = false)
@@ -276,7 +271,6 @@ public class ClassificationController {
                     Date changedSince,
             @Parameter(hidden = true) Pageable pageable,
             @Parameter(hidden = true) PagedResourcesAssembler<ClassificationSeries> assembler) {
-        // @formatter:on
 
         Page<ClassificationSeries> classifications =
                 classificationService.findAllPublic(includeCodelists, changedSince, pageable);
@@ -297,13 +291,11 @@ public class ClassificationController {
                 MediaType.APPLICATION_XML_VALUE
             })
     public KlassPagedResources<SearchResultResource> search(
-            // @formatter:off
             @RequestParam(value = "query") String query,
             @RequestParam(value = "ssbSection", required = false) String ssbSection,
             @RequestParam(value = "includeCodelists", defaultValue = "false")
                     boolean includeCodelists,
             @Parameter(hidden = true) Pageable pageable) {
-        // @formatter:on
         Link self = Link.of(getCurrentRequest(), IanaLinkRelations.SELF);
         ssbSection = extractSsbSection(ssbSection);
 
@@ -427,7 +419,6 @@ public class ClassificationController {
             })
     public CodeList codes(
             @PathVariable Long id,
-            // @formatter:off
             @RequestParam(value = "from") @DateTimeFormat(pattern = RestConstants.DATE_FORMAT)
                     LocalDate from,
             @RequestParam(value = "to", required = false)
@@ -441,7 +432,6 @@ public class ClassificationController {
                     String presentationNamePattern,
             @RequestParam(value = "language", defaultValue = "nb") Language language,
             @RequestParam(value = "includeFuture", defaultValue = "false") Boolean includeFuture) {
-        // @formatter:on
         CodeList codeList =
                 codesInternal(
                         id,
@@ -472,7 +462,6 @@ public class ClassificationController {
             })
     public CodeList codesAt(
             @PathVariable Long id,
-            // @formatter:off
             @RequestParam(value = "date") @DateTimeFormat(pattern = RestConstants.DATE_FORMAT)
                     LocalDate date,
             @RequestParam(value = "csvSeparator", defaultValue = ",") String csvSeparator,
@@ -483,7 +472,6 @@ public class ClassificationController {
                     String presentationNamePattern,
             @RequestParam(value = "language", defaultValue = "nb") Language language,
             @RequestParam(value = "includeFuture", defaultValue = "false") Boolean includeFuture) {
-        // @formatter:on
 
         CodeList codeList =
                 codesInternal(
@@ -543,7 +531,6 @@ public class ClassificationController {
             })
     public CodeChangeList changes(
             @PathVariable Long id,
-            // @formatter:off
             @RequestParam(value = "from") @DateTimeFormat(pattern = RestConstants.DATE_FORMAT)
                     LocalDate from,
             @RequestParam(value = "to", required = false)
@@ -553,7 +540,6 @@ public class ClassificationController {
             @RequestParam(value = "csvFields", defaultValue = "") String csvFields,
             @RequestParam(value = "language", defaultValue = "nb") Language language,
             @RequestParam(value = "includeFuture", defaultValue = "false") Boolean includeFuture) {
-        // @formatter:on
         DateRange dateRange = DateRange.create(from, to);
         ClassificationSeries classification = classificationService.getClassificationSeries(id);
         List<CorrespondenceTable> changeTables =
@@ -585,7 +571,6 @@ public class ClassificationController {
             })
     public CodeList variant(
             @PathVariable Long id,
-            // @formatter:off
             @RequestParam(value = "variantName") String variantName,
             @RequestParam(value = "from") @DateTimeFormat(pattern = RestConstants.DATE_FORMAT)
                     LocalDate from,
@@ -600,7 +585,6 @@ public class ClassificationController {
                     String presentationNamePattern,
             @RequestParam(value = "language", defaultValue = "nb") Language language,
             @RequestParam(value = "includeFuture", defaultValue = "false") Boolean includeFuture) {
-        // @formatter:on
         CodeList codeList =
                 variantInternal(
                         id,
@@ -633,7 +617,6 @@ public class ClassificationController {
             })
     public CodeList variantAt(
             @PathVariable Long id,
-            // @formatter:off
             @RequestParam(value = "variantName") String variantName,
             @RequestParam(value = "date", required = false)
                     @DateTimeFormat(pattern = RestConstants.DATE_FORMAT)
@@ -646,7 +629,6 @@ public class ClassificationController {
                     String presentationNamePattern,
             @RequestParam(value = "language", defaultValue = "nb") Language language,
             @RequestParam(value = "includeFuture", defaultValue = "false") Boolean includeFuture) {
-        // @formatter:on
         CodeList codeList =
                 variantInternal(
                         id,
@@ -706,7 +688,6 @@ public class ClassificationController {
             })
     public CorrespondenceItemList corresponds(
             @PathVariable Long id,
-            // @formatter:off
             @RequestParam(value = "targetClassificationId") Long targetClassificationId,
             @RequestParam(value = "from") @DateTimeFormat(pattern = RestConstants.DATE_FORMAT)
                     LocalDate from,
@@ -717,7 +698,6 @@ public class ClassificationController {
             @RequestParam(value = "csvFields", defaultValue = "") String csvFields,
             @RequestParam(value = "language", defaultValue = "nb") Language language,
             @RequestParam(value = "includeFuture", defaultValue = "false") Boolean includeFuture) {
-        // @formatter:on
         CorrespondenceItemList correspondenceList =
                 correspondsInternal(
                         id,
@@ -748,7 +728,6 @@ public class ClassificationController {
             })
     public CorrespondenceItemList correspondsAt(
             @PathVariable Long id,
-            // @formatter:off
             @RequestParam(value = "targetClassificationId") Long targetClassificationId,
             @RequestParam(value = "date", required = false)
                     @DateTimeFormat(pattern = RestConstants.DATE_FORMAT)
@@ -758,7 +737,6 @@ public class ClassificationController {
             @RequestParam(value = "language", defaultValue = "nb") Language language,
             @RequestParam(value = "includeFuture", defaultValue = "false") Boolean includeFuture,
             @RequestParam(value = "inverted", defaultValue = "false") Boolean inverted) {
-        // @formatter:on
         CorrespondenceItemList correspondenceList =
                 correspondsInternal(
                         id,

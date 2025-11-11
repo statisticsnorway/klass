@@ -1,10 +1,10 @@
 package no.ssb.klass.api.dto.hal;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import no.ssb.klass.core.model.Language;
 import no.ssb.klass.core.model.Level;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class LevelResource {
     private final int levelNumber;
@@ -24,7 +24,8 @@ public class LevelResource {
     }
 
     public static List<LevelResource> convert(List<Level> levels, Language language) {
-        return levels.stream().map(level -> new LevelResource(level, language)).collect(Collectors
-                .toList());
+        return levels.stream()
+                .map(level -> new LevelResource(level, language))
+                .collect(Collectors.toList());
     }
 }

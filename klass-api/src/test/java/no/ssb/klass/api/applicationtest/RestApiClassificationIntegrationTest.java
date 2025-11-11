@@ -16,7 +16,6 @@ import org.springframework.http.HttpStatus;
  */
 public class RestApiClassificationIntegrationTest extends AbstractRestApiApplicationTest {
 
-    // @formatter:off
     @Test
     public void restServiceReturnClassification() {
         String urlParts = REQUEST + "/" + kommuneinndeling.getId();
@@ -151,5 +150,4 @@ public class RestApiClassificationIntegrationTest extends AbstractRestApiApplica
                 .assertThat()
                 .body("versions[3]._links.self.href", containsString("versions/"));
     }
-    // @formatter:on
 }

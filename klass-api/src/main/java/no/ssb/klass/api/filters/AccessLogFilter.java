@@ -1,31 +1,30 @@
 package no.ssb.klass.api.filters;
 
+import jakarta.servlet.*;
+import jakarta.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import jakarta.servlet.*;
-import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
 
 /**
- * Exclude certain paths from Access Logs to prevent the logs being cluttered
- * with irrelevant requests. An example of clutter is health and monitoring
- * endpoint calls.
+ * Exclude certain paths from Access Logs to prevent the logs being cluttered with irrelevant
+ * requests. An example of clutter is health and monitoring endpoint calls.
  */
 @Component
 public class AccessLogFilter implements Filter {
     private final List<String> excludePaths;
 
     public AccessLogFilter(
-            @Value("${klass.env.log.access.exclude-paths}")
-            List<String> excludePaths
-    ) {
+            @Value("${klass.env.log.access.exclude-paths}") List<String> excludePaths) {
         this.excludePaths = excludePaths;
     }
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+            throws IOException, ServletException {
         if (request instanceof HttpServletRequest) {
             String uri = ((HttpServletRequest) request).getRequestURI();
 

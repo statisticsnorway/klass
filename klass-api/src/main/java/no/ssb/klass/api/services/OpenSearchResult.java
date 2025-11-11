@@ -1,21 +1,23 @@
 package no.ssb.klass.api.services;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
+
 import java.util.List;
 
 @Document(indexName = "klass")
 public class OpenSearchResult {
 
-    @Id
-    private String uuid;
-    
+    @Id private String uuid;
+
     @Field(name = "itemid", type = FieldType.Long)
     @JsonProperty("itemid")
     private Long itemId;
+
     private String type;
     private String language;
     private boolean copyrighted;
@@ -26,12 +28,19 @@ public class OpenSearchResult {
     private List<String> codes;
     private double score;
 
-    public OpenSearchResult() {
-    }
+    public OpenSearchResult() {}
 
-    public OpenSearchResult(String uuid, Long itemId, String type, String language,
-                          boolean copyrighted, boolean published, String title,
-                          String description, String family, List<String> codes) {
+    public OpenSearchResult(
+            String uuid,
+            Long itemId,
+            String type,
+            String language,
+            boolean copyrighted,
+            boolean published,
+            String title,
+            String description,
+            String family,
+            List<String> codes) {
         this.uuid = uuid;
         this.itemId = itemId;
         this.type = type;
@@ -44,37 +53,91 @@ public class OpenSearchResult {
         this.codes = codes;
     }
 
-    public String getUuid() { return uuid; }
-    public void setUuid(String uuid) { this.uuid = uuid; }
+    public String getUuid() {
+        return uuid;
+    }
 
-    public Long getItemId() { return itemId; }
-    public void setItemId(Long itemId) { this.itemId = itemId; }
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
 
-    public String getType() { return type; }
-    public void setType(String type) { this.type = type; }
+    public Long getItemId() {
+        return itemId;
+    }
 
-    public String getLanguage() { return language; }
-    public void setLanguage(String language) { this.language = language; }
+    public void setItemId(Long itemId) {
+        this.itemId = itemId;
+    }
 
-    public boolean isCopyrighted() { return copyrighted; }
-    public void setCopyrighted(boolean copyrighted) { this.copyrighted = copyrighted; }
+    public String getType() {
+        return type;
+    }
 
-    public boolean isPublished() { return published; }
-    public void setPublished(boolean published) { this.published = published; }
+    public void setType(String type) {
+        this.type = type;
+    }
 
-    public String getTitle() { return title; }
-    public void setTitle(String title) { this.title = title; }
+    public String getLanguage() {
+        return language;
+    }
 
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
+    public void setLanguage(String language) {
+        this.language = language;
+    }
 
-    public String getFamily() { return family; }
-    public void setFamily(String family) { this.family = family; }
+    public boolean isCopyrighted() {
+        return copyrighted;
+    }
 
-    public List<String> getCodes() { return codes; }
-    public void setCodes(List<String> codes) { this.codes = codes; }
+    public void setCopyrighted(boolean copyrighted) {
+        this.copyrighted = copyrighted;
+    }
 
-    public double getScore() { return score; }
-    public void setScore(double score) { this.score = score; }
+    public boolean isPublished() {
+        return published;
+    }
 
+    public void setPublished(boolean published) {
+        this.published = published;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getFamily() {
+        return family;
+    }
+
+    public void setFamily(String family) {
+        this.family = family;
+    }
+
+    public List<String> getCodes() {
+        return codes;
+    }
+
+    public void setCodes(List<String> codes) {
+        this.codes = codes;
+    }
+
+    public double getScore() {
+        return score;
+    }
+
+    public void setScore(double score) {
+        this.score = score;
+    }
 }

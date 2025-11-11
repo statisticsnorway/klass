@@ -1,14 +1,10 @@
 package no.ssb.klass.core.model;
 
 import static com.google.common.base.Preconditions.*;
+
 import static java.util.stream.Collectors.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import com.google.common.base.Strings;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -22,25 +18,31 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
-import org.apache.commons.lang3.StringUtils;
-
-import com.google.common.base.Strings;
-
+import no.ssb.klass.core.util.AlphaNumericalComparator;
 import no.ssb.klass.core.util.DateRange;
 import no.ssb.klass.core.util.KlassResourceNotFoundException;
 import no.ssb.klass.core.util.TimeUtil;
 import no.ssb.klass.core.util.Translatable;
 import no.ssb.klass.core.util.TranslatablePersistenceConverter;
-import no.ssb.klass.core.util.AlphaNumericalComparator;
+
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 @Entity
-@Table(indexes = {
-        // These must be case insensitive (JPA does not support specifying function
-        // based indexes)
-        @Index(columnList = "name_no", name = "cs_name_no_idx", unique = true),
-        @Index(columnList = "name_nn", name = "cs_name_nn_idx", unique = true),
-        @Index(columnList = "name_en", name = "cs_name_en_idx", unique = true)
-})
+@Table(
+        indexes = {
+            // These must be case insensitive (JPA does not support specifying function
+            // based indexes)
+            @Index(columnList = "name_no", name = "cs_name_no_idx", unique = true),
+            @Index(columnList = "name_nn", name = "cs_name_nn_idx", unique = true),
+            @Index(columnList = "name_en", name = "cs_name_en_idx", unique = true)
+        })
 public class ClassificationSeries extends BaseEntity implements ClassificationEntityOperations {
 
     private static final String PREFIX_CLASSIFICATION_NB = "Standard for ";
@@ -55,43 +57,63 @@ public class ClassificationSeries extends BaseEntity implements ClassificationEn
     // sorting and filtering
     @Column(name = "name_no")
     private String nameNo;
+
     @Column(name = "name_nn")
     private String nameNn;
+
     @Column(name = "name_en")
     private String nameEn;
+
     @Column(columnDefinition = "text", nullable = false)
     @Convert(converter = TranslatablePersistenceConverter.class)
     private Translatable description;
+
     @Column(nullable = false, columnDefinition = "integer")
     private Language primaryLanguage;
+
     @Column(nullable = false)
     private boolean copyrighted;
+
     @Column(nullable = false)
     private boolean includeShortName;
+
     @Column(nullable = false)
     private boolean includeNotes;
+
     @Column(nullable = false)
     private boolean includeValidity;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ClassificationType classificationType;
+
     @ManyToOne(optional = false)
     private ClassificationFamily classificationFamily;
+
     @ManyToOne(optional = false)
     private User contactPerson;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "classification")
     private final List<ClassificationVersion> classificationVersions = new ArrayList<>();
-    @ManyToMany
-    private final List<StatisticalUnit> statisticalUnits = new ArrayList<>();
+
+    @ManyToMany private final List<StatisticalUnit> statisticalUnits = new ArrayList<>();
+
     @Column(nullable = false)
     private boolean deleted;
+
     @Enumerated(EnumType.STRING)
     private MigratedFrom migratedFrom;
+
     @SuppressWarnings("unused")
     private Long migratedFromId;
 
-    public ClassificationSeries(Translatable name, Translatable description, boolean copyrighted,
-            Language primaryLanguage, ClassificationType classificationType, User contactPerson) {
+    public ClassificationSeries(
+            Translatable name,
+            Translatable description,
+            boolean copyrighted,
+            Language primaryLanguage,
+            ClassificationType classificationType,
+            User contactPerson) {
         this.primaryLanguage = checkNotNull(primaryLanguage);
         this.description = checkNotNull(description);
         checkArgument(!description.isEmpty(), "Description is empty");
@@ -149,8 +171,11 @@ public class ClassificationSeries extends BaseEntity implements ClassificationEn
     }
 
     public List<ClassificationVersion> getClassificationVersions() {
-        return classificationVersions.stream().filter(version -> !version.isDeleted())
-                .sorted(AlphaNumericalComparator.comparing(ClassificationVersion::getNameInPrimaryLanguage, true))
+        return classificationVersions.stream()
+                .filter(version -> !version.isDeleted())
+                .sorted(
+                        AlphaNumericalComparator.comparing(
+                                ClassificationVersion::getNameInPrimaryLanguage, true))
                 .collect(toList());
     }
 
@@ -168,9 +193,13 @@ public class ClassificationSeries extends BaseEntity implements ClassificationEn
                 throw new IllegalArgumentException("Only one draft allowed at any given time");
             }
         } else if (!getClassificationVersionsInRange(version.getDateRange()).isEmpty()) {
-            throw new IllegalArgumentException("Date range " + version.getDateRange()
-                    + " of version overlaps with already existing version: "
-                    + getClassificationVersionsInRange(version.getDateRange()).get(0).getNameInPrimaryLanguage());
+            throw new IllegalArgumentException(
+                    "Date range "
+                            + version.getDateRange()
+                            + " of version overlaps with already existing version: "
+                            + getClassificationVersionsInRange(version.getDateRange())
+                                    .get(0)
+                                    .getNameInPrimaryLanguage());
         }
         classificationVersions.add(version);
         version.setClassification(this);
@@ -188,8 +217,7 @@ public class ClassificationSeries extends BaseEntity implements ClassificationEn
     /**
      * drafts are excluded as they do not have a real date range.
      *
-     * @param dateRange
-     *                  that versions should overlap
+     * @param dateRange that versions should overlap
      * @return list of version that overlap provided DateRange
      */
     public List<ClassificationVersion> getClassificationVersionsInRange(DateRange dateRange) {
@@ -209,14 +237,12 @@ public class ClassificationSeries extends BaseEntity implements ClassificationEn
     /**
      * drafts are excluded as they do not have a real date range.
      *
-     * @param dateRange
-     *                      that versions should overlap
-     * @param includeFuture
-     *                      if future version is included
-     * @return list of version that overlap provided DateRange and futured versions
-     *         if value is true
+     * @param dateRange that versions should overlap
+     * @param includeFuture if future version is included
+     * @return list of version that overlap provided DateRange and futured versions if value is true
      */
-    public List<ClassificationVersion> getClassificationVersionsInRange(DateRange dateRange, Boolean includeFuture) {
+    public List<ClassificationVersion> getClassificationVersionsInRange(
+            DateRange dateRange, Boolean includeFuture) {
         checkNotNull(dateRange);
         List<ClassificationVersion> results = new ArrayList<>();
         for (ClassificationVersion classificationVersion : getClassificationVersions()) {
@@ -250,9 +276,8 @@ public class ClassificationSeries extends BaseEntity implements ClassificationEn
     }
 
     /**
-     * Find correspondenceTables that describes changes between versions of same
-     * classification, referred to as
-     * changeTables. A changeTable list changes between two classification versions.
+     * Find correspondenceTables that describes changes between versions of same classification,
+     * referred to as changeTables. A changeTable list changes between two classification versions.
      *
      * @param dateRange
      * @return
@@ -260,7 +285,8 @@ public class ClassificationSeries extends BaseEntity implements ClassificationEn
     public List<CorrespondenceTable> getChangeTables(DateRange dateRange, Boolean includeFuture) {
         checkNotNull(dateRange);
         List<CorrespondenceTable> changeTables = new ArrayList<>();
-        List<ClassificationVersion> versions = getClassificationVersionsInRange(dateRange, includeFuture);
+        List<ClassificationVersion> versions =
+                getClassificationVersionsInRange(dateRange, includeFuture);
         if (versions.size() < 2) {
             // Must have at least 2 versions to have a changeTable describing changes
             // between versions
@@ -273,30 +299,34 @@ public class ClassificationSeries extends BaseEntity implements ClassificationEn
         return changeTables;
     }
 
-    private CorrespondenceTable getChangeTableBetween(ClassificationVersion first,
-            ClassificationVersion second) {
+    private CorrespondenceTable getChangeTableBetween(
+            ClassificationVersion first, ClassificationVersion second) {
         List<CorrespondenceTable> changeTables = new ArrayList<>();
         changeTables.addAll(first.getCorrespondenceTablesWithTargetVersion(second));
         changeTables.addAll(second.getCorrespondenceTablesWithTargetVersion(first));
         if (changeTables.size() > 1) {
-            throw new KlassResourceNotFoundException(createMultipleChangeTablesFoundErrorMessage(first, second));
+            throw new KlassResourceNotFoundException(
+                    createMultipleChangeTablesFoundErrorMessage(first, second));
         }
         if (changeTables.isEmpty()) {
-            throw new KlassResourceNotFoundException(createCorrespondenceNotFoundErrorMessage(first, second));
+            throw new KlassResourceNotFoundException(
+                    createCorrespondenceNotFoundErrorMessage(first, second));
         }
         return changeTables.get(0);
     }
 
-    private String createMultipleChangeTablesFoundErrorMessage(ClassificationVersion first,
-            ClassificationVersion second) {
-        return first.getNameInPrimaryLanguage() + " has multiple change tables (correspondenceTables) with: " + second
-                .getNameInPrimaryLanguage();
+    private String createMultipleChangeTablesFoundErrorMessage(
+            ClassificationVersion first, ClassificationVersion second) {
+        return first.getNameInPrimaryLanguage()
+                + " has multiple change tables (correspondenceTables) with: "
+                + second.getNameInPrimaryLanguage();
     }
 
-    private String createCorrespondenceNotFoundErrorMessage(ClassificationVersion first,
-            ClassificationVersion second) {
-        return first.getNameInPrimaryLanguage() + " has no change table (correspondenceTable) with: " + second
-                .getNameInPrimaryLanguage();
+    private String createCorrespondenceNotFoundErrorMessage(
+            ClassificationVersion first, ClassificationVersion second) {
+        return first.getNameInPrimaryLanguage()
+                + " has no change table (correspondenceTable) with: "
+                + second.getNameInPrimaryLanguage();
     }
 
     public ClassificationVersion getNewestVersion() {
@@ -318,7 +348,8 @@ public class ClassificationSeries extends BaseEntity implements ClassificationEn
     // for 1 administration view
     // the alphanumerical sort algorithm is all ready a bit slow
     private void moveDraftToTop(List<ClassificationVersion> versions) {
-        Optional<ClassificationVersion> find = versions.stream().filter(StatisticalClassification::isDraft).findAny();
+        Optional<ClassificationVersion> find =
+                versions.stream().filter(StatisticalClassification::isDraft).findAny();
         if (find.isPresent()) {
             ClassificationVersion draft = find.get();
             versions.remove(draft);
@@ -449,8 +480,8 @@ public class ClassificationSeries extends BaseEntity implements ClassificationEn
         return getNameWithoutPrefix(prefixedName, language, classificationType);
     }
 
-    public static String getNameWithoutPrefix(String prefixedName, Language language,
-            ClassificationType classificationType) {
+    public static String getNameWithoutPrefix(
+            String prefixedName, Language language, ClassificationType classificationType) {
         String prefix = ClassificationSeries.getNamePrefix(language, classificationType);
         if (prefixedName.matches("^" + prefix + ".*")) {
             return prefixedName.substring(prefix.length());
@@ -523,5 +554,4 @@ public class ClassificationSeries extends BaseEntity implements ClassificationEn
         this.migratedFrom = migratedFrom;
         this.migratedFromId = migratedFromId;
     }
-
 }

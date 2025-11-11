@@ -37,5 +37,4 @@ public class PostmanConfig {
     public void setFromDisplayName(String fromDisplayName) {
         this.fromDisplayName = fromDisplayName;
     }
-
 }

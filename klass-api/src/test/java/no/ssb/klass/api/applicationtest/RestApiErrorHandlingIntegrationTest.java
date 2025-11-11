@@ -2,11 +2,8 @@ package no.ssb.klass.api.applicationtest;
 
 import static io.restassured.RestAssured.*;
 
-import io.restassured.http.ContentType;
-
 import no.ssb.klass.api.util.RestConstants;
 
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;

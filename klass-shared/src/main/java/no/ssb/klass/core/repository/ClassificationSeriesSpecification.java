@@ -1,9 +1,5 @@
 package no.ssb.klass.core.repository;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.JoinType;
@@ -11,16 +7,19 @@ import jakarta.persistence.criteria.Path;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 
-import org.springframework.data.jpa.domain.Specification;
-
 import no.ssb.klass.core.model.ClassificationSeries;
 import no.ssb.klass.core.model.ClassificationType;
 
+import org.springframework.data.jpa.domain.Specification;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 /**
  * Specifies what classifications to find.
- * <p>
- * Note: deleted and copyrighted classifications are not included in result.
  *
+ * <p>Note: deleted and copyrighted classifications are not included in result.
  */
 public class ClassificationSeriesSpecification implements Specification<ClassificationSeries> {
     private final boolean includeCodelists;
@@ -31,32 +30,38 @@ public class ClassificationSeriesSpecification implements Specification<Classifi
         this(includeCodelists, changedSince, false);
     }
 
-    public ClassificationSeriesSpecification(boolean includeCodelists, Date changedSince, boolean onlyPublic) {
+    public ClassificationSeriesSpecification(
+            boolean includeCodelists, Date changedSince, boolean onlyPublic) {
         this.includeCodelists = includeCodelists;
         this.changedSince = changedSince;
         this.onlyPublic = onlyPublic;
     }
 
     @Override
-    public Predicate toPredicate(Root<ClassificationSeries> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+    public Predicate toPredicate(
+            Root<ClassificationSeries> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
         List<Predicate> predicates = new ArrayList<>();
         predicates.add(cb.equal(root.get("copyrighted"), false));
         predicates.add(cb.equal(root.get("deleted"), false));
 
         if (onlyPublic) {
-            Path<Object> versionList = root.joinList("classificationVersions", JoinType.INNER).get("published");
-            Predicate published = cb.or(cb.equal(versionList.get("published_no"), true),
-                    cb.equal(versionList.get("published_nn"), true),
-                    cb.equal(versionList.get("published_en"), true));
+            Path<Object> versionList =
+                    root.joinList("classificationVersions", JoinType.INNER).get("published");
+            Predicate published =
+                    cb.or(
+                            cb.equal(versionList.get("published_no"), true),
+                            cb.equal(versionList.get("published_nn"), true),
+                            cb.equal(versionList.get("published_en"), true));
             predicates.add(published);
             query.distinct(true);
             query.orderBy(cb.asc(root.get("id")));
         }
         if (!includeCodelists) {
-            predicates.add(cb.equal(root.get("classificationType"), ClassificationType.CLASSIFICATION));
+            predicates.add(
+                    cb.equal(root.get("classificationType"), ClassificationType.CLASSIFICATION));
         }
         if (changedSince != null) {
-            predicates.add(cb.greaterThan(root.<Date> get("lastModified"), changedSince));
+            predicates.add(cb.greaterThan(root.<Date>get("lastModified"), changedSince));
         }
 
         return andTogether(predicates, cb);

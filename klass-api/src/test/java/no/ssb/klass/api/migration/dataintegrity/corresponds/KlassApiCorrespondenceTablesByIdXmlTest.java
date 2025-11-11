@@ -1,13 +1,15 @@
 package no.ssb.klass.api.migration.dataintegrity.corresponds;
 
+import static no.ssb.klass.api.migration.MigrationTestConstants.*;
+import static no.ssb.klass.api.migration.MigrationTestUtils.*;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
 import io.restassured.response.Response;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-
-import static no.ssb.klass.api.migration.MigrationTestConstants.*;
-import static no.ssb.klass.api.migration.MigrationTestUtils.*;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class KlassApiCorrespondenceTablesByIdXmlTest extends AbstractKlassApiCorrespondsTest {
 
@@ -16,18 +18,21 @@ public class KlassApiCorrespondenceTablesByIdXmlTest extends AbstractKlassApiCor
         int correspondenceTableId = 1111;
 
         String path = getCorrespondenceTableByIdPath(correspondenceTableId);
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi( path, null,APPLICATION_XML);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi( path, null,APPLICATION_XML);
+        Response sourceResponse =
+                klassApiMigrationClient.getFromSourceApi(path, null, APPLICATION_XML);
+        Response targetResponse =
+                klassApiMigrationClient.getFromTargetApi(path, null, APPLICATION_XML);
 
         assertApiResponseIsNotNull(sourceResponse);
 
-        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+        assertStatusCodesEqual(
+                sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
-        if(sourceResponse.getStatusCode() != 200) {
+        if (sourceResponse.getStatusCode() != 200) {
             System.out.println(LOG_MESSAGE_STATUS_CODE + sourceResponse.getStatusCode());
-            assertThat(compareError(correspondenceTableId, sourceResponse, targetResponse)).isTrue();
-        }
-        else{
+            assertThat(compareError(correspondenceTableId, sourceResponse, targetResponse))
+                    .isTrue();
+        } else {
             validateXmlItems(sourceResponse, targetResponse, pathNamesCorrespondenceTableXml);
         }
     }
@@ -37,61 +42,66 @@ public class KlassApiCorrespondenceTablesByIdXmlTest extends AbstractKlassApiCor
     void getCorrespondenceTable(Integer correspondenceTableId) {
 
         String path = getCorrespondenceTableByIdPath(correspondenceTableId);
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, null,APPLICATION_XML);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, null,APPLICATION_XML);
+        Response sourceResponse =
+                klassApiMigrationClient.getFromSourceApi(path, null, APPLICATION_XML);
+        Response targetResponse =
+                klassApiMigrationClient.getFromTargetApi(path, null, APPLICATION_XML);
 
         assertApiResponseIsNotNull(sourceResponse);
 
-        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+        assertStatusCodesEqual(
+                sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
-        if(sourceResponse.getStatusCode() != 200) {
-            assertThat(compareError(correspondenceTableId, sourceResponse, targetResponse)).isTrue();
-        }
-        else{
+        if (sourceResponse.getStatusCode() != 200) {
+            assertThat(compareError(correspondenceTableId, sourceResponse, targetResponse))
+                    .isTrue();
+        } else {
             validateXmlItems(sourceResponse, targetResponse, pathNamesCorrespondenceTableXml);
         }
     }
-
 
     @ParameterizedTest
     @MethodSource("correspondenceIdRangeProvider")
     void getCorrespondenceTableLanguageEn(int correspondenceTableId) {
         String path = getCorrespondenceTableByIdPath(correspondenceTableId);
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageEn,APPLICATION_XML);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageEn,APPLICATION_XML);
+        Response sourceResponse =
+                klassApiMigrationClient.getFromSourceApi(path, paramsLanguageEn, APPLICATION_XML);
+        Response targetResponse =
+                klassApiMigrationClient.getFromTargetApi(path, paramsLanguageEn, APPLICATION_XML);
 
         assertApiResponseIsNotNull(sourceResponse);
 
-        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+        assertStatusCodesEqual(
+                sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
-        if(sourceResponse.getStatusCode() != 200) {
-            assertThat(compareError(correspondenceTableId, sourceResponse, targetResponse)).isTrue();
-        }
-        else{
+        if (sourceResponse.getStatusCode() != 200) {
+            assertThat(compareError(correspondenceTableId, sourceResponse, targetResponse))
+                    .isTrue();
+        } else {
             validateXmlItems(sourceResponse, targetResponse, pathNamesCorrespondenceTableXml);
         }
     }
-
-
 
     @ParameterizedTest
     @MethodSource("correspondenceIdRangeProvider")
     void getCorrespondenceTableLanguageNn(int correspondenceTableId) {
 
         String path = getCorrespondenceTableByIdPath(correspondenceTableId);
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageNn,APPLICATION_XML);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageNn,APPLICATION_XML);
+        Response sourceResponse =
+                klassApiMigrationClient.getFromSourceApi(path, paramsLanguageNn, APPLICATION_XML);
+        Response targetResponse =
+                klassApiMigrationClient.getFromTargetApi(path, paramsLanguageNn, APPLICATION_XML);
 
         assertApiResponseIsNotNull(sourceResponse);
 
-        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+        assertStatusCodesEqual(
+                sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
-        if(sourceResponse.getStatusCode() != 200) {
-            assertThat(compareError(correspondenceTableId, sourceResponse, targetResponse)).isTrue();
-        }
-        else{
+        if (sourceResponse.getStatusCode() != 200) {
+            assertThat(compareError(correspondenceTableId, sourceResponse, targetResponse))
+                    .isTrue();
+        } else {
             validateXmlItems(sourceResponse, targetResponse, pathNamesCorrespondenceTableXml);
         }
-
     }
 }

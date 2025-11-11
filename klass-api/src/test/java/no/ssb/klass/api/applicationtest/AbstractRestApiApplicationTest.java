@@ -42,14 +42,23 @@ import java.util.Date;
 
 @Testcontainers
 @ExtendWith(SpringExtension.class)
-@SpringBootTest(classes = {ApplicationTestConfig.class}, webEnvironment = WebEnvironment.RANDOM_PORT, properties = {
-        "spring.cloud.gcp.core.enabled=false",
-        "spring.cloud.gcp.config.enabled=false",
-        "spring.cloud.gcp.pubsub.enabled=false",
-        "spring.main.allow-bean-definition-overriding=true"
+@SpringBootTest(
+        classes = {ApplicationTestConfig.class},
+        webEnvironment = WebEnvironment.RANDOM_PORT,
+        properties = {
+            "spring.cloud.gcp.core.enabled=false",
+            "spring.cloud.gcp.config.enabled=false",
+            "spring.cloud.gcp.pubsub.enabled=false",
+            "spring.main.allow-bean-definition-overriding=true"
+        })
+@ActiveProfiles({
+    ConfigurationProfiles.POSTGRES_EMBEDDED,
+    ConfigurationProfiles.MOCK_MAILSERVER,
+    ConfigurationProfiles.MOCK_SEARCH
 })
-@ActiveProfiles({ConfigurationProfiles.POSTGRES_EMBEDDED, ConfigurationProfiles.MOCK_MAILSERVER, ConfigurationProfiles.MOCK_SEARCH})
-@AutoConfigureEmbeddedDatabase(provider = ZONKY, type = AutoConfigureEmbeddedDatabase.DatabaseType.POSTGRES)
+@AutoConfigureEmbeddedDatabase(
+        provider = ZONKY,
+        type = AutoConfigureEmbeddedDatabase.DatabaseType.POSTGRES)
 @ComponentScan(basePackageClasses = TranslatablePersistenceConverter.class)
 public abstract class AbstractRestApiApplicationTest {
 
@@ -57,25 +66,33 @@ public abstract class AbstractRestApiApplicationTest {
     public static final String REQUEST_WITH_ID = REQUEST + "/{classificationId}";
     public static final String REQUEST_SEARCH = REQUEST + "/search";
     public static final String REQUEST_WITH_ID_AND_CODES = REQUEST + "/{classificationId}/codes";
-    public static final String REQUEST_WITH_ID_AND_CODES_AT = REQUEST + "/{classificationId}/codesAt";
-    public static final String REQUEST_WITH_ID_AND_VARIANT = REQUEST + "/{classificationId}/variant";
-    public static final String REQUEST_WITH_ID_AND_VARIANT_AT = REQUEST + "/{classificationId}/variantAt";
-    public static final String REQUEST_WITH_ID_AND_CORRESPONDS = REQUEST + "/{classificationId}/corresponds";
-    public static final String REQUEST_WITH_ID_AND_CORRESPONDS_AT = REQUEST + "/{classificationId}/correspondsAt";
+    public static final String REQUEST_WITH_ID_AND_CODES_AT =
+            REQUEST + "/{classificationId}/codesAt";
+    public static final String REQUEST_WITH_ID_AND_VARIANT =
+            REQUEST + "/{classificationId}/variant";
+    public static final String REQUEST_WITH_ID_AND_VARIANT_AT =
+            REQUEST + "/{classificationId}/variantAt";
+    public static final String REQUEST_WITH_ID_AND_CORRESPONDS =
+            REQUEST + "/{classificationId}/corresponds";
+    public static final String REQUEST_WITH_ID_AND_CORRESPONDS_AT =
+            REQUEST + "/{classificationId}/correspondsAt";
 
-    public static final String REQUEST_CORRESPONDENCE_TABLES = RestConstants.CONTEXT_AND_VERSION_V1
-            + "/correspondencetables/{correspondencetablesId}";
+    public static final String REQUEST_CORRESPONDENCE_TABLES =
+            RestConstants.CONTEXT_AND_VERSION_V1 + "/correspondencetables/{correspondencetablesId}";
 
-    public static final String REQUEST_VERSIONS_WITH_ID = RestConstants.CONTEXT_AND_VERSION_V1
-            + "/versions/{versionsId}";
+    public static final String REQUEST_VERSIONS_WITH_ID =
+            RestConstants.CONTEXT_AND_VERSION_V1 + "/versions/{versionsId}";
 
-    public static final String REQUEST_SSB_SECTION = RestConstants.CONTEXT_AND_VERSION_V1 + "/ssbsections";
+    public static final String REQUEST_SSB_SECTION =
+            RestConstants.CONTEXT_AND_VERSION_V1 + "/ssbsections";
 
-    public static final String REQUEST_CLASSIFICATION_FAMILY = RestConstants.CONTEXT_AND_VERSION_V1 + "/classificationfamilies";
-    public static final String REQUEST_CLASSIFICATION_FAMILY_WITH_ID = REQUEST_CLASSIFICATION_FAMILY
-            + "/{classificationfamilyId}";
+    public static final String REQUEST_CLASSIFICATION_FAMILY =
+            RestConstants.CONTEXT_AND_VERSION_V1 + "/classificationfamilies";
+    public static final String REQUEST_CLASSIFICATION_FAMILY_WITH_ID =
+            REQUEST_CLASSIFICATION_FAMILY + "/{classificationfamilyId}";
 
-    public static final String REQUEST_WITH_ID_AND_CHANGES = REQUEST + "/{classificationId}/changes";
+    public static final String REQUEST_WITH_ID_AND_CHANGES =
+            REQUEST + "/{classificationId}/changes";
 
     public static final String JSON_SEARCH_RESULTS = "_embedded.searchResults";
     public static final String JSON_SEARCH_RESULT1 = "_embedded.searchResults[0]";
@@ -111,8 +128,8 @@ public abstract class AbstractRestApiApplicationTest {
     public static final String JSON_CORRESPONDENCES = "correspondenceItems";
 
     public static final String XML_CORRESPONDENCETABLE = "correspondenceTable";
-    public static final String XML_CORRESPONDENCETABLE_MAP = XML_CORRESPONDENCETABLE
-            + ".correspondenceMaps.correspondenceMap";
+    public static final String XML_CORRESPONDENCETABLE_MAP =
+            XML_CORRESPONDENCETABLE + ".correspondenceMaps.correspondenceMap";
 
     public static final int PAGE_SIZE = 20;
 
@@ -128,21 +145,15 @@ public abstract class AbstractRestApiApplicationTest {
     protected CorrespondenceTable correspondenceTable;
     protected ClassificationSeries badmintonCodelist;
 
-    @Autowired
-    protected ApplicationTestUtil applicationTestUtil;
+    @Autowired protected ApplicationTestUtil applicationTestUtil;
 
-    @Autowired
-    protected ClassificationService classificationService;
-    @Autowired
-    protected UserRepository userRepository;
-    @Autowired
-    protected ClassificationFamilyRepository classificationFamilyRepository;
-    @Autowired
-    protected ClassificationSeriesRepository seriesRepository;
-    @Autowired
-    protected CorrespondenceTableRepository correspondenceTableRepository;
-    @Autowired
-    protected TransactionTemplate template;
+    @Autowired protected ClassificationService classificationService;
+    @Autowired protected UserRepository userRepository;
+    @Autowired protected ClassificationFamilyRepository classificationFamilyRepository;
+    @Autowired protected ClassificationSeriesRepository seriesRepository;
+    @Autowired protected CorrespondenceTableRepository correspondenceTableRepository;
+    @Autowired protected TransactionTemplate template;
+
     @Value("${local.server.port}")
     protected int port;
 
@@ -155,8 +166,9 @@ public abstract class AbstractRestApiApplicationTest {
         User user2 = userRepository.save(TestUtil.createUser2());
         User user3 = userRepository.save(TestUtil.createUser3());
         TimeUtil.setClockSource(new ConstantClockSource(parseDate(CHANGED_SINCE_OLD_DATE)));
-        classificationFamily = classificationFamilyRepository.save(TestUtil
-                .createClassificationFamily("Befolkning"));
+        classificationFamily =
+                classificationFamilyRepository.save(
+                        TestUtil.createClassificationFamily("Befolkning"));
         kommuneinndeling = TestDataProvider.createClassificationKommuneinndeling();
         kommuneinndeling.setContactPerson(user);
         classificationFamily.addClassificationSeries(kommuneinndeling);
@@ -176,24 +188,25 @@ public abstract class AbstractRestApiApplicationTest {
         kommuneinndeling = classificationService.saveAndIndexClassification(kommuneinndeling);
         bydelsinndeling = classificationService.saveAndIndexClassification(bydelsinndeling);
 
-        correspondenceTable = TestDataProvider.createAndAddCorrespondenceTable(kommuneinndeling,
-                bydelsinndeling);
+        correspondenceTable =
+                TestDataProvider.createAndAddCorrespondenceTable(kommuneinndeling, bydelsinndeling);
         correspondenceTableRepository.save(correspondenceTable);
-        correspondenceTableRepository
-                .save(TestDataProvider.createAndAddCorrespondenceTableTableFutureVersion(kommuneinndeling,
-                        bydelsinndeling));
-        correspondenceTableRepository.save(TestDataProvider.createAndAddChangeCorrespondenceTable(
-                kommuneinndeling));
-        correspondenceTableRepository.save(TestDataProvider.createAndAddChangeCorrespondenceTableFutureVersion(
-                kommuneinndeling));
+        correspondenceTableRepository.save(
+                TestDataProvider.createAndAddCorrespondenceTableTableFutureVersion(
+                        kommuneinndeling, bydelsinndeling));
+        correspondenceTableRepository.save(
+                TestDataProvider.createAndAddChangeCorrespondenceTable(kommuneinndeling));
+        correspondenceTableRepository.save(
+                TestDataProvider.createAndAddChangeCorrespondenceTableFutureVersion(
+                        kommuneinndeling));
 
         TimeUtil.setClockSource(new ConstantClockSource(parseDate(CHANGED_SINCE_OLD_DATE)));
         classificationService.saveAndIndexClassification(kommuneinndeling);
         TimeUtil.revertClockSource();
 
         TransactionStatus transaction = template.getTransactionManager().getTransaction(null);
-        seriesRepository.updateClassificationLastModified(bydelsinndeling.getId(), bydelsinndeling
-                .getLastModified());
+        seriesRepository.updateClassificationLastModified(
+                bydelsinndeling.getId(), bydelsinndeling.getLastModified());
         template.getTransactionManager().commit(transaction);
         // testDataInitialized = true;
 
@@ -207,5 +220,4 @@ public abstract class AbstractRestApiApplicationTest {
             throw new RuntimeException("unable to parse date", e);
         }
     }
-
 }

@@ -1,13 +1,15 @@
 package no.ssb.klass.api.migration.dataintegrity.versions;
 
+import static no.ssb.klass.api.migration.MigrationTestConstants.*;
+import static no.ssb.klass.api.migration.MigrationTestUtils.*;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
 import io.restassured.response.Response;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-
-import static no.ssb.klass.api.migration.MigrationTestConstants.*;
-import static no.ssb.klass.api.migration.MigrationTestUtils.*;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class KlassApiVersionByIdJsonTest extends AbstractKlassApiVersions {
 
@@ -16,24 +18,39 @@ public class KlassApiVersionByIdJsonTest extends AbstractKlassApiVersions {
     void getVersionById(int classificationId) {
 
         String path = getVersionByIdPath(classificationId);
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, null,null);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, null,null);
+        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, null, null);
+        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, null, null);
 
         assertApiResponseIsNotNull(sourceResponse);
 
-        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+        assertStatusCodesEqual(
+                sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
-        if(sourceResponse.getStatusCode() != 200) {
+        if (sourceResponse.getStatusCode() != 200) {
             assertThat(compareError(randomId, sourceResponse, targetResponse)).isTrue();
-        }
-        else{
+        } else {
             validateItems(sourceResponse, targetResponse, pathNamesVersionsById);
             validateList(sourceResponse, targetResponse, PUBLISHED);
             validateList(sourceResponse, targetResponse, CHANGELOGS);
             validateList(sourceResponse, targetResponse, LEVELS);
-            validatePathListWithObjects(sourceResponse, targetResponse, CLASSIFICATIONS_VARIANTS, pathNamesClassificationVariants, ID);
-            validatePathListWithObjects(sourceResponse, targetResponse, CORRESPONDENCE_TABLES, pathNamesCorrespondenceTableVersions,ID);
-            validatePathListWithObjects(sourceResponse, targetResponse, CLASSIFICATION_ITEMS, pathNamesVersionsClassificationItems, CODE);
+            validatePathListWithObjects(
+                    sourceResponse,
+                    targetResponse,
+                    CLASSIFICATIONS_VARIANTS,
+                    pathNamesClassificationVariants,
+                    ID);
+            validatePathListWithObjects(
+                    sourceResponse,
+                    targetResponse,
+                    CORRESPONDENCE_TABLES,
+                    pathNamesCorrespondenceTableVersions,
+                    ID);
+            validatePathListWithObjects(
+                    sourceResponse,
+                    targetResponse,
+                    CLASSIFICATION_ITEMS,
+                    pathNamesVersionsClassificationItems,
+                    CODE);
         }
     }
 
@@ -41,24 +58,41 @@ public class KlassApiVersionByIdJsonTest extends AbstractKlassApiVersions {
     void getVersionByIdLanguageEn() {
 
         String path = getVersionByIdPath(randomId);
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi( path, paramsLanguageEn,null);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi( path, paramsLanguageEn,null);
+        Response sourceResponse =
+                klassApiMigrationClient.getFromSourceApi(path, paramsLanguageEn, null);
+        Response targetResponse =
+                klassApiMigrationClient.getFromTargetApi(path, paramsLanguageEn, null);
 
         assertApiResponseIsNotNull(sourceResponse);
 
-        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+        assertStatusCodesEqual(
+                sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
-        if(sourceResponse.getStatusCode() != 200) {
+        if (sourceResponse.getStatusCode() != 200) {
             assertThat(compareError(randomId, sourceResponse, targetResponse)).isTrue();
-        }
-        else{
+        } else {
             validateItems(sourceResponse, targetResponse, pathNamesVersionsById);
             validateList(sourceResponse, targetResponse, PUBLISHED);
             validateList(sourceResponse, targetResponse, CHANGELOGS);
             validateList(sourceResponse, targetResponse, LEVELS);
-            validatePathListWithObjects(sourceResponse, targetResponse, CLASSIFICATIONS_VARIANTS, pathNamesClassificationVariants, ID);
-            validatePathListWithObjects(sourceResponse, targetResponse, CORRESPONDENCE_TABLES, pathNamesCorrespondenceTableVersions,ID);
-            validatePathListWithObjects(sourceResponse, targetResponse, CLASSIFICATION_ITEMS, pathNamesVersionsClassificationItems, CODE);
+            validatePathListWithObjects(
+                    sourceResponse,
+                    targetResponse,
+                    CLASSIFICATIONS_VARIANTS,
+                    pathNamesClassificationVariants,
+                    ID);
+            validatePathListWithObjects(
+                    sourceResponse,
+                    targetResponse,
+                    CORRESPONDENCE_TABLES,
+                    pathNamesCorrespondenceTableVersions,
+                    ID);
+            validatePathListWithObjects(
+                    sourceResponse,
+                    targetResponse,
+                    CLASSIFICATION_ITEMS,
+                    pathNamesVersionsClassificationItems,
+                    CODE);
         }
     }
 
@@ -66,24 +100,41 @@ public class KlassApiVersionByIdJsonTest extends AbstractKlassApiVersions {
     void getVersionByIdLanguageNn() {
 
         String path = getVersionByIdPath(randomId);
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi(path, paramsLanguageNn,null);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi(path, paramsLanguageNn,null);
+        Response sourceResponse =
+                klassApiMigrationClient.getFromSourceApi(path, paramsLanguageNn, null);
+        Response targetResponse =
+                klassApiMigrationClient.getFromTargetApi(path, paramsLanguageNn, null);
 
         assertApiResponseIsNotNull(sourceResponse);
 
-        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+        assertStatusCodesEqual(
+                sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
-        if(sourceResponse.getStatusCode() != 200) {
+        if (sourceResponse.getStatusCode() != 200) {
             assertThat(compareError(randomId, sourceResponse, targetResponse)).isTrue();
-        }
-        else{
+        } else {
             validateItems(sourceResponse, targetResponse, pathNamesVersionsById);
             validateList(sourceResponse, targetResponse, PUBLISHED);
             validateList(sourceResponse, targetResponse, CHANGELOGS);
             validateList(sourceResponse, targetResponse, LEVELS);
-            validatePathListWithObjects(sourceResponse, targetResponse, CLASSIFICATIONS_VARIANTS, pathNamesClassificationVariants, ID);
-            validatePathListWithObjects(sourceResponse, targetResponse, CORRESPONDENCE_TABLES, pathNamesCorrespondenceTableVersions,ID);
-            validatePathListWithObjects(sourceResponse, targetResponse, CLASSIFICATION_ITEMS, pathNamesVersionsClassificationItems, CODE);
+            validatePathListWithObjects(
+                    sourceResponse,
+                    targetResponse,
+                    CLASSIFICATIONS_VARIANTS,
+                    pathNamesClassificationVariants,
+                    ID);
+            validatePathListWithObjects(
+                    sourceResponse,
+                    targetResponse,
+                    CORRESPONDENCE_TABLES,
+                    pathNamesCorrespondenceTableVersions,
+                    ID);
+            validatePathListWithObjects(
+                    sourceResponse,
+                    targetResponse,
+                    CLASSIFICATION_ITEMS,
+                    pathNamesVersionsClassificationItems,
+                    CODE);
         }
     }
 
@@ -92,24 +143,41 @@ public class KlassApiVersionByIdJsonTest extends AbstractKlassApiVersions {
 
         String path = getVersionByIdPath(randomId);
 
-        Response sourceResponse = klassApiMigrationClient.getFromSourceApi( path, paramsIncludeFuture,null);
-        Response targetResponse = klassApiMigrationClient.getFromTargetApi( path, paramsIncludeFuture,null);
+        Response sourceResponse =
+                klassApiMigrationClient.getFromSourceApi(path, paramsIncludeFuture, null);
+        Response targetResponse =
+                klassApiMigrationClient.getFromTargetApi(path, paramsIncludeFuture, null);
 
         assertApiResponseIsNotNull(sourceResponse);
 
-        assertStatusCodesEqual(sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
+        assertStatusCodesEqual(
+                sourceResponse.getStatusCode(), targetResponse.getStatusCode(), path);
 
-        if(sourceResponse.getStatusCode() != 200) {
+        if (sourceResponse.getStatusCode() != 200) {
             assertThat(compareError(randomId, sourceResponse, targetResponse)).isTrue();
-        }
-        else{
+        } else {
             validateItems(sourceResponse, targetResponse, pathNamesVersionsById);
             validateList(sourceResponse, targetResponse, PUBLISHED);
             validateList(sourceResponse, targetResponse, CHANGELOGS);
             validateList(sourceResponse, targetResponse, LEVELS);
-            validatePathListWithObjects(sourceResponse, targetResponse, CLASSIFICATIONS_VARIANTS, pathNamesClassificationVariants, ID);
-            validatePathListWithObjects(sourceResponse, targetResponse, CORRESPONDENCE_TABLES, pathNamesCorrespondenceTableVersions,ID);
-            validatePathListWithObjects(sourceResponse, targetResponse, CLASSIFICATION_ITEMS, pathNamesVersionsClassificationItems, CODE);
+            validatePathListWithObjects(
+                    sourceResponse,
+                    targetResponse,
+                    CLASSIFICATIONS_VARIANTS,
+                    pathNamesClassificationVariants,
+                    ID);
+            validatePathListWithObjects(
+                    sourceResponse,
+                    targetResponse,
+                    CORRESPONDENCE_TABLES,
+                    pathNamesCorrespondenceTableVersions,
+                    ID);
+            validatePathListWithObjects(
+                    sourceResponse,
+                    targetResponse,
+                    CLASSIFICATION_ITEMS,
+                    pathNamesVersionsClassificationItems,
+                    CODE);
         }
     }
 }
