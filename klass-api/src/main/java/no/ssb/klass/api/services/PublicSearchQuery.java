@@ -53,12 +53,19 @@ public class PublicSearchQuery {
                                         .prefixLength(2)
                                         .maxExpansions(30)
                                         .boost(10.0f))
-                        .should(
+                        .should(QueryBuilders.multiMatchQuery(query)
+                                .field("description", 2.0f)
+                                .operator(Operator.OR)
+                                .boost(2.0f))
+                        // Separate handling for codes
+                        .should(QueryBuilders.termsQuery("codes", query.split(","))  // exact match
+                                .boost(0.5f))
+                        /*.should(
                                 QueryBuilders.multiMatchQuery(query)
                                         .field("description", 2.0f)
                                         .field("codes", 0.5f)
                                         .operator(Operator.OR)
-                                        .boost(2.0f))
+                                        .boost(2.0f))*/
                         .filter(filterBuilder)
                         .minimumShouldMatch(1);
 
