@@ -315,11 +315,12 @@ public final class TestDataProvider {
         ClassificationSeries classification = TestUtil.createCodelist(COPYRIGHTED_CODELIST_NAVN_NO, COPYRIGHTED_CODELIST_BESKRIVELSE);
 
         classification.setContactPerson(user);
-        ClassificationVersion version = TestUtil.createClassificationVersion(DateRange.create("2025-01-01", null));
+        ClassificationVersion version = TestUtil.createClassificationVersion(DateRange.create("2025-01-01", TestDataProvider.TEN_YEARS_LATER_DATE));
         Level level = TestUtil.createLevel(1);
         version.addLevel(level);
         version.addClassificationItem(TestUtil.createClassificationItem("A00-B99", "Infeksjoner"),
                 level.getLevelNumber(), null);
+        version.publish(Language.NB);
         classification.addClassificationVersion(version);
         classification.setCopyrighted(true);
         return classification;

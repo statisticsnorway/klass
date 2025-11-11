@@ -42,8 +42,9 @@ public class RestApiListClassificationFamilyIntegrationTest extends AbstractRest
                 .contentType(ContentType.JSON)
                 .body("_embedded.classificationFamilies.size()", equalTo(1))
                 .body("_embedded.classificationFamilies[0].name", equalTo(classificationFamily.getName()))
+                // does not return copyrighted - one test data is copyrighted
                 .body("_embedded.classificationFamilies[0].numberOfClassifications", equalTo(classificationFamily
-                        .getClassificationSeriesBySectionAndClassificationType(null, null).size()))
+                        .getClassificationSeriesBySectionAndClassificationType(null, null).size()-1))
                 // links
                 .body(JSON_LINKS + ".self.href", containsString(REQUEST_CLASSIFICATION_FAMILY));
     }

@@ -24,7 +24,7 @@ public class RestApiClassificationFamilyIntegrationTest extends AbstractRestApiA
                 .assertThat().contentType(ContentType.JSON)
                 // classificationFamily
                 .assertThat().body("name", equalTo(classificationFamily.getName()))
-                // classifications
+                // classification
                 .assertThat().body("classifications.size()", equalTo(classificationFamily.getClassificationSeriesBySectionAndClassificationType(null,
                 ClassificationType.CLASSIFICATION).size()))
 
@@ -46,8 +46,9 @@ public class RestApiClassificationFamilyIntegrationTest extends AbstractRestApiA
                 // classificationFamily
                 .assertThat().body("name", equalTo(classificationFamily.getName()))
                 // classifications
+                // Does not return copyrighted  - there is one copyrighted in test data
                 .assertThat().body("classifications.size()", equalTo(classificationFamily.getClassificationSeriesBySectionAndClassificationType(null,
-                null).size()))
+                null).size()-1))
 
                 // links
                 .body(JSON_LINKS + ".self.href", containsString(urlParts));
