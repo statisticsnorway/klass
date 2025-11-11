@@ -1,0 +1,17 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Data Integrity test &lt;-&gt; prod" type="JUnit" factoryName="JUnit">
+    <module name="klass-api" />
+    <option name="MAIN_CLASS_NAME" value="" />
+    <option name="METHOD_NAME" value="" />
+    <option name="TEST_OBJECT" value="tags" />
+    <envs>
+      <env name="SOURCE_SERVICE_HOST" value="https://data.ssb.no" />
+      <env name="TARGET_SERVICE_HOST" value="https://data.test.ssb.no" />
+    </envs>
+    <dir value="$PROJECT_DIR$/klass-api/src/test/java/no/ssb/klass/api/migration/dataintegrity" />
+    <tag value="data-integrity&amp;!comprehensive" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
