@@ -5,8 +5,8 @@ import static no.ssb.klass.api.migration.MigrationTestConstants.*;
 import io.restassured.response.Response;
 
 import no.ssb.klass.api.migration.KlassApiMigrationClient;
-
 import no.ssb.klass.api.migration.MigrationTestConfig;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeAll;
