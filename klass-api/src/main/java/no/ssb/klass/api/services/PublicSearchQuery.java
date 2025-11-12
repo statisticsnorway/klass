@@ -3,6 +3,7 @@ package no.ssb.klass.api.services;
 import no.ssb.klass.core.model.ClassificationType;
 import no.ssb.klass.core.model.Language;
 
+import org.opensearch.common.unit.Fuzziness;
 import org.opensearch.data.client.orhlc.NativeSearchQueryBuilder;
 import org.opensearch.index.query.BoolQueryBuilder;
 import org.opensearch.index.query.Operator;
@@ -37,16 +38,31 @@ public class PublicSearchQuery {
         if (filterOnSection != null) {
             filterBuilder.must(QueryBuilders.termQuery("section", filterOnSection));
         }
+        // Do not display copyrighted in search
+        filterBuilder.mustNot(QueryBuilders.termQuery("copyrighted", true));
 
+        // Building a query of multiple conditions
+        // Boosting match on title
+        // Adding fuzziness on title to accept incomplete search words
         BoolQueryBuilder finalQuery =
                 QueryBuilders.boolQuery()
-                        .must(
-                                QueryBuilders.queryStringQuery(query)
-                                        .field("title", 3.0f)
+                        // 'matchPhrasePrefixQuery' will match on 'kommune' in 'kommuneinndeling'
+                        .should(QueryBuilders.matchPhrasePrefixQuery("title", query).boost(10.0f))
+                        // will match "kommun", "kommune" with "kommuner"
+                        .should(
+                                QueryBuilders.matchQuery("title", query)
+                                        .fuzziness(Fuzziness.fromEdits(1))
+                                        .prefixLength(2)
+                                        .maxExpansions(30)
+                                        .boost(5.0f))
+                        .should(
+                                QueryBuilders.multiMatchQuery(query)
                                         .field("description", 2.0f)
-                                        .field("codes", 1.0f)
-                                        .defaultOperator(Operator.OR))
-                        .filter(filterBuilder);
+                                        .field("codes", 0.5f)
+                                        .operator(Operator.OR)
+                                        .boost(2.0f))
+                        .filter(filterBuilder)
+                        .minimumShouldMatch(1);
 
         NativeSearchQueryBuilder nativeQueryBuilder =
                 new NativeSearchQueryBuilder()

@@ -15,9 +15,9 @@ import org.springframework.http.HttpStatus;
  * @author Mads Lundemo, SSB.
  *     <p>Testsuite that test the list (all) classifications (tests with JSON and XML)
  */
-public class RestApiListClassificationIntegrationTest extends AbstractRestApiApplicationTest {
+class RestApiListClassificationIntegrationTest extends AbstractRestApiApplicationTest {
     @Test
-    public void restServiceListClassificationsJSON() {
+    void restServiceListClassificationsJSON() {
         given().port(port)
                 .accept(ContentType.JSON)
                 .get(REQUEST)
@@ -25,64 +25,21 @@ public class RestApiListClassificationIntegrationTest extends AbstractRestApiApp
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .contentType(ContentType.JSON)
-                .body(JSON_CLASSIFICATIONS + ".size()", equalTo(2))
-                // result 1
-                .body(
-                        JSON_CLASSIFICATION1 + ".name",
-                        equalTo(TestDataProvider.KOMMUNEINNDELING_NAVN_NO))
-                .body(
-                        JSON_CLASSIFICATION1 + "._links.self.href",
-                        containsString(REQUEST + "/" + kommuneinndeling.getId()))
-                // result 2
-                .body(
-                        JSON_CLASSIFICATION2 + ".name",
-                        equalTo(TestDataProvider.BYDELSINNDELING_NAVN_NO))
-                .body(
-                        JSON_CLASSIFICATION2 + "._links.self.href",
-                        containsString(REQUEST + "/" + bydelsinndeling.getId()))
-                // links
-                .body(JSON_LINKS + ".self.href", containsString(REQUEST))
-                .body(JSON_LINKS + ".search.href", containsString(REQUEST_SEARCH))
-                // paging
-                .body(JSON_PAGE + ".size", equalTo(20))
-                .body(JSON_PAGE + ".totalElements", equalTo(2))
-                .body(JSON_PAGE + ".totalPages", equalTo(1))
-                .body(JSON_PAGE + ".number", equalTo(0));
-    }
-
-    @Test
-    public void restServiceListClassificationsIncludeCodelistsJSON() {
-        given().port(port)
-                .accept(ContentType.JSON)
-                .param("includeCodelists", "true")
-                .get(REQUEST)
-                .prettyPeek()
-                .then()
-                .statusCode(HttpStatus.OK.value())
-                .contentType(ContentType.JSON)
                 .body(JSON_CLASSIFICATIONS + ".size()", equalTo(4))
                 // result 1
-                .body(
-                        JSON_CLASSIFICATION1 + ".name",
-                        equalTo(TestDataProvider.FAMILIEGRUPPERING_NAVN_NO))
-                .body(
-                        JSON_CLASSIFICATION1 + "._links.self.href",
-                        containsString(REQUEST + "/" + familieGrupperingCodelist.getId()))
-                // result 2
                 .body(
                         JSON_CLASSIFICATION3 + ".name",
                         equalTo(TestDataProvider.KOMMUNEINNDELING_NAVN_NO))
                 .body(
                         JSON_CLASSIFICATION3 + "._links.self.href",
                         containsString(REQUEST + "/" + kommuneinndeling.getId()))
-                // result 3
+                // result 2
                 .body(
                         JSON_CLASSIFICATION4 + ".name",
                         equalTo(TestDataProvider.BYDELSINNDELING_NAVN_NO))
                 .body(
                         JSON_CLASSIFICATION4 + "._links.self.href",
                         containsString(REQUEST + "/" + bydelsinndeling.getId()))
-
                 // links
                 .body(JSON_LINKS + ".self.href", containsString(REQUEST))
                 .body(JSON_LINKS + ".search.href", containsString(REQUEST_SEARCH))
@@ -94,7 +51,55 @@ public class RestApiListClassificationIntegrationTest extends AbstractRestApiApp
     }
 
     @Test
-    public void restServiceListClassificationsChangedSinceJSON() {
+    void restServiceListClassificationsIncludeCodelistsJSON() {
+        given().port(port)
+                .accept(ContentType.JSON)
+                .param("includeCodelists", "true")
+                .get(REQUEST)
+                .prettyPeek()
+                .then()
+                .statusCode(HttpStatus.OK.value())
+                .contentType(ContentType.JSON)
+                .body(JSON_CLASSIFICATIONS + ".size()", equalTo(6))
+                // result 1
+                .body(
+                        JSON_CLASSIFICATION1 + ".name",
+                        equalTo(TestDataProvider.FAMILIEGRUPPERING_NAVN_NO))
+                .body(
+                        JSON_CLASSIFICATION1 + "._links.self.href",
+                        containsString(REQUEST + "/" + familieGrupperingCodelist.getId()))
+
+                // result 2
+                .body(
+                        JSON_CLASSIFICATION2 + ".name",
+                        equalTo(TestDataProvider.BADMINTON_KODELISTE_NAVN))
+                .body(
+                        JSON_CLASSIFICATION2 + "._links.self.href",
+                        containsString(REQUEST + "/" + badmintonCodelist.getId()))
+                .body(JSON_CLASSIFICATION4 + ".name", equalTo(TestDataProvider.SPORT_NAVN_NO))
+                .body(
+                        JSON_CLASSIFICATION4 + "._links.self.href",
+                        containsString(REQUEST + "/" + sport.getId()))
+                // result 3
+                .body(
+                        JSON_CLASSIFICATION5 + ".name",
+                        equalTo(TestDataProvider.KOMMUNEINNDELING_NAVN_NO))
+                .body(
+                        JSON_CLASSIFICATION5 + "._links.self.href",
+                        containsString(REQUEST + "/" + kommuneinndeling.getId()))
+
+                // links
+                .body(JSON_LINKS + ".self.href", containsString(REQUEST))
+                .body(JSON_LINKS + ".search.href", containsString(REQUEST_SEARCH))
+                // paging
+                .body(JSON_PAGE + ".size", equalTo(20))
+                .body(JSON_PAGE + ".totalElements", equalTo(6))
+                .body(JSON_PAGE + ".totalPages", equalTo(1))
+                .body(JSON_PAGE + ".number", equalTo(0));
+    }
+
+    @Test
+    void restServiceListClassificationsChangedSinceJSON() {
         // Spring's DateTimeFormat parser har changed the timezone offset format from ssZ to SSSXXX.
         given().port(port)
                 .accept(ContentType.JSON)
@@ -110,26 +115,26 @@ public class RestApiListClassificationIntegrationTest extends AbstractRestApiApp
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .contentType(ContentType.JSON)
-                .body(JSON_CLASSIFICATIONS + ".size()", equalTo(1))
+                .body(JSON_CLASSIFICATIONS + ".size()", equalTo(3))
                 // result 1
                 .body(
-                        JSON_CLASSIFICATION1 + ".name",
+                        JSON_CLASSIFICATION3 + ".name",
                         equalTo(TestDataProvider.BYDELSINNDELING_NAVN_NO))
                 .body(
-                        JSON_CLASSIFICATION1 + "._links.self.href",
+                        JSON_CLASSIFICATION3 + "._links.self.href",
                         containsString(REQUEST + "/" + bydelsinndeling.getId()))
                 // links
                 .body(JSON_LINKS + ".self.href", containsString(REQUEST))
                 .body(JSON_LINKS + ".search.href", containsString(REQUEST_SEARCH))
                 // paging
                 .body(JSON_PAGE + ".size", equalTo(20))
-                .body(JSON_PAGE + ".totalElements", equalTo(1))
+                .body(JSON_PAGE + ".totalElements", equalTo(3))
                 .body(JSON_PAGE + ".totalPages", equalTo(1))
                 .body(JSON_PAGE + ".number", equalTo(0));
     }
 
     @Test
-    public void restServiceListClassificationsXML() {
+    void restServiceListClassificationsXML() {
         given().port(port).accept(ContentType.XML).get(REQUEST).prettyPrint();
 
         given().port(port)
@@ -140,55 +145,8 @@ public class RestApiListClassificationIntegrationTest extends AbstractRestApiApp
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .contentType(ContentType.XML)
-                .body(XML_CLASSIFICATIONS + ".size()", equalTo(2))
-                // result 1
-                .body(
-                        XML_CLASSIFICATION1 + ".name",
-                        equalTo(TestDataProvider.KOMMUNEINNDELING_NAVN_NO))
-                .body(XML_CLASSIFICATION1 + ".link.rel", equalTo("self"))
-                .body(
-                        XML_CLASSIFICATION1 + ".link.href",
-                        containsString(REQUEST + "/" + kommuneinndeling.getId()))
-                // result 2
-                .body(
-                        XML_CLASSIFICATION2 + ".name",
-                        equalTo(TestDataProvider.BYDELSINNDELING_NAVN_NO))
-                .body(XML_CLASSIFICATION2 + ".link.rel", equalTo("self"))
-                .body(
-                        XML_CLASSIFICATION2 + ".link.href",
-                        containsString(REQUEST + "/" + bydelsinndeling.getId()))
-                // links
-                .body(XML_ROOT + ".link[0].rel", equalTo("self"))
-                .body(XML_ROOT + ".link[0].href", containsString(REQUEST))
-                .body(XML_ROOT + ".link[1].rel", equalTo("search"))
-                .body(XML_ROOT + ".link[1].href", containsString(REQUEST_SEARCH))
-                // paging
-                .body(XML_PAGE + ".size.toInteger();", equalTo(20))
-                .body(XML_PAGE + ".totalElements.toInteger();", equalTo(2))
-                .body(XML_PAGE + ".totalPages.toInteger();", equalTo(1))
-                .body(XML_PAGE + ".number.toInteger();", equalTo(0));
-    }
-
-    @Test
-    public void restServiceListClassificationsIncludeCodelistXML() {
-        given().port(port)
-                .accept(ContentType.XML)
-                .param("includeCodelists", "true")
-                .get(REQUEST)
-                .prettyPeek()
-                .then()
-                .statusCode(HttpStatus.OK.value())
-                .contentType(ContentType.XML)
                 .body(XML_CLASSIFICATIONS + ".size()", equalTo(4))
                 // result 1
-                .body(
-                        XML_CLASSIFICATION1 + ".name",
-                        equalTo(TestDataProvider.FAMILIEGRUPPERING_NAVN_NO))
-                .body(XML_CLASSIFICATION1 + ".link.rel", equalTo("self"))
-                .body(
-                        XML_CLASSIFICATION1 + ".link.href",
-                        containsString(REQUEST + "/" + familieGrupperingCodelist.getId()))
-                // result 2
                 .body(
                         XML_CLASSIFICATION3 + ".name",
                         equalTo(TestDataProvider.KOMMUNEINNDELING_NAVN_NO))
@@ -196,14 +154,6 @@ public class RestApiListClassificationIntegrationTest extends AbstractRestApiApp
                 .body(
                         XML_CLASSIFICATION3 + ".link.href",
                         containsString(REQUEST + "/" + kommuneinndeling.getId()))
-                // result 3
-                .body(
-                        XML_CLASSIFICATION4 + ".name",
-                        equalTo(TestDataProvider.BYDELSINNDELING_NAVN_NO))
-                .body(XML_CLASSIFICATION4 + ".link.rel", equalTo("self"))
-                .body(
-                        XML_CLASSIFICATION4 + ".link.href",
-                        containsString(REQUEST + "/" + bydelsinndeling.getId()))
 
                 // links
                 .body(XML_ROOT + ".link[0].rel", equalTo("self"))
@@ -218,7 +168,47 @@ public class RestApiListClassificationIntegrationTest extends AbstractRestApiApp
     }
 
     @Test
-    public void restServiceListClassificationsChangedSinceXML() {
+    void restServiceListClassificationsIncludeCodelistXML() {
+        given().port(port)
+                .accept(ContentType.XML)
+                .param("includeCodelists", "true")
+                .get(REQUEST)
+                .prettyPeek()
+                .then()
+                .statusCode(HttpStatus.OK.value())
+                .contentType(ContentType.XML)
+                .body(XML_CLASSIFICATIONS + ".size()", equalTo(6))
+                // result 1
+                .body(
+                        XML_CLASSIFICATION1 + ".name",
+                        equalTo(TestDataProvider.FAMILIEGRUPPERING_NAVN_NO))
+                .body(XML_CLASSIFICATION1 + ".link.rel", equalTo("self"))
+                .body(
+                        XML_CLASSIFICATION1 + ".link.href",
+                        containsString(REQUEST + "/" + familieGrupperingCodelist.getId()))
+                // result 2
+                .body(
+                        XML_CLASSIFICATION5 + ".name",
+                        equalTo(TestDataProvider.KOMMUNEINNDELING_NAVN_NO))
+                .body(XML_CLASSIFICATION5 + ".link.rel", equalTo("self"))
+                .body(
+                        XML_CLASSIFICATION5 + ".link.href",
+                        containsString(REQUEST + "/" + kommuneinndeling.getId()))
+
+                // links
+                .body(XML_ROOT + ".link[0].rel", equalTo("self"))
+                .body(XML_ROOT + ".link[0].href", containsString(REQUEST))
+                .body(XML_ROOT + ".link[1].rel", equalTo("search"))
+                .body(XML_ROOT + ".link[1].href", containsString(REQUEST_SEARCH))
+                // paging
+                .body(XML_PAGE + ".size.toInteger();", equalTo(20))
+                .body(XML_PAGE + ".totalElements.toInteger();", equalTo(6))
+                .body(XML_PAGE + ".totalPages.toInteger();", equalTo(1))
+                .body(XML_PAGE + ".number.toInteger();", equalTo(0));
+    }
+
+    @Test
+    void restServiceListClassificationsChangedSinceXML() {
         given().port(port)
                 .accept(ContentType.XML)
                 .param("changedSince", "2015-10-31T01:30:00.000-0200")
@@ -227,14 +217,14 @@ public class RestApiListClassificationIntegrationTest extends AbstractRestApiApp
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .contentType(ContentType.XML)
-                .body(XML_CLASSIFICATIONS + ".size()", equalTo(1))
+                .body(XML_CLASSIFICATIONS + ".size()", equalTo(3))
                 // result 1
                 .body(
-                        XML_CLASSIFICATION1 + ".name",
+                        XML_CLASSIFICATION3 + ".name",
                         equalTo(TestDataProvider.BYDELSINNDELING_NAVN_NO))
-                .body(XML_CLASSIFICATION1 + ".link.rel", equalTo("self"))
+                .body(XML_CLASSIFICATION3 + ".link.rel", equalTo("self"))
                 .body(
-                        XML_CLASSIFICATION1 + ".link.href",
+                        XML_CLASSIFICATION3 + ".link.href",
                         containsString(REQUEST + "/" + bydelsinndeling.getId()))
                 // links
                 .body(XML_ROOT + ".link[0].rel", equalTo("self"))
@@ -243,7 +233,7 @@ public class RestApiListClassificationIntegrationTest extends AbstractRestApiApp
                 .body(XML_ROOT + ".link[1].href", containsString(REQUEST_SEARCH))
                 // paging
                 .body(XML_PAGE + ".size.toInteger();", equalTo(20))
-                .body(XML_PAGE + ".totalElements.toInteger();", equalTo(1))
+                .body(XML_PAGE + ".totalElements.toInteger();", equalTo(3))
                 .body(XML_PAGE + ".totalPages.toInteger();", equalTo(1))
                 .body(XML_PAGE + ".number.toInteger();", equalTo(0));
     }

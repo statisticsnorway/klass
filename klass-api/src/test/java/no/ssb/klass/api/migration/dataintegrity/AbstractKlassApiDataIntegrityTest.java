@@ -34,9 +34,9 @@ public abstract class AbstractKlassApiDataIntegrityTest {
 
     protected static int lastClassificationId;
 
-    protected static int gender_standard_id = 2;
-    protected static int marital_status_standard_id = 19;
-    protected static int industry_classification_standard = 6;
+    protected static int genderStandardId = 2;
+    protected static int maritalStatusStandardId = 19;
+    protected static int industryClassificationStandard = 6;
     protected static String section320 = "320 - Seksjon for befolkningsstatistikk";
 
     public static String sourceHost;

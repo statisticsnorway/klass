@@ -94,9 +94,13 @@ public abstract class AbstractRestApiApplicationTest {
     public static final String REQUEST_WITH_ID_AND_CHANGES =
             REQUEST + "/{classificationId}/changes";
 
+    public static final String QUERY = "query";
+    public static final String INCLUDE_CODE_LISTS = "includeCodelists";
+    public static final String TRUE = "true";
     public static final String JSON_SEARCH_RESULTS = "_embedded.searchResults";
     public static final String JSON_SEARCH_RESULT1 = "_embedded.searchResults[0]";
     public static final String JSON_SEARCH_RESULT2 = "_embedded.searchResults[1]";
+    public static final String JSON_SEARCH_RESULT3 = "_embedded.searchResults[2]";
 
     public static final String XML_SEARCH_RESULTS = "PagedResources.contents.content";
     public static final String XML_SEARCH_RESULT1 = "PagedResources.contents.content[0]";
@@ -107,12 +111,14 @@ public abstract class AbstractRestApiApplicationTest {
     public static final String JSON_CLASSIFICATION2 = "_embedded.classifications[1]";
     public static final String JSON_CLASSIFICATION3 = "_embedded.classifications[2]";
     public static final String JSON_CLASSIFICATION4 = "_embedded.classifications[3]";
+    public static final String JSON_CLASSIFICATION5 = "_embedded.classifications[4]";
 
     public static final String XML_CLASSIFICATIONS = "PagedResources.contents.content";
     public static final String XML_CLASSIFICATION1 = "PagedResources.contents.content[0]";
     public static final String XML_CLASSIFICATION2 = "PagedResources.contents.content[1]";
     public static final String XML_CLASSIFICATION3 = "PagedResources.contents.content[2]";
     public static final String XML_CLASSIFICATION4 = "PagedResources.contents.content[3]";
+    public static final String XML_CLASSIFICATION5 = "PagedResources.contents.content[4]";
 
     public static final String JSON_PAGE = "page";
     public static final String XML_PAGE = "PagedResources.page";
@@ -144,6 +150,9 @@ public abstract class AbstractRestApiApplicationTest {
     protected ClassificationFamily classificationFamily;
     protected CorrespondenceTable correspondenceTable;
     protected ClassificationSeries badmintonCodelist;
+    protected ClassificationSeries badminton;
+    protected ClassificationSeries sport;
+    protected ClassificationSeries icd;
 
     @Autowired protected ApplicationTestUtil applicationTestUtil;
 
@@ -181,12 +190,25 @@ public abstract class AbstractRestApiApplicationTest {
         classificationFamily.addClassificationSeries(familieGrupperingCodelist);
         classificationService.saveAndIndexClassification(familieGrupperingCodelist);
 
-        badmintonCodelist = TestDataProvider.createBadmintonCodelist(user, user2, user3);
+        badmintonCodelist = TestDataProvider.createBadmintonCodeList(user, user2, user3);
         classificationFamily.addClassificationSeries(badmintonCodelist);
         classificationService.saveAndIndexClassification(badmintonCodelist);
 
+        badminton = TestDataProvider.createBadmintonClassification(user);
+        badminton.setContactPerson(user);
+        classificationFamily.addClassificationSeries(badminton);
+        badminton = classificationService.saveAndIndexClassification(badminton);
+
+        sport = TestDataProvider.createSportClassification(user);
+        sport.setContactPerson(user);
+        classificationFamily.addClassificationSeries(sport);
+        sport = classificationService.saveAndIndexClassification(sport);
+
         kommuneinndeling = classificationService.saveAndIndexClassification(kommuneinndeling);
         bydelsinndeling = classificationService.saveAndIndexClassification(bydelsinndeling);
+        icd = TestDataProvider.createCopyrightedCodeList(user);
+        classificationFamily.addClassificationSeries(icd);
+        icd = classificationService.saveAndIndexClassification(icd);
 
         correspondenceTable =
                 TestDataProvider.createAndAddCorrespondenceTable(kommuneinndeling, bydelsinndeling);

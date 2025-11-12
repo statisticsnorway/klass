@@ -14,11 +14,11 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.time.Instant;
 
-public class KlassApiClassificationChangesXmlTest extends AbstractKlassApiChanges {
+class KlassApiClassificationChangesXmlTest extends AbstractKlassApiChanges {
 
     @Test
     void getOneClassificationChanges() {
-        Integer classificationId = industry_classification_standard;
+        Integer classificationId = industryClassificationStandard;
 
         System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
 
@@ -137,7 +137,7 @@ public class KlassApiClassificationChangesXmlTest extends AbstractKlassApiChange
 
     @Test
     void getOneClassificationChangesIncludeFuture() {
-        int classificationId = industry_classification_standard;
+        int classificationId = industryClassificationStandard;
 
         String path = getChangesPath(classificationId);
         Response sourceResponse =

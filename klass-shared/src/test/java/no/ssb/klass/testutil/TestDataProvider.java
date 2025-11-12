@@ -33,6 +33,17 @@ public final class TestDataProvider {
     public static final String BYDELSINNDELING_NAVN_NO = "Standard for bydelsinndeling";
     public static final String BYDELSINNDELING_BESKRIVELSE_NO =
             "Bydel utgjør geografiske områder i en kommune";
+    public static final String BADMINTON_NAVN_NO = "Standard for Badminton";
+    public static final String BADMINTON_BESKRIVELSE_NO = "Testing search results for badminton";
+    public static final String SPORT_NAVN_NO = "Standard for sport";
+    public static final String SPORT_BESKRIVELSE_NO = "Testing search results for badminton";
+    public static final String BADMINTON_KODELISTE_NAVN = "Badminton";
+    public static final String BADMINTON_KODELISTE_BESKRIVELSE =
+            "Testing when version owning section is different from variant owning section badminton";
+
+    public static final String COPYRIGHTED_CODELIST_NAVN_NO = "Kodeliste for ICD-10";
+    public static final String COPYRIGHTED_CODELIST_BESKRIVELSE =
+            "Den internasjonale statistiske klassifikasjonen av sykdommer og beslektede helseproblemer";
 
     public static final String FAMILIEGRUPPERING_NAVN_NO = "Standard for gruppering av familier";
     public static final String FAMILIEGRUPPERING_BESKRIVELSE_NO =
@@ -334,11 +345,9 @@ public final class TestDataProvider {
         return classification;
     }
 
-    public static ClassificationSeries createBadmintonCodelist(User user, User user1, User user2) {
+    public static ClassificationSeries createBadmintonCodeList(User user, User user1, User user2) {
         ClassificationSeries classification =
-                TestUtil.createCodelist(
-                        "Badminton",
-                        "Testing when version owning section is different from variant owning section");
+                TestUtil.createCodelist(BADMINTON_KODELISTE_NAVN, BADMINTON_KODELISTE_BESKRIVELSE);
 
         classification.setContactPerson(user);
         ClassificationVersion version =
@@ -377,6 +386,73 @@ public final class TestDataProvider {
         version.addClassificationVariant(variant2);
         classification.addClassificationVersion(version);
 
+        return classification;
+    }
+
+    public static ClassificationSeries createBadmintonClassification(User user) {
+        ClassificationSeries classification =
+                TestUtil.createClassification(BADMINTON_NAVN_NO, BADMINTON_BESKRIVELSE_NO);
+
+        classification.setContactPerson(user);
+        ClassificationVersion version =
+                TestUtil.createClassificationVersion(
+                        DateRange.create("2014-01-01", TestDataProvider.TEN_YEARS_LATER_DATE));
+        Level level = TestUtil.createLevel(1);
+        version.addLevel(level);
+        version.addClassificationItem(
+                TestUtil.createClassificationItem("030101", "Spill"), level.getLevelNumber(), null);
+        version.addClassificationItem(
+                TestUtil.createClassificationItem("030102", "Konkurranser"),
+                level.getLevelNumber(),
+                null);
+        version.publish(Language.NB);
+        classification.addClassificationVersion(version);
+
+        return classification;
+    }
+
+    public static ClassificationSeries createSportClassification(User user) {
+        ClassificationSeries classification =
+                TestUtil.createClassification(SPORT_NAVN_NO, SPORT_BESKRIVELSE_NO);
+
+        classification.setContactPerson(user);
+        ClassificationVersion version =
+                TestUtil.createClassificationVersion(
+                        DateRange.create("2014-01-01", TestDataProvider.TEN_YEARS_LATER_DATE));
+        Level level = TestUtil.createLevel(1);
+        version.addLevel(level);
+        version.addClassificationItem(
+                TestUtil.createClassificationItem("030105", "Badminton"),
+                level.getLevelNumber(),
+                null);
+        version.addClassificationItem(
+                TestUtil.createClassificationItem("030106", "Tennis"),
+                level.getLevelNumber(),
+                null);
+        version.publish(Language.NB);
+        classification.addClassificationVersion(version);
+
+        return classification;
+    }
+
+    public static ClassificationSeries createCopyrightedCodeList(User user) {
+        ClassificationSeries classification =
+                TestUtil.createCodelist(
+                        COPYRIGHTED_CODELIST_NAVN_NO, COPYRIGHTED_CODELIST_BESKRIVELSE);
+
+        classification.setContactPerson(user);
+        ClassificationVersion version =
+                TestUtil.createClassificationVersion(
+                        DateRange.create("2025-01-01", TestDataProvider.TEN_YEARS_LATER_DATE));
+        Level level = TestUtil.createLevel(1);
+        version.addLevel(level);
+        version.addClassificationItem(
+                TestUtil.createClassificationItem("A00-B99", "Infeksjoner"),
+                level.getLevelNumber(),
+                null);
+        version.publish(Language.NB);
+        classification.addClassificationVersion(version);
+        classification.setCopyrighted(true);
         return classification;
     }
 

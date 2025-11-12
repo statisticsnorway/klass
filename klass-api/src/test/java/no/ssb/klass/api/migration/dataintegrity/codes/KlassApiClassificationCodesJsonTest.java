@@ -14,11 +14,11 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.time.Instant;
 
-public class KlassApiClassificationCodesJsonTest extends AbstractKlassApiCodesTest {
+class KlassApiClassificationCodesJsonTest extends AbstractKlassApiCodesTest {
 
     @Test
     void getOneClassificationWithCodes() {
-        int classificationId = industry_classification_standard;
+        int classificationId = industryClassificationStandard;
         System.out.println("Start test for ID " + classificationId + " at " + Instant.now());
 
         String path = getCodesPath(classificationId);
@@ -132,7 +132,7 @@ public class KlassApiClassificationCodesJsonTest extends AbstractKlassApiCodesTe
 
     @Test
     void getClassificationWithCodesLanguageNn() {
-        int classificationId = industry_classification_standard;
+        int classificationId = industryClassificationStandard;
 
         String path = getCodesPath(classificationId);
         Response sourceResponse =
@@ -155,7 +155,7 @@ public class KlassApiClassificationCodesJsonTest extends AbstractKlassApiCodesTe
     @Test
     void getClassificationWithCodesIncludeFuture() {
 
-        int classificationId = industry_classification_standard;
+        int classificationId = industryClassificationStandard;
 
         String path = getCodesPath(classificationId);
         Response sourceResponse =

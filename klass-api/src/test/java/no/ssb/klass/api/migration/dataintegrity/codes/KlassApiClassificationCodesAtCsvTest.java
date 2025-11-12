@@ -16,11 +16,11 @@ import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
-public class KlassApiClassificationCodesAtCsvTest extends AbstractKlassApiCodesTest {
+class KlassApiClassificationCodesAtCsvTest extends AbstractKlassApiCodesTest {
 
     @Test
     void getOneClassificationCodesAt() {
-        int classificationId = gender_standard_id;
+        int classificationId = genderStandardId;
         date = "2001-01-01";
 
         Map<String, Object> paramDate = new HashMap<>();
@@ -98,7 +98,7 @@ public class KlassApiClassificationCodesAtCsvTest extends AbstractKlassApiCodesT
 
     @Test
     void getClassificationCodesAtLanguageNn() {
-        int classificationId = industry_classification_standard;
+        int classificationId = industryClassificationStandard;
 
         String path = getCodesAtPath(classificationId);
         Response sourceResponse =
@@ -121,7 +121,7 @@ public class KlassApiClassificationCodesAtCsvTest extends AbstractKlassApiCodesT
     @Test
     void getClassificationCodesAtIncludeFuture() {
 
-        int classificationId = industry_classification_standard;
+        int classificationId = industryClassificationStandard;
 
         String path = getCodesAtPath(classificationId);
         Response sourceResponse =
@@ -212,7 +212,7 @@ public class KlassApiClassificationCodesAtCsvTest extends AbstractKlassApiCodesT
 
     @Test
     void getClassificationCodesAtCsvSeparator() {
-        int classificationId = industry_classification_standard;
+        int classificationId = industryClassificationStandard;
 
         String path = getCodesAtPath(classificationId);
         Response sourceResponse =
@@ -234,7 +234,7 @@ public class KlassApiClassificationCodesAtCsvTest extends AbstractKlassApiCodesT
 
     @Test
     void getClassificationCodesAtCsvFields() {
-        int classificationId = industry_classification_standard;
+        int classificationId = industryClassificationStandard;
 
         String path = getCodesAtPath(classificationId);
         Response sourceResponse =

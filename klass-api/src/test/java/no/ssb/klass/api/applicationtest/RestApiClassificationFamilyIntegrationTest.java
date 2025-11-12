@@ -11,9 +11,9 @@ import no.ssb.klass.core.model.ClassificationType;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
-public class RestApiClassificationFamilyIntegrationTest extends AbstractRestApiApplicationTest {
+class RestApiClassificationFamilyIntegrationTest extends AbstractRestApiApplicationTest {
     @Test
-    public void restServiceReturnClassificationFamily() {
+    void restServiceReturnClassificationFamily() {
         String urlParts = REQUEST_CLASSIFICATION_FAMILY + "/" + classificationFamily.getId();
 
         given().port(port)
@@ -43,7 +43,7 @@ public class RestApiClassificationFamilyIntegrationTest extends AbstractRestApiA
     }
 
     @Test
-    public void restServiceClassificationFamilyFiltersClassificationType() {
+    void restServiceClassificationFamilyFiltersClassificationType() {
         String urlParts = REQUEST_CLASSIFICATION_FAMILY + "/" + classificationFamily.getId();
 
         given().port(port)
@@ -60,21 +60,24 @@ public class RestApiClassificationFamilyIntegrationTest extends AbstractRestApiA
                 .assertThat()
                 .body("name", equalTo(classificationFamily.getName()))
                 // classifications
+                // minus 1 because there is one copyrighted in classifications test data,
+                // but copyrighted classifications are only available with id
                 .assertThat()
                 .body(
                         "classifications.size()",
                         equalTo(
                                 classificationFamily
-                                        .getClassificationSeriesBySectionAndClassificationType(
-                                                null, null)
-                                        .size()))
+                                                .getClassificationSeriesBySectionAndClassificationType(
+                                                        null, null)
+                                                .size()
+                                        - 1))
 
                 // links
                 .body(JSON_LINKS + ".self.href", containsString(urlParts));
     }
 
     @Test
-    public void restServiceClassificationFamilyFiltersSsbSection() {
+    void restServiceClassificationFamilyFiltersSsbSection() {
         final String ssbSection = "unknown section";
         String urlParts = REQUEST_CLASSIFICATION_FAMILY + "/" + classificationFamily.getId();
 
@@ -100,7 +103,7 @@ public class RestApiClassificationFamilyIntegrationTest extends AbstractRestApiA
     }
 
     @Test
-    public void restServiceClassificationFamilyFiltersSsbSectionKnownSection() {
+    void restServiceClassificationFamilyFiltersSsbSectionKnownSection() {
         final String ssbSection = "section";
         String urlParts = REQUEST_CLASSIFICATION_FAMILY + "/" + classificationFamily.getId();
 
@@ -116,12 +119,12 @@ public class RestApiClassificationFamilyIntegrationTest extends AbstractRestApiA
                 .assertThat()
                 .body("name", equalTo(classificationFamily.getName()))
                 .assertThat()
-                .body("classifications.size()", equalTo(2))
+                .body("classifications.size()", equalTo(4))
                 .body(JSON_LINKS + ".self.href", containsString(urlParts));
     }
 
     @Test
-    public void restServiceClassificationFamilyFiltersSsbSectionKnownSectionFullName() {
+    void restServiceClassificationFamilyFiltersSsbSectionKnownSectionFullName() {
         final String ssbSection = "section - section name";
         String urlParts = REQUEST_CLASSIFICATION_FAMILY + "/" + classificationFamily.getId();
 
@@ -137,7 +140,7 @@ public class RestApiClassificationFamilyIntegrationTest extends AbstractRestApiA
                 .assertThat()
                 .body("name", equalTo(classificationFamily.getName()))
                 .assertThat()
-                .body("classifications.size()", equalTo(2))
+                .body("classifications.size()", equalTo(4))
                 .body(JSON_LINKS + ".self.href", containsString(urlParts));
     }
 }

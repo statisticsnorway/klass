@@ -15,11 +15,11 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.time.Instant;
 
-public class KlassApiClassificationCodesXmlTest extends AbstractKlassApiCodesTest {
+class KlassApiClassificationCodesXmlTest extends AbstractKlassApiCodesTest {
 
     @Test
     void getOneClassificationWithCodes() {
-        int classificationId = industry_classification_standard;
+        int classificationId = industryClassificationStandard;
 
         String path = getCodesPath(classificationId);
         Response sourceResponse =
@@ -95,7 +95,7 @@ public class KlassApiClassificationCodesXmlTest extends AbstractKlassApiCodesTes
     @Test
     void getClassificationWithCodesLanguageEn() {
 
-        int classificationId = industry_classification_standard;
+        int classificationId = industryClassificationStandard;
 
         String path = getCodesPath(classificationId);
         Response sourceResponse =
@@ -117,7 +117,7 @@ public class KlassApiClassificationCodesXmlTest extends AbstractKlassApiCodesTes
 
     @Test
     void getClassificationWithCodesLanguageNn() {
-        int classificationId = industry_classification_standard;
+        int classificationId = industryClassificationStandard;
 
         String path = getCodesPath(classificationId);
         Response sourceResponse =
@@ -140,7 +140,7 @@ public class KlassApiClassificationCodesXmlTest extends AbstractKlassApiCodesTes
     @Test
     void getClassificationWithCodesIncludeFuture() {
 
-        int classificationId = industry_classification_standard;
+        int classificationId = industryClassificationStandard;
 
         String path = getCodesPath(classificationId);
         Response sourceResponse =
@@ -187,7 +187,7 @@ public class KlassApiClassificationCodesXmlTest extends AbstractKlassApiCodesTes
 
     @Test
     void getClassificationWithCodesSelectLevel() {
-        int classificationId = industry_classification_standard;
+        int classificationId = industryClassificationStandard;
 
         String path = getCodesPath(classificationId);
         Response sourceResponse =
