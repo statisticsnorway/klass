@@ -17,8 +17,8 @@ public class PublicSearchQuery {
                 "This is a utility class and cannot be instantiated");
     }
 
-  public static org.springframework.data.elasticsearch.core.query.Query build(
-      String query, Pageable pageable, String filterOnSection, boolean includeCodeLists) {
+    public static org.springframework.data.elasticsearch.core.query.Query build(
+            String query, Pageable pageable, String filterOnSection, boolean includeCodeLists) {
         BoolQueryBuilder filterBuilder = QueryBuilders.boolQuery();
         filterBuilder.must(QueryBuilders.termQuery("published", true));
 
@@ -63,8 +63,6 @@ public class PublicSearchQuery {
                                         .boost(2.0f))
                         .filter(filterBuilder)
                         .minimumShouldMatch(1);
-
-
 
         NativeSearchQueryBuilder nativeQueryBuilder =
                 new NativeSearchQueryBuilder()
