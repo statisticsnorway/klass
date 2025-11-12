@@ -42,11 +42,11 @@ public class PublicSearchQuery {
         filterBuilder.mustNot(QueryBuilders.termQuery("copyrighted", true));
 
         // Building a query of multiple conditions
-        // Boosting match on prefix in title as top match
+        // Boosting match on title
         // Adding fuzziness on title to accept incomplete search words
         BoolQueryBuilder finalQuery =
                 QueryBuilders.boolQuery()
-                        // will match on 'kommune' in 'kommuneinndeling'
+                        // 'matchPhrasePrefixQuery' will match on 'kommune' in 'kommuneinndeling'
                         .should(QueryBuilders.matchPhrasePrefixQuery("title", query).boost(10.0f))
                         // will match "kommun", "kommune" with "kommuner"
                         .should(
@@ -63,6 +63,8 @@ public class PublicSearchQuery {
                                         .boost(2.0f))
                         .filter(filterBuilder)
                         .minimumShouldMatch(1);
+
+
 
         NativeSearchQueryBuilder nativeQueryBuilder =
                 new NativeSearchQueryBuilder()
