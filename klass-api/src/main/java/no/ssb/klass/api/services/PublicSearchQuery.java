@@ -56,6 +56,12 @@ public class PublicSearchQuery {
                                         .maxExpansions(30)
                                         .boost(5.0f))
                         .should(
+                                QueryBuilders.matchQuery("description", query)
+                                        .fuzziness(Fuzziness.fromEdits(1))
+                                        .prefixLength(2)
+                                        .maxExpansions(30)
+                                        .boost(1.0f))
+                        .should(
                                 QueryBuilders.multiMatchQuery(query)
                                         .field("description", 2.0f)
                                         .field("codes", 0.5f)

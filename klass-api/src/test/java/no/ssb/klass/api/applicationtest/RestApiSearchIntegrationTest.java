@@ -302,7 +302,7 @@ class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest {
                 .assertThat()
                 .statusCode(HttpStatus.OK.value())
                 .contentType(ContentType.XML)
-                .body(XML_SEARCH_RESULTS + ".size()", equalTo(1))
+                .body(XML_SEARCH_RESULTS + ".size()", equalTo(2))
                 // result 1
                 .body(
                         XML_SEARCH_RESULT1 + ".name",
@@ -316,7 +316,7 @@ class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest {
                 // footer
                 .body(XML_ROOT + ".link.href", containsString(REQUEST_SEARCH))
                 .body(XML_PAGE + ".size.toInteger();", equalTo(PAGE_SIZE))
-                .body(XML_PAGE + ".totalElements.toInteger();", equalTo(1))
+                .body(XML_PAGE + ".totalElements.toInteger();", equalTo(2))
                 .body(XML_PAGE + ".totalPages.toInteger();", equalTo(1))
                 .body(XML_PAGE + ".number.toInteger();", equalTo(0));
     }
