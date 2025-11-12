@@ -51,10 +51,11 @@ class RestApiListClassificationFamilyIntegrationTest extends AbstractRestApiAppl
                 .body(
                         "_embedded.classificationFamilies[0].name",
                         equalTo(classificationFamily.getName()))
-                // does not return copyrighted - one test data is copyrighted
                 .body(
                         "_embedded.classificationFamilies[0].name",
                         equalTo(classificationFamily.getName()))
+                // minus 1 because there is one copyrighted in classifications test data,
+                // but copyrighted classifications are only available with id
                 .body(
                         "_embedded.classificationFamilies[0].numberOfClassifications",
                         equalTo(

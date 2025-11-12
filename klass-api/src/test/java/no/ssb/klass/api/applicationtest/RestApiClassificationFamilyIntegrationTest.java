@@ -60,7 +60,8 @@ class RestApiClassificationFamilyIntegrationTest extends AbstractRestApiApplicat
                 .assertThat()
                 .body("name", equalTo(classificationFamily.getName()))
                 // classifications
-                // Does not return copyrighted  - there is one copyrighted in test data
+                // minus 1 because there is one copyrighted in classifications test data,
+                // but copyrighted classifications are only available with id
                 .assertThat()
                 .body(
                         "classifications.size()",
