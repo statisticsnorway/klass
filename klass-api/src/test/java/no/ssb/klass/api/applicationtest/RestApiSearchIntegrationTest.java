@@ -68,10 +68,6 @@ class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest {
     @Qualifier("opensearchRestTemplate")
     private OpenSearchRestTemplate openSearchRestTemplate;
 
-    @Autowired private RestHighLevelClient opensearchClient;
-
-    @Autowired private ClassificationSeriesRepository classificationSeriesRepository;
-
     @BeforeEach
     void setupSearchIndex() {
 
