@@ -17,8 +17,8 @@ public class PublicSearchQuery {
                 "This is a utility class and cannot be instantiated");
     }
 
-    public static org.springframework.data.elasticsearch.core.query.Query build(
-            String query, Pageable pageable, String filterOnSection, boolean includeCodeLists) {
+  public static org.springframework.data.elasticsearch.core.query.Query build(
+      String query, Pageable pageable, String filterOnSection, boolean includeCodeLists) {
         BoolQueryBuilder filterBuilder = QueryBuilders.boolQuery();
         filterBuilder.must(QueryBuilders.termQuery("published", true));
 
@@ -42,30 +42,25 @@ public class PublicSearchQuery {
         filterBuilder.mustNot(QueryBuilders.termQuery("copyrighted", true));
 
         // Building a query of multiple conditions
-        // Boosting pure match on title as top match
+        // Boosting match on prefix in title as top match
         // Adding fuzziness on title to accept incomplete search words
         BoolQueryBuilder finalQuery =
                 QueryBuilders.boolQuery()
-                        .should(QueryBuilders.matchPhrasePrefixQuery("title", query).boost(20.0f))
+                        // will match on 'kommune' in 'kommuneinndeling'
+                        .should(QueryBuilders.matchPhrasePrefixQuery("title", query).boost(10.0f))
+                        // will match "kommun", "kommune" with "kommuner"
                         .should(
                                 QueryBuilders.matchQuery("title", query)
                                         .fuzziness(Fuzziness.fromEdits(1))
                                         .prefixLength(2)
                                         .maxExpansions(30)
-                                        .boost(10.0f))
-                        .should(QueryBuilders.multiMatchQuery(query)
-                                .field("description", 2.0f)
-                                .operator(Operator.OR)
-                                .boost(2.0f))
-                        // Separate handling for codes
-                        .should(QueryBuilders.termsQuery("codes", query.split(","))  // exact match
-                                .boost(0.5f))
-                        /*.should(
+                                        .boost(5.0f))
+                        .should(
                                 QueryBuilders.multiMatchQuery(query)
                                         .field("description", 2.0f)
                                         .field("codes", 0.5f)
                                         .operator(Operator.OR)
-                                        .boost(2.0f))*/
+                                        .boost(2.0f))
                         .filter(filterBuilder)
                         .minimumShouldMatch(1);
 
