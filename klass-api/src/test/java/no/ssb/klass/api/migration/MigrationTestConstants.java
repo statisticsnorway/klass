@@ -161,11 +161,6 @@ public final class MigrationTestConstants {
     public static final String CLASSIFICATION_VERSION_LEGAL_BASE =
             "classificationVersion.legalBase";
 
-    // search
-    public static final String SEARCH_RESULTS = "_embedded.searchResults";
-    public static final String FIRST_SEARCH_RESULT = "_embedded.searchResults[0]";
-    public static final String SECOND_SEARCH_RESULT = "_embedded.searchResults[1]";
-    public static final String THIRD_SEARCH_RESULT = "_embedded.searchResults[2]";
     // Link fields
     public static final String HREF = "href";
     public static final String LINKS_SELF_HREF = "_links.self.href";
