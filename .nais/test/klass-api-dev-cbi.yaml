@@ -21,16 +21,15 @@ spec:
     limits:
       memory: 1400Mi
   env:
-    env:
-      - name: SPRING_PROFILES_ACTIVE
-        value: api, postgres, remote-open-search, skip-indexing
-        # Structured logging in cluster
-      - name: LOGGING_STRUCTURED_FORMAT_CONSOLE
-        value: logstash
-      - name: KLASS_ENV_CLIENT_KLASS_MAIL_URL
-        value: http://klass-mail
-      - name: JAVA_TOOL_OPTIONS
-        value: "-XX:InitialRAMPercentage=50.0 -XX:MaxRAMPercentage=50.0"
+    - name: SPRING_PROFILES_ACTIVE
+      value: api, postgres, remote-open-search, skip-indexing
+      # Structured logging in cluster
+    - name: LOGGING_STRUCTURED_FORMAT_CONSOLE
+      value: logstash
+    - name: KLASS_ENV_CLIENT_KLASS_MAIL_URL
+      value: http://klass-mail
+    - name: JAVA_TOOL_OPTIONS
+      value: "-XX:InitialRAMPercentage=50.0 -XX:MaxRAMPercentage=50.0"
 
 
   envFrom:

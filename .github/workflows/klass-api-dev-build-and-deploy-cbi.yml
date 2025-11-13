@@ -1,22 +1,6 @@
 name: klass-api-dev-cbi-build-and-deploy.yml
 on:
-  workflow_dispatch:
-    inputs:
-      app:
-        description: "Specify a custom name for your app"
-        required: true
-        type: string
-      ttl:
-        description: "Select required time for app to live"
-        required: true
-        default: '1h'
-        type: choice
-        options:
-          - 1h
-          - 2h
-          - 4h
-          - 8h
-          - 36h
+  push:
 jobs:
   build:
     name: Build
@@ -46,13 +30,13 @@ jobs:
         id: changed-files
         uses: "nais/what-changed@main"
         with:
-          files: .nais/**/klass-api-dev.yaml
+          files: .nais/**/klass-api-dev-cbi.yaml
           main-branch-name: 'main'
       - name: Check for test config changes
         id: test-config-changed
         uses: "nais/what-changed@main"
         with:
-          files: .nais/test/klass-api-dev.yaml
+          files: .nais/test/klass-api-dev-cbi.yaml
           main-branch-name: 'main'
 
       - name: Build with Maven
@@ -86,8 +70,7 @@ jobs:
       - uses: nais/deploy/actions/deploy@v2
         env:
           CLUSTER: test
-          RESOURCE: .nais/test/klass-api-dev.yaml
+          RESOURCE: .nais/test/klass-api-dev-cbi.yaml
           DEPLOY_SERVER: deploy.ssb.cloud.nais.io:443
           WORKLOAD_IMAGE: ${{ needs.build.outputs.image }}
-          VAR: app-name=${{ github.event.inputs.app }},time-to-live=${{ github.event.inputs.ttl }}
           TELEMETRY: ${{ needs.build.outputs.telemetry }}
