@@ -22,7 +22,7 @@ spec:
       memory: 1400Mi
   env:
     - name: SPRING_PROFILES_ACTIVE
-      value: api, postgres, remote-open-search, skip-indexing
+      value: api, postgres, remote-open-search
       # Structured logging in cluster
     - name: LOGGING_STRUCTURED_FORMAT_CONSOLE
       value: logstash
