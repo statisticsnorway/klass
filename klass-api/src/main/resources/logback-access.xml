@@ -1,0 +1,20 @@
+<configuration debug="false">
+    <appender name="accessJsonConsoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashAccessEncoder">
+            <fieldNames>
+                <requestHeaders>request_headers</requestHeaders>
+                <responseHeaders>response_headers</responseHeaders>
+            </fieldNames>
+            <pattern>
+                <pattern>
+                    {
+                    "context": "klass-api",
+                    "logger_name": "tomcat.access",
+                    "level": "INFO"
+                    }
+                </pattern>
+            </pattern>
+        </encoder>
+    </appender>
+    <appender-ref ref="accessJsonConsoleAppender"/>
+</configuration>
