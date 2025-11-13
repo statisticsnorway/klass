@@ -22,7 +22,7 @@ spec:
       memory: 1400Mi
   env:
     - name: SPRING_PROFILES_ACTIVE
-      value: api, postgres, remote-open-search
+      value: api, postgres, remote-open-search, skip-indexing
     - name: OPENSEARCH_USERNAME
       value: ${OPEN_SEARCH_USERNAME}
     - name: OPENSEARCH_URL

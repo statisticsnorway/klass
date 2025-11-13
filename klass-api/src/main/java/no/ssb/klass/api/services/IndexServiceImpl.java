@@ -80,7 +80,15 @@ public class IndexServiceImpl implements IndexService {
     public void createIndexWithStemmingAnalyzer() {
 
         try {
+            // What does the service have access to?
             var indexOps = elasticsearchOperations.indexOps(getIndexCoordinates());
+
+            log.info("Cbi checking if index '{}' exists (resolved as: {})",
+                    elasticsearchIndex,
+                    getIndexCoordinates().getIndexNames());
+
+            boolean actuallyExists = elasticsearchOperations.indexOps(IndexCoordinates.of(elasticsearchIndex)).exists();
+            log.info("Manual indexOps.exists('{}'): {}", elasticsearchIndex, actuallyExists);
 
             if (indexOps.exists()) {
                 log.info("Index '{}' already exists — skipping creation.", elasticsearchIndex);
