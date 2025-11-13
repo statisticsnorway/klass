@@ -79,7 +79,9 @@ public class IndexServiceImpl implements IndexService {
     @Override
     @PostConstruct
     public void createIndexWithStemmingAnalyzer() {
-
+        log.info("Cbi checking username '{}' and password {})",
+                elasticsearchOperations,
+                getIndexCoordinates().getIndexName());
         try {
             var indexOps = elasticsearchOperations.indexOps(getIndexCoordinates());
 

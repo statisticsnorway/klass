@@ -29,6 +29,8 @@ spec:
       value: ${OPEN_SEARCH_URI}
     - name: OPENSEARCH_PASSWORD
       value: ${OPEN_SEARCH_PASSWORD}
+    - name: OPENSEARCH_HOST
+      value: ${OPEN_SEARCH_HOST}
       # Structured logging in cluster
     - name: LOGGING_STRUCTURED_FORMAT_CONSOLE
       value: logstash
