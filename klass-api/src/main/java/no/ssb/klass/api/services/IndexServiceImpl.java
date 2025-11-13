@@ -83,17 +83,16 @@ public class IndexServiceImpl implements IndexService {
             // What does the service have access to?
             var indexOps = elasticsearchOperations.indexOps(getIndexCoordinates());
 
-            log.info("Cbi checking if index '{}' exists (resolved as: {})",
+            log.info(
+                    "Cbi checking if index '{}' exists (resolved as: {})",
                     elasticsearchIndex,
                     getIndexCoordinates().getIndexNames());
 
-            boolean actuallyExists = elasticsearchOperations.indexOps(IndexCoordinates.of(elasticsearchIndex)).exists();
-            log.info("Manual indexOps.exists('{}'): {}", elasticsearchIndex, actuallyExists);
-
-            if (indexOps.exists()) {
+            if (indexOps.existsIndexTemplate(elasticsearchIndex)) {
                 log.info("Index '{}' already exists — skipping creation.", elasticsearchIndex);
                 return;
             }
+            log.info("Cbi creates index");
 
             Map<String, Object> settings =
                     Map.of(
