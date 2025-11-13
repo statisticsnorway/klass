@@ -1,4 +1,4 @@
-name: klass-api-dev-cbi-build-and-deploy.yml
+name: klass-api-dev-build-and-deploy.yml
 on:
   workflow_dispatch:
     inputs:
