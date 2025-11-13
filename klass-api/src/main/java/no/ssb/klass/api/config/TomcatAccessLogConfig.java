@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class TomcatAccessLogConfig {
 
-
     @Bean
     public WebServerFactoryCustomizer<TomcatServletWebServerFactory> accessLogsCustomizer() {
         return factory -> {
