@@ -34,6 +34,9 @@ spec:
       value: ${OPEN_SEARCH_URI}
     - name: OPENSEARCH_PASSWORD
       value: ${OPEN_SEARCH_PASSWORD}
+      # Structured logging in cluster
+    - name: LOGGING_STRUCTURED_FORMAT_CONSOLE
+      value: logstash
     - name: KLASS_ENV_CLIENT_KLASS_MAIL_URL
       value: http://klass-mail
     - name: JAVA_TOOL_OPTIONS
