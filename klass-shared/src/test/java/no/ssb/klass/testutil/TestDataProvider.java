@@ -34,9 +34,9 @@ public final class TestDataProvider {
     public static final String BYDELSINNDELING_BESKRIVELSE_NO =
             "Bydel utgjør geografiske områder i en kommune";
     public static final String BADMINTON_NAVN_NO = "Standard for Badminton";
-    public static final String BADMINTON_BESKRIVELSE_NO = "Testing search results for badminton";
+    public static final String BADMINTON_BESKRIVELSE_NO = "En sport for studenter badminton.";
     public static final String SPORT_NAVN_NO = "Standard for sport";
-    public static final String SPORT_BESKRIVELSE_NO = "Testing search results for badminton";
+    public static final String SPORT_BESKRIVELSE_NO = "Testing search results for sport";
     public static final String BADMINTON_KODELISTE_NAVN = "Badminton";
     public static final String BADMINTON_KODELISTE_BESKRIVELSE =
             "Testing when version owning section is different from variant owning section badminton";
