@@ -13,6 +13,7 @@
         </filter>
         <encoder class="net.logstash.logback.encoder.LogstashAccessEncoder">
             <fieldNames>
+                <messagePattern>%requestURL - %statusCode - %i{User-Agent}</messagePattern>
                 <requestHeaders>request_headers</requestHeaders>
                 <responseHeaders>response_headers</responseHeaders>
             </fieldNames>
