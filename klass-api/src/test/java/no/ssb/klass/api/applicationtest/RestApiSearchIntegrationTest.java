@@ -251,6 +251,50 @@ class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest {
     }
 
     @Test
+    void restServiceSearchCodesJSON() {
+        // 'Kommuneinndeling' has code "0101", "Halden"
+        given().port(port)
+                .accept(ContentType.JSON)
+                .param(QUERY, "0101")
+                .get(REQUEST_SEARCH)
+                .prettyPeek()
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .contentType(ContentType.JSON)
+                .body(JSON_PAGE + ".totalElements", equalTo(1))
+                .body(
+                        JSON_SEARCH_RESULTS + ".name",
+                        hasItem(TestDataProvider.KOMMUNEINNDELING_NAVN_NO));
+
+        given().port(port)
+                .accept(ContentType.JSON)
+                .param(QUERY, "Halden")
+                .get(REQUEST_SEARCH)
+                .prettyPeek()
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .contentType(ContentType.JSON)
+                .body(JSON_PAGE + ".totalElements", equalTo(1))
+                .body(
+                        JSON_SEARCH_RESULTS + ".name",
+                        hasItem(TestDataProvider.KOMMUNEINNDELING_NAVN_NO));
+
+        // 'Kongsvinger' is not a code item
+        given().port(port)
+                .accept(ContentType.JSON)
+                .param(QUERY, "Kongsvinger")
+                .get(REQUEST_SEARCH)
+                .prettyPeek()
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .contentType(ContentType.JSON)
+                .body(JSON_PAGE + ".totalElements", equalTo(0));
+    }
+
+    @Test
     void restServiceSearchGetClassificationAndNotCodeListJSON() {
         given().port(port)
                 .accept(ContentType.JSON)
@@ -423,5 +467,33 @@ class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest {
                 .body(
                         XML_SEARCH_RESULT1 + ".link.href",
                         containsString(REQUEST + "/" + familieGrupperingCodelist.getId()));
+    }
+
+    @Test
+    void restServiceSearchCodesWithNorwegianStemmer() {
+        given().port(port)
+                .accept(ContentType.JSON)
+                .param(QUERY, "konkurranser")
+                .get(REQUEST_SEARCH)
+                .prettyPeek()
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .contentType(ContentType.JSON)
+                .body(JSON_PAGE + ".totalElements", equalTo(1))
+                .body(JSON_SEARCH_RESULT1 + ".name", equalTo(TestDataProvider.BADMINTON_NAVN_NO));
+
+        // Code is "løper"
+        given().port(port)
+                .accept(ContentType.JSON)
+                .param(QUERY, "løp")
+                .get(REQUEST_SEARCH)
+                .prettyPeek()
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .contentType(ContentType.JSON)
+                .body(JSON_PAGE + ".totalElements", equalTo(1))
+                .body(JSON_SEARCH_RESULT1 + ".name", equalTo(TestDataProvider.BADMINTON_NAVN_NO));
     }
 }
