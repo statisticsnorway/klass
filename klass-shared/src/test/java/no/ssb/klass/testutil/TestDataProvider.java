@@ -405,6 +405,8 @@ public final class TestDataProvider {
                 TestUtil.createClassificationItem("030102", "Konkurranser"),
                 level.getLevelNumber(),
                 null);
+        version.addClassificationItem(
+                TestUtil.createClassificationItem("030103", "Løper"), level.getLevelNumber(), null);
         version.publish(Language.NB);
         classification.addClassificationVersion(version);
 
