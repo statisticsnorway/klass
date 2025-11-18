@@ -16,9 +16,9 @@ spec:
   resources:
     requests:
       cpu: 200m
-      memory: 2000Mi
+      memory: 1500Mi
     limits:
-      memory: 2400Mi
+      memory: 1730Mi
   gcp:
     sqlInstances:
       - type: POSTGRES_17
@@ -27,21 +27,28 @@ spec:
           - name: klass
   env:
     - name: SPRING_PROFILES_ACTIVE
-      value: api, postgres, solr-remote, skip-indexing
-    - name: SPRING_DATA_SOLR_HOST
-      value: http://klass-solr/solr
+      value: api, postgres, remote-open-search, skip-indexing
+    - name: OPENSEARCH_USERNAME
+      value: ${OPEN_SEARCH_USERNAME}
+    - name: OPENSEARCH_URL
+      value: ${OPEN_SEARCH_URI}
+    - name: OPENSEARCH_PASSWORD
+      value: ${OPEN_SEARCH_PASSWORD}
+      # Structured logging in cluster
+    - name: LOGGING_STRUCTURED_FORMAT_CONSOLE
+      value: logstash
     - name: KLASS_ENV_CLIENT_KLASS_MAIL_URL
       value: http://klass-mail
     - name: JAVA_TOOL_OPTIONS
-      value: "-XX:InitialRAMPercentage=50.0 -XX:MaxRAMPercentage=75.0"
-    - name: LOGGING_LEVEL_ROOT
-      value: INFO
+      value: "-XX:InitialRAMPercentage=50.0 -XX:MaxRAMPercentage=50.0"
 
   accessPolicy:
     outbound:
       rules:
-        - application: klass-solr
         - application: klass-mail
+  openSearch:
+    access: admin
+    instance: klass-search
 
   prometheus:
     enabled: true
