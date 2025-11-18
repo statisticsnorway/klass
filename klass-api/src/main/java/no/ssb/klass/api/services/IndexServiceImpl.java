@@ -134,7 +134,7 @@ public class IndexServiceImpl implements IndexService {
                                                     "text",
                                                     ANALYZER,
                                                     OpenSearchConfig.NORWEGIAN_STEMMER_ANALYZER,
-                                                    "",
+                                                    SEARCH_ANALYZER,
                                                     OpenSearchConfig.NORWEGIAN_STEMMER_ANALYZER),
                                     FAMILY, Map.of("type", "keyword"),
                                     SECTION, Map.of("type", "keyword")));
