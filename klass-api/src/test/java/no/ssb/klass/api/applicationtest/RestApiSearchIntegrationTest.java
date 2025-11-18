@@ -11,12 +11,10 @@ import no.ssb.klass.api.applicationtest.config.ApplicationTestConfig;
 import no.ssb.klass.api.applicationtest.config.IndexServiceTestConfig;
 import no.ssb.klass.api.services.IndexServiceImpl;
 import no.ssb.klass.core.config.ConfigurationProfiles;
-import no.ssb.klass.core.repository.ClassificationSeriesRepository;
 import no.ssb.klass.testutil.TestDataProvider;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.opensearch.client.RestHighLevelClient;
 import org.opensearch.data.client.orhlc.OpenSearchRestTemplate;
 import org.opensearch.testcontainers.OpensearchContainer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,10 +65,6 @@ class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest {
     @Autowired
     @Qualifier("opensearchRestTemplate")
     private OpenSearchRestTemplate openSearchRestTemplate;
-
-    @Autowired private RestHighLevelClient opensearchClient;
-
-    @Autowired private ClassificationSeriesRepository classificationSeriesRepository;
 
     @BeforeEach
     void setupSearchIndex() {
@@ -188,6 +182,45 @@ class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest {
     }
 
     @Test
+    void restServiceSearchFuzzyDescriptionJSON() {
+        // 'Badminton' has the word 'sport' only in description
+        given().port(port)
+                .accept(ContentType.JSON)
+                .param(QUERY, "sport")
+                .get(REQUEST_SEARCH)
+                .prettyPeek()
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .contentType(ContentType.JSON)
+                .body(JSON_SEARCH_RESULTS + ".name", hasItem(TestDataProvider.BADMINTON_NAVN_NO));
+
+        given().port(port)
+                .accept(ContentType.JSON)
+                .param(QUERY, "spor")
+                .get(REQUEST_SEARCH)
+                .prettyPeek()
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .contentType(ContentType.JSON)
+                .body(JSON_SEARCH_RESULTS + ".name", hasItem(TestDataProvider.BADMINTON_NAVN_NO));
+
+        given().port(port)
+                .accept(ContentType.JSON)
+                .param(QUERY, "spo")
+                .get(REQUEST_SEARCH)
+                .prettyPeek()
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .contentType(ContentType.JSON)
+                .body(
+                        JSON_SEARCH_RESULTS + ".name",
+                        not(hasItem(TestDataProvider.BADMINTON_NAVN_NO)));
+    }
+
+    @Test
     void restServiceSearchNotDisplayCopyrighted() {
         assertThat(icd.isCopyrighted()).isTrue();
         given().port(port)
@@ -218,6 +251,50 @@ class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest {
     }
 
     @Test
+    void restServiceSearchCodesJSON() {
+        // 'Kommuneinndeling' has code "0101", "Halden"
+        given().port(port)
+                .accept(ContentType.JSON)
+                .param(QUERY, "0101")
+                .get(REQUEST_SEARCH)
+                .prettyPeek()
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .contentType(ContentType.JSON)
+                .body(JSON_PAGE + ".totalElements", equalTo(1))
+                .body(
+                        JSON_SEARCH_RESULTS + ".name",
+                        hasItem(TestDataProvider.KOMMUNEINNDELING_NAVN_NO));
+
+        given().port(port)
+                .accept(ContentType.JSON)
+                .param(QUERY, "Halden")
+                .get(REQUEST_SEARCH)
+                .prettyPeek()
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .contentType(ContentType.JSON)
+                .body(JSON_PAGE + ".totalElements", equalTo(1))
+                .body(
+                        JSON_SEARCH_RESULTS + ".name",
+                        hasItem(TestDataProvider.KOMMUNEINNDELING_NAVN_NO));
+
+        // 'Kongsvinger' is not a code item
+        given().port(port)
+                .accept(ContentType.JSON)
+                .param(QUERY, "Kongsvinger")
+                .get(REQUEST_SEARCH)
+                .prettyPeek()
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .contentType(ContentType.JSON)
+                .body(JSON_PAGE + ".totalElements", equalTo(0));
+    }
+
+    @Test
     void restServiceSearchGetClassificationAndNotCodeListJSON() {
         given().port(port)
                 .accept(ContentType.JSON)
@@ -237,7 +314,6 @@ class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest {
 
     @Test
     void restServiceSearchGetClassificationAndCodeList() {
-        // Should classification rank over codeList?
         given().port(port)
                 .accept(ContentType.JSON)
                 .param(QUERY, "badminton")
@@ -259,8 +335,6 @@ class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest {
 
     @Test
     void restServiceSearchClassificationsXML() {
-        // When searching for 'kommuner' bydelsinndeling is not a hit because the classification
-        // contains only 'kommune'
         given().port(port)
                 .accept(ContentType.XML)
                 .param(QUERY, "kommune")
@@ -291,8 +365,6 @@ class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest {
 
     @Test
     void restServiceSearchClassificationsXMLKommuner() {
-        // One search result because 'bydelsinndeling' is not a hit - the classification description
-        // contains 'kommune'
         given().port(port)
                 .accept(ContentType.XML)
                 .param(QUERY, "kommuner")
@@ -302,21 +374,23 @@ class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest {
                 .assertThat()
                 .statusCode(HttpStatus.OK.value())
                 .contentType(ContentType.XML)
-                .body(XML_SEARCH_RESULTS + ".size()", equalTo(1))
-                // result 1
-                .body(
-                        XML_SEARCH_RESULT1 + ".name",
-                        equalTo(TestDataProvider.KOMMUNEINNDELING_NAVN_NO))
+                .body(XML_SEARCH_RESULTS + ".size()", equalTo(2))
+                // result 1: 'kommune' in title
+                .body(XML_SEARCH_RESULT1 + ".name", containsString("kommune"))
                 .body(XML_SEARCH_RESULT1 + ".snippet", containsString("kommune"))
                 .body(XML_SEARCH_RESULT1 + ".searchScore.toFloat()", greaterThan(0.0f))
                 .body(XML_SEARCH_RESULT1 + ".link.rel", equalTo("self"))
                 .body(
                         XML_SEARCH_RESULT1 + ".link.href",
                         containsString(REQUEST + "/" + kommuneinndeling.getId()))
+                // result 2 - kommune just in description
+                .body(XML_SEARCH_RESULT2 + ".name", not(containsString("kommune")))
+                .body(XML_SEARCH_RESULT2 + ".snippet", containsString("kommune"))
+                .body(XML_SEARCH_RESULT2 + ".searchScore.toFloat()", greaterThan(0.0f))
                 // footer
                 .body(XML_ROOT + ".link.href", containsString(REQUEST_SEARCH))
                 .body(XML_PAGE + ".size.toInteger();", equalTo(PAGE_SIZE))
-                .body(XML_PAGE + ".totalElements.toInteger();", equalTo(1))
+                .body(XML_PAGE + ".totalElements.toInteger();", equalTo(2))
                 .body(XML_PAGE + ".totalPages.toInteger();", equalTo(1))
                 .body(XML_PAGE + ".number.toInteger();", equalTo(0));
     }
@@ -349,7 +423,6 @@ class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest {
                 .statusCode(HttpStatus.OK.value())
                 .contentType(ContentType.JSON)
                 .body(JSON_SEARCH_RESULTS + ".size()", equalTo(1))
-                // result 1
                 .body(
                         JSON_SEARCH_RESULT1 + ".name",
                         equalTo(TestDataProvider.FAMILIEGRUPPERING_NAVN_NO))
@@ -394,5 +467,33 @@ class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest {
                 .body(
                         XML_SEARCH_RESULT1 + ".link.href",
                         containsString(REQUEST + "/" + familieGrupperingCodelist.getId()));
+    }
+
+    @Test
+    void restServiceSearchCodesWithNorwegianStemmer() {
+        given().port(port)
+                .accept(ContentType.JSON)
+                .param(QUERY, "konkurranser")
+                .get(REQUEST_SEARCH)
+                .prettyPeek()
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .contentType(ContentType.JSON)
+                .body(JSON_PAGE + ".totalElements", equalTo(1))
+                .body(JSON_SEARCH_RESULT1 + ".name", equalTo(TestDataProvider.BADMINTON_NAVN_NO));
+
+        // Code is "løper"
+        given().port(port)
+                .accept(ContentType.JSON)
+                .param(QUERY, "løp")
+                .get(REQUEST_SEARCH)
+                .prettyPeek()
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .contentType(ContentType.JSON)
+                .body(JSON_PAGE + ".totalElements", equalTo(1))
+                .body(JSON_SEARCH_RESULT1 + ".name", equalTo(TestDataProvider.BADMINTON_NAVN_NO));
     }
 }
