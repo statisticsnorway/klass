@@ -1,6 +1,6 @@
 name: klass-v3-prod.yml
 on:
- # push:
+ push:
 jobs:
   build:
     name: Build
