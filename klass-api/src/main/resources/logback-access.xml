@@ -17,7 +17,7 @@
                 <requestHeaders>request_headers</requestHeaders>
                 <responseHeaders>response_headers</responseHeaders>
             </fieldNames>
-            <pattern>
+            <provider class="net.logstash.logback.composite.loggingevent.LoggingEventPatternJsonProvider">
                 <pattern>
                     {
                     "context": "klass-api",
@@ -25,7 +25,7 @@
                     "level": "INFO"
                     }
                 </pattern>
-            </pattern>
+            </provider>
         </encoder>
     </appender>
     <appender-ref ref="accessJsonConsoleAppender"/>
