@@ -12,8 +12,8 @@
             <OnMatch>DENY</OnMatch>
         </filter>
         <encoder class="net.logstash.logback.encoder.LogstashAccessEncoder">
+            <messagePattern>%requestURL - %statusCode - %i{User-Agent}</messagePattern>
             <fieldNames>
-                <messagePattern>%requestURL - %statusCode - %i{User-Agent}</messagePattern>
                 <requestHeaders>request_headers</requestHeaders>
                 <responseHeaders>response_headers</responseHeaders>
             </fieldNames>
