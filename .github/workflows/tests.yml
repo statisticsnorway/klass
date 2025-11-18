@@ -44,6 +44,8 @@ jobs:
         run: mvn --batch-mode --update-snapshots package
 
       - name: SonarQube Cloud Scan
+        # No need to run SonarCloud analysis if dependabot update or token not defined
+        if: env.SONAR_TOKEN != '' && (github.actor != 'dependabot[bot]')
         run: mvn --batch-mode sonar:sonar
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
