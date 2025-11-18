@@ -37,11 +37,11 @@
         <sonar.projectKey>klass</sonar.projectKey>
         <sonar.projectName>klass</sonar.projectName>
 
-        <asciidoctor-version>2.2.4</asciidoctor-version>
+        <asciidoctor-version>3.2.0</asciidoctor-version>
         <commons-io-version>2.21.0</commons-io-version>
         <commons-lang3-version>3.20.0</commons-lang3-version>
         <guava-version>32.0.1-jre</guava-version>
-        <jakarta-rs-api-version>3.1.0</jakarta-rs-api-version>
+        <jakarta-rs-api-version>4.0.0</jakarta-rs-api-version>
         <jaxb-api-version>4.0.4</jaxb-api-version>
         <maven-jaxb2-plugin-version>0.15.3</maven-jaxb2-plugin-version>
         <objenesis-version>2.4</objenesis-version>
