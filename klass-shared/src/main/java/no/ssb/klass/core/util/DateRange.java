@@ -3,6 +3,7 @@ package no.ssb.klass.core.util;
 import static com.google.common.base.Preconditions.*;
 
 import com.google.common.collect.Lists;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
@@ -25,8 +26,8 @@ public final class DateRange {
     }
 
     public boolean isCurrentVersion() {
-        LocalDate today=LocalDate.now();
-        return (today.isEqual(from)||today.isAfter(from)) && today.isBefore(to);
+        LocalDate today = LocalDate.now();
+        return (today.isEqual(from) || today.isAfter(from)) && today.isBefore(to);
     }
 
     public boolean overlaps(DateRange other) {
