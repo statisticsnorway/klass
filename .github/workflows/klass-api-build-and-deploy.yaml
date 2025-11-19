@@ -108,8 +108,7 @@ jobs:
       id-token: "write"
       packages: "read"
     runs-on: ubuntu-latest
-    # TODO: @mmwinther DPMETA-1162 Reactivate deploy on config changes after release to prod
-    if: github.event_name == 'release' || github.event.inputs.cluster == 'prod' # || (needs.build.outputs.prod-config-changed == 'true' && needs.build.outputs.only-config-changed == 'true')
+    if: github.event_name == 'release' || github.event.inputs.cluster == 'prod' || (needs.build.outputs.prod-config-changed == 'true' && needs.build.outputs.only-config-changed == 'true')
     steps:
       - name: Checkout
         uses: actions/checkout@v4
