@@ -1443,7 +1443,7 @@ public class ApiDocumentation {
                         getWithContext(
                                         "/classifications/"
                                                 + CLASS_ID_KOMMUNEINNDELING
-                                                + "/codes?from=2020-01-01&to=2021-01-01&selectCodes=3415-3418,300*")
+                                                + "/codes?from=2020-01-01&to=2021-01-01&selectCodes=0301,01*")
                                 .accept("text/csv"))
                 .andDo(
                         this.documentationHandler =

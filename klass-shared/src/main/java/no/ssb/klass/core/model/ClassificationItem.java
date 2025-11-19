@@ -78,7 +78,7 @@ public abstract class ClassificationItem extends BaseEntity
         return AlphaNumericCompareUtil.compare(getCode(), other.getCode());
     }
 
-    abstract boolean hasNotes();
+    protected abstract boolean hasNotes();
 
-    abstract boolean hasShortName();
+    protected abstract boolean hasShortName();
 }

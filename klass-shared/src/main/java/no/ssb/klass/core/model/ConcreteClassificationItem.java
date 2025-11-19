@@ -141,12 +141,12 @@ public class ConcreteClassificationItem extends ClassificationItem {
     }
 
     @Override
-    boolean hasNotes() {
+    protected boolean hasNotes() {
         return !notes.isEmpty();
     }
 
     @Override
-    boolean hasShortName() {
+    protected boolean hasShortName() {
         return !shortName.isEmpty();
     }
 
