@@ -206,7 +206,6 @@ class CodeListTest {
             @Test
             void invalidRanges() {
                 CodeList output = baseList.filterOnCodes("3004- , -3004, *-3004, 3004-*, *-*");
-                // Ingen av disse er gyldige, så vi forventer ingen filtrering
                 assertThat(output.getCodes())
                         .extracting(CodeItem::getCode)
                         .containsExactlyInAnyOrderElementsOf(baseCodes);
@@ -220,7 +219,7 @@ class CodeListTest {
 
         @SuppressWarnings("SameParameterValue")
         private CodeItem.RangedCodeItem createItem(String code, LocalDate from, LocalDate to) {
-            Level level = new Level(1, null); // Dummy Level
+            Level level = new Level(1, null);
             ClassificationItem item = new TestClassificationItem(code, from, to);
             DateRange range = DateRange.create(from, to);
             CodeDto dto = new CodeDto(level, item, range, Language.NB);
