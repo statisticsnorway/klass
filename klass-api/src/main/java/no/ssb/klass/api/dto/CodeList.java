@@ -338,14 +338,13 @@ public class CodeList {
     }
 
     /**
-     * Returns the shortest prefix representing the next lexicographic increment of the given numeric string.
-     * The method scans from right to left, increments the first non-'9' digit, and truncates everything after it.
-     * If all digits are '9', it returns "1" followed by zeros (e.g., "999" -> "1000").
+     * Returns the shortest prefix representing the next lexicographic increment of the given
+     * numeric string. The method scans from right to left, increments the first non-'9' digit, and
+     * truncates everything after it. If all digits are '9', it returns "1" followed by zeros (e.g.,
+     * "999" -> "1000").
      *
-     * Examples:
-     *   "34"  -> "35"    (increment last digit)
-     *   "399" -> "4"     (increment first non-'9' digit and truncate)
-     *   "9"   -> "10"    (all digits are '9', so add leading '1')
+     * <p>Examples: "34" -> "35" (increment last digit) "399" -> "4" (increment first non-'9' digit
+     * and truncate) "9" -> "10" (all digits are '9', so add leading '1')
      */
     private static String incrementNumericString(String digits) {
         char[] arr = digits.toCharArray();
