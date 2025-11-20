@@ -66,12 +66,12 @@ public class ReferencingClassificationItem extends ClassificationItem {
     }
 
     @Override
-    boolean hasNotes() {
+    protected boolean hasNotes() {
         return false;
     }
 
     @Override
-    boolean hasShortName() {
+    protected boolean hasShortName() {
         return false;
     }
 

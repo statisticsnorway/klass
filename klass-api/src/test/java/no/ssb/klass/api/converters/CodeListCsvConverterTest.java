@@ -19,6 +19,7 @@ import org.springframework.mock.http.MockHttpOutputMessage;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 public class CodeListCsvConverterTest {
     private CodeListCsvConverter subject;
@@ -108,7 +109,7 @@ public class CodeListCsvConverterTest {
                         TestUtil.createClassificationItem("0104", "Sandefjord"),
                         DateRange.create("2008-01-01", "2020-01-01"),
                         Language.getDefault());
-        return new CodeList(",", withValidRange, dateRange, null).convert(Arrays.asList(code));
+        return new CodeList(",", withValidRange, dateRange, null).convert(List.of(code));
     }
 
     private CodeList createCodeListWithDoubleQuotedNote(

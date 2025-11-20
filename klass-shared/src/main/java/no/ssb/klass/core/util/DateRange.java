@@ -25,9 +25,9 @@ public final class DateRange {
         this.to = to;
     }
 
-    public Boolean isCurrentVersion() {
-        return (LocalDate.now().isEqual(from) || LocalDate.now().isAfter(from))
-                && (LocalDate.now().isBefore(to));
+    public boolean isCurrentVersion() {
+        LocalDate today = LocalDate.now();
+        return (today.isEqual(from) || today.isAfter(from)) && today.isBefore(to);
     }
 
     public boolean overlaps(DateRange other) {

@@ -50,3 +50,4 @@ klass.log*
 .dccache
 
 **/initdb/*.sql
+.DS_Store

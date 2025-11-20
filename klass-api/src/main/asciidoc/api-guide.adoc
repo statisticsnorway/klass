@@ -669,7 +669,7 @@ include::{snippets}/changed-since-example/curl-request.adoc[]
 | selectCodes = 3004, 3006 | Only 3004 and 3006
 | selectCodes = 3004, 11* | 3004 and all starting with 11
 | selectCodes = 3004-3400 | range from 3004 to 3400
-| selectCodes = 3004-34* | range from 3004 to any higher code starting with 34
+| selectCodes = 3004-34* | range from 3004 to highest code starting with 34
 |===
 
 ==== Example request for selectCodes=0301,01*;
