@@ -33,8 +33,7 @@ public class MailControllerTest {
 
     @Autowired private MockMvc mvc;
 
-    @MockitoBean
-    private MailService testMailService;
+    @MockitoBean private MailService testMailService;
 
     private final ObjectMapper mapper = new ObjectMapper();
 
