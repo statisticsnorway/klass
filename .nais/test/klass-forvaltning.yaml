@@ -48,6 +48,8 @@ spec:
       value: klass.intern.test.ssb.no
     - name: KLASS_ENV_CLIENT_KLASS_MAIL_URL
       value: http://klass-mail
+    - name: VAADIN_SERVLET_PRODUCTION_MODE
+      value: "true"
     - name: JAVA_TOOL_OPTIONS
       value: "-XX:InitialRAMPercentage=50.0 -XX:MaxRAMPercentage=50.0"
   envFrom:
