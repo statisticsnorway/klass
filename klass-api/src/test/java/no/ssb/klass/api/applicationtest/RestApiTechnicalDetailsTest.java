@@ -103,12 +103,7 @@ class RestApiTechnicalDetailsTest extends AbstractRestApiApplicationTest {
     }
 
     @ParameterizedTest
-    @ValueSource(
-            strings = {
-                "/swagger-ui/index.html",
-                "/v3/api-docs"
-            }) // should test this, but it's not generated until package install
-    // "/v1/api-guide.html"})
+    @ValueSource(strings = {"/swagger-ui/index.html", "/v3/api-docs", "/v1/api-guide.html"})
     void apiDocsAvailable(String path) {
         given().port(port)
                 .accept(ContentType.JSON)
@@ -116,5 +111,16 @@ class RestApiTechnicalDetailsTest extends AbstractRestApiApplicationTest {
                 .get(RestConstants.CONTEXT_PATH + path)
                 .then()
                 .statusCode(200);
+    }
+
+    @Test
+    void aDocRenderedCorrectly() {
+        given().port(port)
+                .accept(ContentType.JSON)
+                .when()
+                .get(RestConstants.CONTEXT_PATH + "/v1/api-guide.html")
+                .then()
+                .statusCode(200)
+                .body(not(containsString("Unresolved directive")));
     }
 }
