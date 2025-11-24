@@ -266,20 +266,6 @@
                                     </attributes>
                                 </configuration>
                             </execution>
-                            <execution>
-                                <id>generate-docs-test</id>
-                                <phase>generate-test-resources</phase>
-                                <goals>
-                                    <goal>process-asciidoc</goal>
-                                </goals>
-                                <configuration>
-                                    <backend>html</backend>
-                                    <doctype>book</doctype>
-                                    <attributes>
-                                        <snippets>${snippetsDirectory}</snippets>
-                                    </attributes>
-                                </configuration>
-                            </execution>
                         </executions>
                     </plugin>
                     <plugin>
