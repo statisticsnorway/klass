@@ -10,7 +10,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.7</version>
+        <version>4.0.0</version>
         <relativePath />
     </parent>
 
@@ -48,11 +48,11 @@
         <snakeyaml.version>2.5</snakeyaml.version>
         <solr-version>8.5.2</solr-version>
         <sonar.version>5.3.0.6276</sonar.version>
-        <spring-restdocs-version>3.0.5</spring-restdocs-version>
+        <spring-restdocs-version>4.0.0</spring-restdocs-version>
         <testcontainers.version>1.20.1</testcontainers.version>
         <tomcat7-maven-plugin-version>2.2</tomcat7-maven-plugin-version>
         <woodstox-version>4.4.1</woodstox-version>
-        <zonky.pg.version>2.7.0</zonky.pg.version>
+        <zonky.pg.version>2.7.1</zonky.pg.version>
         <zonky.version>2.2.0</zonky.version>
     </properties>
 
