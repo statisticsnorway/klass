@@ -71,9 +71,10 @@ class RestApiTechnicalDetailsTest extends AbstractRestApiApplicationTest {
 
     @ParameterizedTest
     @MethodSource("validPathExtensionContentTypes")
-    void pathExtensionContentNegotiation(String pathExtension, String expectedContentType) {
+    void pathExtensionContentNegotiationTakesPrecedenceOverAcceptHeader(
+            String pathExtension, String expectedContentType) {
         given().port(port)
-                .noContentType() // Make sure the path extension is the sole specifier
+                .contentType(ContentType.XML)
                 .param("from", "2014-01-01")
                 .param("to", "2015-01-01")
                 .when()
