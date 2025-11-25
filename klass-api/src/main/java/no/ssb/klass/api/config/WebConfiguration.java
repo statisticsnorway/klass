@@ -36,7 +36,6 @@ public class WebConfiguration implements WebMvcConfigurer {
     public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
         configurer.strategies(
                 List.of(
-                        new HeaderContentNegotiationStrategy(),
                         new PathExtensionContentNegotiationStrategy(
                                 // Only these path extensions are allowed.
                                 Map.of(
@@ -45,6 +44,7 @@ public class WebConfiguration implements WebMvcConfigurer {
                                         "json",
                                         MediaType.APPLICATION_JSON,
                                         "xml",
-                                        MediaType.APPLICATION_XML))));
+                                        MediaType.APPLICATION_XML)),
+                        new HeaderContentNegotiationStrategy()));
     }
 }
