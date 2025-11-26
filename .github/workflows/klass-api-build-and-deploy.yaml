@@ -23,8 +23,8 @@ on:
           - prod
 
 jobs:
-  build:
-    name: Build
+  docker-build:
+    name: Docker Build
     permissions:
       contents: "read"
       id-token: "write"
@@ -81,13 +81,13 @@ jobs:
 
   deploy-test:
     name: Deploy to test
-    needs: build
+    needs: docker-build
     permissions:
       contents: "read"
       id-token: "write"
       packages: "read"
     runs-on: ubuntu-latest
-    if: github.event_name != 'release' || github.event.inputs.cluster == 'test' || needs.build.outputs.test-config-changed == 'true'
+    if: github.event_name != 'release' || github.event.inputs.cluster == 'test' || needs.docker-build.outputs.test-config-changed == 'true'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -97,18 +97,18 @@ jobs:
           CLUSTER: test
           RESOURCE: .nais/test/klass-api.yaml
           DEPLOY_SERVER: deploy.ssb.cloud.nais.io:443
-          WORKLOAD_IMAGE: ${{ needs.build.outputs.image }}
-          TELEMETRY: ${{ needs.build.outputs.telemetry }}
+          WORKLOAD_IMAGE: ${{ needs.docker-build.outputs.image }}
+          TELEMETRY: ${{ needs.docker-build.outputs.telemetry }}
 
   deploy-prod:
     name: Deploy to prod
-    needs: build
+    needs: docker-build
     permissions:
       contents: "read"
       id-token: "write"
       packages: "read"
     runs-on: ubuntu-latest
-    if: github.event_name == 'release' || github.event.inputs.cluster == 'prod' || (needs.build.outputs.prod-config-changed == 'true' && needs.build.outputs.only-config-changed == 'true')
+    if: github.event_name == 'release' || github.event.inputs.cluster == 'prod' || (needs.docker-build.outputs.prod-config-changed == 'true' && needs.docker-build.outputs.only-config-changed == 'true')
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -118,5 +118,5 @@ jobs:
           CLUSTER: prod
           RESOURCE: .nais/prod/klass-api.yaml
           DEPLOY_SERVER: deploy.ssb.cloud.nais.io:443
-          WORKLOAD_IMAGE: ${{ needs.build.outputs.image }}
-          TELEMETRY: ${{ needs.build.outputs.telemetry }}
+          WORKLOAD_IMAGE: ${{ needs.docker-build.outputs.image }}
+          TELEMETRY: ${{ needs.docker-build.outputs.telemetry }}

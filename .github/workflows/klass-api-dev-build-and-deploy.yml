@@ -18,8 +18,8 @@ on:
           - 8h
           - 36h
 jobs:
-  build:
-    name: Build
+  docker-build:
+    name: Docker Build
     permissions:
       contents: "read"
       id-token: "write"
@@ -73,7 +73,7 @@ jobs:
 
   deploy-test:
     name: Deploy to test
-    needs: build
+    needs: docker-build
     permissions:
       contents: "read"
       id-token: "write"
@@ -88,6 +88,6 @@ jobs:
           CLUSTER: test
           RESOURCE: .nais/test/klass-api-dev.yaml
           DEPLOY_SERVER: deploy.ssb.cloud.nais.io:443
-          WORKLOAD_IMAGE: ${{ needs.build.outputs.image }}
+          WORKLOAD_IMAGE: ${{ needs.docker-build.outputs.image }}
           VAR: app-name=${{ github.event.inputs.app }},time-to-live=${{ github.event.inputs.ttl }}
-          TELEMETRY: ${{ needs.build.outputs.telemetry }}
+          TELEMETRY: ${{ needs.docker-build.outputs.telemetry }}
