@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <artifactId>klass-shared</artifactId>
     <packaging>jar</packaging>
@@ -14,26 +15,8 @@
     </parent>
 
     <properties>
-
-        <!--
-        ja disse skal være her og skal være tomme,de er  nødvendig siden jgitflow plugin ikke plukker opp at  local profilen er activateByDefault
-        (på server defaulter disse til applications.properties)
-        -->
-        <klass.env.name />
-        <klass.doc.env.url />
-        <klass.doc.env.port />
-
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <spring.version>4.3.7.RELEASE</spring.version>
-        <objenesis-version>3.4</objenesis-version>
-        <guava-version>33.5.0-jre</guava-version>
-        <woodstox-version>4.4.1</woodstox-version>
-        <commons-lang3-version>3.19.0</commons-lang3-version>
-        <asciidoctor-version>1.6.0</asciidoctor-version>
-        <maven-jaxb2-plugin-version>2.5.0</maven-jaxb2-plugin-version>
-        <tomcat7-maven-plugin-version>2.2</tomcat7-maven-plugin-version>
-        <postgresql.version>42.7.8</postgresql.version>
     </properties>
 
     <dependencies>

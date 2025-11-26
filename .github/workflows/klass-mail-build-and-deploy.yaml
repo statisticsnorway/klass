@@ -7,6 +7,7 @@ on:
     branches:
       - main
     paths:
+      - "pom.xml"
       - "klass-mail/**"
       - ".nais/**/klass-mail.yaml"
       - ".github/workflows/klass-mail-build-and-deploy.yaml"
