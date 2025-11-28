@@ -15,10 +15,10 @@ spec:
     max: 1
   resources:
     requests:
-      cpu: 800m
-      memory: 2400Mi
+      cpu: 200m
+      memory: 1000Mi
     limits:
-      memory: 2400Mi
+      memory: 1920Mi  # High limit needed for re-indexing
   gcp:
     sqlInstances:
       - type: POSTGRES_17
