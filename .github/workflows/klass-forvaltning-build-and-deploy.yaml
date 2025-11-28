@@ -18,7 +18,7 @@ on:
         default: "test"
         type: choice
         options:
-          - test
+          #          - test
           - prod
 
 
@@ -106,7 +106,9 @@ jobs:
       id-token: "write"
       packages: "read"
     runs-on: ubuntu-latest
-    if: github.event_name == 'release' || github.event.inputs.cluster == 'prod' || (needs.docker-build.outputs.prod-config-changed == 'true' && needs.docker-build.outputs.only-config-changed == 'true')
+    # if: github.event_name == 'release' || github.event.inputs.cluster == 'prod' || (needs.docker-build.outputs.prod-config-changed == 'true' && needs.docker-build.outputs.only-config-changed == 'true')
+    # Disable prod deploy while klass-forvaltning is broken in test
+    if: false
     steps:
       - name: Checkout
         uses: actions/checkout@v4
