@@ -33,7 +33,7 @@ jobs:
       prod-manifest-changed: ${{ steps.prod-manifest-changed.outputs.changed != 'non-inputs' }}
       test-manifest-changed: ${{ steps.test-manifest-changed.outputs.changed != 'non-inputs'}}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - name: Check for Test manifest changes
@@ -58,7 +58,7 @@ jobs:
     needs: what-changed
     if: needs.what-changed.outputs.test-manifest-changed == 'true' || github.event.inputs.cluster == 'test'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -79,7 +79,7 @@ jobs:
     needs: what-changed
     if: needs.what-changed.outputs.prod-manifest-changed == 'true' || github.event.inputs.cluster == 'prod'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
 

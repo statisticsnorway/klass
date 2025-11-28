@@ -38,7 +38,7 @@ jobs:
       only-config-changed: ${{ steps.changed-files.outputs.changed == 'only-inputs'}}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - uses: actions/setup-java@v4
@@ -90,7 +90,7 @@ jobs:
     if: github.event_name != 'release' || github.event.inputs.cluster == 'test' || needs.docker-build.outputs.test-config-changed == 'true'
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - uses: nais/deploy/actions/deploy@v2
         env:
@@ -111,7 +111,7 @@ jobs:
     if: github.event_name == 'release' || github.event.inputs.cluster == 'prod' || (needs.docker-build.outputs.prod-config-changed == 'true' && needs.docker-build.outputs.only-config-changed == 'true')
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - uses: nais/deploy/actions/deploy@v2
         env:
