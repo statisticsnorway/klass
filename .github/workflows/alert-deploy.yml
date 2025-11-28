@@ -21,7 +21,7 @@ jobs:
       test-alerts: ${{ steps.discover.outputs.test }}
       prod-alerts: ${{ steps.discover.outputs.prod }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - id: discover
         run: |
@@ -42,7 +42,7 @@ jobs:
       matrix:
         resource: ${{ fromJson(needs.discover-alerts.outputs.test-alerts) }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Deploy ${{ matrix.resource }} to test
         uses: nais/deploy/actions/deploy@v2
         env:
@@ -58,7 +58,7 @@ jobs:
       matrix:
         resource: ${{ fromJson(needs.discover-alerts.outputs.prod-alerts) }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Deploy ${{ matrix.resource }} to prod
         uses: nais/deploy/actions/deploy@v2
         env:
