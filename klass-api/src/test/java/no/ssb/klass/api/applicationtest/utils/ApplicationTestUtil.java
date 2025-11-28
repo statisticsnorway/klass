@@ -24,6 +24,8 @@ public class ApplicationTestUtil {
 
     @Transactional
     public void clearDatabase() {
+        entityManager.createQuery("delete from Subscription").executeUpdate();
+        entityManager.createQuery("delete from Subscriber").executeUpdate();
         entityManager.createQuery("delete from Changelog").executeUpdate();
         entityManager.createQuery("delete from CorrespondenceMap").executeUpdate();
         entityManager.createQuery("delete from ClassificationItem").executeUpdate();

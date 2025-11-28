@@ -24,12 +24,12 @@ public class BaseEntityInterceptor implements Interceptor {
 
     public BaseEntityInterceptor() {
         objenesis = new ObjenesisStd(true);
-        clazzCache = new ConcurrentHashMap<String, Optional<Class<BaseEntity>>>();
+        clazzCache = new ConcurrentHashMap<>();
     }
 
     public Object instantiate(String entityName, Serializable id) {
         Optional<Class<BaseEntity>> clazz = getOrUpdate(entityName);
-        if (!clazz.isPresent()) {
+        if (clazz.isEmpty()) {
             return null;
         }
         BaseEntity entity = objenesis.getInstantiatorOf(clazz.get()).newInstance();
@@ -47,11 +47,11 @@ public class BaseEntityInterceptor implements Interceptor {
         try {
             Class<?> foundClazz = Class.forName(clazz);
             if (!BaseEntity.class.isAssignableFrom(foundClazz)) {
-                return Optional.ofNullable(null);
+                return Optional.empty();
             }
             return Optional.of((Class<BaseEntity>) foundClazz);
         } catch (ClassNotFoundException e) {
-            return Optional.ofNullable(null);
+            return Optional.empty();
         }
     }
 }

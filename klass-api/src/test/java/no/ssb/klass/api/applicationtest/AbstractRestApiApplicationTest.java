@@ -93,6 +93,7 @@ public abstract class AbstractRestApiApplicationTest {
 
     public static final String REQUEST_WITH_ID_AND_CHANGES =
             REQUEST + "/{classificationId}/changes";
+    public static final String REQUEST_SUBSCRIBE = REQUEST + "/{classificationId}/trackChanges";
 
     public static final String QUERY = "query";
     public static final String INCLUDE_CODE_LISTS = "includeCodelists";
