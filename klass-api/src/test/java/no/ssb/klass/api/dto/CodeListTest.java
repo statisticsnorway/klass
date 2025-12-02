@@ -42,6 +42,8 @@ class CodeListTest {
         private CodeList baseList;
         private List<String> baseCodes;
 
+        private CodeList listWithOtherCharacters;
+
         @BeforeEach
         void setUp() {
             baseList =
@@ -49,6 +51,10 @@ class CodeListTest {
                             "1000", "1100", "1111", "1199", "1200", "3000", "3004", "3006", "3100",
                             "3200", "3399", "3400", "3410", "3499", "3500");
             baseCodes = baseList.getCodes().stream().map(CodeItem::getCode).toList();
+
+            listWithOtherCharacters =
+                    makeCodeList(
+                            "0187", "0187.ZZ1", "0187.ZZ1.297", "0530", "0530.ZZ2", "0530.ZZ2.574");
         }
 
         @Nested
@@ -152,14 +158,38 @@ class CodeListTest {
                         .containsExactlyInAnyOrder("3100", "3200", "3399", "3400", "3410", "3499");
                 assertThat(output).isNotSameAs(baseList);
             }
+
+            @Test
+            void singleCodeOtherCharacters() {
+                CodeList output = listWithOtherCharacters.filterOnCodes("0187.ZZ1.297");
+                assertThat(output.getCodes())
+                        .extracting(CodeItem::getCode)
+                        .containsExactlyInAnyOrder("0187.ZZ1.297");
+            }
+
+            @Test
+            void wildcardOtherCharacters() {
+                CodeList output = listWithOtherCharacters.filterOnCodes("0187*");
+                assertThat(output.getCodes())
+                        .extracting(CodeItem::getCode)
+                        .containsExactlyInAnyOrder("0187", "0187.ZZ1", "0187.ZZ1.297");
+            }
         }
 
         @Nested
         @DisplayName("Validation")
         class Validation {
-            @Test
-            void allowedCharacters() {
-                String input = "3004, 3006-3400, 11*,  1 , 2-3,    9*,\t 8-9";
+
+            @ParameterizedTest
+            @ValueSource(
+                    strings = {
+                        "a",
+                        "bcd",
+                        "al06",
+                        "0574.ZZ6.2",
+                        "3004, 3006-3400, 11*,  1 , 2-3,    9*,\t 8-9"
+                    })
+            void allowedCharacters(String input) {
                 CodeList output = baseList.filterOnCodes(input);
                 assertThat(output).isNotNull();
             }
@@ -167,8 +197,8 @@ class CodeListTest {
             @ParameterizedTest
             @ValueSource(
                     strings = {
-                        "a", "bcd", "2001.", "2002/", "2003\\", "2004:", "2005;", "2006|", "2007+",
-                        "2 O O 8", "2009😆", "3001?", "3002=", "3003&", "3004%", "3005!", "3006@"
+                        "2002/", "2003\\", "2004:", "2005;", "2006|", "2007+", "2009😆", "3001?",
+                        "3002=", "3003&", "3004%", "3005!", "3006@"
                     })
             void illegalCharacters(String invalidCode) {
                 assertThatThrownBy(() -> baseList.filterOnCodes(invalidCode))
