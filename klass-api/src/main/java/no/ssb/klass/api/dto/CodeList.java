@@ -22,8 +22,9 @@ import java.util.regex.Pattern;
 public class CodeList {
     private static final int MAX_SELECTCODES_LENGTH = 200;
     private static final int MAX_PARAMETERS = 20;
-    private static final Pattern LEGAL_SELECTCODES_CHARS = Pattern.compile("^[0-9,\\-*\\s]+$");
-    private static final Pattern DIGITS = Pattern.compile("^\\d+$");
+    private static final Pattern LEGAL_SELECTCODES_CHARS =
+            Pattern.compile("^[0-9a-zA-Z,.\\-*\\s]+$");
+    private static final Pattern VALID_SINGLE_CODE = Pattern.compile("^[0-9a-zA-Z.]+$");
     private static final Pattern DIGITS_OR_STARS = Pattern.compile("^[0-9*]+$");
     private final char csvSeparator;
     private final boolean displayWithValidRange;
@@ -310,12 +311,12 @@ public class CodeList {
     private void addPrefixIfValid(String parameter, ParsedSelectCodes out) {
         String prefix = parameter.substring(0, parameter.length() - 1);
         if (prefix.isEmpty()) return;
-        if (!DIGITS.matcher(prefix).matches()) return;
+        if (!VALID_SINGLE_CODE.matcher(prefix).matches()) return;
         out.prefixes.add(prefix);
     }
 
     private void addExactIfValid(String parameter, ParsedSelectCodes out) {
-        if (!DIGITS.matcher(parameter).matches()) return;
+        if (!VALID_SINGLE_CODE.matcher(parameter).matches()) return;
         out.exact.add(parameter);
     }
 
@@ -329,10 +330,10 @@ public class CodeList {
     private static String computeExclusiveUpperBound(String right) {
         if (right.endsWith("*")) {
             String prefix = right.substring(0, right.length() - 1);
-            if (!DIGITS.matcher(prefix).matches()) return null;
+            if (!VALID_SINGLE_CODE.matcher(prefix).matches()) return null;
             return incrementNumericString(prefix);
         } else {
-            if (!DIGITS.matcher(right).matches()) return null;
+            if (!VALID_SINGLE_CODE.matcher(right).matches()) return null;
             return right + "\uFFFF";
         }
     }
