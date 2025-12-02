@@ -10,7 +10,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.7</version>
+        <version>4.0.0</version>
         <relativePath />
     </parent>
 
@@ -54,7 +54,7 @@
         <testcontainers.version>1.20.1</testcontainers.version>
         <tomcat7-maven-plugin-version>2.2</tomcat7-maven-plugin-version>
         <woodstox-version>4.4.1</woodstox-version>
-        <zonky.pg.version>2.7.0</zonky.pg.version>
+        <zonky.pg.version>2.7.1</zonky.pg.version>
         <zonky.version>2.2.0</zonky.version>
     </properties>
 
