@@ -6,6 +6,9 @@ metadata:
   namespace: dapla-metadata
   labels:
     team: dapla-metadata
+  annotations:
+    # Allow large, long running queries to complete
+    nginx.ingress.kubernetes.io/proxy-read-timeout: 120
 spec:
   port: 8080
   ingresses:
