@@ -10,7 +10,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.7</version>
+        <version>4.0.1</version>
         <relativePath />
     </parent>
 
@@ -44,17 +44,17 @@
         <jaxb-api-version>4.0.4</jaxb-api-version>
         <maven-jaxb2-plugin-version>2.5.0</maven-jaxb2-plugin-version>
         <objenesis-version>3.4</objenesis-version>
-        <rest-assured-version>5.5.6</rest-assured-version>
+        <rest-assured-version>6.0.0</rest-assured-version>
         <snakeyaml.version>2.5</snakeyaml.version>
         <solr-version>8.5.2</solr-version>
-        <sonar.version>5.3.0.6276</sonar.version>
+        <sonar.version>5.5.0.6356</sonar.version>
         <spring.version>4.3.7.RELEASE</spring.version>
         <spring-restdocs-version>3.0.5</spring-restdocs-version>
         <postgresql.version>42.7.8</postgresql.version>
         <testcontainers.version>1.20.1</testcontainers.version>
         <tomcat7-maven-plugin-version>2.2</tomcat7-maven-plugin-version>
         <woodstox-version>4.4.1</woodstox-version>
-        <zonky.pg.version>2.7.0</zonky.pg.version>
+        <zonky.pg.version>2.7.1</zonky.pg.version>
         <zonky.version>2.2.0</zonky.version>
     </properties>
 
@@ -124,7 +124,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-release-plugin</artifactId>
-                    <version>3.2.0</version>
+                    <version>3.3.1</version>
                     <configuration>
                         <releaseProfiles>documentation</releaseProfiles>
                         <autoVersionSubmodules>true</autoVersionSubmodules>
