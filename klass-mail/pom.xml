@@ -14,7 +14,7 @@
     </parent>
 
     <properties>
-        <spring-cloud-gcp-dependencies.version>7.4.1</spring-cloud-gcp-dependencies.version>
+        <spring-cloud-gcp-dependencies.version>7.4.2</spring-cloud-gcp-dependencies.version>
     </properties>
 
     <dependencies>
