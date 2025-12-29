@@ -1,0 +1,10 @@
+<ehcache>
+    <defaultCache
+            maxEntriesLocalHeap="100000"
+            eternal="true"
+            maxEntriesLocalDisk="10000000"
+            diskExpiryThreadIntervalSeconds="120"
+            memoryStoreEvictionPolicy="LRU"
+            <persistence strategy="localTempSwap"/>
+    />
+</ehcache>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <artifactId>klass-shared</artifactId>
     <packaging>jar</packaging>
@@ -29,11 +30,6 @@
             <groupId>org.objenesis</groupId>
             <artifactId>objenesis</artifactId>
             <version>${objenesis-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>2.4.240</version>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
@@ -170,6 +166,19 @@
             <version>1.0.2.Final</version>
             <scope>compile</scope>
         </dependency>
+
+        <!-- Support second level cache in Hibernate -->
+        <dependency>
+            <groupId>org.hibernate.orm</groupId>
+            <artifactId>hibernate-jcache</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+            <version>3.10.8</version>
+            <classifier>jakarta</classifier>
+        </dependency>
     </dependencies>
 
     <build>
@@ -204,40 +213,5 @@
             </plugin>
 
         </plugins>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>external.atlassian.jgitflow</groupId>
-                    <artifactId>jgitflow-maven-plugin</artifactId>
-                    <version>1.0-m5.1</version>
-                    <configuration>
-                        <!-- see goals wiki page for configuration options -->
-                        <flowInitContext>
-                            <masterBranchName>master</masterBranchName>
-                            <developBranchName>develop</developBranchName>
-                            <featureBranchPrefix>feature/</featureBranchPrefix>
-                            <releaseBranchPrefix>release/</releaseBranchPrefix>
-                            <hotfixBranchPrefix>hotfix/</hotfixBranchPrefix>
-                            <versionTagPrefix>klass_v</versionTagPrefix>
-                        </flowInitContext>
-                        <releaseProfiles>documentation</releaseProfiles>
-                        <arguments>-Pdocumentation -Dmaven.javadoc.skip=true</arguments>
-                    </configuration>
-                </plugin>
-
-                <plugin>
-                    <groupId>org.apache.tomcat.maven</groupId>
-                    <artifactId>tomcat7-maven-plugin</artifactId>
-                    <version>${tomcat7-maven-plugin-version}</version>
-                    <configuration>
-                        <url>${deploy.server.url}</url>
-                        <path>/</path>
-                        <username>${deploy.credentials.username}</username>
-                        <password>${deploy.credentials.password}</password>
-                    </configuration>
-                </plugin>
-
-            </plugins>
-        </pluginManagement>
     </build>
 </project>
