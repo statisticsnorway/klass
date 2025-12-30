@@ -146,6 +146,13 @@
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <!--Conflicts with Spring's logging setup-->
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>io.zonky.test</groupId>
