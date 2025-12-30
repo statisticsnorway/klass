@@ -1,6 +1,5 @@
 package no.ssb.klass.api;
 
-
 import static io.zonky.test.db.AutoConfigureEmbeddedDatabase.DatabaseProvider.EMBEDDED;
 
 import static org.mockito.Mockito.*;

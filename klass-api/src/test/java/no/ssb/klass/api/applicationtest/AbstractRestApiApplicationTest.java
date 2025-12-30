@@ -1,6 +1,5 @@
 package no.ssb.klass.api.applicationtest;
 
-
 import static io.zonky.test.db.AutoConfigureEmbeddedDatabase.DatabaseProvider.EMBEDDED;
 
 import io.zonky.test.db.AutoConfigureEmbeddedDatabase;

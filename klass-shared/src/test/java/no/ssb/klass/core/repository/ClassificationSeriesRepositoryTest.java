@@ -1,6 +1,5 @@
 package no.ssb.klass.core.repository;
 
-
 import static io.zonky.test.db.AutoConfigureEmbeddedDatabase.DatabaseProvider.EMBEDDED;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
