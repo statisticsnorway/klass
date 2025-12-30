@@ -1,6 +1,7 @@
 package no.ssb.klass.api.applicationtest;
 
-import static io.zonky.test.db.AutoConfigureEmbeddedDatabase.DatabaseProvider.ZONKY;
+
+import static io.zonky.test.db.AutoConfigureEmbeddedDatabase.DatabaseProvider.EMBEDDED;
 
 import io.zonky.test.db.AutoConfigureEmbeddedDatabase;
 
@@ -57,7 +58,7 @@ import java.util.Date;
     ConfigurationProfiles.MOCK_SEARCH
 })
 @AutoConfigureEmbeddedDatabase(
-        provider = ZONKY,
+        provider = EMBEDDED,
         type = AutoConfigureEmbeddedDatabase.DatabaseType.POSTGRES)
 @ComponentScan(basePackageClasses = TranslatablePersistenceConverter.class)
 public abstract class AbstractRestApiApplicationTest {

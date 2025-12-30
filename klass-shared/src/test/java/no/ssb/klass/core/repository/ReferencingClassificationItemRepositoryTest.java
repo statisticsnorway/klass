@@ -1,6 +1,10 @@
 package no.ssb.klass.core.repository;
 
+import static io.zonky.test.db.AutoConfigureEmbeddedDatabase.DatabaseProvider.EMBEDDED;
+
 import static org.assertj.core.api.Assertions.assertThat;
+
+import io.zonky.test.db.AutoConfigureEmbeddedDatabase;
 
 import jakarta.transaction.Transactional;
 
@@ -31,6 +35,9 @@ import java.util.List;
 @SpringBootTest
 @ActiveProfiles({ConfigurationProfiles.POSTGRES_EMBEDDED, ConfigurationProfiles.MOCK_MAILSERVER})
 @Transactional
+@AutoConfigureEmbeddedDatabase(
+        provider = EMBEDDED,
+        type = AutoConfigureEmbeddedDatabase.DatabaseType.POSTGRES)
 public class ReferencingClassificationItemRepositoryTest {
 
     @Autowired private ReferencingClassificationItemRepository referencingItemRepository;
