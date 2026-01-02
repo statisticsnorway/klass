@@ -82,6 +82,11 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+            <version>11.17.0</version>
+        </dependency>
+        <dependency>
             <groupId>ch.qos.logback.access</groupId>
             <artifactId>logback-access-common</artifactId>
             <version>2.0.7</version>
@@ -173,6 +178,12 @@
             <groupId>io.zonky.test</groupId>
             <artifactId>embedded-database-spring-test</artifactId>
             <version>${zonky.pg.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>testcontainers</artifactId>
+            <version>1.19.8</version>
             <scope>test</scope>
         </dependency>
         <dependency>
