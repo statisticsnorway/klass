@@ -9,7 +9,7 @@ metadata:
     team: dapla-metadata
 spec:
   port: 8080
-  ttl: {{ time-to-live }}
+  ttl: "{{ time-to-live }}"
   ingresses:
     - https://klass-dev-{{ app-name }}.intern.test.ssb.no/api/klass
   replicas:
@@ -18,18 +18,25 @@ spec:
   resources:
     requests:
       cpu: 200m
-      memory: 1200Mi
+      memory: 1000Mi
     limits:
-      memory: 1400Mi
+      memory: 1920Mi
   env:
     - name: SPRING_PROFILES_ACTIVE
-      value: api, postgres, solr-remote, skip-indexing
-    - name: SPRING_DATA_SOLR_HOST
-      value: http://klass-solr/solr
+      value: api, postgres, remote-open-search, skip-indexing
+    - name: OPENSEARCH_USERNAME
+      value: ${OPEN_SEARCH_USERNAME}
+    - name: OPENSEARCH_URL
+      value: ${OPEN_SEARCH_URI}
+    - name: OPENSEARCH_PASSWORD
+      value: ${OPEN_SEARCH_PASSWORD}
+      # Structured logging in cluster
+    - name: LOGGING_STRUCTURED_FORMAT_CONSOLE
+      value: logstash
     - name: KLASS_ENV_CLIENT_KLASS_MAIL_URL
       value: http://klass-mail
     - name: JAVA_TOOL_OPTIONS
-      value: "-XX:InitialRAMPercentage=50.0 -XX:MaxRAMPercentage=75.0"
+      value: "-XX:InitialRAMPercentage=50.0 -XX:MaxRAMPercentage=50.0"
 
   envFrom:
     - secret: google-sql-klass
@@ -41,6 +48,9 @@ spec:
       rules:
         - application: klass-solr
         - application: klass-mail
+  openSearch:
+    access: admin
+    instance: klass-search
 
   prometheus:
     enabled: true
@@ -62,9 +72,3 @@ spec:
     port: 8090
     initialDelay: 60
     timeout: 180
-
-
-
-
-
-  

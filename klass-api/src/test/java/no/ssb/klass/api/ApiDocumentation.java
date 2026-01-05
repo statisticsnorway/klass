@@ -1,5 +1,7 @@
 package no.ssb.klass.api;
 
+import static io.zonky.test.db.AutoConfigureEmbeddedDatabase.DatabaseProvider.EMBEDDED;
+
 import static org.mockito.Mockito.*;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -14,6 +16,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+
+import io.zonky.test.db.AutoConfigureEmbeddedDatabase;
 
 import no.ssb.klass.api.config.MockConfig;
 import no.ssb.klass.api.config.TestConfig;
@@ -88,6 +92,9 @@ import java.util.List;
             ElasticsearchRestClientAutoConfiguration.class,
             ElasticsearchDataAutoConfiguration.class
         })
+@AutoConfigureEmbeddedDatabase(
+        provider = EMBEDDED,
+        type = AutoConfigureEmbeddedDatabase.DatabaseType.POSTGRES)
 public class ApiDocumentation {
     private static final int CLASS_ID_FAMILIEGRUPPERING = 17;
     private static final int CLASS_ID_GREENHOUSE_GASES = 84;

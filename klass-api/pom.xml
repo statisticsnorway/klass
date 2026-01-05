@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <name>Klass API</name>
@@ -25,6 +26,7 @@
             <artifactId>klass-shared</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
+
         <!--Spring-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -44,6 +46,11 @@
             <optional>true</optional>
         </dependency>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>2.8.14</version>
@@ -53,6 +60,8 @@
             <artifactId>spring-data-opensearch-starter</artifactId>
             <version>1.7.1</version>
         </dependency>
+
+        <!--Non-Spring-->
         <dependency>
             <groupId>jakarta.xml.bind</groupId>
             <artifactId>jakarta.xml.bind-api</artifactId>
@@ -63,29 +72,9 @@
             <artifactId>jaxb-runtime</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>testcontainers</artifactId>
-            <version>1.19.8</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>1.21.3</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.opensearch</groupId>
-            <artifactId>opensearch-testcontainers</artifactId>
-            <version>2.0.1</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
         </dependency>
-
-        <!--Flyway-->
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-database-postgresql</artifactId>
@@ -97,14 +86,6 @@
             <artifactId>flyway-core</artifactId>
             <version>11.17.0</version>
         </dependency>
-
-        <!--TOMCAT-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-tomcat</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
         <dependency>
             <groupId>ch.qos.logback.access</groupId>
             <artifactId>logback-access-common</artifactId>
@@ -120,11 +101,23 @@
             <artifactId>logstash-logback-encoder</artifactId>
             <version>9.0</version>
         </dependency>
-
         <dependency>
             <groupId>org.apache.tomcat.embed</groupId>
             <artifactId>tomcat-embed-jasper</artifactId>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.jayway.jsonpath</groupId>
+            <artifactId>json-path</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.ws.rs</groupId>
+            <artifactId>jakarta.ws.rs-api</artifactId>
+            <version>${jakarta-rs-api-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
         </dependency>
 
         <!--TEST SCOPE-->
@@ -135,33 +128,6 @@
             <scope>test</scope>
             <version>${project.parent.version}</version>
         </dependency>
-
-        <dependency>
-            <groupId>jakarta.ws.rs</groupId>
-            <artifactId>jakarta.ws.rs-api</artifactId>
-            <version>${jakarta-rs-api-version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>io.micrometer</groupId>
-            <artifactId>micrometer-registry-prometheus</artifactId>
-        </dependency>
-
-        <!-- Zonky test -->
-        <dependency>
-            <groupId>io.zonky.test</groupId>
-            <artifactId>embedded-postgres</artifactId>
-            <version>2.2.0</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.zonky.test</groupId>
-            <artifactId>embedded-database-spring-test</artifactId>
-            <version>2.7.1</version>
-            <scope>test</scope>
-        </dependency>
-
-        <!--Spring TEST-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -186,31 +152,50 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.jayway.jsonpath</groupId>
-            <artifactId>json-path</artifactId>
-        </dependency>
-        <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
             <scope>test</scope>
             <exclusions>
-                <!-- remove conflicting dependency because declared in 2 differents versions (3 & 4)
-                See: https://github.com/rest-assured/rest-assured/issues/1612 -->
                 <exclusion>
-                    <groupId>org.apache.groovy</groupId>
-                    <artifactId>groovy-xml</artifactId>
+                    <!--Conflicts with Spring's logging setup-->
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
         <dependency>
-            <!-- add this dep which bring back the groovy-xml in a single and last version (4) -->
-            <groupId>io.rest-assured</groupId>
-            <artifactId>xml-path</artifactId>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
+            <groupId>io.zonky.test</groupId>
+            <artifactId>embedded-postgres</artifactId>
+            <version>${zonky.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.zonky.test</groupId>
+            <artifactId>embedded-database-spring-test</artifactId>
+            <version>${zonky.pg.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>testcontainers</artifactId>
+            <version>1.19.8</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>1.21.3</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.opensearch</groupId>
+            <artifactId>opensearch-testcontainers</artifactId>
+            <version>2.0.1</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

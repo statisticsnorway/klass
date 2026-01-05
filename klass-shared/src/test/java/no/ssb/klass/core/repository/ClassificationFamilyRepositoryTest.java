@@ -1,7 +1,11 @@
 package no.ssb.klass.core.repository;
 
+import static io.zonky.test.db.AutoConfigureEmbeddedDatabase.DatabaseProvider.EMBEDDED;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+
+import io.zonky.test.db.AutoConfigureEmbeddedDatabase;
 
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
@@ -32,6 +36,9 @@ import java.util.List;
 @SpringBootTest
 @ActiveProfiles(ConfigurationProfiles.POSTGRES_EMBEDDED)
 @Transactional
+@AutoConfigureEmbeddedDatabase(
+        provider = EMBEDDED,
+        type = AutoConfigureEmbeddedDatabase.DatabaseType.POSTGRES)
 public class ClassificationFamilyRepositoryTest {
 
     private static final Logger logger =
