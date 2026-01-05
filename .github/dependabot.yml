@@ -19,7 +19,7 @@ updates:
       klass-root:
         ignore:
           # Don't attempt to automatically update to Spring v4
-          - dependency-name: "org.springframework*"
+          - dependency-name: "org.springframework.*:*"
             update-types: [ "version-update:semver-major" ]
         patterns:
           - "*"
@@ -31,7 +31,7 @@ updates:
       klass-api:
         ignore:
           # Don't attempt to automatically update to Spring v4
-          - dependency-name: "org.springframework*"
+          - dependency-name: "org.springframework.*:*"
             update-types: [ "version-update:semver-major" ]
         patterns:
           - "*"
@@ -43,7 +43,7 @@ updates:
       klass-shared:
         ignore:
           # Don't attempt to automatically update to Spring v4
-          - dependency-name: "org.springframework*"
+          - dependency-name: "org.springframework.*:*"
             update-types: [ "version-update:semver-major" ]
         patterns:
           - "*"
@@ -55,7 +55,7 @@ updates:
       klass-mail:
         ignore:
           # Don't attempt to automatically update to Spring v4
-          - dependency-name: "org.springframework*"
+          - dependency-name: "org.springframework.*:*"
             update-types: [ "version-update:semver-major" ]
         patterns:
           - "*"
