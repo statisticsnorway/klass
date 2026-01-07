@@ -29,10 +29,10 @@ spec:
     max: 1
   resources:
     requests:
-      cpu: 400m
-      memory: 1000Mi
+      cpu: 600m
+      memory: 1300Mi
     limits:
-      memory: 1100Mi
+      memory: 1300Mi
   env:
     - name: SPRING_PROFILES_ACTIVE
       value: frontend, postgres, skip-indexing, remote-solr
@@ -50,6 +50,8 @@ spec:
       value: http://klass-mail
     - name: LOGGING_LEVEL_ROOT
       value: INFO
+    - name: VAADIN_SERVLET_PRODUCTION_MODE
+      value: "true"
     - name: JAVA_TOOL_OPTIONS
       value: "-XX:InitialRAMPercentage=50.0 -XX:MaxRAMPercentage=50.0"
   envFrom:
