@@ -49,6 +49,10 @@ spec:
     outbound:
       rules:
         - application: klass-mail
+    inbound:
+      rules:
+        - application: metadata-catalog
+        - application: metadata-catalog-dev
   openSearch:
     access: admin
     instance: klass-search
