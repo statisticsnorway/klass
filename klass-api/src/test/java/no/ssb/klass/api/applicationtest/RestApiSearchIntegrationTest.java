@@ -46,7 +46,6 @@ class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest {
     @SuppressWarnings("resource") // Managed by Testcontainers
     protected static final OpensearchContainer<?> opensearchContainer =
             new OpensearchContainer<>(DockerImageName.parse("opensearchproject/opensearch:2.11.0"))
-                    .withEnv("OPENSEARCH_JAVA_OPTS", "-Xms2g -Xmx2g")
                     .withEnv("discovery.type", "single-node")
                     .withReuse(true);
 
