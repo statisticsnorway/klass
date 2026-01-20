@@ -11,7 +11,7 @@
     <parent>
         <groupId>no.ssb.klass</groupId>
         <artifactId>klass-root</artifactId>
-        <version>4.2.4-SNAPSHOT</version>
+        <version>4.2.5-SNAPSHOT</version>
     </parent>
 
     <properties>
@@ -89,12 +89,10 @@
         <dependency>
             <groupId>ch.qos.logback.access</groupId>
             <artifactId>logback-access-common</artifactId>
-            <version>2.0.8</version>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback.access</groupId>
             <artifactId>logback-access-tomcat</artifactId>
-            <version>2.0.8</version>
         </dependency>
         <dependency>
             <groupId>net.logstash.logback</groupId>
