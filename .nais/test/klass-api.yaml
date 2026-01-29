@@ -53,6 +53,8 @@ spec:
       rules:
         - application: metadata-catalog
         - application: metadata-catalog-dev
+        - application: dataportalen
+        - application: dataportalen-dev
   openSearch:
     access: admin
     instance: klass-search
