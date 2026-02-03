@@ -16,7 +16,7 @@ spec:
   resources:
     requests:
       cpu: 155m
-      memory: 1920Mi
+      memory: 2500Mi
     limits:
       memory: 2500Mi
   gcp:
