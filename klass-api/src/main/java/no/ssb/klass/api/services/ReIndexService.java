@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,7 +33,8 @@ public class ReIndexService {
      * <p>This method retrieves all classification IDs from repository and triggers asynchronous
      * indexing for each one. The job is scheduled to run every day at 23:30.
      */
-    @Scheduled(cron = "0 30 23 * * *")
+    // Disable temporary reindexing job because app runs out of memory
+    // @Scheduled(cron = "0 30 23 * * *")
     public void runDailyIndexJob() {
         log.info("Starting scheduled index job at 23:30");
 
