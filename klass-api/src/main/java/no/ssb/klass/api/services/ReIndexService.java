@@ -34,7 +34,7 @@ public class ReIndexService {
      * indexing for each one. The job is scheduled to run every day at 23:30.
      */
     // Disable temporary reindexing job because app runs out of memory
-    //@Scheduled(cron = "0 30 23 * * *")
+    // @Scheduled(cron = "0 30 23 * * *")
     public void runDailyIndexJob() {
         log.info("Starting scheduled index job at 23:30");
 
