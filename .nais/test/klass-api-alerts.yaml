@@ -14,7 +14,7 @@ spec:
           for: 3m
           annotations:
             title: "HTTP error responses"
-            consequence: "A high number of HTTP requests are receiving error responses. This may indicate a problem with the application"
+            consequence: "A high number of HTTP requests are receiving error responses. This may indicate a problem with the application."
             action: "Investigate whether this indicates an app failure or user errors."
           labels:
             service: klass-api
@@ -61,8 +61,8 @@ spec:
             severity: critical
             environment: test
 
-        - alert: Klass-api is unavailable
-          expr: kube_deployment_status_replicas_available{deployment="klass-api"} == 0
+        - alert: Klass is unavailable
+          expr: kube_deployment_status_replicas_available{deployment="klass"} == 0
           for: 1m
           annotations:
             title: "Klass-api is unavailable"
