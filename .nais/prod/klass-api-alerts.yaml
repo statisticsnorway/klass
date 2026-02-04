@@ -9,8 +9,34 @@ spec:
   groups:
     - name: dapla-metadata
       rules:
+        - alert: HTTP error responses
+          expr: 100 * sum(rate(nginx_ingress_controller_request_duration_seconds_count{ingress="klass-nais-ingress-eaceac17",status!~"[4-5].*"}[10m])) by (ingress) / sum(rate(nginx_ingress_controller_request_duration_seconds_count{ingress="klass-nais-ingress-eaceac17"}[10m])) by (ingress) < 75.0
+          for: 3m
+          annotations:
+            title: "HTTP error responses"
+            consequence: "A high number of HTTP requests are receiving error responses. This may indicate a problem with the application."
+            action: "Investigate whether this indicates an app failure or user errors."
+          labels:
+            service: klass-api
+            namespace: dapla-metadata
+            severity: critical
+            environment: prod
+
+        - alert: High heap memory usage
+          expr: (100 * sum by (instance) (jvm_memory_used_bytes{application="klass", area="heap"})) / (sum by (instance) (jvm_memory_max_bytes{application="klass", area="heap"}) ) > 70.0
+          for: 3m
+          annotations:
+            title: "High heap memory usage"
+            consequence: "If this increase continues then the app could run out of memory and either lock or crash."
+            action: "Immediate: Restart the app from the Nais console\nShort term: Investigate the cause of high heap usage and either fix the bug or increase the available heap."
+          labels:
+            service: klass-api
+            namespace: dapla-metadata
+            severity: critical
+            environment: prod
+
         - alert: High number of errors
-          expr: (100 * sum by (app, namespace) (rate(logback_events_total{app="klass-api",level="error"}[3m])) / sum by (app, namespace) (rate(logback_events_total{app="klass-api"}[3m]))) > 10
+          expr: (100 * sum by (app, namespace) (rate(logback_events_total{application="klass",level="error"}[3m])) / sum by (app, namespace) (rate(logback_events_total{application="klass"}[3m]))) > 1
           for: 3m
           annotations:
             title: "High number of errors logged"
@@ -23,7 +49,7 @@ spec:
             environment: prod
 
         - alert: A Klass-api client is unavailable
-          expr: rate(http_client_requests_seconds_count{app="klass-api", status!="200"}[1m]) > 0
+          expr: rate(http_client_requests_seconds_count{application="klass", status!="200"}[1m]) > 0
           for: 1m
           annotations:
             title: "A Klass-api client is unavailable "
@@ -35,8 +61,8 @@ spec:
             severity: critical
             environment: prod
 
-        - alert: Klass-api is unavailable
-          expr: kube_deployment_status_replicas_available{deployment="klass-api"} == 0
+        - alert: Klass is unavailable
+          expr: kube_deployment_status_replicas_available{deployment="klass"} == 0
           for: 1m
           annotations:
             title: "Klass-api is unavailable"
