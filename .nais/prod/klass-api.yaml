@@ -40,7 +40,7 @@ spec:
     - name: KLASS_ENV_CLIENT_KLASS_MAIL_URL
       value: http://klass-mail
     - name: JAVA_TOOL_OPTIONS
-      value: "-XX:InitialRAMPercentage=75.0 -XX:MaxRAMPercentage=75.0"
+      value: "-XX:+ExitOnOutOfMemoryError -XX:InitialRAMPercentage=75.0 -XX:MaxRAMPercentage=75.0"
 
   accessPolicy:
     outbound:
