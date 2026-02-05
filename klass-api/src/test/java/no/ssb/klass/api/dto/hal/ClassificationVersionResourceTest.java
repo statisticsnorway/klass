@@ -41,7 +41,7 @@ public class ClassificationVersionResourceTest {
         // then
         assertEquals(1, subject.getLinks().toList().size());
         assertEquals(
-                "http://localhost" + RestConstants.API_VERSION_V1 + "/versions/1",
+                "http://localhost" + RestConstants.CONTEXT_AND_VERSION_V1 + "/versions/1",
                 subject.getLink("self")
                         .orElseThrow(() -> new RuntimeException("No link found"))
                         .getHref());

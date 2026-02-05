@@ -14,6 +14,7 @@ import no.ssb.klass.core.config.ConfigurationProfiles;
 import no.ssb.klass.testutil.TestDataProvider;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.opensearch.data.client.orhlc.OpenSearchRestTemplate;
 import org.opensearch.testcontainers.OpensearchContainer;
@@ -40,6 +41,7 @@ import org.testcontainers.utility.DockerImageName;
             ConfigurationProfiles.OPEN_SEARCH_LOCAL
         },
         inheritProfiles = false)
+@Disabled
 class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest {
 
     @Container

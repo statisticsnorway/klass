@@ -40,7 +40,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchDataAutoConfiguration;
 import org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchRestClientAutoConfiguration;
@@ -111,8 +110,7 @@ public class ApiDocumentation {
 
     private MockMvc mockMvc;
 
-    @Value("${server.servlet.context-path}")
-    private String contextPath;
+    private String contextPath = RestConstants.CONTEXT_PATH;
 
     private String server = "data.ssb.no";
     private int port = 443;
@@ -1653,14 +1651,12 @@ public class ApiDocumentation {
             String urlTemplate, Object... urlVariables) {
         return MockMvcRequestBuilders.get(
                         this.contextPath + RestConstants.API_VERSION_V1 + urlTemplate, urlVariables)
-                .requestAttr(RestDocumentationGenerator.ATTRIBUTE_NAME_URL_TEMPLATE, urlTemplate)
-                .contextPath(contextPath);
+                .requestAttr(RestDocumentationGenerator.ATTRIBUTE_NAME_URL_TEMPLATE, urlTemplate);
     }
 
     public MockHttpServletRequestBuilder getWithContextUri(String url) {
         return MockMvcRequestBuilders.get(toUri(contextPath + RestConstants.API_VERSION_V1 + url))
-                .requestAttr(RestDocumentationGenerator.ATTRIBUTE_NAME_URL_TEMPLATE, url)
-                .contextPath(contextPath);
+                .requestAttr(RestDocumentationGenerator.ATTRIBUTE_NAME_URL_TEMPLATE, url);
     }
 
     private Page<OpenSearchResult> createSearchPage(Pageable pageable) {

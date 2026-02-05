@@ -62,7 +62,7 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping(value = {RestConstants.API_VERSION_V1})
+@RequestMapping(RestConstants.CONTEXT_AND_VERSION_V1)
 public class ClassificationController {
     private static final Logger log = LoggerFactory.getLogger(ClassificationController.class);
     private final ClassificationService classificationService;
