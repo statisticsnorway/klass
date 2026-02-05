@@ -35,13 +35,16 @@ public class ClassificationResourceTest {
         // then
         assertEquals(name, subject.getName());
         assertEquals(
-                "http://localhost" + RestConstants.API_VERSION_V1 + "/classifications/" + id,
+                "http://localhost"
+                        + RestConstants.CONTEXT_AND_VERSION_V1
+                        + "/classifications/"
+                        + id,
                 subject.getLink("self")
                         .orElseThrow(() -> new RuntimeException("No link found"))
                         .getHref());
         assertEquals(
                 "http://localhost"
-                        + RestConstants.API_VERSION_V1
+                        + RestConstants.CONTEXT_AND_VERSION_V1
                         + "/classifications/"
                         + id
                         + "/variant"
@@ -51,7 +54,7 @@ public class ClassificationResourceTest {
                         .getHref());
         assertEquals(
                 "http://localhost"
-                        + RestConstants.API_VERSION_V1
+                        + RestConstants.CONTEXT_AND_VERSION_V1
                         + "/classifications/"
                         + id
                         + "/variantAt"

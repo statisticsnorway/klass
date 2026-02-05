@@ -62,20 +62,20 @@ spec:
   prometheus:
     enabled: true
     path: /actuator/prometheus
-    port: "8090"
+    port: "8080"
 
   liveness:
-    path: /actuator/health/liveness
-    port: 8090
+    path: /actuator/health
+    port: 8080
     initialDelay: 60
     timeout: 180
   readiness:
-    path: /actuator/health/readiness
-    port: 8090
+    path: /actuator/health
+    port: 8080
     initialDelay: 60
     timeout: 180
   startup:
-    path: /actuator/health/liveness
-    port: 8090
+    path: /actuator/health
+    port: 8080
     initialDelay: 60
     timeout: 180
