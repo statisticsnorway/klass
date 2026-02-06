@@ -21,6 +21,7 @@ import io.zonky.test.db.AutoConfigureEmbeddedDatabase;
 
 import no.ssb.klass.api.config.MockConfig;
 import no.ssb.klass.api.config.TestConfig;
+import no.ssb.klass.api.controllers.handlers.Handlers;
 import no.ssb.klass.api.services.OpenSearchResult;
 import no.ssb.klass.api.services.SearchService;
 import no.ssb.klass.api.util.RestConstants;
@@ -45,6 +46,7 @@ import org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchDa
 import org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchRestClientAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -94,6 +96,7 @@ import java.util.List;
 @AutoConfigureEmbeddedDatabase(
         provider = EMBEDDED,
         type = AutoConfigureEmbeddedDatabase.DatabaseType.POSTGRES)
+@Import(Handlers.class)
 public class ApiDocumentation {
     private static final int CLASS_ID_FAMILIEGRUPPERING = 17;
     private static final int CLASS_ID_GREENHOUSE_GASES = 84;
