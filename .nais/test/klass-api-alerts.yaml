@@ -24,7 +24,7 @@ spec:
         #            environment: test
 
         - alert: High heap memory usage
-          expr: (100 * sum by (instance) (jvm_memory_used_bytes{application="klass", area="heap"})) / (sum by (instance) (jvm_memory_max_bytes{application="klass", area="heap"}) ) > 70.0
+          expr: (100 * sum by (instance) (jvm_memory_used_bytes{application="klass", area="heap"})) / (sum by (instance) (jvm_memory_max_bytes{application="klass", area="heap"}) ) > 80.0
           for: 3m
           annotations:
             title: "High heap memory usage"
