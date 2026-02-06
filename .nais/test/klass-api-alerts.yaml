@@ -9,18 +9,19 @@ spec:
   groups:
     - name: dapla-metadata
       rules:
-        - alert: HTTP error responses
-          expr: 100 * sum(rate(nginx_ingress_controller_request_duration_seconds_count{ingress="klass-nais-ingress-eaceac17",status!~"[4-5].*"}[10m])) by (ingress) / sum(rate(nginx_ingress_controller_request_duration_seconds_count{ingress="klass-nais-ingress-eaceac17"}[10m])) by (ingress) < 75.0
-          for: 3m
-          annotations:
-            title: "HTTP error responses"
-            consequence: "A high number of HTTP requests are receiving error responses. This may indicate a problem with the application."
-            action: "Investigate whether this indicates an app failure or user errors."
-          labels:
-            service: klass-api
-            namespace: dapla-metadata
-            severity: critical
-            environment: test
+        # This one doesn't work when there isn't any traffic.
+        #        - alert: HTTP error responses
+        #          expr: 100 * sum(rate(nginx_ingress_controller_request_duration_seconds_count{ingress="klass-nais-ingress-eaceac17",status!~"[4-5].*"}[10m])) by (ingress) / sum(rate(nginx_ingress_controller_request_duration_seconds_count{ingress="klass-nais-ingress-eaceac17"}[10m])) by (ingress) < 75.0
+        #          for: 3m
+        #          annotations:
+        #            title: "HTTP error responses"
+        #            consequence: "A high number of HTTP requests are receiving error responses. This may indicate a problem with the application."
+        #            action: "Investigate whether this indicates an app failure or user errors."
+        #          labels:
+        #            service: klass-api
+        #            namespace: dapla-metadata
+        #            severity: critical
+        #            environment: test
 
         - alert: High heap memory usage
           expr: (100 * sum by (instance) (jvm_memory_used_bytes{application="klass", area="heap"})) / (sum by (instance) (jvm_memory_max_bytes{application="klass", area="heap"}) ) > 70.0
