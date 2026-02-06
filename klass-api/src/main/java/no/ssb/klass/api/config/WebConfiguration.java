@@ -3,13 +3,16 @@ package no.ssb.klass.api.config;
 import no.ssb.klass.api.util.RestConstants;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.CacheControl;
 import org.springframework.http.MediaType;
 import org.springframework.web.accept.HeaderContentNegotiationStrategy;
 import org.springframework.web.accept.PathExtensionContentNegotiationStrategy;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +28,14 @@ import java.util.Map;
  */
 @Configuration
 public class WebConfiguration implements WebMvcConfigurer {
+
+    /** Explicitly configure serving the API guide at this path */
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler(RestConstants.CONTEXT_AND_VERSION_V1 + "/api-guide.html")
+                .addResourceLocations("classpath:/static/")
+                .setCacheControl(CacheControl.maxAge(Duration.ofDays(7)));
+    }
 
     @Override
     public void configurePathMatch(PathMatchConfigurer configurer) {
