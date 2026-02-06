@@ -36,6 +36,7 @@ class RestApiErrorHandlingIntegrationTest extends AbstractRestApiApplicationTest
 
     private static Stream<Arguments> notFounds() {
         return Stream.of(
+                Arguments.of("/unknown/path"),
                 Arguments.of("/api/klass/v1/classifications/99999"),
                 Arguments.of("/api/klass/v1/versions/99999"),
                 Arguments.of(

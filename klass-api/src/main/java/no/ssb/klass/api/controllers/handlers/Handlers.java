@@ -2,7 +2,6 @@ package no.ssb.klass.api.controllers.handlers;
 
 import jakarta.servlet.http.HttpServletRequest;
 
-import no.ssb.klass.api.util.RestConstants;
 import no.ssb.klass.core.util.KlassResourceNotFoundException;
 
 import org.slf4j.Logger;
@@ -14,6 +13,7 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 @RestControllerAdvice
 public class Handlers {
@@ -22,7 +22,7 @@ public class Handlers {
     private static final String EXCEPTION_HANDLER_LOG_MESSAGE_TEMPLATE = "{}. For request: {}";
 
     @ExceptionHandler(
-            exception = KlassResourceNotFoundException.class,
+            exception = {KlassResourceNotFoundException.class, NoHandlerFoundException.class},
             produces = {
                 MediaType.APPLICATION_JSON_VALUE,
                 MediaType.APPLICATION_PROBLEM_JSON_VALUE,
@@ -31,18 +31,21 @@ public class Handlers {
                 MediaType.APPLICATION_PROBLEM_XML_VALUE
             })
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ProblemDetail resourceNotFoundProblemDetailExceptionHandler(
-            KlassResourceNotFoundException exception, HttpServletRequest request) {
-        return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, exception.getMessage());
+    public ProblemDetail resourceNotFoundProblemDetailExceptionHandler(Exception exception) {
+        if (exception.getClass() == KlassResourceNotFoundException.class) {
+            return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, exception.getMessage());
+        }
+        return ProblemDetail.forStatus(HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(
-            exception = KlassResourceNotFoundException.class,
-            produces = {MediaType.TEXT_PLAIN_VALUE, RestConstants.CONTENT_TYPE_CSV})
+            exception = {KlassResourceNotFoundException.class, NoHandlerFoundException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String resourceNotFoundTextExceptionHandler(
-            KlassResourceNotFoundException exception, HttpServletRequest request) {
-        return exception.getMessage();
+    public @ResponseBody String resourceNotFoundTextExceptionHandler(Exception exception) {
+        if (exception.getClass() == KlassResourceNotFoundException.class) {
+            return exception.getMessage();
+        }
+        return "";
     }
 
     @ExceptionHandler(
@@ -71,8 +74,7 @@ public class Handlers {
                 MethodArgumentTypeMismatchException.class,
                 IllegalArgumentException.class,
                 MissingServletRequestParameterException.class
-            },
-            produces = {MediaType.TEXT_PLAIN_VALUE, RestConstants.CONTENT_TYPE_CSV})
+            })
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public @ResponseBody String badRequestTextExceptionHandler(Exception exception) {
         return exception.getMessage();
