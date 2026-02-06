@@ -2,6 +2,8 @@ package no.ssb.klass.api.applicationtest;
 
 import static io.restassured.RestAssured.*;
 
+import io.restassured.http.ContentType;
+
 import no.ssb.klass.api.util.RestConstants;
 
 import org.junit.jupiter.params.ParameterizedTest;
@@ -12,11 +14,6 @@ import org.springframework.http.MediaType;
 
 import java.util.stream.Stream;
 
-/**
- * @author Mads Lundemo, SSB.
- *     <p>Testsuite that test how the Rest Api handles unexpected sutuations (tests with JSON and
- *     XML)
- */
 class RestApiErrorHandlingIntegrationTest extends AbstractRestApiApplicationTest {
 
     private static Stream<Arguments> contentTypes() {
@@ -25,6 +22,24 @@ class RestApiErrorHandlingIntegrationTest extends AbstractRestApiApplicationTest
                 Arguments.of(MediaType.TEXT_XML_VALUE, MediaType.TEXT_XML_VALUE),
                 Arguments.of(MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_JSON_VALUE),
                 Arguments.of(RestConstants.CONTENT_TYPE_CSV, RestConstants.CONTENT_TYPE_CSV));
+    }
+
+    private static Stream<Arguments> badRequests() {
+        return Stream.of(
+                Arguments.of("/api/klass/v1/classifications/139/changes"),
+                Arguments.of("/api/klass/v1/classifications/2%3Flanguage=en"),
+                Arguments.of("/api/klass/v1/classifications/null"),
+                Arguments.of(
+                        "/api/klass/v1/classifications/1/correspondsAt?targetClassificationId=2"),
+                Arguments.of("/api/klass/v1/classifications/145/variantAt"));
+    }
+
+    private static Stream<Arguments> notFounds() {
+        return Stream.of(
+                Arguments.of("/api/klass/v1/classifications/99999"),
+                Arguments.of("/api/klass/v1/versions/99999"),
+                Arguments.of(
+                        "/api/klass/v1/classifications/1/correspondsAt?targetClassificationId=99999&date=2020-01-01"));
     }
 
     @ParameterizedTest
@@ -55,5 +70,29 @@ class RestApiErrorHandlingIntegrationTest extends AbstractRestApiApplicationTest
                 .then()
                 .statusCode(HttpStatus.BAD_REQUEST.value())
                 .contentType(responseContentType);
+    }
+
+    @ParameterizedTest
+    @MethodSource("badRequests")
+    void badRequests(String path) {
+        given().port(port)
+                .contentType(ContentType.JSON)
+                .when()
+                .get(path)
+                .prettyPeek()
+                .then()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
+    }
+
+    @ParameterizedTest
+    @MethodSource("notFounds")
+    void notFounds(String path) {
+        given().port(port)
+                .contentType(ContentType.JSON)
+                .when()
+                .get(path)
+                .prettyPeek()
+                .then()
+                .statusCode(HttpStatus.NOT_FOUND.value());
     }
 }

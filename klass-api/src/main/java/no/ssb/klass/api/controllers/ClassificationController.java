@@ -26,7 +26,6 @@ import no.ssb.klass.core.service.dto.CorrespondenceDto;
 import no.ssb.klass.core.util.AlphaNumericalComparator;
 import no.ssb.klass.core.util.ClientException;
 import no.ssb.klass.core.util.DateRange;
-import no.ssb.klass.core.util.KlassResourceNotFoundException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,14 +39,12 @@ import org.springframework.hateoas.*;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestClientException;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -71,8 +68,6 @@ public class ClassificationController {
     private final StatisticsService statisticsService;
     private final CsvFieldsValidator csvFieldsValidator;
 
-    private static final String EXCEPTION_HANDLER_LOG_MESSAGE_TEMPLATE = "{}. For request: {}";
-
     @Autowired
     public ClassificationController(
             ClassificationService classificationService,
@@ -85,96 +80,6 @@ public class ClassificationController {
         this.searchService = searchService;
         this.statisticsService = statisticsService;
         this.csvFieldsValidator = csvFieldsValidator;
-    }
-
-    @ExceptionHandler(
-            exception = KlassResourceNotFoundException.class,
-            produces = {MediaType.TEXT_PLAIN_VALUE, RestConstants.CONTENT_TYPE_CSV})
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String resourceNotFoundTextExceptionHandler(KlassResourceNotFoundException exception) {
-        log.info(
-                EXCEPTION_HANDLER_LOG_MESSAGE_TEMPLATE,
-                exception.getMessage(),
-                getCurrentRequest());
-        return exception.getMessage();
-    }
-
-    @ExceptionHandler(
-            exception = KlassResourceNotFoundException.class,
-            produces = {
-                MediaType.APPLICATION_JSON_VALUE,
-                MediaType.APPLICATION_PROBLEM_JSON_VALUE,
-                MediaType.TEXT_XML_VALUE,
-                MediaType.APPLICATION_XML_VALUE,
-                MediaType.APPLICATION_PROBLEM_XML_VALUE
-            })
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ProblemDetail resourceNotFoundProblemDetailExceptionHandler(
-            KlassResourceNotFoundException exception) {
-        log.info(
-                EXCEPTION_HANDLER_LOG_MESSAGE_TEMPLATE,
-                exception.getMessage(),
-                getCurrentRequest());
-        return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, exception.getMessage());
-    }
-
-    @ExceptionHandler(
-            exception = {
-                RestClientException.class,
-                MethodArgumentTypeMismatchException.class,
-                IllegalArgumentException.class
-            },
-            produces = {MediaType.TEXT_PLAIN_VALUE, RestConstants.CONTENT_TYPE_CSV})
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String badRequestTextExceptionHandler(Exception exception) {
-        return exception.getMessage();
-    }
-
-    @ExceptionHandler(
-            exception = {
-                RestClientException.class,
-                MethodArgumentTypeMismatchException.class,
-                IllegalArgumentException.class
-            },
-            produces = {
-                MediaType.APPLICATION_JSON_VALUE,
-                MediaType.APPLICATION_PROBLEM_JSON_VALUE,
-                MediaType.TEXT_XML_VALUE,
-                MediaType.APPLICATION_XML_VALUE,
-                MediaType.APPLICATION_PROBLEM_XML_VALUE
-            })
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ProblemDetail badRequestProblemDetailExceptionHandler(Exception exception) {
-        return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, exception.getMessage());
-    }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public String serverErrorTextExceptionHandler(Exception exception) {
-        log.warn(
-                EXCEPTION_HANDLER_LOG_MESSAGE_TEMPLATE,
-                exception.getMessage(),
-                getCurrentRequest(),
-                exception);
-        return exception.getMessage();
-    }
-
-    @ExceptionHandler(
-            produces = {
-                MediaType.APPLICATION_JSON_VALUE,
-                MediaType.APPLICATION_PROBLEM_JSON_VALUE,
-                MediaType.TEXT_XML_VALUE,
-                MediaType.APPLICATION_XML_VALUE,
-                MediaType.APPLICATION_PROBLEM_XML_VALUE
-            })
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ProblemDetail serverErrorProblemDetailExceptionHandler(Exception exception) {
-        log.warn(
-                EXCEPTION_HANDLER_LOG_MESSAGE_TEMPLATE,
-                exception.getMessage(),
-                getCurrentRequest(),
-                exception);
-        return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, exception.getMessage());
     }
 
     /** Redirect root to docs for convenience */
@@ -729,8 +634,7 @@ public class ClassificationController {
     public CorrespondenceItemList correspondsAt(
             @PathVariable Long id,
             @RequestParam(value = "targetClassificationId") Long targetClassificationId,
-            @RequestParam(value = "date", required = false)
-                    @DateTimeFormat(pattern = RestConstants.DATE_FORMAT)
+            @RequestParam(value = "date") @DateTimeFormat(pattern = RestConstants.DATE_FORMAT)
                     LocalDate date,
             @RequestParam(value = "csvSeparator", defaultValue = ",") String csvSeparator,
             @RequestParam(value = "csvFields", defaultValue = "") String csvFields,
