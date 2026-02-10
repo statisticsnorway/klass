@@ -1,10 +1,10 @@
-package no.ssb.klass.api.services;
+package no.ssb.klass.search;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import com.google.common.base.Preconditions;
 
 import jakarta.annotation.PostConstruct;
 
-import no.ssb.klass.api.config.OpenSearchConfig;
+import no.ssb.klass.config.OpenSearchConfig;
 import no.ssb.klass.core.config.ConfigurationProfiles;
 import no.ssb.klass.core.model.*;
 import no.ssb.klass.core.repository.ClassificationSeriesRepository;
@@ -157,10 +157,10 @@ public class IndexServiceImpl implements IndexService {
     @Async
     @Transactional(readOnly = true)
     public void indexAsync(Long classificationSeriesId) {
-        checkNotNull(classificationSeriesId);
+        Preconditions.checkNotNull(classificationSeriesId);
         try {
             ClassificationSeries classification =
-                    classificationRepository.getOne(classificationSeriesId);
+                    classificationRepository.getReferenceById(classificationSeriesId);
             indexService.indexSync(classification);
         } catch (Exception e) {
             log.warn(
