@@ -21,7 +21,6 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Import;
-import org.springframework.scheduling.annotation.EnableScheduling;
 
 @OpenAPIDefinition(
         info =
@@ -94,7 +93,6 @@ To get a snapshot of codes valid at a specified date, use codesAt.
 @Import(TomcatServletWebServerFactoryCustomizer.class)
 @ConfigurationPropertiesScan
 @ServletComponentScan
-@EnableScheduling
 public class KlassApiApplication extends SpringBootServletInitializer {
 
     @Override

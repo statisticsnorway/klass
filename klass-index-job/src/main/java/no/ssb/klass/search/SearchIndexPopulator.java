@@ -6,6 +6,7 @@ import no.ssb.klass.core.repository.ClassificationSeriesRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
@@ -33,6 +34,10 @@ public class SearchIndexPopulator implements CommandLineRunner {
             IndexService indexService) {
         this.classificationSeriesRepository = classificationSeriesRepository;
         this.indexService = indexService;
+    }
+
+    public static void main(String[] args) {
+        SpringApplication.run(SearchIndexPopulator.class, args);
     }
 
     @Override
