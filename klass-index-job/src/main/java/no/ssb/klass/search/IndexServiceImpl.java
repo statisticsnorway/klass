@@ -177,7 +177,7 @@ public class IndexServiceImpl implements IndexService {
 
         elasticsearchOperations.indexOps(getIndexCoordinates());
         log.info(
-                "Indexing: {} took (ms): {}",
+                "Indexed: {} took (ms): {}",
                 classification.getNameInPrimaryLanguage(),
                 TimeUtil.millisecondsSince(start));
     }

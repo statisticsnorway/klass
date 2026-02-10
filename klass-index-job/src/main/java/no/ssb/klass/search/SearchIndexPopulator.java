@@ -13,9 +13,6 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-
 /**
  * Populates search index at startup of application.
  *
@@ -50,12 +47,8 @@ public class SearchIndexPopulator implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        CompletableFuture.runAsync(
-                () -> {
-                    List<Long> ids = classificationSeriesRepository.findAllClassificationIds();
-                    log.info("Starting to index {} classifications", ids.size());
-                    ids.forEach(indexService::indexAsync);
-                    log.info("Finished indexing for {} classifications", ids.size());
-                });
+        log.info("Starting indexing of classifications");
+        classificationSeriesRepository.findAll().forEach(indexService::indexSync);
+        log.info("Finished indexing");
     }
 }
