@@ -45,9 +45,9 @@ Classifications are "official", and in a classification, the categories at each 
                         description = "API Guide",
                         url = RestConstants.CONTEXT_AND_VERSION_V1 + "/api-guide.html"),
         servers = {
-            @Server(url = "https://data.ssb.no/api/klass", description = "Production"),
-            @Server(url = "https://data.test.ssb.no/api/klass", description = "Test"),
-            @Server(url = "http://localhost:8080/api/klass", description = "Local"),
+            @Server(url = "https://data.ssb.no", description = "Production"),
+            @Server(url = "https://data.test.ssb.no", description = "Test"),
+            @Server(url = "http://localhost:8080", description = "Local"),
         },
         tags = {
             @Tag(
