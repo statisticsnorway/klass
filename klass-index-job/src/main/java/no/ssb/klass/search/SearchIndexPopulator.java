@@ -1,6 +1,5 @@
 package no.ssb.klass.search;
 
-import no.ssb.klass.core.config.ConfigurationProfiles;
 import no.ssb.klass.core.repository.ClassificationSeriesRepository;
 
 import org.slf4j.Logger;
@@ -8,8 +7,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Component;
+import org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchDataAutoConfiguration;
+import org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchRepositoriesAutoConfiguration;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -19,9 +21,15 @@ import java.util.concurrent.CompletableFuture;
  *
  * <p>Read all classifications ids from database and then indexes them for search.
  */
-@SpringBootApplication
-@Component
-@Profile({"!" + ConfigurationProfiles.MOCK_SEARCH})
+@ConfigurationPropertiesScan
+@EnableJpaRepositories(basePackages = {"no.ssb.klass.core.repository"})
+@EntityScan(basePackages = {"no.ssb.klass.core.model"})
+@SpringBootApplication(
+        scanBasePackages = {"no.ssb.klass.search"},
+        exclude = {
+            ElasticsearchDataAutoConfiguration.class,
+            ElasticsearchRepositoriesAutoConfiguration.class,
+        })
 public class SearchIndexPopulator implements CommandLineRunner {
 
     private static final Logger log = LoggerFactory.getLogger(SearchIndexPopulator.class);

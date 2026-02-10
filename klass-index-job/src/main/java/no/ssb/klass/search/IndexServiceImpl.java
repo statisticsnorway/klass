@@ -4,8 +4,6 @@ import com.google.common.base.Preconditions;
 
 import jakarta.annotation.PostConstruct;
 
-import no.ssb.klass.config.OpenSearchConfig;
-import no.ssb.klass.core.config.ConfigurationProfiles;
 import no.ssb.klass.core.model.*;
 import no.ssb.klass.core.repository.ClassificationSeriesRepository;
 import no.ssb.klass.core.util.TimeUtil;
@@ -16,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.context.annotation.Profile;
 import org.springframework.data.elasticsearch.core.document.Document;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
 import org.springframework.data.elasticsearch.core.query.IndexQuery;
@@ -29,7 +26,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-@Profile("!" + ConfigurationProfiles.MOCK_SEARCH)
 public class IndexServiceImpl implements IndexService {
 
     private static final String ANALYZER = "analyzer";
