@@ -136,3 +136,11 @@ check-klass-api-open-search-docker:
 .PHONY: logs-klass-api-open-search
 logs-klass-api-open-search:
 	docker compose $(COMPOSE_FILE) --profile open-search logs --tail=100 -f
+
+.PHONY: start-klass-index-job-docker
+start-klass-index-job-docker:
+	docker compose $(COMPOSE_FILE) --profile index up --build
+
+.PHONY: stop-docker
+stop-docker:
+	docker compose $(COMPOSE_FILE) down

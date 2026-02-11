@@ -25,6 +25,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional(readOnly = true)
 public class IndexServiceImpl implements IndexService {
 
     private static final String ANALYZER = "analyzer";
@@ -54,7 +55,6 @@ public class IndexServiceImpl implements IndexService {
     private final ClassificationSeriesRepository classificationRepository;
     private final OpenSearchRestTemplate elasticsearchOperations;
     private final DocumentMapper documentMapper;
-
 
     @Autowired
     public IndexServiceImpl(
@@ -226,8 +226,10 @@ public class IndexServiceImpl implements IndexService {
     }
 
     /** Inner class to handle document mapping from domain entities to search documents */
+    @Transactional(readOnly = true)
     private static class DocumentMapper {
 
+        @Transactional(readOnly = true)
         public Map<String, Object> mapClassificationSeries(
                 ClassificationSeries classification, Language language) {
             Map<String, Object> doc = new HashMap<>();

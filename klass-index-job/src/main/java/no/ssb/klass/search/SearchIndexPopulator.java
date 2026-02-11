@@ -1,6 +1,7 @@
 package no.ssb.klass.search;
 
 import no.ssb.klass.core.repository.ClassificationSeriesRepository;
+import no.ssb.klass.core.service.ClassificationServiceImpl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,33 +12,45 @@ import org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchDa
 import org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchRepositoriesAutoConfiguration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+import java.util.List;
 
 /**
  * Populates search index at startup of application.
  *
  * <p>Read all classifications ids from database and then indexes them for search.
  */
-@ConfigurationPropertiesScan
-@EnableJpaRepositories(basePackages = {"no.ssb.klass.core.repository"})
-@EntityScan(basePackages = {"no.ssb.klass.core.model"})
 @SpringBootApplication(
-        scanBasePackages = {"no.ssb.klass.search"},
+        scanBasePackages = {
+            "no.ssb.klass.search",
+            "no.ssb.klass.core.repository",
+            "no.ssb.klass.core.service",
+            "no.ssb.klass.core.util",
+        },
         exclude = {
             ElasticsearchDataAutoConfiguration.class,
             ElasticsearchRepositoriesAutoConfiguration.class,
         })
+@Configuration
+@ConfigurationPropertiesScan
+@EnableTransactionManagement
+@EnableJpaRepositories(basePackages = {"no.ssb.klass.core.repository"})
+@EntityScan(basePackages = {"no.ssb.klass.core.model", "no.ssb.klass.core.util"})
+@Import(ClassificationServiceImpl.class)
 public class SearchIndexPopulator implements CommandLineRunner {
 
     private static final Logger log = LoggerFactory.getLogger(SearchIndexPopulator.class);
 
-    private final ClassificationSeriesRepository classificationSeriesRepository;
+    private final ClassificationSeriesRepository classificationRepository;
     private final IndexService indexService;
 
     public SearchIndexPopulator(
-            ClassificationSeriesRepository classificationSeriesRepository,
-            IndexService indexService) {
-        this.classificationSeriesRepository = classificationSeriesRepository;
+            ClassificationSeriesRepository classificationRepository, IndexService indexService) {
+        this.classificationRepository = classificationRepository;
         this.indexService = indexService;
     }
 
@@ -47,8 +60,13 @@ public class SearchIndexPopulator implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        log.info("Starting indexing of classifications");
-        classificationSeriesRepository.findAll().forEach(indexService::indexSync);
+        log.info("Collecting classifications to index");
+        List<Long> ids =
+                classificationRepository.findPublishedClassificationIds();
+        log.info("Found {} classifications, starting indexing", ids.size());
+        for (Long id : ids) {
+            indexService.indexAsync(id);
+        }
         log.info("Finished indexing");
     }
 }

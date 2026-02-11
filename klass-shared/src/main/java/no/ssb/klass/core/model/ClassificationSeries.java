@@ -6,17 +6,7 @@ import static java.util.stream.Collectors.*;
 
 import com.google.common.base.Strings;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Index;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import no.ssb.klass.core.util.AlphaNumericalComparator;
 import no.ssb.klass.core.util.DateRange;
@@ -93,7 +83,7 @@ public class ClassificationSeries extends BaseEntity implements ClassificationEn
     @ManyToOne(optional = false)
     private User contactPerson;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "classification")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "classification", fetch = FetchType.EAGER)
     private final List<ClassificationVersion> classificationVersions = new ArrayList<>();
 
     @ManyToMany private final List<StatisticalUnit> statisticalUnits = new ArrayList<>();
