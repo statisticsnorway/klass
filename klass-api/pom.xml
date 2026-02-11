@@ -77,13 +77,13 @@
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-database-postgresql</artifactId>
-            <version>11.20.0</version>
+            <version>12.0.0</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
-            <version>11.20.0</version>
+            <version>12.0.0</version>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback.access</groupId>
@@ -214,7 +214,7 @@
                     <plugin>
                         <groupId>org.flywaydb</groupId>
                         <artifactId>flyway-maven-plugin</artifactId>
-                        <version>11.20.0</version>
+                        <version>12.0.0</version>
                     </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
