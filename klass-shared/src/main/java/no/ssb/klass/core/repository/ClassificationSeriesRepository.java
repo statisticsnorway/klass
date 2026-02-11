@@ -160,7 +160,7 @@ public interface ClassificationSeriesRepository
     List<Long> findAllClassificationIds();
 
     @Query(
-            "select classification.id "
+            "select distinct classification.id "
                     + "from ClassificationVersion version "
                     + "join version.classification classification "
                     + "where version.deleted = false"
