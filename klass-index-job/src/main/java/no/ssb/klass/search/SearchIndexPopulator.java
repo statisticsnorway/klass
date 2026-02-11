@@ -18,6 +18,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Populates search index at startup of application.
@@ -28,7 +29,6 @@ import java.util.List;
         scanBasePackages = {
             "no.ssb.klass.search",
             "no.ssb.klass.core.repository",
-            "no.ssb.klass.core.service",
             "no.ssb.klass.core.util",
         },
         exclude = {
@@ -61,12 +61,12 @@ public class SearchIndexPopulator implements CommandLineRunner {
     @Override
     public void run(String... args) {
         log.info("Collecting classifications to index");
-        List<Long> ids =
-                classificationRepository.findPublishedClassificationIds();
-        log.info("Found {} classifications, starting indexing", ids.size());
-        for (Long id : ids) {
-            indexService.indexAsync(id);
-        }
-        log.info("Finished indexing");
+        CompletableFuture.runAsync(
+                () -> {
+                    List<Long> ids = classificationRepository.findPublishedClassificationIds();
+                    log.info("Starting to index {} classifications", ids.size());
+                    ids.forEach(indexService::indexAsync);
+                    log.info("Finished indexing for {} classifications", ids.size());
+                });
     }
 }
