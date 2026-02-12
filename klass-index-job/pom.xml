@@ -6,7 +6,7 @@
     <parent>
         <groupId>no.ssb.klass</groupId>
         <artifactId>klass-root</artifactId>
-        <version>4.2.8-SNAPSHOT</version>
+        <version>4.2.9-SNAPSHOT</version>
     </parent>
 
     <artifactId>klass-index-job</artifactId>
