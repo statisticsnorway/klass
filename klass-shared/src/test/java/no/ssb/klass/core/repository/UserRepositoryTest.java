@@ -34,7 +34,11 @@ import java.util.Set;
  */
 @ExtendWith(SpringExtension.class)
 @SpringBootTest()
-@ActiveProfiles({ConfigurationProfiles.POSTGRES_EMBEDDED, ConfigurationProfiles.MOCK_MAILSERVER})
+@ActiveProfiles({
+    ConfigurationProfiles.POSTGRES_EMBEDDED,
+    ConfigurationProfiles.MOCK_MAILSERVER,
+    ConfigurationProfiles.MOCK_SEARCH
+})
 @Transactional
 // This test exposes a bug. The bug is fixed in klass-shared v2.x versions since this functionality
 // is

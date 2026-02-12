@@ -9,8 +9,8 @@ import io.restassured.http.ContentType;
 
 import no.ssb.klass.api.applicationtest.config.ApplicationTestConfig;
 import no.ssb.klass.api.applicationtest.config.IndexServiceTestConfig;
-import no.ssb.klass.api.services.IndexServiceImpl;
 import no.ssb.klass.core.config.ConfigurationProfiles;
+import no.ssb.klass.search.IndexServiceImpl;
 import no.ssb.klass.testutil.TestDataProvider;
 
 import org.junit.jupiter.api.BeforeEach;

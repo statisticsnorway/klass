@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 
 import jakarta.annotation.PostConstruct;
 
+import no.ssb.klass.core.config.ConfigurationProfiles;
 import no.ssb.klass.core.model.*;
 import no.ssb.klass.core.repository.ClassificationSeriesRepository;
 import no.ssb.klass.core.util.TimeUtil;
@@ -13,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.elasticsearch.core.document.Document;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
 import org.springframework.data.elasticsearch.core.query.IndexQuery;
@@ -26,6 +28,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
+@Profile("!" + ConfigurationProfiles.MOCK_SEARCH)
 public class IndexServiceImpl implements IndexService {
 
     private static final String ANALYZER = "analyzer";
@@ -55,6 +58,9 @@ public class IndexServiceImpl implements IndexService {
     private final ClassificationSeriesRepository classificationRepository;
     private final OpenSearchRestTemplate elasticsearchOperations;
     private final DocumentMapper documentMapper;
+
+    // Constant for the stemmer
+    public static final String NORWEGIAN_STEMMER_ANALYZER = "norwegian_stemmer_analyzer";
 
     @Autowired
     public IndexServiceImpl(
@@ -87,7 +93,7 @@ public class IndexServiceImpl implements IndexService {
                             Map.of(
                                     ANALYZER,
                                     Map.of(
-                                            OpenSearchConfig.NORWEGIAN_STEMMER_ANALYZER,
+                                            NORWEGIAN_STEMMER_ANALYZER,
                                             Map.of(
                                                     "type", "custom",
                                                     "tokenizer", "standard",
@@ -111,25 +117,25 @@ public class IndexServiceImpl implements IndexService {
                                                     "type",
                                                     "text",
                                                     ANALYZER,
-                                                    OpenSearchConfig.NORWEGIAN_STEMMER_ANALYZER,
+                                                    NORWEGIAN_STEMMER_ANALYZER,
                                                     SEARCH_ANALYZER,
-                                                    OpenSearchConfig.NORWEGIAN_STEMMER_ANALYZER),
+                                                    NORWEGIAN_STEMMER_ANALYZER),
                                     DESCRIPTION,
                                             Map.of(
                                                     "type",
                                                     "text",
                                                     ANALYZER,
-                                                    OpenSearchConfig.NORWEGIAN_STEMMER_ANALYZER,
+                                                    NORWEGIAN_STEMMER_ANALYZER,
                                                     SEARCH_ANALYZER,
-                                                    OpenSearchConfig.NORWEGIAN_STEMMER_ANALYZER),
+                                                    NORWEGIAN_STEMMER_ANALYZER),
                                     CODES,
                                             Map.of(
                                                     "type",
                                                     "text",
                                                     ANALYZER,
-                                                    OpenSearchConfig.NORWEGIAN_STEMMER_ANALYZER,
+                                                    NORWEGIAN_STEMMER_ANALYZER,
                                                     SEARCH_ANALYZER,
-                                                    OpenSearchConfig.NORWEGIAN_STEMMER_ANALYZER),
+                                                    NORWEGIAN_STEMMER_ANALYZER),
                                     FAMILY, Map.of("type", "keyword"),
                                     SECTION, Map.of("type", "keyword")));
 

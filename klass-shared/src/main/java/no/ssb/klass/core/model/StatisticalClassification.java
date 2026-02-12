@@ -37,8 +37,7 @@ public abstract class StatisticalClassification extends BaseEntity
     @OneToMany(
             cascade = CascadeType.ALL,
             orphanRemoval = true,
-            mappedBy = "statisticalClassification",
-            fetch = FetchType.EAGER)
+            mappedBy = "statisticalClassification")
     private final List<Level> levels;
 
     @OneToMany(mappedBy = "source")

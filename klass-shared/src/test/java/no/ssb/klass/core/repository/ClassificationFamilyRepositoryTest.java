@@ -34,7 +34,11 @@ import java.util.List;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-@ActiveProfiles(ConfigurationProfiles.POSTGRES_EMBEDDED)
+@ActiveProfiles({
+    ConfigurationProfiles.POSTGRES_EMBEDDED,
+    ConfigurationProfiles.MOCK_MAILSERVER,
+    ConfigurationProfiles.MOCK_SEARCH
+})
 @Transactional
 @AutoConfigureEmbeddedDatabase(
         provider = EMBEDDED,

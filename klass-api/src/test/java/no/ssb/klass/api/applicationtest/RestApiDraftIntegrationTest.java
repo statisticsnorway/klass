@@ -28,7 +28,6 @@ public class RestApiDraftIntegrationTest extends AbstractRestApiApplicationTest 
     @BeforeEach
     public void addDrafts() {
         applicationTestUtil.clearDatabase();
-        applicationTestUtil.clearSearch();
 
         User user = userRepository.save(TestUtil.createUser());
         ClassificationFamily classificationFamily =

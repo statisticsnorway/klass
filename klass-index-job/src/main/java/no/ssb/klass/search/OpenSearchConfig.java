@@ -1,6 +1,5 @@
 package no.ssb.klass.search;
 
-
 import org.opensearch.client.RestHighLevelClient;
 import org.opensearch.data.client.orhlc.AbstractOpenSearchConfiguration;
 import org.opensearch.data.client.orhlc.ClientConfiguration;
@@ -25,9 +24,6 @@ public class OpenSearchConfig extends AbstractOpenSearchConfiguration {
 
     @Value("${opensearch.ssl}")
     private boolean ssl;
-
-    // Constant for the stemmer
-    public static final String NORWEGIAN_STEMMER_ANALYZER = "norwegian_stemmer_analyzer";
 
     @Override
     @Bean(destroyMethod = "close")

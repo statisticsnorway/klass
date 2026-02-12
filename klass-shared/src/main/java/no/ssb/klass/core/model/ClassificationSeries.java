@@ -83,7 +83,7 @@ public class ClassificationSeries extends BaseEntity implements ClassificationEn
     @ManyToOne(optional = false)
     private User contactPerson;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "classification", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "classification")
     private final List<ClassificationVersion> classificationVersions = new ArrayList<>();
 
     @ManyToMany private final List<StatisticalUnit> statisticalUnits = new ArrayList<>();
