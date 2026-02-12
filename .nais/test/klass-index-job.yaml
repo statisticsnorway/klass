@@ -7,11 +7,10 @@ metadata:
     team: dapla-metadata
     shared-db: "true"
 spec:
+  schedule: "0 30 23 * * *"  # Run once per day at 23:30
   concurrencyPolicy: Forbid
-  failedJobsHistoryLimit: 3
   restartPolicy: Never
-  # TODO configure schedule after development is complete
-  # schedule: "1/10 * * * *"
+  failedJobsHistoryLimit: 3
   successfulJobsHistoryLimit: 3
   openSearch:
     access: admin
