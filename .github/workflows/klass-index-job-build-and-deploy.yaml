@@ -1,0 +1,117 @@
+name: Klass Index Job build and deploy
+
+on:
+  push:
+    paths:
+      - "klass-index-job/**"
+      - "klass-shared/**"
+      - ".nais/**/klass-index-job.yaml"
+      - ".github/workflows/klass-index-job-build-and-deploy.yaml"
+  workflow_dispatch:
+    inputs:
+      cluster:
+        description: "Which cluster to deploy to?"
+        required: true
+        default: "test"
+        type: choice
+        options:
+          - test
+          - prod
+
+jobs:
+  docker-build:
+    name: Docker Build
+    permissions:
+      contents: "read"
+      id-token: "write"
+      packages: "read"
+    runs-on: ubuntu-latest
+    outputs:
+      image: ${{ steps.docker-build-push.outputs.image }}
+      telemetry: ${{ steps.docker-build-push.outputs.telemetry }}
+      prod-config-changed: ${{ steps.prod-config-changed.outputs.changed != 'non-inputs' }}
+      test-config-changed: ${{ steps.test-config-changed.outputs.changed != 'non-inputs' }}
+      only-config-changed: ${{ steps.changed-files.outputs.changed == 'only-inputs'}}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: "17"
+          cache: "maven"
+
+      - name: Check what changed
+        id: changed-files
+        uses: "nais/what-changed@main"
+        with:
+          files: .nais/**/klass-index-job.yaml
+      - name: Check for test config changes
+        id: test-config-changed
+        uses: "nais/what-changed@main"
+        with:
+          files: .nais/test/klass-index-job.yaml
+      - name: Check for prod config changes
+        id: prod-config-changed
+        uses: "nais/what-changed@main"
+        with:
+          files: .nais/prod/klass-index-job.yaml
+
+      - name: Build with Maven
+        if: steps.changed-files.outputs.changed != 'only-inputs' || github.event.inputs.cluster == 'test' || github.event.inputs.cluster == 'prod'
+        run: mvn --batch-mode --update-snapshots install
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push
+        if: steps.changed-files.outputs.changed != 'only-inputs' || github.event.inputs.cluster == 'test' || github.event.inputs.cluster == 'prod'
+        uses: nais/docker-build-push@v0
+        id: docker-build-push
+        with:
+          team: dapla-metadata
+          dockerfile: klass-index-job/Dockerfile
+          docker_context: klass-index-job
+
+  deploy-test:
+    name: Deploy to test
+    needs: docker-build
+    permissions:
+      contents: "read"
+      id-token: "write"
+      packages: "read"
+    runs-on: ubuntu-latest
+    if: github.event_name != 'release' || github.event.inputs.cluster == 'test' || needs.docker-build.outputs.test-config-changed == 'true'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - uses: nais/deploy/actions/deploy@v2
+        env:
+          CLUSTER: test
+          RESOURCE: .nais/test/klass-index-job.yaml
+          DEPLOY_SERVER: deploy.ssb.cloud.nais.io:443
+          WORKLOAD_IMAGE: ${{ needs.docker-build.outputs.image }}
+          TELEMETRY: ${{ needs.docker-build.outputs.telemetry }}
+
+  deploy-prod:
+    name: Deploy to prod
+    needs: docker-build
+    permissions:
+      contents: "read"
+      id-token: "write"
+      packages: "read"
+    runs-on: ubuntu-latest
+    if: github.event_name == 'release' || github.event.inputs.cluster == 'prod' || (needs.docker-build.outputs.prod-config-changed == 'true' && needs.docker-build.outputs.only-config-changed == 'true')
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - uses: nais/deploy/actions/deploy@v2
+        env:
+          CLUSTER: prod
+          RESOURCE: .nais/prod/klass-index-job.yaml
+          DEPLOY_SERVER: deploy.ssb.cloud.nais.io:443
+          WORKLOAD_IMAGE: ${{ needs.docker-build.outputs.image }}
+          TELEMETRY: ${{ needs.docker-build.outputs.telemetry }}
