@@ -7,7 +7,7 @@ metadata:
     team: dapla-metadata
     shared-db: "true"
 spec:
-  schedule: "0 30 23 * * *"  # Run once per day at 23:30
+  schedule: "30 23 * * *"  # Run once per day at 23:30
   concurrencyPolicy: Forbid
   restartPolicy: Never
   failedJobsHistoryLimit: 3
