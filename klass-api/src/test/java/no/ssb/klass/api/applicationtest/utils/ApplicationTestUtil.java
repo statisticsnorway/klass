@@ -35,5 +35,4 @@ public class ApplicationTestUtil {
         entityManager.createQuery("delete from User").executeUpdate();
         entityManager.createQuery("delete from StatisticalUnit").executeUpdate();
     }
-
 }

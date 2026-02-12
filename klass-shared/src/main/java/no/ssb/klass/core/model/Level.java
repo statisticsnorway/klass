@@ -24,10 +24,7 @@ public class Level extends BaseEntity {
     @Column(nullable = false)
     private final int levelNumber;
 
-    @OneToMany(
-            cascade = CascadeType.ALL,
-            mappedBy = "level",
-            orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "level", orphanRemoval = true)
     private final List<ClassificationItem> classificationItems;
 
     @ManyToOne(optional = false)
