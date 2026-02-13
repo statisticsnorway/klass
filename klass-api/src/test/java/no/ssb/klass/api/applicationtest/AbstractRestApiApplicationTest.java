@@ -45,12 +45,7 @@ import java.util.Date;
 @SpringBootTest(
         classes = {ApplicationTestConfig.class},
         webEnvironment = WebEnvironment.RANDOM_PORT,
-        properties = {
-            "spring.cloud.gcp.core.enabled=false",
-            "spring.cloud.gcp.config.enabled=false",
-            "spring.cloud.gcp.pubsub.enabled=false",
-            "spring.main.allow-bean-definition-overriding=true"
-        })
+        properties = {"spring.main.allow-bean-definition-overriding=true"})
 @ActiveProfiles({
     ConfigurationProfiles.POSTGRES_EMBEDDED,
     ConfigurationProfiles.MOCK_MAILSERVER,
@@ -170,8 +165,7 @@ public abstract class AbstractRestApiApplicationTest {
     @BeforeEach
     public void prepareTestData() {
         applicationTestUtil.clearDatabase();
-        applicationTestUtil.clearSearch();
-        // if (!testDataInitialized) {
+
         User user = userRepository.save(TestUtil.createUser());
         User user2 = userRepository.save(TestUtil.createUser2());
         User user3 = userRepository.save(TestUtil.createUser3());
@@ -231,9 +225,6 @@ public abstract class AbstractRestApiApplicationTest {
         seriesRepository.updateClassificationLastModified(
                 bydelsinndeling.getId(), bydelsinndeling.getLastModified());
         template.getTransactionManager().commit(transaction);
-        // testDataInitialized = true;
-
-        // }
     }
 
     protected Date parseDate(String date) {

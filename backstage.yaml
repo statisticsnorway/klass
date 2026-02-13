@@ -141,3 +141,27 @@ spec:
   system: metadata
   owner: dapla-metadata-developers
   lifecycle: production
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  title: Klass Index Job
+  name: klass-index-job
+  description:
+    Independent job which creates and updates the search index for Klass.
+  tags:
+    - metadata
+    - java
+    - classification
+    - codelist
+    - nais
+  annotations:
+    github.com/project-slug: statisticsnorway/klass
+spec:
+  type: job
+  owner: dapla-metadata-developers
+  lifecycle: production
+  system: metadata
+  dependsOn:
+    - resource:klass-postgresql
+    - resource:klass-opensearch

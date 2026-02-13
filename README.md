@@ -1,41 +1,39 @@
-[![Maintainability](https://api.codeclimate.com/v1/badges/34eed0d4c7e9abd16add/maintainability)](https://codeclimate.com/github/statisticsnorway/klass/maintainability)
-[![CodeQL](https://github.com/statisticsnorway/klass/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/statisticsnorway/klass/actions/workflows/codeql-analysis.yml)
+# Klass
 
-# KLASS
+Klass is Statistics Norway's system for classifications and code lists. The data model is based on the structure and principles described by [GSIM](https://statswiki.unece.org/spaces/gsim/pages/97356506/1_Introduction).
 
-Spring Boot applications that handles classifications for SSB.
-Klass provides a REST api that clients can use to read classifications, and a Vaadin frontend for maintaining classifications.
+The information in Klass is exposed through a REST API, available to all, free of charge under the [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.no) license. The API documentation is available in multiple flavours:
+
+- API Guide: <https://data.ssb.no/api/klass/v1/api-guide.html>
+- Swagger UI: <https://data.ssb.no/api/klass/swagger-ui/index.html>
+- OpenAPI spec: <https://data.ssb.no/api/klass/v3/api-docs>
 
 ## Overview
 
 Klass consists of 4 maven modules
 
 - Klass API (Standalone application that provides the Klass API)
-- Klass Forvaltning (Frontend for classification maintaining)
+- Klass Forvaltning (Internal tool for maintenance of classifications)
 - Klass Shared (Classes shared between API and Forvaltning. primary database and search components)
 - Klass Solr (Solr Core configuration and configuration for embedded solr for test/development)
+- Klass Index Job (Responsible for periodically updating the OpenSearch index)
 
-## Build and Deploy
+## Build
 
-Building the project will output war files for **Klass API** & **Klass Forvaltning** and a zip file (WiP) for **Klass Solr**.
+Run `mvn install` to build the project.
 
-You can find these in each maven modules target folder.
+## Deploy
 
-```
-klass-api/target/klass-api-{Version}.war
-klass-forvaltning/target/klass-forvaltning-{Version}.war
-klass-solr/klass-solr-{Version}.zip (WiP)
-```
+Klass is hosted on the Nais application platform. Deploy configuration may be found in the [.nais](.nais) directory. Deploy workflows may be found in the [.github/workflows](.github/workflows) directory.
 
 ## Database
 
-Klass is configured to use Flyway for database initialising and migration.
+Klass uses PostgreSQL for its database.
+
+Tests are run with the Zonky Postgres embedded database so that they use the PostgreSQL dialect and guarantee consistency with deployed environments.
+
+Klass is configured to use Flyway for database initialization and migration.
 You can find the collection of SQL scripts in the Klass-shared module under `src/main/resources/db/migration`
-
-If the classification tables are empty Klass will by default attempt to import data from its predecessor.
-This process can take quite some time as there is a lot of data and its also sent to Solr to populate the search index.
-
-Tips: If you are only setting up Klass for testing/development purposes you can use the `small-import` spring profile to reduce the amount of data being imported.
 
 ## Development
 
@@ -119,7 +117,9 @@ Build the app: `make build-klass-api`
 
 #### Docker compose
 
-TODO
+The apps can be run in multiple different configurations with Docker Compose. See [klass-shared/docker-compose.yaml](klass-shared/docker-compose.yaml) for details.
+
+There are tasks available in the Makefile as well.
 
 ### Klass Forvaltning
 

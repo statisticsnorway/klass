@@ -46,17 +46,41 @@ services:
     command: [ "java", "-Xms2g", "-Xmx4g", "-jar", "app.war" ]
     profiles: [ open-search ]
     depends_on:
-      - opensearch
-      - postgresql
+      opensearch:
+        condition: service_healthy
+      postgresql:
+        condition: service_started
     ports:
       - "8080:8080"
     mem_limit: 8g
     cpus: 1.0
     environment:
-      SPRING_PROFILES_ACTIVE: "api,postgres-local,open-search-local"
+      SPRING_PROFILES_ACTIVE: "api,postgres-local,skip-indexing,open-search-local"
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_USER: "klass"
       POSTGRES_INSTANCE: postgresql
+      OPENSEARCH_URL: http://opensearch:9200
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/actuator/health" ]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 90s
+      start_interval: 5s
+  index:
+    build:
+      context: ../klass-index-job
+      dockerfile: ../klass-index-job/Dockerfile
+    command: [ "java", "-Xms1g", "-Xmx1g", "-jar", "app.war" ]
+    profiles: [ index ]
+    depends_on:
+      opensearch:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: "postgres-local,open-search-local"
+      POSTGRES_INSTANCE: host.docker.internal
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_USER: "klass"
       OPENSEARCH_URL: http://opensearch:9200
   klass-forvaltning:
     build:
@@ -113,22 +137,34 @@ services:
       - solr_data:/var/solr
     mem_limit: 4g
   opensearch:
-    image: opensearchproject/opensearch:3
+    image: opensearchproject/opensearch:3.0.0
     ports:
       - "9200:9200"
     environment:
       - discovery.type=single-node
-      - DISABLE_SECURITY_PLUGIN=true
+      - discovery.seed_hosts='["127.0.0.1", "[::1]"]'
+      - "DISABLE_SECURITY_PLUGIN=true"
+      - "DISABLE_INSTALL_DEMO_CONFIG=true"
       - bootstrap.memory_lock=true
       - "OPENSEARCH_JAVA_OPTS=-Xms3g -Xmx3g"
     ulimits:
       memlock:
         soft: -1
         hard: -1
-    mem_limit: 6g
-    profiles: [ open-search ]
+    deploy:
+      resources:
+        reservations:
+          memory: 4g
+    profiles: [ index, open-search ]
     volumes:
       - opensearch_data:/usr/share/opensearch/data
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:9200/_cluster/health" ]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 90s
+      start_interval: 5s
 volumes:
   pgdata:
     name: klass_pgdata

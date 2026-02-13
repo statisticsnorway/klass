@@ -6,13 +6,7 @@ import static java.util.stream.Collectors.*;
 
 import com.google.common.base.Strings;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 
 import no.ssb.klass.core.util.DateRange;
 import no.ssb.klass.core.util.DraftUtil;

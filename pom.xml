@@ -18,6 +18,7 @@
         <module>klass-shared</module>
         <module>klass-api</module>
         <module>klass-mail</module>
+        <module>klass-index-job</module>
     </modules>
 
     <scm>

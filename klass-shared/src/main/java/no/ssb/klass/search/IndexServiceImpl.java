@@ -1,10 +1,9 @@
-package no.ssb.klass.api.services;
+package no.ssb.klass.search;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import com.google.common.base.Preconditions;
 
 import jakarta.annotation.PostConstruct;
 
-import no.ssb.klass.api.config.OpenSearchConfig;
 import no.ssb.klass.core.config.ConfigurationProfiles;
 import no.ssb.klass.core.model.*;
 import no.ssb.klass.core.repository.ClassificationSeriesRepository;
@@ -15,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.elasticsearch.core.document.Document;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
@@ -29,6 +27,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional(readOnly = true)
 @Profile("!" + ConfigurationProfiles.MOCK_SEARCH)
 public class IndexServiceImpl implements IndexService {
 
@@ -60,7 +59,8 @@ public class IndexServiceImpl implements IndexService {
     private final OpenSearchRestTemplate elasticsearchOperations;
     private final DocumentMapper documentMapper;
 
-    @Autowired @Lazy private IndexService indexService;
+    // Constant for the stemmer
+    public static final String NORWEGIAN_STEMMER_ANALYZER = "norwegian_stemmer_analyzer";
 
     @Autowired
     public IndexServiceImpl(
@@ -93,7 +93,7 @@ public class IndexServiceImpl implements IndexService {
                             Map.of(
                                     ANALYZER,
                                     Map.of(
-                                            OpenSearchConfig.NORWEGIAN_STEMMER_ANALYZER,
+                                            NORWEGIAN_STEMMER_ANALYZER,
                                             Map.of(
                                                     "type", "custom",
                                                     "tokenizer", "standard",
@@ -117,25 +117,25 @@ public class IndexServiceImpl implements IndexService {
                                                     "type",
                                                     "text",
                                                     ANALYZER,
-                                                    OpenSearchConfig.NORWEGIAN_STEMMER_ANALYZER,
+                                                    NORWEGIAN_STEMMER_ANALYZER,
                                                     SEARCH_ANALYZER,
-                                                    OpenSearchConfig.NORWEGIAN_STEMMER_ANALYZER),
+                                                    NORWEGIAN_STEMMER_ANALYZER),
                                     DESCRIPTION,
                                             Map.of(
                                                     "type",
                                                     "text",
                                                     ANALYZER,
-                                                    OpenSearchConfig.NORWEGIAN_STEMMER_ANALYZER,
+                                                    NORWEGIAN_STEMMER_ANALYZER,
                                                     SEARCH_ANALYZER,
-                                                    OpenSearchConfig.NORWEGIAN_STEMMER_ANALYZER),
+                                                    NORWEGIAN_STEMMER_ANALYZER),
                                     CODES,
                                             Map.of(
                                                     "type",
                                                     "text",
                                                     ANALYZER,
-                                                    OpenSearchConfig.NORWEGIAN_STEMMER_ANALYZER,
+                                                    NORWEGIAN_STEMMER_ANALYZER,
                                                     SEARCH_ANALYZER,
-                                                    OpenSearchConfig.NORWEGIAN_STEMMER_ANALYZER),
+                                                    NORWEGIAN_STEMMER_ANALYZER),
                                     FAMILY, Map.of("type", "keyword"),
                                     SECTION, Map.of("type", "keyword")));
 
@@ -157,11 +157,11 @@ public class IndexServiceImpl implements IndexService {
     @Async
     @Transactional(readOnly = true)
     public void indexAsync(Long classificationSeriesId) {
-        checkNotNull(classificationSeriesId);
+        Preconditions.checkNotNull(classificationSeriesId);
         try {
             ClassificationSeries classification =
-                    classificationRepository.getOne(classificationSeriesId);
-            indexService.indexSync(classification);
+                    classificationRepository.getReferenceById(classificationSeriesId);
+            this.indexSync(classification);
         } catch (Exception e) {
             log.warn(
                     "Failed to index classification {}: {}",
@@ -181,7 +181,7 @@ public class IndexServiceImpl implements IndexService {
 
         elasticsearchOperations.indexOps(getIndexCoordinates());
         log.info(
-                "Indexing: {} took (ms): {}",
+                "Indexed: {} took (ms): {}",
                 classification.getNameInPrimaryLanguage(),
                 TimeUtil.millisecondsSince(start));
     }
@@ -232,8 +232,10 @@ public class IndexServiceImpl implements IndexService {
     }
 
     /** Inner class to handle document mapping from domain entities to search documents */
+    @Transactional(readOnly = true)
     private static class DocumentMapper {
 
+        @Transactional(readOnly = true)
         public Map<String, Object> mapClassificationSeries(
                 ClassificationSeries classification, Language language) {
             Map<String, Object> doc = new HashMap<>();

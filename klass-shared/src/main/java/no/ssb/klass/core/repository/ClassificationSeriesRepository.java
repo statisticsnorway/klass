@@ -159,6 +159,17 @@ public interface ClassificationSeriesRepository
     @Query("select id from ClassificationSeries")
     List<Long> findAllClassificationIds();
 
+    @Query(
+            "select distinct classification.id "
+                    + "from ClassificationVersion version "
+                    + "join version.classification classification "
+                    + "where version.deleted = false"
+                    + " and (version.published.published_no = true "
+                    + "      or version.published.published_nn = true "
+                    + "      or version.published.published_en = true) "
+                    + " and classification.deleted = false")
+    List<Long> findPublishedClassificationIds();
+
     List<ClassificationSeries> findByContactPerson(User contactPerson);
 
     @Modifying
