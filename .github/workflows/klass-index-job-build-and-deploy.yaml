@@ -1,7 +1,11 @@
 name: Klass Index Job build and deploy
 
 on:
+  release:
+    types: [ published ]
   push:
+    branches:
+      - main
     paths:
       - "klass-index-job/**"
       - "klass-shared/**"
