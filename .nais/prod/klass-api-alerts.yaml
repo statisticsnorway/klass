@@ -10,7 +10,7 @@ spec:
     - name: dapla-metadata
       rules:
         - alert: HTTP error responses
-          expr: 100 * sum(rate(nginx_ingress_controller_request_duration_seconds_count{ingress="klass-nais-ingress-eaceac17",status!~"[4-5].*"}[10m])) by (ingress) / sum(rate(nginx_ingress_controller_request_duration_seconds_count{ingress="klass-nais-ingress-eaceac17"}[10m])) by (ingress) < 75.0
+          expr: 100 * sum(rate(nginx_ingress_controller_request_duration_seconds_count{ingress="klass-nais-ingress-eaceac17",status!~"499|5[0-9]{2}"}[10m])) by (ingress) / sum(rate(nginx_ingress_controller_request_duration_seconds_count{ingress="klass-nais-ingress-eaceac17"}[10m])) by (ingress) < 75.0
           for: 3m
           annotations:
             title: "HTTP error responses"
