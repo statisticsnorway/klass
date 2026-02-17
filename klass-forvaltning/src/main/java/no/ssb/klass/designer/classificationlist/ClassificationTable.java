@@ -2,6 +2,8 @@ package no.ssb.klass.designer.classificationlist;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.google.common.collect.ImmutableMap;
@@ -32,6 +34,9 @@ import no.ssb.klass.designer.util.VaadinUtil;
 @UIScope
 @SpringComponent
 public class ClassificationTable extends AbstractTable {
+
+    private static final Logger log =
+            LoggerFactory.getLogger(ClassificationTable.class);
     private static final String NEW_CLASSIFICATION_TOOLTIP = "Lag nytt kodeverk";
 
     @Autowired
@@ -190,6 +195,18 @@ public class ClassificationTable extends AbstractTable {
         }
 
         private Button createFavoriteButton(ClassificationSeries classification) {
+
+            log.debug("Creating favorite button for classification: {}", classification);
+
+            if (classification.getContactPerson() == null) {
+                log.debug("No contact person for classification: {}", classification);
+                return null;
+            }
+
+            if (classification.getId() == null) {
+                log.debug("No id: {}", classification);
+                return null;
+            }
             boolean isFavorite = userContext.isFavorite(classification);
             Resource favoriteSymbol = FavoriteUtils.getFavoriteIcon(isFavorite);
             Button favoriteButton = createButton(classification, favoriteSymbol, createFavoriteTooltip(isFavorite));
