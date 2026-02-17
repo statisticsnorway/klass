@@ -88,6 +88,11 @@ start-klass-forvaltning-docker:
 logs-klass-forvaltning:
 	docker compose $(COMPOSE_FILE) --profile frontend logs -f
 
+.PHONY: check-klass-forvaltning-docker
+check-klass-forvaltning-docker:
+	docker compose $(COMPOSE_FILE) --profile frontend ps
+
+
 .PHONY: stop-klass-forvaltning-docker
 stop-klass-forvaltning-docker:
 	docker compose $(COMPOSE_FILE) --profile frontend down -v
