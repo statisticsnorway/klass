@@ -197,6 +197,10 @@ public class ClassificationTable extends AbstractTable {
         private Button createFavoriteButton(ClassificationSeries classification) {
 
             log.debug("Creating favorite button for classification: {}", classification);
+            if (userContext == null){
+                log.info("User context is null");
+                return null;
+            }
 
             if (classification.getContactPerson() == null) {
                 log.debug("No contact person for classification: {}", classification);
