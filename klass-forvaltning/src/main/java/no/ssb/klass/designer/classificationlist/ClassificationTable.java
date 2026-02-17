@@ -197,20 +197,14 @@ public class ClassificationTable extends AbstractTable {
         private Button createFavoriteButton(ClassificationSeries classification) {
 
             log.debug("Creating favorite button for classification: {}", classification);
-            if (userContext == null){
-                log.info("User context is null");
-                return null;
+            if (classification.getContactPerson() == null || classification.getId() == null || userContext == null ) {
+                log.warn("Skipping favorite button: incomplete classification {}", classification);
+                // Return a dummy invisible component to avoid Vaadin NPE
+                Button dummy = new Button();
+                dummy.setVisible(false);
+                return dummy;
             }
 
-            if (classification.getContactPerson() == null) {
-                log.debug("No contact person for classification: {}", classification);
-                return null;
-            }
-
-            if (classification.getId() == null) {
-                log.debug("No id: {}", classification);
-                return null;
-            }
             boolean isFavorite = userContext.isFavorite(classification);
             Resource favoriteSymbol = FavoriteUtils.getFavoriteIcon(isFavorite);
             Button favoriteButton = createButton(classification, favoriteSymbol, createFavoriteTooltip(isFavorite));
