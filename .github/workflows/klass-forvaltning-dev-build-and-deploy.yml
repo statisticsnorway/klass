@@ -3,6 +3,10 @@ on:
   push:
     branches:
       - prod-image-august
+    paths:
+      - "klass-forvaltning/**"
+      - ".nais/**/klass-forvaltning-dev.yaml"
+      - ".github/workflows/klass-forvaltning-dev-build-and-deploy.yaml"
   workflow_dispatch:
 jobs:
   docker-build:
@@ -31,7 +35,7 @@ jobs:
         id: changed-files
         uses: "nais/what-changed@main"
         with:
-          files: .nais/**/klass-forvaltning.yaml
+          files: .nais/**/klass-forvaltning-dev.yaml
           main-branch-name: 'nais-migration' #TODO: Remove when we change branch back to main
       - name: Check for test config changes
         id: test-config-changed
