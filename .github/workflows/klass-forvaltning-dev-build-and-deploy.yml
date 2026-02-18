@@ -1,0 +1,74 @@
+name: klass-forvaltning-dev-build-and-deploy.yml
+on:
+  workflow_dispatch:
+jobs:
+  docker-build:
+    name: Docker build
+    permissions:
+      contents: "read"
+      id-token: "write"
+      packages: "read"
+    runs-on: ubuntu-latest
+    outputs:
+      image: ${{ steps.docker-build-push.outputs.image }}
+      telemetry: ${{ steps.docker-build-push.outputs.telemetry }}
+      test-config-changed: ${{ steps.test-config-changed.outputs.changed != 'non-inputs' }}
+      only-config-changed: ${{ steps.changed-files.outputs.changed == 'only-inputs'}}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '8'
+          cache: 'maven'
+      - name: Check what changed
+        id: changed-files
+        uses: "nais/what-changed@main"
+        with:
+          files: .nais/**/klass-forvaltning.yaml
+          main-branch-name: 'nais-migration' #TODO: Remove when we change branch back to main
+      - name: Check for test config changes
+        id: test-config-changed
+        uses: "nais/what-changed@main"
+        with:
+          files: .nais/test/klass-forvaltning.yaml
+          main-branch-name: 'nais-migration'  #TODO: Remove when we change branch back to main
+      - name: Build with Maven
+        if: steps.changed-files.outputs.changed != 'only-inputs' || github.event.inputs.cluster == 'test'
+        working-directory: klass-forvaltning
+        run: mvn --batch-mode --update-snapshots install -DskipTests
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and push
+        if: steps.changed-files.outputs.changed != 'only-inputs' || github.event.inputs.cluster == 'test'
+        uses: nais/docker-build-push@v0
+        id: docker-build-push
+        with:
+          team: dapla-metadata
+          image_suffix: forvaltning
+          dockerfile: klass-forvaltning/Dockerfile
+          docker_context: klass-forvaltning
+
+  deploy-test:
+    name: Deploy to test
+    needs: docker-build
+    permissions:
+      contents: "read"
+      id-token: "write"
+      packages: "read"
+    runs-on: ubuntu-latest
+    if: github.event_name != 'release' || github.event.inputs.cluster == 'test' || needs.build.outputs.test-config-changed == 'true'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: nais/deploy/actions/deploy@v2
+        env:
+          CLUSTER: test
+          RESOURCE: .nais/test/klass-forvaltning.yaml
+          DEPLOY_SERVER: deploy.ssb.cloud.nais.io:443
+          WORKLOAD_IMAGE: ${{ needs.build.outputs.image }}
+          TELEMETRY: ${{ needs.build.outputs.telemetry }}
