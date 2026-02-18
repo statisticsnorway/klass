@@ -2,26 +2,14 @@ name: Klass-forvaltning build and deploy
 
 on:
   release:
-    types: [ published ]
+    types: [published]
   push:
     branches:
-      - main
+      - 18-of-september-2025
     paths:
       - "klass-forvaltning/**"
       - ".nais/**/klass-forvaltning.yaml"
       - ".github/workflows/klass-forvaltning-build-and-deploy.yaml"
-  workflow_dispatch:
-    inputs:
-      cluster:
-        description: "Which cluster to deploy to?"
-        required: true
-        default: "test"
-        type: choice
-        options:
-          - test
-          - prod
-
-
 jobs:
   docker-build:
     name: Docker build
@@ -33,45 +21,26 @@ jobs:
     outputs:
       image: ${{ steps.docker-build-push.outputs.image }}
       telemetry: ${{ steps.docker-build-push.outputs.telemetry }}
-      prod-config-changed: ${{ steps.prod-config-changed.outputs.changed != 'non-inputs' }}
-      test-config-changed: ${{ steps.test-config-changed.outputs.changed != 'non-inputs' }}
-      only-config-changed: ${{ steps.changed-files.outputs.changed == 'only-inputs'}}
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: actions/setup-java@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '8'
           cache: 'maven'
-      - name: Check what changed
-        id: changed-files
-        uses: "nais/what-changed@main"
-        with:
-          files: .nais/**/klass-forvaltning.yaml
-          main-branch-name: 'main' #TODO: Remove when we change branch back to main
-      - name: Check for test config changes
-        id: test-config-changed
-        uses: "nais/what-changed@main"
-        with:
-          files: .nais/test/klass-forvaltning.yaml
-          main-branch-name: 'main'  #TODO: Remove when we change branch back to main
-      - name: Check for prod config changes
-        id: prod-config-changed
-        uses: "nais/what-changed@main"
-        with:
-          files: .nais/prod/klass-forvaltning.yaml
-          main-branch-name: 'main'  #TODO: Remove when we change branch back to main
+
       - name: Build with Maven
-        if: steps.changed-files.outputs.changed != 'only-inputs' || github.event.inputs.cluster == 'test' || github.event.inputs.cluster == 'prod'
         working-directory: klass-forvaltning
         run: mvn --batch-mode --update-snapshots install -DskipTests
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build and push
-        if: steps.changed-files.outputs.changed != 'only-inputs' || github.event.inputs.cluster == 'test' || github.event.inputs.cluster == 'prod'
+
+      - name: Build and push Docker image
         uses: nais/docker-build-push@v0
         id: docker-build-push
         with:
@@ -88,36 +57,16 @@ jobs:
       id-token: "write"
       packages: "read"
     runs-on: ubuntu-latest
-    if: github.event_name != 'release' || github.event.inputs.cluster == 'test' || needs.build.outputs.test-config-changed == 'true'
+    if: github.event_name != 'release' || github.event.inputs.cluster == 'test'
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - uses: nais/deploy/actions/deploy@v2
+      - name: Deploy to test cluster
+        uses: nais/deploy/actions/deploy@v2
         env:
           CLUSTER: test
           RESOURCE: .nais/test/klass-forvaltning.yaml
           DEPLOY_SERVER: deploy.ssb.cloud.nais.io:443
-          WORKLOAD_IMAGE: ${{ needs.build.outputs.image }}
-          TELEMETRY: ${{ needs.build.outputs.telemetry }}
-
-  deploy-prod:
-    name: Deploy to prod
-    needs: docker-build
-    permissions:
-      contents: "read"
-      id-token: "write"
-      packages: "read"
-    runs-on: ubuntu-latest
-    if: github.event_name == 'release' || github.event.inputs.cluster == 'prod' || (needs.build.outputs.prod-config-changed == 'true' && needs.build.outputs.only-config-changed == 'true')
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - uses: nais/deploy/actions/deploy@v2
-        env:
-          CLUSTER: prod
-          RESOURCE: .nais/prod/klass-forvaltning.yaml
-          DEPLOY_SERVER: deploy.ssb.cloud.nais.io:443
-          WORKLOAD_IMAGE: ${{ needs.build.outputs.image }}
-          TELEMETRY: ${{ needs.build.outputs.telemetry }}
+          WORKLOAD_IMAGE: ${{ needs.docker-build.outputs.image }}
+          TELEMETRY: ${{ needs.docker-build.outputs.telemetry }}
