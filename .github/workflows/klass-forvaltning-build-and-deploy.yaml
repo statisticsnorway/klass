@@ -10,6 +10,16 @@ on:
       - "klass-forvaltning/**"
       - ".nais/**/klass-forvaltning.yaml"
       - ".github/workflows/klass-forvaltning-build-and-deploy.yaml"
+  workflow_dispatch:
+    inputs:
+      cluster:
+        description: "Which cluster to deploy to?"
+        required: true
+        default: "test"
+        type: choice
+        options:
+          - test
+          - prod
 jobs:
   docker-build:
     name: Docker build
