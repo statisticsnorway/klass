@@ -20,7 +20,6 @@ spec:
         - application: klass-solr
         - application: klass-mail
   login:
-    secretName: login-config-klass-forvaltning
     provider: openid
     enforce:
       enabled: true
@@ -54,6 +53,7 @@ spec:
       value: "-XX:InitialRAMPercentage=50.0 -XX:MaxRAMPercentage=50.0"
   envFrom:
     - secret: google-sql-klass
+    - secret: login-config-klass-forvaltning
   filesFrom:
     - mountPath: /var/run/secrets/nais.io/sqlcertificate
       secret: sqeletor-klass-827ec8ec
