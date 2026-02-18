@@ -45,6 +45,7 @@ jobs:
       contents: "read"
       id-token: "write"
       packages: "read"
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
