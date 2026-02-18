@@ -18,9 +18,8 @@ on:
         default: "test"
         type: choice
         options:
-          #          - test
+          - test
           - prod
-
 
 jobs:
   docker-build:
