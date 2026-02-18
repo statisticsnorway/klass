@@ -5,11 +5,22 @@ on:
     types: [published]
   push:
     branches:
-      - 18-of-september-2025
+      - main
     paths:
       - "klass-forvaltning/**"
       - ".nais/**/klass-forvaltning.yaml"
       - ".github/workflows/klass-forvaltning-build-and-deploy.yaml"
+  workflow_dispatch:
+    inputs:
+      cluster:
+        description: "Which cluster to deploy to?"
+        required: true
+        default: "test"
+        type: choice
+        options:
+          - test
+          - prod
+
 jobs:
   docker-build:
     name: Docker build
@@ -67,6 +78,28 @@ jobs:
         env:
           CLUSTER: test
           RESOURCE: .nais/test/klass-forvaltning.yaml
+          DEPLOY_SERVER: deploy.ssb.cloud.nais.io:443
+          WORKLOAD_IMAGE: ${{ needs.docker-build.outputs.image }}
+          TELEMETRY: ${{ needs.docker-build.outputs.telemetry }}
+
+  deploy-prod:
+    name: Deploy to prod
+    needs: docker-build
+    permissions:
+      contents: "read"
+      id-token: "write"
+      packages: "read"
+    runs-on: ubuntu-latest
+    if: github.event_name == 'release' || github.event.inputs.cluster == 'prod'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to prod cluster
+        uses: nais/deploy/actions/deploy@v2
+        env:
+          CLUSTER: prod
+          RESOURCE: .nais/prod/klass-forvaltning.yaml
           DEPLOY_SERVER: deploy.ssb.cloud.nais.io:443
           WORKLOAD_IMAGE: ${{ needs.docker-build.outputs.image }}
           TELEMETRY: ${{ needs.docker-build.outputs.telemetry }}
