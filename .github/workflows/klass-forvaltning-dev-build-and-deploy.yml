@@ -1,5 +1,8 @@
 name: klass-forvaltning-dev-build-and-deploy.yml
 on:
+  push:
+    branches:
+      - prod-image-august
   workflow_dispatch:
 jobs:
   docker-build:
