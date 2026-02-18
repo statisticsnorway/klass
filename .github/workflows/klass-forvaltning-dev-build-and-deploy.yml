@@ -71,7 +71,7 @@ jobs:
       - uses: nais/deploy/actions/deploy@v2
         env:
           CLUSTER: test
-          RESOURCE: .nais/test/klass-forvaltning.yaml
+          RESOURCE: .nais/test/klass-forvaltning-dev.yaml
           DEPLOY_SERVER: deploy.ssb.cloud.nais.io:443
           WORKLOAD_IMAGE: ${{ needs.build.outputs.image }}
           TELEMETRY: ${{ needs.build.outputs.telemetry }}
