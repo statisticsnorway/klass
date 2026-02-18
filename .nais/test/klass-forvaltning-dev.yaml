@@ -4,6 +4,7 @@ metadata:
   name: klass-forvaltning-dev
   namespace: dapla-metadata
   labels:
+    shared-db: "true"
     team: dapla-metadata
   annotations:
     nginx.ingress.kubernetes.io/proxy-body-size: "8m"
