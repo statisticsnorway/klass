@@ -20,6 +20,7 @@ spec:
         - application: klass-solr
         - application: klass-mail
   login:
+    secretName: login-config-klass-forvaltning
     provider: openid
     enforce:
       enabled: true
