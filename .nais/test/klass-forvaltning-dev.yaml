@@ -11,7 +11,7 @@ metadata:
 spec:
   port: 8081
   ingresses:
-    - https://klass.intern.test.ssb.no/klass-dev/admin
+    - https://klass-dev.intern.test.ssb.no/klass/admin
   accessPolicy:
     outbound:
       external:
