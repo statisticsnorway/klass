@@ -26,6 +26,21 @@ Run `mvn install` to build the project.
 
 Klass is hosted on the Nais application platform. Deploy configuration may be found in the [.nais](.nais) directory. Deploy workflows may be found in the [.github/workflows](.github/workflows) directory.
 
+## Release
+
+The release process is automated. It can be triggered by following these steps:
+
+1. Check that you are on the default branch.
+1. Check that you don't have any local commits or changes.
+1. Run `make release`. This command creates a branch called `release` and triggers the further release process like so:
+    1. The version number is bumped for a minor release.
+    2. The artifacts are deployed
+    3. A tag is pushed
+    4. The project is reset for the next development iteration
+    5. A GitHub release is created which triggers deploy to the prod environment
+
+This command pushes the current state of origin/master as well as locally committed changes to the release branch. This starts a workflow that performs a minor version bump, a GitHub release, and a deployment to the NAIS production environment.
+
 ## Database
 
 Klass uses PostgreSQL for its database.

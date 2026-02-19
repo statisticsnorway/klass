@@ -22,6 +22,16 @@ default: | help
 help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
+
+.PHONY: release
+release:
+	@set -e ; \
+	git checkout master && \
+	git pull && \
+	git checkout release && \
+	git merge master && \
+	git push
+
 .PHONY: build-klass-forvaltning
 build-klass-forvaltning:
 	pushd klass-forvaltning && \
