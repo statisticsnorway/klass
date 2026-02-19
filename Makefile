@@ -34,7 +34,7 @@ build-klass-forvaltning:
 build-clean-klass-forvaltning:
 	pushd klass-forvaltning && \
 	${sdk} env && \
-	mvn clean install; \
+	mvn clean install -U; \
  	popd; \
 	${sdk} env clear
 
