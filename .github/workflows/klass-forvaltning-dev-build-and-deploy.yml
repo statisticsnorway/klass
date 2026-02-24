@@ -1,8 +1,8 @@
 name: klass-forvaltning-dev-build-and-deploy.yml
 on:
-  pull_request:
-#branches:
-#  - use-31-of-october-with-main
+  push:
+    branches:
+      - use-31-of-october-with-main
   workflow_dispatch:
 
 jobs:
