@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+<head>
+ <meta charset="UTF-8">
+ <meta name="design-properties"
+       content="{&quot;RULERS_VISIBLE&quot;:true,&quot;GUIDELINES_VISIBLE&quot;:false,&quot;SNAP_TO_OBJECTS&quot;:true,&quot;SNAP_TO_GRID&quot;:true,&quot;SNAPPING_DISTANCE&quot;:10,&quot;GENERATE_GETTERS&quot;:false,&quot;JAVA_SOURCES_ROOT&quot;:&quot;src/main/java&quot;,&quot;THEME&quot;:&quot;klasstheme&quot;}">
+ <meta name="vaadin-version" content="7.7.7">
+ <meta name="package-mapping"
+       content="no_ssb_klass_designer_editing_components:no.ssb.klass.designer.editing.components">
+ <meta name="package-mapping" content="no_ssb_klass_designer_editing:no.ssb.klass.designer.editing">
+</head>
+<body>
+<vaadin-vertical-layout margin-left margin-top>
+ <vaadin-horizontal-layout width-full>
+  <vaadin-vertical-layout style-name="language-separator-line" spacing margin-right _id="primaryLanguageLayout">
+   <vaadin-label style-name="bold" size-auto plain-text _id="primaryLanguageLabel" :center>
+    Bokmål
+   </vaadin-label>
+   <vaadin-horizontal-layout caption="Gyldighetsperiode" spacing height="40px" _id="dateLayout">
+    <vaadin-label size-auto plain-text _id="fromLabel" :middle>
+     fra og med
+    </vaadin-label>
+    <vaadin-date-field resolution="month" _id="fromDate" :middle></vaadin-date-field>
+    <vaadin-label size-auto plain-text :middle>
+     til og med
+    </vaadin-label>
+    <vaadin-date-field resolution="month" _id="toDate" :middle></vaadin-date-field>
+   </vaadin-horizontal-layout>
+   <vaadin-check-box caption="hak av denne boksen dersom dette er ett utkast" _id="draftCheckBox"></vaadin-check-box>
+   <vaadin-text-field caption="Navn" width-full _id="primaryNameTextfield"></vaadin-text-field>
+   <vaadin-text-area caption="Beskrivelse" width-full _id="primaryDescriptionTextArea"></vaadin-text-area>
+   <vaadin-combo-box caption="Kontakt person" item-caption-mode="id" width-full _id="contactPersonCombobox">
+    <option>Option 1</option>
+    <option>Option 2</option>
+    <option>Option 3</option>
+   </vaadin-combo-box>
+   <vaadin-text-field caption="Vedlikeholdes av seksjon" width-full readonly _id="sectionTextfield"></vaadin-text-field>
+  </vaadin-vertical-layout>
+  <vaadin-vertical-layout spacing margin-left>
+   <no_ssb_klass_designer_editing_components-edit-languages-component _id="languageSelect"
+                                                                      :right></no_ssb_klass_designer_editing_components-edit-languages-component>
+   <vaadin-horizontal-layout height="65px" _id="dateFillerLayout"></vaadin-horizontal-layout>
+   <vaadin-horizontal-layout spacing height="25px" _id="draftFillerLayout"></vaadin-horizontal-layout>
+   <vaadin-vertical-layout spacing margin-right _id="secondLanguageLayout">
+    <vaadin-text-field caption="Navn" width-full _id="secondaryNameTextfield"></vaadin-text-field>
+    <vaadin-text-area caption="Beskrivelse" width-full _id="secondaryDescriptionTextArea"></vaadin-text-area>
+   </vaadin-vertical-layout>
+   <vaadin-vertical-layout spacing margin-right _id="thirdLanguageLayout">
+    <vaadin-text-field caption="Navn" width-full _id="thirdNameTextfield"></vaadin-text-field>
+    <vaadin-text-area caption="Beskrivelse" width-full _id="thirdDescriptionTextArea"></vaadin-text-area>
+   </vaadin-vertical-layout>
+  </vaadin-vertical-layout>
+ </vaadin-horizontal-layout>
+</vaadin-vertical-layout>
+</body>
+</html>

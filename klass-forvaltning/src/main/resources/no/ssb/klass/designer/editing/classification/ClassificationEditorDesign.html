@@ -1,0 +1,125 @@
+<!doctype html>
+<html>
+<head>
+ <meta charset="UTF-8">
+ <meta name="design-properties"
+       content="{&quot;RULERS_VISIBLE&quot;:true,&quot;GUIDELINES_VISIBLE&quot;:false,&quot;SNAP_TO_OBJECTS&quot;:true,&quot;SNAP_TO_GRID&quot;:true,&quot;SNAPPING_DISTANCE&quot;:10,&quot;JAVA_SOURCES_ROOT&quot;:&quot;src/main/java&quot;,&quot;THEME&quot;:&quot;klasstheme&quot;}">
+ <meta name="vaadin-version" content="7.7.0">
+ <meta name="package-mapping" content="com_explicatis_ext_token_field:com.explicatis.ext_token_field">
+ <meta name="package-mapping" content="no_ssb_klass_designer_components_common:no.ssb.klass.designer.components.common">
+ <meta name="package-mapping"
+       content="no_ssb_klass_designer_components_sidepanel:no.ssb.klass.designer.components.sidepanel">
+</head>
+<body>
+<vaadin-vertical-layout margin-bottom>
+ <vaadin-vertical-layout margin-left margin-top :bottom>
+    <vaadin-label style-name="h3 bold" size-auto plain-text _id="headerLabel">
+      Kodeverk - eksempel Tittel
+    </vaadin-label>
+   </vaadin-vertical-layout>
+   <vaadin-horizontal-layout size-full margin>
+    <vaadin-vertical-layout style-name="language-separator-line" size-full margin-right _id="bokmalLayout" :expand>
+     <vaadin-horizontal-layout width-full height="30px" :center>
+      <vaadin-label style-name="bold" size-auto plain-text _id="primaryLabel" :middle :center>
+        Bokmål
+      </vaadin-label>
+     </vaadin-horizontal-layout>
+     <vaadin-horizontal-layout size-full :expand>
+      <vaadin-vertical-layout spacing id="primary" size-full margin-top :expand>
+       <vaadin-combo-box caption="Kodeverkstype" invalid-allowed="false" required item-caption-mode="id" width-full
+                         _id="classificationTypeCombobox"></vaadin-combo-box>
+       <vaadin-horizontal-layout width-full>
+        <vaadin-text-field caption="Tittel" invalid-allowed="false" required style-name="align-center" immediate
+                           width="150px" readonly _id="primaryTitlePrefixTextfield" :bottom></vaadin-text-field>
+        <vaadin-text-field invalid-allowed="false" required id="classification-name" immediate width-full
+                           _id="primaryTitleTextfield" :bottom :expand></vaadin-text-field>
+       </vaadin-horizontal-layout>
+       <vaadin-text-area caption="Beskrivelse" invalid-allowed="false" required immediate width-full
+                         _id="primaryDescriptionTextArea"></vaadin-text-area>
+       <vaadin-combo-box caption="Emneområde" invalid-allowed="false" required width-full
+                         _id="familiesCombobox"></vaadin-combo-box>
+       <vaadin-combo-box caption="Kontaktperson" invalid-allowed="false" required width-full
+                         _id="contactPersonCombobox"></vaadin-combo-box>
+       <vaadin-text-field caption="Ansvarlig seksjon" invalid-allowed="false" width-full readonly
+                          _id="sectionTextfield"></vaadin-text-field>
+       <vaadin-twin-col-select caption="Enhetstyper" required item-caption-mode="id" immediate width-full
+                               _id="statisticalUnitSelector"></vaadin-twin-col-select>
+       <vaadin-combo-box caption="Primærspråk" invalid-allowed="false" required item-caption-mode="id" width-full
+                         _id="primaryLanguageCombobox"></vaadin-combo-box>
+       <vaadin-vertical-layout spacing size-auto margin-top>
+        <vaadin-check-box caption="Inkluder kortnavn" _id="includeShortnameCheckbox"></vaadin-check-box>
+        <vaadin-check-box caption="Inkluder noter" _id="includeNotesCheckbox"></vaadin-check-box>
+        <vaadin-check-box caption="Inkluder gyldighet for element" _id="includeValidCheckbox"></vaadin-check-box>
+        <vaadin-check-box caption="Copyright" _id="copyrightCheckbox"></vaadin-check-box>
+       </vaadin-vertical-layout>
+       <vaadin-vertical-layout size-auto _id="padding" :expand></vaadin-vertical-layout>
+      </vaadin-vertical-layout>
+      <vaadin-vertical-layout width="50%" height-full _id="optional"></vaadin-vertical-layout>
+     </vaadin-horizontal-layout>
+    </vaadin-vertical-layout>
+    <vaadin-vertical-layout size-full margin-left _id="otherLanguages" :right :expand>
+     <vaadin-horizontal-layout width-full height="30px" _id="languagesHeader">
+      <vaadin-grid-layout width-full height="39px">
+       <row>
+        <column expand="1">
+         <vaadin-horizontal-layout width-full></vaadin-horizontal-layout>
+        </column>
+        <column expand="1">
+         <vaadin-horizontal-layout _id="languageLayout">
+          <vaadin-button primary-style-name="action-text-button" plain-text _id="secondaryLanguageButton" :center>
+            Nynorsk
+          </vaadin-button>
+          <vaadin-label size-auto plain-text>
+            |
+          </vaadin-label>
+          <vaadin-button primary-style-name="action-text-button" plain-text _id="thirdLanguageButton" :center>
+            Engelsk
+          </vaadin-button>
+         </vaadin-horizontal-layout>
+        </column>
+        <column expand="1">
+         <vaadin-horizontal-layout width-full>
+          <vaadin-button primary-style-name="action-text-button" style-name="tiny" plain-text _id="languageToggleButton" :right>
+            Rediger språk
+          </vaadin-button>
+         </vaadin-horizontal-layout>
+        </column>
+       </row>
+       <row></row>
+      </vaadin-grid-layout>
+     </vaadin-horizontal-layout>
+     <vaadin-horizontal-layout size-full margin-top _id="secondaryLanguageLayout" :expand>
+      <vaadin-vertical-layout spacing size-full margin-right :expand>
+       <vaadin-vertical-layout height="63px" _id="spacer"></vaadin-vertical-layout>
+       <vaadin-horizontal-layout width-full>
+        <vaadin-text-field caption="Tittel" invalid-allowed="false" required style-name="align-center" immediate
+                           width="150px" readonly _id="secondaryTitlePrefixTextfield" :bottom></vaadin-text-field>
+        <vaadin-text-field invalid-allowed="false" immediate width-full _id="secondaryTitleTextfield" :bottom
+                           :expand></vaadin-text-field>
+       </vaadin-horizontal-layout>
+       <vaadin-text-area caption="Beskrivelse" invalid-allowed="false" immediate width-full
+                         _id="secondaryDescriptionTextArea"></vaadin-text-area>
+      </vaadin-vertical-layout>
+     </vaadin-horizontal-layout>
+     <vaadin-horizontal-layout size-full margin-top _id="thirdLanguageLayout" :expand>
+      <vaadin-vertical-layout spacing size-full margin-right :expand>
+       <vaadin-vertical-layout height="63px" _id="spacer2"></vaadin-vertical-layout>
+       <vaadin-horizontal-layout width-full>
+        <vaadin-text-field caption="Tittel" invalid-allowed="false" required style-name="align-center" immediate
+                           width="150px" readonly _id="thirdTitlePrefixTextfield" :bottom></vaadin-text-field>
+        <vaadin-text-field invalid-allowed="false" immediate width-full _id="thirdTitleTextfield" :bottom
+                           :expand></vaadin-text-field>
+       </vaadin-horizontal-layout>
+       <vaadin-text-area caption="Beskrivelse" invalid-allowed="false" immediate width-full
+                         _id="thirdDescriptionTextArea"></vaadin-text-area>
+      </vaadin-vertical-layout>
+     </vaadin-horizontal-layout>
+    </vaadin-vertical-layout>
+   </vaadin-horizontal-layout>
+   <vaadin-horizontal-layout spacing height="37px" margin-left :middle>
+    <no_ssb_klass_designer_components_common-confirm-or-cancel-component
+            _id="actionButtons"></no_ssb_klass_designer_components_common-confirm-or-cancel-component>
+   </vaadin-horizontal-layout>
+  </vaadin-vertical-layout>
+ </body>
+</html>

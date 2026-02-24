@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8" name="design-properties"
+          content="{&quot;RULERS_VISIBLE&quot;:true,&quot;GUIDELINES_VISIBLE&quot;:false,&quot;SNAP_TO_OBJECTS&quot;:true,&quot;SNAP_TO_GRID&quot;:true,&quot;SNAPPING_DISTANCE&quot;:10,&quot;JAVA_SOURCES_ROOT&quot;:&quot;src/main/java&quot;,&quot;THEME&quot;:&quot;klasstheme&quot;}">
+    <meta charset="UTF-8" name="vaadin-version" content="7.7.0">
+</head>
+<body>
+<vaadin-vertical-layout spacing margin>
+    <vaadin-grid caption="Enehtstyper" size-full _id="statisticalUnitGrid"></vaadin-grid>
+    <vaadin-vertical-layout height="111px">
+        <vaadin-horizontal-layout spacing size-full margin _id="hlayout">
+            <vaadin-text-field caption="Bokmål" width-full _id="nb"></vaadin-text-field>
+            <vaadin-text-field caption="Nynorsk" width-full _id="nn"></vaadin-text-field>
+            <vaadin-text-field caption="Engelsk" width-full _id="en"></vaadin-text-field>
+        </vaadin-horizontal-layout>
+    </vaadin-vertical-layout>
+    <vaadin-horizontal-layout spacing margin-left margin-right _id="buttonhlayout">
+        <vaadin-button width="110px" height="36px" plain-text _id="saveButton">
+            Oppdater
+        </vaadin-button>
+        <vaadin-button width="110px" height="36px" plain-text _id="newButton">
+            Opprett ny
+        </vaadin-button>
+        <vaadin-button width="110px" height="36px" plain-text _id="deleteButton">
+            Slett
+        </vaadin-button>
+    </vaadin-horizontal-layout>
+</vaadin-vertical-layout>
+</body>
+</html>

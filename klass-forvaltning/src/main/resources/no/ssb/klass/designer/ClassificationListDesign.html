@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8" name="design-properties" content="{&quot;RULERS_VISIBLE&quot;:true,&quot;GUIDELINES_VISIBLE&quot;:false,&quot;SNAP_TO_OBJECTS&quot;:true,&quot;SNAP_TO_GRID&quot;:true,&quot;SNAPPING_DISTANCE&quot;:10,&quot;JAVA_SOURCES_ROOT&quot;:&quot;src/main/java&quot;,&quot;THEME&quot;:&quot;klasstheme&quot;}">
+     <meta charset="UTF-8" name="vaadin-version" content="7.7.0">
+  <meta charset="UTF-8" name="package-mapping" content="org_tepi_filtertable:org.tepi.filtertable">
+  <meta charset="UTF-8" name="package-mapping" content="no_ssb_klass_designer_classificationlist:no.ssb.klass.designer.classificationlist">
+ </head> 
+ <body> 
+  <vaadin-vertical-layout style-name="classification-list" spacing size-full margin> 
+   <vaadin-button icon="fonticon://FontAwesome/f104" style-name="borderless link-button" plain-text _id="backButton">
+     Tilbake til hovedsiden 
+   </vaadin-button> 
+   <vaadin-label style-name="bold" size-auto plain-text _id="familyLabel">
+     Generelle 
+   </vaadin-label> 
+   <vaadin-horizontal-layout size-full :expand>
+       <vaadin-horizontal-split-panel split-position="33.3%">
+           <no_ssb_klass_designer_classificationlist-classification-table id="classifications" size-full
+                                                                          _id="classificationTable"></no_ssb_klass_designer_classificationlist-classification-table>
+           <vaadin-horizontal-split-panel>
+               <no_ssb_klass_designer_classificationlist-version-table id="versions" size-full
+                                                                       _id="versionTable"></no_ssb_klass_designer_classificationlist-version-table>
+               <no_ssb_klass_designer_classificationlist-variant-table id="variants" size-full
+                                                                       _id="variantTable"></no_ssb_klass_designer_classificationlist-variant-table>
+           </vaadin-horizontal-split-panel>
+       </vaadin-horizontal-split-panel>
+   </vaadin-horizontal-layout> 
+  </vaadin-vertical-layout>  
+ </body>
+</html>

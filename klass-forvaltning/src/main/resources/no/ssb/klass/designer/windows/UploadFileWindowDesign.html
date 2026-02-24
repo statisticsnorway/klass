@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8" name="design-properties"
+          content="{&quot;RULERS_VISIBLE&quot;:true,&quot;GUIDELINES_VISIBLE&quot;:false,&quot;SNAP_TO_OBJECTS&quot;:true,&quot;SNAP_TO_GRID&quot;:true,&quot;SNAPPING_DISTANCE&quot;:10,&quot;JAVA_SOURCES_ROOT&quot;:&quot;src/main/java&quot;,&quot;THEME&quot;:&quot;klasstheme&quot;}">
+    <meta charset="UTF-8" name="package-mapping"
+          content="no_ssb_klass_designer_components_common:no.ssb.klass.designer.components.common">
+</head>
+<body>
+<vaadin-vertical-layout spacing width="425px" height="200px">
+    <vaadin-label style-name="h2" size-auto plain-text _id="titleLabel" :center :expand>
+        Label
+    </vaadin-label>
+    <vaadin-horizontal-layout spacing width-full margin-left margin-right :expand>
+        <vaadin-upload primary-style-name="klass-upload" style-name="v-upload" width-full
+                       _id="uploadComponent"></vaadin-upload>
+    </vaadin-horizontal-layout>
+    <vaadin-progress-bar immediate width-full _id="progressbar" :expand="0.4"></vaadin-progress-bar>
+    <vaadin-vertical-layout size-auto margin-bottom :bottom :center :expand>
+        <no_ssb_klass_designer_components_common-confirm-or-cancel-component width-full _id="actionButtons" :bottom
+                                                                             :center></no_ssb_klass_designer_components_common-confirm-or-cancel-component>
+    </vaadin-vertical-layout>
+</vaadin-vertical-layout>
+</body>
+</html>

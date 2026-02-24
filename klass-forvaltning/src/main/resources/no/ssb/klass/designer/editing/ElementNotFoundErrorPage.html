@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+ <head>
+  <meta charset="UTF-8" name="design-properties" content="{&quot;RULERS_VISIBLE&quot;:true,&quot;GUIDELINES_VISIBLE&quot;:false,&quot;SNAP_TO_OBJECTS&quot;:true,&quot;SNAP_TO_GRID&quot;:true,&quot;SNAPPING_DISTANCE&quot;:10,&quot;JAVA_SOURCES_ROOT&quot;:&quot;src/main/java&quot;,&quot;THEME&quot;:&quot;klasstheme&quot;}">
+ </head> 
+ <body> 
+  <vaadin-vertical-layout size-full> 
+   <vaadin-vertical-layout style-name="h2" width="75%" margin :center> 
+    <vaadin-label style-name="h2" size-auto plain-text :center>
+      En feil har oppstått 
+    </vaadin-label> 
+    <vaadin-vertical-layout size-auto margin-bottom :center> 
+     <vaadin-label size-auto plain-text _id="reason" :center>
+       Klarte ikke å finne den ønskede 
+     </vaadin-label> 
+     <vaadin-label size-auto plain-text :center>
+       Årsaken til denne feilen kan være en av følgende: 
+     </vaadin-label> 
+    </vaadin-vertical-layout> 
+    <vaadin-text-area input-prompt="0" rows="3" style-name="borderless" width-full readonly :center :expand>
+      Hvis du tidligere har laget et bokmerke i browseren din, og denne feilen oppstår når du henter bokmerket ditt, så er enten det gitte elementet blitt slettet eller at KLASS er blitt oppdatert. Slett bokmerket, og finn det ønskede element i KLASS. 
+    </vaadin-text-area> 
+    <vaadin-text-area rows="2" style-name="borderless" width-full _id="parameterText" :expand>
+      Hvis du har modifisert URL i browseren direkte. 
+    </vaadin-text-area> 
+    <vaadin-text-area rows="2" style-name="borderless" width-full>
+      Hvis du har benyttet et bokmerke i KLASS, så er denne ikke lengre gyldig. Slett bokmerket og finn det ønskede element på ny. 
+    </vaadin-text-area> 
+    <vaadin-text-area rows="2" style-name="borderless" width-full>
+      Kopier denne feilsiden med å trykke på tastene &lt;alt&gt; og &lt;PrtScn&gt; samtidig. Lim så inn den lagrede feilsiden i en e-post som sendes til Kundeservice. 
+    </vaadin-text-area> 
+    <vaadin-button plain-text _id="okButton">
+      OK 
+    </vaadin-button> 
+   </vaadin-vertical-layout> 
+  </vaadin-vertical-layout>  
+ </body>
+</html>

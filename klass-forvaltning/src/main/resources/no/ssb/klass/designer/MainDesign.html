@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+ <head>
+  <meta charset="UTF-8" name="design-properties" content="{&quot;RULERS_VISIBLE&quot;:true,&quot;GUIDELINES_VISIBLE&quot;:false,&quot;SNAP_TO_OBJECTS&quot;:true,&quot;SNAP_TO_GRID&quot;:true,&quot;SNAPPING_DISTANCE&quot;:10,&quot;JAVA_SOURCES_ROOT&quot;:&quot;src/main/java&quot;,&quot;THEME&quot;:&quot;klasstheme&quot;}">
+  <meta charset="UTF-8" name="package-mapping" content="no_ssb_klass_designer_components:no.ssb.klass.designer.components">
+ </head> 
+ <body> 
+  <vaadin-vertical-layout caption="Tittel" size-full> 
+   <vaadin-horizontal-layout size-full> 
+    <vaadin-vertical-layout size-full :expand> 
+     <vaadin-horizontal-layout style-name="header-row" spacing width-full margin-left margin-right _id="topPanel"> 
+      <vaadin-button style-name="borderless klasslogo" plain-text _id="klassLogo" :expand>
+        KLASS 
+      </vaadin-button> 
+      <vaadin-vertical-layout size-auto _id="userIcon"></vaadin-vertical-layout> 
+     </vaadin-horizontal-layout> 
+     <vaadin-horizontal-layout style-name="select-row" spacing width-full margin _id="filterPanel"> 
+      <vaadin-native-select invalid-allowed="false" id="classification-type-selector" style-name="select-row-selector" item-caption-mode="id" _id="selectKodeverk"> 
+       <option>Alle typer kodeverk</option> 
+      </vaadin-native-select> 
+      <vaadin-native-select id="section-selector" item-caption-mode="id" _id="selectSection" :expand> 
+       <option>Alle seksjoner</option> 
+      </vaadin-native-select> 
+     </vaadin-horizontal-layout> 
+     <no_ssb_klass_designer_components-breadcumb-panel _id="breadcrumbPanel"></no_ssb_klass_designer_components-breadcumb-panel> 
+     <vaadin-panel size-full _id="content" :expand></vaadin-panel> 
+    </vaadin-vertical-layout> 
+   </vaadin-horizontal-layout> 
+  </vaadin-vertical-layout>  
+ </body>
+</html>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://klass.ssb.no/variant"
+           elementFormDefault="qualified">
+    <xs:element name="variant">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="element" maxOccurs="unbounded" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element type="xs:string" name="kode"/>
+                            <xs:element type="xs:string" name="navn_bokmål"/>
+                            <xs:element type="xs:string" name="navn_nynorsk"/>
+                            <xs:element type="xs:string" name="navn_engelsk"/>
+                            <xs:element type="xs:string" name="kilde_kode"/>
+                            <xs:element type="xs:string" name="forelder"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
