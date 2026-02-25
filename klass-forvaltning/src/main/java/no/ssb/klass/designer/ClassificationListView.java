@@ -19,25 +19,36 @@ import no.ssb.klass.designer.listeners.SharedEscapeShortcutListener;
 import no.ssb.klass.designer.service.ClassificationFacade;
 import no.ssb.klass.designer.util.ParameterUtil;
 import no.ssb.klass.designer.util.VaadinUtil;
+import no.ssb.klass.designer.user.UserContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 @PrototypeScope
 @SpringView(name = ClassificationListView.NAME)
 @SuppressWarnings("serial")
 public class ClassificationListView extends ClassificationListDesign implements FilteringView {
+    private static final Logger log = LoggerFactory.getLogger(ClassificationListView.class);
     public static final String NAME = "list";
     public static final String PARAM_FAMILY_ID = "familyId";
 
     @Autowired
     private ClassificationFacade classificationFacade;
 
+    private UserContext userContext;
+
+
     private final ClassificationFilter classificationFilter;
     private final SharedEscapeShortcutListener sharedEscapeShortcutListener;
 
-    public ClassificationListView() {
+    @Autowired
+    public ClassificationListView(UserContext userContext) {
+        this.userContext = userContext;
+        log.info("User context list view {}", userContext);
         sharedEscapeShortcutListener = new SharedEscapeShortcutListener();
         this.classificationFilter = VaadinUtil.getKlassState().getClassificationFilter();
         backButton.addClickListener(e -> VaadinUtil.navigateTo(ClassificationFamilyView.NAME));
-        classificationTable.init(versionTable, variantTable);
+        classificationTable.init(versionTable, variantTable, userContext);
         versionTable.init(classificationTable, variantTable);
         variantTable.init(versionTable);
         classificationTable.addToSharedActionListener(sharedEscapeShortcutListener);
@@ -47,6 +58,7 @@ public class ClassificationListView extends ClassificationListDesign implements 
 
     @Override
     public void enter(ViewChangeEvent event) {
+        log.info("User context list view {}", userContext);
         Long familyId = ParameterUtil.getRequiredLongParameter(PARAM_FAMILY_ID, event.getParameters());
         ClassificationFamily classificationFamily = classificationFacade.getRequiredClassificationFamily(familyId);
         updateFamilyLabel(classificationFamily.getName());
@@ -92,6 +104,7 @@ public class ClassificationListView extends ClassificationListDesign implements 
     }
 
     private void populateClassificationTable(ClassificationFamily classificationFamily) {
+        log.info("Populating classification table with user context {}", userContext);
         List<ClassificationSeries> classifications = classificationFamily
                 .getClassificationSeriesBySectionAndClassificationType(classificationFilter.getCurrentSection(),
                         classificationFilter.getCurrentClassificationType());
