@@ -27,16 +27,20 @@ import no.ssb.klass.designer.user.UserContext;
 import no.ssb.klass.designer.util.FavoriteUtils;
 import no.ssb.klass.designer.util.KlassTheme;
 import no.ssb.klass.designer.util.VaadinUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 @SuppressWarnings("serial")
 @UIScope
 @SpringComponent
 public class ClassificationTable extends AbstractTable {
+    private static final Logger log = LoggerFactory.getLogger(ClassificationTable.class);
     private static final String NEW_CLASSIFICATION_TOOLTIP = "Lag nytt kodeverk";
 
     @Autowired
     private ClassificationFacade classificationFacade;
-    @Autowired
+
     private UserContext userContext;
 
     private TextField filterBox;
@@ -45,7 +49,9 @@ public class ClassificationTable extends AbstractTable {
 
     private ClassificationClickListener classificationClickListener;
 
-    public void init(VersionTable versionTable, VariantTable variantTable) {
+    @Autowired
+    public void init(VersionTable versionTable, VariantTable variantTable, UserContext userContext) {
+        this.userContext = userContext;
         this.classificationClickListener = new ClassificationClickListener(userContext, classificationFacade,
                 versionTable, variantTable);
         table = createTable(new ClassificationContainer(userContext), classificationClickListener);
