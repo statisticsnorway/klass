@@ -32,7 +32,6 @@ public class ClassificationListView extends ClassificationListDesign implements 
     public static final String NAME = "list";
     public static final String PARAM_FAMILY_ID = "familyId";
 
-    @Autowired
     private ClassificationFacade classificationFacade;
 
     private UserContext userContext;
@@ -42,14 +41,15 @@ public class ClassificationListView extends ClassificationListDesign implements 
     private final SharedEscapeShortcutListener sharedEscapeShortcutListener;
 
     @Autowired
-    public ClassificationListView(UserContext userContext) {
+    public ClassificationListView(UserContext userContext, ClassificationFacade classificationFacade) {
         this.userContext = userContext;
+        this.classificationFacade = classificationFacade;
         log.info("User context list view {}", userContext);
         sharedEscapeShortcutListener = new SharedEscapeShortcutListener();
         this.classificationFilter = VaadinUtil.getKlassState().getClassificationFilter();
         backButton.addClickListener(e -> VaadinUtil.navigateTo(ClassificationFamilyView.NAME));
-        classificationTable.init(versionTable, variantTable, userContext);
-        versionTable.init(classificationTable, variantTable);
+        classificationTable.init(versionTable, variantTable, userContext, classificationFacade);
+        versionTable.init(classificationTable, variantTable, userContext);
         variantTable.init(versionTable);
         classificationTable.addToSharedActionListener(sharedEscapeShortcutListener);
         versionTable.addToSharedActionListener(sharedEscapeShortcutListener);

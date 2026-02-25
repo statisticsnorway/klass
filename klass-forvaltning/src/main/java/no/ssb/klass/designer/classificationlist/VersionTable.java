@@ -51,8 +51,9 @@ public class VersionTable extends AbstractTable {
     private ApplicationContext applicationContext;
     @Autowired
     private ClassificationFacade classificationFacade;
-    @Autowired
+
     private UserContext userContext;
+
     @Autowired
     private FullVersionExportService exportService;
 
@@ -63,7 +64,9 @@ public class VersionTable extends AbstractTable {
 
     private ClassificationVersionClickListener classificationVersionClickListener;
 
-    public void init(ClassificationTable classificationTable, VariantTable variantTable) {
+    @Autowired
+    public void init(ClassificationTable classificationTable, VariantTable variantTable, UserContext userContext) {
+        this.userContext = userContext;
         classificationVersionClickListener = new ClassificationVersionClickListener(userContext,
                 classificationFacade, variantTable);
         table = createTable(new VersionContainer(userContext, classificationFacade),

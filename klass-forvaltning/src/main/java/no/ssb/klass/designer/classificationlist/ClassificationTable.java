@@ -38,7 +38,6 @@ public class ClassificationTable extends AbstractTable {
     private static final Logger log = LoggerFactory.getLogger(ClassificationTable.class);
     private static final String NEW_CLASSIFICATION_TOOLTIP = "Lag nytt kodeverk";
 
-    @Autowired
     private ClassificationFacade classificationFacade;
 
     private UserContext userContext;
@@ -50,8 +49,9 @@ public class ClassificationTable extends AbstractTable {
     private ClassificationClickListener classificationClickListener;
 
     @Autowired
-    public void init(VersionTable versionTable, VariantTable variantTable, UserContext userContext) {
+    public void init(VersionTable versionTable, VariantTable variantTable, UserContext userContext, ClassificationFacade classificationFacade) {
         this.userContext = userContext;
+        this.classificationFacade = classificationFacade;
         this.classificationClickListener = new ClassificationClickListener(userContext, classificationFacade,
                 versionTable, variantTable);
         table = createTable(new ClassificationContainer(userContext), classificationClickListener);
@@ -138,6 +138,8 @@ public class ClassificationTable extends AbstractTable {
         }
 
         private ClassificationSeries reloadToAvoidLazyInitializationException(ClassificationSeries classification) {
+            log.info("Reloading classification series " + classification);
+            log.info("Classification facade {}", classificationFacade);
             return classificationFacade.getRequiredClassificationSeries(classification.getId());
         }
 
