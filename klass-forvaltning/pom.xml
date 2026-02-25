@@ -179,6 +179,13 @@
             <artifactId>resetbuttonfortextfield</artifactId>
             <version>1.2.1</version>
         </dependency>
+        <!-- Source: https://mvnrepository.com/artifact/javax.annotation/javax.annotation-api -->
+        <dependency>
+            <groupId>javax.annotation</groupId>
+            <artifactId>javax.annotation-api</artifactId>
+            <version>1.3.2</version>
+            <scope>compile</scope>
+        </dependency>
 
         <!-- TEST SCOPE-->
         <dependency>
