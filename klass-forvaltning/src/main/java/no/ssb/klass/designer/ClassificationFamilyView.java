@@ -26,11 +26,15 @@ import no.ssb.klass.designer.user.UserContext;
 import no.ssb.klass.designer.util.FavoriteUtils;
 import no.ssb.klass.designer.util.KlassTheme;
 import no.ssb.klass.designer.util.VaadinUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @PrototypeScope
 @SpringView(name = ClassificationFamilyView.NAME)
 @SuppressWarnings("serial")
 public class ClassificationFamilyView extends ClassificationFamilyDesign implements FilteringView {
+
+    private static final Logger log = LoggerFactory.getLogger(ClassificationFamilyView.class);
 
     public static final String NAME = ""; // empty name will make it default view for navigator
 
@@ -44,6 +48,10 @@ public class ClassificationFamilyView extends ClassificationFamilyDesign impleme
     public ClassificationFamilyView() {
         this.classificationFilter = VaadinUtil.getKlassState().getClassificationFilter();
         UI.getCurrent().getPage().addBrowserWindowResizeListener(event -> updateGrid(event.getWidth()));
+        if(userContext != null) {
+            log.info("userContext: {}", userContext);
+        }
+        log.info("ClassificationFamilyView initialized with userContext: {} and classification facade {}", userContext, classificationFacade);
     }
 
     private void updateGrid(int width) {
