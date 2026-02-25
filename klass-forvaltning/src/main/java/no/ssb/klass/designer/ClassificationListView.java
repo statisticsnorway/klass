@@ -49,8 +49,8 @@ public class ClassificationListView extends ClassificationListDesign implements 
         this.classificationFilter = VaadinUtil.getKlassState().getClassificationFilter();
         backButton.addClickListener(e -> VaadinUtil.navigateTo(ClassificationFamilyView.NAME));
         classificationTable.init(versionTable, variantTable, userContext, classificationFacade);
-        versionTable.init(classificationTable, variantTable, userContext);
-        variantTable.init(versionTable);
+        versionTable.init(classificationTable, variantTable, userContext, classificationFacade);
+        variantTable.init(versionTable, userContext);
         classificationTable.addToSharedActionListener(sharedEscapeShortcutListener);
         versionTable.addToSharedActionListener(sharedEscapeShortcutListener);
         variantTable.addToSharedActionListener(sharedEscapeShortcutListener);

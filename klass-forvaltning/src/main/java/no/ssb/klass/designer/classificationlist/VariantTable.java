@@ -29,11 +29,14 @@ import no.ssb.klass.designer.user.UserContext;
 import no.ssb.klass.designer.util.VaadinUtil;
 import no.ssb.klass.designer.windows.NewCorrespondenceTableWindow;
 import no.ssb.klass.designer.windows.NewVariantWindow;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("serial")
 @UIScope
 @SpringComponent
 public class VariantTable extends AbstractTable {
+    private static final Logger log = LoggerFactory.getLogger(VariantTable.class);
     private static final String NEW_CORRESPONDENCE_TABLE_TOOLTIP = "Lag ny korrespondansetabell";
     private static final String NEW_VARIANT_TOOLTIP = "Lag ny variant";
 
@@ -41,7 +44,7 @@ public class VariantTable extends AbstractTable {
     private ApplicationContext applicationContext;
     @Autowired
     private ClassificationFacade classificationFacade;
-    @Autowired
+
     private UserContext userContext;
 
     private Table table;
@@ -49,7 +52,9 @@ public class VariantTable extends AbstractTable {
     private Button addCorrespondenceButton;
     private Button addVariantButton;
 
-    public void init(VersionTable versionTable) {
+    @Autowired
+    public void init(VersionTable versionTable, UserContext userContext) {
+        this.userContext = userContext;
         table = createTable(new VariantContainer(userContext, classificationFacade, versionTable));
         table.setColumnExpandRatio(AbstractPropertyContainer.NAME, 1);
         addCorrespondenceButton = createAddElementButton(NEW_CORRESPONDENCE_TABLE_TOOLTIP);

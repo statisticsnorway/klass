@@ -36,11 +36,15 @@ import no.ssb.klass.designer.user.UserContext;
 import no.ssb.klass.core.util.AlphaNumericalComparator;
 import no.ssb.klass.designer.util.VaadinUtil;
 import no.ssb.klass.designer.windows.NewVersionWindow;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("serial")
 @UIScope
 @SpringComponent
 public class VersionTable extends AbstractTable {
+
+    private static final Logger log = LoggerFactory.getLogger(VersionTable.class);
     private static final String COPY_VERSION_TOOLTIP = "Lag ny versjon av valgt kodeverk";
     private static final String EXPORT_VERSION_TOOLTIP = "Eksporter valgt kodeverk";
 
@@ -49,7 +53,7 @@ public class VersionTable extends AbstractTable {
 
     @Autowired
     private ApplicationContext applicationContext;
-    @Autowired
+
     private ClassificationFacade classificationFacade;
 
     private UserContext userContext;
@@ -65,8 +69,9 @@ public class VersionTable extends AbstractTable {
     private ClassificationVersionClickListener classificationVersionClickListener;
 
     @Autowired
-    public void init(ClassificationTable classificationTable, VariantTable variantTable, UserContext userContext) {
+    public void init(ClassificationTable classificationTable, VariantTable variantTable, UserContext userContext, ClassificationFacade classificationFacade) {
         this.userContext = userContext;
+        this.classificationFacade = classificationFacade;
         classificationVersionClickListener = new ClassificationVersionClickListener(userContext,
                 classificationFacade, variantTable);
         table = createTable(new VersionContainer(userContext, classificationFacade),
@@ -164,7 +169,7 @@ public class VersionTable extends AbstractTable {
         private List<ClassificationEntityOperations> getListOfVariantsAndCorrespondenceTables(
                 ClassificationVersion version) {
             List<ClassificationEntityOperations> entities = new LinkedList<>();
-
+            log.info("Classification facade version table {}", classificationFacade);
             List<CorrespondenceTable> sourceList = classificationFacade.findCorrespondenceTablesWithSource(version)
                     .stream()
                     .sorted(AlphaNumericalComparator.comparing(ClassificationEntityOperations::getNameInPrimaryLanguage,
