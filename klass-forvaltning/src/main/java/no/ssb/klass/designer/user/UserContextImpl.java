@@ -51,8 +51,10 @@ public class UserContextImpl implements UserContext {
         this.environment = environment;
         log.debug("Users to assign admin role to {}", this.adminUsers);
         VaadinSession session = VaadinSession.getCurrent();
+        log.info("Current session: {}", session);
         this.userService = userService;
         User user = session.getAttribute(User.class);
+        log.info("User: {}", user);
         if (user == null) {
             log.error("User is null! Application features may be broken.");
         } else {
