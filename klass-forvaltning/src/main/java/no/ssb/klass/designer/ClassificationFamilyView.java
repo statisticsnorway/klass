@@ -40,17 +40,16 @@ public class ClassificationFamilyView extends ClassificationFamilyDesign impleme
 
     private final ClassificationFilter classificationFilter;
 
-    @Autowired
     private ClassificationFacade classificationFacade;
-    @Autowired
+
     private UserContext userContext;
 
-    public ClassificationFamilyView() {
+    @Autowired
+    public ClassificationFamilyView(ClassificationFacade classificationFacade, UserContext userContext) {
+        this.classificationFacade = classificationFacade;
+        this.userContext = userContext;
         this.classificationFilter = VaadinUtil.getKlassState().getClassificationFilter();
         UI.getCurrent().getPage().addBrowserWindowResizeListener(event -> updateGrid(event.getWidth()));
-        if(userContext != null) {
-            log.info("userContext: {}", userContext);
-        }
         log.info("ClassificationFamilyView initialized with userContext: {} and classification facade {}", userContext, classificationFacade);
     }
 
