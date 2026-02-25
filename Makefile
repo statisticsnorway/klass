@@ -94,6 +94,10 @@ run-klass-api-local-postgres:
 start-klass-forvaltning-docker:
 	docker compose $(COMPOSE_FILE) --profile frontend up --build -d
 
+.PHONY: check-klass-forvaltning-docker
+check-klass-forvaltning-docker:
+	docker compose $(COMPOSE_FILE) --profile frontend ps
+
 .PHONY: logs-klass-forvaltning
 logs-klass-forvaltning:
 	docker compose $(COMPOSE_FILE) --profile frontend logs -f
