@@ -20,6 +20,7 @@ import no.ssb.klass.designer.service.ClassificationFacade;
 import no.ssb.klass.designer.util.ParameterUtil;
 import no.ssb.klass.designer.util.VaadinUtil;
 import no.ssb.klass.designer.user.UserContext;
+import no.ssb.klass.forvaltning.converting.xml.FullVersionExportService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,16 +41,19 @@ public class ClassificationListView extends ClassificationListDesign implements 
     private final ClassificationFilter classificationFilter;
     private final SharedEscapeShortcutListener sharedEscapeShortcutListener;
 
+    private FullVersionExportService exportService;
+
     @Autowired
-    public ClassificationListView(UserContext userContext, ClassificationFacade classificationFacade) {
+    public ClassificationListView(UserContext userContext, ClassificationFacade classificationFacade, FullVersionExportService exportService) {
         this.userContext = userContext;
         this.classificationFacade = classificationFacade;
+        this.exportService = exportService;
         log.info("User context list view {}", userContext);
         sharedEscapeShortcutListener = new SharedEscapeShortcutListener();
         this.classificationFilter = VaadinUtil.getKlassState().getClassificationFilter();
         backButton.addClickListener(e -> VaadinUtil.navigateTo(ClassificationFamilyView.NAME));
         classificationTable.init(versionTable, variantTable, userContext, classificationFacade);
-        versionTable.init(classificationTable, variantTable, userContext, classificationFacade);
+        versionTable.init(classificationTable, variantTable, userContext, classificationFacade, exportService);
         variantTable.init(versionTable, userContext);
         classificationTable.addToSharedActionListener(sharedEscapeShortcutListener);
         versionTable.addToSharedActionListener(sharedEscapeShortcutListener);

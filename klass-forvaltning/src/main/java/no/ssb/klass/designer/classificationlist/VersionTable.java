@@ -58,7 +58,6 @@ public class VersionTable extends AbstractTable {
 
     private UserContext userContext;
 
-    @Autowired
     private FullVersionExportService exportService;
 
     private Table table;
@@ -69,9 +68,10 @@ public class VersionTable extends AbstractTable {
     private ClassificationVersionClickListener classificationVersionClickListener;
 
     @Autowired
-    public void init(ClassificationTable classificationTable, VariantTable variantTable, UserContext userContext, ClassificationFacade classificationFacade) {
+    public void init(ClassificationTable classificationTable, VariantTable variantTable, UserContext userContext, ClassificationFacade classificationFacade, FullVersionExportService exportService) {
         this.userContext = userContext;
         this.classificationFacade = classificationFacade;
+        this.exportService = exportService;
         classificationVersionClickListener = new ClassificationVersionClickListener(userContext,
                 classificationFacade, variantTable);
         table = createTable(new VersionContainer(userContext, classificationFacade),
@@ -89,6 +89,7 @@ public class VersionTable extends AbstractTable {
         rootLayout.addComponents(createHeader("Versjoner", exportVersionButton, addVersionButton),
                 wrapFilter(filterBox), table);
         rootLayout.setExpandRatio(table, 1);
+        log.info("Version table initialized {}", this);
     }
 
     private InputStream generateExportData() {
