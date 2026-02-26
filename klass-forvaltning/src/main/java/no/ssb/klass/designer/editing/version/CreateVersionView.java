@@ -42,16 +42,18 @@ public class CreateVersionView extends VerticalLayout implements EditingView {
 
     private boolean ignoreChanges = false;
 
-    @Autowired
+
     private ClassificationFacade classificationFacade;
 
-    @Autowired
     private UserContext userContext;
 
     private final VersionEditorView versionEditorView;
     private ClassificationVersion classificationVersion;
 
-    public CreateVersionView() {
+    @Autowired
+    public CreateVersionView( ClassificationFacade classificationFacade, UserContext userContext) {
+        this.classificationFacade = classificationFacade;
+        this.userContext = userContext;
         ConfirmOrCancelComponent actionButtons = new ConfirmOrCancelComponent();
         actionButtons.setConfirmText("Lagre");
         actionButtons.addConfirmClickListener(event -> save());

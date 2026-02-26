@@ -46,7 +46,7 @@ public class NewVersionWindow extends Window {
     private static final String MONTH_PADDING = "mm";
     private static final String YEAR_PADDING = "åååå";
 
-    @Autowired
+    // ?
     private ClassificationFacade classificationFacade;
 
     private LocalDate validFrom;
@@ -59,7 +59,8 @@ public class NewVersionWindow extends Window {
         setModal(true);
     }
 
-    public void init(String classificationId, String versionName) {
+    public void init(String classificationId, String versionName, ClassificationFacade classificationFacade) {
+        this.classificationFacade = classificationFacade;
         classificationSeries = classificationFacade.getRequiredClassificationSeries(Long.parseLong(classificationId));
 
         // Label headings part

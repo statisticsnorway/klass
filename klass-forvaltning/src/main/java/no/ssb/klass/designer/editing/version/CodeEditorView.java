@@ -23,28 +23,32 @@ import no.ssb.klass.designer.listeners.SharedEscapeShortcutListener;
 import no.ssb.klass.designer.service.ClassificationFacade;
 import no.ssb.klass.designer.util.ComponentUtil;
 import no.ssb.klass.designer.windows.AutomaticTranslationWindow;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("serial")
 @SpringComponent
 @PrototypeScope
 public class CodeEditorView extends CodeEditorDesign implements HasEditingState {
+    private static final Logger log = LoggerFactory.getLogger(CodeEditorView.class);
 
     private ImportExportComponent<ClassificationVersion> importExportComponent;
     private ClassificationVersion version;
     private final EventBus eventbus;
 
-    @Autowired
     private ApplicationContext context;
 
-    @Autowired
     private ClassificationFacade classificationFacade;
 
-    @Autowired
     private ClassificationVersionXmlService versionXmlService;
 
     private SharedEscapeShortcutListener shortcutListener;
 
-    public CodeEditorView() {
+    @Autowired
+    public CodeEditorView(ApplicationContext context, ClassificationFacade classificationFacade, ClassificationVersionXmlService versionXmlService) {
+        this.context = context;
+        this.classificationFacade = classificationFacade;
+        this.versionXmlService = versionXmlService;
         shortcutListener = new SharedEscapeShortcutListener();
         eventbus = new EventBus("code-editor");
         eventbus.register(primaryCodeTable);
@@ -58,7 +62,7 @@ public class CodeEditorView extends CodeEditorDesign implements HasEditingState 
             translationCodeTable.init(eventbus, version, language);
             translationLevels.init(eventbus, version, language);
         });
-
+        log.info("Initializing CodeEditorView");
     }
 
     @Override
@@ -100,7 +104,7 @@ public class CodeEditorView extends CodeEditorDesign implements HasEditingState 
         }
     }
 
-
+// consider autowired
     public void init(ClassificationVersion version) {
         this.version = version;
         primaryCodeTable.init(eventbus, version, version.getPrimaryLanguage(), classificationFacade);
@@ -120,6 +124,7 @@ public class CodeEditorView extends CodeEditorDesign implements HasEditingState 
 
         primaryCodeTable.addToSharedActionListener(shortcutListener);
         translationCodeTable.addToSharedActionListener(shortcutListener);
+        log.info("Initializing CodeEditorView version {}", version);
 
     }
 
@@ -138,6 +143,7 @@ public class CodeEditorView extends CodeEditorDesign implements HasEditingState 
     }
 
     private void updatePrimaryLanguageLabel() {
+        log.info("Updating primary language label ()", version);
         primaryLanguage.setValue(version.getPrimaryLanguage().getDisplayName());
     }
 

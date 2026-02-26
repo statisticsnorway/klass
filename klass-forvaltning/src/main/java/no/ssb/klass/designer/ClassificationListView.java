@@ -23,6 +23,7 @@ import no.ssb.klass.designer.user.UserContext;
 import no.ssb.klass.forvaltning.converting.xml.FullVersionExportService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
 
 
 @PrototypeScope
@@ -37,6 +38,8 @@ public class ClassificationListView extends ClassificationListDesign implements 
 
     private UserContext userContext;
 
+    private ApplicationContext applicationContext;
+
 
     private final ClassificationFilter classificationFilter;
     private final SharedEscapeShortcutListener sharedEscapeShortcutListener;
@@ -44,17 +47,19 @@ public class ClassificationListView extends ClassificationListDesign implements 
     private FullVersionExportService exportService;
 
     @Autowired
-    public ClassificationListView(UserContext userContext, ClassificationFacade classificationFacade, FullVersionExportService exportService) {
+    public ClassificationListView(UserContext userContext, ClassificationFacade classificationFacade, FullVersionExportService exportService, ApplicationContext applicationContext) {
         this.userContext = userContext;
         this.classificationFacade = classificationFacade;
         this.exportService = exportService;
+        this.applicationContext = applicationContext;
         log.info("User context list view {}", userContext);
+        log.info("Application context list view {}", applicationContext);
         sharedEscapeShortcutListener = new SharedEscapeShortcutListener();
         this.classificationFilter = VaadinUtil.getKlassState().getClassificationFilter();
         backButton.addClickListener(e -> VaadinUtil.navigateTo(ClassificationFamilyView.NAME));
         classificationTable.init(versionTable, variantTable, userContext, classificationFacade);
-        versionTable.init(classificationTable, variantTable, userContext, classificationFacade, exportService);
-        variantTable.init(versionTable, userContext);
+        versionTable.init(classificationTable, variantTable, userContext, classificationFacade, exportService, applicationContext);
+        variantTable.init(versionTable, userContext, classificationFacade);
         classificationTable.addToSharedActionListener(sharedEscapeShortcutListener);
         versionTable.addToSharedActionListener(sharedEscapeShortcutListener);
         variantTable.addToSharedActionListener(sharedEscapeShortcutListener);

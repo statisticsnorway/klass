@@ -51,6 +51,7 @@ public class ClassificationFamilyView extends ClassificationFamilyDesign impleme
         this.classificationFilter = VaadinUtil.getKlassState().getClassificationFilter();
         UI.getCurrent().getPage().addBrowserWindowResizeListener(event -> updateGrid(event.getWidth()));
         log.info("ClassificationFamilyView initialized with userContext: {} and classification facade {}", userContext, classificationFacade);
+        log.info("ClassificationFamilyView initialized klass state: {}", VaadinUtil.getKlassState());
     }
 
     private void updateGrid(int width) {

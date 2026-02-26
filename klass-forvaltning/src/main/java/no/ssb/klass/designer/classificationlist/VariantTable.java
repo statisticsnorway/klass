@@ -42,7 +42,8 @@ public class VariantTable extends AbstractTable {
 
     @Autowired
     private ApplicationContext applicationContext;
-    @Autowired
+
+
     private ClassificationFacade classificationFacade;
 
     private UserContext userContext;
@@ -53,8 +54,9 @@ public class VariantTable extends AbstractTable {
     private Button addVariantButton;
 
     @Autowired
-    public void init(VersionTable versionTable, UserContext userContext) {
+    public void init(VersionTable versionTable, UserContext userContext, ClassificationFacade classificationFacade) {
         this.userContext = userContext;
+        this.classificationFacade = classificationFacade;
         table = createTable(new VariantContainer(userContext, classificationFacade, versionTable));
         table.setColumnExpandRatio(AbstractPropertyContainer.NAME, 1);
         addCorrespondenceButton = createAddElementButton(NEW_CORRESPONDENCE_TABLE_TOOLTIP);

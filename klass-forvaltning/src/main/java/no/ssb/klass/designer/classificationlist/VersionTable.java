@@ -51,7 +51,6 @@ public class VersionTable extends AbstractTable {
     private final StreamResource streamResource = new StreamResource(this::generateExportData, "");
     private final FileDownloader fileDownloader = new FileDownloader(streamResource);
 
-    @Autowired
     private ApplicationContext applicationContext;
 
     private ClassificationFacade classificationFacade;
@@ -68,10 +67,11 @@ public class VersionTable extends AbstractTable {
     private ClassificationVersionClickListener classificationVersionClickListener;
 
     @Autowired
-    public void init(ClassificationTable classificationTable, VariantTable variantTable, UserContext userContext, ClassificationFacade classificationFacade, FullVersionExportService exportService) {
+    public void init(ClassificationTable classificationTable, VariantTable variantTable, UserContext userContext, ClassificationFacade classificationFacade, FullVersionExportService exportService, ApplicationContext applicationContext) {
         this.userContext = userContext;
         this.classificationFacade = classificationFacade;
         this.exportService = exportService;
+        this.applicationContext = applicationContext;
         classificationVersionClickListener = new ClassificationVersionClickListener(userContext,
                 classificationFacade, variantTable);
         table = createTable(new VersionContainer(userContext, classificationFacade),
@@ -133,7 +133,7 @@ public class VersionTable extends AbstractTable {
 
             NewVersionWindow copyVersionWindow = applicationContext.getBean(NewVersionWindow.class);
             copyVersionWindow.init(classificationTable.getSelectedClassificationId(),
-                    classificationTable.getSelectedClassificationName());
+                    classificationTable.getSelectedClassificationName(), classificationFacade);
             UI.getCurrent().addWindow(copyVersionWindow);
         }
     }

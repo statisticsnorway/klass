@@ -31,20 +31,22 @@ import no.ssb.klass.designer.windows.DescriptionOfChangeWindow;
 @SuppressWarnings("serial")
 public class VersionMainView extends VersionMainEditor implements EditingView {
 
+    // error
     public static final String NAME = "editVersion";
     public static final String PARAM_VERSION_ID = "versionId";
 
     private boolean ignoreChanges = false;
 
-    @Autowired
     private ClassificationFacade classificationFacade;
 
-    @Autowired
     private UserContext userContext;
 
     private PublicationChoiceEditor publicationChoiceEditor;
 
-    public VersionMainView() {
+    @Autowired
+    public VersionMainView(ClassificationFacade classificationFacade, UserContext userContext) {
+        this.classificationFacade = classificationFacade;
+        this.userContext = userContext;
         publicationChoiceEditor = new PublicationChoiceEditor(new MarginInfo(true, false, true, true));
         actionButtons.addConfirmClickListener(event -> checkAndSaveVersion());
         actionButtons.addCancelClickListener(this::cancelClick);
