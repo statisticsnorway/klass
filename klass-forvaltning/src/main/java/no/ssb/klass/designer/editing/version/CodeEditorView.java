@@ -26,6 +26,10 @@ import no.ssb.klass.designer.windows.AutomaticTranslationWindow;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+// import org.springframework.web.context.support.WebApplicationContextUtils;
+// import com.vaadin.server.VaadinService;
+// log verdier not in constructor
+
 @SuppressWarnings("serial")
 @SpringComponent
 @PrototypeScope
@@ -33,8 +37,11 @@ public class CodeEditorView extends CodeEditorDesign implements HasEditingState 
     private static final Logger log = LoggerFactory.getLogger(CodeEditorView.class);
 
     private ImportExportComponent<ClassificationVersion> importExportComponent;
+
     private ClassificationVersion version;
-    private final EventBus eventbus;
+    //private final EventBus eventbus;
+
+    private EventBus eventbus = new EventBus("code-editor");
 
     private ApplicationContext context;
 
@@ -44,13 +51,29 @@ public class CodeEditorView extends CodeEditorDesign implements HasEditingState 
 
     private SharedEscapeShortcutListener shortcutListener;
 
+
+  /*
+  private void injectBeans() {
+    ApplicationContext ctx =
+        WebApplicationContextUtils.getWebApplicationContext(
+            VaadinService.getCurrent().getContext()
+        );
+
+    this.context = ctx;
+    this.classificationFacade = ctx.getBean(ClassificationFacade.class);
+    this.versionXmlService = ctx.getBean(ClassificationVersionXmlService.class);
+}
+   */
+  public CodeEditorView() {
+      // nothing here
+  }
     @Autowired
     public CodeEditorView(ApplicationContext context, ClassificationFacade classificationFacade, ClassificationVersionXmlService versionXmlService) {
         this.context = context;
         this.classificationFacade = classificationFacade;
         this.versionXmlService = versionXmlService;
         shortcutListener = new SharedEscapeShortcutListener();
-        eventbus = new EventBus("code-editor");
+        //eventbus = new EventBus("code-editor");
         eventbus.register(primaryCodeTable);
         eventbus.register(primaryLevels);
         eventbus.register(translationCodeTable);
@@ -104,9 +127,16 @@ public class CodeEditorView extends CodeEditorDesign implements HasEditingState 
         }
     }
 
-// consider autowired
+    @Autowired
     public void init(ClassificationVersion version) {
         this.version = version;
+        log.info("Initializing CodeEditorView ? {}", version);
+        log.info("Initializing CodeEditorView ? {}", primaryCodeTable);
+        log.info("Initializing CodeEditorView eventbus? {}", eventbus);
+        log.info("Initializing CodeEditorView context? {}", context);
+        log.info("Initializing CodeEditorView facade? {}", classificationFacade);
+        log.info("Initializing CodeEditorView version xml service? {}", versionXmlService);
+        log.info("Initializing CodeEditorView shortcut listner? {}", shortcutListener);
         primaryCodeTable.init(eventbus, version, version.getPrimaryLanguage(), classificationFacade);
         primaryLevels.init(eventbus, version, version.getPrimaryLanguage(), classificationFacade);
         editTranslations.initWithAutomaticTranslation(version.getPrimaryLanguage(),
@@ -118,14 +148,13 @@ public class CodeEditorView extends CodeEditorDesign implements HasEditingState 
 
         importExportComponent = new ImportExportComponent<>(
                 context, versionXmlService, importButton, exportButton);
+        log.info("Initializing CodeEditorView ? {}", importExportComponent);
         importExportComponent.init(version, "versjon");
         importExportComponent.setOnCompleteCallback(this::updateView);
         importExportComponent.setClearEntityCallback(this::deleteExistingItemsBeforeImport);
 
         primaryCodeTable.addToSharedActionListener(shortcutListener);
         translationCodeTable.addToSharedActionListener(shortcutListener);
-        log.info("Initializing CodeEditorView version {}", version);
-
     }
 
     private AutomaticTranslationWindow createAutomaticTranslationWindow(ClassificationVersion version) {
@@ -148,7 +177,10 @@ public class CodeEditorView extends CodeEditorDesign implements HasEditingState 
     }
 
     public ClassificationVersion getClassificationVersion() {
+
+        log.info("Initializing CodeEditorView classification version ? {}", version);
         return version;
+
     }
 
 
