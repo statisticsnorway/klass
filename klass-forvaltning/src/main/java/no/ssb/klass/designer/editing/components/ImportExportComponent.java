@@ -25,6 +25,8 @@ import no.ssb.klass.core.model.Publishable;
 import no.ssb.klass.designer.util.ConfirmationDialog;
 import no.ssb.klass.designer.util.ParameterUtil;
 import no.ssb.klass.designer.windows.UploadFileWindow;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Mads Lundemo, SSB.
@@ -65,6 +67,11 @@ public class ImportExportComponent<T extends ClassificationEntityOperations> {
     }
 
     public void init(T entity, String datatypeName) {
+        log.info("Initializing import component");
+        log.info("entity: {}", entity);
+        log.info("datatypeName: {}", datatypeName);
+        log.info("xml service {}", xmlService);
+        log.info("import export application context: {}", applicationContext);
         this.entity = entity;
         this.datatypeName = datatypeName;
         streamResource.setFilename(xmlService.createFileName(entity));
@@ -83,6 +90,7 @@ public class ImportExportComponent<T extends ClassificationEntityOperations> {
         return xmlService.toXmlStream(entity);
     }
 
+    // latest error
     private void showImportDialog() {
         UploadFileWindow uploadFileWindow = applicationContext.getBean(UploadFileWindow.class);
         uploadFileWindow.init("Importer " + datatypeName, this::uploadedFileHandler);
