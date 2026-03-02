@@ -28,11 +28,13 @@ Klass is hosted on the Nais application platform. Deploy configuration may be fo
 
 ## Release
 
-The release process is automated. It can be triggered by following these steps:
+The release process is automated. It is set to bump the *minor* version. This may be changed by setting the `projectVersionPolicyId` configuration value for `maven-release-plugin` in [pom.xml](pom.xml), valid values can be seen [here](https://maven.apache.org/maven-release/maven-release-plugin/versioning-policies.html).
+
+It can be triggered by following these steps:
 
 1. Check that you are on the default branch.
 1. Check that you don't have any local commits or changes.
-1. Run `make release`. This command creates a branch called `release` and triggers the further release process like so:
+1. Run `make release`. This command creates a branch called `release`. Create a PR and once this is merged, it triggers a workflow to run the release process like so:
     1. The version number is bumped for a minor release.
     2. The artifacts are deployed
     3. A tag is pushed
