@@ -17,13 +17,13 @@ jobs:
 
     steps:
       - name: Create DaplaBot app token
-        uses: actions/create-github-app-token@v1
+        uses: actions/create-github-app-token@v2
         id: app-token
         with:
           app-id: ${{ secrets.DAPLA_BOT_APP_ID }}
           private-key: ${{ secrets.DAPLA_BOT_PRIVATE_KEY }}
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           token: ${{ steps.app-token.outputs.token }}
           ref: refs/heads/master
@@ -52,7 +52,7 @@ jobs:
           git config user.name ${{steps.get-bot-vars.outputs.bot_name}}
 
       - name: Setup Maven authentication to GitHub packages
-        uses: s4u/maven-settings-action@v3.0.0
+        uses: s4u/maven-settings-action@v4.0.0
         with:
           override: true
           githubServer: false
