@@ -27,12 +27,15 @@ import no.ssb.klass.designer.service.ClassificationFacade;
 import no.ssb.klass.designer.util.ComponentUtil;
 import no.ssb.klass.designer.util.KlassTheme;
 import no.ssb.klass.designer.util.VaadinUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 // VersionMetadataEditor
 @SpringComponent
 @PrototypeScope
 @SuppressWarnings("serial")
 public class VersionEditorView extends VersionEditorDesign implements HasEditingState {
+    private static final Logger log = LoggerFactory.getLogger(VersionEditorView.class);
     private static final String DATE_INPUT_MASK = "MM.yyyy";
     private Language primaryLanguage;
     private Language secondaryLanguage;
@@ -49,6 +52,7 @@ public class VersionEditorView extends VersionEditorDesign implements HasEditing
         thirdLanguageButton.addClickListener(event -> enableThirdLanguage());
         languageToggleButton.addClickListener(event -> toggleLanguages());
         enableAlias(false);
+        log.info("Version editor view initialized");
     }
 
     private void toggleLanguages() {
@@ -114,6 +118,7 @@ public class VersionEditorView extends VersionEditorDesign implements HasEditing
 
 
     public void init(ClassificationVersion classificationVersion) {
+        log.info("Version editor initialized with version {}", classificationVersion);
         this.classificationVersion = checkNotNull(classificationVersion);
         resetForm();
 
@@ -181,6 +186,7 @@ public class VersionEditorView extends VersionEditorDesign implements HasEditing
         if (!checkForm()) {
             return false;
         }
+        log.info("Updating version {} facade {}", classificationVersion, classificationFacade);
         Date from = fromDate.getValue();
         Date to = toDate.getValue();
         DateRange newRange = null;
