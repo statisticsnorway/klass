@@ -25,12 +25,17 @@ import no.ssb.klass.designer.user.UserContext;
 import no.ssb.klass.designer.util.ParameterUtil;
 import no.ssb.klass.designer.util.VaadinUtil;
 import no.ssb.klass.designer.windows.DescriptionOfChangeWindow;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import no.ssb.klass.forvaltning.converting.xml.ClassificationVersionXmlService;
 
 @PrototypeScope
 @SpringView(name = VersionMainView.NAME)
 @SuppressWarnings("serial")
 public class VersionMainView extends VersionMainEditor implements EditingView {
+    private static final Logger log = LoggerFactory.getLogger(VersionMainView.class);
 
+    // legge til xml service og application context ?
     // error
     public static final String NAME = "editVersion";
     public static final String PARAM_VERSION_ID = "versionId";
@@ -44,9 +49,15 @@ public class VersionMainView extends VersionMainEditor implements EditingView {
     private PublicationChoiceEditor publicationChoiceEditor;
 
     @Autowired
+    private ClassificationVersionXmlService versionXmlService;
+
+    // application context, xml service
+
+    @Autowired
     public VersionMainView(ClassificationFacade classificationFacade, UserContext userContext) {
         this.classificationFacade = classificationFacade;
         this.userContext = userContext;
+        log.info("User context version main view {}", userContext);
         publicationChoiceEditor = new PublicationChoiceEditor(new MarginInfo(true, false, true, true));
         actionButtons.addConfirmClickListener(event -> checkAndSaveVersion());
         actionButtons.addCancelClickListener(this::cancelClick);
@@ -63,10 +74,14 @@ public class VersionMainView extends VersionMainEditor implements EditingView {
         metadataEditor.enableAlias(userContext.isAdministrator());
         metadataEditor.addComponent(publicationChoiceEditor);
         publicationChoiceEditor.init(userContext.isAdministrator(), classificationVersion);
+        log.info("Version editor view initialized with user context {}", userContext);
         checkUserAccess(classificationVersion);
         // NB. checkUserAccess() must be before codeEditor.init(..), if not a NewCodeEditor will be
         // added even when user does not have permission to alter version.
+        codeEditor.setVersionXmlService(versionXmlService);
+        log.info("Version editor view initialized with xml service {}", versionXmlService);
         codeEditor.init(classificationVersion);
+        log.info("Code editor in version main view {}", codeEditor);
         if (editingState.isCodeEditorNotMetadataVisible()) {
             codeEditor.restorePreviousEditingState(editingState);
             versionAccordion.setSelectedTab(codeEditor);
