@@ -41,6 +41,7 @@ public class VersionMainView extends VersionMainEditor implements EditingView {
 
     private boolean ignoreChanges = false;
 
+    @Autowired
     private ClassificationFacade classificationFacade;
 
     private UserContext userContext;
@@ -52,6 +53,20 @@ public class VersionMainView extends VersionMainEditor implements EditingView {
 
     @Autowired
     private ApplicationContext applicationContext;
+
+
+    @java.lang.Override
+    public java.lang.String toString() {
+        final java.lang.StringBuffer sb = new java.lang.StringBuffer("VersionMainView{");
+        sb.append("ignoreChanges=").append(ignoreChanges);
+        sb.append(", classificationFacade=").append(classificationFacade);
+        sb.append(", userContext=").append(userContext);
+        sb.append(", publicationChoiceEditor=").append(publicationChoiceEditor);
+        sb.append(", versionXmlService=").append(versionXmlService);
+        sb.append(", applicationContext=").append(applicationContext);
+        sb.append('}');
+        return sb.toString();
+    }
 
     @Autowired
     public VersionMainView(ClassificationFacade classificationFacade, UserContext userContext) {

@@ -393,4 +393,17 @@ public class VersionEditorView extends VersionEditorDesign implements HasEditing
 
         return !builder.isEquals();
     }
+
+    @java.lang.Override
+    public java.lang.String toString() {
+        final java.lang.StringBuffer sb = new java.lang.StringBuffer("VersionEditorView{");
+        sb.append("primaryLanguage=").append(primaryLanguage);
+        sb.append(", secondaryLanguage=").append(secondaryLanguage);
+        sb.append(", thirdLanguage=").append(thirdLanguage);
+        sb.append(", copyFromPrimary=").append(copyFromPrimary);
+        sb.append(", isCodeList=").append(isCodeList);
+        sb.append(", classificationVersion=").append(classificationVersion);
+        sb.append('}');
+        return sb.toString();
+    }
 }
