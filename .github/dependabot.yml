@@ -16,8 +16,8 @@ updates:
     schedule:
       interval: "weekly"
     ignore:
-      # Don't attempt to automatically update to Spring v4
-      - update-types: [ "version-update:semver-major" ]
+      - dependency-name: "*"
+        update-types: [ "version-update:semver-major" ]
     groups:
       klass-root:
         patterns:
@@ -27,8 +27,8 @@ updates:
     schedule:
       interval: "weekly"
     ignore:
-      # Don't attempt to automatically update to Spring v4
-      - update-types: [ "version-update:semver-major" ]
+      - dependency-name: "*"
+        update-types: [ "version-update:semver-major" ]
     groups:
       klass-api:
         patterns:
@@ -38,8 +38,8 @@ updates:
     schedule:
       interval: "weekly"
     ignore:
-      # Don't attempt to automatically update to Spring v4
-      - update-types: [ "version-update:semver-major" ]
+      - dependency-name: "*"
+        update-types: [ "version-update:semver-major" ]
     groups:
       klass-shared:
         patterns:
@@ -49,8 +49,8 @@ updates:
     schedule:
       interval: "weekly"
     ignore:
-      # Don't attempt to automatically update to Spring v4
-      - update-types: [ "version-update:semver-major" ]
+      - dependency-name: "*"
+        update-types: [ "version-update:semver-major" ]
     groups:
       klass-mail:
         patterns:
