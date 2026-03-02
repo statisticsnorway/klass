@@ -1,15 +1,15 @@
 name: Release
 
 on:
-  push:
+  pull_request:
     branches:
       - release
+    types: [ closed ]
 
 jobs:
   release:
     runs-on: ubuntu-latest
-    # Do not run workflow if the triggering commit created the 'release' branch
-    if: ${{github.event.created}} == false
+    if: ${{ github.event.pull_request.merged == 'true'}}
     permissions:
       contents: write
       id-token: write
@@ -79,18 +79,6 @@ jobs:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
         with:
           tag: ${{ steps.release-artifact.outputs.tag }}
-
-      - name: Upload assets to GitHub release draft
-        env:
-          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
-        run: |
-          ARTIFACT_ID=$(mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout)
-          # Get all files matching the artifact id and version (source, javadoc, etc.)
-          ARTIFACT_GLOB=(./target/$ARTIFACT_ID-${{ steps.release-artifact.outputs.version }}*.jar)
-          for file in "${ARTIFACT_GLOB[@]}"; do
-            echo "Uploading $file"
-            gh release upload ${{ steps.create-github-release.outputs.tag_name }} $file
-          done
 
       - name: Publish GitHub release
         uses: eregon/publish-release@v1
