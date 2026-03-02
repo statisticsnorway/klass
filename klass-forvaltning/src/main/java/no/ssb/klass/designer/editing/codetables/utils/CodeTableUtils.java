@@ -42,6 +42,7 @@ public final class CodeTableUtils {
         }
     }
 
+    // feiler - null pointer
     public static void verifyNoReferencesToClassificationItems(ClassificationFacade classificationFacade,
             StatisticalClassification statisticalClassification) {
         Set<String> references = classificationFacade.findReferencesOfClassificationItems(statisticalClassification);

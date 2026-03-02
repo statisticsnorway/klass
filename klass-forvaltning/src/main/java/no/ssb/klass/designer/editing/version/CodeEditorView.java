@@ -72,6 +72,15 @@ public class CodeEditorView extends CodeEditorDesign implements HasEditingState{
         this.versionXmlService = versionXmlService;
     }
 
+    public void setApplicationContext(ApplicationContext context) {
+        this.context = context;
+    }
+
+    public void setClassificationFacade(ClassificationFacade classificationFacade) {
+        this.classificationFacade = classificationFacade;
+    }
+
+
     @Override
     public void restorePreviousEditingState(EditingState editingState) {
         if (editingState.isLanguageTabVisible()) {
@@ -99,6 +108,7 @@ public class CodeEditorView extends CodeEditorDesign implements HasEditingState{
     private void deleteExistingItemsBeforeImport(ClassificationVersion version) throws ImportException {
         // check if we can delete items
         try {
+            // error null?
             CodeTableUtils.verifyNoReferencesToClassificationItems(classificationFacade, version);
         } catch (IllegalArgumentException e) {
             throw new ImportException(e.getMessage(), e);

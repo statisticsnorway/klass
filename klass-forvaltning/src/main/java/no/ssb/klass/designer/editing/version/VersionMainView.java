@@ -28,6 +28,7 @@ import no.ssb.klass.designer.windows.DescriptionOfChangeWindow;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import no.ssb.klass.forvaltning.converting.xml.ClassificationVersionXmlService;
+import org.springframework.context.ApplicationContext;
 
 @PrototypeScope
 @SpringView(name = VersionMainView.NAME)
@@ -35,8 +36,6 @@ import no.ssb.klass.forvaltning.converting.xml.ClassificationVersionXmlService;
 public class VersionMainView extends VersionMainEditor implements EditingView {
     private static final Logger log = LoggerFactory.getLogger(VersionMainView.class);
 
-    // legge til xml service og application context ?
-    // error
     public static final String NAME = "editVersion";
     public static final String PARAM_VERSION_ID = "versionId";
 
@@ -51,7 +50,8 @@ public class VersionMainView extends VersionMainEditor implements EditingView {
     @Autowired
     private ClassificationVersionXmlService versionXmlService;
 
-    // application context, xml service
+    @Autowired
+    private ApplicationContext applicationContext;
 
     @Autowired
     public VersionMainView(ClassificationFacade classificationFacade, UserContext userContext) {
@@ -80,6 +80,10 @@ public class VersionMainView extends VersionMainEditor implements EditingView {
         // added even when user does not have permission to alter version.
         codeEditor.setVersionXmlService(versionXmlService);
         log.info("Version editor view initialized with xml service {}", versionXmlService);
+        codeEditor.setApplicationContext(applicationContext);
+        log.info("Version editor view initialized with application context {}", applicationContext);
+        codeEditor.setClassificationFacade(classificationFacade);
+        log.info("Version editor view initialized with classificationFacade {}", classificationFacade);
         codeEditor.init(classificationVersion);
         log.info("Code editor in version main view {}", codeEditor);
         if (editingState.isCodeEditorNotMetadataVisible()) {
