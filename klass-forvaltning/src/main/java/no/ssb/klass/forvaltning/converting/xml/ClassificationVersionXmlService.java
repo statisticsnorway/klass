@@ -148,12 +148,18 @@ public class ClassificationVersionXmlService extends XmlCodeHierarchyService<Cla
         }
     }
 
+    // Logger
     protected XmlVersionExportContainer versionToDto(ClassificationVersion version) {
         List<XmlVersionItem> list = version.getAllClassificationItems()
                 .stream()
                 .map(XmlVersionItem::new)
                 .sorted(Comparator.comparing(XmlVersionItem::getCode))
                 .collect(Collectors.toCollection(LinkedList::new));
+
+        log.info("Found {} elements", list.size());
+        for (int i = 0; i < list.size(); i++) {
+            log.info("Element {}: {}", i, values.get(i));
+        }
 
         XmlVersionExportContainer container = new XmlVersionExportContainer(list);
         container.setSchemaBaseUrl(SchemaBaseUrl);
