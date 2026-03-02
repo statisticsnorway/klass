@@ -158,7 +158,7 @@ public class ClassificationVersionXmlService extends XmlCodeHierarchyService<Cla
 
         log.info("Found {} elements", list.size());
         for (int i = 0; i < list.size(); i++) {
-            log.info("Element {}: {}", i, values.get(i));
+            log.info("Element {}: {}", i, list.get(i));
         }
 
         XmlVersionExportContainer container = new XmlVersionExportContainer(list);
