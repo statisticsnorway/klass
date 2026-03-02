@@ -294,4 +294,15 @@ public class ClassificationFacade {
     public void deleteChangelog(Changelog changelog) {
         changeLogService.deleteChangelog(changelog);
     }
+
+    @java.lang.Override
+    public java.lang.String toString() {
+        final java.lang.StringBuffer sb = new java.lang.StringBuffer("ClassificationFacade{");
+        sb.append("classificationService=").append(classificationService);
+        sb.append(", searchService=").append(searchService);
+        sb.append(", subscriberService=").append(subscriberService);
+        sb.append(", changeLogService=").append(changeLogService);
+        sb.append('}');
+        return sb.toString();
+    }
 }

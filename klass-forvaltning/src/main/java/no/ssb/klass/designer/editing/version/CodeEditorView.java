@@ -196,4 +196,18 @@ public class CodeEditorView extends CodeEditorDesign implements HasEditingState{
         return primaryLevels.hasChanges() || primaryCodeTable.hasChanges() || translationCodeTable.hasChanges();
 
     }
+
+    @java.lang.Override
+    public java.lang.String toString() {
+        final java.lang.StringBuffer sb = new java.lang.StringBuffer("CodeEditorView{");
+        sb.append("importExportComponent=").append(importExportComponent);
+        sb.append(", version=").append(version);
+        sb.append(", eventbus=").append(eventbus);
+        sb.append(", context=").append(context);
+        sb.append(", classificationFacade=").append(classificationFacade);
+        sb.append(", versionXmlService=").append(versionXmlService);
+        sb.append(", shortcutListener=").append(shortcutListener);
+        sb.append('}');
+        return sb.toString();
+    }
 }

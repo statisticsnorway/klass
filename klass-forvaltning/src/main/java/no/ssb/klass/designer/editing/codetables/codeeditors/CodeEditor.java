@@ -279,4 +279,24 @@ public abstract class CodeEditor extends CustomComponent {
         }
         return !Objects.equals(textField.getValue(), textField.getData());
     }
+
+    @java.lang.Override
+    public java.lang.String toString() {
+        final java.lang.StringBuffer sb = new java.lang.StringBuffer("CodeEditor{");
+        sb.append("code=").append(code);
+        sb.append(", title=").append(title);
+        sb.append(", shortname=").append(shortname);
+        sb.append(", validFrom=").append(validFrom);
+        sb.append(", validTo=").append(validTo);
+        sb.append(", validityLayout=").append(validityLayout);
+        sb.append(", notes=").append(notes);
+        sb.append(", language=").append(language);
+        sb.append(", includeShortName=").append(includeShortName);
+        sb.append(", includeNotes=").append(includeNotes);
+        sb.append(", includeValidity=").append(includeValidity);
+        sb.append(", version=").append(version);
+        sb.append(", eventBus=").append(eventBus);
+        sb.append('}');
+        return sb.toString();
+    }
 }

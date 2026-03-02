@@ -125,4 +125,17 @@ public class CreateVersionView extends VerticalLayout implements EditingView {
         VaadinUtil.navigateTo(ClassificationListView.NAME, ImmutableMap.of(ClassificationListView.PARAM_FAMILY_ID,
                 familyId));
     }
+
+    @java.lang.Override
+    public java.lang.String toString() {
+        final java.lang.StringBuffer sb = new java.lang.StringBuffer("CreateVersionView{");
+        sb.append("log=").append(log);
+        sb.append(", ignoreChanges=").append(ignoreChanges);
+        sb.append(", classificationFacade=").append(classificationFacade);
+        sb.append(", userContext=").append(userContext);
+        sb.append(", versionEditorView=").append(versionEditorView);
+        sb.append(", classificationVersion=").append(classificationVersion);
+        sb.append('}');
+        return sb.toString();
+    }
 }

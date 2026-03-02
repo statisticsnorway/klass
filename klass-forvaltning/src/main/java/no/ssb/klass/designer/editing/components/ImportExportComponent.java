@@ -73,6 +73,7 @@ public class ImportExportComponent<T extends ClassificationEntityOperations> {
         log.info("xml service {}", xmlService);
         log.info("import export application context: {}", applicationContext);
         this.entity = entity;
+        log.info("entity: {}", entity);
         this.datatypeName = datatypeName;
         streamResource.setFilename(xmlService.createFileName(entity));
         if (entity instanceof Publishable && entity.isPublishedInAnyLanguage()) {
@@ -90,13 +91,13 @@ public class ImportExportComponent<T extends ClassificationEntityOperations> {
         return xmlService.toXmlStream(entity);
     }
 
-    // latest error
     private void showImportDialog() {
         UploadFileWindow uploadFileWindow = applicationContext.getBean(UploadFileWindow.class);
         uploadFileWindow.init("Importer " + datatypeName, this::uploadedFileHandler);
         UI.getCurrent().addWindow(uploadFileWindow);
     }
 
+    // Kun 1 element
     private void uploadedFileHandler(InputStream stream) {
         boolean success = true;
         try {
