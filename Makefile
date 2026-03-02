@@ -26,10 +26,10 @@ help:
 .PHONY: release
 release:
 	@set -e ; \
-	git checkout master && \
+	git checkout main && \
 	git pull && \
 	git checkout release && \
-	git merge master && \
+	git merge main && \
 	git push
 
 .PHONY: build-klass-forvaltning
