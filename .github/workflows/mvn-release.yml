@@ -52,7 +52,7 @@ jobs:
           git config user.name ${{steps.get-bot-vars.outputs.bot_name}}
 
       - name: Setup Maven authentication to GitHub packages
-        uses: s4u/maven-settings-action@v3.0.0
+        uses: s4u/maven-settings-action@v4.0.0
         with:
           override: true
           githubServer: false
