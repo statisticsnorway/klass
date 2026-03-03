@@ -75,8 +75,9 @@ public class ImportExportComponent<T extends ClassificationEntityOperations> {
         log.info("Initializing import component with application context {}", applicationContext);
         log.info("Initializing import component with xml service {}", xmlService);
         this.entity = entity;
+        log.info("Initializing import component with entity {}", entity);
         this.datatypeName = datatypeName;
-        // Is null - check with autowired or inject here - cbi
+        log.info("Initializing import component with datatype {}", datatypeName);
         streamResource.setFilename(xmlService.createFileName(entity));
         if (entity instanceof Publishable && entity.isPublishedInAnyLanguage()) {
             disableImportButton(true, "Import er deaktivert for gitt " + datatypeName
