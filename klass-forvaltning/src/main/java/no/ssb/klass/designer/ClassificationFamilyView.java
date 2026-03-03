@@ -40,8 +40,10 @@ public class ClassificationFamilyView extends ClassificationFamilyDesign impleme
 
     private final ClassificationFilter classificationFilter;
 
+    // Moved from field injection to constructor - but was not an explicit problem, just trying to do the same all over - cbi
     private ClassificationFacade classificationFacade;
 
+    // Moved from field injection to constructor - but was not an explicit problem, just trying to do the same all over - cbi
     private UserContext userContext;
 
     @Autowired
