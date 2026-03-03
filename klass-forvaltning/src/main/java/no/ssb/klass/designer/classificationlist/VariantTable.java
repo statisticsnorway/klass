@@ -42,10 +42,10 @@ public class VariantTable extends AbstractTable {
 
     private ApplicationContext applicationContext;
 
-
+    // Moved from field injection to constructor - cbi
     private ClassificationFacade classificationFacade;
 
-    // Moved from field injection to constructor
+    // Moved from field injection to constructor - cbi
     private UserContext userContext;
 
     private Table table;
