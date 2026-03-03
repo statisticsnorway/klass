@@ -29,9 +29,8 @@ import java.util.stream.Collectors;
  */
 public class StatisticalUnitTab extends StatisticalUnitTabDesign {
 
-    @Autowired
+
     private UserContext userContext;
-    @Autowired
     private ClassificationFacade classificationFacade;
 
     public StatisticalUnitTab() {
@@ -42,7 +41,9 @@ public class StatisticalUnitTab extends StatisticalUnitTabDesign {
     }
 
 
-    public void init() {
+    public void init(UserContext userContext, ClassificationFacade classificationFacade) {
+        this.userContext = userContext;
+        this.classificationFacade = classificationFacade;
 
         Container container = createClassificationUnitContainer();
         // Bind it to a component
