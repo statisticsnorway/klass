@@ -68,7 +68,7 @@ build-clean-klass-api:
 run-klass-forvaltning-local-postgres:
 	pushd klass-forvaltning && \
 	${sdk} env && \
-	mvn spring-boot\:run  -Dspring.profiles.active=frontend,postgres-local,hardcoded-user,mock-search,mock-mailserver,small-import,skip-indexing; \
+	mvn spring-boot\:run  -Dspring.profiles.active=frontend,postgres-local,hardcoded-user,embedded-solr,mock-mailserver,small-import,skip-indexing; \
 	popd; \
 	${sdk} env clear
 
