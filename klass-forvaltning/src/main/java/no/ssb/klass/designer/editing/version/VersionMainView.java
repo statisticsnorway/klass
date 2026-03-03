@@ -44,29 +44,17 @@ public class VersionMainView extends VersionMainEditor implements EditingView {
     @Autowired
     private ClassificationFacade classificationFacade;
 
+    // From field injection to constructor injection - cbi
     private UserContext userContext;
 
     private PublicationChoiceEditor publicationChoiceEditor;
 
+    // Added versionXmlService and applicationContext
     @Autowired
     private ClassificationVersionXmlService versionXmlService;
 
     @Autowired
     private ApplicationContext applicationContext;
-
-
-    @java.lang.Override
-    public java.lang.String toString() {
-        final java.lang.StringBuffer sb = new java.lang.StringBuffer("VersionMainView{");
-        sb.append("ignoreChanges=").append(ignoreChanges);
-        sb.append(", classificationFacade=").append(classificationFacade);
-        sb.append(", userContext=").append(userContext);
-        sb.append(", publicationChoiceEditor=").append(publicationChoiceEditor);
-        sb.append(", versionXmlService=").append(versionXmlService);
-        sb.append(", applicationContext=").append(applicationContext);
-        sb.append('}');
-        return sb.toString();
-    }
 
     @Autowired
     public VersionMainView(ClassificationFacade classificationFacade, UserContext userContext) {
@@ -93,6 +81,7 @@ public class VersionMainView extends VersionMainEditor implements EditingView {
         checkUserAccess(classificationVersion);
         // NB. checkUserAccess() must be before codeEditor.init(..), if not a NewCodeEditor will be
         // added even when user does not have permission to alter version.
+        // Added set methods for CodeEditorView in order to inject these values - cbi
         codeEditor.setVersionXmlService(versionXmlService);
         log.info("Version editor view initialized with xml service {}", versionXmlService);
         codeEditor.setApplicationContext(applicationContext);
@@ -170,5 +159,18 @@ public class VersionMainView extends VersionMainEditor implements EditingView {
 
     private void cancelClick(Button.ClickEvent clickEvent) {
         VaadinUtil.navigateTo(Iterables.getLast(getBreadcrumbs()));
+    }
+
+    @java.lang.Override
+    public java.lang.String toString() {
+        final java.lang.StringBuffer sb = new java.lang.StringBuffer("VersionMainView{");
+        sb.append("ignoreChanges=").append(ignoreChanges);
+        sb.append(", classificationFacade=").append(classificationFacade);
+        sb.append(", userContext=").append(userContext);
+        sb.append(", publicationChoiceEditor=").append(publicationChoiceEditor);
+        sb.append(", versionXmlService=").append(versionXmlService);
+        sb.append(", applicationContext=").append(applicationContext);
+        sb.append('}');
+        return sb.toString();
     }
 }
