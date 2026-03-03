@@ -51,12 +51,16 @@ public class VersionTable extends AbstractTable {
     private final StreamResource streamResource = new StreamResource(this::generateExportData, "");
     private final FileDownloader fileDownloader = new FileDownloader(streamResource);
 
+    // Moved from field injection to constructor - cbi
     private ApplicationContext applicationContext;
 
+    // Moved from field injection to constructor - cbi
     private ClassificationFacade classificationFacade;
 
+    // Moved from field injection to constructor - cbi
     private UserContext userContext;
 
+    // Moved from field injection to constructor - cbi
     private FullVersionExportService exportService;
 
     private Table table;
@@ -130,8 +134,8 @@ public class VersionTable extends AbstractTable {
 
     private void copyVersion(ClassificationTable classificationTable) {
         if (classificationTable.getSelectedClassificationId() != null) {
-
             NewVersionWindow copyVersionWindow = applicationContext.getBean(NewVersionWindow.class);
+            // Added classificationFacade - cbi
             copyVersionWindow.init(classificationTable.getSelectedClassificationId(),
                     classificationTable.getSelectedClassificationName(), classificationFacade);
             UI.getCurrent().addWindow(copyVersionWindow);
@@ -170,7 +174,6 @@ public class VersionTable extends AbstractTable {
         private List<ClassificationEntityOperations> getListOfVariantsAndCorrespondenceTables(
                 ClassificationVersion version) {
             List<ClassificationEntityOperations> entities = new LinkedList<>();
-            log.info("Classification facade version table {}", classificationFacade);
             List<CorrespondenceTable> sourceList = classificationFacade.findCorrespondenceTablesWithSource(version)
                     .stream()
                     .sorted(AlphaNumericalComparator.comparing(ClassificationEntityOperations::getNameInPrimaryLanguage,
