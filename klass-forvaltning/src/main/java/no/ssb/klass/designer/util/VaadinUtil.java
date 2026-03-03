@@ -16,8 +16,6 @@ import no.ssb.klass.core.util.TimeUtil;
 import no.ssb.klass.designer.ClassificationListView;
 import no.ssb.klass.designer.components.BreadcumbPanel.Breadcrumb;
 import no.ssb.klass.designer.ui.KlassUI;
-import no.ssb.klass.designer.user.UserContext;
-import com.vaadin.server.VaadinSession;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -128,10 +126,5 @@ public final class VaadinUtil {
         VaadinUtil.getKlassState().setClassificationListViewSelection(breadcrumb.getClassificationListViewSelection());
         VaadinUtil.navigateTo(ClassificationListView.NAME, ImmutableMap.of(ClassificationListView.PARAM_FAMILY_ID,
                 breadcrumb.getClassificationFamilyId().toString()));
-    }
-
-    public static UserContext getUserContext() {
-        return (UserContext) VaadinSession.getCurrent()
-                .getAttribute(UserContext.class);
     }
 }
