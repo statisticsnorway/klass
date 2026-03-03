@@ -10,11 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class SectionsTab extends SectionsTabDesign {
 
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private ClassificationService classificationService;
 
     private StringBuffer mainLog;
     private StringBuffer changeLog;
@@ -33,7 +28,7 @@ public class SectionsTab extends SectionsTabDesign {
         logTextArea.setVisible(false);
     }
 
-    public void init() {
+    public void init(UserService userService) {
         reset();
         total = userService.countUsersWithClassifications();
         usersTotalLabel.setValue(String.valueOf(total));
