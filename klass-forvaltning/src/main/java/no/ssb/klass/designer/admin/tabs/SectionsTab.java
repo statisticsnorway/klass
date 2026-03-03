@@ -33,7 +33,6 @@ public class SectionsTab extends SectionsTabDesign {
         logTextArea.setVisible(false);
     }
 
-    // user service also null
     public void init() {
         reset();
         total = userService.countUsersWithClassifications();
