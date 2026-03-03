@@ -104,6 +104,10 @@ logs-klass-forvaltning:
 
 .PHONY: stop-klass-forvaltning-docker
 stop-klass-forvaltning-docker:
+	docker compose $(COMPOSE_FILE) --profile frontend down
+
+.PHONY: stop-klass-forvaltning-docker-delete-volume
+stop-klass-forvaltning-docker-delete-volume:
 	docker compose $(COMPOSE_FILE) --profile frontend down -v
 
 .PHONY: clean-klass-forvaltning-volumes
