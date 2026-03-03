@@ -61,8 +61,6 @@ public class VariantCodeEditorView extends VariantCodeEditorDesign implements Ha
         eventbus.register(translationCodeTable);
         selectEditLanguageOrVariant.addEditLanguagesListener(this::switchCodeTables);
         selectEditLanguageOrVariant.addLanguageChangeListener(this::switchLanguage);
-        log.info("Variant code editor view: variant {}", variant);
-
     }
 
     private void configureDragDrop() {
@@ -95,17 +93,17 @@ public class VariantCodeEditorView extends VariantCodeEditorDesign implements Ha
 
     }
 
-    public void init(ClassificationVariant variant) {
+    public void init(ClassificationVariant variant, ClassificationFacade classificationFacade) {
         this.variant = variant;
+        this.classificationFacade = classificationFacade;
+        log.info("Variant code editor view init: facade {}", classificationFacade);
         this.version = reloadToAvoidLazyInitializationException(variant.getClassificationVersion());
-
+        log.info("Variant code editor view init: variant {}", variant);
         primaryLanguage.setValue(variant.getPrimaryLanguage().getDisplayName());
         variantCodeTable.init(eventbus, variant, version, variant.getPrimaryLanguage(), classificationFacade);
         variantLevels.init(eventbus, variant, variant.getPrimaryLanguage(), classificationFacade);
         translatableLevels.init(eventbus, variant, Language.getSecondLanguage(variant.getPrimaryLanguage()));
         variantName.setValue(variant.getNameInPrimaryLanguage());
-
-
 
         originalVersion.init(eventbus, version, variant.getPrimaryLanguage());
         originalVersion.markAsReferenced(variant.getAllClassificationItems());
@@ -119,7 +117,7 @@ public class VariantCodeEditorView extends VariantCodeEditorDesign implements Ha
 
         importExportComponent = new ImportExportComponent<>(
                 applicationContext, xmlService, importButton, exportButton);
-        importExportComponent.init(variant, "Variant");
+        importExportComponent.init(variant, "Variant", applicationContext, xmlService);
         importExportComponent.setOnCompleteCallback(this::updateView);
         importExportComponent.setClearEntityCallback(this::clearBeforeImport);
         configureDragDrop();
@@ -167,6 +165,7 @@ public class VariantCodeEditorView extends VariantCodeEditorDesign implements Ha
     }
 
     private ClassificationVersion reloadToAvoidLazyInitializationException(ClassificationVersion version) {
+        // Is null - cbi
         return classificationFacade.getRequiredClassificationVersion(version.getId());
     }
 

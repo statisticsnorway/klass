@@ -44,7 +44,7 @@ public class CorrespondenceTableCodeEditorView extends CorrespondenceTableCodeEd
 
         importExportComponent = new ImportExportComponent<>(
                 applicationContext, correspondenceTableXmlService, importButton, exportButton);
-        importExportComponent.init(correspondenceTable, "Korrespondansetabell");
+        importExportComponent.init(correspondenceTable, "Korrespondansetabell", applicationContext, correspondenceTableXmlService);
         importExportComponent.setOnCompleteCallback(this::updateView);
 
     }

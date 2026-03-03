@@ -97,7 +97,7 @@ public class ChangeTableCodeEditorView extends ChangeTableCodeEditorDesign imple
 
         importExportComponent = new ImportExportComponent<>(
                 applicationContext, correspondenceTableXmlService, importButton, exportButton);
-        importExportComponent.init(correspondenceTable, "Korrespondansetabell");
+        importExportComponent.init(correspondenceTable, "Korrespondansetabell", applicationContext, correspondenceTableXmlService);
         importExportComponent.setOnCompleteCallback(this::updateView);
 
     }

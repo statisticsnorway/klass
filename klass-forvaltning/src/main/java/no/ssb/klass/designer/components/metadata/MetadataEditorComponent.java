@@ -53,10 +53,8 @@ public class MetadataEditorComponent extends CustomComponent implements HasEditi
     private List<AbstractField<?>> fieldsToValidate = Arrays.asList(design.primaryNameTextfield,
             design.primaryDescriptionTextArea, design.contactPersonCombobox);
 
-    @Autowired
     private UserService userService;
 
-    @Autowired
     private UserContext userContext;
 
     private Language primaryLanguage;
@@ -84,11 +82,14 @@ public class MetadataEditorComponent extends CustomComponent implements HasEditi
         design.primaryNameTextfield.setRequiredError("Navn for primærspråk er påkrevd");
         design.primaryDescriptionTextArea.setRequiredError("Beskrivelse for primærspråk er påkrevd");
         design.contactPersonCombobox.setRequiredError("Kontaktperson er påkrevd");
-
         configureContactPersonCombobox();
-        log.info("Created MetadataEditorComponent with user service {}", userService);
-        log.info("Created MetadataEditorComponent with user context {}", userContext);
+        log.info("Created empty MetadataEditorComponent with user service {}", userService);
+        log.info("Created empty MetadataEditorComponent with user context {}", userContext);
     }
+
+   public void setUserService(UserService userService) {
+        this.userService = userService;
+   }
 
     public void setDatesVisible(boolean visible) {
         design.dateLayout.setVisible(visible);
@@ -125,13 +126,17 @@ public class MetadataEditorComponent extends CustomComponent implements HasEditi
         design.sectionTextfield.setReadOnly(true);
     }
 
-    public void init(Language primaryLanguage) {
+    public void init(Language primaryLanguage, UserService userService, UserContext userContext) {
         this.primaryLanguage = primaryLanguage;
+        this.userService = userService;
+        this.userContext = userContext;
         design.primaryLanguageLabel.setValue(primaryLanguage.getDisplayName());
         design.languageSelect.init(primaryLanguage);
         updateLanguagePanels(primaryLanguage);
         populateContactPersons();
         resetValidations();
+        log.info("Init MetadataEditorComponent with user service {}", userService);
+        log.info("Init MetadataEditorComponent with user context {}", userContext);
     }
 
     @Override
@@ -158,6 +163,7 @@ public class MetadataEditorComponent extends CustomComponent implements HasEditi
         boolean isReadOnly = personCombobox.isReadOnly();
         personCombobox.setReadOnly(false);
         personCombobox.removeAllItems();
+        // Is null
         List<User> userList = userService.getAllUsers();
         personCombobox.clear();
         for (User user : userList) {

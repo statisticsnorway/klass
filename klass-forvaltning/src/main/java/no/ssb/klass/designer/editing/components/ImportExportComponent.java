@@ -27,6 +27,7 @@ import no.ssb.klass.designer.util.ParameterUtil;
 import no.ssb.klass.designer.windows.UploadFileWindow;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @author Mads Lundemo, SSB.
@@ -55,9 +56,11 @@ public class ImportExportComponent<T extends ClassificationEntityOperations> {
     protected T entity;
     protected String datatypeName;
 
+    @Autowired
     public ImportExportComponent(ApplicationContext applicationContext, AbstractXmlService<T> xmlService,
             Button importButton, Button exportButton) {
         this.applicationContext = applicationContext;
+        this.xmlService = xmlService;
         this.importButton = importButton;
         this.exportButton = exportButton;
         this.xmlService = xmlService;
@@ -66,11 +69,14 @@ public class ImportExportComponent<T extends ClassificationEntityOperations> {
         fileDownloader.extend(exportButton);
     }
 
-    public void init(T entity, String datatypeName) {
+    public void init(T entity, String datatypeName, ApplicationContext applicationContext, AbstractXmlService<T> xmlService) {
+        this.applicationContext = applicationContext;
+        this.xmlService = xmlService;
         log.info("Initializing import component with application context {}", applicationContext);
         log.info("Initializing import component with xml service {}", xmlService);
         this.entity = entity;
         this.datatypeName = datatypeName;
+        // Is null - check with autowired or inject here - cbi
         streamResource.setFilename(xmlService.createFileName(entity));
         if (entity instanceof Publishable && entity.isPublishedInAnyLanguage()) {
             disableImportButton(true, "Import er deaktivert for gitt " + datatypeName

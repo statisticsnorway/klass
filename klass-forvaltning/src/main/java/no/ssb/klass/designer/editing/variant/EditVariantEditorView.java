@@ -33,6 +33,7 @@ import no.ssb.klass.designer.user.UserContext;
 import no.ssb.klass.designer.util.ParameterUtil;
 import no.ssb.klass.designer.util.VaadinUtil;
 import no.ssb.klass.designer.windows.DescriptionOfChangeWindow;
+import no.ssb.klass.core.service.UserService;
 
 /**
  * @author Mads Lundemo, SSB.
@@ -54,6 +55,8 @@ public class EditVariantEditorView extends EditVariantEditorDesign implements Ed
     private ClassificationFacade classificationFacade;
     @Autowired
     private UserContext userContext;
+    @Autowired
+    private UserService userService;
 
     private ClassificationVariant variant;
 
@@ -70,7 +73,9 @@ public class EditVariantEditorView extends EditVariantEditorDesign implements Ed
         EditingState editingState = VaadinUtil.getKlassState().getAndClearEditingState();
         Long variantId = ParameterUtil.getRequiredLongParameter(PARAM_ID, event.getParameters());
         variant = classificationFacade.getRequiredClassificationVariant(variantId);
-        metadataEditor.init(variant.getPrimaryLanguage());
+        // Use this
+        metadataEditor.init(variant.getPrimaryLanguage(), userService, userContext);
+        log.info("Variant metadata editor user service {}", userService);
         metadataEditor.setContactPerson(variant.getContactPerson());
         for (Language language : supportedLanguages) {
             metadataEditor.setName(language, variant.getNameBase(language));
@@ -84,7 +89,7 @@ public class EditVariantEditorView extends EditVariantEditorDesign implements Ed
         checkUserAccess();
         // NB. checkUserAccess() must be before codeEditor.init(..), if not a NewCodeEditor will be
         // added even when user does not have permission to alter variant.
-        codeEditor.init(variant);
+        codeEditor.init(variant, classificationFacade);
         if (editingState.isCodeEditorNotMetadataVisible()) {
             accordion.setSelectedTab(codeEditor);
             codeEditor.restorePreviousEditingState(editingState);

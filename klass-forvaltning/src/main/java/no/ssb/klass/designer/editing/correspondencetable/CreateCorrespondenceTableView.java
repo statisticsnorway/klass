@@ -25,6 +25,8 @@ import no.ssb.klass.designer.service.ClassificationFacade;
 import no.ssb.klass.designer.service.InformSubscribers;
 import no.ssb.klass.designer.util.ParameterUtil;
 import no.ssb.klass.designer.util.VaadinUtil;
+import no.ssb.klass.core.service.UserService;
+import no.ssb.klass.designer.user.UserContext;
 
 /**
  * @author Mads Lundemo, SSB.
@@ -46,6 +48,14 @@ public class CreateCorrespondenceTableView extends CreateCorrespondenceTableDesi
 
     @Autowired
     private ClassificationFacade classificationFacade;
+
+    // Added for injecting in metadataEditorView - cbi
+    @Autowired
+    private UserService userService;
+
+    // Added for injecting in metadataEditorView - cbi
+    @Autowired
+    private UserContext userContext;
 
     private ClassificationVersion fromVersion;
     private ClassificationVersion toVersion;
@@ -72,7 +82,7 @@ public class CreateCorrespondenceTableView extends CreateCorrespondenceTableDesi
         correspondenceTable = new CorrespondenceTable(Translatable.empty(),
                 fromVersion, fromLevelNumber.intValue(), toVersion, toLevelNumber.intValue());
 
-        metadataEditor.init(correspondenceTable.getPrimaryLanguage());
+        metadataEditor.init(correspondenceTable.getPrimaryLanguage(), userService, userContext);
         metadataEditor.setContactPersonReadOnly(correspondenceTable.getContactPerson());
         header.setTypeText(TypeAndNameHeaderComponent.TEXT_CORRESPONDANCE_TABLE);
         header.setNameText(correspondenceTable.getNameInPrimaryLanguage());

@@ -29,6 +29,7 @@ import no.ssb.klass.designer.user.UserContext;
 import no.ssb.klass.designer.util.ParameterUtil;
 import no.ssb.klass.designer.util.VaadinUtil;
 import no.ssb.klass.designer.windows.DescriptionOfChangeWindow;
+import no.ssb.klass.core.service.UserService;
 
 /**
  * @author Mads Lundemo, SSB.
@@ -52,6 +53,8 @@ public class EditCorrespondenceTableView extends EditCorrespondenceTableDesign i
     private UserContext userContext;
     @Autowired
     private ApplicationContext applicationContext;
+    @Autowired
+    private UserService userService;
 
     private CorrespondenceTable correspondenceTable;
     private HasCorrespondenceTableComponent codeEditor;
@@ -70,7 +73,7 @@ public class EditCorrespondenceTableView extends EditCorrespondenceTableDesign i
         EditingState editingState = VaadinUtil.getKlassState().getAndClearEditingState();
         Long correspondenceId = ParameterUtil.getRequiredLongParameter(PARAM_ID, event.getParameters());
         correspondenceTable = classificationFacade.getRequiredCorrespondenceTable(correspondenceId);
-        metadataEditor.init(correspondenceTable.getPrimaryLanguage());
+        metadataEditor.init(correspondenceTable.getPrimaryLanguage(), userService, userContext);
         metadataEditor.setPublication(correspondenceTable);
         metadataEditor.setContactPersonReadOnly(correspondenceTable.getContactPerson());
         metadataEditor.setDraft(correspondenceTable.isDraft());
