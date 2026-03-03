@@ -367,7 +367,9 @@ public class VersionEditorView extends VersionEditorDesign implements HasEditing
 
         DateRange newRange = DateRange.create(TimeUtil.toLocalDate(fromDate.getValue()),
                 VaadinUtil.convertToExclusive(TimeUtil.toLocalDate(toDate.getValue())));
-
+        log.info("hasChanges newRange: {}", newRange);
+        log.info("hasChanges classification version: {}", classificationVersion);
+        log.info("hasChanges classification version primary language: {}", classificationVersion.getPrimaryLanguage());
         Language primaryLanguage = classificationVersion.getPrimaryLanguage();
         Language secondLanguage = Language.getSecondLanguage(primaryLanguage);
         Language thirdLanguage = Language.getThirdLanguage(primaryLanguage);

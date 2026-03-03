@@ -55,6 +55,8 @@ public class CreateVersionView extends VerticalLayout implements EditingView {
     public CreateVersionView( ClassificationFacade classificationFacade, UserContext userContext) {
         this.classificationFacade = classificationFacade;
         this.userContext = userContext;
+        log.info("CreateVersionView created with userContext: {}", userContext);
+        log.info("CreateVersionView created with classificationFacade: {}", classificationFacade);
         ConfirmOrCancelComponent actionButtons = new ConfirmOrCancelComponent();
         actionButtons.setConfirmText("Lagre");
         actionButtons.addConfirmClickListener(event -> save());
@@ -84,8 +86,8 @@ public class CreateVersionView extends VerticalLayout implements EditingView {
 
     @Override
     public boolean hasChanges() {
+        // add logger
         return !ignoreChanges && versionEditorView.hasChanges();
-
     }
 
     @Override
