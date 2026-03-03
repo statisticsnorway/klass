@@ -36,6 +36,8 @@ import no.ssb.klass.designer.user.UserContext;
 import no.ssb.klass.designer.util.ComponentUtil;
 import no.ssb.klass.designer.util.PassiveValidationUtil;
 import no.ssb.klass.designer.util.VaadinUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Mads Lundemo, SSB.
@@ -44,6 +46,7 @@ import no.ssb.klass.designer.util.VaadinUtil;
 @SpringComponent
 @PrototypeScope
 public class MetadataEditorComponent extends CustomComponent implements HasEditingState {
+    private static final Logger log = LoggerFactory.getLogger(MetadataEditorComponent.class);
     private static final String DATE_INPUT_MASK = "MM.yyyy";
 
     private MetadataEditorComponentDesign design = new MetadataEditorComponentDesign();
@@ -83,6 +86,8 @@ public class MetadataEditorComponent extends CustomComponent implements HasEditi
         design.contactPersonCombobox.setRequiredError("Kontaktperson er påkrevd");
 
         configureContactPersonCombobox();
+        log.info("Created MetadataEditorComponent with user service {}", userService);
+        log.info("Created MetadataEditorComponent with user context {}", userContext);
     }
 
     public void setDatesVisible(boolean visible) {
