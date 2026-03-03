@@ -42,9 +42,10 @@ public class CreateVersionView extends VerticalLayout implements EditingView {
 
     private boolean ignoreChanges = false;
 
-
+    // Moved from field injection to constructor - cbi
     private ClassificationFacade classificationFacade;
 
+    // Moved from field injection to constructor - cbi
     private UserContext userContext;
 
     private final VersionEditorView versionEditorView;
