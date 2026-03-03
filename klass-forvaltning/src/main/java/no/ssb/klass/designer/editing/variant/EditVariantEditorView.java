@@ -34,6 +34,8 @@ import no.ssb.klass.designer.util.ParameterUtil;
 import no.ssb.klass.designer.util.VaadinUtil;
 import no.ssb.klass.designer.windows.DescriptionOfChangeWindow;
 import no.ssb.klass.core.service.UserService;
+import no.ssb.klass.forvaltning.converting.xml.ClassificationVariantXmlService;
+import org.springframework.context.ApplicationContext;
 
 /**
  * @author Mads Lundemo, SSB.
@@ -57,6 +59,12 @@ public class EditVariantEditorView extends EditVariantEditorDesign implements Ed
     private UserContext userContext;
     @Autowired
     private UserService userService;
+    // Add so value is injected down - cbi
+    @Autowired
+    private ApplicationContext applicationContext;
+    // Add so value is injected down - cbi
+    @Autowired
+    private ClassificationVariantXmlService xmlService;
 
     private ClassificationVariant variant;
 
@@ -89,7 +97,7 @@ public class EditVariantEditorView extends EditVariantEditorDesign implements Ed
         checkUserAccess();
         // NB. checkUserAccess() must be before codeEditor.init(..), if not a NewCodeEditor will be
         // added even when user does not have permission to alter variant.
-        codeEditor.init(variant, classificationFacade);
+        codeEditor.init(variant, classificationFacade, applicationContext, xmlService);
         if (editingState.isCodeEditorNotMetadataVisible()) {
             accordion.setSelectedTab(codeEditor);
             codeEditor.restorePreviousEditingState(editingState);
