@@ -24,25 +24,12 @@ spec:
         #            environment: test
 
         - alert: High heap memory usage
-          expr: (100 * sum by (instance) (jvm_memory_used_bytes{application="klass", area="heap"})) / (sum by (instance) (jvm_memory_max_bytes{application="klass", area="heap"}) ) > 80.0
-          for: 3m
+          expr: (100 * sum by (instance) (jvm_memory_used_bytes{application="klass", area="heap"})) / (sum by (instance) (jvm_memory_max_bytes{application="klass", area="heap"}) ) > 90.0
+          for: 10m
           annotations:
             title: "High heap memory usage"
             consequence: "If this increase continues then the app could run out of memory and either lock or crash."
             action: "Immediate: Restart the app from the Nais console\nShort term: Investigate the cause of high heap usage and either fix the bug or increase the available heap."
-          labels:
-            service: klass-api
-            namespace: dapla-metadata
-            severity: critical
-            environment: test
-
-        - alert: High number of errors
-          expr: (100 * sum by (app, namespace) (rate(logback_events_total{application="klass",level="error"}[3m])) / sum by (app, namespace) (rate(logback_events_total{application="klass"}[3m]))) > 1
-          for: 3m
-          annotations:
-            title: "High number of errors logged"
-            consequence: "There can be different causes for errors, check logs for cause and evaluation of consequences."
-            action: "`kubectl describe pod -l app=klass-api -n dapla-metadata` -> `kubectl logs <podname>`"
           labels:
             service: klass-api
             namespace: dapla-metadata
