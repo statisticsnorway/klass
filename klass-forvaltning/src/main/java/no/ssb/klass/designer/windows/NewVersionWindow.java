@@ -46,7 +46,7 @@ public class NewVersionWindow extends Window {
     private static final String MONTH_PADDING = "mm";
     private static final String YEAR_PADDING = "åååå";
 
-    // ?
+    // Removed field injection here - cbi
     private ClassificationFacade classificationFacade;
 
     private LocalDate validFrom;
@@ -59,6 +59,7 @@ public class NewVersionWindow extends Window {
         setModal(true);
     }
 
+    // Init classificationFacade in constructor - cbi
     public void init(String classificationId, String versionName, ClassificationFacade classificationFacade) {
         this.classificationFacade = classificationFacade;
         classificationSeries = classificationFacade.getRequiredClassificationSeries(Long.parseLong(classificationId));
