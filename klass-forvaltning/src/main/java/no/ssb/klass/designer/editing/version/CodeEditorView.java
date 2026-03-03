@@ -48,9 +48,6 @@ public class CodeEditorView extends CodeEditorDesign implements HasEditingState{
 
     private SharedEscapeShortcutListener shortcutListener;
 
-    // set these values?
-    // from
-
     public CodeEditorView() {
         shortcutListener = new SharedEscapeShortcutListener();
         eventbus = new EventBus("code-editor");
@@ -68,6 +65,7 @@ public class CodeEditorView extends CodeEditorDesign implements HasEditingState{
         log.info("Initializing CodeEditorView");
     }
 
+    // Added setters, tried to use constructor but this caused init problems somewhere (need empty constructor) - cbi
     public void setVersionXmlService(ClassificationVersionXmlService versionXmlService) {
         this.versionXmlService = versionXmlService;
     }
@@ -108,7 +106,6 @@ public class CodeEditorView extends CodeEditorDesign implements HasEditingState{
     private void deleteExistingItemsBeforeImport(ClassificationVersion version) throws ImportException {
         // check if we can delete items
         try {
-            // error null?
             CodeTableUtils.verifyNoReferencesToClassificationItems(classificationFacade, version);
         } catch (IllegalArgumentException e) {
             throw new ImportException(e.getMessage(), e);
@@ -138,8 +135,7 @@ public class CodeEditorView extends CodeEditorDesign implements HasEditingState{
         translationLevels.init(eventbus, version, Language.getSecondLanguage(version.getPrimaryLanguage()));
         showTranslations(false);
         updatePrimaryLanguageLabel();
-
-        // problem
+        
         importExportComponent = new ImportExportComponent<>(
                 context, versionXmlService, importButton, exportButton);
         log.info("Initializing CodeEditorView ? {}", importExportComponent);
