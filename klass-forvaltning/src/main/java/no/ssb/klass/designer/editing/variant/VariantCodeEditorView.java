@@ -93,7 +93,12 @@ public class VariantCodeEditorView extends VariantCodeEditorDesign implements Ha
 
     }
 
-    public void init(ClassificationVariant variant, ClassificationFacade classificationFacade) {
+    // Init application context and xml service here - cbi
+    public void init(ClassificationVariant variant, ClassificationFacade classificationFacade, ApplicationContext applicationContext, ClassificationVariantXmlService xmlService) {
+        this.xmlService = xmlService;
+        this.applicationContext = applicationContext;
+        log.info("Initializing variant code editor with application context {}", applicationContext);
+        log.info("Initializing variant code editor with xml service {}", xmlService);
         this.variant = variant;
         this.classificationFacade = classificationFacade;
         log.info("Variant code editor view init: facade {}", classificationFacade);
@@ -165,7 +170,6 @@ public class VariantCodeEditorView extends VariantCodeEditorDesign implements Ha
     }
 
     private ClassificationVersion reloadToAvoidLazyInitializationException(ClassificationVersion version) {
-        // Is null - cbi
         return classificationFacade.getRequiredClassificationVersion(version.getId());
     }
 
