@@ -91,6 +91,7 @@ public class EditVariantEditorView extends EditVariantEditorDesign implements Ed
         } else {
             metadataEditor.restorePreviousEditingState(editingState);
         }
+        log.info("edit VariantView: variant {}", variant);
     }
 
     @Override
