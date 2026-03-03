@@ -40,12 +40,12 @@ public class VariantTable extends AbstractTable {
     private static final String NEW_CORRESPONDENCE_TABLE_TOOLTIP = "Lag ny korrespondansetabell";
     private static final String NEW_VARIANT_TOOLTIP = "Lag ny variant";
 
-    @Autowired
     private ApplicationContext applicationContext;
 
 
     private ClassificationFacade classificationFacade;
 
+    // Moved from field injection to constructor
     private UserContext userContext;
 
     private Table table;
@@ -54,9 +54,10 @@ public class VariantTable extends AbstractTable {
     private Button addVariantButton;
 
     @Autowired
-    public void init(VersionTable versionTable, UserContext userContext, ClassificationFacade classificationFacade) {
+    public void init(VersionTable versionTable, UserContext userContext, ClassificationFacade classificationFacade, ApplicationContext applicationContext) {
         this.userContext = userContext;
         this.classificationFacade = classificationFacade;
+        this.applicationContext = applicationContext;
         table = createTable(new VariantContainer(userContext, classificationFacade, versionTable));
         table.setColumnExpandRatio(AbstractPropertyContainer.NAME, 1);
         addCorrespondenceButton = createAddElementButton(NEW_CORRESPONDENCE_TABLE_TOOLTIP);
@@ -71,6 +72,7 @@ public class VariantTable extends AbstractTable {
         rootLayout.addComponents(createHeader("Korrespondansetabell/variant", addCorrespondenceButton,
                 addVariantButton), wrapFilter(filterBox), table);
         rootLayout.setExpandRatio(table, 1);
+        log.info("Variant table view with userContext {} and apllicationContext {}", userContext, applicationContext);
 
     }
 
