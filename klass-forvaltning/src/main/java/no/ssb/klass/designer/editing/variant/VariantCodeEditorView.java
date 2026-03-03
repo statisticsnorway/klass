@@ -24,10 +24,14 @@ import no.ssb.klass.designer.listeners.SharedEscapeShortcutListener;
 import no.ssb.klass.designer.service.ClassificationFacade;
 import no.ssb.klass.designer.util.ComponentUtil;
 import no.ssb.klass.designer.windows.AutomaticTranslationWindow;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @SpringComponent
 @PrototypeScope
 public class VariantCodeEditorView extends VariantCodeEditorDesign implements HasEditingState {
+
+    private static final Logger log = LoggerFactory.getLogger(VariantCodeEditorView.class);
 
     private static final String SINGLE_ELEMENTS = "Enkeltkoder";
     private static final String ELEMENTS_WITH_CHILDREN = "Koder med underelementer";
@@ -57,6 +61,7 @@ public class VariantCodeEditorView extends VariantCodeEditorDesign implements Ha
         eventbus.register(translationCodeTable);
         selectEditLanguageOrVariant.addEditLanguagesListener(this::switchCodeTables);
         selectEditLanguageOrVariant.addLanguageChangeListener(this::switchLanguage);
+        log.info("Variant code editor view: variant {}", variant);
 
     }
 
@@ -121,7 +126,11 @@ public class VariantCodeEditorView extends VariantCodeEditorDesign implements Ha
         originalVersion.addToSharedActionListener(shortcutListener);
         variantCodeTable.addToSharedActionListener(shortcutListener);
         translationCodeTable.addToSharedActionListener(shortcutListener);
-
+        log.info("Variant code editor view: variant {}", variant);
+        log.info("Variant code editor view: version {}", version);
+        log.info("Variant code editor view: context {}", applicationContext);
+        log.info("Variant code editor view: facade {}", classificationFacade);
+        log.info("Variant code editor view: xml service {}", xmlService);
     }
 
     private void clearBeforeImport(ClassificationVariant variant) {
