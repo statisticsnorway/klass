@@ -67,13 +67,9 @@ public class ImportExportComponent<T extends ClassificationEntityOperations> {
     }
 
     public void init(T entity, String datatypeName) {
-        log.info("Initializing import component");
-        log.info("entity: {}", entity);
-        log.info("datatypeName: {}", datatypeName);
-        log.info("xml service {}", xmlService);
-        log.info("import export application context: {}", applicationContext);
+        log.info("Initializing import component with application context {}", applicationContext);
+        log.info("Initializing import component with xml service {}", xmlService);
         this.entity = entity;
-        log.info("entity: {}", entity);
         this.datatypeName = datatypeName;
         streamResource.setFilename(xmlService.createFileName(entity));
         if (entity instanceof Publishable && entity.isPublishedInAnyLanguage()) {
@@ -97,7 +93,6 @@ public class ImportExportComponent<T extends ClassificationEntityOperations> {
         UI.getCurrent().addWindow(uploadFileWindow);
     }
 
-    // Kun 1 element
     private void uploadedFileHandler(InputStream stream) {
         boolean success = true;
         try {
