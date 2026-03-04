@@ -31,6 +31,8 @@ import no.ssb.klass.core.service.SubscriberService;
 import no.ssb.klass.core.util.DateRange;
 import no.ssb.klass.core.util.KlassResourceNotFoundException;
 import no.ssb.klass.designer.exceptions.ParameterException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Facade to be used for front end (vaadin) code. Mostly a wrapper around ClassificationService, but provides among
@@ -38,6 +40,7 @@ import no.ssb.klass.designer.exceptions.ParameterException;
  */
 @Service
 public class ClassificationFacade {
+    private static final Logger log = LoggerFactory.getLogger(ClassificationFacade.class);
     private final ClassificationService classificationService;
     private final SearchService searchService;
     private final SubscriberService subscriberService;
@@ -158,13 +161,21 @@ public class ClassificationFacade {
     @Transactional(propagation = Propagation.NEVER)
     public ClassificationVersion saveAndIndexVersion(ClassificationVersion version,
             InformSubscribers informSubscribers) {
+        long startTime = System.currentTimeMillis();
+        log.info("Start save at {}", startTime);
+        log.info("Check classification service {}", classificationService);
         classificationService.saveNotIndexVersion(version);
+        long endTimeAfterServiceSave = System.currentTimeMillis();
+        log.info("Save not index took {} ms", endTimeAfterServiceSave-startTime);
+        log.info("Start index {}", searchService);
+        log.info("Start index with owner classification {}", version.getOwnerClassification());
         searchService.indexAsync(version.getOwnerClassification().getId());
         if (informSubscribers.isInformSubscribers()) {
             subscriberService.informSubscribersOfUpdatedClassification(version.getOwnerClassification(),
                     "Endring i versjonen: " + version.getNameInPrimaryLanguage(), informSubscribers
                             .getDescriptionOfChange());
         }
+        log.info("Save for version finished {}", version);
         return version;
     }
 
