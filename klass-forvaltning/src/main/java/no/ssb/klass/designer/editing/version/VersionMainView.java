@@ -77,7 +77,6 @@ public class VersionMainView extends VersionMainEditor implements EditingView {
         metadataEditor.enableAlias(userContext.isAdministrator());
         metadataEditor.addComponent(publicationChoiceEditor);
         publicationChoiceEditor.init(userContext.isAdministrator(), classificationVersion);
-        log.info("Version editor view initialized with user context {}", userContext);
         checkUserAccess(classificationVersion);
         // NB. checkUserAccess() must be before codeEditor.init(..), if not a NewCodeEditor will be
         // added even when user does not have permission to alter version.
@@ -96,6 +95,10 @@ public class VersionMainView extends VersionMainEditor implements EditingView {
         } else {
             metadataEditor.restorePreviousEditingState(editingState);
         }
+        log.info("Version editor view enter with user context {}", userContext);
+        log.info("Version editor view enter with classification facade {}", classificationFacade);
+        log.info("Version editor view enter with code editor {}", codeEditor);
+        log.info("Version editor view enter with metadata editor {}", metadataEditor);
     }
 
     @Override
@@ -105,6 +108,7 @@ public class VersionMainView extends VersionMainEditor implements EditingView {
 
     @Override
     public boolean hasChanges() {
+        log.info("Version editor view has changes {} {} {}", ignoreChanges, metadataEditor, codeEditor);
         return !ignoreChanges && (metadataEditor.hasChanges() || codeEditor.hasChanges());
     }
 
@@ -122,9 +126,12 @@ public class VersionMainView extends VersionMainEditor implements EditingView {
     }
 
     private void checkAndSaveVersion() {
+        log.info("Version editor view check and save has code editor {}", codeEditor);
         codeEditor.prepareSave();
         ClassificationVersion classificationVersion = codeEditor.getClassificationVersion();
         boolean wasPublished = classificationVersion.isPublishedInAnyLanguage();
+        log.info("Version editor view check and save was published {}", wasPublished);
+        log.info("Version editor view check and save has user context {}", userContext);
         if (metadataEditor.updateVersion(classificationVersion, classificationFacade) && publicationChoiceEditor
                 .checkAndSetPublished(userContext.isAdministrator(), classificationVersion)) {
             if (wasPublished) {
@@ -134,6 +141,7 @@ public class VersionMainView extends VersionMainEditor implements EditingView {
                             saveVersion(classificationVersion, InformSubscribers.createWhenPublished(changelog));
                         }));
             } else {
+                log.info("Version editor view check and save was not published");
                 saveVersion(classificationVersion, InformSubscribers.createWhenWasUnpublished(classificationVersion));
             }
         }
@@ -146,6 +154,9 @@ public class VersionMainView extends VersionMainEditor implements EditingView {
     }
 
     private void saveVersion(ClassificationVersion version, InformSubscribers informSubscribers) {
+        log.info("Version editor view save version {}", version);
+        log.info("Version editor view save version inform subscribers {}", informSubscribers);
+        log.info("Version editor view save version classification facade {}", classificationFacade);
         classificationFacade.saveAndIndexVersion(version, informSubscribers);
         VaadinUtil.showSavedMessage();
         if (versionAccordion.getSelectedTab() == codeEditor) {
