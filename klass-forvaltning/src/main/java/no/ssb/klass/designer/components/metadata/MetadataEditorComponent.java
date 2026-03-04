@@ -163,7 +163,6 @@ public class MetadataEditorComponent extends CustomComponent implements HasEditi
         boolean isReadOnly = personCombobox.isReadOnly();
         personCombobox.setReadOnly(false);
         personCombobox.removeAllItems();
-        // Is null
         List<User> userList = userService.getAllUsers();
         personCombobox.clear();
         for (User user : userList) {
