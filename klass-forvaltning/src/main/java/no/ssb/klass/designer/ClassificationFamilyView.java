@@ -39,11 +39,7 @@ public class ClassificationFamilyView extends ClassificationFamilyDesign impleme
     public static final String NAME = ""; // empty name will make it default view for navigator
 
     private final ClassificationFilter classificationFilter;
-
-    // Moved from field injection to constructor - but was not an explicit problem, just trying to do the same all over - cbi
     private ClassificationFacade classificationFacade;
-
-    // Moved from field injection to constructor - but was not an explicit problem, just trying to do the same all over - cbi
     private UserContext userContext;
 
     @Autowired
