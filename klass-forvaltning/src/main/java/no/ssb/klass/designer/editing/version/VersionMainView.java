@@ -41,7 +41,7 @@ public class VersionMainView extends VersionMainEditor implements EditingView {
 
     private boolean ignoreChanges = false;
 
-    @Autowired
+    // From field injection to constructor injection - cbi
     private ClassificationFacade classificationFacade;
 
     // From field injection to constructor injection - cbi
@@ -50,16 +50,18 @@ public class VersionMainView extends VersionMainEditor implements EditingView {
     private PublicationChoiceEditor publicationChoiceEditor;
 
     // Added versionXmlService and applicationContext
-    @Autowired
+    // From field injection to constructor injection - cbi
     private ClassificationVersionXmlService versionXmlService;
 
-    @Autowired
+    // From field injection to constructor injection - cbi
     private ApplicationContext applicationContext;
 
     @Autowired
-    public VersionMainView(ClassificationFacade classificationFacade, UserContext userContext) {
+    public VersionMainView(ClassificationFacade classificationFacade, UserContext userContext, ClassificationVersionXmlService versionXmlService, ApplicationContext applicationContext) {
         this.classificationFacade = classificationFacade;
         this.userContext = userContext;
+        this.versionXmlService = versionXmlService;
+        this.applicationContext = applicationContext;
         log.info("User context version main view {}", userContext);
         publicationChoiceEditor = new PublicationChoiceEditor(new MarginInfo(true, false, true, true));
         actionButtons.addConfirmClickListener(event -> checkAndSaveVersion());
