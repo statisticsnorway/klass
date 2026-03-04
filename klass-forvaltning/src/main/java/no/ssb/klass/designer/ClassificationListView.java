@@ -31,19 +31,13 @@ import org.springframework.context.ApplicationContext;
 @SuppressWarnings("serial")
 public class ClassificationListView extends ClassificationListDesign implements FilteringView {
     private static final Logger log = LoggerFactory.getLogger(ClassificationListView.class);
+
     public static final String NAME = "list";
     public static final String PARAM_FAMILY_ID = "familyId";
 
-    // Moved from field injection to constructor - cbi
     private ClassificationFacade classificationFacade;
-
-    // Added field for injection in versionTable and variantTable - cbi
     private UserContext userContext;
-
-    // Added field for injection in versionTable and variantTable - cbi
     private ApplicationContext applicationContext;
-
-
     private final ClassificationFilter classificationFilter;
     private final SharedEscapeShortcutListener sharedEscapeShortcutListener;
 
