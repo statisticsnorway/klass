@@ -33,6 +33,7 @@ import no.ssb.klass.core.model.ConcreteClassificationItem;
 import no.ssb.klass.core.model.Language;
 import no.ssb.klass.core.util.Translatable;
 
+
 /**
  *
  * Service that takes care of xml import and export for ClassificationVersion
@@ -52,6 +53,7 @@ public class ClassificationVersionXmlService extends XmlCodeHierarchyService<Cla
     }
 
     public void fromXmlStreamAndMerge(InputStream stream, ClassificationVersion version) throws ImportException {
+        // can this stream have been consumed?
         List<XmlVersionItem> values = readInputStream(stream, XmlVersionItem.class);
         // This often fails - can not read items
         log.info("Import file contains " + values.size() + " elements");
@@ -152,7 +154,11 @@ public class ClassificationVersionXmlService extends XmlCodeHierarchyService<Cla
         List<XmlVersionItem> list = version.getAllClassificationItems()
                 .stream()
                 .map(XmlVersionItem::new)
-                .sorted(Comparator.comparing(XmlVersionItem::getCode))
+                //.sorted(Comparator.comparing(XmlVersionItem::getCode))
+                .sorted(Comparator.comparing(
+                        XmlVersionItem::getCode,
+                        Comparator.nullsLast(String::compareTo)
+                ))
                 .collect(Collectors.toCollection(LinkedList::new));
         // Added logging for each element in file - cbi
         log.info("Found {} elements", list.size());
