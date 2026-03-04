@@ -172,8 +172,7 @@ public class ClassificationFacade {
         log.info("Save not index took {} ms", endTimeAfterServiceSave-startTime);
         log.info("Start index {}", searchService);
         log.info("Start index with owner classification {}", version.getOwnerClassification());
-        // test without index
-        //searchService.indexAsync(version.getOwnerClassification().getId());
+        searchService.indexAsync(version.getOwnerClassification().getId());
         if (informSubscribers.isInformSubscribers()) {
             subscriberService.informSubscribersOfUpdatedClassification(version.getOwnerClassification(),
                     "Endring i versjonen: " + version.getNameInPrimaryLanguage(), informSubscribers
