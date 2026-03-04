@@ -53,6 +53,7 @@ public class ClassificationVersionXmlService extends XmlCodeHierarchyService<Cla
 
     public void fromXmlStreamAndMerge(InputStream stream, ClassificationVersion version) throws ImportException {
         List<XmlVersionItem> values = readInputStream(stream, XmlVersionItem.class);
+        // This often fails - can not read items
         log.info("Import file contains " + values.size() + " elements");
         // Added logging for each element in file - cbi
         for (int i = 0; i < values.size(); i++) {
