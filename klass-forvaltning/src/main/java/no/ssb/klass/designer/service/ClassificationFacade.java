@@ -164,21 +164,14 @@ public class ClassificationFacade {
     @Transactional(propagation = Propagation.NEVER)
     public ClassificationVersion saveAndIndexVersion(ClassificationVersion version,
             InformSubscribers informSubscribers) {
-        long startTime = System.currentTimeMillis();
-        log.info("Start save at {}", startTime);
-        log.info("Check classification service {}", classificationService);
         classificationService.saveNotIndexVersion(version);
-        long endTimeAfterServiceSave = System.currentTimeMillis();
-        log.info("Save not index took {} ms", endTimeAfterServiceSave-startTime);
-        log.info("Start index {}", searchService);
-        log.info("Start index with owner classification {}", version.getOwnerClassification());
+        // try catch finally? cbi
         searchService.indexAsync(version.getOwnerClassification().getId());
         if (informSubscribers.isInformSubscribers()) {
             subscriberService.informSubscribersOfUpdatedClassification(version.getOwnerClassification(),
                     "Endring i versjonen: " + version.getNameInPrimaryLanguage(), informSubscribers
                             .getDescriptionOfChange());
         }
-        log.info("Save for version finished {}", version);
         return version;
     }
 
@@ -193,7 +186,7 @@ public class ClassificationFacade {
     public void deleteAndIndexClassification(User currentUser, ClassificationSeries classification)
             throws KlassMessageException {
         classificationService.deleteNotIndexClassification(currentUser, classification);
-        log.info("Delete classification async index {}", classification);
+        // try catch finally ? cbi
         searchService.indexAsync(classification.getId());
         subscriberService.informSubscribersOfUpdatedClassification(classification, "Klassifikasjonen er slettet: "
                 + classification.getNameInPrimaryLanguage(), "Klassifikasjonen er slettet");
@@ -206,7 +199,7 @@ public class ClassificationFacade {
     public void deleteAndIndexCorrespondenceTable(User currentUser,
             CorrespondenceTable correspondenceTable) throws KlassMessageException {
         classificationService.deleteNotIndexCorrespondenceTable(currentUser, correspondenceTable);
-        log.info("Delete correspondence table before async {}", correspondenceTable);
+        // try catch finally ? cbi
         searchService.indexAsync(correspondenceTable.getOwnerClassification().getId());
         if (correspondenceTable.isPublishedInAnyLanguage()) {
             subscriberService.informSubscribersOfUpdatedClassification(correspondenceTable.getOwnerClassification(),
@@ -222,7 +215,7 @@ public class ClassificationFacade {
     public void deleteAndIndexVariant(User currentUser, ClassificationVariant variant)
             throws KlassMessageException {
         classificationService.deleteNotIndexVariant(currentUser, variant);
-        log.info("Delete variant before index async {}", variant);
+        // try catch finally ? cbi
         searchService.indexAsync(variant.getOwnerClassification().getId());
         if (variant.isPublishedInAnyLanguage()) {
             subscriberService.informSubscribersOfUpdatedClassification(variant.getOwnerClassification(),
@@ -236,7 +229,7 @@ public class ClassificationFacade {
     @Transactional(propagation = Propagation.NEVER)
     public void deleteAndIndexVersion(User currentUser, ClassificationVersion version) throws KlassMessageException {
         classificationService.deleteNotIndexVersion(currentUser, version);
-        log.info("Index async delete {}", currentUser);
+        // try catch finally ? cbi
         searchService.indexAsync(version.getOwnerClassification().getId());
         if (version.isPublishedInAnyLanguage()) {
             subscriberService.informSubscribersOfUpdatedClassification(version.getOwnerClassification(),

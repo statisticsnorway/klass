@@ -37,6 +37,7 @@ public class CodeEditorView extends CodeEditorDesign implements HasEditingState{
     private ClassificationVersion version;
     private final EventBus eventbus;
 
+    // These field injections can not be moved to constructor because of bean initialization needs empty constructor - cbi
     @Autowired
     private ApplicationContext context;
 
@@ -62,10 +63,9 @@ public class CodeEditorView extends CodeEditorDesign implements HasEditingState{
             translationCodeTable.init(eventbus, version, language);
             translationLevels.init(eventbus, version, language);
         });
-        log.info("Initializing CodeEditorView");
     }
 
-    // Added setters, tried to use constructor but this caused init problems somewhere (need empty constructor) - cbi
+    // Added setters for injecting values into prototype scope - cbi
     public void setVersionXmlService(ClassificationVersionXmlService versionXmlService) {
         this.versionXmlService = versionXmlService;
     }
@@ -118,15 +118,10 @@ public class CodeEditorView extends CodeEditorDesign implements HasEditingState{
         }
     }
 
+    // check if we can use init for injecting values ? - cbi
     public void init(ClassificationVersion version) {
         this.version = version;
-        log.info("Initializing CodeEditorView ? {}", version);
-        log.info("Initializing CodeEditorView ? {}", primaryCodeTable);
-        log.info("Initializing CodeEditorView eventbus? {}", eventbus);
-        log.info("Initializing CodeEditorView context? {}", context);
-        log.info("Initializing CodeEditorView facade? {}", classificationFacade);
-        log.info("Initializing CodeEditorView version xml service? {}", versionXmlService);
-        log.info("Initializing CodeEditorView shortcut listner? {}", shortcutListener);
+        log.info("Initializing Code editor view with version xml service: {}", versionXmlService);
         primaryCodeTable.init(eventbus, version, version.getPrimaryLanguage(), classificationFacade);
         primaryLevels.init(eventbus, version, version.getPrimaryLanguage(), classificationFacade);
         editTranslations.initWithAutomaticTranslation(version.getPrimaryLanguage(),
@@ -135,10 +130,10 @@ public class CodeEditorView extends CodeEditorDesign implements HasEditingState{
         translationLevels.init(eventbus, version, Language.getSecondLanguage(version.getPrimaryLanguage()));
         showTranslations(false);
         updatePrimaryLanguageLabel();
-        
+        // This is important to check for how xml handles files - cbi
         importExportComponent = new ImportExportComponent<>(
                 context, versionXmlService, importButton, exportButton);
-        log.info("Initializing CodeEditorView ? {}", importExportComponent);
+        log.debug("Initializing CodeEditorView {}", importExportComponent);
         importExportComponent.init(version, "versjon", context, versionXmlService);
         importExportComponent.setOnCompleteCallback(this::updateView);
         importExportComponent.setClearEntityCallback(this::deleteExistingItemsBeforeImport);
@@ -162,13 +157,10 @@ public class CodeEditorView extends CodeEditorDesign implements HasEditingState{
     }
 
     private void updatePrimaryLanguageLabel() {
-        log.info("Updating primary language label ()", version);
         primaryLanguage.setValue(version.getPrimaryLanguage().getDisplayName());
     }
 
     public ClassificationVersion getClassificationVersion() {
-
-        log.info("Initializing CodeEditorView classification version ? {}", version);
         return version;
 
     }

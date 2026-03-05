@@ -63,8 +63,7 @@ public class ClassificationListView extends ClassificationListDesign implements 
         classificationTable.addToSharedActionListener(sharedEscapeShortcutListener);
         versionTable.addToSharedActionListener(sharedEscapeShortcutListener);
         variantTable.addToSharedActionListener(sharedEscapeShortcutListener);
-        // debug
-        log.info(
+        log.debug(
                 "Creating classification list view with user context {}, " +
                         "application context {} and classification facade {}",
                 userContext, applicationContext, classificationFacade

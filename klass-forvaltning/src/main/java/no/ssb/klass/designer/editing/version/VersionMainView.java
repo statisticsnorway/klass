@@ -45,7 +45,7 @@ public class VersionMainView extends VersionMainEditor implements EditingView {
     private UserContext userContext;
     private PublicationChoiceEditor publicationChoiceEditor;
 
-    // Added versionXmlService and applicationContext for injecting values into code editor
+    // Added versionXmlService and applicationContext for injecting values into code editor - cbi
     private ClassificationVersionXmlService versionXmlService;
     private ApplicationContext applicationContext;
 
@@ -60,8 +60,7 @@ public class VersionMainView extends VersionMainEditor implements EditingView {
         actionButtons.addCancelClickListener(this::cancelClick);
         versionAccordion.addSelectedTabChangeListener(eventTabChange -> metadataEditor.updateVersion(codeEditor
                 .getClassificationVersion(), classificationFacade));
-        // debug
-        log.info(
+        log.debug(
                 "Creating version main view with version xml service {}, application context {}, user context {} and " +
                         "classification facade {}",
                 versionXmlService,
@@ -149,7 +148,6 @@ public class VersionMainView extends VersionMainEditor implements EditingView {
     }
 
     private void saveVersion(ClassificationVersion version, InformSubscribers informSubscribers) {
-        // try catch?
         classificationFacade.saveAndIndexVersion(version, informSubscribers);
         VaadinUtil.showSavedMessage();
         if (versionAccordion.getSelectedTab() == codeEditor) {

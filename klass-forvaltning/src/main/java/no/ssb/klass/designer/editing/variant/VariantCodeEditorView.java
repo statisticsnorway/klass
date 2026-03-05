@@ -94,16 +94,19 @@ public class VariantCodeEditorView extends VariantCodeEditorDesign implements Ha
     }
 
     // Init application context and xml service here - cbi
-    public void init(ClassificationVariant variant, ClassificationFacade classificationFacade, ApplicationContext applicationContext, ClassificationVariantXmlService xmlService) {
+    // check if version should do the same - cbi
+    public void init(ClassificationVariant variant,
+                     ClassificationFacade classificationFacade,
+                     ApplicationContext applicationContext,
+                     ClassificationVariantXmlService xmlService
+    ) {
         this.xmlService = xmlService;
         this.applicationContext = applicationContext;
         log.info("Initializing variant code editor with application context {}", applicationContext);
         log.info("Initializing variant code editor with xml service {}", xmlService);
         this.variant = variant;
         this.classificationFacade = classificationFacade;
-        log.info("Variant code editor view init: facade {}", classificationFacade);
         this.version = reloadToAvoidLazyInitializationException(variant.getClassificationVersion());
-        log.info("Variant code editor view init: variant {}", variant);
         primaryLanguage.setValue(variant.getPrimaryLanguage().getDisplayName());
         variantCodeTable.init(eventbus, variant, version, variant.getPrimaryLanguage(), classificationFacade);
         variantLevels.init(eventbus, variant, variant.getPrimaryLanguage(), classificationFacade);
@@ -129,10 +132,6 @@ public class VariantCodeEditorView extends VariantCodeEditorDesign implements Ha
         originalVersion.addToSharedActionListener(shortcutListener);
         variantCodeTable.addToSharedActionListener(shortcutListener);
         translationCodeTable.addToSharedActionListener(shortcutListener);
-        log.info("Variant code editor view: variant {}", variant);
-        log.info("Variant code editor view: version {}", version);
-        log.info("Variant code editor view: context {}", applicationContext);
-        log.info("Variant code editor view: facade {}", classificationFacade);
         log.info("Variant code editor view: xml service {}", xmlService);
     }
 

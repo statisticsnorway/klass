@@ -42,10 +42,7 @@ public class CreateVersionView extends VerticalLayout implements EditingView {
 
     private boolean ignoreChanges = false;
 
-    // Moved from field injection to constructor - cbi
     private ClassificationFacade classificationFacade;
-
-    // Moved from field injection to constructor - cbi
     private UserContext userContext;
 
     private final VersionEditorView versionEditorView;
@@ -55,8 +52,6 @@ public class CreateVersionView extends VerticalLayout implements EditingView {
     public CreateVersionView( ClassificationFacade classificationFacade, UserContext userContext) {
         this.classificationFacade = classificationFacade;
         this.userContext = userContext;
-        log.info("CreateVersionView created with userContext: {}", userContext);
-        log.info("CreateVersionView created with classificationFacade: {}", classificationFacade);
         ConfirmOrCancelComponent actionButtons = new ConfirmOrCancelComponent();
         actionButtons.setConfirmText("Lagre");
         actionButtons.addConfirmClickListener(event -> save());
@@ -64,8 +59,8 @@ public class CreateVersionView extends VerticalLayout implements EditingView {
         HorizontalLayout actionButtonsWrap = new HorizontalLayout(actionButtons);
         actionButtonsWrap.setMargin(new MarginInfo(false, false, true, true));
         versionEditorView = new VersionEditorView();
-
         addComponents(versionEditorView, actionButtonsWrap);
+        log.debug("Create version view with userContext: {} and classification facade: {}", userContext, classificationFacade);
     }
 
     @Override
@@ -86,7 +81,6 @@ public class CreateVersionView extends VerticalLayout implements EditingView {
 
     @Override
     public boolean hasChanges() {
-        // add logger
         return !ignoreChanges && versionEditorView.hasChanges();
     }
 
