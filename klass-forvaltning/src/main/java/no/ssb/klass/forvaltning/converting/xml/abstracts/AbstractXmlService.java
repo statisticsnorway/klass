@@ -5,6 +5,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.annotation.Value;
 
@@ -16,12 +18,15 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 import no.ssb.klass.forvaltning.converting.exception.ImportException;
 import no.ssb.klass.core.model.ClassificationEntityOperations;
+import java.nio.charset.StandardCharsets;
+import org.apache.commons.io.IOUtils;
 
 /**
  * @author Mads Lundemo, SSB.
  */
 public abstract class AbstractXmlService<T> {
 
+    private static final Logger log = LoggerFactory.getLogger(AbstractXmlService.class);
     private static final String FILE_EXT = ".xml";
 
     public abstract InputStream toXmlStream(T domainObject);
@@ -62,8 +67,18 @@ public abstract class AbstractXmlService<T> {
     protected <U> List<U> readInputStream(InputStream stream, Class<U> type) throws ImportException {
         ObjectReader objectReader = getObjectReader(type);
         try {
-            MappingIterator<U> mappingIterator = objectReader.readValues(stream);
-            return mappingIterator.readAll();
+            // Store stream so it can be logged
+            byte[] data = IOUtils.toByteArray(stream);
+            String preview = new String(data, StandardCharsets.UTF_8);
+            log.debug("Input XML ({} bytes):\n{}", data.length, preview);
+            MappingIterator<U> mappingIterator = objectReader.readValues(data);
+            // Read to list so it can be logged
+            List<U> result = mappingIterator.readAll();
+            log.debug("Parsed {} elements", result.size());
+            for (int i = 0; i < result.size(); i++) {
+                log.info("Element {}: {}", i, result.get(i));
+            }
+            return result;
         } catch (Exception e) {
             throw new ImportException(
                     "En feil oppstod under lesing av filen, er du sikker på at den er på riktig format?", e);

@@ -53,14 +53,7 @@ public class ClassificationVersionXmlService extends XmlCodeHierarchyService<Cla
     }
 
     public void fromXmlStreamAndMerge(InputStream stream, ClassificationVersion version) throws ImportException {
-        // can this stream have been consumed?
         List<XmlVersionItem> values = readInputStream(stream, XmlVersionItem.class);
-        // This often fails - can not read items
-        log.info("Import file contains " + values.size() + " elements");
-        // Added logging for each element in file - cbi
-        for (int i = 0; i < values.size(); i++) {
-            log.info("Element {}: {}", i, values.get(i));
-        }
         checkForExistingCodes(version, values);
         checkForMissingTitles(values);
         checkForMissingCodes(values);
@@ -150,6 +143,7 @@ public class ClassificationVersionXmlService extends XmlCodeHierarchyService<Cla
         }
     }
 
+    // Check this sorted - cbi
     protected XmlVersionExportContainer versionToDto(ClassificationVersion version) {
         List<XmlVersionItem> list = version.getAllClassificationItems()
                 .stream()
@@ -160,11 +154,6 @@ public class ClassificationVersionXmlService extends XmlCodeHierarchyService<Cla
                         Comparator.nullsLast(String::compareTo)
                 ))
                 .collect(Collectors.toCollection(LinkedList::new));
-        // Added logging for each element in file - cbi
-        log.info("Found {} elements", list.size());
-        for (int i = 0; i < list.size(); i++) {
-            log.info("Element {}: {}", i, list.get(i));
-        }
         XmlVersionExportContainer container = new XmlVersionExportContainer(list);
         container.setSchemaBaseUrl(SchemaBaseUrl);
         return container;
