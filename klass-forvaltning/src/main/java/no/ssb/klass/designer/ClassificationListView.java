@@ -44,13 +44,16 @@ public class ClassificationListView extends ClassificationListDesign implements 
     private FullVersionExportService exportService;
 
     @Autowired
-    public ClassificationListView(UserContext userContext, ClassificationFacade classificationFacade, FullVersionExportService exportService, ApplicationContext applicationContext) {
+    public ClassificationListView(
+            UserContext userContext,
+            ClassificationFacade classificationFacade,
+            FullVersionExportService exportService,
+            ApplicationContext applicationContext
+    ) {
         this.userContext = userContext;
         this.classificationFacade = classificationFacade;
         this.exportService = exportService;
         this.applicationContext = applicationContext;
-        log.info("User context list view {}", userContext);
-        log.info("Application context list view {}", applicationContext);
         sharedEscapeShortcutListener = new SharedEscapeShortcutListener();
         this.classificationFilter = VaadinUtil.getKlassState().getClassificationFilter();
         backButton.addClickListener(e -> VaadinUtil.navigateTo(ClassificationFamilyView.NAME));
@@ -60,11 +63,16 @@ public class ClassificationListView extends ClassificationListDesign implements 
         classificationTable.addToSharedActionListener(sharedEscapeShortcutListener);
         versionTable.addToSharedActionListener(sharedEscapeShortcutListener);
         variantTable.addToSharedActionListener(sharedEscapeShortcutListener);
+        // debug
+        log.info(
+                "Creating classification list view with user context {}, " +
+                        "application context {} and classification facade {}",
+                userContext, applicationContext, classificationFacade
+        );
     }
 
     @Override
     public void enter(ViewChangeEvent event) {
-        log.info("User context list view {}", userContext);
         Long familyId = ParameterUtil.getRequiredLongParameter(PARAM_FAMILY_ID, event.getParameters());
         ClassificationFamily classificationFamily = classificationFacade.getRequiredClassificationFamily(familyId);
         updateFamilyLabel(classificationFamily.getName());
@@ -110,7 +118,6 @@ public class ClassificationListView extends ClassificationListDesign implements 
     }
 
     private void populateClassificationTable(ClassificationFamily classificationFamily) {
-        log.info("Populating classification table with user context {}", userContext);
         List<ClassificationSeries> classifications = classificationFamily
                 .getClassificationSeriesBySectionAndClassificationType(classificationFilter.getCurrentSection(),
                         classificationFilter.getCurrentClassificationType());

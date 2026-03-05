@@ -41,19 +41,12 @@ public class VersionMainView extends VersionMainEditor implements EditingView {
 
     private boolean ignoreChanges = false;
 
-    // From field injection to constructor injection - cbi
     private ClassificationFacade classificationFacade;
-
-    // From field injection to constructor injection - cbi
     private UserContext userContext;
-
     private PublicationChoiceEditor publicationChoiceEditor;
 
-    // Added versionXmlService and applicationContext
-    // From field injection to constructor injection - cbi
+    // Added versionXmlService and applicationContext for injecting values into code editor
     private ClassificationVersionXmlService versionXmlService;
-
-    // From field injection to constructor injection - cbi
     private ApplicationContext applicationContext;
 
     @Autowired
@@ -62,12 +55,20 @@ public class VersionMainView extends VersionMainEditor implements EditingView {
         this.userContext = userContext;
         this.versionXmlService = versionXmlService;
         this.applicationContext = applicationContext;
-        log.info("User context version main view {}", userContext);
         publicationChoiceEditor = new PublicationChoiceEditor(new MarginInfo(true, false, true, true));
         actionButtons.addConfirmClickListener(event -> checkAndSaveVersion());
         actionButtons.addCancelClickListener(this::cancelClick);
         versionAccordion.addSelectedTabChangeListener(eventTabChange -> metadataEditor.updateVersion(codeEditor
                 .getClassificationVersion(), classificationFacade));
+        // debug
+        log.info(
+                "Creating version main view with version xml service {}, application context {}, user context {} and " +
+                        "classification facade {}",
+                versionXmlService,
+                applicationContext,
+                userContext,
+                classificationFacade
+        );
     }
 
     @Override
@@ -84,23 +85,20 @@ public class VersionMainView extends VersionMainEditor implements EditingView {
         // added even when user does not have permission to alter version.
         // Added set methods for CodeEditorView in order to inject these values - cbi
         codeEditor.setVersionXmlService(versionXmlService);
-        log.info("Version editor view initialized with xml service {}", versionXmlService);
         codeEditor.setApplicationContext(applicationContext);
-        log.info("Version editor view initialized with application context {}", applicationContext);
         codeEditor.setClassificationFacade(classificationFacade);
-        log.info("Version editor view initialized with classificationFacade {}", classificationFacade);
         codeEditor.init(classificationVersion);
-        log.info("Code editor in version main view {}", codeEditor);
         if (editingState.isCodeEditorNotMetadataVisible()) {
             codeEditor.restorePreviousEditingState(editingState);
             versionAccordion.setSelectedTab(codeEditor);
         } else {
             metadataEditor.restorePreviousEditingState(editingState);
         }
-        log.info("Version editor view enter with user context {}", userContext);
-        log.info("Version editor view enter with classification facade {}", classificationFacade);
-        log.info("Version editor view enter with code editor {}", codeEditor);
-        log.info("Version editor view enter with metadata editor {}", metadataEditor);
+        log.info(
+                "Enter version editor view with user context {}, version xml service {}, application context {} " +
+                        "and classification facade {}", userContext, versionXmlService, applicationContext, classificationFacade);
+        log.info("Enter version editor view with code editor {}", codeEditor);
+        log.info("Enter version editor view with metadata editor {}", metadataEditor);
     }
 
     @Override
@@ -110,7 +108,6 @@ public class VersionMainView extends VersionMainEditor implements EditingView {
 
     @Override
     public boolean hasChanges() {
-        log.info("Version editor view has changes {} {} {}", ignoreChanges, metadataEditor, codeEditor);
         return !ignoreChanges && (metadataEditor.hasChanges() || codeEditor.hasChanges());
     }
 
@@ -128,12 +125,9 @@ public class VersionMainView extends VersionMainEditor implements EditingView {
     }
 
     private void checkAndSaveVersion() {
-        log.info("Version editor view check and save has code editor {}", codeEditor);
         codeEditor.prepareSave();
         ClassificationVersion classificationVersion = codeEditor.getClassificationVersion();
         boolean wasPublished = classificationVersion.isPublishedInAnyLanguage();
-        log.info("Version editor view check and save was published {}", wasPublished);
-        log.info("Version editor view check and save has user context {}", userContext);
         if (metadataEditor.updateVersion(classificationVersion, classificationFacade) && publicationChoiceEditor
                 .checkAndSetPublished(userContext.isAdministrator(), classificationVersion)) {
             if (wasPublished) {
@@ -143,7 +137,6 @@ public class VersionMainView extends VersionMainEditor implements EditingView {
                             saveVersion(classificationVersion, InformSubscribers.createWhenPublished(changelog));
                         }));
             } else {
-                log.info("Version editor view check and save was not published");
                 saveVersion(classificationVersion, InformSubscribers.createWhenWasUnpublished(classificationVersion));
             }
         }
@@ -156,9 +149,7 @@ public class VersionMainView extends VersionMainEditor implements EditingView {
     }
 
     private void saveVersion(ClassificationVersion version, InformSubscribers informSubscribers) {
-        log.info("Version editor view save version {}", version);
-        log.info("Version editor view save version inform subscribers {}", informSubscribers);
-        log.info("Version editor view save version classification facade {}", classificationFacade);
+        // try catch?
         classificationFacade.saveAndIndexVersion(version, informSubscribers);
         VaadinUtil.showSavedMessage();
         if (versionAccordion.getSelectedTab() == codeEditor) {

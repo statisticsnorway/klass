@@ -52,7 +52,6 @@ public class VersionEditorView extends VersionEditorDesign implements HasEditing
         thirdLanguageButton.addClickListener(event -> enableThirdLanguage());
         languageToggleButton.addClickListener(event -> toggleLanguages());
         enableAlias(false);
-        log.info("Version editor view initialized");
     }
 
     private void toggleLanguages() {
@@ -118,7 +117,6 @@ public class VersionEditorView extends VersionEditorDesign implements HasEditing
 
 
     public void init(ClassificationVersion classificationVersion) {
-        log.info("Version editor initialized with version {}", classificationVersion);
         this.classificationVersion = checkNotNull(classificationVersion);
         resetForm();
 
@@ -186,7 +184,6 @@ public class VersionEditorView extends VersionEditorDesign implements HasEditing
         if (!checkForm()) {
             return false;
         }
-        log.info("Updating version {} facade {}", classificationVersion, classificationFacade);
         Date from = fromDate.getValue();
         Date to = toDate.getValue();
         DateRange newRange = null;
@@ -367,9 +364,6 @@ public class VersionEditorView extends VersionEditorDesign implements HasEditing
 
         DateRange newRange = DateRange.create(TimeUtil.toLocalDate(fromDate.getValue()),
                 VaadinUtil.convertToExclusive(TimeUtil.toLocalDate(toDate.getValue())));
-        log.info("hasChanges newRange: {}", newRange);
-        log.info("hasChanges classification version: {}", classificationVersion);
-        log.info("hasChanges classification version primary language: {}", classificationVersion.getPrimaryLanguage());
         Language primaryLanguage = classificationVersion.getPrimaryLanguage();
         Language secondLanguage = Language.getSecondLanguage(primaryLanguage);
         Language thirdLanguage = Language.getThirdLanguage(primaryLanguage);
