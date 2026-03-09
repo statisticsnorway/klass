@@ -1,9 +1,18 @@
 name: klass-forvaltning-dev-build-and-deploy.yml
 on:
-  #push:
-    #branches:
-      # - log-user-context
   workflow_dispatch:
+    inputs:
+      ttl:
+        description: "Select required time for app to live"
+        required: true
+        default: '1h'
+        type: choice
+        options:
+          - 1h
+          - 2h
+          - 4h
+          - 8h
+          - 36h
 
 jobs:
   docker-build:
@@ -59,3 +68,4 @@ jobs:
           DEPLOY_SERVER: deploy.ssb.cloud.nais.io:443
           WORKLOAD_IMAGE: ${{ needs.docker-build.outputs.image }}
           TELEMETRY: ${{ needs.docker-build.outputs.telemetry }}
+          VAR: time-to-live=${{ github.event.inputs.ttl }}

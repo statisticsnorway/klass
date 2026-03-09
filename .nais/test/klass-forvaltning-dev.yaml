@@ -10,6 +10,7 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-body-size: "8m"
 spec:
   port: 8081
+  ttl: "{{ time-to-live }}"
   ingresses:
     - https://klass-dev.intern.test.ssb.no/klass/admin
   accessPolicy:
