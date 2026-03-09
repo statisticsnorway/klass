@@ -60,7 +60,6 @@ public class EditVariantEditorView extends EditVariantEditorDesign implements Ed
     @Autowired
     private UserService userService;
 
-    // Add fields so value are injected down - cbi
     @Autowired
     private ApplicationContext applicationContext;
     @Autowired
@@ -78,12 +77,16 @@ public class EditVariantEditorView extends EditVariantEditorDesign implements Ed
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
+        log.debug(
+                "Enter variant editing view with application context {}, user service {} and classification variant xml service {}",
+                applicationContext,
+                userService,
+                xmlService
+        );
         EditingState editingState = VaadinUtil.getKlassState().getAndClearEditingState();
         Long variantId = ParameterUtil.getRequiredLongParameter(PARAM_ID, event.getParameters());
         variant = classificationFacade.getRequiredClassificationVariant(variantId);
-        // Inject values ? - cbi
         metadataEditor.init(variant.getPrimaryLanguage(), userService, userContext);
-        log.info("Edit variant editor view with user service: {}", userService);
         metadataEditor.setContactPerson(variant.getContactPerson());
         for (Language language : supportedLanguages) {
             metadataEditor.setName(language, variant.getNameBase(language));
