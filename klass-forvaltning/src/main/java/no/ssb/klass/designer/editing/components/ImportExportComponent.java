@@ -56,7 +56,6 @@ public class ImportExportComponent<T extends ClassificationEntityOperations> {
     protected T entity;
     protected String datatypeName;
 
-    @Autowired
     public ImportExportComponent(ApplicationContext applicationContext, AbstractXmlService<T> xmlService,
             Button importButton, Button exportButton) {
         this.applicationContext = applicationContext;
@@ -68,11 +67,7 @@ public class ImportExportComponent<T extends ClassificationEntityOperations> {
         fileDownloader.extend(exportButton);
     }
 
-    public void init(T entity, String datatypeName, ApplicationContext applicationContext, AbstractXmlService<T> xmlService) {
-        // Init twice?
-        this.applicationContext = applicationContext;
-        this.xmlService = xmlService;
-        log.debug("Init ImportExport component with application context {} and xml service", applicationContext, xmlService);
+    public void init(T entity, String datatypeName) {
         this.entity = entity;
         this.datatypeName = datatypeName;
         streamResource.setFilename(xmlService.createFileName(entity));
