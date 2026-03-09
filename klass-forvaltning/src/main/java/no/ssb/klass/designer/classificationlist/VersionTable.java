@@ -51,16 +51,9 @@ public class VersionTable extends AbstractTable {
     private final StreamResource streamResource = new StreamResource(this::generateExportData, "");
     private final FileDownloader fileDownloader = new FileDownloader(streamResource);
 
-    // Moved from field injection to constructor - cbi
     private ApplicationContext applicationContext;
-
-    // Moved from field injection to constructor - cbi
     private ClassificationFacade classificationFacade;
-
-    // Moved from field injection to constructor - cbi
     private UserContext userContext;
-
-    // Moved from field injection to constructor - cbi
     private FullVersionExportService exportService;
 
     private Table table;
@@ -93,7 +86,7 @@ public class VersionTable extends AbstractTable {
         rootLayout.addComponents(createHeader("Versjoner", exportVersionButton, addVersionButton),
                 wrapFilter(filterBox), table);
         rootLayout.setExpandRatio(table, 1);
-        log.info("Version table initialized {}", this);
+        log.debug("Init Version table {}", this);
     }
 
     private InputStream generateExportData() {
@@ -135,7 +128,6 @@ public class VersionTable extends AbstractTable {
     private void copyVersion(ClassificationTable classificationTable) {
         if (classificationTable.getSelectedClassificationId() != null) {
             NewVersionWindow copyVersionWindow = applicationContext.getBean(NewVersionWindow.class);
-            // Added classificationFacade - cbi
             copyVersionWindow.init(classificationTable.getSelectedClassificationId(),
                     classificationTable.getSelectedClassificationName(), classificationFacade);
             UI.getCurrent().addWindow(copyVersionWindow);
