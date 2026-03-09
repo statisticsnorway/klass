@@ -54,7 +54,6 @@ public class MetadataEditorComponent extends CustomComponent implements HasEditi
             design.primaryDescriptionTextArea, design.contactPersonCombobox);
 
     private UserService userService;
-
     private UserContext userContext;
 
     private Language primaryLanguage;
@@ -83,8 +82,6 @@ public class MetadataEditorComponent extends CustomComponent implements HasEditi
         design.primaryDescriptionTextArea.setRequiredError("Beskrivelse for primærspråk er påkrevd");
         design.contactPersonCombobox.setRequiredError("Kontaktperson er påkrevd");
         configureContactPersonCombobox();
-        log.info("Created empty MetadataEditorComponent with user service {}", userService);
-        log.info("Created empty MetadataEditorComponent with user context {}", userContext);
     }
 
    public void setUserService(UserService userService) {
@@ -135,8 +132,7 @@ public class MetadataEditorComponent extends CustomComponent implements HasEditi
         updateLanguagePanels(primaryLanguage);
         populateContactPersons();
         resetValidations();
-        log.info("Init MetadataEditorComponent with user service {}", userService);
-        log.info("Init MetadataEditorComponent with user context {}", userContext);
+        log.debug("Init MetadataEditorComponent with user service {} and user context", userService, userContext);
     }
 
     @Override
