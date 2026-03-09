@@ -38,10 +38,7 @@ public class ClassificationTable extends AbstractTable {
     private static final Logger log = LoggerFactory.getLogger(ClassificationTable.class);
     private static final String NEW_CLASSIFICATION_TOOLTIP = "Lag nytt kodeverk";
 
-    // moved from field injection to constructor - cbi
     private ClassificationFacade classificationFacade;
-
-    // moved from field injection to constructor - cbi
     private UserContext userContext;
 
     private TextField filterBox;
