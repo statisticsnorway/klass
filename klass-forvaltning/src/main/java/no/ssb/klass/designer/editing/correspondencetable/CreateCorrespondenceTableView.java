@@ -49,11 +49,9 @@ public class CreateCorrespondenceTableView extends CreateCorrespondenceTableDesi
     @Autowired
     private ClassificationFacade classificationFacade;
 
-    // Added for injecting in metadataEditorView - cbi
     @Autowired
     private UserService userService;
 
-    // Added for injecting in metadataEditorView - cbi
     @Autowired
     private UserContext userContext;
 
