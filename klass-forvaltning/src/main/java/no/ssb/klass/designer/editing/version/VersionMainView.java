@@ -45,7 +45,6 @@ public class VersionMainView extends VersionMainEditor implements EditingView {
     private UserContext userContext;
     private PublicationChoiceEditor publicationChoiceEditor;
 
-    // Added versionXmlService and applicationContext for injecting values into code editor - cbi
     private ClassificationVersionXmlService versionXmlService;
     private ApplicationContext applicationContext;
 
@@ -60,14 +59,7 @@ public class VersionMainView extends VersionMainEditor implements EditingView {
         actionButtons.addCancelClickListener(this::cancelClick);
         versionAccordion.addSelectedTabChangeListener(eventTabChange -> metadataEditor.updateVersion(codeEditor
                 .getClassificationVersion(), classificationFacade));
-        log.debug(
-                "Creating version main view with version xml service {}, application context {}, user context {} and " +
-                        "classification facade {}",
-                versionXmlService,
-                applicationContext,
-                userContext,
-                classificationFacade
-        );
+        log.debug("Creating version main view {}", this);
     }
 
     @Override
@@ -82,7 +74,6 @@ public class VersionMainView extends VersionMainEditor implements EditingView {
         checkUserAccess(classificationVersion);
         // NB. checkUserAccess() must be before codeEditor.init(..), if not a NewCodeEditor will be
         // added even when user does not have permission to alter version.
-        // Added set methods for CodeEditorView in order to inject these values - cbi
         codeEditor.setVersionXmlService(versionXmlService);
         codeEditor.setApplicationContext(applicationContext);
         codeEditor.setClassificationFacade(classificationFacade);
@@ -93,11 +84,9 @@ public class VersionMainView extends VersionMainEditor implements EditingView {
         } else {
             metadataEditor.restorePreviousEditingState(editingState);
         }
-        log.info(
+        log.debug(
                 "Enter version editor view with user context {}, version xml service {}, application context {} " +
                         "and classification facade {}", userContext, versionXmlService, applicationContext, classificationFacade);
-        log.info("Enter version editor view with code editor {}", codeEditor);
-        log.info("Enter version editor view with metadata editor {}", metadataEditor);
     }
 
     @Override
