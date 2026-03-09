@@ -93,8 +93,6 @@ public class VariantCodeEditorView extends VariantCodeEditorDesign implements Ha
 
     }
 
-    // Init application context and xml service here - cbi
-    // check if version should do the same - cbi
     public void init(ClassificationVariant variant,
                      ClassificationFacade classificationFacade,
                      ApplicationContext applicationContext,
@@ -102,8 +100,6 @@ public class VariantCodeEditorView extends VariantCodeEditorDesign implements Ha
     ) {
         this.xmlService = xmlService;
         this.applicationContext = applicationContext;
-        log.info("Initializing variant code editor with application context {}", applicationContext);
-        log.info("Initializing variant code editor with xml service {}", xmlService);
         this.variant = variant;
         this.classificationFacade = classificationFacade;
         this.version = reloadToAvoidLazyInitializationException(variant.getClassificationVersion());
@@ -132,7 +128,7 @@ public class VariantCodeEditorView extends VariantCodeEditorDesign implements Ha
         originalVersion.addToSharedActionListener(shortcutListener);
         variantCodeTable.addToSharedActionListener(shortcutListener);
         translationCodeTable.addToSharedActionListener(shortcutListener);
-        log.info("Variant code editor view: xml service {}", xmlService);
+        log.debug("Initializing variant code editor {}", this);
     }
 
     private void clearBeforeImport(ClassificationVariant variant) {
