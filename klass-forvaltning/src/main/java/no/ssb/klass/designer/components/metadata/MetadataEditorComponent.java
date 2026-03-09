@@ -84,10 +84,6 @@ public class MetadataEditorComponent extends CustomComponent implements HasEditi
         configureContactPersonCombobox();
     }
 
-   public void setUserService(UserService userService) {
-        this.userService = userService;
-   }
-
     public void setDatesVisible(boolean visible) {
         design.dateLayout.setVisible(visible);
         design.dateFillerLayout.setVisible(visible);
