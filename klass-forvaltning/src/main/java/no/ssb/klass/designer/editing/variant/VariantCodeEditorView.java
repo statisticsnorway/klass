@@ -40,13 +40,8 @@ public class VariantCodeEditorView extends VariantCodeEditorDesign implements Ha
     private ClassificationVersion version;
     private ImportExportComponent<ClassificationVariant> importExportComponent;
 
-    @Autowired
     private ClassificationVariantXmlService xmlService;
-
-    @Autowired
     private ClassificationFacade classificationFacade;
-
-    @Autowired
     private ApplicationContext applicationContext;
 
     private SharedEscapeShortcutListener shortcutListener;
@@ -93,6 +88,7 @@ public class VariantCodeEditorView extends VariantCodeEditorDesign implements Ha
 
     }
 
+    @Autowired
     public void init(ClassificationVariant variant,
                      ClassificationFacade classificationFacade,
                      ApplicationContext applicationContext,
@@ -100,8 +96,8 @@ public class VariantCodeEditorView extends VariantCodeEditorDesign implements Ha
     ) {
         this.xmlService = xmlService;
         this.applicationContext = applicationContext;
-        this.variant = variant;
         this.classificationFacade = classificationFacade;
+        this.variant = variant;
         this.version = reloadToAvoidLazyInitializationException(variant.getClassificationVersion());
         primaryLanguage.setValue(variant.getPrimaryLanguage().getDisplayName());
         variantCodeTable.init(eventbus, variant, version, variant.getPrimaryLanguage(), classificationFacade);
