@@ -131,7 +131,7 @@ public class CodeEditorView extends CodeEditorDesign implements HasEditingState{
         importExportComponent = new ImportExportComponent<>(
                 context, versionXmlService, importButton, exportButton);
         log.debug("Initializing CodeEditorView {}", importExportComponent);
-        importExportComponent.init(version, "versjon", context, versionXmlService);
+        importExportComponent.init(version, "versjon");
         importExportComponent.setOnCompleteCallback(this::updateView);
         importExportComponent.setClearEntityCallback(this::deleteExistingItemsBeforeImport);
 

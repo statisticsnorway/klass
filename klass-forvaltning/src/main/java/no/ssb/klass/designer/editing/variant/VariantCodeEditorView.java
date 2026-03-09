@@ -121,7 +121,7 @@ public class VariantCodeEditorView extends VariantCodeEditorDesign implements Ha
 
         importExportComponent = new ImportExportComponent<>(
                 applicationContext, xmlService, importButton, exportButton);
-        importExportComponent.init(variant, "Variant", applicationContext, xmlService);
+        importExportComponent.init(variant, "Variant");
         importExportComponent.setOnCompleteCallback(this::updateView);
         importExportComponent.setClearEntityCallback(this::clearBeforeImport);
         configureDragDrop();
