@@ -53,7 +53,6 @@ public class UserContextImpl implements UserContext {
         VaadinSession session = VaadinSession.getCurrent();
         this.userService = userService;
         User user = session.getAttribute(User.class);
-        log.info("User: {}", user);
         if (user == null) {
             log.error("User is null! Application features may be broken.");
         } else {
