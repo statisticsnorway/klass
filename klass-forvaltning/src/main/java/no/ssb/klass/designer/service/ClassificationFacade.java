@@ -116,7 +116,7 @@ public class ClassificationFacade {
     @Transactional(propagation = Propagation.NEVER)
     public ClassificationSeries saveAndIndexClassification(ClassificationSeries classification) {
         classificationService.saveNotIndexClassification(classification);
-        log.info("Save classification  befire index classification facade {}", classification);
+        log.debug("Classification saved {}, starting indexing", classification);
         searchService.indexAsync(classification.getId());
         subscriberService.informSubscribersOfUpdatedClassification(classification,
                 "Endring i metadata for klassifikasjonen: " + classification.getNameInPrimaryLanguage(),
@@ -131,7 +131,7 @@ public class ClassificationFacade {
     public CorrespondenceTable saveAndIndexCorrespondenceTable(CorrespondenceTable correspondenceTable,
             InformSubscribers informSubscribers) {
         classificationService.saveNotIndexCorrespondenceTable(correspondenceTable);
-        log.info("Check index async classifcation table {}", correspondenceTable);
+        log.debug("Correspondence table saved {}, starting indexing", correspondenceTable);
         searchService.indexAsync(correspondenceTable.getOwnerClassification().getId());
         if (informSubscribers.isInformSubscribers()) {
             subscriberService.informSubscribersOfUpdatedClassification(correspondenceTable.getOwnerClassification(),
@@ -148,7 +148,7 @@ public class ClassificationFacade {
     public ClassificationVariant saveAndIndexVariant(ClassificationVariant variant,
             InformSubscribers informSubscribers) {
         classificationService.saveNotIndexVariant(variant);
-        log.info("Check index async classifcation variant {}", variant);
+        log.debug("Classification variant saved {}, starting indexing", variant);
         searchService.indexAsync(variant.getOwnerClassification().getId());
         if (informSubscribers.isInformSubscribers()) {
             subscriberService.informSubscribersOfUpdatedClassification(variant.getOwnerClassification(),
@@ -165,7 +165,7 @@ public class ClassificationFacade {
     public ClassificationVersion saveAndIndexVersion(ClassificationVersion version,
             InformSubscribers informSubscribers) {
         classificationService.saveNotIndexVersion(version);
-        // try catch finally? cbi
+        log.debug("Classification version saved {}, starting indexing", version);
         searchService.indexAsync(version.getOwnerClassification().getId());
         if (informSubscribers.isInformSubscribers()) {
             subscriberService.informSubscribersOfUpdatedClassification(version.getOwnerClassification(),
@@ -186,7 +186,7 @@ public class ClassificationFacade {
     public void deleteAndIndexClassification(User currentUser, ClassificationSeries classification)
             throws KlassMessageException {
         classificationService.deleteNotIndexClassification(currentUser, classification);
-        // try catch finally ? cbi
+        log.debug("Classification {} deleted, starting indexing", classification);
         searchService.indexAsync(classification.getId());
         subscriberService.informSubscribersOfUpdatedClassification(classification, "Klassifikasjonen er slettet: "
                 + classification.getNameInPrimaryLanguage(), "Klassifikasjonen er slettet");
@@ -199,7 +199,7 @@ public class ClassificationFacade {
     public void deleteAndIndexCorrespondenceTable(User currentUser,
             CorrespondenceTable correspondenceTable) throws KlassMessageException {
         classificationService.deleteNotIndexCorrespondenceTable(currentUser, correspondenceTable);
-        // try catch finally ? cbi
+        log.debug("Correspondence table {} deleted, starting indexing", correspondenceTable);
         searchService.indexAsync(correspondenceTable.getOwnerClassification().getId());
         if (correspondenceTable.isPublishedInAnyLanguage()) {
             subscriberService.informSubscribersOfUpdatedClassification(correspondenceTable.getOwnerClassification(),
@@ -215,7 +215,7 @@ public class ClassificationFacade {
     public void deleteAndIndexVariant(User currentUser, ClassificationVariant variant)
             throws KlassMessageException {
         classificationService.deleteNotIndexVariant(currentUser, variant);
-        // try catch finally ? cbi
+        log.debug("Variant {} deleted, starting indexing", variant);
         searchService.indexAsync(variant.getOwnerClassification().getId());
         if (variant.isPublishedInAnyLanguage()) {
             subscriberService.informSubscribersOfUpdatedClassification(variant.getOwnerClassification(),
@@ -229,7 +229,7 @@ public class ClassificationFacade {
     @Transactional(propagation = Propagation.NEVER)
     public void deleteAndIndexVersion(User currentUser, ClassificationVersion version) throws KlassMessageException {
         classificationService.deleteNotIndexVersion(currentUser, version);
-        // try catch finally ? cbi
+        log.debug("Version {} deleted, starting indexing", version);
         searchService.indexAsync(version.getOwnerClassification().getId());
         if (version.isPublishedInAnyLanguage()) {
             subscriberService.informSubscribersOfUpdatedClassification(version.getOwnerClassification(),
