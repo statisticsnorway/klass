@@ -137,8 +137,7 @@ public class ClassificationTable extends AbstractTable {
         }
 
         private ClassificationSeries reloadToAvoidLazyInitializationException(ClassificationSeries classification) {
-            log.info("Reloading classification series " + classification);
-            log.info("Classification facade {}", classificationFacade);
+            log.debug("Reloading classification {} with classification facade", classification, classificationFacade);
             return classificationFacade.getRequiredClassificationSeries(classification.getId());
         }
 
