@@ -33,7 +33,6 @@ import no.ssb.klass.core.model.ConcreteClassificationItem;
 import no.ssb.klass.core.model.Language;
 import no.ssb.klass.core.util.Translatable;
 
-
 /**
  *
  * Service that takes care of xml import and export for ClassificationVersion
