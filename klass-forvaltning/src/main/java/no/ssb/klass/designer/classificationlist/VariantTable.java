@@ -42,10 +42,7 @@ public class VariantTable extends AbstractTable {
 
     private ApplicationContext applicationContext;
 
-    // Moved from field injection to constructor - cbi
     private ClassificationFacade classificationFacade;
-
-    // Moved from field injection to constructor - cbi
     private UserContext userContext;
 
     private Table table;
@@ -72,8 +69,7 @@ public class VariantTable extends AbstractTable {
         rootLayout.addComponents(createHeader("Korrespondansetabell/variant", addCorrespondenceButton,
                 addVariantButton), wrapFilter(filterBox), table);
         rootLayout.setExpandRatio(table, 1);
-        log.info("Variant table view with userContext {} and apllicationContext {}", userContext, applicationContext);
-
+        log.debug("Init Variant table view with userContext {} and applicationContext {}", userContext, applicationContext);
     }
 
     public void selectItem(final ClassificationEntityOperations item) {
