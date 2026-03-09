@@ -63,21 +63,18 @@ public class ImportExportComponent<T extends ClassificationEntityOperations> {
         this.xmlService = xmlService;
         this.importButton = importButton;
         this.exportButton = exportButton;
-        this.xmlService = xmlService;
 
         importButton.addClickListener(this::importClick);
         fileDownloader.extend(exportButton);
     }
 
     public void init(T entity, String datatypeName, ApplicationContext applicationContext, AbstractXmlService<T> xmlService) {
+        // Init twice?
         this.applicationContext = applicationContext;
         this.xmlService = xmlService;
-        log.info("Initializing import component with application context {}", applicationContext);
-        log.info("Initializing import component with xml service {}", xmlService);
+        log.debug("Init ImportExport component with application context {} and xml service", applicationContext, xmlService);
         this.entity = entity;
-        log.info("Initializing import component with entity {}", entity);
         this.datatypeName = datatypeName;
-        log.info("Initializing import component with datatype {}", datatypeName);
         streamResource.setFilename(xmlService.createFileName(entity));
         if (entity instanceof Publishable && entity.isPublishedInAnyLanguage()) {
             disableImportButton(true, "Import er deaktivert for gitt " + datatypeName
