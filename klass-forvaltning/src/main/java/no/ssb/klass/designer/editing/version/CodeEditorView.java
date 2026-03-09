@@ -37,8 +37,11 @@ public class CodeEditorView extends CodeEditorDesign implements HasEditingState{
     private ClassificationVersion version;
     private final EventBus eventbus;
 
+    @Autowired
     private ApplicationContext context;
+    @Autowired
     private ClassificationFacade classificationFacade;
+    @Autowired
     private ClassificationVersionXmlService versionXmlService;
 
     private SharedEscapeShortcutListener shortcutListener;
