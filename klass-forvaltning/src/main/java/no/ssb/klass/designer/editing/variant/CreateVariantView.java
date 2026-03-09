@@ -58,7 +58,7 @@ public class CreateVariantView extends CreateVariantDesign implements EditingVie
     private ClassificationVariant variant;
     private ClassificationVersion version;
 
-    // source to this
+    // source to this ?
     @Autowired
     private UserService userService;
 
@@ -90,8 +90,7 @@ public class CreateVariantView extends CreateVariantDesign implements EditingVie
                 .getDetachedUserObject());
         variant.setClassificationVersion(version);
         variant.setDateRange(dateRange);
-        log.info("CreateVariantView: variant {}", variant);
-
+        log.debug("Enter CreateVariantView with variant {} and user service {}", variant, userService);
     }
 
     @Override
@@ -111,7 +110,6 @@ public class CreateVariantView extends CreateVariantDesign implements EditingVie
 
     public ClassificationVersion getVersionFromParameters(ViewChangeListener.ViewChangeEvent event) {
         Long versionId = ParameterUtil.getRequiredLongParameter(PARAM_VERSION_ID, event.getParameters());
-        log.info("Create variant view with classification facade {}", classificationFacade);
         return classificationFacade.getRequiredClassificationVersion(versionId);
     }
 
