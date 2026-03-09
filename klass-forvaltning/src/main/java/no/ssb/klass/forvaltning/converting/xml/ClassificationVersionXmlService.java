@@ -149,8 +149,8 @@ public class ClassificationVersionXmlService extends XmlCodeHierarchyService<Cla
                 .map(XmlVersionItem::new)
                 .sorted(Comparator.comparing(XmlVersionItem::getCode))
                 .collect(Collectors.toCollection(LinkedList::new));
-        XmlVersionExportContainer container = new XmlVersionExportContainer(list);
 
+        XmlVersionExportContainer container = new XmlVersionExportContainer(list);
         container.setSchemaBaseUrl(SchemaBaseUrl);
         return container;
     }
