@@ -37,7 +37,6 @@ public class CodeEditorView extends CodeEditorDesign implements HasEditingState{
     private ClassificationVersion version;
     private final EventBus eventbus;
 
-    // These field injections can not be moved to constructor because of bean initialization needs empty constructor - cbi
     @Autowired
     private ApplicationContext context;
 
@@ -65,7 +64,7 @@ public class CodeEditorView extends CodeEditorDesign implements HasEditingState{
         });
     }
 
-    // Added setters for injecting values into prototype scope - cbi
+
     public void setVersionXmlService(ClassificationVersionXmlService versionXmlService) {
         this.versionXmlService = versionXmlService;
     }
@@ -118,10 +117,9 @@ public class CodeEditorView extends CodeEditorDesign implements HasEditingState{
         }
     }
 
-    // check if we can use init for injecting values ? - cbi
     public void init(ClassificationVersion version) {
         this.version = version;
-        log.info("Initializing Code editor view with version xml service: {}", versionXmlService);
+        log.debug("Initializing Code editor view with version xml service: {}", versionXmlService);
         primaryCodeTable.init(eventbus, version, version.getPrimaryLanguage(), classificationFacade);
         primaryLevels.init(eventbus, version, version.getPrimaryLanguage(), classificationFacade);
         editTranslations.initWithAutomaticTranslation(version.getPrimaryLanguage(),
@@ -130,7 +128,6 @@ public class CodeEditorView extends CodeEditorDesign implements HasEditingState{
         translationLevels.init(eventbus, version, Language.getSecondLanguage(version.getPrimaryLanguage()));
         showTranslations(false);
         updatePrimaryLanguageLabel();
-        // This is important to check for how xml handles files - cbi
         importExportComponent = new ImportExportComponent<>(
                 context, versionXmlService, importButton, exportButton);
         log.debug("Initializing CodeEditorView {}", importExportComponent);
