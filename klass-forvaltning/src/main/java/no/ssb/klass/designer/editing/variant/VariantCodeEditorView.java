@@ -24,10 +24,14 @@ import no.ssb.klass.designer.listeners.SharedEscapeShortcutListener;
 import no.ssb.klass.designer.service.ClassificationFacade;
 import no.ssb.klass.designer.util.ComponentUtil;
 import no.ssb.klass.designer.windows.AutomaticTranslationWindow;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @SpringComponent
 @PrototypeScope
 public class VariantCodeEditorView extends VariantCodeEditorDesign implements HasEditingState {
+
+    private static final Logger log = LoggerFactory.getLogger(VariantCodeEditorView.class);
 
     private static final String SINGLE_ELEMENTS = "Enkeltkoder";
     private static final String ELEMENTS_WITH_CHILDREN = "Koder med underelementer";
@@ -36,13 +40,8 @@ public class VariantCodeEditorView extends VariantCodeEditorDesign implements Ha
     private ClassificationVersion version;
     private ImportExportComponent<ClassificationVariant> importExportComponent;
 
-    @Autowired
     private ClassificationVariantXmlService xmlService;
-
-    @Autowired
     private ClassificationFacade classificationFacade;
-
-    @Autowired
     private ApplicationContext applicationContext;
 
     private SharedEscapeShortcutListener shortcutListener;
@@ -57,7 +56,6 @@ public class VariantCodeEditorView extends VariantCodeEditorDesign implements Ha
         eventbus.register(translationCodeTable);
         selectEditLanguageOrVariant.addEditLanguagesListener(this::switchCodeTables);
         selectEditLanguageOrVariant.addLanguageChangeListener(this::switchLanguage);
-
     }
 
     private void configureDragDrop() {
@@ -90,17 +88,22 @@ public class VariantCodeEditorView extends VariantCodeEditorDesign implements Ha
 
     }
 
-    public void init(ClassificationVariant variant) {
+    @Autowired
+    public void init(ClassificationVariant variant,
+                     ClassificationFacade classificationFacade,
+                     ApplicationContext applicationContext,
+                     ClassificationVariantXmlService xmlService
+    ) {
+        this.xmlService = xmlService;
+        this.applicationContext = applicationContext;
+        this.classificationFacade = classificationFacade;
         this.variant = variant;
         this.version = reloadToAvoidLazyInitializationException(variant.getClassificationVersion());
-
         primaryLanguage.setValue(variant.getPrimaryLanguage().getDisplayName());
         variantCodeTable.init(eventbus, variant, version, variant.getPrimaryLanguage(), classificationFacade);
         variantLevels.init(eventbus, variant, variant.getPrimaryLanguage(), classificationFacade);
         translatableLevels.init(eventbus, variant, Language.getSecondLanguage(variant.getPrimaryLanguage()));
         variantName.setValue(variant.getNameInPrimaryLanguage());
-
-
 
         originalVersion.init(eventbus, version, variant.getPrimaryLanguage());
         originalVersion.markAsReferenced(variant.getAllClassificationItems());
@@ -121,7 +124,7 @@ public class VariantCodeEditorView extends VariantCodeEditorDesign implements Ha
         originalVersion.addToSharedActionListener(shortcutListener);
         variantCodeTable.addToSharedActionListener(shortcutListener);
         translationCodeTable.addToSharedActionListener(shortcutListener);
-
+        log.debug("Initializing variant code editor {}", this);
     }
 
     private void clearBeforeImport(ClassificationVariant variant) {

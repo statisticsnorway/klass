@@ -30,12 +30,12 @@ public class SubscriberUnitTab extends SubscriberUnitTabDesign {
 
     private static final int LINES_PER_PAGE = 100;
     public static final char CSV_SEPARATOR = ';';
-    @Autowired
     private StatisticsService statisticsService;
     private SubscriberModeChoice choice;
     private String type;
 
-    public void init() {
+    public void init(StatisticsService statisticsService) {
+        this.statisticsService = statisticsService;
         subscriberUnitTable.setVisible(true);
         makeDetailedElementsVisible(false);
         createSubscriberStatistics();
@@ -85,8 +85,8 @@ public class SubscriberUnitTab extends SubscriberUnitTabDesign {
 
     private SubscriberStatisticsRows getReportData() {
         SubscriberStatisticsDto statistics = statisticsService.getSubscriberStatistics();
-        return  new SubscriberStatisticsRows(statistics.numberOfSubscribers, 
-                statistics.numberOfInternalSubscribers, 
+        return  new SubscriberStatisticsRows(statistics.numberOfSubscribers,
+                statistics.numberOfInternalSubscribers,
                 statistics.numberOfExternalSubscribers);
     }
 

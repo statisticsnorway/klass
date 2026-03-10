@@ -28,6 +28,9 @@ import no.ssb.klass.designer.service.InformSubscribers;
 import no.ssb.klass.designer.user.UserContext;
 import no.ssb.klass.designer.util.ParameterUtil;
 import no.ssb.klass.designer.util.VaadinUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import no.ssb.klass.core.service.UserService;
 
 /**
  * @author Mads Lundemo, SSB.
@@ -36,6 +39,8 @@ import no.ssb.klass.designer.util.VaadinUtil;
 @SpringView(name = CreateVariantView.NAME)
 @SuppressWarnings("serial")
 public class CreateVariantView extends CreateVariantDesign implements EditingView {
+
+    private static final Logger log = LoggerFactory.getLogger(CreateVariantView.class);
 
     public static final String NAME = "createVariant";
     public static final String PARAM_NAME = "variantName";
@@ -46,15 +51,20 @@ public class CreateVariantView extends CreateVariantDesign implements EditingVie
 
     private boolean ignoreChanges = false;
 
-    @Autowired
     private ClassificationFacade classificationFacade;
-    @Autowired
+
     private UserContext userContext;
 
     private ClassificationVariant variant;
     private ClassificationVersion version;
 
-    public CreateVariantView() {
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    public CreateVariantView(ClassificationFacade classificationFacade, UserContext userContext) {
+        this.classificationFacade = classificationFacade;
+        this.userContext = userContext;
         actionButtons.setConfirmText("Lagre");
         actionButtons.addConfirmClickListener(this::saveClick);
         actionButtons.addCancelClickListener(this::cancelClick);
@@ -70,7 +80,7 @@ public class CreateVariantView extends CreateVariantDesign implements EditingVie
         String name = ParameterUtil.getRequiredStringParameter(PARAM_NAME, event.getParameters());
         version = getVersionFromParameters(event);
         header.setTypeText(TypeAndNameHeaderComponent.TEXT_VARIANT_OF + version.getNameInPrimaryLanguage());
-        metadataEditor.init(version.getPrimaryLanguage());
+        metadataEditor.init(version.getPrimaryLanguage(), userService, userContext);
         metadataEditor.setName(version.getPrimaryLanguage(), name);
         metadataEditor.setContactPerson(userContext.getDetachedUserObject());
         metadataEditor.setDateRange(dateRange);
@@ -79,7 +89,7 @@ public class CreateVariantView extends CreateVariantDesign implements EditingVie
                 .getDetachedUserObject());
         variant.setClassificationVersion(version);
         variant.setDateRange(dateRange);
-
+        log.debug("Enter CreateVariantView with variant {} and user service {}", variant, userService);
     }
 
     @Override

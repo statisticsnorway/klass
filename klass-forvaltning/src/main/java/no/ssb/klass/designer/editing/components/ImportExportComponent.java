@@ -25,6 +25,9 @@ import no.ssb.klass.core.model.Publishable;
 import no.ssb.klass.designer.util.ConfirmationDialog;
 import no.ssb.klass.designer.util.ParameterUtil;
 import no.ssb.klass.designer.windows.UploadFileWindow;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @author Mads Lundemo, SSB.
@@ -53,12 +56,13 @@ public class ImportExportComponent<T extends ClassificationEntityOperations> {
     protected T entity;
     protected String datatypeName;
 
+    @Autowired
     public ImportExportComponent(ApplicationContext applicationContext, AbstractXmlService<T> xmlService,
             Button importButton, Button exportButton) {
         this.applicationContext = applicationContext;
+        this.xmlService = xmlService;
         this.importButton = importButton;
         this.exportButton = exportButton;
-        this.xmlService = xmlService;
 
         importButton.addClickListener(this::importClick);
         fileDownloader.extend(exportButton);

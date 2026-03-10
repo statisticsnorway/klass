@@ -19,30 +19,55 @@ import no.ssb.klass.designer.listeners.SharedEscapeShortcutListener;
 import no.ssb.klass.designer.service.ClassificationFacade;
 import no.ssb.klass.designer.util.ParameterUtil;
 import no.ssb.klass.designer.util.VaadinUtil;
+import no.ssb.klass.designer.user.UserContext;
+import no.ssb.klass.forvaltning.converting.xml.FullVersionExportService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+
 
 @PrototypeScope
 @SpringView(name = ClassificationListView.NAME)
 @SuppressWarnings("serial")
 public class ClassificationListView extends ClassificationListDesign implements FilteringView {
+    private static final Logger log = LoggerFactory.getLogger(ClassificationListView.class);
+
     public static final String NAME = "list";
     public static final String PARAM_FAMILY_ID = "familyId";
 
-    @Autowired
     private ClassificationFacade classificationFacade;
-
+    private UserContext userContext;
+    private ApplicationContext applicationContext;
     private final ClassificationFilter classificationFilter;
     private final SharedEscapeShortcutListener sharedEscapeShortcutListener;
 
-    public ClassificationListView() {
+    private FullVersionExportService exportService;
+
+    @Autowired
+    public ClassificationListView(
+            UserContext userContext,
+            ClassificationFacade classificationFacade,
+            FullVersionExportService exportService,
+            ApplicationContext applicationContext
+    ) {
+        this.userContext = userContext;
+        this.classificationFacade = classificationFacade;
+        this.exportService = exportService;
+        this.applicationContext = applicationContext;
         sharedEscapeShortcutListener = new SharedEscapeShortcutListener();
         this.classificationFilter = VaadinUtil.getKlassState().getClassificationFilter();
         backButton.addClickListener(e -> VaadinUtil.navigateTo(ClassificationFamilyView.NAME));
-        classificationTable.init(versionTable, variantTable);
-        versionTable.init(classificationTable, variantTable);
-        variantTable.init(versionTable);
+        classificationTable.init(versionTable, variantTable, userContext, classificationFacade);
+        versionTable.init(classificationTable, variantTable, userContext, classificationFacade, exportService, applicationContext);
+        variantTable.init(versionTable, userContext, classificationFacade, applicationContext);
         classificationTable.addToSharedActionListener(sharedEscapeShortcutListener);
         versionTable.addToSharedActionListener(sharedEscapeShortcutListener);
         variantTable.addToSharedActionListener(sharedEscapeShortcutListener);
+        log.debug(
+                "Creating classification list view with user context {}, " +
+                        "application context {} and classification facade {}",
+                userContext, applicationContext, classificationFacade
+        );
     }
 
     @Override

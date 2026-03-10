@@ -33,6 +33,9 @@ import no.ssb.klass.designer.user.UserContext;
 import no.ssb.klass.designer.util.ParameterUtil;
 import no.ssb.klass.designer.util.VaadinUtil;
 import no.ssb.klass.designer.windows.DescriptionOfChangeWindow;
+import no.ssb.klass.core.service.UserService;
+import no.ssb.klass.forvaltning.converting.xml.ClassificationVariantXmlService;
+import org.springframework.context.ApplicationContext;
 
 /**
  * @author Mads Lundemo, SSB.
@@ -54,6 +57,13 @@ public class EditVariantEditorView extends EditVariantEditorDesign implements Ed
     private ClassificationFacade classificationFacade;
     @Autowired
     private UserContext userContext;
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private ApplicationContext applicationContext;
+    @Autowired
+    private ClassificationVariantXmlService xmlService;
 
     private ClassificationVariant variant;
 
@@ -67,10 +77,16 @@ public class EditVariantEditorView extends EditVariantEditorDesign implements Ed
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
+        log.debug(
+                "Enter variant editing view with application context {}, user service {} and classification variant xml service {}",
+                applicationContext,
+                userService,
+                xmlService
+        );
         EditingState editingState = VaadinUtil.getKlassState().getAndClearEditingState();
         Long variantId = ParameterUtil.getRequiredLongParameter(PARAM_ID, event.getParameters());
         variant = classificationFacade.getRequiredClassificationVariant(variantId);
-        metadataEditor.init(variant.getPrimaryLanguage());
+        metadataEditor.init(variant.getPrimaryLanguage(), userService, userContext);
         metadataEditor.setContactPerson(variant.getContactPerson());
         for (Language language : supportedLanguages) {
             metadataEditor.setName(language, variant.getNameBase(language));
@@ -84,7 +100,7 @@ public class EditVariantEditorView extends EditVariantEditorDesign implements Ed
         checkUserAccess();
         // NB. checkUserAccess() must be before codeEditor.init(..), if not a NewCodeEditor will be
         // added even when user does not have permission to alter variant.
-        codeEditor.init(variant);
+        codeEditor.init(variant, classificationFacade, applicationContext, xmlService);
         if (editingState.isCodeEditorNotMetadataVisible()) {
             accordion.setSelectedTab(codeEditor);
             codeEditor.restorePreviousEditingState(editingState);

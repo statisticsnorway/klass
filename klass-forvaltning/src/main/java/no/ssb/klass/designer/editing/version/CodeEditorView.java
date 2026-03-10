@@ -23,22 +23,24 @@ import no.ssb.klass.designer.listeners.SharedEscapeShortcutListener;
 import no.ssb.klass.designer.service.ClassificationFacade;
 import no.ssb.klass.designer.util.ComponentUtil;
 import no.ssb.klass.designer.windows.AutomaticTranslationWindow;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("serial")
 @SpringComponent
 @PrototypeScope
-public class CodeEditorView extends CodeEditorDesign implements HasEditingState {
+public class CodeEditorView extends CodeEditorDesign implements HasEditingState{
+    private static final Logger log = LoggerFactory.getLogger(CodeEditorView.class);
 
     private ImportExportComponent<ClassificationVersion> importExportComponent;
+
     private ClassificationVersion version;
     private final EventBus eventbus;
 
     @Autowired
     private ApplicationContext context;
-
     @Autowired
     private ClassificationFacade classificationFacade;
-
     @Autowired
     private ClassificationVersionXmlService versionXmlService;
 
@@ -58,8 +60,21 @@ public class CodeEditorView extends CodeEditorDesign implements HasEditingState 
             translationCodeTable.init(eventbus, version, language);
             translationLevels.init(eventbus, version, language);
         });
-
     }
+
+
+    public void setVersionXmlService(ClassificationVersionXmlService versionXmlService) {
+        this.versionXmlService = versionXmlService;
+    }
+
+    public void setApplicationContext(ApplicationContext context) {
+        this.context = context;
+    }
+
+    public void setClassificationFacade(ClassificationFacade classificationFacade) {
+        this.classificationFacade = classificationFacade;
+    }
+
 
     @Override
     public void restorePreviousEditingState(EditingState editingState) {
@@ -100,9 +115,9 @@ public class CodeEditorView extends CodeEditorDesign implements HasEditingState 
         }
     }
 
-
     public void init(ClassificationVersion version) {
         this.version = version;
+        log.debug("Initializing Code editor view with version xml service: {}", versionXmlService);
         primaryCodeTable.init(eventbus, version, version.getPrimaryLanguage(), classificationFacade);
         primaryLevels.init(eventbus, version, version.getPrimaryLanguage(), classificationFacade);
         editTranslations.initWithAutomaticTranslation(version.getPrimaryLanguage(),
@@ -111,16 +126,15 @@ public class CodeEditorView extends CodeEditorDesign implements HasEditingState 
         translationLevels.init(eventbus, version, Language.getSecondLanguage(version.getPrimaryLanguage()));
         showTranslations(false);
         updatePrimaryLanguageLabel();
-
         importExportComponent = new ImportExportComponent<>(
                 context, versionXmlService, importButton, exportButton);
+        log.debug("Initializing CodeEditorView {}", importExportComponent);
         importExportComponent.init(version, "versjon");
         importExportComponent.setOnCompleteCallback(this::updateView);
         importExportComponent.setClearEntityCallback(this::deleteExistingItemsBeforeImport);
 
         primaryCodeTable.addToSharedActionListener(shortcutListener);
         translationCodeTable.addToSharedActionListener(shortcutListener);
-
     }
 
     private AutomaticTranslationWindow createAutomaticTranslationWindow(ClassificationVersion version) {
@@ -143,6 +157,7 @@ public class CodeEditorView extends CodeEditorDesign implements HasEditingState 
 
     public ClassificationVersion getClassificationVersion() {
         return version;
+
     }
 
 
@@ -163,5 +178,19 @@ public class CodeEditorView extends CodeEditorDesign implements HasEditingState 
     public boolean hasChanges() {
         return primaryLevels.hasChanges() || primaryCodeTable.hasChanges() || translationCodeTable.hasChanges();
 
+    }
+
+    @java.lang.Override
+    public java.lang.String toString() {
+        final java.lang.StringBuffer sb = new java.lang.StringBuffer("CodeEditorView{");
+        sb.append("importExportComponent=").append(importExportComponent);
+        sb.append(", version=").append(version);
+        sb.append(", eventbus=").append(eventbus);
+        sb.append(", context=").append(context);
+        sb.append(", classificationFacade=").append(classificationFacade);
+        sb.append(", versionXmlService=").append(versionXmlService);
+        sb.append(", shortcutListener=").append(shortcutListener);
+        sb.append('}');
+        return sb.toString();
     }
 }

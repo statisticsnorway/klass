@@ -26,24 +26,32 @@ import no.ssb.klass.designer.user.UserContext;
 import no.ssb.klass.designer.util.FavoriteUtils;
 import no.ssb.klass.designer.util.KlassTheme;
 import no.ssb.klass.designer.util.VaadinUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @PrototypeScope
 @SpringView(name = ClassificationFamilyView.NAME)
 @SuppressWarnings("serial")
 public class ClassificationFamilyView extends ClassificationFamilyDesign implements FilteringView {
 
+    private static final Logger log = LoggerFactory.getLogger(ClassificationFamilyView.class);
+
     public static final String NAME = ""; // empty name will make it default view for navigator
 
     private final ClassificationFilter classificationFilter;
-
-    @Autowired
     private ClassificationFacade classificationFacade;
-    @Autowired
     private UserContext userContext;
 
-    public ClassificationFamilyView() {
+    @Autowired
+    public ClassificationFamilyView(ClassificationFacade classificationFacade, UserContext userContext) {
+        this.classificationFacade = classificationFacade;
+        this.userContext = userContext;
         this.classificationFilter = VaadinUtil.getKlassState().getClassificationFilter();
         UI.getCurrent().getPage().addBrowserWindowResizeListener(event -> updateGrid(event.getWidth()));
+        log.debug(
+                "Creating classification family view with user context {} and classification facade {}",
+                userContext, classificationFacade
+        );
     }
 
     private void updateGrid(int width) {

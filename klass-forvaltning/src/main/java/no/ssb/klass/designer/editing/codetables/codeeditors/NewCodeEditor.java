@@ -115,4 +115,15 @@ public class NewCodeEditor extends CodeEditor {
     public Level getLevel() {
         return level;
     }
+
+    @java.lang.Override
+    public java.lang.String toString() {
+        final java.lang.StringBuffer sb = new java.lang.StringBuffer("NewCodeEditor{");
+        sb.append("itemId=").append(itemId);
+        sb.append(", level=").append(level);
+        sb.append(", parent=").append(parent);
+        sb.append(", version=").append(version);
+        sb.append('}');
+        return sb.toString();
+    }
 }
