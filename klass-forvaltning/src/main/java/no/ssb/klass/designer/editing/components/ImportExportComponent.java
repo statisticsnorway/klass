@@ -44,9 +44,7 @@ public class ImportExportComponent<T extends ClassificationEntityOperations> {
     private final StreamResource streamResource = new StreamResource(this::generateExportData, "");
     private final FileDownloader fileDownloader = new FileDownloader(streamResource);
 
-    @Autowired
     private ApplicationContext applicationContext;
-    @Autowired
     private AbstractXmlService<T> xmlService;
 
     protected final Button importButton;
@@ -58,6 +56,7 @@ public class ImportExportComponent<T extends ClassificationEntityOperations> {
     protected T entity;
     protected String datatypeName;
 
+    @Autowired
     public ImportExportComponent(ApplicationContext applicationContext, AbstractXmlService<T> xmlService,
             Button importButton, Button exportButton) {
         this.applicationContext = applicationContext;
