@@ -58,7 +58,6 @@ public class CreateVariantView extends CreateVariantDesign implements EditingVie
     private ClassificationVariant variant;
     private ClassificationVersion version;
 
-    // source to this ?
     @Autowired
     private UserService userService;
 
