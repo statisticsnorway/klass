@@ -75,9 +75,6 @@ public abstract class AbstractXmlService<T> {
             // Read to list so it can be logged
             List<U> result = mappingIterator.readAll();
             log.debug("Parsed {} elements", result.size());
-            for (int i = 0; i < result.size(); i++) {
-                log.info("Element {}: {}", i, result.get(i));
-            }
             return result;
         } catch (Exception e) {
             throw new ImportException(
