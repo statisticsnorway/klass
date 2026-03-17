@@ -9,7 +9,6 @@ metadata:
   annotations:
     # Allow large, long running queries to complete
     nginx.ingress.kubernetes.io/proxy-read-timeout: "120"
-    nginx.ingress.kubernetes.io/proxy-body-size: "8m"
 spec:
   port: 8080
   ingresses:
