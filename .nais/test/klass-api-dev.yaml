@@ -49,7 +49,6 @@ spec:
   accessPolicy:
     outbound:
       rules:
-        - application: klass-solr
         - application: klass-mail
   openSearch:
     access: admin
