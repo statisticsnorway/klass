@@ -7,8 +7,9 @@ metadata:
   labels:
     team: dapla-metadata
   annotations:
-    # Allow large, long running queries to complete
-    nginx.ingress.kubernetes.io/proxy-read-timeout: "120"
+    nginx.ingress.kubernetes.io/proxy-body-size: "256M"
+    nginx.ingress.kubernetes.io/proxy-buffer-size: "8k"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
 spec:
   port: 8080
   ingresses:
