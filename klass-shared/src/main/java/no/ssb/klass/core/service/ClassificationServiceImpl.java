@@ -30,6 +30,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional()
@@ -174,6 +175,14 @@ public class ClassificationServiceImpl implements ClassificationService {
     @Override
     @Transactional(readOnly = true)
     public CorrespondenceTable getCorrespondenceTable(long id) {
+        return correspondenceTableRepository.findFullyInitializedById(id)
+                .orElseThrow(() ->
+                        new KlassResourceNotFoundException("Correspondence Table not found with id = " + id));
+    }
+
+    /*@Override
+    @Transactional(readOnly = true)
+    public CorrespondenceTable getCorrespondenceTable(long id) {
         CorrespondenceTable correspondenceTable =
                 correspondenceTableRepository
                         .findById(id)
@@ -191,7 +200,7 @@ public class ClassificationServiceImpl implements ClassificationService {
         Hibernate.initialize(correspondenceTable.getChangelogs());
         return correspondenceTable;
     }
-
+*/
     @Override
     @Transactional(readOnly = true)
     public ClassificationFamily getClassificationFamily(long id) {
