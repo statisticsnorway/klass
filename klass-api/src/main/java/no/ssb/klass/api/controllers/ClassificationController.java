@@ -290,7 +290,8 @@ public class ClassificationController {
                     durationVersion,
                     successGetVersion);
             log.info(
-                    "findPublicCorrespondenceTablesWithTarget finished in {} ms, success={}",
+                    "id {} findPublicCorrespondenceTablesWithTarget finished in {} ms, success={}",
+                    id,
                     durationCorrespondence,
                     successGetCorrespondence);
         }
@@ -480,7 +481,8 @@ public class ClassificationController {
         } finally {
             long duration = System.currentTimeMillis() - start;
             log.info(
-                    "codes internal findClassificationCodes finished in {} ms, success={}",
+                    "codes {} internal findClassificationCodes finished in {} ms, success={}",
+                    id,
                     duration,
                     success);
         }
@@ -506,24 +508,60 @@ public class ClassificationController {
             @RequestParam(value = "csvFields", defaultValue = "") String csvFields,
             @RequestParam(value = "language", defaultValue = "nb") Language language,
             @RequestParam(value = "includeFuture", defaultValue = "false") Boolean includeFuture) {
-        DateRange dateRange = DateRange.create(from, to);
-        ClassificationSeries classification = classificationService.getClassificationSeries(id);
-        List<CorrespondenceTable> changeTables =
-                classification.getChangeTables(dateRange, includeFuture).stream()
-                        .filter(correspondenceTable -> correspondenceTable.isPublished(language))
-                        .collect(toList());
-        CodeChangeList codeChanges = new CodeChangeList(csvSeparator);
-        for (CorrespondenceTable changeTable : changeTables) {
-            codeChanges = codeChanges.merge(codeChanges.convert(changeTable, language));
-        }
+        long startGetClassification = System.currentTimeMillis();
+        long startGetChangeTables = 0;
+        long startMergeChangeTable = 0;
+        boolean successGetClassification = false;
+        boolean successGetChangeTables = false;
+        boolean successMergeChangeTables = false;
+        try {
+            DateRange dateRange = DateRange.create(from, to);
 
-        if (!csvFields.isEmpty()) {
-            List<String> csvFieldsList = getCsvFieldsList(csvFields);
-            csvFieldsValidator.validateFieldsChangeItemSchema(csvFieldsList);
-            codeChanges.setCsvFields(csvFieldsList);
-        }
+            ClassificationSeries classification = classificationService.getClassificationSeries(id);
+            successGetClassification = classification != null;
+            startGetClassification = System.currentTimeMillis();
+            List<CorrespondenceTable> changeTables =
+                    classification.getChangeTables(dateRange, includeFuture).stream()
+                            .filter(
+                                    correspondenceTable ->
+                                            correspondenceTable.isPublished(language))
+                            .collect(toList());
+            successGetChangeTables = true;
 
-        return codeChanges;
+            CodeChangeList codeChanges = new CodeChangeList(csvSeparator);
+            startMergeChangeTable = System.currentTimeMillis();
+            for (CorrespondenceTable changeTable : changeTables) {
+                codeChanges = codeChanges.merge(codeChanges.convert(changeTable, language));
+            }
+            successMergeChangeTables = true;
+
+            if (!csvFields.isEmpty()) {
+                List<String> csvFieldsList = getCsvFieldsList(csvFields);
+                csvFieldsValidator.validateFieldsChangeItemSchema(csvFieldsList);
+                codeChanges.setCsvFields(csvFieldsList);
+            }
+
+            return codeChanges;
+        } finally {
+            long durationGetClassification = System.currentTimeMillis() - startGetClassification;
+            long durationGetChangeTables = System.currentTimeMillis() - startGetChangeTables;
+            long durationMergeChangeTables = System.currentTimeMillis() - startMergeChangeTable;
+            log.info(
+                    "Changes get classification {} getClassifications() finished in {} ms, success={}",
+                    id,
+                    durationGetClassification,
+                    successGetClassification);
+            log.info(
+                    "Changes get changetables classification {} getChangeTables() finished in {} ms, success={}",
+                    id,
+                    durationGetChangeTables,
+                    successGetChangeTables);
+            log.info(
+                    "Changes merge changetables classification {} codeChanges.merge() finished in {} ms, success={}",
+                    id,
+                    durationMergeChangeTables,
+                    successMergeChangeTables);
+        }
     }
 
     @Tag(name = OpenApiConstants.Tags.VARIANTS_TAG)
@@ -649,7 +687,8 @@ public class ClassificationController {
         } finally {
             long duration = System.currentTimeMillis() - start;
             log.info(
-                    "variant internal findVariantClassificationCodes finished in {} ms, success={}",
+                    "variant {} internal findVariantClassificationCodes finished in {} ms, success={}",
+                    id,
                     duration,
                     success);
         }
@@ -763,7 +802,8 @@ public class ClassificationController {
         } finally {
             long duration = System.currentTimeMillis() - start;
             log.info(
-                    "corresponds findCorrespondences() finished in {} ms, success={}",
+                    "corresponds {} findCorrespondences() finished in {} ms, success={}",
+                    id,
                     duration,
                     success);
         }
