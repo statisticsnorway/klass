@@ -261,18 +261,39 @@ public class ClassificationController {
             @PathVariable Long id,
             @RequestParam(value = "language", defaultValue = "nb") Language language,
             @RequestParam(value = "includeFuture", defaultValue = "false") Boolean includeFuture) {
-        ClassificationVersion version = classificationService.getClassificationVersion(id);
-        List<CorrespondenceTable> corrTableVersionIsTarget =
-                classificationService.findPublicCorrespondenceTablesWithTarget(version).stream()
-                        .sorted(
-                                AlphaNumericalComparator.comparing(
-                                        CorrespondenceTable::getNameInPrimaryLanguage, true))
-                        .collect(toList());
-        String owningSectionName =
-                classificationService.resolveSectionName(
-                        version.getContactPerson().getSection(), language);
-        return new ClassificationVersionResource(
-                version, language, corrTableVersionIsTarget, includeFuture, owningSectionName);
+        long startGetVerions = System.currentTimeMillis();
+        boolean successGetVersion = false;
+        boolean successGetCorrespondence = false;
+        long startGetCorrespondence = 0;
+        try {
+            ClassificationVersion version = classificationService.getClassificationVersion(id);
+            successGetVersion = true;
+            startGetCorrespondence = System.currentTimeMillis();
+            List<CorrespondenceTable> corrTableVersionIsTarget =
+                    classificationService.findPublicCorrespondenceTablesWithTarget(version).stream()
+                            .sorted(
+                                    AlphaNumericalComparator.comparing(
+                                            CorrespondenceTable::getNameInPrimaryLanguage, true))
+                            .collect(toList());
+            successGetCorrespondence = true;
+            String owningSectionName =
+                    classificationService.resolveSectionName(
+                            version.getContactPerson().getSection(), language);
+            return new ClassificationVersionResource(
+                    version, language, corrTableVersionIsTarget, includeFuture, owningSectionName);
+        } finally {
+            long durationVersion = System.currentTimeMillis() - startGetVerions;
+            long durationCorrespondence = System.currentTimeMillis() - startGetCorrespondence;
+            log.info(
+                    "getClassificationVersion(id={}) finished in {} ms, success={}",
+                    id,
+                    durationVersion,
+                    successGetVersion);
+            log.info(
+                    "findPublicCorrespondenceTablesWithTarget finished in {} ms, success={}",
+                    durationCorrespondence,
+                    successGetCorrespondence);
+        }
     }
 
     @Tag(name = OpenApiConstants.Tags.CORRESPONDENCE_TABLES_TAG)
@@ -287,11 +308,23 @@ public class ClassificationController {
     public CorrespondenceTableResource correspondenceTables(
             @PathVariable Long id,
             @RequestParam(value = "language", defaultValue = "nb") Language language) {
-        CorrespondenceTable table = classificationService.getCorrespondenceTable(id);
-        String owningSectionName =
-                classificationService.resolveSectionName(
-                        table.getContactPerson().getSection(), language);
-        return new CorrespondenceTableResource(table, language, owningSectionName);
+        long start = System.currentTimeMillis();
+        boolean success = false;
+        try {
+            CorrespondenceTable table = classificationService.getCorrespondenceTable(id);
+            success = true;
+            String owningSectionName =
+                    classificationService.resolveSectionName(
+                            table.getContactPerson().getSection(), language);
+            return new CorrespondenceTableResource(table, language, owningSectionName);
+        } finally {
+            long duration = System.currentTimeMillis() - start;
+            log.info(
+                    "getCorrespondenceTable(id={}) finished in {} ms, success={}",
+                    id,
+                    duration,
+                    success);
+        }
     }
 
     @Tag(name = OpenApiConstants.Tags.VARIANTS_TAG)
@@ -306,11 +339,26 @@ public class ClassificationController {
     public ClassificationVariantResource variants(
             @PathVariable Long id,
             @RequestParam(value = "language", defaultValue = "nb") Language language) {
-        ClassificationVariant variant = classificationService.getClassificationVariant(id);
-        String owningSectionName =
-                classificationService.resolveSectionName(
-                        variant.getContactPerson().getSection(), language);
-        return new ClassificationVariantResource(variant, language, owningSectionName);
+        long start = System.currentTimeMillis();
+        boolean success = false;
+        try {
+            ClassificationVariant variant = classificationService.getClassificationVariant(id);
+            success = true;
+
+            String owningSectionName =
+                    classificationService.resolveSectionName(
+                            variant.getContactPerson().getSection(), language);
+
+            return new ClassificationVariantResource(variant, language, owningSectionName);
+
+        } finally {
+            long duration = System.currentTimeMillis() - start;
+            log.info(
+                    "getClassificationVariant(id={}) finished in {} ms, success={}",
+                    id,
+                    duration,
+                    success);
+        }
     }
 
     @Tag(name = OpenApiConstants.Tags.CODES_TAG)
