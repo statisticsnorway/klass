@@ -519,7 +519,7 @@ public class ClassificationController {
 
             ClassificationSeries classification = classificationService.getClassificationSeries(id);
             successGetClassification = classification != null;
-            startGetClassification = System.currentTimeMillis();
+            startGetChangeTables= System.currentTimeMillis();
             List<CorrespondenceTable> changeTables =
                     classification.getChangeTables(dateRange, includeFuture).stream()
                             .filter(
