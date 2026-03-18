@@ -56,7 +56,7 @@
         <testcontainers.version>1.20.1</testcontainers.version>
         <tomcat7-maven-plugin-version>2.2</tomcat7-maven-plugin-version>
         <woodstox-version>4.4.1</woodstox-version>
-        <zonky.pg.version>2.7.1</zonky.pg.version>
+        <zonky.pg.version>2.8.0</zonky.pg.version>
         <zonky.version>2.2.2</zonky.version>
     </properties>
 
