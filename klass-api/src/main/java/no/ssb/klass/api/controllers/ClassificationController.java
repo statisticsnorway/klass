@@ -454,23 +454,36 @@ public class ClassificationController {
             String presentationNamePattern,
             Language language,
             Boolean includeFuture) {
-        List<CodeDto> codes =
-                classificationService.findClassificationCodes(
-                        id, dateRangeHolder.dateRange, language, includeFuture);
-        CodeList codeList =
-                new CodeList(
-                                csvSeparator,
-                                dateRangeHolder.withRange,
-                                dateRangeHolder.dateRange,
-                                includeFuture)
-                        .convert(codes);
-        return codeList.filterValidity(dateRangeHolder.dateRange)
-                .limit(dateRangeHolder.dateRange)
-                .compress()
-                .filterOnLevel(selectLevel)
-                .filterOnCodes(selectCodes)
-                .presentationNames(presentationNamePattern)
-                .sort();
+
+        long start = System.currentTimeMillis();
+        boolean success = false;
+        try {
+
+            List<CodeDto> codes =
+                    classificationService.findClassificationCodes(
+                            id, dateRangeHolder.dateRange, language, includeFuture);
+            success = true;
+            CodeList codeList =
+                    new CodeList(
+                                    csvSeparator,
+                                    dateRangeHolder.withRange,
+                                    dateRangeHolder.dateRange,
+                                    includeFuture)
+                            .convert(codes);
+            return codeList.filterValidity(dateRangeHolder.dateRange)
+                    .limit(dateRangeHolder.dateRange)
+                    .compress()
+                    .filterOnLevel(selectLevel)
+                    .filterOnCodes(selectCodes)
+                    .presentationNames(presentationNamePattern)
+                    .sort();
+        } finally {
+            long duration = System.currentTimeMillis() - start;
+            log.info(
+                    "codes internal findClassificationCodes finished in {} ms, success={}",
+                    duration,
+                    success);
+        }
     }
 
     @Tag(name = OpenApiConstants.Tags.CODES_TAG)
@@ -613,21 +626,33 @@ public class ClassificationController {
             String presentationNamePattern,
             Language language,
             Boolean includeFuture) {
-        List<CodeDto> codes =
-                classificationService.findVariantClassificationCodes(
-                        id, variantName, language, dateRangeHolder.dateRange, includeFuture);
-        return new CodeList(
-                        csvSeparator,
-                        dateRangeHolder.withRange,
-                        dateRangeHolder.dateRange,
-                        includeFuture)
-                .convert(codes)
-                .limit(dateRangeHolder.dateRange)
-                .compress()
-                .filterOnLevel(selectLevel)
-                .filterOnCodes(selectCodes)
-                .presentationNames(presentationNamePattern)
-                .sort();
+        long start = System.currentTimeMillis();
+        boolean success = false;
+        try {
+
+            List<CodeDto> codes =
+                    classificationService.findVariantClassificationCodes(
+                            id, variantName, language, dateRangeHolder.dateRange, includeFuture);
+            success = true;
+            return new CodeList(
+                            csvSeparator,
+                            dateRangeHolder.withRange,
+                            dateRangeHolder.dateRange,
+                            includeFuture)
+                    .convert(codes)
+                    .limit(dateRangeHolder.dateRange)
+                    .compress()
+                    .filterOnLevel(selectLevel)
+                    .filterOnCodes(selectCodes)
+                    .presentationNames(presentationNamePattern)
+                    .sort();
+        } finally {
+            long duration = System.currentTimeMillis() - start;
+            log.info(
+                    "variant internal findVariantClassificationCodes finished in {} ms, success={}",
+                    duration,
+                    success);
+        }
     }
 
     @Tag(name = OpenApiConstants.Tags.CORRESPONDENCE_TABLES_TAG)
@@ -716,20 +741,32 @@ public class ClassificationController {
             Language language,
             Boolean includeFuture,
             Boolean inverted) {
-        List<CorrespondenceDto> correspondences =
-                classificationService.findCorrespondences(
-                        id,
-                        targetClassificationId,
-                        dateRangeHolder.dateRange,
-                        language,
-                        includeFuture,
-                        inverted);
-        return new CorrespondenceItemList(csvSeparator, dateRangeHolder.withRange, includeFuture)
-                .convert(correspondences)
-                .removeOutside(dateRangeHolder.dateRange)
-                .limit(dateRangeHolder.dateRange)
-                .group()
-                .sort();
+        long start = System.currentTimeMillis();
+        boolean success = false;
+        try {
+            List<CorrespondenceDto> correspondences =
+                    classificationService.findCorrespondences(
+                            id,
+                            targetClassificationId,
+                            dateRangeHolder.dateRange,
+                            language,
+                            includeFuture,
+                            inverted);
+            success = true;
+            return new CorrespondenceItemList(
+                            csvSeparator, dateRangeHolder.withRange, includeFuture)
+                    .convert(correspondences)
+                    .removeOutside(dateRangeHolder.dateRange)
+                    .limit(dateRangeHolder.dateRange)
+                    .group()
+                    .sort();
+        } finally {
+            long duration = System.currentTimeMillis() - start;
+            log.info(
+                    "corresponds findCorrespondences() finished in {} ms, success={}",
+                    duration,
+                    success);
+        }
     }
 
     @Hidden // We don't want to document this
