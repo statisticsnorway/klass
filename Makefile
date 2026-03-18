@@ -137,7 +137,7 @@ logs-klass-api:
 
 .PHONY: stop-klass-api-docker
 stop-klass-api-docker:
-	docker compose $(COMPOSE_FILE) --profile api down -v
+	docker compose $(COMPOSE_FILE) --profile api down
 
 .PHONY: start-klass-api-open-search-docker
 start-klass-api-open-search-docker:
