@@ -29,6 +29,10 @@ spec:
         tier: db-custom-1-3840
         databases:
           - name: klass
+  observability:
+    autoInstrumentation:
+      enabled: true
+      runtime: java
   env:
     - name: SPRING_PROFILES_ACTIVE
       value: api, postgres, remote-open-search, skip-indexing
