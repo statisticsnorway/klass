@@ -7,6 +7,8 @@ metadata:
   labels:
     shared-db: "true"
     team: dapla-metadata
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
 spec:
   port: 8080
   ttl: "{{ time-to-live }}"
