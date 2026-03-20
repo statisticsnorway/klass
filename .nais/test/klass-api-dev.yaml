@@ -51,23 +51,3 @@ spec:
     access: admin
     instance: klass-search
 
-  prometheus:
-    enabled: true
-    path: /actuator/prometheus
-    port: "8090"
-
-  liveness:
-    path: /actuator/health/liveness
-    port: 8090
-    initialDelay: 60
-    timeout: 180
-  readiness:
-    path: /actuator/health/readiness
-    port: 8090
-    initialDelay: 60
-    timeout: 180
-  startup:
-    path: /actuator/health/liveness
-    port: 8090
-    initialDelay: 60
-    timeout: 180
