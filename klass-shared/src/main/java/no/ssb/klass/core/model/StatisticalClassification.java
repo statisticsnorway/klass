@@ -51,6 +51,7 @@ public abstract class StatisticalClassification extends BaseEntity
             name = "statisticalclassification_changelog",
             joinColumns = @JoinColumn(name = "statisticalclassification_id"),
             inverseJoinColumns = @JoinColumn(name = "changelog_id"))
+    @BatchSize(size = 100)
     private final List<Changelog> changelogs;
 
     private transient List<ClassificationItem> deletedClassificationItems;
