@@ -23,6 +23,7 @@ public class CorrespondenceMap extends BaseEntity implements Comparable<Correspo
             Comparator.nullsFirst(String::compareToIgnoreCase);
 
     @ManyToOne private ClassificationItem source;
+
     @ManyToOne private ClassificationItem target;
 
     @ManyToOne(optional = false)

@@ -1,8 +1,5 @@
 name: klass-api-dev-build-and-deploy.yml
 on:
-  push:
-    branches:
-      - feat/DPMETA-1376-improve-database-queries-api
   workflow_dispatch:
     inputs:
       app:
