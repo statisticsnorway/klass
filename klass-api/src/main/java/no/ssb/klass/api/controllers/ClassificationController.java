@@ -261,14 +261,12 @@ public class ClassificationController {
             @PathVariable Long id,
             @RequestParam(value = "language", defaultValue = "nb") Language language,
             @RequestParam(value = "includeFuture", defaultValue = "false") Boolean includeFuture) {
-        long startGetVerions = System.currentTimeMillis();
+        long start = System.currentTimeMillis();
         boolean successGetVersion = false;
         boolean successGetCorrespondence = false;
-        long startGetCorrespondence = 0;
         try {
             ClassificationVersion version = classificationService.getClassificationVersion(id);
             successGetVersion = true;
-            startGetCorrespondence = System.currentTimeMillis();
             List<CorrespondenceTable> corrTableVersionIsTarget =
                     classificationService.findPublicCorrespondenceTablesWithTarget(version).stream()
                             .sorted(
@@ -282,17 +280,12 @@ public class ClassificationController {
             return new ClassificationVersionResource(
                     version, language, corrTableVersionIsTarget, includeFuture, owningSectionName);
         } finally {
-            long durationVersion = System.currentTimeMillis() - startGetVerions;
-            long durationCorrespondence = System.currentTimeMillis() - startGetCorrespondence;
+            long durationVersion = System.currentTimeMillis() - start;
             log.info(
-                    "getClassificationVersion(id={}) finished in {} ms, success={}",
+                    "getClassificationVersion(id={}) finished in {} ms, success={} get version and success {} get correspondences",
                     id,
                     durationVersion,
-                    successGetVersion);
-            log.info(
-                    "id {} findPublicCorrespondenceTablesWithTarget finished in {} ms, success={}",
-                    id,
-                    durationCorrespondence,
+                    successGetVersion,
                     successGetCorrespondence);
         }
     }
@@ -508,18 +501,14 @@ public class ClassificationController {
             @RequestParam(value = "csvFields", defaultValue = "") String csvFields,
             @RequestParam(value = "language", defaultValue = "nb") Language language,
             @RequestParam(value = "includeFuture", defaultValue = "false") Boolean includeFuture) {
-        long startGetClassification = System.currentTimeMillis();
-        long startGetChangeTables = 0;
-        long startMergeChangeTable = 0;
+        long start = System.currentTimeMillis();
         boolean successGetClassification = false;
         boolean successGetChangeTables = false;
         boolean successMergeChangeTables = false;
         try {
             DateRange dateRange = DateRange.create(from, to);
-
             ClassificationSeries classification = classificationService.getClassificationSeries(id);
             successGetClassification = classification != null;
-            startGetChangeTables = System.currentTimeMillis();
             List<CorrespondenceTable> changeTables =
                     classification.getChangeTables(dateRange, includeFuture).stream()
                             .filter(
@@ -529,7 +518,6 @@ public class ClassificationController {
             successGetChangeTables = true;
 
             CodeChangeList codeChanges = new CodeChangeList(csvSeparator);
-            startMergeChangeTable = System.currentTimeMillis();
             for (CorrespondenceTable changeTable : changeTables) {
                 codeChanges = codeChanges.merge(codeChanges.convert(changeTable, language));
             }
@@ -543,23 +531,13 @@ public class ClassificationController {
 
             return codeChanges;
         } finally {
-            long durationGetClassification = System.currentTimeMillis() - startGetClassification;
-            long durationGetChangeTables = System.currentTimeMillis() - startGetChangeTables;
-            long durationMergeChangeTables = System.currentTimeMillis() - startMergeChangeTable;
+            long duration = System.currentTimeMillis() - start;
             log.info(
-                    "Changes get classification {} getClassifications() finished in {} ms, success={}",
+                    "Changes get classification {} getClassifications() finished in {} ms, success={} get classification, success={} get change tables and success={} merge change tables",
                     id,
-                    durationGetClassification,
-                    successGetClassification);
-            log.info(
-                    "Changes get changetables classification {} getChangeTables() finished in {} ms, success={}",
-                    id,
-                    durationGetChangeTables,
-                    successGetChangeTables);
-            log.info(
-                    "Changes merge changetables classification {} codeChanges.merge() finished in {} ms, success={}",
-                    id,
-                    durationMergeChangeTables,
+                    duration,
+                    successGetClassification,
+                    successGetChangeTables,
                     successMergeChangeTables);
         }
     }

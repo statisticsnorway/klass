@@ -174,8 +174,6 @@ public class ClassificationServiceImpl implements ClassificationService {
     @Override
     @Transactional(readOnly = true)
     public CorrespondenceTable getCorrespondenceTable(long id) {
-        long startTime = System.currentTimeMillis();
-        log.info("getCorrespondenceTable start id {}", id);
         CorrespondenceTable correspondenceTable =
                 correspondenceTableRepository
                         .findById(id)
@@ -191,8 +189,6 @@ public class ClassificationServiceImpl implements ClassificationService {
         Hibernate.initialize(correspondenceTable.getTarget().getLevels());
         Hibernate.initialize(correspondenceTable.getCorrespondenceMaps());
         Hibernate.initialize(correspondenceTable.getChangelogs());
-        long duration = System.currentTimeMillis() - startTime;
-        log.info("getCorrespondenceTable end id {} took {} ms", id, duration);
         return correspondenceTable;
     }
 

@@ -7,7 +7,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
-import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Cache;
 
 import java.util.Comparator;
@@ -23,13 +22,9 @@ public class CorrespondenceMap extends BaseEntity implements Comparable<Correspo
     private static Comparator<String> nullSafeStringComparator =
             Comparator.nullsFirst(String::compareToIgnoreCase);
 
-    @ManyToOne
-    @BatchSize(size = 50)
-    private ClassificationItem source;
+    @ManyToOne private ClassificationItem source;
 
-    @ManyToOne
-    @BatchSize(size = 50)
-    private ClassificationItem target;
+    @ManyToOne private ClassificationItem target;
 
     @ManyToOne(optional = false)
     private CorrespondenceTable correspondenceTable;

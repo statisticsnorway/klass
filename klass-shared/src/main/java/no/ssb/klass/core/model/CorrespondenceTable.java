@@ -25,6 +25,7 @@ import no.ssb.klass.core.util.TimeUtil;
 import no.ssb.klass.core.util.Translatable;
 import no.ssb.klass.core.util.TranslatablePersistenceConverter;
 
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Cache;
 
 import java.time.LocalDate;
@@ -59,6 +60,7 @@ public class CorrespondenceTable extends BaseEntity
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "correspondenceTable")
     @Cache(usage = READ_ONLY)
+    @BatchSize(size = 100)
     private List<CorrespondenceMap> correspondenceMaps;
 
     @OneToMany(cascade = CascadeType.ALL)
