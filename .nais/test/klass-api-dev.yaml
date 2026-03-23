@@ -2,7 +2,7 @@
 apiVersion: nais.io/v1alpha1
 kind: Application
 metadata:
-  name: klass-dev-cbi
+  name: klass-dev-{{ app-name }}
   namespace: dapla-metadata
   labels:
     shared-db: "true"
@@ -13,17 +13,16 @@ spec:
   port: 8080
   ttl: "{{ time-to-live }}"
   ingresses:
-    - https://klass-dev-cbi.intern.test.ssb.no/api/klass
+    - https://klass-dev-{{ app-name }}.intern.test.ssb.no/api/klass
   replicas:
     min: 1
     max: 1
   resources:
     requests:
-      cpu: 1000m
-      memory: 4096Mi
+      cpu: 200m
+      memory: 1000Mi
     limits:
-      memory: 4096Mi
-      cpu: 1000m
+      memory: 1920Mi
   env:
     - name: SPRING_PROFILES_ACTIVE
       value: api, postgres, remote-open-search, skip-indexing
