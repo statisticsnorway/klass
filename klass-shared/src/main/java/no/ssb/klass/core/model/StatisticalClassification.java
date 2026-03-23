@@ -14,6 +14,8 @@ import no.ssb.klass.core.util.TimeUtil;
 import no.ssb.klass.core.util.Translatable;
 import no.ssb.klass.core.util.TranslatablePersistenceConverter;
 
+import org.hibernate.annotations.BatchSize;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -41,6 +43,7 @@ public abstract class StatisticalClassification extends BaseEntity
     private final List<Level> levels;
 
     @OneToMany(mappedBy = "source")
+    @BatchSize(size = 100)
     private final List<CorrespondenceTable> correspondenceTables;
 
     @OneToMany(cascade = CascadeType.ALL)
@@ -48,6 +51,7 @@ public abstract class StatisticalClassification extends BaseEntity
             name = "statisticalclassification_changelog",
             joinColumns = @JoinColumn(name = "statisticalclassification_id"),
             inverseJoinColumns = @JoinColumn(name = "changelog_id"))
+    @BatchSize(size = 100)
     private final List<Changelog> changelogs;
 
     private transient List<ClassificationItem> deletedClassificationItems;

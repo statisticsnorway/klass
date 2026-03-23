@@ -16,6 +16,7 @@ import no.ssb.klass.core.util.Translatable;
 import no.ssb.klass.core.util.TranslatablePersistenceConverter;
 
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.annotations.BatchSize;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -86,7 +87,9 @@ public class ClassificationSeries extends BaseEntity implements ClassificationEn
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "classification")
     private final List<ClassificationVersion> classificationVersions = new ArrayList<>();
 
-    @ManyToMany private final List<StatisticalUnit> statisticalUnits = new ArrayList<>();
+    @ManyToMany
+    @BatchSize(size = 50)
+    private final List<StatisticalUnit> statisticalUnits = new ArrayList<>();
 
     @Column(nullable = false)
     private boolean deleted;
