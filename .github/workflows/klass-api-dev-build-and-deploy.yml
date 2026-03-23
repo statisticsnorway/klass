@@ -1,5 +1,8 @@
 name: klass-api-dev-build-and-deploy.yml
 on:
+  push:
+    branches:
+      - chore/DPMETA-1376-optimize-faster-queries
   workflow_dispatch:
     inputs:
       app:
