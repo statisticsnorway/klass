@@ -27,7 +27,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -45,10 +44,6 @@ public class JwtAuthFilter extends OncePerRequestFilter implements Filter {
 
     private static final Logger log = LoggerFactory.getLogger(JwtAuthFilter.class);
     private final NimbusJwtDecoder decoder;
-
-    @NotEmpty
-    @Value("${klass.security.oauth2.protected.paths}")
-    private List<String> protectedPaths;
 
     public JwtAuthFilter(
             @NotEmpty
@@ -72,7 +67,8 @@ public class JwtAuthFilter extends OncePerRequestFilter implements Filter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        return this.protectedPaths.stream().noneMatch((path) -> request.getRequestURI().contains(path));
+        // Skip JWT validation only for public schema files (excluded from Wonderwall enforcement)
+        return request.getRequestURI().contains("/schemas/");
     }
 
     @Override
