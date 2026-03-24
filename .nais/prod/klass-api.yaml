@@ -12,13 +12,13 @@ spec:
     - https://klass.intern.ssb.no/api/klass
   replicas:
     min: 2
-    max: 2
+    max: 4
   resources:
     requests:
-      cpu: 500m
-      memory: 4096Mi
-    limits:
+      cpu: 1000m
       memory: 5120Mi
+    limits:
+      memory: 8192Mi
   gcp:
     sqlInstances:
       - type: POSTGRES_17
