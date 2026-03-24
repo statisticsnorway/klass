@@ -23,14 +23,35 @@ help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
 
-.PHONY: release
-release:
+.PHONY: release-patch
+release-patch:
 	@set -e ; \
 	git checkout main && \
 	git pull && \
-	git checkout release && \
+	git checkout -B release && \
 	git merge main && \
-	git push
+	chmod +x bin/bump.sh && \
+    ./bin/bump.sh bugfix
+
+.PHONY: release-minor
+release-minor:
+	@set -e ; \
+	git checkout main && \
+	git pull && \
+	git checkout -B release && \
+	git merge main && \
+	chmod +x bin/bump.sh && \
+    ./bin/bump.sh minor
+
+.PHONY: release-major
+release-major:
+	@set -e ; \
+	git checkout main && \
+	git pull && \
+	git checkout -B release && \
+	git merge main && \
+	chmod +x bin/bump.sh && \
+    ./bin/bump.sh major
 
 .PHONY: build-klass-forvaltning
 build-klass-forvaltning:

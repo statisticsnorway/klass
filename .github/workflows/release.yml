@@ -2,15 +2,14 @@ name: Release
 
 on:
   pull_request:
-    branches:
-      - release
-    types: [ closed ]
-  workflow_dispatch:
+    types:
+      - closed
 
 jobs:
   release:
     runs-on: ubuntu-latest
-    # if: github.event.pull_request.merged == true
+    # Only run when a PR is merged from 'release' to 'main'
+    if: github.event.pull_request.merged == true && github.event.pull_request.head.ref == 'release' && github.event.pull_request.base.ref == 'main'
     permissions:
       contents: write
       id-token: write
@@ -67,8 +66,7 @@ jobs:
           # Get the release version from the pom.xml before the next snapshot increment
           VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout | sed "s/-SNAPSHOT//")
           echo "version=${VERSION}" >> $GITHUB_OUTPUT
-          # Perform the release/deploy and increment the version to the next snapshot
-          mvn --batch-mode release:prepare -P github -Darguments="-Dmaven.test.skip=true -Dmaven.deploy.skip=true"
+          # Perform the release/deploy
           mvn --batch-mode release:perform
           TAG=$(git describe --abbrev=0 --tags)
           echo "tag=${TAG}" >> $GITHUB_OUTPUT
