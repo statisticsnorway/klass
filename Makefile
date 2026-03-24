@@ -30,6 +30,7 @@ release-patch:
 	git pull && \
 	git checkout -B release && \
 	git merge main && \
+	chmod +x bin/bump.sh && \
     ./bin/bump.sh bugfix
 
 .PHONY: release-minor
@@ -39,16 +40,18 @@ release-minor:
 	git pull && \
 	git checkout -B release && \
 	git merge main && \
+	chmod +x bin/bump.sh && \
     ./bin/bump.sh minor
 
 .PHONY: release-major
-release-minor:
+release-major:
 	@set -e ; \
 	git checkout main && \
 	git pull && \
 	git checkout -B release && \
 	git merge main && \
-    ./bin/bump.sh minor
+	chmod +x bin/bump.sh && \
+    ./bin/bump.sh major
 
 .PHONY: build-klass-forvaltning
 build-klass-forvaltning:
