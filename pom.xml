@@ -1,5 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8" ?>
+<project
+    xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+>
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>no.ssb.klass</groupId>
@@ -22,7 +26,8 @@
     </modules>
 
     <scm>
-        <developerConnection>scm:git:https://github.com/${github.repository}.git</developerConnection>
+        <developerConnection
+        >scm:git:https://github.com/${github.repository}.git</developerConnection>
         <url>https://github.com/${github.repository}</url>
         <tag>HEAD</tag>
     </scm>
@@ -31,7 +36,8 @@
         <java.version>17</java.version>
         <github.repository>statisticsnorway/klass</github.repository>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <project.reporting.outputEncoding
+        >UTF-8</project.reporting.outputEncoding>
 
         <sonar.organization>statisticsnorway</sonar.organization>
         <sonar.projectKey>klass</sonar.projectKey>
@@ -100,11 +106,12 @@
                     <version>3.3.1</version>
                     <configuration>
                         <releaseProfiles>documentation</releaseProfiles>
-                        <projectVersionPolicyId>SemVerMinorDevelopment</projectVersionPolicyId>
                         <autoVersionSubmodules>true</autoVersionSubmodules>
                         <tagNameFormat>v@{project.version}</tagNameFormat>
                         <!--TODO find a solution for the javadoc error on generated sources-->
-                        <arguments>-Pdocumentation -Dmaven.javadoc.skip=true -pl :klass-api -am</arguments>
+                        <arguments>
+                            -Pdocumentation -Dmaven.javadoc.skip=true -pl :klass-api -am
+                        </arguments>
                     </configuration>
                 </plugin>
                 <plugin>
