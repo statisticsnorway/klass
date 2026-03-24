@@ -28,7 +28,7 @@ release:
 	@set -e ; \
 	git checkout main && \
 	git pull && \
-	git checkout release && \
+	git checkout -B release && \
 	git merge main && \
 	git push
 
