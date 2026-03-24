@@ -1,6 +1,9 @@
 package no.ssb.klass.designer.ui;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 
 import com.vaadin.annotations.Theme;
@@ -22,6 +25,7 @@ import no.ssb.klass.designer.util.KlassTheme;
 @Theme(KlassTheme.NAME)
 @SpringUI(path = KlassUI.PATH)
 public class KlassUI extends UI {
+    private static final Logger log = LoggerFactory.getLogger(KlassUI.class);
     public static final String PATH = "klassui";
     public static final String KLASS_TITLE = "KlassUI";
     private final ErrorHandler klassErrorHandler = new KlassErrorHandler();
@@ -30,11 +34,24 @@ public class KlassUI extends UI {
     @Autowired
     private ApplicationContext applicationContext;
 
+    @Value("${klass.env.server}")
+    private String klassForvaltningServerName;
+
+    @Value("${klass.security.oauth2.logout.path}")
+    private String logoutPath;
+
     @Override
     protected void init(VaadinRequest vaadinRequest) {
         getPage().setTitle(KLASS_TITLE);
-        configureErrorHandler();
 
+        Boolean needsLogout = (Boolean) VaadinSession.getCurrent().getAttribute("redirect-to-logout");
+        if (Boolean.TRUE.equals(needsLogout)) {
+            log.warn("Auth was null during session init. Redirecting to logout to clear session.");
+            getPage().setLocation("https://" + klassForvaltningServerName + logoutPath);
+            return;
+        }
+
+        configureErrorHandler();
         VaadinService.getCurrent().setSystemMessagesProvider(new KlassSystemMessageProvider());
         MainView main = applicationContext.getBean(MainView.class);
         setContent(main);
