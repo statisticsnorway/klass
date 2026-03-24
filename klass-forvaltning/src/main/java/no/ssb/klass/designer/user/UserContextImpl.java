@@ -1,6 +1,7 @@
 package no.ssb.klass.designer.user;
 
 import com.google.common.collect.ImmutableSet;
+import com.vaadin.server.Page;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.VaadinSessionScope;
@@ -44,7 +45,11 @@ public class UserContextImpl implements UserContext {
             @Value("${klass.security.roles.admin.users}")
             String[] adminUsers,
             @Autowired
-            Environment environment
+            Environment environment,
+            @Value("${klass.env.server}")
+            String klassForvaltningServerName,
+            @Value("${klass.security.oauth2.logout.path}")
+            String logoutPath
     ) {
         if (adminUsers == null) {
             this.adminUsers = new String[]{};
@@ -56,7 +61,11 @@ public class UserContextImpl implements UserContext {
         this.userService = userService;
         User user = session.getAttribute(User.class);
         if (user == null) {
-            log.error("User is null! Abandoning session.");
+            log.error("User is null! Redirecting to logout and abandoning session.");
+            Page page = Page.getCurrent();
+            if (page != null) {
+                page.setLocation("https://" + klassForvaltningServerName + logoutPath);
+            }
             throw new OAuth2AuthenticationException(new OAuth2Error(OAuth2ErrorCodes.UNAUTHORIZED_CLIENT));
         } else {
             log.debug("Setting user {}", user.getUsername());

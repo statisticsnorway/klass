@@ -9,11 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
-import org.springframework.security.oauth2.core.OAuth2Error;
-import org.springframework.security.oauth2.core.OAuth2ErrorCodes;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Component;
@@ -39,8 +35,9 @@ public class AuthVaadinServlet extends SpringVaadinServlet {
         VaadinSession session = sessionInitEvent.getSession();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null) {
-            log.error("Authentication is null!");
-            throw new OAuth2AuthenticationException(new OAuth2Error(OAuth2ErrorCodes.UNAUTHORIZED_CLIENT));
+            log.error("Authentication is null! Flagging session for logout redirect.");
+            session.setAttribute("redirect-to-logout", true);
+            return;
         } else {
             log.debug("Got Authentication in Vaadin session {}", authentication.getPrincipal());
             if (authentication.getClass() == JwtAuthenticationToken.class) {
@@ -48,8 +45,9 @@ public class AuthVaadinServlet extends SpringVaadinServlet {
                 log.debug("Got JWT in Vaadin session {}", jwt);
                 User user = new KlassUserMapperJwt(jwt).getUser();
                 if (user == null) {
-                    log.error("User from authentication {} is null!", authentication);
-                    throw new OAuth2AuthenticationException(new OAuth2Error(OAuth2ErrorCodes.UNAUTHORIZED_CLIENT));
+                    log.error("User from authentication {} is null! Flagging session for logout redirect.", authentication);
+                    session.setAttribute("redirect-to-logout", true);
+                    return;
                 }
                 log.info("Starting new session for {}", user.getUsername());
                 session.setAttribute(User.class, user);
