@@ -2,15 +2,14 @@ name: Release
 
 on:
   pull_request:
-    branches:
-      - release
-    types: [ closed ]
-  workflow_dispatch:
+    types:
+      - closed
 
 jobs:
   release:
     runs-on: ubuntu-latest
-    # if: github.event.pull_request.merged == true
+    # Only run when a PR is merged from 'release' to 'main'
+    if: github.event.pull_request.merged == true && github.event.pull_request.head.ref == 'release' && github.event.pull_request.base.ref == 'main'
     permissions:
       contents: write
       id-token: write
