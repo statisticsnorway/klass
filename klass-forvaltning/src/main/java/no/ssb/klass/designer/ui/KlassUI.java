@@ -46,7 +46,8 @@ public class KlassUI extends UI {
 
         Boolean needsLogout = (Boolean) VaadinSession.getCurrent().getAttribute("redirect-to-logout");
         if (Boolean.TRUE.equals(needsLogout)) {
-            log.warn("Auth was null during session init. Redirecting to logout to clear session.");
+            log.warn("Auth was null during session init. Invalidating session and redirecting to logout.");
+            VaadinSession.getCurrent().getSession().invalidate();
             getPage().setLocation("https://" + klassForvaltningServerName + logoutPath);
             return;
         }

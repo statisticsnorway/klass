@@ -61,7 +61,10 @@ public class UserContextImpl implements UserContext {
         this.userService = userService;
         User user = session.getAttribute(User.class);
         if (user == null) {
-            log.error("User is null! Redirecting to logout and abandoning session.");
+            log.error("User is null! Invalidating session and redirecting to logout.");
+            if (session != null && session.getSession() != null) {
+                session.getSession().invalidate();
+            }
             Page page = Page.getCurrent();
             if (page != null) {
                 page.setLocation("https://" + klassForvaltningServerName + logoutPath);
