@@ -41,6 +41,15 @@ release-minor:
 	git merge main && \
     ./bin/bump.sh minor
 
+.PHONY: release-major
+release-minor:
+	@set -e ; \
+	git checkout main && \
+	git pull && \
+	git checkout -B release && \
+	git merge main && \
+    ./bin/bump.sh minor
+
 .PHONY: build-klass-forvaltning
 build-klass-forvaltning:
 	pushd klass-forvaltning && \

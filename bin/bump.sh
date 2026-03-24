@@ -49,7 +49,8 @@ function pull_values {
 # Update the pom.xml file with with maven
 #
 function update_pom {
-  mvn versions:commit -DnewVersion="${new_version}"
+  echo "Updating version to ${new_version}"
+  mvn versions:set -DnewVersion="${new_version}" versions:commit
 }
 
 # Set up the defaults for the script
