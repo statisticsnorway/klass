@@ -1,4 +1,5 @@
 # Klass
+v4.3.2
 
 Klass is Statistics Norway's system for classifications and code lists. The data model is based on the structure and principles described by [GSIM](https://statswiki.unece.org/spaces/gsim/pages/97356506/1_Introduction).
 
