@@ -23,35 +23,38 @@ categories:
     labels:
       - "dependencies"
       - "build"
-
+exclude-labels:
+  - "skip-changelog"
 autolabeler:
-  - label: 'documentation'
+  - label: "documentation"
     branch:
       - '/docs{0,1}\/.+/'
-  - label: 'bug'
+  - label: "bug"
     branch:
       - '/fix\/.+/'
     title:
-      - '/fix/i'
-  - label: 'enhancement'
+      - "/fix/i"
+  - label: "enhancement"
     branch:
       - '/feat\/.+/'
-    body:
-      - '/JIRA-[0-9]{1,4}/'
-  - label: 'refactoring'
+  - label: "refactoring"
     branch:
       - '/refactor\/.+/'
     title:
-      - '/^refactor/i'
-  - label: 'testing'
+      - "/^refactor/i"
+  - label: "testing"
     branch:
       - '/test\/.+/'
-  - label: 'breaking'
+  - label: "skip-changelog"
+    branch:
+      - '/release\/.+/'
+      - '/chore\/.+/'
+  - label: "breaking"
     title:
-      - '/breaking change/i'
-  - label: 'ci'
+      - "/breaking change/i"
+  - label: "ci"
     files:
-      - '.github/*'
+      - ".github/*"
 
 template: |
   ## Changes
