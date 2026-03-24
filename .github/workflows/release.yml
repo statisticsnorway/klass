@@ -72,7 +72,7 @@ jobs:
           echo "tag=${TAG}" >> $GITHUB_OUTPUT
 
       - name: Create GitHub release draft
-        uses: release-drafter/release-drafter@v6
+        uses: release-drafter/release-drafter@v7
         id: create-github-release
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
