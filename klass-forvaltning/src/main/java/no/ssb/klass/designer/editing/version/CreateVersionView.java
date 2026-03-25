@@ -42,16 +42,16 @@ public class CreateVersionView extends VerticalLayout implements EditingView {
 
     private boolean ignoreChanges = false;
 
-    @Autowired
     private ClassificationFacade classificationFacade;
-
-    @Autowired
     private UserContext userContext;
 
     private final VersionEditorView versionEditorView;
     private ClassificationVersion classificationVersion;
 
-    public CreateVersionView() {
+    @Autowired
+    public CreateVersionView( ClassificationFacade classificationFacade, UserContext userContext) {
+        this.classificationFacade = classificationFacade;
+        this.userContext = userContext;
         ConfirmOrCancelComponent actionButtons = new ConfirmOrCancelComponent();
         actionButtons.setConfirmText("Lagre");
         actionButtons.addConfirmClickListener(event -> save());
@@ -59,8 +59,8 @@ public class CreateVersionView extends VerticalLayout implements EditingView {
         HorizontalLayout actionButtonsWrap = new HorizontalLayout(actionButtons);
         actionButtonsWrap.setMargin(new MarginInfo(false, false, true, true));
         versionEditorView = new VersionEditorView();
-
         addComponents(versionEditorView, actionButtonsWrap);
+        log.debug("Create version view with userContext: {} and classification facade: {}", userContext, classificationFacade);
     }
 
     @Override
@@ -82,7 +82,6 @@ public class CreateVersionView extends VerticalLayout implements EditingView {
     @Override
     public boolean hasChanges() {
         return !ignoreChanges && versionEditorView.hasChanges();
-
     }
 
     @Override
@@ -122,5 +121,18 @@ public class CreateVersionView extends VerticalLayout implements EditingView {
         String familyId = classificationVersion.getOwnerClassification().getClassificationFamily().getId().toString();
         VaadinUtil.navigateTo(ClassificationListView.NAME, ImmutableMap.of(ClassificationListView.PARAM_FAMILY_ID,
                 familyId));
+    }
+
+    @java.lang.Override
+    public java.lang.String toString() {
+        final java.lang.StringBuffer sb = new java.lang.StringBuffer("CreateVersionView{");
+        sb.append("log=").append(log);
+        sb.append(", ignoreChanges=").append(ignoreChanges);
+        sb.append(", classificationFacade=").append(classificationFacade);
+        sb.append(", userContext=").append(userContext);
+        sb.append(", versionEditorView=").append(versionEditorView);
+        sb.append(", classificationVersion=").append(classificationVersion);
+        sb.append('}');
+        return sb.toString();
     }
 }

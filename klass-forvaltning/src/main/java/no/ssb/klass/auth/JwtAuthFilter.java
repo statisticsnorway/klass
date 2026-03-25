@@ -46,10 +46,6 @@ public class JwtAuthFilter extends OncePerRequestFilter implements Filter {
     private static final Logger log = LoggerFactory.getLogger(JwtAuthFilter.class);
     private final NimbusJwtDecoder decoder;
 
-    @NotEmpty
-    @Value("${klass.security.oauth2.protected.paths}")
-    private List<String> protectedPaths;
-
     public JwtAuthFilter(
             @NotEmpty
             @Value("${klass.security.oauth2.jwt.jwks.uri}")
@@ -72,7 +68,8 @@ public class JwtAuthFilter extends OncePerRequestFilter implements Filter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        return this.protectedPaths.stream().noneMatch((path) -> request.getRequestURI().contains(path));
+        // Skip JWT validation only for the exact public schema file path.
+        return request.getRequestURI().equals(request.getContextPath() + "/schemas/version.xsd");
     }
 
     @Override

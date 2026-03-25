@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URL;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -39,6 +40,12 @@ public class Subscriber extends BaseEntity {
     public Subscriber(String email) {
         this.email = checkNotNull(email);
         this.subscriptions = Lists.newArrayList();
+    }
+
+    /** No args constructor for JPA */
+    public Subscriber() {
+        this.email = "";
+        this.subscriptions = Collections.emptyList();
     }
 
     public String addSubscription(ClassificationSeries classification, URL endSubscriptionUrl) {

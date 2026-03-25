@@ -36,6 +36,8 @@ import no.ssb.klass.designer.user.UserContext;
 import no.ssb.klass.designer.util.ComponentUtil;
 import no.ssb.klass.designer.util.PassiveValidationUtil;
 import no.ssb.klass.designer.util.VaadinUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Mads Lundemo, SSB.
@@ -44,16 +46,14 @@ import no.ssb.klass.designer.util.VaadinUtil;
 @SpringComponent
 @PrototypeScope
 public class MetadataEditorComponent extends CustomComponent implements HasEditingState {
+    private static final Logger log = LoggerFactory.getLogger(MetadataEditorComponent.class);
     private static final String DATE_INPUT_MASK = "MM.yyyy";
 
     private MetadataEditorComponentDesign design = new MetadataEditorComponentDesign();
     private List<AbstractField<?>> fieldsToValidate = Arrays.asList(design.primaryNameTextfield,
             design.primaryDescriptionTextArea, design.contactPersonCombobox);
 
-    @Autowired
     private UserService userService;
-
-    @Autowired
     private UserContext userContext;
 
     private Language primaryLanguage;
@@ -81,7 +81,6 @@ public class MetadataEditorComponent extends CustomComponent implements HasEditi
         design.primaryNameTextfield.setRequiredError("Navn for primærspråk er påkrevd");
         design.primaryDescriptionTextArea.setRequiredError("Beskrivelse for primærspråk er påkrevd");
         design.contactPersonCombobox.setRequiredError("Kontaktperson er påkrevd");
-
         configureContactPersonCombobox();
     }
 
@@ -120,13 +119,16 @@ public class MetadataEditorComponent extends CustomComponent implements HasEditi
         design.sectionTextfield.setReadOnly(true);
     }
 
-    public void init(Language primaryLanguage) {
+    public void init(Language primaryLanguage, UserService userService, UserContext userContext) {
         this.primaryLanguage = primaryLanguage;
+        this.userService = userService;
+        this.userContext = userContext;
         design.primaryLanguageLabel.setValue(primaryLanguage.getDisplayName());
         design.languageSelect.init(primaryLanguage);
         updateLanguagePanels(primaryLanguage);
         populateContactPersons();
         resetValidations();
+        log.debug("Init MetadataEditorComponent with user service {} and user context", userService, userContext);
     }
 
     @Override

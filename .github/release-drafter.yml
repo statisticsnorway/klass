@@ -1,0 +1,69 @@
+categories:
+  - title: ":boom: Breaking Changes"
+    label: "breaking"
+  - title: ":rocket: Features"
+    label: "enhancement"
+  - title: ":fire: Removals and Deprecations"
+    label: "removal"
+  - title: ":beetle: Fixes"
+    label: "bug"
+  - title: ":racehorse: Performance"
+    label: "performance"
+  - title: ":rotating_light: Testing"
+    label: "testing"
+  - title: ":construction_worker: Continuous Integration"
+    label: "ci"
+  - title: ":books: Documentation"
+    label: "documentation"
+  - title: ":hammer: Refactoring"
+    label: "refactoring"
+  - title: ":lipstick: Style"
+    label: "style"
+  - title: ":package: Dependencies"
+    labels:
+      - "dependencies"
+      - "build"
+exclude-labels:
+  - "skip-changelog"
+autolabeler:
+  - label: "documentation"
+    branch:
+      - '/docs{0,1}\/.+/'
+  - label: "bug"
+    branch:
+      - '/fix\/.+/'
+    title:
+      - "/fix/i"
+  - label: "dependencies"
+    branch:
+      - '/deps\/.+/'
+      - '/dependencies\/.+/'
+    title:
+      - "/deps/i"
+      - "/dependencies/i"
+  - label: "enhancement"
+    branch:
+      - '/feat\/.+/'
+  - label: "refactoring"
+    branch:
+      - '/refactor\/.+/'
+    title:
+      - "/^refactor/i"
+  - label: "testing"
+    branch:
+      - '/test\/.+/'
+  - label: "skip-changelog"
+    branch:
+      - '/release\/.+/'
+      - '/chore\/.+/'
+  - label: "breaking"
+    title:
+      - "/breaking change/i"
+  - label: "ci"
+    files:
+      - ".github/*"
+
+template: |
+  ## Changes
+
+  $CHANGES

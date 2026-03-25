@@ -6,6 +6,8 @@ metadata:
   namespace: dapla-metadata
   labels:
     team: dapla-metadata
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "120"
 spec:
   port: 8080
   ingresses:
@@ -15,16 +17,23 @@ spec:
     max: 1
   resources:
     requests:
-      cpu: 800m
-      memory: 2400Mi
+      cpu: 500m
+      memory: 4096Mi
     limits:
-      memory: 2400Mi
+      memory: 5120Mi
   gcp:
     sqlInstances:
       - type: POSTGRES_17
         tier: db-custom-1-3840
         databases:
           - name: klass
+        flags:
+          - name: log_min_duration_statement
+            value: "500"
+  observability:
+    autoInstrumentation:
+      enabled: true
+      runtime: java
   env:
     - name: SPRING_PROFILES_ACTIVE
       value: api, postgres, remote-open-search, skip-indexing
@@ -40,12 +49,16 @@ spec:
     - name: KLASS_ENV_CLIENT_KLASS_MAIL_URL
       value: http://klass-mail
     - name: JAVA_TOOL_OPTIONS
-      value: "-XX:InitialRAMPercentage=50.0 -XX:MaxRAMPercentage=50.0"
+      value: "-XX:+ExitOnOutOfMemoryError -XX:InitialRAMPercentage=75.0 -XX:MaxRAMPercentage=75.0"
 
   accessPolicy:
     outbound:
       rules:
         - application: klass-mail
+    inbound:
+      rules:
+        - application: dataportalen
+        - application: dataportalen-dev
   openSearch:
     access: admin
     instance: klass-search
@@ -53,20 +66,20 @@ spec:
   prometheus:
     enabled: true
     path: /actuator/prometheus
-    port: "8090"
+    port: "8080"
 
   liveness:
-    path: /actuator/health/liveness
-    port: 8090
+    path: /actuator/health
+    port: 8080
     initialDelay: 60
     timeout: 180
   readiness:
-    path: /actuator/health/readiness
-    port: 8090
+    path: /actuator/health
+    port: 8080
     initialDelay: 60
     timeout: 180
   startup:
-    path: /actuator/health/liveness
-    port: 8090
+    path: /actuator/health
+    port: 8080
     initialDelay: 60
     timeout: 180

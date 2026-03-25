@@ -26,7 +26,6 @@ import no.ssb.klass.core.service.dto.CorrespondenceDto;
 import no.ssb.klass.core.util.AlphaNumericalComparator;
 import no.ssb.klass.core.util.ClientException;
 import no.ssb.klass.core.util.DateRange;
-import no.ssb.klass.core.util.KlassResourceNotFoundException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,14 +39,12 @@ import org.springframework.hateoas.*;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestClientException;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -62,7 +59,7 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping(value = {RestConstants.API_VERSION_V1})
+@RequestMapping(RestConstants.CONTEXT_AND_VERSION_V1)
 public class ClassificationController {
     private static final Logger log = LoggerFactory.getLogger(ClassificationController.class);
     private final ClassificationService classificationService;
@@ -70,8 +67,6 @@ public class ClassificationController {
     private final SearchService searchService;
     private final StatisticsService statisticsService;
     private final CsvFieldsValidator csvFieldsValidator;
-
-    private static final String EXCEPTION_HANDLER_LOG_MESSAGE_TEMPLATE = "{}. For request: {}";
 
     @Autowired
     public ClassificationController(
@@ -85,96 +80,6 @@ public class ClassificationController {
         this.searchService = searchService;
         this.statisticsService = statisticsService;
         this.csvFieldsValidator = csvFieldsValidator;
-    }
-
-    @ExceptionHandler(
-            exception = KlassResourceNotFoundException.class,
-            produces = {MediaType.TEXT_PLAIN_VALUE, RestConstants.CONTENT_TYPE_CSV})
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String resourceNotFoundTextExceptionHandler(KlassResourceNotFoundException exception) {
-        log.info(
-                EXCEPTION_HANDLER_LOG_MESSAGE_TEMPLATE,
-                exception.getMessage(),
-                getCurrentRequest());
-        return exception.getMessage();
-    }
-
-    @ExceptionHandler(
-            exception = KlassResourceNotFoundException.class,
-            produces = {
-                MediaType.APPLICATION_JSON_VALUE,
-                MediaType.APPLICATION_PROBLEM_JSON_VALUE,
-                MediaType.TEXT_XML_VALUE,
-                MediaType.APPLICATION_XML_VALUE,
-                MediaType.APPLICATION_PROBLEM_XML_VALUE
-            })
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ProblemDetail resourceNotFoundProblemDetailExceptionHandler(
-            KlassResourceNotFoundException exception) {
-        log.info(
-                EXCEPTION_HANDLER_LOG_MESSAGE_TEMPLATE,
-                exception.getMessage(),
-                getCurrentRequest());
-        return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, exception.getMessage());
-    }
-
-    @ExceptionHandler(
-            exception = {
-                RestClientException.class,
-                MethodArgumentTypeMismatchException.class,
-                IllegalArgumentException.class
-            },
-            produces = {MediaType.TEXT_PLAIN_VALUE, RestConstants.CONTENT_TYPE_CSV})
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String badRequestTextExceptionHandler(Exception exception) {
-        return exception.getMessage();
-    }
-
-    @ExceptionHandler(
-            exception = {
-                RestClientException.class,
-                MethodArgumentTypeMismatchException.class,
-                IllegalArgumentException.class
-            },
-            produces = {
-                MediaType.APPLICATION_JSON_VALUE,
-                MediaType.APPLICATION_PROBLEM_JSON_VALUE,
-                MediaType.TEXT_XML_VALUE,
-                MediaType.APPLICATION_XML_VALUE,
-                MediaType.APPLICATION_PROBLEM_XML_VALUE
-            })
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ProblemDetail badRequestProblemDetailExceptionHandler(Exception exception) {
-        return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, exception.getMessage());
-    }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public String serverErrorTextExceptionHandler(Exception exception) {
-        log.warn(
-                EXCEPTION_HANDLER_LOG_MESSAGE_TEMPLATE,
-                exception.getMessage(),
-                getCurrentRequest(),
-                exception);
-        return exception.getMessage();
-    }
-
-    @ExceptionHandler(
-            produces = {
-                MediaType.APPLICATION_JSON_VALUE,
-                MediaType.APPLICATION_PROBLEM_JSON_VALUE,
-                MediaType.TEXT_XML_VALUE,
-                MediaType.APPLICATION_XML_VALUE,
-                MediaType.APPLICATION_PROBLEM_XML_VALUE
-            })
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ProblemDetail serverErrorProblemDetailExceptionHandler(Exception exception) {
-        log.warn(
-                EXCEPTION_HANDLER_LOG_MESSAGE_TEMPLATE,
-                exception.getMessage(),
-                getCurrentRequest(),
-                exception);
-        return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, exception.getMessage());
     }
 
     /** Redirect root to docs for convenience */
@@ -356,18 +261,33 @@ public class ClassificationController {
             @PathVariable Long id,
             @RequestParam(value = "language", defaultValue = "nb") Language language,
             @RequestParam(value = "includeFuture", defaultValue = "false") Boolean includeFuture) {
-        ClassificationVersion version = classificationService.getClassificationVersion(id);
-        List<CorrespondenceTable> corrTableVersionIsTarget =
-                classificationService.findPublicCorrespondenceTablesWithTarget(version).stream()
-                        .sorted(
-                                AlphaNumericalComparator.comparing(
-                                        CorrespondenceTable::getNameInPrimaryLanguage, true))
-                        .collect(toList());
-        String owningSectionName =
-                classificationService.resolveSectionName(
-                        version.getContactPerson().getSection(), language);
-        return new ClassificationVersionResource(
-                version, language, corrTableVersionIsTarget, includeFuture, owningSectionName);
+        long start = System.currentTimeMillis();
+        boolean successGetVersion = false;
+        boolean successGetCorrespondence = false;
+        try {
+            ClassificationVersion version = classificationService.getClassificationVersion(id);
+            successGetVersion = true;
+            List<CorrespondenceTable> corrTableVersionIsTarget =
+                    classificationService.findPublicCorrespondenceTablesWithTarget(version).stream()
+                            .sorted(
+                                    AlphaNumericalComparator.comparing(
+                                            CorrespondenceTable::getNameInPrimaryLanguage, true))
+                            .collect(toList());
+            successGetCorrespondence = true;
+            String owningSectionName =
+                    classificationService.resolveSectionName(
+                            version.getContactPerson().getSection(), language);
+            return new ClassificationVersionResource(
+                    version, language, corrTableVersionIsTarget, includeFuture, owningSectionName);
+        } finally {
+            long durationVersion = System.currentTimeMillis() - start;
+            log.info(
+                    "getClassificationVersion(id={}) finished in {} ms, success={} get version and success {} get correspondences",
+                    id,
+                    durationVersion,
+                    successGetVersion,
+                    successGetCorrespondence);
+        }
     }
 
     @Tag(name = OpenApiConstants.Tags.CORRESPONDENCE_TABLES_TAG)
@@ -382,11 +302,23 @@ public class ClassificationController {
     public CorrespondenceTableResource correspondenceTables(
             @PathVariable Long id,
             @RequestParam(value = "language", defaultValue = "nb") Language language) {
-        CorrespondenceTable table = classificationService.getCorrespondenceTable(id);
-        String owningSectionName =
-                classificationService.resolveSectionName(
-                        table.getContactPerson().getSection(), language);
-        return new CorrespondenceTableResource(table, language, owningSectionName);
+        long start = System.currentTimeMillis();
+        boolean success = false;
+        try {
+            CorrespondenceTable table = classificationService.getCorrespondenceTable(id);
+            success = true;
+            String owningSectionName =
+                    classificationService.resolveSectionName(
+                            table.getContactPerson().getSection(), language);
+            return new CorrespondenceTableResource(table, language, owningSectionName);
+        } finally {
+            long duration = System.currentTimeMillis() - start;
+            log.info(
+                    "getCorrespondenceTable(id={}) finished in {} ms, success={}",
+                    id,
+                    duration,
+                    success);
+        }
     }
 
     @Tag(name = OpenApiConstants.Tags.VARIANTS_TAG)
@@ -401,11 +333,26 @@ public class ClassificationController {
     public ClassificationVariantResource variants(
             @PathVariable Long id,
             @RequestParam(value = "language", defaultValue = "nb") Language language) {
-        ClassificationVariant variant = classificationService.getClassificationVariant(id);
-        String owningSectionName =
-                classificationService.resolveSectionName(
-                        variant.getContactPerson().getSection(), language);
-        return new ClassificationVariantResource(variant, language, owningSectionName);
+        long start = System.currentTimeMillis();
+        boolean success = false;
+        try {
+            ClassificationVariant variant = classificationService.getClassificationVariant(id);
+            success = true;
+
+            String owningSectionName =
+                    classificationService.resolveSectionName(
+                            variant.getContactPerson().getSection(), language);
+
+            return new ClassificationVariantResource(variant, language, owningSectionName);
+
+        } finally {
+            long duration = System.currentTimeMillis() - start;
+            log.info(
+                    "getClassificationVariant(id={}) finished in {} ms, success={}",
+                    id,
+                    duration,
+                    success);
+        }
     }
 
     @Tag(name = OpenApiConstants.Tags.CODES_TAG)
@@ -501,23 +448,37 @@ public class ClassificationController {
             String presentationNamePattern,
             Language language,
             Boolean includeFuture) {
-        List<CodeDto> codes =
-                classificationService.findClassificationCodes(
-                        id, dateRangeHolder.dateRange, language, includeFuture);
-        CodeList codeList =
-                new CodeList(
-                                csvSeparator,
-                                dateRangeHolder.withRange,
-                                dateRangeHolder.dateRange,
-                                includeFuture)
-                        .convert(codes);
-        return codeList.filterValidity(dateRangeHolder.dateRange)
-                .limit(dateRangeHolder.dateRange)
-                .compress()
-                .filterOnLevel(selectLevel)
-                .filterOnCodes(selectCodes)
-                .presentationNames(presentationNamePattern)
-                .sort();
+
+        long start = System.currentTimeMillis();
+        boolean success = false;
+        try {
+
+            List<CodeDto> codes =
+                    classificationService.findClassificationCodes(
+                            id, dateRangeHolder.dateRange, language, includeFuture);
+            success = true;
+            CodeList codeList =
+                    new CodeList(
+                                    csvSeparator,
+                                    dateRangeHolder.withRange,
+                                    dateRangeHolder.dateRange,
+                                    includeFuture)
+                            .convert(codes);
+            return codeList.filterValidity(dateRangeHolder.dateRange)
+                    .limit(dateRangeHolder.dateRange)
+                    .compress()
+                    .filterOnLevel(selectLevel)
+                    .filterOnCodes(selectCodes)
+                    .presentationNames(presentationNamePattern)
+                    .sort();
+        } finally {
+            long duration = System.currentTimeMillis() - start;
+            log.info(
+                    "codes {} internal findClassificationCodes finished in {} ms, success={}",
+                    id,
+                    duration,
+                    success);
+        }
     }
 
     @Tag(name = OpenApiConstants.Tags.CODES_TAG)
@@ -540,24 +501,45 @@ public class ClassificationController {
             @RequestParam(value = "csvFields", defaultValue = "") String csvFields,
             @RequestParam(value = "language", defaultValue = "nb") Language language,
             @RequestParam(value = "includeFuture", defaultValue = "false") Boolean includeFuture) {
-        DateRange dateRange = DateRange.create(from, to);
-        ClassificationSeries classification = classificationService.getClassificationSeries(id);
-        List<CorrespondenceTable> changeTables =
-                classification.getChangeTables(dateRange, includeFuture).stream()
-                        .filter(correspondenceTable -> correspondenceTable.isPublished(language))
-                        .collect(toList());
-        CodeChangeList codeChanges = new CodeChangeList(csvSeparator);
-        for (CorrespondenceTable changeTable : changeTables) {
-            codeChanges = codeChanges.merge(codeChanges.convert(changeTable, language));
-        }
+        long start = System.currentTimeMillis();
+        boolean successGetClassification = false;
+        boolean successGetChangeTables = false;
+        boolean successMergeChangeTables = false;
+        try {
+            DateRange dateRange = DateRange.create(from, to);
+            ClassificationSeries classification = classificationService.getClassificationSeries(id);
+            successGetClassification = classification != null;
+            List<CorrespondenceTable> changeTables =
+                    classification.getChangeTables(dateRange, includeFuture).stream()
+                            .filter(
+                                    correspondenceTable ->
+                                            correspondenceTable.isPublished(language))
+                            .collect(toList());
+            successGetChangeTables = true;
 
-        if (!csvFields.isEmpty()) {
-            List<String> csvFieldsList = getCsvFieldsList(csvFields);
-            csvFieldsValidator.validateFieldsChangeItemSchema(csvFieldsList);
-            codeChanges.setCsvFields(csvFieldsList);
-        }
+            CodeChangeList codeChanges = new CodeChangeList(csvSeparator);
+            for (CorrespondenceTable changeTable : changeTables) {
+                codeChanges = codeChanges.merge(codeChanges.convert(changeTable, language));
+            }
+            successMergeChangeTables = true;
 
-        return codeChanges;
+            if (!csvFields.isEmpty()) {
+                List<String> csvFieldsList = getCsvFieldsList(csvFields);
+                csvFieldsValidator.validateFieldsChangeItemSchema(csvFieldsList);
+                codeChanges.setCsvFields(csvFieldsList);
+            }
+
+            return codeChanges;
+        } finally {
+            long duration = System.currentTimeMillis() - start;
+            log.info(
+                    "Changes get classification {} getClassifications() finished in {} ms, success={} get classification, success={} get change tables and success={} merge change tables",
+                    id,
+                    duration,
+                    successGetClassification,
+                    successGetChangeTables,
+                    successMergeChangeTables);
+        }
     }
 
     @Tag(name = OpenApiConstants.Tags.VARIANTS_TAG)
@@ -660,21 +642,34 @@ public class ClassificationController {
             String presentationNamePattern,
             Language language,
             Boolean includeFuture) {
-        List<CodeDto> codes =
-                classificationService.findVariantClassificationCodes(
-                        id, variantName, language, dateRangeHolder.dateRange, includeFuture);
-        return new CodeList(
-                        csvSeparator,
-                        dateRangeHolder.withRange,
-                        dateRangeHolder.dateRange,
-                        includeFuture)
-                .convert(codes)
-                .limit(dateRangeHolder.dateRange)
-                .compress()
-                .filterOnLevel(selectLevel)
-                .filterOnCodes(selectCodes)
-                .presentationNames(presentationNamePattern)
-                .sort();
+        long start = System.currentTimeMillis();
+        boolean success = false;
+        try {
+
+            List<CodeDto> codes =
+                    classificationService.findVariantClassificationCodes(
+                            id, variantName, language, dateRangeHolder.dateRange, includeFuture);
+            success = true;
+            return new CodeList(
+                            csvSeparator,
+                            dateRangeHolder.withRange,
+                            dateRangeHolder.dateRange,
+                            includeFuture)
+                    .convert(codes)
+                    .limit(dateRangeHolder.dateRange)
+                    .compress()
+                    .filterOnLevel(selectLevel)
+                    .filterOnCodes(selectCodes)
+                    .presentationNames(presentationNamePattern)
+                    .sort();
+        } finally {
+            long duration = System.currentTimeMillis() - start;
+            log.info(
+                    "variant {} internal findVariantClassificationCodes finished in {} ms, success={}",
+                    id,
+                    duration,
+                    success);
+        }
     }
 
     @Tag(name = OpenApiConstants.Tags.CORRESPONDENCE_TABLES_TAG)
@@ -729,8 +724,7 @@ public class ClassificationController {
     public CorrespondenceItemList correspondsAt(
             @PathVariable Long id,
             @RequestParam(value = "targetClassificationId") Long targetClassificationId,
-            @RequestParam(value = "date", required = false)
-                    @DateTimeFormat(pattern = RestConstants.DATE_FORMAT)
+            @RequestParam(value = "date") @DateTimeFormat(pattern = RestConstants.DATE_FORMAT)
                     LocalDate date,
             @RequestParam(value = "csvSeparator", defaultValue = ",") String csvSeparator,
             @RequestParam(value = "csvFields", defaultValue = "") String csvFields,
@@ -764,20 +758,33 @@ public class ClassificationController {
             Language language,
             Boolean includeFuture,
             Boolean inverted) {
-        List<CorrespondenceDto> correspondences =
-                classificationService.findCorrespondences(
-                        id,
-                        targetClassificationId,
-                        dateRangeHolder.dateRange,
-                        language,
-                        includeFuture,
-                        inverted);
-        return new CorrespondenceItemList(csvSeparator, dateRangeHolder.withRange, includeFuture)
-                .convert(correspondences)
-                .removeOutside(dateRangeHolder.dateRange)
-                .limit(dateRangeHolder.dateRange)
-                .group()
-                .sort();
+        long start = System.currentTimeMillis();
+        boolean success = false;
+        try {
+            List<CorrespondenceDto> correspondences =
+                    classificationService.findCorrespondences(
+                            id,
+                            targetClassificationId,
+                            dateRangeHolder.dateRange,
+                            language,
+                            includeFuture,
+                            inverted);
+            success = true;
+            return new CorrespondenceItemList(
+                            csvSeparator, dateRangeHolder.withRange, includeFuture)
+                    .convert(correspondences)
+                    .removeOutside(dateRangeHolder.dateRange)
+                    .limit(dateRangeHolder.dateRange)
+                    .group()
+                    .sort();
+        } finally {
+            long duration = System.currentTimeMillis() - start;
+            log.info(
+                    "corresponds {} findCorrespondences() finished in {} ms, success={}",
+                    id,
+                    duration,
+                    success);
+        }
     }
 
     @Hidden // We don't want to document this

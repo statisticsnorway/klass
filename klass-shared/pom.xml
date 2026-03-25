@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <artifactId>klass-shared</artifactId>
     <packaging>jar</packaging>
@@ -10,53 +11,20 @@
     <parent>
         <groupId>no.ssb.klass</groupId>
         <artifactId>klass-root</artifactId>
-        <version>4.2.1-SNAPSHOT</version>
+        <version>4.4.1</version>
     </parent>
 
     <properties>
-
-        <!--
-        ja disse skal være her og skal være tomme,de er  nødvendig siden jgitflow plugin ikke plukker opp at  local profilen er activateByDefault
-        (på server defaulter disse til applications.properties)
-        -->
-        <klass.env.name />
-        <klass.doc.env.url />
-        <klass.doc.env.port />
-
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <spring.version>4.3.7.RELEASE</spring.version>
-        <objenesis-version>3.4</objenesis-version>
-        <guava-version>33.5.0-jre</guava-version>
-        <woodstox-version>4.4.1</woodstox-version>
-        <commons-lang3-version>3.19.0</commons-lang3-version>
-        <asciidoctor-version>1.6.0</asciidoctor-version>
-        <maven-jaxb2-plugin-version>2.5.0</maven-jaxb2-plugin-version>
-        <tomcat7-maven-plugin-version>2.2</tomcat7-maven-plugin-version>
-        <postgresql.version>42.7.8</postgresql.version>
     </properties>
 
     <dependencies>
 
-
+        <!-- Spring dependencies -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.objenesis</groupId>
-            <artifactId>objenesis</artifactId>
-            <version>${objenesis-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>2.4.240</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>${guava-version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -68,6 +36,25 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-hateoas</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.opensearch.client</groupId>
+            <artifactId>spring-data-opensearch-starter</artifactId>
+            <version>${spring-data-opensearch-starter.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
             <groupId>org.apache.tomcat.embed</groupId>
             <artifactId>tomcat-embed-jasper</artifactId>
             <scope>provided</scope>
@@ -78,17 +65,14 @@
             <version>3.0.2</version>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-hateoas</artifactId>
+            <groupId>org.objenesis</groupId>
+            <artifactId>objenesis</artifactId>
+            <version>${objenesis-version}</version>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
-            <optional>true</optional>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava-version}</version>
         </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>
@@ -104,64 +88,9 @@
             <artifactId>jackson-dataformat-xml</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.jayway.jsonpath</groupId>
-            <artifactId>json-path</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.restdocs</groupId>
-            <artifactId>spring-restdocs-mockmvc</artifactId>
-            <version>${spring-restdocs-version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>${commons-lang3-version}</version>
-        </dependency>
-
-        <!-- Zonky test -->
-        <dependency>
-            <groupId>io.zonky.test</groupId>
-            <artifactId>embedded-postgres</artifactId>
-            <version>2.1.1</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.zonky.test</groupId>
-            <artifactId>embedded-database-spring-test</artifactId>
-            <version>2.6.0</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <!-- woodstox needed to pretty print json and xml -->
-            <groupId>org.codehaus.woodstox</groupId>
-            <artifactId>woodstox-core-asl</artifactId>
-            <version>${woodstox-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.rest-assured</groupId>
-            <artifactId>rest-assured</artifactId>
-            <scope>test</scope>
-            <exclusions>
-                <!-- remove conflicting dependency because declared in 2 differents versions (3 & 4)
-                See: https://github.com/rest-assured/rest-assured/issues/1612 -->
-                <exclusion>
-                    <groupId>org.apache.groovy</groupId>
-                    <artifactId>groovy-xml</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <!-- add this dep which bring back the groovy-xml in a single and last version (4) -->
-            <groupId>io.rest-assured</groupId>
-            <artifactId>xml-path</artifactId>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>jakarta.xml.bind</groupId>
@@ -188,6 +117,60 @@
             <version>1.0.2.Final</version>
             <scope>compile</scope>
         </dependency>
+
+        <!-- Support second level cache in Hibernate -->
+        <dependency>
+            <groupId>org.hibernate.orm</groupId>
+            <artifactId>hibernate-jcache</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+            <version>3.11.1</version>
+            <classifier>jakarta</classifier>
+        </dependency>
+
+        <!-- Test scope-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.jayway.jsonpath</groupId>
+            <artifactId>json-path</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.restdocs</groupId>
+            <artifactId>spring-restdocs-mockmvc</artifactId>
+            <version>${spring-restdocs-version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <!--Conflicts with Spring's logging setup-->
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>io.zonky.test</groupId>
+            <artifactId>embedded-postgres</artifactId>
+            <version>${zonky.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.zonky.test</groupId>
+            <artifactId>embedded-database-spring-test</artifactId>
+            <version>${zonky.pg.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -195,7 +178,7 @@
             <plugin>
                 <groupId>org.jvnet.jaxb</groupId>
                 <artifactId>jaxb-maven-plugin</artifactId>
-                <version>4.0.11</version>
+                <version>4.0.12</version>
                 <executions>
                     <execution>
                         <goals>
@@ -211,7 +194,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>3.4.2</version>
+                <version>3.5.0</version>
                 <executions>
                     <execution>
                         <goals>
@@ -222,40 +205,5 @@
             </plugin>
 
         </plugins>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>external.atlassian.jgitflow</groupId>
-                    <artifactId>jgitflow-maven-plugin</artifactId>
-                    <version>1.0-m5.1</version>
-                    <configuration>
-                        <!-- see goals wiki page for configuration options -->
-                        <flowInitContext>
-                            <masterBranchName>master</masterBranchName>
-                            <developBranchName>develop</developBranchName>
-                            <featureBranchPrefix>feature/</featureBranchPrefix>
-                            <releaseBranchPrefix>release/</releaseBranchPrefix>
-                            <hotfixBranchPrefix>hotfix/</hotfixBranchPrefix>
-                            <versionTagPrefix>klass_v</versionTagPrefix>
-                        </flowInitContext>
-                        <releaseProfiles>documentation</releaseProfiles>
-                        <arguments>-Pdocumentation -Dmaven.javadoc.skip=true</arguments>
-                    </configuration>
-                </plugin>
-
-                <plugin>
-                    <groupId>org.apache.tomcat.maven</groupId>
-                    <artifactId>tomcat7-maven-plugin</artifactId>
-                    <version>${tomcat7-maven-plugin-version}</version>
-                    <configuration>
-                        <url>${deploy.server.url}</url>
-                        <path>/</path>
-                        <username>${deploy.credentials.username}</username>
-                        <password>${deploy.credentials.password}</password>
-                    </configuration>
-                </plugin>
-
-            </plugins>
-        </pluginManagement>
     </build>
 </project>

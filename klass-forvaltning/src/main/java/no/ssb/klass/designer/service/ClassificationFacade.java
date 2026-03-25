@@ -31,6 +31,8 @@ import no.ssb.klass.core.service.SubscriberService;
 import no.ssb.klass.core.util.DateRange;
 import no.ssb.klass.core.util.KlassResourceNotFoundException;
 import no.ssb.klass.designer.exceptions.ParameterException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Facade to be used for front end (vaadin) code. Mostly a wrapper around ClassificationService, but provides among
@@ -38,6 +40,7 @@ import no.ssb.klass.designer.exceptions.ParameterException;
  */
 @Service
 public class ClassificationFacade {
+    private static final Logger log = LoggerFactory.getLogger(ClassificationFacade.class);
     private final ClassificationService classificationService;
     private final SearchService searchService;
     private final SubscriberService subscriberService;
@@ -113,6 +116,7 @@ public class ClassificationFacade {
     @Transactional(propagation = Propagation.NEVER)
     public ClassificationSeries saveAndIndexClassification(ClassificationSeries classification) {
         classificationService.saveNotIndexClassification(classification);
+        log.debug("Classification saved {}, starting indexing", classification);
         searchService.indexAsync(classification.getId());
         subscriberService.informSubscribersOfUpdatedClassification(classification,
                 "Endring i metadata for klassifikasjonen: " + classification.getNameInPrimaryLanguage(),
@@ -127,6 +131,7 @@ public class ClassificationFacade {
     public CorrespondenceTable saveAndIndexCorrespondenceTable(CorrespondenceTable correspondenceTable,
             InformSubscribers informSubscribers) {
         classificationService.saveNotIndexCorrespondenceTable(correspondenceTable);
+        log.debug("Correspondence table saved {}, starting indexing", correspondenceTable);
         searchService.indexAsync(correspondenceTable.getOwnerClassification().getId());
         if (informSubscribers.isInformSubscribers()) {
             subscriberService.informSubscribersOfUpdatedClassification(correspondenceTable.getOwnerClassification(),
@@ -143,6 +148,7 @@ public class ClassificationFacade {
     public ClassificationVariant saveAndIndexVariant(ClassificationVariant variant,
             InformSubscribers informSubscribers) {
         classificationService.saveNotIndexVariant(variant);
+        log.debug("Classification variant saved {}, starting indexing", variant);
         searchService.indexAsync(variant.getOwnerClassification().getId());
         if (informSubscribers.isInformSubscribers()) {
             subscriberService.informSubscribersOfUpdatedClassification(variant.getOwnerClassification(),
@@ -159,6 +165,7 @@ public class ClassificationFacade {
     public ClassificationVersion saveAndIndexVersion(ClassificationVersion version,
             InformSubscribers informSubscribers) {
         classificationService.saveNotIndexVersion(version);
+        log.debug("Classification version saved {}, starting indexing", version);
         searchService.indexAsync(version.getOwnerClassification().getId());
         if (informSubscribers.isInformSubscribers()) {
             subscriberService.informSubscribersOfUpdatedClassification(version.getOwnerClassification(),
@@ -179,6 +186,7 @@ public class ClassificationFacade {
     public void deleteAndIndexClassification(User currentUser, ClassificationSeries classification)
             throws KlassMessageException {
         classificationService.deleteNotIndexClassification(currentUser, classification);
+        log.debug("Classification {} deleted, starting indexing", classification);
         searchService.indexAsync(classification.getId());
         subscriberService.informSubscribersOfUpdatedClassification(classification, "Klassifikasjonen er slettet: "
                 + classification.getNameInPrimaryLanguage(), "Klassifikasjonen er slettet");
@@ -191,6 +199,7 @@ public class ClassificationFacade {
     public void deleteAndIndexCorrespondenceTable(User currentUser,
             CorrespondenceTable correspondenceTable) throws KlassMessageException {
         classificationService.deleteNotIndexCorrespondenceTable(currentUser, correspondenceTable);
+        log.debug("Correspondence table {} deleted, starting indexing", correspondenceTable);
         searchService.indexAsync(correspondenceTable.getOwnerClassification().getId());
         if (correspondenceTable.isPublishedInAnyLanguage()) {
             subscriberService.informSubscribersOfUpdatedClassification(correspondenceTable.getOwnerClassification(),
@@ -206,6 +215,7 @@ public class ClassificationFacade {
     public void deleteAndIndexVariant(User currentUser, ClassificationVariant variant)
             throws KlassMessageException {
         classificationService.deleteNotIndexVariant(currentUser, variant);
+        log.debug("Variant {} deleted, starting indexing", variant);
         searchService.indexAsync(variant.getOwnerClassification().getId());
         if (variant.isPublishedInAnyLanguage()) {
             subscriberService.informSubscribersOfUpdatedClassification(variant.getOwnerClassification(),
@@ -219,6 +229,7 @@ public class ClassificationFacade {
     @Transactional(propagation = Propagation.NEVER)
     public void deleteAndIndexVersion(User currentUser, ClassificationVersion version) throws KlassMessageException {
         classificationService.deleteNotIndexVersion(currentUser, version);
+        log.debug("Version {} deleted, starting indexing", version);
         searchService.indexAsync(version.getOwnerClassification().getId());
         if (version.isPublishedInAnyLanguage()) {
             subscriberService.informSubscribersOfUpdatedClassification(version.getOwnerClassification(),
@@ -293,5 +304,16 @@ public class ClassificationFacade {
     }
     public void deleteChangelog(Changelog changelog) {
         changeLogService.deleteChangelog(changelog);
+    }
+
+    @java.lang.Override
+    public java.lang.String toString() {
+        final java.lang.StringBuffer sb = new java.lang.StringBuffer("ClassificationFacade{");
+        sb.append("classificationService=").append(classificationService);
+        sb.append(", searchService=").append(searchService);
+        sb.append(", subscriberService=").append(subscriberService);
+        sb.append(", changeLogService=").append(changeLogService);
+        sb.append('}');
+        return sb.toString();
     }
 }

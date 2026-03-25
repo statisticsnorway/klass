@@ -361,7 +361,6 @@ public class VersionEditorView extends VersionEditorDesign implements HasEditing
 
         DateRange newRange = DateRange.create(TimeUtil.toLocalDate(fromDate.getValue()),
                 VaadinUtil.convertToExclusive(TimeUtil.toLocalDate(toDate.getValue())));
-
         Language primaryLanguage = classificationVersion.getPrimaryLanguage();
         Language secondLanguage = Language.getSecondLanguage(primaryLanguage);
         Language thirdLanguage = Language.getThirdLanguage(primaryLanguage);
@@ -386,5 +385,18 @@ public class VersionEditorView extends VersionEditorDesign implements HasEditing
                 .append(classificationVersion.getDerivedFrom(thirdLanguage), thirdDerivedFrom.getValue());
 
         return !builder.isEquals();
+    }
+
+    @java.lang.Override
+    public java.lang.String toString() {
+        final java.lang.StringBuffer sb = new java.lang.StringBuffer("VersionEditorView{");
+        sb.append("primaryLanguage=").append(primaryLanguage);
+        sb.append(", secondaryLanguage=").append(secondaryLanguage);
+        sb.append(", thirdLanguage=").append(thirdLanguage);
+        sb.append(", copyFromPrimary=").append(copyFromPrimary);
+        sb.append(", isCodeList=").append(isCodeList);
+        sb.append(", classificationVersion=").append(classificationVersion);
+        sb.append('}');
+        return sb.toString();
     }
 }

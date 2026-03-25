@@ -1,6 +1,10 @@
 package no.ssb.klass.core.repository;
 
+import static io.zonky.test.db.AutoConfigureEmbeddedDatabase.DatabaseProvider.EMBEDDED;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import io.zonky.test.db.AutoConfigureEmbeddedDatabase;
 
 import jakarta.transaction.Transactional;
 
@@ -29,8 +33,15 @@ import java.util.List;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-@ActiveProfiles({ConfigurationProfiles.POSTGRES_EMBEDDED, ConfigurationProfiles.MOCK_MAILSERVER})
+@ActiveProfiles({
+    ConfigurationProfiles.POSTGRES_EMBEDDED,
+    ConfigurationProfiles.MOCK_MAILSERVER,
+    ConfigurationProfiles.MOCK_SEARCH
+})
 @Transactional
+@AutoConfigureEmbeddedDatabase(
+        provider = EMBEDDED,
+        type = AutoConfigureEmbeddedDatabase.DatabaseType.POSTGRES)
 public class SearchWordsRepositoryTest {
 
     @Autowired private SearchWordsRepository searchWordsRepository;

@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>no.ssb.klass</groupId>
     <artifactId>klass-root</artifactId>
-    <version>4.2.1-SNAPSHOT</version>
+    <version>4.4.1</version>
     <packaging>pom</packaging>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.7</version>
+        <version>3.5.12</version>
         <relativePath/>
     </parent>
 
@@ -19,12 +18,13 @@
         <module>klass-shared</module>
         <module>klass-api</module>
         <module>klass-mail</module>
+        <module>klass-index-job</module>
     </modules>
 
     <scm>
         <developerConnection>scm:git:https://github.com/${github.repository}.git</developerConnection>
         <url>https://github.com/${github.repository}</url>
-        <tag>v4.0.0</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <properties>
@@ -37,53 +37,29 @@
         <sonar.projectKey>klass</sonar.projectKey>
         <sonar.projectName>klass</sonar.projectName>
 
-        <asciidoctor-version>2.2.4</asciidoctor-version>
+        <asciidoctor-version>3.2.0</asciidoctor-version>
         <commons-io-version>2.21.0</commons-io-version>
         <commons-lang3-version>3.20.0</commons-lang3-version>
-        <guava-version>32.0.1-jre</guava-version>
-        <jakarta-rs-api-version>3.1.0</jakarta-rs-api-version>
-        <jaxb-api-version>4.0.4</jaxb-api-version>
-        <maven-jaxb2-plugin-version>0.15.3</maven-jaxb2-plugin-version>
-        <objenesis-version>2.4</objenesis-version>
+        <guava-version>33.5.0-jre</guava-version>
+        <jackson-bom.version>2.21.2</jackson-bom.version>
+        <jakarta-rs-api-version>4.0.0</jakarta-rs-api-version>
+        <jaxb-api-version>4.0.5</jaxb-api-version>
+        <maven-jaxb2-plugin-version>2.5.0</maven-jaxb2-plugin-version>
+        <objenesis-version>3.5</objenesis-version>
         <rest-assured-version>5.5.6</rest-assured-version>
         <snakeyaml.version>2.5</snakeyaml.version>
         <solr-version>8.5.2</solr-version>
-        <sonar.version>5.3.0.6276</sonar.version>
+        <sonar.version>5.5.0.6356</sonar.version>
+        <spring.version>4.3.7.RELEASE</spring.version>
+        <spring-data-opensearch-starter.version>1.8.2</spring-data-opensearch-starter.version>
         <spring-restdocs-version>3.0.5</spring-restdocs-version>
+        <postgresql.version>42.7.10</postgresql.version>
         <testcontainers.version>1.20.1</testcontainers.version>
         <tomcat7-maven-plugin-version>2.2</tomcat7-maven-plugin-version>
         <woodstox-version>4.4.1</woodstox-version>
-        <zonky.pg.version>2.7.0</zonky.pg.version>
-        <zonky.version>2.2.0</zonky.version>
+        <zonky.pg.version>2.8.0</zonky.pg.version>
+        <zonky.version>2.2.2</zonky.version>
     </properties>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>io.rest-assured</groupId>
-                <artifactId>rest-assured</artifactId>
-                <version>${rest-assured-version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>io.zonky.test</groupId>
-                <artifactId>embedded-postgres</artifactId>
-                <version>${zonky.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>io.zonky.test</groupId>
-                <artifactId>embedded-database-spring-test</artifactId>
-                <version>${zonky.pg.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-lang3</artifactId>
-                <version>${commons-lang3-version}</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <distributionManagement>
         <repository>
@@ -91,7 +67,7 @@
             <name>GitHub Packages</name>
             <url>https://maven.pkg.github.com/${github.repository}</url>
             <snapshots>
-                <enabled>true</enabled>
+                <enabled>false</enabled>
             </snapshots>
         </repository>
     </distributionManagement>
@@ -131,19 +107,20 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-release-plugin</artifactId>
-                    <version>3.2.0</version>
+                    <version>3.3.1</version>
                     <configuration>
                         <releaseProfiles>documentation</releaseProfiles>
                         <autoVersionSubmodules>true</autoVersionSubmodules>
                         <tagNameFormat>v@{project.version}</tagNameFormat>
                         <!--TODO find a solution for the javadoc error on generated sources-->
-                        <arguments>-Pdocumentation -Dmaven.javadoc.skip=true -pl :klass-api -am</arguments>
+                        <arguments>
+                            -Pdocumentation -Dmaven.javadoc.skip=true -pl :klass-api -am
+                        </arguments>
                     </configuration>
                 </plugin>
                 <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-deploy-plugin</artifactId>
-                    <version>3.1.4</version>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
                 </plugin>
             </plugins>
         </pluginManagement>

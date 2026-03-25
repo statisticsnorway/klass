@@ -1,6 +1,6 @@
 package no.ssb.klass.api.applicationtest;
 
-import static io.zonky.test.db.AutoConfigureEmbeddedDatabase.DatabaseProvider.ZONKY;
+import static io.zonky.test.db.AutoConfigureEmbeddedDatabase.DatabaseProvider.EMBEDDED;
 
 import io.zonky.test.db.AutoConfigureEmbeddedDatabase;
 
@@ -45,19 +45,14 @@ import java.util.Date;
 @SpringBootTest(
         classes = {ApplicationTestConfig.class},
         webEnvironment = WebEnvironment.RANDOM_PORT,
-        properties = {
-            "spring.cloud.gcp.core.enabled=false",
-            "spring.cloud.gcp.config.enabled=false",
-            "spring.cloud.gcp.pubsub.enabled=false",
-            "spring.main.allow-bean-definition-overriding=true"
-        })
+        properties = {"spring.main.allow-bean-definition-overriding=true"})
 @ActiveProfiles({
     ConfigurationProfiles.POSTGRES_EMBEDDED,
     ConfigurationProfiles.MOCK_MAILSERVER,
     ConfigurationProfiles.MOCK_SEARCH
 })
 @AutoConfigureEmbeddedDatabase(
-        provider = ZONKY,
+        provider = EMBEDDED,
         type = AutoConfigureEmbeddedDatabase.DatabaseType.POSTGRES)
 @ComponentScan(basePackageClasses = TranslatablePersistenceConverter.class)
 public abstract class AbstractRestApiApplicationTest {
@@ -93,6 +88,7 @@ public abstract class AbstractRestApiApplicationTest {
 
     public static final String REQUEST_WITH_ID_AND_CHANGES =
             REQUEST + "/{classificationId}/changes";
+    public static final String REQUEST_SUBSCRIBE = REQUEST + "/{classificationId}/trackChanges";
 
     public static final String QUERY = "query";
     public static final String INCLUDE_CODE_LISTS = "includeCodelists";
@@ -169,8 +165,7 @@ public abstract class AbstractRestApiApplicationTest {
     @BeforeEach
     public void prepareTestData() {
         applicationTestUtil.clearDatabase();
-        applicationTestUtil.clearSearch();
-        // if (!testDataInitialized) {
+
         User user = userRepository.save(TestUtil.createUser());
         User user2 = userRepository.save(TestUtil.createUser2());
         User user3 = userRepository.save(TestUtil.createUser3());
@@ -230,9 +225,6 @@ public abstract class AbstractRestApiApplicationTest {
         seriesRepository.updateClassificationLastModified(
                 bydelsinndeling.getId(), bydelsinndeling.getLastModified());
         template.getTransactionManager().commit(transaction);
-        // testDataInitialized = true;
-
-        // }
     }
 
     protected Date parseDate(String date) {

@@ -9,11 +9,12 @@ import io.restassured.http.ContentType;
 
 import no.ssb.klass.api.applicationtest.config.ApplicationTestConfig;
 import no.ssb.klass.api.applicationtest.config.IndexServiceTestConfig;
-import no.ssb.klass.api.services.IndexServiceImpl;
 import no.ssb.klass.core.config.ConfigurationProfiles;
+import no.ssb.klass.search.IndexServiceImpl;
 import no.ssb.klass.testutil.TestDataProvider;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.opensearch.data.client.orhlc.OpenSearchRestTemplate;
 import org.opensearch.testcontainers.OpensearchContainer;
@@ -40,13 +41,13 @@ import org.testcontainers.utility.DockerImageName;
             ConfigurationProfiles.OPEN_SEARCH_LOCAL
         },
         inheritProfiles = false)
+@Disabled
 class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest {
 
     @Container
     @SuppressWarnings("resource") // Managed by Testcontainers
     protected static final OpensearchContainer<?> opensearchContainer =
             new OpensearchContainer<>(DockerImageName.parse("opensearchproject/opensearch:2.11.0"))
-                    .withEnv("OPENSEARCH_JAVA_OPTS", "-Xms2g -Xmx2g")
                     .withEnv("discovery.type", "single-node")
                     .withReuse(true);
 

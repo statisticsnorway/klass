@@ -6,17 +6,7 @@ import static java.util.stream.Collectors.*;
 
 import com.google.common.base.Strings;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Index;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import no.ssb.klass.core.util.AlphaNumericalComparator;
 import no.ssb.klass.core.util.DateRange;
@@ -26,6 +16,7 @@ import no.ssb.klass.core.util.Translatable;
 import no.ssb.klass.core.util.TranslatablePersistenceConverter;
 
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.annotations.BatchSize;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -96,7 +87,9 @@ public class ClassificationSeries extends BaseEntity implements ClassificationEn
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "classification")
     private final List<ClassificationVersion> classificationVersions = new ArrayList<>();
 
-    @ManyToMany private final List<StatisticalUnit> statisticalUnits = new ArrayList<>();
+    @ManyToMany
+    @BatchSize(size = 50)
+    private final List<StatisticalUnit> statisticalUnits = new ArrayList<>();
 
     @Column(nullable = false)
     private boolean deleted;

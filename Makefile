@@ -22,6 +22,37 @@ default: | help
 help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
+
+.PHONY: release-patch
+release-patch:
+	@set -e ; \
+	git checkout main && \
+	git pull && \
+	git checkout -B release && \
+	git merge main && \
+	chmod +x bin/bump.sh && \
+    ./bin/bump.sh bugfix
+
+.PHONY: release-minor
+release-minor:
+	@set -e ; \
+	git checkout main && \
+	git pull && \
+	git checkout -B release && \
+	git merge main && \
+	chmod +x bin/bump.sh && \
+    ./bin/bump.sh minor
+
+.PHONY: release-major
+release-major:
+	@set -e ; \
+	git checkout main && \
+	git pull && \
+	git checkout -B release && \
+	git merge main && \
+	chmod +x bin/bump.sh && \
+    ./bin/bump.sh major
+
 .PHONY: build-klass-forvaltning
 build-klass-forvaltning:
 	pushd klass-forvaltning && \
@@ -58,7 +89,7 @@ build-clean-klass-api:
 run-klass-forvaltning-local-postgres:
 	pushd klass-forvaltning && \
 	${sdk} env && \
-	mvn spring-boot\:run  -Dspring-boot.run.profiles=frontend,postgres-local,hardcoded-user,mock-search,mock-mailserver,small-import,skip-indexing; \
+	mvn spring-boot\:run  -Dspring.profiles.active=frontend,postgres-local,hardcoded-user,embedded-solr,mock-mailserver,small-import,skip-indexing; \
 	popd; \
 	${sdk} env clear
 
@@ -66,7 +97,7 @@ run-klass-forvaltning-local-postgres:
 run-klass-forvaltning-local-postgres-search:
 	pushd klass-forvaltning && \
 	${sdk} env && \
-	mvn spring-boot\:run -Dspring-boot.run.profiles=frontend,postgres-local,hardcoded-user,mock-mailserver,small-import,skip-indexing,remote-solr -Dklass.env.search.solr.url=http://localhost:8983/solr/; \
+	mvn spring-boot\:run -Dspring.profiles.active=frontend,postgres-local,hardcoded-user,mock-mailserver,small-import,skip-indexing,remote-solr -Dklass.env.search.solr.url=http://localhost:8983/solr/; \
 	popd; \
 	${sdk} env clear
 
@@ -84,12 +115,20 @@ run-klass-api-local-postgres:
 start-klass-forvaltning-docker:
 	docker compose $(COMPOSE_FILE) --profile frontend up --build -d
 
+.PHONY: check-klass-forvaltning-docker
+check-klass-forvaltning-docker:
+	docker compose $(COMPOSE_FILE) --profile frontend ps
+
 .PHONY: logs-klass-forvaltning
 logs-klass-forvaltning:
 	docker compose $(COMPOSE_FILE) --profile frontend logs -f
 
 .PHONY: stop-klass-forvaltning-docker
 stop-klass-forvaltning-docker:
+	docker compose $(COMPOSE_FILE) --profile frontend down
+
+.PHONY: stop-klass-forvaltning-docker-delete-volume
+stop-klass-forvaltning-docker-delete-volume:
 	docker compose $(COMPOSE_FILE) --profile frontend down -v
 
 .PHONY: clean-klass-forvaltning-volumes
@@ -119,7 +158,7 @@ logs-klass-api:
 
 .PHONY: stop-klass-api-docker
 stop-klass-api-docker:
-	docker compose $(COMPOSE_FILE) --profile api down -v
+	docker compose $(COMPOSE_FILE) --profile api down
 
 .PHONY: start-klass-api-open-search-docker
 start-klass-api-open-search-docker:
@@ -136,3 +175,11 @@ check-klass-api-open-search-docker:
 .PHONY: logs-klass-api-open-search
 logs-klass-api-open-search:
 	docker compose $(COMPOSE_FILE) --profile open-search logs --tail=100 -f
+
+.PHONY: start-klass-index-job-docker
+start-klass-index-job-docker:
+	docker compose $(COMPOSE_FILE) --profile index up --build
+
+.PHONY: stop-docker
+stop-docker:
+	docker compose $(COMPOSE_FILE) down

@@ -1,5 +1,7 @@
 package no.ssb.klass.api;
 
+import static io.zonky.test.db.AutoConfigureEmbeddedDatabase.DatabaseProvider.EMBEDDED;
+
 import static org.mockito.Mockito.*;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -15,8 +17,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
+import io.zonky.test.db.AutoConfigureEmbeddedDatabase;
+
 import no.ssb.klass.api.config.MockConfig;
 import no.ssb.klass.api.config.TestConfig;
+import no.ssb.klass.api.controllers.handlers.Handlers;
 import no.ssb.klass.api.services.OpenSearchResult;
 import no.ssb.klass.api.services.SearchService;
 import no.ssb.klass.api.util.RestConstants;
@@ -36,12 +41,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchDataAutoConfiguration;
 import org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchRestClientAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -88,6 +93,10 @@ import java.util.List;
             ElasticsearchRestClientAutoConfiguration.class,
             ElasticsearchDataAutoConfiguration.class
         })
+@AutoConfigureEmbeddedDatabase(
+        provider = EMBEDDED,
+        type = AutoConfigureEmbeddedDatabase.DatabaseType.POSTGRES)
+@Import(Handlers.class)
 public class ApiDocumentation {
     private static final int CLASS_ID_FAMILIEGRUPPERING = 17;
     private static final int CLASS_ID_GREENHOUSE_GASES = 84;
@@ -104,8 +113,7 @@ public class ApiDocumentation {
 
     private MockMvc mockMvc;
 
-    @Value("${server.servlet.context-path}")
-    private String contextPath;
+    private String contextPath = RestConstants.CONTEXT_PATH;
 
     private String server = "data.ssb.no";
     private int port = 443;
@@ -1646,14 +1654,12 @@ public class ApiDocumentation {
             String urlTemplate, Object... urlVariables) {
         return MockMvcRequestBuilders.get(
                         this.contextPath + RestConstants.API_VERSION_V1 + urlTemplate, urlVariables)
-                .requestAttr(RestDocumentationGenerator.ATTRIBUTE_NAME_URL_TEMPLATE, urlTemplate)
-                .contextPath(contextPath);
+                .requestAttr(RestDocumentationGenerator.ATTRIBUTE_NAME_URL_TEMPLATE, urlTemplate);
     }
 
     public MockHttpServletRequestBuilder getWithContextUri(String url) {
         return MockMvcRequestBuilders.get(toUri(contextPath + RestConstants.API_VERSION_V1 + url))
-                .requestAttr(RestDocumentationGenerator.ATTRIBUTE_NAME_URL_TEMPLATE, url)
-                .contextPath(contextPath);
+                .requestAttr(RestDocumentationGenerator.ATTRIBUTE_NAME_URL_TEMPLATE, url);
     }
 
     private Page<OpenSearchResult> createSearchPage(Pageable pageable) {

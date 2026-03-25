@@ -37,20 +37,18 @@ import no.ssb.klass.designer.util.VaadinUtil;
 public class LoggMessageTab extends LoggMessageTabDesign {
     private static final Logger log = LoggerFactory.getLogger(LoggMessageTab.class);
     private ClassificationVersion version;
-    //@formatter:off
     private List<ComboBox> fieldsToValidate = Arrays.asList(
             classificationComboBox,
             versionComboBox
     );
     private String selectedClassificationName;
     private String selectedVersionName;
-    //@formatter:on
-    @Autowired
     private UserContext userContext;
-    @Autowired
     private ClassificationFacade classificationFacade;
 
-    public void init() {
+    public void init(UserContext userContext, ClassificationFacade classificationFacade) {
+        this.userContext = userContext;
+        this.classificationFacade = classificationFacade;
        for (ComboBox field : fieldsToValidate) {
             field.removeAllItems();
             field.setItemCaptionMode(AbstractSelect.ItemCaptionMode.EXPLICIT);
@@ -229,5 +227,3 @@ public class LoggMessageTab extends LoggMessageTabDesign {
         UI.getCurrent().addWindow(confWindow);
     }
 }
-
-

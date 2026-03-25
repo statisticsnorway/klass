@@ -21,7 +21,8 @@ public class ResourceUtilTest {
         // IDE
         link = link.replace("http://localhost", "");
         assertEquals(
-                RestConstants.API_VERSION_V1 + "/classifications/search{?query,includeCodelists}",
+                RestConstants.CONTEXT_AND_VERSION_V1
+                        + "/classifications/search{?query,includeCodelists}",
                 link);
     }
 }

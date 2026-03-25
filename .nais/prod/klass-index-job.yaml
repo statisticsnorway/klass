@@ -1,0 +1,43 @@
+apiVersion: nais.io/v1
+kind: Naisjob
+metadata:
+  name: klass-index-job
+  namespace: dapla-metadata
+  labels:
+    team: dapla-metadata
+    shared-db: "true"
+spec:
+  schedule: "30 23 * * *"  # Run once per day at 23:30
+  timeZone: Europe/Oslo
+  concurrencyPolicy: Forbid
+  restartPolicy: Never
+  failedJobsHistoryLimit: 3
+  successfulJobsHistoryLimit: 3
+  openSearch:
+    access: admin
+    instance: klass-search
+  resources:
+    requests:
+      cpu: 200m
+      memory: 1920Mi
+    limits:
+      memory: 1920Mi
+  env:
+    - name: SPRING_PROFILES_ACTIVE
+      value: postgres, remote-open-search
+    - name: OPENSEARCH_USERNAME
+      value: ${OPEN_SEARCH_USERNAME}
+    - name: OPENSEARCH_URL
+      value: ${OPEN_SEARCH_URI}
+    - name: OPENSEARCH_PASSWORD
+      value: ${OPEN_SEARCH_PASSWORD}
+      # Structured logging in cluster
+    - name: LOGGING_STRUCTURED_FORMAT_CONSOLE
+      value: logstash
+    - name: JAVA_TOOL_OPTIONS
+      value: "-XX:InitialRAMPercentage=75.0 -XX:MaxRAMPercentage=75.0"
+  envFrom:
+    - secret: google-sql-klass
+  filesFrom:
+    - mountPath: /var/run/secrets/nais.io/sqlcertificate
+      secret: sqeletor-klass-827ec8ec

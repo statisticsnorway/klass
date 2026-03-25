@@ -2,6 +2,8 @@ package no.ssb.klass.core.model;
 
 import static com.google.common.base.Preconditions.*;
 
+import static org.hibernate.annotations.CacheConcurrencyStrategy.READ_ONLY;
+
 import static java.util.stream.Collectors.*;
 
 import com.google.common.collect.Lists;
@@ -23,10 +25,13 @@ import no.ssb.klass.core.util.TimeUtil;
 import no.ssb.klass.core.util.Translatable;
 import no.ssb.klass.core.util.TranslatablePersistenceConverter;
 
+import org.hibernate.annotations.Cache;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 @Entity
 @Table(
@@ -53,6 +58,7 @@ public class CorrespondenceTable extends BaseEntity
     private int targetLevelNumber;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "correspondenceTable")
+    @Cache(usage = READ_ONLY)
     private List<CorrespondenceMap> correspondenceMaps;
 
     @OneToMany(cascade = CascadeType.ALL)
@@ -185,6 +191,10 @@ public class CorrespondenceTable extends BaseEntity
 
     public List<CorrespondenceMap> getCorrespondenceMaps() {
         return correspondenceMaps.stream().sorted().collect(toList());
+    }
+
+    public Stream<CorrespondenceMap> streamCorrespondenceMaps() {
+        return correspondenceMaps.stream();
     }
 
     public void removeAllCorrespondenceMaps() {

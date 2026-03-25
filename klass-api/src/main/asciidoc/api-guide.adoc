@@ -143,7 +143,7 @@ include::{snippets}/classifications-example/links.adoc[]
 
 ==== Request parameters
 
-include::{snippets}/classifications-optional-parameters-example/request-parameters.adoc[]
+include::{snippets}/classifications-optional-parameters-example/query-parameters.adoc[]
 
 [[search]]
 === Search for classifications
@@ -173,7 +173,7 @@ include::{snippets}/search-example/links.adoc[]
 
 ==== Request parameters
 
-include::{snippets}/search-optional-parameters-example/request-parameters.adoc[]
+include::{snippets}/search-optional-parameters-example/query-parameters.adoc[]
 
 [[classification]]
 === classifications by ID
@@ -204,7 +204,7 @@ include::{snippets}/classification-example/links.adoc[]
 
 ==== Request parameters
 
-include::{snippets}/classification-optional-parameters-example/request-parameters.adoc[]
+include::{snippets}/classification-optional-parameters-example/query-parameters.adoc[]
 
 === codes
 
@@ -238,7 +238,7 @@ include::{snippets}/codes-example-json/http-response.adoc[]
 
 ==== Request parameters
 
-include::{snippets}/codes-optional-parameters-example/request-parameters.adoc[]
+include::{snippets}/codes-optional-parameters-example/query-parameters.adoc[]
 
 === codesAt
 
@@ -268,7 +268,7 @@ include::{snippets}/codes-at-example-json/http-response.adoc[]
 
 ==== Request parameters
 
-include::{snippets}/codes-at-optional-parameters-example/request-parameters.adoc[]
+include::{snippets}/codes-at-optional-parameters-example/query-parameters.adoc[]
 
 === versions by ID
 
@@ -285,7 +285,7 @@ The ID is shown under classifications.
 
 ==== Request parameters
 
-include::{snippets}/versions-request-parameters-example/request-parameters.adoc[]
+include::{snippets}/versions-request-parameters-example/query-parameters.adoc[]
 
 ==== Example request (JSON with UTF-8)
 
@@ -338,7 +338,7 @@ include::{snippets}/variant-example-json/http-response.adoc[]
 
 ==== Request parameters
 
-include::{snippets}/variant-optional-parameters-example/request-parameters.adoc[]
+include::{snippets}/variant-optional-parameters-example/query-parameters.adoc[]
 
 === variantAt
 
@@ -368,7 +368,7 @@ include::{snippets}/variant-at-example-json/http-response.adoc[]
 
 ==== Request parameters
 
-include::{snippets}/variant-at-optional-parameters-example/request-parameters.adoc[]
+include::{snippets}/variant-at-optional-parameters-example/query-parameters.adoc[]
 
 === variants by ID
 
@@ -385,7 +385,7 @@ The ID is shown under versions.
 
 ==== Request parameters
 
-include::{snippets}/variants-request-parameters-example/request-parameters.adoc[]
+include::{snippets}/variants-request-parameters-example/query-parameters.adoc[]
 
 ==== Example request (JSON with UTF-8)
 
@@ -435,7 +435,7 @@ include::{snippets}/corresponds-example/http-response.adoc[]
 
 ==== Request parameters
 
-include::{snippets}/corresponds-optional-parameters-example/request-parameters.adoc[]
+include::{snippets}/corresponds-optional-parameters-example/query-parameters.adoc[]
 
 === correspondsAt
 
@@ -462,7 +462,7 @@ include::{snippets}/corresponds-at-example/http-response.adoc[]
 
 ==== Request parameters
 
-include::{snippets}/corresponds-at-optional-parameters-example/request-parameters.adoc[]
+include::{snippets}/corresponds-at-optional-parameters-example/query-parameters.adoc[]
 
 === correspondenceTables by ID
 
@@ -506,7 +506,7 @@ include::{snippets}/correspondence-tables-example-json/links.adoc[]
 
 ==== Request parameters
 
-include::{snippets}/correspondence-tables-optional-parameters-example/request-parameters.adoc[]
+include::{snippets}/correspondence-tables-optional-parameters-example/query-parameters.adoc[]
 
 === changes
 
@@ -534,7 +534,7 @@ include::{snippets}/changes-example/http-response.adoc[]
 
 ==== Request parameters
 
-include::{snippets}/changes-optional-parameters-example/request-parameters.adoc[]
+include::{snippets}/changes-optional-parameters-example/query-parameters.adoc[]
 
 === classificationfamilies
 
@@ -563,7 +563,7 @@ include::{snippets}/classification-families-example/links.adoc[]
 
 ==== Request parameters
 
-include::{snippets}/classification-families-optional-parameters-example/request-parameters.adoc[]
+include::{snippets}/classification-families-optional-parameters-example/query-parameters.adoc[]
 
 [[classification-family]]
 === classificationfamilies by ID
@@ -593,7 +593,7 @@ include::{snippets}/classification-family-example/links.adoc[]
 
 ==== Request parameters
 
-include::{snippets}/classification-family-optional-parameters-example/request-parameters.adoc[]
+include::{snippets}/classification-family-optional-parameters-example/query-parameters.adoc[]
 
 === ssbsections
 

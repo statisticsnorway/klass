@@ -25,31 +25,41 @@ import no.ssb.klass.designer.user.UserContext;
 import no.ssb.klass.designer.util.ParameterUtil;
 import no.ssb.klass.designer.util.VaadinUtil;
 import no.ssb.klass.designer.windows.DescriptionOfChangeWindow;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import no.ssb.klass.forvaltning.converting.xml.ClassificationVersionXmlService;
+import org.springframework.context.ApplicationContext;
 
 @PrototypeScope
 @SpringView(name = VersionMainView.NAME)
 @SuppressWarnings("serial")
 public class VersionMainView extends VersionMainEditor implements EditingView {
+    private static final Logger log = LoggerFactory.getLogger(VersionMainView.class);
 
     public static final String NAME = "editVersion";
     public static final String PARAM_VERSION_ID = "versionId";
 
     private boolean ignoreChanges = false;
 
-    @Autowired
     private ClassificationFacade classificationFacade;
-
-    @Autowired
     private UserContext userContext;
-
     private PublicationChoiceEditor publicationChoiceEditor;
 
-    public VersionMainView() {
+    private ClassificationVersionXmlService versionXmlService;
+    private ApplicationContext applicationContext;
+
+    @Autowired
+    public VersionMainView(ClassificationFacade classificationFacade, UserContext userContext, ClassificationVersionXmlService versionXmlService, ApplicationContext applicationContext) {
+        this.classificationFacade = classificationFacade;
+        this.userContext = userContext;
+        this.versionXmlService = versionXmlService;
+        this.applicationContext = applicationContext;
         publicationChoiceEditor = new PublicationChoiceEditor(new MarginInfo(true, false, true, true));
         actionButtons.addConfirmClickListener(event -> checkAndSaveVersion());
         actionButtons.addCancelClickListener(this::cancelClick);
         versionAccordion.addSelectedTabChangeListener(eventTabChange -> metadataEditor.updateVersion(codeEditor
                 .getClassificationVersion(), classificationFacade));
+        log.debug("Creating version main view {}", this);
     }
 
     @Override
@@ -64,6 +74,9 @@ public class VersionMainView extends VersionMainEditor implements EditingView {
         checkUserAccess(classificationVersion);
         // NB. checkUserAccess() must be before codeEditor.init(..), if not a NewCodeEditor will be
         // added even when user does not have permission to alter version.
+        codeEditor.setVersionXmlService(versionXmlService);
+        codeEditor.setApplicationContext(applicationContext);
+        codeEditor.setClassificationFacade(classificationFacade);
         codeEditor.init(classificationVersion);
         if (editingState.isCodeEditorNotMetadataVisible()) {
             codeEditor.restorePreviousEditingState(editingState);
@@ -71,6 +84,9 @@ public class VersionMainView extends VersionMainEditor implements EditingView {
         } else {
             metadataEditor.restorePreviousEditingState(editingState);
         }
+        log.debug(
+                "Enter version editor view with user context {}, version xml service {}, application context {} " +
+                        "and classification facade {}", userContext, versionXmlService, applicationContext, classificationFacade);
     }
 
     @Override
@@ -134,5 +150,18 @@ public class VersionMainView extends VersionMainEditor implements EditingView {
 
     private void cancelClick(Button.ClickEvent clickEvent) {
         VaadinUtil.navigateTo(Iterables.getLast(getBreadcrumbs()));
+    }
+
+    @java.lang.Override
+    public java.lang.String toString() {
+        final java.lang.StringBuffer sb = new java.lang.StringBuffer("VersionMainView{");
+        sb.append("ignoreChanges=").append(ignoreChanges);
+        sb.append(", classificationFacade=").append(classificationFacade);
+        sb.append(", userContext=").append(userContext);
+        sb.append(", publicationChoiceEditor=").append(publicationChoiceEditor);
+        sb.append(", versionXmlService=").append(versionXmlService);
+        sb.append(", applicationContext=").append(applicationContext);
+        sb.append('}');
+        return sb.toString();
     }
 }

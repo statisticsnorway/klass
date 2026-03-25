@@ -28,10 +28,10 @@ spec:
     max: 1
   resources:
     requests:
-      cpu: 100m
-      memory: 2Gi
+      cpu: 20m
+      memory: 520Mi
     limits:
-      memory: 2Gi
+      memory: 520Mi
 
   accessPolicy:
     inbound:

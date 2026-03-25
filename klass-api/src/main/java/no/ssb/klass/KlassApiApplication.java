@@ -21,7 +21,6 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Import;
-import org.springframework.scheduling.annotation.EnableScheduling;
 
 @OpenAPIDefinition(
         info =
@@ -45,9 +44,9 @@ Classifications are "official", and in a classification, the categories at each 
                         description = "API Guide",
                         url = RestConstants.CONTEXT_AND_VERSION_V1 + "/api-guide.html"),
         servers = {
-            @Server(url = "https://data.ssb.no/api/klass", description = "Production"),
-            @Server(url = "https://data.test.ssb.no/api/klass", description = "Test"),
-            @Server(url = "http://localhost:8080/api/klass", description = "Local"),
+            @Server(url = "https://data.ssb.no", description = "Production"),
+            @Server(url = "https://data.test.ssb.no", description = "Test"),
+            @Server(url = "http://localhost:8080", description = "Local"),
         },
         tags = {
             @Tag(
@@ -94,7 +93,6 @@ To get a snapshot of codes valid at a specified date, use codesAt.
 @Import(TomcatServletWebServerFactoryCustomizer.class)
 @ConfigurationPropertiesScan
 @ServletComponentScan
-@EnableScheduling
 public class KlassApiApplication extends SpringBootServletInitializer {
 
     @Override

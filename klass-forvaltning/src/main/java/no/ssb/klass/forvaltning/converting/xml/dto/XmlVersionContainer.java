@@ -193,5 +193,25 @@ public class XmlVersionContainer {
                     .append(validTo, null)
                     .isEquals();
         }
+
+        @java.lang.Override
+        public java.lang.String toString() {
+            final java.lang.StringBuffer sb = new java.lang.StringBuffer("XmlVersionItem{");
+            sb.append("code='").append(code).append('\'');
+            sb.append(", parentCode='").append(parentCode).append('\'');
+            sb.append(", nameNB='").append(nameNB).append('\'');
+            sb.append(", nameNN='").append(nameNN).append('\'');
+            sb.append(", nameEN='").append(nameEN).append('\'');
+            sb.append(", shortNameNB='").append(shortNameNB).append('\'');
+            sb.append(", shortNameNN='").append(shortNameNN).append('\'');
+            sb.append(", shortNameEN='").append(shortNameEN).append('\'');
+            sb.append(", notesNB='").append(notesNB).append('\'');
+            sb.append(", notesNN='").append(notesNN).append('\'');
+            sb.append(", notesEN='").append(notesEN).append('\'');
+            sb.append(", validFrom='").append(validFrom).append('\'');
+            sb.append(", validTo='").append(validTo).append('\'');
+            sb.append('}');
+            return sb.toString();
+        }
     }
 }

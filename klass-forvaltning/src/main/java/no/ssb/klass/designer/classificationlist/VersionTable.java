@@ -36,24 +36,24 @@ import no.ssb.klass.designer.user.UserContext;
 import no.ssb.klass.core.util.AlphaNumericalComparator;
 import no.ssb.klass.designer.util.VaadinUtil;
 import no.ssb.klass.designer.windows.NewVersionWindow;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("serial")
 @UIScope
 @SpringComponent
 public class VersionTable extends AbstractTable {
+
+    private static final Logger log = LoggerFactory.getLogger(VersionTable.class);
     private static final String COPY_VERSION_TOOLTIP = "Lag ny versjon av valgt kodeverk";
     private static final String EXPORT_VERSION_TOOLTIP = "Eksporter valgt kodeverk";
 
     private final StreamResource streamResource = new StreamResource(this::generateExportData, "");
     private final FileDownloader fileDownloader = new FileDownloader(streamResource);
 
-    @Autowired
     private ApplicationContext applicationContext;
-    @Autowired
     private ClassificationFacade classificationFacade;
-    @Autowired
     private UserContext userContext;
-    @Autowired
     private FullVersionExportService exportService;
 
     private Table table;
@@ -63,7 +63,12 @@ public class VersionTable extends AbstractTable {
 
     private ClassificationVersionClickListener classificationVersionClickListener;
 
-    public void init(ClassificationTable classificationTable, VariantTable variantTable) {
+    @Autowired
+    public void init(ClassificationTable classificationTable, VariantTable variantTable, UserContext userContext, ClassificationFacade classificationFacade, FullVersionExportService exportService, ApplicationContext applicationContext) {
+        this.userContext = userContext;
+        this.classificationFacade = classificationFacade;
+        this.exportService = exportService;
+        this.applicationContext = applicationContext;
         classificationVersionClickListener = new ClassificationVersionClickListener(userContext,
                 classificationFacade, variantTable);
         table = createTable(new VersionContainer(userContext, classificationFacade),
@@ -81,6 +86,7 @@ public class VersionTable extends AbstractTable {
         rootLayout.addComponents(createHeader("Versjoner", exportVersionButton, addVersionButton),
                 wrapFilter(filterBox), table);
         rootLayout.setExpandRatio(table, 1);
+        log.debug("Init Version table {}", this);
     }
 
     private InputStream generateExportData() {
@@ -121,10 +127,9 @@ public class VersionTable extends AbstractTable {
 
     private void copyVersion(ClassificationTable classificationTable) {
         if (classificationTable.getSelectedClassificationId() != null) {
-
             NewVersionWindow copyVersionWindow = applicationContext.getBean(NewVersionWindow.class);
             copyVersionWindow.init(classificationTable.getSelectedClassificationId(),
-                    classificationTable.getSelectedClassificationName());
+                    classificationTable.getSelectedClassificationName(), classificationFacade);
             UI.getCurrent().addWindow(copyVersionWindow);
         }
     }
@@ -161,7 +166,6 @@ public class VersionTable extends AbstractTable {
         private List<ClassificationEntityOperations> getListOfVariantsAndCorrespondenceTables(
                 ClassificationVersion version) {
             List<ClassificationEntityOperations> entities = new LinkedList<>();
-
             List<CorrespondenceTable> sourceList = classificationFacade.findCorrespondenceTablesWithSource(version)
                     .stream()
                     .sorted(AlphaNumericalComparator.comparing(ClassificationEntityOperations::getNameInPrimaryLanguage,

@@ -1,6 +1,7 @@
 package no.ssb.klass.designer.user;
 
 import com.google.common.collect.ImmutableSet;
+import com.vaadin.server.Page;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.VaadinSessionScope;
@@ -14,6 +15,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
+import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
+import org.springframework.security.oauth2.core.OAuth2Error;
+import org.springframework.security.oauth2.core.OAuth2ErrorCodes;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -41,7 +45,11 @@ public class UserContextImpl implements UserContext {
             @Value("${klass.security.roles.admin.users}")
             String[] adminUsers,
             @Autowired
-            Environment environment
+            Environment environment,
+            @Value("${klass.env.server}")
+            String klassForvaltningServerName,
+            @Value("${klass.security.oauth2.logout.path}")
+            String logoutPath
     ) {
         if (adminUsers == null) {
             this.adminUsers = new String[]{};
@@ -49,16 +57,21 @@ public class UserContextImpl implements UserContext {
             this.adminUsers = adminUsers;
         }
         this.environment = environment;
-        log.debug("Users to assign admin role to {}", this.adminUsers);
         VaadinSession session = VaadinSession.getCurrent();
         this.userService = userService;
         User user = session.getAttribute(User.class);
         if (user == null) {
-            log.error("User is null! Application features may be broken.");
+            log.error("User is null! Redirecting to logout.");
+            Page page = Page.getCurrent();
+            if (page != null) {
+                page.setLocation("https://" + klassForvaltningServerName + logoutPath);
+            }
+            throw new OAuth2AuthenticationException(new OAuth2Error(OAuth2ErrorCodes.UNAUTHORIZED_CLIENT));
         } else {
             log.debug("Setting user {}", user.getUsername());
             this.setUser(user);
         }
+        log.info("User '{}' logged in with role '{}'", user.getUsername(), user.getRole());
     }
 
     @Override
@@ -141,7 +154,6 @@ public class UserContextImpl implements UserContext {
         if (shouldHaveAdminRole(user, this.adminUsers)) {
             role = Role.ADMINISTRATOR;
         }
-        log.info("User '{}' assigned role '{}'", user.getUsername(), role);
         return role;
     }
 

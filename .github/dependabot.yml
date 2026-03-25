@@ -15,6 +15,9 @@ updates:
       - klass-mail  # Has its own config below
     schedule:
       interval: "weekly"
+    ignore:
+      - dependency-name: "*"
+        update-types: [ "version-update:semver-major" ]
     groups:
       klass-root:
         patterns:
@@ -23,6 +26,9 @@ updates:
     directory: "/klass-api" # Location of package manifests
     schedule:
       interval: "weekly"
+    ignore:
+      - dependency-name: "*"
+        update-types: [ "version-update:semver-major" ]
     groups:
       klass-api:
         patterns:
@@ -31,6 +37,9 @@ updates:
     directory: "/klass-shared" # Location of package manifests
     schedule:
       interval: "weekly"
+    ignore:
+      - dependency-name: "*"
+        update-types: [ "version-update:semver-major" ]
     groups:
       klass-shared:
         patterns:
@@ -39,6 +48,9 @@ updates:
     directory: "/klass-mail" # Location of package manifests
     schedule:
       interval: "weekly"
+    ignore:
+      - dependency-name: "*"
+        update-types: [ "version-update:semver-major" ]
     groups:
       klass-mail:
         patterns:
