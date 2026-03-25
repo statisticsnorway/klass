@@ -58,7 +58,7 @@
         <dependency>
             <groupId>org.opensearch.client</groupId>
             <artifactId>spring-data-opensearch-starter</artifactId>
-            <version>1.7.1</version>
+            <version>${spring-data-opensearch-starter.version}</version>
         </dependency>
 
         <!--Non-Spring-->
