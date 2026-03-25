@@ -31,8 +31,8 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          java-version: 21
-          distribution: temurin
+          distribution: 'temurin'
+          java-version: '21'
           cache: maven
           overwrite-settings: false
 
