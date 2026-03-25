@@ -46,6 +46,7 @@
         <dependency>
             <groupId>org.opensearch.client</groupId>
             <artifactId>spring-data-opensearch-starter</artifactId>
+            <version>${spring-data-opensearch-starter.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
