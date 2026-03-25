@@ -2,11 +2,12 @@ name: Klass Index Job build and deploy
 
 on:
   release:
-    types: [published]
+    types: [ published ]
   push:
     branches:
       - main
     paths:
+      - "pom.xml"
       - "klass-index-job/**"
       - "klass-shared/**"
       - ".nais/**/klass-index-job.yaml"
