@@ -68,8 +68,8 @@ public class JwtAuthFilter extends OncePerRequestFilter implements Filter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        // Skip JWT validation only for public schema files (excluded from Wonderwall enforcement)
-        return request.getRequestURI().contains("/schemas/");
+        // Skip JWT validation only for the exact public schema file path.
+        return request.getRequestURI().equals(request.getContextPath() + "/schemas/version.xsd");
     }
 
     @Override
