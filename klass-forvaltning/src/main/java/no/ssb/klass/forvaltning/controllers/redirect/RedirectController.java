@@ -19,6 +19,11 @@ public class RedirectController {
         this.serverContextPath = serverContextPath;
     }
 
+    @GetMapping("/")
+    public void redirectRoot(HttpServletResponse httpServletResponse) throws IOException {
+        httpServletResponse.sendRedirect(this.serverContextPath + "/" + KlassUI.PATH);
+    }
+
     @GetMapping("/login")
     public void redirectLogin(HttpServletResponse httpServletResponse) throws IOException {
         httpServletResponse.sendRedirect(this.serverContextPath + "/" + KlassUI.PATH);
