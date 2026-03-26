@@ -8,7 +8,7 @@
 
     <groupId>no.ssb.klass</groupId>
     <artifactId>klass-root</artifactId>
-    <version>4.4.1</version>
+    <version>4.4.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <parent>
@@ -108,7 +108,6 @@
                         <releaseProfiles>documentation</releaseProfiles>
                         <autoVersionSubmodules>true</autoVersionSubmodules>
                         <tagNameFormat>v@{project.version}</tagNameFormat>
-                        <!--TODO find a solution for the javadoc error on generated sources-->
                         <arguments>
                             -Pdocumentation -Dmaven.javadoc.skip=true -pl :klass-api -am
                         </arguments>

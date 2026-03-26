@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #
-# Update the artifact version in pom.xml
+# Bump the version for release
 # Script arguments:
 # $1 = mode (major, minor, bugfix)
 #
@@ -36,26 +36,22 @@ function bump {
 }
 
 #
-# Read the existing project name and version number from pom.xml and populate the following variables:
+# Extract the current version
 #
 # $version = "1.54.3"
 #
-function pull_values {
-  local fline=`head -1 ${pom}`
-  version=`cat pom.xml | grep "<version>.*</version>" | head -1 | awk -F'[><]' '{print $3}'`
+function extract_version {
+  version=`cat version.txt`
 }
 
 #
-# Update the pom.xml file with with maven
+# Update the current version
 #
-function update_pom {
+function write_version {
   echo "Updating version to ${new_version}"
-  mvn versions:set -DnewVersion="${new_version}" versions:commit
+  echo "${new_version}" > version.txt
 }
 
-# Set up the defaults for the script
-pom="pom.xml"
-
-pull_values
+extract_version
 bump $1 ${version}
-update_pom
+write_version
