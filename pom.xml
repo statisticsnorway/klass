@@ -109,7 +109,7 @@
                         <autoVersionSubmodules>true</autoVersionSubmodules>
                         <tagNameFormat>v@{project.version}</tagNameFormat>
                         <arguments>
-                            -Pdocumentation -Dmaven.javadoc.skip=true -DskipTests -pl :klass-api -am
+                            -Pdocumentation -Dmaven.javadoc.skip=true -pl :klass-api -am
                         </arguments>
                     </configuration>
                 </plugin>
