@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #
-# Update the artifact version in pom.xml
+# Bump the version for release
 # Script arguments:
 # $1 = mode (major, minor, bugfix)
 #
@@ -40,18 +40,18 @@ function bump {
 #
 # $version = "1.54.3"
 #
-function pull_values {
+function extract_version {
   version=`cat version.txt`
 }
 
 #
 # Update the current version
 #
-function update_pom {
+function write_version {
   echo "Updating version to ${new_version}"
   echo "${new_version}" > version.txt
 }
 
-pull_values
+extract_version
 bump $1 ${version}
-update_pom
+write_version
