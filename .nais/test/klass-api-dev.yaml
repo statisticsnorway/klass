@@ -19,10 +19,10 @@ spec:
     max: 1
   resources:
     requests:
-      cpu: 200m
-      memory: 1000Mi
+      cpu: 500m
+      memory: 4096Mi
     limits:
-      memory: 1920Mi
+      memory: 5120Mi
   env:
     - name: SPRING_PROFILES_ACTIVE
       value: api, postgres, remote-open-search, skip-indexing
