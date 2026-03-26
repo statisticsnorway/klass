@@ -32,7 +32,7 @@ The release process is automated. It can be triggered by following these steps:
 
 1. Check that you are on the default branch.
 1. Check that you don't have any local commits or changes.
-1. Run one of the following commands depending on what version you wish to release `make release-patch`, `make release-minor`, `make release-major`. This command creates or switches to a branch called `release` and bumps the version number. Commit the changes and create a PR. Once this is merged, it triggers a workflow to run the release process like so:
+1. Run one of the following commands depending on what version you wish to release `make release-patch`, `make release-minor`, `make release-major`. This command creates or switches to a branch called `release` and bumps the version number in `version.txt`. Commit the changes and create a PR. Once this is merged, it triggers a workflow to run the release process like so:
     1. The project is built
     2. The artifacts are deployed
     3. A tag is pushed
