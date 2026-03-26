@@ -60,14 +60,11 @@ jobs:
             [{"id": "github","username": "${{steps.get-bot-vars.outputs.bot_email}}","password": "${{steps.app-token.outputs.token}}",
             "configuration": {"httpHeaders": {"property": {"name": "Authorization","value": "Bearer ${{ secrets.GITHUB_TOKEN }}"}}}}]
 
-      - name: Maven release and deploy to GitHub packages
+      - name: Maven release
         id: release-artifact
         run: |
-          # Get the release version from the pom.xml before the next snapshot increment
-          VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout | sed "s/-SNAPSHOT//")
-          echo "version=${VERSION}" >> $GITHUB_OUTPUT
           # Prepare the release
-          mvn --batch-mode release:prepare -DreleaseVersion=4.3.3 -DdevelopmentVersion=4.3.4-SNAPSHOT
+          mvn --batch-mode release:prepare -DreleaseVersion=$(cat version.txt)
           # Perform the release
           mvn --batch-mode release:perform
           TAG=$(git describe --abbrev=0 --tags)
