@@ -66,7 +66,9 @@ jobs:
           # Get the release version from the pom.xml before the next snapshot increment
           VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout | sed "s/-SNAPSHOT//")
           echo "version=${VERSION}" >> $GITHUB_OUTPUT
-          # Perform the release/deploy
+          # Prepare the release
+          mvn --batch-mode release:prepare -DreleaseVersion=4.3.3 -DdevelopmentVersion=4.3.4-SNAPSHOT
+          # Perform the release
           mvn --batch-mode release:perform
           TAG=$(git describe --abbrev=0 --tags)
           echo "tag=${TAG}" >> $GITHUB_OUTPUT
