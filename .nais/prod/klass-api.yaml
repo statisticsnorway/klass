@@ -12,7 +12,7 @@ spec:
     - https://klass.intern.ssb.no/api/klass
   replicas:
     min: 2
-    max: 4
+    max: 2
   resources:
     requests:
       cpu: 500m
