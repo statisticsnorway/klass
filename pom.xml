@@ -10,7 +10,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.12</version>
+        <version>3.5.13</version>
         <relativePath />
     </parent>
 
@@ -40,7 +40,7 @@
         <asciidoctor-version>3.2.0</asciidoctor-version>
         <commons-io-version>2.21.0</commons-io-version>
         <commons-lang3-version>3.20.0</commons-lang3-version>
-        <guava-version>33.5.0-jre</guava-version>
+        <guava-version>33.6.0-jre</guava-version>
         <jackson-bom.version>2.21.2</jackson-bom.version>
         <jakarta-rs-api-version>4.0.0</jakarta-rs-api-version>
         <jaxb-api-version>4.0.5</jaxb-api-version>
@@ -78,7 +78,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.14.1</version>
+                    <version>3.15.0</version>
                     <configuration>
                         <release>${java.version}</release>
                     </configuration>
