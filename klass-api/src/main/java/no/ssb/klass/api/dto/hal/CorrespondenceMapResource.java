@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import no.ssb.klass.core.model.ClassificationItem;
 import no.ssb.klass.core.model.CorrespondenceMap;
 import no.ssb.klass.core.model.Language;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Comparator;
 import java.util.List;
@@ -22,6 +24,7 @@ public class CorrespondenceMapResource {
     private final String sourceName;
     private final String targetCode;
     private final String targetName;
+    private static final Logger log = LoggerFactory.getLogger(CorrespondenceMapResource.class);
 
     public CorrespondenceMapResource(CorrespondenceMap correspondenceMap, Language language) {
         ClassificationItem sourceItem = correspondenceMap.getSource().orElse(null);
@@ -54,15 +57,18 @@ public class CorrespondenceMapResource {
      * help when you feed the inner comparator with the method to call to get values
      */
     private String getNullSafeSourceCode() {
+        log.info("getNullSafeSourceCode {}", sourceCode);
         return sourceCode == null ? "" : sourceCode;
     }
 
     private String getNullSafeTargetCode() {
+        log.info("getNullSafeTargetCode {}", targetCode);
         return targetCode == null ? "" : targetCode;
     }
 
     public static List<CorrespondenceMapResource> convert(
             List<CorrespondenceMap> correspondenceMaps, Language language) {
+        log.info("convert correspondenceMaps {}", correspondenceMaps);
         return correspondenceMaps.stream()
                 .map(
                         correspondenceMap ->

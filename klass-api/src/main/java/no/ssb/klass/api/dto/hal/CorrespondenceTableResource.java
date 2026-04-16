@@ -7,6 +7,8 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 import no.ssb.klass.core.model.CorrespondenceTable;
 import no.ssb.klass.core.model.Language;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -31,6 +33,7 @@ import java.util.List;
     "links"
 })
 public class CorrespondenceTableResource extends CorrespondenceTableSummaryResource {
+    private static final Logger log = LoggerFactory.getLogger(CorrespondenceTableResource.class);
     private final String description;
     private final List<ChangelogResource> changelogs;
     private final String owningSection;
@@ -64,6 +67,7 @@ public class CorrespondenceTableResource extends CorrespondenceTableSummaryResou
     @JacksonXmlElementWrapper(localName = "correspondenceMaps")
     @JacksonXmlProperty(localName = "correspondenceMap")
     public List<CorrespondenceMapResource> getCorrespondenceMaps() {
+        log.info("Getting correspondence maps for {}", this);
         return correspondenceMaps;
     }
 }

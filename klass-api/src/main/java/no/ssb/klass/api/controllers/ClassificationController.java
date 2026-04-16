@@ -274,6 +274,7 @@ public class ClassificationController {
                                             CorrespondenceTable::getNameInPrimaryLanguage, true))
                             .collect(toList());
             successGetCorrespondence = true;
+            log.info("Correspondence is target returned {} correspondences", corrTableVersionIsTarget);
             String owningSectionName =
                     classificationService.resolveSectionName(
                             version.getContactPerson().getSection(), language);
@@ -310,7 +311,9 @@ public class ClassificationController {
             String owningSectionName =
                     classificationService.resolveSectionName(
                             table.getContactPerson().getSection(), language);
-            return new CorrespondenceTableResource(table, language, owningSectionName);
+            CorrespondenceTableResource correspondenceTableResource = new CorrespondenceTableResource(table, language, owningSectionName);
+            log.info("Returning correspondence table resource {}", correspondenceTableResource);
+            return correspondenceTableResource;
         } finally {
             long duration = System.currentTimeMillis() - start;
             log.info(
@@ -342,8 +345,9 @@ public class ClassificationController {
             String owningSectionName =
                     classificationService.resolveSectionName(
                             variant.getContactPerson().getSection(), language);
-
-            return new ClassificationVariantResource(variant, language, owningSectionName);
+            ClassificationVariantResource classificationVariantResource = new ClassificationVariantResource(variant, language, owningSectionName);
+            log.info("Returning classification variant resource {}", classificationVariantResource);
+            return classificationVariantResource;
 
         } finally {
             long duration = System.currentTimeMillis() - start;
@@ -708,7 +712,7 @@ public class ClassificationController {
             csvFieldsValidator.validateFieldsCorrespondenceItem(csvFieldsList);
             correspondenceList.setCsvFields(csvFieldsList);
         }
-
+        log.info("correspondenceList {}", correspondenceList);
         return correspondenceList;
     }
 
@@ -746,7 +750,7 @@ public class ClassificationController {
             csvFieldsValidator.validateFieldsCorrespondenceItem(csvFieldsList);
             correspondenceList.setCsvFields(csvFieldsList);
         }
-
+        log.info("correspondenceList corresponds at {}", correspondenceList);
         return correspondenceList;
     }
 
@@ -770,13 +774,15 @@ public class ClassificationController {
                             includeFuture,
                             inverted);
             success = true;
-            return new CorrespondenceItemList(
+            CorrespondenceItemList correspondenceItemList = new CorrespondenceItemList(
                             csvSeparator, dateRangeHolder.withRange, includeFuture)
                     .convert(correspondences)
                     .removeOutside(dateRangeHolder.dateRange)
                     .limit(dateRangeHolder.dateRange)
                     .group()
                     .sort();
+            log.info("correspondenceItemList {}", correspondenceItemList);
+            return correspondenceItemList;
         } finally {
             long duration = System.currentTimeMillis() - start;
             log.info(
