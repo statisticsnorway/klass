@@ -58,7 +58,6 @@ public class CorrespondenceTable extends BaseEntity
     private int targetLevelNumber;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "correspondenceTable")
-    @Cache(usage = READ_ONLY)
     private List<CorrespondenceMap> correspondenceMaps;
 
     @OneToMany(cascade = CascadeType.ALL)
