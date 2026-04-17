@@ -2,6 +2,7 @@ package no.ssb.klass.core.model;
 
 import static com.google.common.base.Preconditions.*;
 
+import static org.hibernate.annotations.CacheConcurrencyStrategy.NONSTRICT_READ_WRITE;
 import static org.hibernate.annotations.CacheConcurrencyStrategy.READ_ONLY;
 
 import static java.util.stream.Collectors.*;
@@ -58,7 +59,7 @@ public class CorrespondenceTable extends BaseEntity
     private int targetLevelNumber;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "correspondenceTable")
-    @Cache(usage = READ_ONLY)
+    @Cache(usage = NONSTRICT_READ_WRITE)
     private List<CorrespondenceMap> correspondenceMaps;
 
     @OneToMany(cascade = CascadeType.ALL)
