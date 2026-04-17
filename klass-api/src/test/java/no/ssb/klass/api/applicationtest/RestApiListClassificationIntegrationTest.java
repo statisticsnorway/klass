@@ -6,9 +6,12 @@ import static org.hamcrest.Matchers.*;
 
 import io.restassured.http.ContentType;
 
+import no.ssb.klass.core.model.Language;
 import no.ssb.klass.testutil.TestDataProvider;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.http.HttpStatus;
 
 /**
@@ -48,6 +51,39 @@ class RestApiListClassificationIntegrationTest extends AbstractRestApiApplicatio
                 .body(JSON_PAGE + ".totalElements", equalTo(4))
                 .body(JSON_PAGE + ".totalPages", equalTo(1))
                 .body(JSON_PAGE + ".number", equalTo(0));
+    }
+
+    String getExpectedName(Language language) {
+        switch (language) {
+            case null -> {
+                return TestDataProvider.KOMMUNEINNDELING_NAVN_NO;
+            }
+            case NB -> {
+                return TestDataProvider.KOMMUNEINNDELING_NAVN_NO;
+            }
+            case NN -> {
+                return TestDataProvider.KOMMUNEINNDELING_NAVN_NN;
+            }
+            case EN -> {
+                return TestDataProvider.KOMMUNEINNDELING_NAVN_EN;
+            }
+        }
+    }
+
+    @ParameterizedTest
+    @EnumSource(Language.class)
+    void restServiceListClassificationsLanguages(Language language) {
+
+        given().port(port)
+                .accept(ContentType.JSON)
+                .param("language", language.toString().toLowerCase())
+                .get(REQUEST)
+                .prettyPeek()
+                .then()
+                .statusCode(HttpStatus.OK.value())
+                .contentType(ContentType.JSON)
+                .body(JSON_CLASSIFICATIONS + ".size()", equalTo(4))
+                .body(JSON_CLASSIFICATION3 + ".name", equalTo(getExpectedName(language)));
     }
 
     @Test

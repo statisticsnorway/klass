@@ -174,6 +174,7 @@ public class ClassificationController {
                             iso = ISO.DATE_TIME,
                             fallbackPatterns = "yyyy-MM-dd'T'HH:mm:ss.ssZ")
                     Date changedSince,
+            @RequestParam(value = "language", required = false) Language language,
             @Parameter(hidden = true) Pageable pageable,
             @Parameter(hidden = true) PagedResourcesAssembler<ClassificationSeries> assembler) {
 
@@ -182,7 +183,8 @@ public class ClassificationController {
 
         Link self = Link.of(getCurrentRequest(), IanaLinkRelations.SELF);
         PagedModel<ClassificationSummaryResource> response =
-                assembler.toModel(classifications, ClassificationSummaryResource::new, self);
+                assembler.toModel(
+                        classifications, c -> new ClassificationSummaryResource(language, c), self);
         addSearchLink(response);
         return new KlassPagedResources<>(response);
     }

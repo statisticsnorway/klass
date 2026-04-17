@@ -7,6 +7,8 @@ import static java.util.stream.Collectors.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import jakarta.validation.constraints.NotNull;
+
 import no.ssb.klass.api.controllers.ClassificationController;
 import no.ssb.klass.core.model.ClassificationSeries;
 import no.ssb.klass.core.model.Language;
@@ -24,17 +26,15 @@ public class ClassificationSummaryResource extends KlassResource {
     private final String classificationType;
     private final Date lastModified;
 
-    protected ClassificationSummaryResource(
-            Language language, ClassificationSeries classification) {
+    public ClassificationSummaryResource(Language language, ClassificationSeries classification) {
         super(classification.getId());
-        this.name = classification.getName(language);
-        this.classificationType = classification.getClassificationType().getDisplayName(language);
+        @NotNull
+        Language chosenLanguage = language != null ? language : classification.getPrimaryLanguage();
+        this.name = classification.getName(chosenLanguage);
+        this.classificationType =
+                classification.getClassificationType().getDisplayName(chosenLanguage);
         this.lastModified = classification.getLastModified();
         addLink(createSelfLink(classification.getId()));
-    }
-
-    public ClassificationSummaryResource(ClassificationSeries classification) {
-        this(classification.getPrimaryLanguage(), classification);
     }
 
     private Link createSelfLink(Long id) {
