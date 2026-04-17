@@ -136,6 +136,12 @@ The apps can be run in multiple different configurations with Docker Compose. Se
 
 There are tasks available in the Makefile as well.
 
+#### Flyway migration
+Flyway runs when creating database locally. This is important to ensure local database behaves like deployed database.
+To work around flyway migration `V4__grant_user_role.sql` which will fail locally:
+- Add file `init_roles.sql` in `klass-shared/initdb/`
+- In the file: `CREATE ROLE "dapla-metadata-developers@groups.ssb.no";`
+
 ### Klass Forvaltning
 
 #### Build
