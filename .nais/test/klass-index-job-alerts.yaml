@@ -10,7 +10,7 @@ spec:
     - name: dapla-metadata
       rules:
         - alert: Klass Index Job Failed
-          expr: rate(kube_job_status_failed{job_name=~"klass-index-job.*"})[1h] > 0
+          expr: rate(kube_job_status_failed{job_name=~"klass-index-job.*"}[1h]) > 0
           for: 1s
           annotations:
             title: Klass Index Job Failed
