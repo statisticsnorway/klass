@@ -10,8 +10,8 @@ spec:
     - name: dapla-metadata
       rules:
         - alert: Klass Index Job Failed
-          expr: kube_job_status_failed{job_name=~"klass-index-job.*"} > 0
-          for: 1m
+          expr: rate(kube_job_status_failed{job_name=~"klass-index-job.*"})[1h] > 0
+          for: 1s
           annotations:
             title: Klass Index Job Failed
             consequence: "The search index will become outdated if this continues for several days."
