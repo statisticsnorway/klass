@@ -11,12 +11,4 @@
             <offheap unit="MB">100</offheap>
         </resources>
     </cache>
-    <cache alias="default-update-timestamps-region">
-        <expiry>
-            <none />
-        </expiry>
-        <resources>
-            <heap>1000</heap>
-        </resources>
-    </cache>
 </config>
