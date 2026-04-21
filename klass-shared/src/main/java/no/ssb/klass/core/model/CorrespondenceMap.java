@@ -1,6 +1,4 @@
 package no.ssb.klass.core.model;
-
-import static org.hibernate.annotations.CacheConcurrencyStrategy.NONSTRICT_READ_WRITE;
 import static org.hibernate.annotations.CacheConcurrencyStrategy.READ_ONLY;
 
 import jakarta.persistence.Entity;
@@ -9,7 +7,6 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import java.util.Comparator;
 import java.util.Optional;
@@ -19,7 +16,7 @@ import java.util.Optional;
         uniqueConstraints =
                 @UniqueConstraint(
                         columnNames = {"source_id", "target_id", "correspondence_table_id"}))
-@Cache(usage = NONSTRICT_READ_WRITE)
+@Cache(usage = READ_ONLY)
 public class CorrespondenceMap extends BaseEntity implements Comparable<CorrespondenceMap> {
     private static Comparator<String> nullSafeStringComparator =
             Comparator.nullsFirst(String::compareToIgnoreCase);
