@@ -54,6 +54,7 @@ autolabeler:
       - '/test\/.+/'
   - label: "skip-changelog"
     branch:
+      - 'release'
       - '/release\/.+/'
       - '/chore\/.+/'
   - label: "breaking"
