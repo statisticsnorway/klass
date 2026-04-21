@@ -1,0 +1,23 @@
+apiVersion: "monitoring.coreos.com/v1"
+kind: PrometheusRule
+metadata:
+  name: alert-klass-index-job
+  namespace: dapla-metadata
+  labels:
+    team: dapla-metadata
+spec:
+  groups:
+    - name: dapla-metadata
+      rules:
+        - alert: Klass Index Job Failed
+          expr: rate(kube_job_status_failed{job_name=~"klass-index-job.*"})[1h] > 0
+          for: 1s
+          annotations:
+            title: Klass Index Job Failed
+            consequence: "The search index will become outdated if this continues for several days."
+            action: "Investigate the cause of the crash."
+            dashboard_url: "https://console.ssb.cloud.nais.io/team/dapla-metadata/test/job/klass-index-job"
+          labels:
+            namespace: dapla-metadata
+            severity: warning
+            environment: test
