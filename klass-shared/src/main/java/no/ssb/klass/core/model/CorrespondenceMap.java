@@ -17,7 +17,6 @@ import java.util.Optional;
         uniqueConstraints =
                 @UniqueConstraint(
                         columnNames = {"source_id", "target_id", "correspondence_table_id"}))
-@Cache(usage = READ_ONLY)
 public class CorrespondenceMap extends BaseEntity implements Comparable<CorrespondenceMap> {
     private static Comparator<String> nullSafeStringComparator =
             Comparator.nullsFirst(String::compareToIgnoreCase);
