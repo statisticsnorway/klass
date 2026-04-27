@@ -2,8 +2,6 @@ package no.ssb.klass.core.model;
 
 import static com.google.common.base.Preconditions.*;
 
-import static org.hibernate.annotations.CacheConcurrencyStrategy.READ_ONLY;
-
 import static java.util.stream.Collectors.*;
 
 import com.google.common.collect.Lists;
@@ -24,8 +22,6 @@ import no.ssb.klass.core.util.DateRange;
 import no.ssb.klass.core.util.TimeUtil;
 import no.ssb.klass.core.util.Translatable;
 import no.ssb.klass.core.util.TranslatablePersistenceConverter;
-
-import org.hibernate.annotations.Cache;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
