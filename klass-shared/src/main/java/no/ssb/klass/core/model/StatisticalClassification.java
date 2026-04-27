@@ -43,7 +43,6 @@ public abstract class StatisticalClassification extends BaseEntity
     private final List<Level> levels;
 
     @OneToMany(mappedBy = "source")
-    @BatchSize(size = 50)
     private final List<CorrespondenceTable> correspondenceTables;
 
     @OneToMany(cascade = CascadeType.ALL)
@@ -51,7 +50,6 @@ public abstract class StatisticalClassification extends BaseEntity
             name = "statisticalclassification_changelog",
             joinColumns = @JoinColumn(name = "statisticalclassification_id"),
             inverseJoinColumns = @JoinColumn(name = "changelog_id"))
-    @BatchSize(size = 50)
     private final List<Changelog> changelogs;
 
     private transient List<ClassificationItem> deletedClassificationItems;

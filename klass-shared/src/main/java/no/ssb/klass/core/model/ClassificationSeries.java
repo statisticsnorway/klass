@@ -88,7 +88,6 @@ public class ClassificationSeries extends BaseEntity implements ClassificationEn
     private final List<ClassificationVersion> classificationVersions = new ArrayList<>();
 
     @ManyToMany
-    @BatchSize(size = 50)
     private final List<StatisticalUnit> statisticalUnits = new ArrayList<>();
 
     @Column(nullable = false)
