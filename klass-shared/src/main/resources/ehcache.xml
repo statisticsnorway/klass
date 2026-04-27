@@ -4,7 +4,7 @@
 
     <cache alias="default">
         <expiry>
-            <ttl>140</ttl>
+            <ttl unit="minutes">2</ttl>
         </expiry>
         <resources>
             <heap>10000</heap>
