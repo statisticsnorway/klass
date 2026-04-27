@@ -159,7 +159,7 @@ logs-klass-api:
 # Log only klass-api
 .PHONY: logs-klass-api-top
 logs-klass-api-top:
-	docker compose $(COMPOSE_FILE) --profile api logs
+	docker compose $(COMPOSE_FILE) --profile api logs -f klass-api
 
 .PHONY: stop-klass-api-docker
 stop-klass-api-docker:
