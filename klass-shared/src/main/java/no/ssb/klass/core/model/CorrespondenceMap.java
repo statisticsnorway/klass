@@ -1,6 +1,5 @@
 package no.ssb.klass.core.model;
 
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
