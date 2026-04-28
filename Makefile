@@ -156,6 +156,10 @@ restart-klass-api-docker:
 logs-klass-api:
 	docker compose $(COMPOSE_FILE) --profile api logs --tail=100 -f klass-api
 
+.PHONY: logs-klass-api-top
+logs-klass-api-top:
+	docker compose $(COMPOSE_FILE) --profile api logs -f klass-api
+
 .PHONY: stop-klass-api-docker
 stop-klass-api-docker:
 	docker compose $(COMPOSE_FILE) --profile api down
