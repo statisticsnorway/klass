@@ -4,7 +4,7 @@
 
     <cache alias="default">
         <expiry>
-            <ttl unit="minutes">2</ttl>
+            <ttl unit="seconds">10</ttl>
         </expiry>
         <resources>
             <heap>10000</heap>
@@ -13,7 +13,7 @@
     </cache>
     <cache alias="no.ssb.klass.core.model.CorrespondenceMap">
         <expiry>
-            <ttl unit="minutes">2</ttl>
+            <ttl unit="seconds">10</ttl>
         </expiry>
         <resources>
             <heap>10000</heap>
@@ -22,7 +22,7 @@
     </cache>
     <cache alias="no.ssb.klass.core.model.CorrespondenceTable.correspondenceMaps">
         <expiry>
-            <ttl unit="minutes">2</ttl>
+            <ttl unit="seconds">10</ttl>
         </expiry>
         <resources>
             <heap>10000</heap>
