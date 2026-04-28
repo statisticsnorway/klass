@@ -43,6 +43,10 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.opensearch.client</groupId>
             <artifactId>spring-data-opensearch-starter</artifactId>
             <version>${spring-data-opensearch-starter.version}</version>
@@ -116,6 +120,19 @@
             <version>1.0.2.Final</version>
             <scope>compile</scope>
         </dependency>
+
+        <!-- Support second level cache in Hibernate -->
+        <dependency>
+            <groupId>org.hibernate.orm</groupId>
+            <artifactId>hibernate-jcache</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+            <version>3.11.1</version>
+            <classifier>jakarta</classifier>
+        </dependency>
+
 
         <!-- Test scope-->
         <dependency>
