@@ -17,7 +17,6 @@ import no.ssb.klass.core.util.KlassResourceNotFoundException;
 import no.ssb.klass.core.util.Translatable;
 import no.ssb.klass.testutil.TestUtil;
 
-import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -69,7 +68,6 @@ public class ClassificationServiceImplTest {
                         statisticalUnitRepositoryMock,
                         userRepositoryMock,
                         classificationFamilySummaryBuilder);
-
     }
 
     @Test
