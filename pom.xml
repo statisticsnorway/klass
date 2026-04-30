@@ -10,7 +10,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.13</version>
+        <version>3.5.14</version>
         <relativePath />
     </parent>
 
@@ -40,7 +40,7 @@
         <sonar.projectName>klass</sonar.projectName>
 
         <asciidoctor-version>3.2.0</asciidoctor-version>
-        <commons-io-version>2.21.0</commons-io-version>
+        <commons-io-version>2.22.0</commons-io-version>
         <commons-lang3-version>3.20.0</commons-lang3-version>
         <guava-version>33.6.0-jre</guava-version>
         <jackson-bom.version>2.21.2</jackson-bom.version>
@@ -55,7 +55,7 @@
         <spring.version>4.3.7.RELEASE</spring.version>
         <spring-data-opensearch-starter.version>1.8.2</spring-data-opensearch-starter.version>
         <spring-restdocs-version>3.0.5</spring-restdocs-version>
-        <postgresql.version>42.7.10</postgresql.version>
+        <postgresql.version>42.7.11</postgresql.version>
         <testcontainers.version>1.20.1</testcontainers.version>
         <tomcat7-maven-plugin-version>2.2</tomcat7-maven-plugin-version>
         <woodstox-version>4.4.1</woodstox-version>
