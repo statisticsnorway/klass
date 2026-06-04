@@ -74,6 +74,20 @@ public class JwtAuthFilter extends OncePerRequestFilter implements Filter {
 
     @Override
     public void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws ServletException, IOException {
+
+        if (res == null) {
+            log.error("Response is null");
+            return;
+        }
+        if (req == null) {
+            log.error("Request is null");
+            return;
+        }
+        if (chain == null) {
+            log.error("FilterChain is null");
+            return;
+        }
+
         try {
             Optional<Jwt> jwt = extractJwt(req);
 
