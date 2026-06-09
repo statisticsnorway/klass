@@ -1,11 +1,11 @@
 name: Klass-forvaltning build and deploy
 
 on:
-  release:
-    types: [ published ]
   push:
     branches:
       - main
+    tags:
+      - "forvaltning-*"
     paths:
       - "klass-forvaltning/**"
       - ".nais/**/klass-forvaltning.yaml"
@@ -85,7 +85,7 @@ jobs:
       id-token: "write"
       packages: "read"
     runs-on: ubuntu-latest
-    if: github.event_name != 'release' || github.event.inputs.cluster == 'test' || needs.docker-build.outputs.test-config-changed == 'true'
+    if: (github.event_name != 'push' || !startsWith(github.ref, 'refs/tags/')) && (github.event_name != 'release' || github.event.inputs.cluster == 'test' || needs.docker-build.outputs.test-config-changed == 'true')
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -106,7 +106,7 @@ jobs:
       id-token: "write"
       packages: "read"
     runs-on: ubuntu-latest
-    if: github.event_name == 'release' || github.event.inputs.cluster == 'prod' || (needs.docker-build.outputs.prod-config-changed == 'true' && needs.docker-build.outputs.only-config-changed == 'true')
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/forvaltning-') || (needs.docker-build.outputs.prod-config-changed == 'true' && needs.docker-build.outputs.only-config-changed == 'true')
     steps:
       - name: Checkout
         uses: actions/checkout@v6
