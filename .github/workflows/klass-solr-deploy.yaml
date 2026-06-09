@@ -33,7 +33,7 @@ jobs:
       prod-manifest-changed: ${{ steps.prod-manifest-changed.outputs.changed != 'non-inputs' }}
       test-manifest-changed: ${{ steps.test-manifest-changed.outputs.changed != 'non-inputs'}}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
           fetch-depth: 0
       - name: Check for Test manifest changes
@@ -58,12 +58,12 @@ jobs:
     needs: what-changed
     if: needs.what-changed.outputs.test-manifest-changed == 'true' || github.event.inputs.cluster == 'test'
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
           fetch-depth: 0
 
       - name: Deploy to Nais
-        uses: nais/deploy/actions/deploy@v2
+        uses: nais/deploy/actions/deploy@ab841e4d99cbb00edd996d3ae39bd4cea6b8e2c2 # v2
         env:
           CLUSTER: test
           RESOURCE: .nais/test/klass-solr.yaml
@@ -79,12 +79,12 @@ jobs:
     needs: what-changed
     if: needs.what-changed.outputs.prod-manifest-changed == 'true' || github.event.inputs.cluster == 'prod'
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
           fetch-depth: 0
 
       - name: Deploy to Nais
-        uses: nais/deploy/actions/deploy@v2
+        uses: nais/deploy/actions/deploy@ab841e4d99cbb00edd996d3ae39bd4cea6b8e2c2 # v2
         env:
           CLUSTER: prod
           RESOURCE: .nais/prod/klass-solr.yaml
