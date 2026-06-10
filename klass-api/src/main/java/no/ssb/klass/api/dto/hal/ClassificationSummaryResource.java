@@ -20,7 +20,14 @@ import java.util.Date;
 import java.util.List;
 
 @Relation(collectionRelation = "classifications")
-@JsonPropertyOrder({"name", "id", "classificationType", "classificationFamilyId", "lastModified", "links"})
+@JsonPropertyOrder({
+    "name",
+    "id",
+    "classificationType",
+    "classificationFamilyId",
+    "lastModified",
+    "links"
+})
 public class ClassificationSummaryResource extends KlassResource {
     private final String name;
     private final String classificationType;
