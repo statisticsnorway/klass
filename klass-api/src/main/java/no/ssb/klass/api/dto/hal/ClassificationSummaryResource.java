@@ -20,10 +20,18 @@ import java.util.Date;
 import java.util.List;
 
 @Relation(collectionRelation = "classifications")
-@JsonPropertyOrder({"name", "id", "classificationType", "lastModified", "links"})
+@JsonPropertyOrder({
+    "name",
+    "id",
+    "classificationType",
+    "classificationFamilyId",
+    "lastModified",
+    "links"
+})
 public class ClassificationSummaryResource extends KlassResource {
     private final String name;
     private final String classificationType;
+    private final Long classificationFamilyId;
     private final Date lastModified;
 
     public ClassificationSummaryResource(Language language, ClassificationSeries classification) {
@@ -33,6 +41,7 @@ public class ClassificationSummaryResource extends KlassResource {
         this.name = classification.getName(chosenLanguage);
         this.classificationType =
                 classification.getClassificationType().getDisplayName(chosenLanguage);
+        this.classificationFamilyId = classification.getClassificationFamilyId();
         this.lastModified = classification.getLastModified();
         addLink(createSelfLink(classification.getId()));
     }
@@ -49,6 +58,10 @@ public class ClassificationSummaryResource extends KlassResource {
 
     public String getName() {
         return name;
+    }
+
+    public Long getClassificationFamilyId() {
+        return classificationFamilyId;
     }
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ")

@@ -347,6 +347,9 @@ public class ApiDocumentation {
                                                 .description("An array of Classifications"),
                                         fieldWithPath("_embedded.classifications[].name")
                                                 .description("Classification name"),
+                                        fieldWithPath(
+                                                        "_embedded.classifications[].classificationFamilyId")
+                                                .description("Classification family id"),
                                         fieldWithPath("_embedded.classifications[].lastModified")
                                                 .description(
                                                         "Last modification time of classification"),
@@ -731,6 +734,12 @@ public class ApiDocumentation {
                                                 + "/codesAt?date=2021-01-01&csvSeparator=;&csvFields=name,code&selectLevel=1&selectCodes=01*"
                                                 + "&presentationNamePattern={code}-{name}&language=nb&includeFuture=true")
                                 .accept("text/csv"))
+                .andDo(
+                        this.documentationHandler =
+                                document(
+                                        "{method-name}",
+                                        preprocessRequest(prettyPrint()),
+                                        preprocessResponse(/*prettyPrint()*/ )))
                 .andDo(
                         this.documentationHandler.document(
                                 queryParameters(
