@@ -151,6 +151,33 @@ public class ClassificationSeriesTest {
     }
 
     @Test
+    public void getClassificationFamilyIdWhenFamilyExists() {
+        // given
+        ClassificationSeries subject = TestUtil.createClassification("classification");
+        ClassificationFamily family = TestUtil.createClassificationFamily("family");
+        family.setId(42L);
+        subject.setClassificationFamily(family);
+
+        // when
+        Long result = subject.getClassificationFamilyId();
+
+        // then
+        assertEquals(Long.valueOf(42L), result);
+    }
+
+    @Test
+    public void getClassificationFamilyIdWhenFamilyMissing() {
+        // given
+        ClassificationSeries subject = TestUtil.createClassification("classification");
+
+        // when
+        Long result = subject.getClassificationFamilyId();
+
+        // then
+        assertNull(result);
+    }
+
+    @Test
     public void setDeletedUpdatesName() {
         try {
             // given
