@@ -53,4 +53,3 @@ public class ClassificationSummaryResourceTest {
         assertEquals(Long.valueOf(456L), subject.getClassificationFamilyId());
     }
 }
-
