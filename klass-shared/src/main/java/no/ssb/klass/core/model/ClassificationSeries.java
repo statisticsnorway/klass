@@ -364,6 +364,10 @@ public class ClassificationSeries extends BaseEntity implements ClassificationEn
         return classificationFamily;
     }
 
+    public Long getClassificationFamilyId() {
+        return classificationFamily == null ? null : classificationFamily.getId();
+    }
+
     public void setClassificationFamily(ClassificationFamily classificationFamily) {
         this.classificationFamily = classificationFamily;
     }

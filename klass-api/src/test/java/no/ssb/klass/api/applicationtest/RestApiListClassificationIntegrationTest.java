@@ -34,6 +34,9 @@ class RestApiListClassificationIntegrationTest extends AbstractRestApiApplicatio
                         JSON_CLASSIFICATION3 + ".name",
                         equalTo(TestDataProvider.KOMMUNEINNDELING_NAVN_NO))
                 .body(
+                        JSON_CLASSIFICATION3 + ".classificationFamilyId",
+                        equalTo(classificationFamily.getId().intValue()))
+                .body(
                         JSON_CLASSIFICATION3 + "._links.self.href",
                         containsString(REQUEST + "/" + kommuneinndeling.getId()))
                 // result 2
@@ -186,6 +189,9 @@ class RestApiListClassificationIntegrationTest extends AbstractRestApiApplicatio
                 .body(
                         XML_CLASSIFICATION3 + ".name",
                         equalTo(TestDataProvider.KOMMUNEINNDELING_NAVN_NO))
+                .body(
+                        XML_CLASSIFICATION3 + ".classificationFamilyId.toInteger();",
+                        equalTo(classificationFamily.getId().intValue()))
                 .body(XML_CLASSIFICATION3 + ".link.rel", equalTo("self"))
                 .body(
                         XML_CLASSIFICATION3 + ".link.href",
