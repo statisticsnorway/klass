@@ -82,8 +82,8 @@ public abstract class AbstractKlassApiDataIntegrityTest {
     @BeforeAll
     static void beforeAll() {
 
-        sourceHost = "http://localhost:8080"; //MigrationTestConfig.getSourceHost();
-        targetHost = "https://klass.intern.ssb.no" ;//MigrationTestConfig.getTargetHost();
+        sourceHost = MigrationTestConfig.getSourceHost();
+        targetHost = MigrationTestConfig.getTargetHost();
 
         klassApiMigrationClient = new KlassApiMigrationClient();
 

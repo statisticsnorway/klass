@@ -504,7 +504,7 @@ public class ApiDocumentation {
                                                 .description("Array of classification versions"),
                                         fieldWithPath("_links")
                                                 .description(
-                                                        "Links to operations on the classification"))))
+                                                        "<<classification-links,Links>> to operations on classification"))))
                 .andExpect(status().isOk());
     }
 
