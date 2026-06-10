@@ -606,12 +606,6 @@ public class ApiDocumentation {
                 .perform(
                         getWithContext("/versions/" + CLASS_ID_KOMMUNEINNDELING)
                                 .header("Accept", "text/csv; charset=ISO-8859-1"))
-                .andDo(
-                        this.documentationHandler =
-                                document(
-                                        "{method-name}",
-                                        preprocessRequest(prettyPrint()),
-                                        preprocessResponse(/*prettyPrint()*/ )))
                 .andExpect(status().isOk());
     }
 
