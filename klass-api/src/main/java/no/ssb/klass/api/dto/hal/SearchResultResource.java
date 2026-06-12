@@ -16,21 +16,22 @@ import java.util.Objects;
 import java.util.StringJoiner;
 
 @Relation(collectionRelation = "searchResults")
-@JsonPropertyOrder({"name", "id", "snippet", "searchScore", "links"})
+@JsonPropertyOrder({"name", "id", "language", "snippet", "searchScore", "links"})
 public class SearchResultResource extends KlassResource {
 
     private final String name;
+    private final String language;
     private String snippet;
     private final Double searchScore;
-    private final String language;
 
     public SearchResultResource(
             OpenSearchResult searchResult, Map<String, List<String>> highlights) {
         super(searchResult.getItemId());
         this.name = searchResult.getTitle();
+        this.language = searchResult.getLanguage();
         this.snippet = searchResult.getDescription();
         this.searchScore = searchResult.getScore();
-        this.language = searchResult.getLanguage();
+        
         addLink(createSelfLink(searchResult.getItemId()));
 
         if (highlights != null) {
