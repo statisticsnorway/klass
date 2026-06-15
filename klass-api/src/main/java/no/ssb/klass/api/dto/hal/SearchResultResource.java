@@ -12,28 +12,32 @@ import org.springframework.hateoas.server.core.Relation;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.StringJoiner;
 
 @Relation(collectionRelation = "searchResults")
-@JsonPropertyOrder({"name", "id", "snippet", "searchScore", "links"})
+@JsonPropertyOrder({"name", "id", "language", "snippet", "searchScore", "links"})
 public class SearchResultResource extends KlassResource {
 
-    private String name;
+    private final String name;
+    private final String language;
     private String snippet;
-    private Double searchScore;
+    private final Double searchScore;
 
     public SearchResultResource(
             OpenSearchResult searchResult, Map<String, List<String>> highlights) {
         super(searchResult.getItemId());
         this.name = searchResult.getTitle();
+        this.language = searchResult.getLanguage();
         this.snippet = searchResult.getDescription();
         this.searchScore = searchResult.getScore();
+
         addLink(createSelfLink(searchResult.getItemId()));
 
         if (highlights != null) {
             List<String> descriptionHighlights = highlights.get("description");
             if (descriptionHighlights != null && !descriptionHighlights.isEmpty()) {
-                String snipplet = descriptionHighlights.get(0);
+                String snipplet = descriptionHighlights.getFirst();
                 if (snipplet.contains("<strong>")) {
                     this.snippet = snipplet;
                     return;
@@ -42,7 +46,7 @@ public class SearchResultResource extends KlassResource {
 
             List<String> codesHighlights = highlights.get("codes");
             if (codesHighlights != null && !codesHighlights.isEmpty()) {
-                String snipplet = codesHighlights.get(0);
+                String snipplet = codesHighlights.getFirst();
                 if (snipplet.contains("<strong>")) {
                     StringJoiner joiner = new StringJoiner(", ");
                     codesHighlights.forEach(joiner::add);
@@ -58,12 +62,32 @@ public class SearchResultResource extends KlassResource {
                 .expand();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        SearchResultResource that = (SearchResultResource) o;
+        return Objects.equals(name, that.name)
+                && Objects.equals(snippet, that.snippet)
+                && Objects.equals(searchScore, that.searchScore)
+                && Objects.equals(language, that.language);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), name, snippet, searchScore, language);
+    }
+
     public String getName() {
         return name;
     }
 
     public String getSnippet() {
         return snippet;
+    }
+
+    public String getLanguage() {
+        return language;
     }
 
     public Double getSearchScore() {

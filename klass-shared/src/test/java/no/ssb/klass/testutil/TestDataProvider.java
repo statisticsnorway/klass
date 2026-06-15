@@ -25,6 +25,10 @@ public final class TestDataProvider {
     public static final String KOMMUNEINNDELING_NAVN_NN = "Standard for kommuneinndeling (Nynorsk)";
     public static final String KOMMUNEINNDELING_NAVN_EN = "Standard for kommuneinndeling(English)";
 
+    public static final String CLASSIFICATION_OF_AGE = "Classification of age";
+    public static final String ALDERS_INNDELING_NB = "Standard for aldersinndeling";
+    public static final String ALDERS_INNDELING_NN = "Standard for aldersinndeling";
+
     public static final String KOMMUNEINNDELING_BESKRIVELSE_NO =
             "kommune inndelingen er en administrativ inndeling av kommuner i Norge";
     public static final String KOMMUNEINNDELING_BESKRIVELSE_NN = "kommune beskrivelse";
@@ -41,6 +45,11 @@ public final class TestDataProvider {
     public static final String BADMINTON_KODELISTE_BESKRIVELSE =
             "Testing when version owning section is different from variant owning section badminton";
 
+    public static final String AGE_DESCRIPTION =
+            "The main purpose of this standard is to be the base for different age groupings (variants).";
+
+    public static final String ALDERS_INNDELING_BESKRIVELSE =
+            "Dette er en inndeling som består av enkeltår. Hovedhensikten er at denne kan være utgangspunkt for ulike varianter (grupperinger).";
     public static final String COPYRIGHTED_CODELIST_NAVN_NO = "Kodeliste for ICD-10";
     public static final String COPYRIGHTED_CODELIST_BESKRIVELSE =
             "Den internasjonale statistiske klassifikasjonen av sykdommer og beslektede helseproblemer";
@@ -154,6 +163,7 @@ public final class TestDataProvider {
                 level2012.getLevelNumber(),
                 null);
         version2012.publish(Language.NB);
+        version2012.publish(Language.NN);
         classification.addClassificationVersion(version2012);
 
         ClassificationVersion version2008 =
@@ -408,6 +418,32 @@ public final class TestDataProvider {
         version.addClassificationItem(
                 TestUtil.createClassificationItem("030103", "Løper"), level.getLevelNumber(), null);
         version.publish(Language.NB);
+        classification.addClassificationVersion(version);
+
+        return classification;
+    }
+
+    public static ClassificationSeries createAgeClassification(User user) {
+        ClassificationSeries classification =
+                TestUtil.createClassification(
+                        ALDERS_INNDELING_NB,
+                        ALDERS_INNDELING_NN,
+                        CLASSIFICATION_OF_AGE,
+                        ALDERS_INNDELING_BESKRIVELSE,
+                        ALDERS_INNDELING_BESKRIVELSE,
+                        AGE_DESCRIPTION);
+
+        classification.setContactPerson(user);
+        ClassificationVersion version =
+                TestUtil.createClassificationVersion(
+                        DateRange.create("2014-01-01", TestDataProvider.TEN_YEARS_LATER_DATE));
+        Level level = TestUtil.createLevel(1);
+        version.addLevel(level);
+        version.addClassificationItem(
+                TestUtil.createClassificationItem("000", "0 years"), level.getLevelNumber(), null);
+        version.addClassificationItem(
+                TestUtil.createClassificationItem("001", "1 year"), level.getLevelNumber(), null);
+        version.publish(Language.EN);
         classification.addClassificationVersion(version);
 
         return classification;
