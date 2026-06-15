@@ -51,7 +51,7 @@ class RestApiListClassificationIntegrationTest extends AbstractRestApiApplicatio
                 .body(JSON_LINKS + ".search.href", containsString(REQUEST_SEARCH))
                 // paging
                 .body(JSON_PAGE + ".size", equalTo(20))
-                .body(JSON_PAGE + ".totalElements", equalTo(4))
+                .body(JSON_PAGE + ".totalElements", equalTo(5))
                 .body(JSON_PAGE + ".totalPages", equalTo(1))
                 .body(JSON_PAGE + ".number", equalTo(0));
     }
@@ -132,7 +132,7 @@ class RestApiListClassificationIntegrationTest extends AbstractRestApiApplicatio
                 .body(JSON_LINKS + ".search.href", containsString(REQUEST_SEARCH))
                 // paging
                 .body(JSON_PAGE + ".size", equalTo(20))
-                .body(JSON_PAGE + ".totalElements", equalTo(6))
+                .body(JSON_PAGE + ".totalElements", equalTo(7))
                 .body(JSON_PAGE + ".totalPages", equalTo(1))
                 .body(JSON_PAGE + ".number", equalTo(0));
     }
@@ -204,7 +204,7 @@ class RestApiListClassificationIntegrationTest extends AbstractRestApiApplicatio
                 .body(XML_ROOT + ".link[1].href", containsString(REQUEST_SEARCH))
                 // paging
                 .body(XML_PAGE + ".size.toInteger();", equalTo(20))
-                .body(XML_PAGE + ".totalElements.toInteger();", equalTo(4))
+                .body(XML_PAGE + ".totalElements.toInteger();", equalTo(5))
                 .body(XML_PAGE + ".totalPages.toInteger();", equalTo(1))
                 .body(XML_PAGE + ".number.toInteger();", equalTo(0));
     }
@@ -244,7 +244,7 @@ class RestApiListClassificationIntegrationTest extends AbstractRestApiApplicatio
                 .body(XML_ROOT + ".link[1].href", containsString(REQUEST_SEARCH))
                 // paging
                 .body(XML_PAGE + ".size.toInteger();", equalTo(20))
-                .body(XML_PAGE + ".totalElements.toInteger();", equalTo(6))
+                .body(XML_PAGE + ".totalElements.toInteger();", equalTo(7))
                 .body(XML_PAGE + ".totalPages.toInteger();", equalTo(1))
                 .body(XML_PAGE + ".number.toInteger();", equalTo(0));
     }
