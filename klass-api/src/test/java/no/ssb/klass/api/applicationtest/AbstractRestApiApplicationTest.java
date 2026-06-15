@@ -101,6 +101,7 @@ public abstract class AbstractRestApiApplicationTest {
     public static final String XML_SEARCH_RESULTS = "PagedResources.contents.content";
     public static final String XML_SEARCH_RESULT1 = "PagedResources.contents.content[0]";
     public static final String XML_SEARCH_RESULT2 = "PagedResources.contents.content[1]";
+    public static final String XML_SEARCH_RESULT3 = "PagedResources.contents.content[2]";
 
     public static final String JSON_CLASSIFICATIONS = "_embedded.classifications";
     public static final String JSON_CLASSIFICATION1 = "_embedded.classifications[0]";
@@ -141,6 +142,7 @@ public abstract class AbstractRestApiApplicationTest {
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 
     protected ClassificationSeries kommuneinndeling;
+    protected ClassificationSeries age;
     protected ClassificationSeries bydelsinndeling;
     protected ClassificationSeries familieGrupperingCodelist;
     protected ClassificationFamily classificationFamily;
@@ -175,7 +177,10 @@ public abstract class AbstractRestApiApplicationTest {
                         TestUtil.createClassificationFamily("Befolkning"));
         kommuneinndeling = TestDataProvider.createClassificationKommuneinndeling();
         kommuneinndeling.setContactPerson(user);
+        age = TestDataProvider.createAgeClassification(user);
+        age.setContactPerson(user);
         classificationFamily.addClassificationSeries(kommuneinndeling);
+        classificationFamily.addClassificationSeries(age);
         TimeUtil.setClockSource(new ConstantClockSource(parseDate(CHANGED_SINCE_NEW_DATE)));
         bydelsinndeling = TestDataProvider.createClassificationBydelsinndeling();
         bydelsinndeling.setContactPerson(user);
