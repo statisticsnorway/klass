@@ -17,19 +17,19 @@ jobs:
 
     steps:
       - name: Create DaplaBot app token
-        uses: actions/create-github-app-token@v2
+        uses: actions/create-github-app-token@fee1f7d63c2ff003460e3d139729b119787bc349 # v2.2.2
         id: app-token
         with:
           app-id: ${{ secrets.DAPLA_BOT_APP_ID }}
           private-key: ${{ secrets.DAPLA_BOT_PRIVATE_KEY }}
 
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
           token: ${{ steps.app-token.outputs.token }}
           ref: refs/heads/main
 
       - name: Set up JDK
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@c1e323688fd81a25caa38c78aa6df2d33d3e20d9 # v4.8.0
         with:
           distribution: 'temurin'
           java-version: '21'
@@ -52,7 +52,7 @@ jobs:
           git config user.name ${{steps.get-bot-vars.outputs.bot_name}}
 
       - name: Setup Maven authentication to GitHub packages
-        uses: s4u/maven-settings-action@v4.0.0
+        uses: s4u/maven-settings-action@894661b3ddae382f1ae8edbeab60987e08cf0788 # v4.0.0
         with:
           override: true
           githubServer: false
@@ -71,7 +71,7 @@ jobs:
           echo "tag=${TAG}" >> $GITHUB_OUTPUT
 
       - name: Create GitHub release draft
-        uses: release-drafter/release-drafter@v6
+        uses: release-drafter/release-drafter@6a93d829887aa2e0748befe2e808c66c0ec6e4c7 # v6.4.0
         id: create-github-release
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
@@ -79,7 +79,7 @@ jobs:
           tag: ${{ steps.release-artifact.outputs.tag }}
 
       - name: Publish GitHub release
-        uses: eregon/publish-release@v1
+        uses: eregon/publish-release@01df127f5e9a3c26935118e22e738d95b59d10ce # v1.0.6
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
         with:
