@@ -80,6 +80,7 @@ class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest {
         indexService.createIndexWithStemmingAnalyzer();
 
         indexService.indexSync(kommuneinndeling);
+        indexService.indexSync(age);
         indexService.indexSync(bydelsinndeling);
         indexService.indexSync(familieGrupperingCodelist);
         indexService.indexSync(badmintonCodelist);
@@ -101,10 +102,10 @@ class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest {
                 .assertThat()
                 .statusCode(HttpStatus.OK.value())
                 .contentType(ContentType.JSON)
-                .body(JSON_SEARCH_RESULTS + ".size()", equalTo(2))
+                .body(JSON_SEARCH_RESULTS + ".size()", equalTo(3))
                 .body(
                         JSON_SEARCH_RESULT1 + ".name",
-                        equalTo(TestDataProvider.KOMMUNEINNDELING_NAVN_NO))
+                        equalTo(TestDataProvider.KOMMUNEINNDELING_NAVN_NN))
                 .body(JSON_SEARCH_RESULT1 + ".snippet", containsString("kommune"))
                 .body(JSON_SEARCH_RESULT1 + ".searchScore", greaterThan(0.0f))
                 .body(
@@ -112,17 +113,17 @@ class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest {
                         containsString(REQUEST + "/" + kommuneinndeling.getId()))
                 // result 2
                 .body(
-                        JSON_SEARCH_RESULT2 + ".name",
+                        JSON_SEARCH_RESULT3 + ".name",
                         equalTo(TestDataProvider.BYDELSINNDELING_NAVN_NO))
-                .body(JSON_SEARCH_RESULT2 + ".snippet", containsString("kommune"))
-                .body(JSON_SEARCH_RESULT2 + ".searchScore", greaterThan(0.0f))
+                .body(JSON_SEARCH_RESULT3 + ".snippet", containsString("kommune"))
+                .body(JSON_SEARCH_RESULT3 + ".searchScore", greaterThan(0.0f))
                 .body(
-                        JSON_SEARCH_RESULT2 + "._links.self.href",
+                        JSON_SEARCH_RESULT3 + "._links.self.href",
                         containsString(REQUEST + "/" + bydelsinndeling.getId()))
                 // footer
                 .body(JSON_LINKS + ".self.href", containsString(REQUEST_SEARCH))
                 .body(JSON_PAGE + ".size", equalTo(PAGE_SIZE))
-                .body(JSON_PAGE + ".totalElements", equalTo(2))
+                .body(JSON_PAGE + ".totalElements", equalTo(3))
                 .body(JSON_PAGE + ".totalPages", equalTo(1))
                 .body(JSON_PAGE + ".number", equalTo(0));
     }
@@ -239,6 +240,7 @@ class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest {
 
     @Test
     void restServiceSearchExactNameJSON() {
+        // Will match both norwegian nb and nn
         given().port(port)
                 .accept(ContentType.JSON)
                 .param(QUERY, "kommuneinndeling")
@@ -248,7 +250,7 @@ class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest {
                 .assertThat()
                 .statusCode(HttpStatus.OK.value())
                 .contentType(ContentType.JSON)
-                .body(JSON_PAGE + ".totalElements", equalTo(1));
+                .body(JSON_PAGE + ".totalElements", equalTo(2));
     }
 
     @Test
@@ -263,7 +265,10 @@ class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest {
                 .assertThat()
                 .statusCode(HttpStatus.OK.value())
                 .contentType(ContentType.JSON)
-                .body(JSON_PAGE + ".totalElements", equalTo(1))
+                .body(JSON_PAGE + ".totalElements", equalTo(2))
+                .body(
+                        JSON_SEARCH_RESULTS + ".name",
+                        hasItem(TestDataProvider.KOMMUNEINNDELING_NAVN_NN))
                 .body(
                         JSON_SEARCH_RESULTS + ".name",
                         hasItem(TestDataProvider.KOMMUNEINNDELING_NAVN_NO));
@@ -345,11 +350,11 @@ class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest {
                 .assertThat()
                 .statusCode(HttpStatus.OK.value())
                 .contentType(ContentType.XML)
-                .body(XML_SEARCH_RESULTS + ".size()", equalTo(2))
+                .body(XML_SEARCH_RESULTS + ".size()", equalTo(3))
                 // result 1
                 .body(
                         XML_SEARCH_RESULT1 + ".name",
-                        equalTo(TestDataProvider.KOMMUNEINNDELING_NAVN_NO))
+                        equalTo(TestDataProvider.KOMMUNEINNDELING_NAVN_NN))
                 .body(XML_SEARCH_RESULT1 + ".snippet", containsString("kommune"))
                 .body(XML_SEARCH_RESULT1 + ".searchScore.toFloat()", greaterThan(0.0f))
                 .body(XML_SEARCH_RESULT1 + ".link.rel", equalTo("self"))
@@ -359,7 +364,7 @@ class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest {
                 // footer
                 .body(XML_ROOT + ".link.href", containsString(REQUEST_SEARCH))
                 .body(XML_PAGE + ".size.toInteger();", equalTo(PAGE_SIZE))
-                .body(XML_PAGE + ".totalElements.toInteger();", equalTo(2))
+                .body(XML_PAGE + ".totalElements.toInteger();", equalTo(3))
                 .body(XML_PAGE + ".totalPages.toInteger();", equalTo(1))
                 .body(XML_PAGE + ".number.toInteger();", equalTo(0));
     }
@@ -375,7 +380,7 @@ class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest {
                 .assertThat()
                 .statusCode(HttpStatus.OK.value())
                 .contentType(ContentType.XML)
-                .body(XML_SEARCH_RESULTS + ".size()", equalTo(2))
+                .body(XML_SEARCH_RESULTS + ".size()", equalTo(3))
                 // result 1: 'kommune' in title
                 .body(XML_SEARCH_RESULT1 + ".name", containsString("kommune"))
                 .body(XML_SEARCH_RESULT1 + ".snippet", containsString("kommune"))
@@ -385,13 +390,13 @@ class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest {
                         XML_SEARCH_RESULT1 + ".link.href",
                         containsString(REQUEST + "/" + kommuneinndeling.getId()))
                 // result 2 - kommune just in description
-                .body(XML_SEARCH_RESULT2 + ".name", not(containsString("kommune")))
-                .body(XML_SEARCH_RESULT2 + ".snippet", containsString("kommune"))
-                .body(XML_SEARCH_RESULT2 + ".searchScore.toFloat()", greaterThan(0.0f))
+                .body(XML_SEARCH_RESULT3 + ".name", not(containsString("kommune")))
+                .body(XML_SEARCH_RESULT3 + ".snippet", containsString("kommune"))
+                .body(XML_SEARCH_RESULT3 + ".searchScore.toFloat()", greaterThan(0.0f))
                 // footer
                 .body(XML_ROOT + ".link.href", containsString(REQUEST_SEARCH))
                 .body(XML_PAGE + ".size.toInteger();", equalTo(PAGE_SIZE))
-                .body(XML_PAGE + ".totalElements.toInteger();", equalTo(2))
+                .body(XML_PAGE + ".totalElements.toInteger();", equalTo(3))
                 .body(XML_PAGE + ".totalPages.toInteger();", equalTo(1))
                 .body(XML_PAGE + ".number.toInteger();", equalTo(0));
     }
@@ -496,5 +501,35 @@ class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest {
                 .contentType(ContentType.JSON)
                 .body(JSON_PAGE + ".totalElements", equalTo(1))
                 .body(JSON_SEARCH_RESULT1 + ".name", equalTo(TestDataProvider.BADMINTON_NAVN_NO));
+    }
+
+    @Test
+    void restServiceSearchExposesLanguage() {
+        given().port(port)
+                .accept(ContentType.JSON)
+                .param(QUERY, "kommune")
+                .param(INCLUDE_CODE_LISTS, "true")
+                .get(REQUEST_SEARCH)
+                .prettyPeek()
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .contentType(ContentType.JSON)
+                .body(JSON_PAGE + ".totalElements", equalTo(3))
+                .body(JSON_SEARCH_RESULT1 + ".language", equalTo("nn"))
+                .body(JSON_SEARCH_RESULT2 + ".language", equalTo("nb"))
+                .body(JSON_SEARCH_RESULT3 + ".language", equalTo("nb"));
+
+        given().port(port)
+                .accept(ContentType.JSON)
+                .param(QUERY, "age")
+                .get(REQUEST_SEARCH)
+                .prettyPeek()
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .contentType(ContentType.JSON)
+                .body(JSON_PAGE + ".totalElements", equalTo(1))
+                .body(JSON_SEARCH_RESULT1 + ".language", equalTo("en"));
     }
 }
