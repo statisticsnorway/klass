@@ -119,7 +119,7 @@ class RestApiClassificationFamilyIntegrationTest extends AbstractRestApiApplicat
                 .assertThat()
                 .body("name", equalTo(classificationFamily.getName()))
                 .assertThat()
-                .body("classifications.size()", equalTo(4))
+                .body("classifications.size()", equalTo(5))
                 .body(JSON_LINKS + ".self.href", containsString(urlParts));
     }
 
@@ -140,7 +140,7 @@ class RestApiClassificationFamilyIntegrationTest extends AbstractRestApiApplicat
                 .assertThat()
                 .body("name", equalTo(classificationFamily.getName()))
                 .assertThat()
-                .body("classifications.size()", equalTo(4))
+                .body("classifications.size()", equalTo(5))
                 .body(JSON_LINKS + ".self.href", containsString(urlParts));
     }
 }
