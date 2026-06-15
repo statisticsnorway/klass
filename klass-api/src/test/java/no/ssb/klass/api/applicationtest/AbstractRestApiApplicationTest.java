@@ -206,6 +206,8 @@ public abstract class AbstractRestApiApplicationTest {
 
         kommuneinndeling = classificationService.saveAndIndexClassification(kommuneinndeling);
         bydelsinndeling = classificationService.saveAndIndexClassification(bydelsinndeling);
+        age = classificationService.saveAndIndexClassification(age);
+
         icd = TestDataProvider.createCopyrightedCodeList(user);
         classificationFamily.addClassificationSeries(icd);
         icd = classificationService.saveAndIndexClassification(icd);
