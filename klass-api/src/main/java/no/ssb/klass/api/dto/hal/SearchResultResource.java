@@ -31,7 +31,7 @@ public class SearchResultResource extends KlassResource {
         this.language = searchResult.getLanguage();
         this.snippet = searchResult.getDescription();
         this.searchScore = searchResult.getScore();
-        
+
         addLink(createSelfLink(searchResult.getItemId()));
 
         if (highlights != null) {
@@ -67,7 +67,10 @@ public class SearchResultResource extends KlassResource {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         SearchResultResource that = (SearchResultResource) o;
-        return Objects.equals(name, that.name) && Objects.equals(snippet, that.snippet) && Objects.equals(searchScore, that.searchScore) && Objects.equals(language, that.language);
+        return Objects.equals(name, that.name)
+                && Objects.equals(snippet, that.snippet)
+                && Objects.equals(searchScore, that.searchScore)
+                && Objects.equals(language, that.language);
     }
 
     @Override

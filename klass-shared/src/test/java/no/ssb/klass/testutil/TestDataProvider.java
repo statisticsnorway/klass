@@ -29,9 +29,6 @@ public final class TestDataProvider {
     public static final String ALDERS_INNDELING_NB = "Standard for aldersinndeling";
     public static final String ALDERS_INNDELING_NN = "Standard for aldersinndeling";
 
-
-
-
     public static final String KOMMUNEINNDELING_BESKRIVELSE_NO =
             "kommune inndelingen er en administrativ inndeling av kommuner i Norge";
     public static final String KOMMUNEINNDELING_BESKRIVELSE_NN = "kommune beskrivelse";
@@ -51,7 +48,8 @@ public final class TestDataProvider {
     public static final String AGE_DESCRIPTION =
             "The main purpose of this standard is to be the base for different age groupings (variants).";
 
-    public static final String ALDERS_INNDELING_BESKRIVELSE= "Dette er en inndeling som består av enkeltår. Hovedhensikten er at denne kan være utgangspunkt for ulike varianter (grupperinger).";
+    public static final String ALDERS_INNDELING_BESKRIVELSE =
+            "Dette er en inndeling som består av enkeltår. Hovedhensikten er at denne kan være utgangspunkt for ulike varianter (grupperinger).";
     public static final String COPYRIGHTED_CODELIST_NAVN_NO = "Kodeliste for ICD-10";
     public static final String COPYRIGHTED_CODELIST_BESKRIVELSE =
             "Den internasjonale statistiske klassifikasjonen av sykdommer og beslektede helseproblemer";
@@ -433,8 +431,7 @@ public final class TestDataProvider {
                         CLASSIFICATION_OF_AGE,
                         ALDERS_INNDELING_BESKRIVELSE,
                         ALDERS_INNDELING_BESKRIVELSE,
-                        AGE_DESCRIPTION
-                );
+                        AGE_DESCRIPTION);
 
         classification.setContactPerson(user);
         ClassificationVersion version =
@@ -445,9 +442,7 @@ public final class TestDataProvider {
         version.addClassificationItem(
                 TestUtil.createClassificationItem("000", "0 years"), level.getLevelNumber(), null);
         version.addClassificationItem(
-                TestUtil.createClassificationItem("001", "1 year"),
-                level.getLevelNumber(),
-                null);
+                TestUtil.createClassificationItem("001", "1 year"), level.getLevelNumber(), null);
         version.publish(Language.EN);
         classification.addClassificationVersion(version);
 
