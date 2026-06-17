@@ -10,7 +10,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.13</version>
+        <version>3.5.15</version>
         <relativePath />
     </parent>
 
@@ -51,10 +51,10 @@
         <rest-assured-version>5.5.6</rest-assured-version>
         <snakeyaml.version>2.5</snakeyaml.version>
         <solr-version>8.5.2</solr-version>
-        <sonar.version>5.6.0.6792</sonar.version>
+        <sonar.version>5.7.0.6970</sonar.version>
         <spring.version>4.3.7.RELEASE</spring.version>
         <spring-data-opensearch-starter.version>1.8.2</spring-data-opensearch-starter.version>
-        <spring-restdocs-version>3.0.5</spring-restdocs-version>
+        <spring-restdocs-version>3.0.6</spring-restdocs-version>
         <postgresql.version>42.7.10</postgresql.version>
         <testcontainers.version>1.20.1</testcontainers.version>
         <tomcat7-maven-plugin-version>2.2</tomcat7-maven-plugin-version>
