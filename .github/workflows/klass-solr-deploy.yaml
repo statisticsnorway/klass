@@ -38,13 +38,13 @@ jobs:
           fetch-depth: 0
       - name: Check for Test manifest changes
         id: test-manifest-changed
-        uses: "nais/what-changed@main"
+        uses: "nais/what-changed@e253615426610a2e873ada19749ca58896f3679f"
         with:
           files: .nais/test/klass-solr.yaml
 
       - name: Check for Prod manifest changes
         id: prod-manifest-changed
-        uses: "nais/what-changed@main"
+        uses: "nais/what-changed@e253615426610a2e873ada19749ca58896f3679f"
         with:
           files: .nais/prod/klass-solr.yaml
 
