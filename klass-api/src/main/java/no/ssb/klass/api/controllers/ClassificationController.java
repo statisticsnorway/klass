@@ -169,6 +169,8 @@ public class ClassificationController {
     public KlassPagedResources<ClassificationSummaryResource> classifications(
             @RequestParam(value = "includeCodelists", defaultValue = "false")
                     boolean includeCodelists,
+            @RequestParam(value = "includeDescription", defaultValue = "false")
+                    boolean includeDescription,
             @RequestParam(value = "changedSince", required = false)
                     @DateTimeFormat(
                             iso = ISO.DATE_TIME,
@@ -184,7 +186,7 @@ public class ClassificationController {
         Link self = Link.of(getCurrentRequest(), IanaLinkRelations.SELF);
         PagedModel<ClassificationSummaryResource> response =
                 assembler.toModel(
-                        classifications, c -> new ClassificationSummaryResource(language, c), self);
+                                        classifications, c -> new ClassificationSummaryResource(language, c, includeDescription), self);
         addSearchLink(response);
         return new KlassPagedResources<>(response);
     }
