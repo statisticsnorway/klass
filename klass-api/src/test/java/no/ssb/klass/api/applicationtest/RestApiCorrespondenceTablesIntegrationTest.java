@@ -23,6 +23,7 @@ public class RestApiCorrespondenceTablesIntegrationTest extends AbstractRestApiA
                 .statusCode(HttpStatus.OK.value())
                 .body("name", is("Kommuneinndeling 2014 - Bydelsinndeling 2014"))
                 .body("contactPerson", notNullValue())
+                .body("contactPerson.phone", is(""))
                 .body("owningSection", is("section"))
                 .body("source", is("Kommuneinndeling 2014"))
                 .body("sourceId", is(correspondenceTable.getSource().getId().intValue()))

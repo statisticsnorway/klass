@@ -10,7 +10,7 @@ public class ContactPersonResource {
     public ContactPersonResource(User contactPerson) {
         name = contactPerson.getFullname();
         email = contactPerson.getEmail();
-        phone = contactPerson.getPhone();
+        phone = "";  // We no longer expose phone numbers ref DPMETA-1469
     }
 
     public String getName() {
