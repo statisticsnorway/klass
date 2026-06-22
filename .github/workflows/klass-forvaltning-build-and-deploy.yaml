@@ -48,17 +48,17 @@ jobs:
           cache: 'maven'
       - name: Check what changed
         id: changed-files
-        uses: "nais/what-changed@main"
+        uses: "nais/what-changed@e253615426610a2e873ada19749ca58896f3679f"
         with:
           files: .nais/**/klass-forvaltning.yaml
       - name: Check for test config changes
         id: test-config-changed
-        uses: "nais/what-changed@main"
+        uses: "nais/what-changed@e253615426610a2e873ada19749ca58896f3679f"
         with:
           files: .nais/test/klass-forvaltning.yaml
       - name: Check for prod config changes
         id: prod-config-changed
-        uses: "nais/what-changed@main"
+        uses: "nais/what-changed@e253615426610a2e873ada19749ca58896f3679f"
         with:
           files: .nais/prod/klass-forvaltning.yaml
       - name: Build with Maven
