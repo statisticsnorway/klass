@@ -372,12 +372,14 @@ public class ApiDocumentation {
         this.mockMvc
                 .perform(
                         getWithContext(
-                                        "/classifications?includeCodelists=true&changedSince=2015-01-01T00:00:00.000-0000")
+                                        "/classifications?includeDescription=true&includeCodelists=true&changedSince=2015-01-01T00:00:00.000-0000")
                                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(
                         this.documentationHandler.document(
                                 queryParameters(
-                                        includeCodelistsDescription(), changedSinceDescription())))
+                                        includeCodelistsDescription(),
+                                        includeDescriptionDescription(),
+                                        changedSinceDescription())))
                 .andExpect(status().isOk());
     }
 
@@ -1645,6 +1647,11 @@ public class ApiDocumentation {
                         "[Optional] include codelists when "
                                 + part
                                 + " classifications. Default is false");
+    }
+
+    private ParameterDescriptor includeDescriptionDescription() {
+        return parameterWithName("includeDescription")
+                .description("[Optional] include description. Default is false.");
     }
 
     private ParameterDescriptor includeFutureDescription(String part) {
