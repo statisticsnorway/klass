@@ -35,7 +35,9 @@ public class ClassificationSummaryResource extends KlassResource {
     private final String classificationType;
     private final Long classificationFamilyId;
     private final Date lastModified;
-    @com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)
+
+    @com.fasterxml.jackson.annotation.JsonInclude(
+            com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)
     private final String description;
 
     public ClassificationSummaryResource(Language language, ClassificationSeries classification) {
@@ -52,7 +54,8 @@ public class ClassificationSummaryResource extends KlassResource {
                 classification.getClassificationType().getDisplayName(chosenLanguage);
         this.classificationFamilyId = classification.getClassificationFamilyId();
         this.lastModified = classification.getLastModified();
-        this.description = includeDescription ? classification.getDescription(chosenLanguage) : null;
+        this.description =
+                includeDescription ? classification.getDescription(chosenLanguage) : null;
         addLink(createSelfLink(classification.getId()));
     }
 
@@ -95,11 +98,21 @@ public class ClassificationSummaryResource extends KlassResource {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         ClassificationSummaryResource that = (ClassificationSummaryResource) o;
-        return Objects.equals(name, that.name) && Objects.equals(classificationType, that.classificationType) && Objects.equals(classificationFamilyId, that.classificationFamilyId) && Objects.equals(lastModified, that.lastModified) && Objects.equals(description, that.description);
+        return Objects.equals(name, that.name)
+                && Objects.equals(classificationType, that.classificationType)
+                && Objects.equals(classificationFamilyId, that.classificationFamilyId)
+                && Objects.equals(lastModified, that.lastModified)
+                && Objects.equals(description, that.description);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), name, classificationType, classificationFamilyId, lastModified, description);
+        return Objects.hash(
+                super.hashCode(),
+                name,
+                classificationType,
+                classificationFamilyId,
+                lastModified,
+                description);
     }
 }

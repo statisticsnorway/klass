@@ -1,8 +1,8 @@
 package no.ssb.klass.api.dto.hal;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import no.ssb.klass.core.model.ClassificationFamily;
 import no.ssb.klass.core.model.ClassificationSeries;

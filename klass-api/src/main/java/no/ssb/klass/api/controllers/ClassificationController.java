@@ -186,7 +186,9 @@ public class ClassificationController {
         Link self = Link.of(getCurrentRequest(), IanaLinkRelations.SELF);
         PagedModel<ClassificationSummaryResource> response =
                 assembler.toModel(
-                                        classifications, c -> new ClassificationSummaryResource(language, c, includeDescription), self);
+                        classifications,
+                        c -> new ClassificationSummaryResource(language, c, includeDescription),
+                        self);
         addSearchLink(response);
         return new KlassPagedResources<>(response);
     }
