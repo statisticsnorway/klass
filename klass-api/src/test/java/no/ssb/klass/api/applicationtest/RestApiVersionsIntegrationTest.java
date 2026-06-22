@@ -21,6 +21,7 @@ public class RestApiVersionsIntegrationTest extends AbstractRestApiApplicationTe
                 .statusCode(HttpStatus.OK.value())
                 .body("name", is("Badminton 2006"))
                 .body("contactPerson.name", is("Ziggy Stardust"))
+                .body("contactPerson.phone", is(""))
                 .body("owningSection", is("section"))
                 .body("classificationVariants[0].owningSection", is("425"))
                 .body("classificationVariants[1].owningSection", is("150"));
