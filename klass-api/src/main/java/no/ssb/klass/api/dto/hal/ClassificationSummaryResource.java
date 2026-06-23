@@ -1,6 +1,7 @@
 package no.ssb.klass.api.dto.hal;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
+
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 import static java.util.stream.Collectors.*;

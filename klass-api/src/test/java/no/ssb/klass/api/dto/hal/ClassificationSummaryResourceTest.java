@@ -38,7 +38,7 @@ class ClassificationSummaryResourceTest {
     }
 
     @Test
-   void createWithClassificationFamily() {
+    void createWithClassificationFamily() {
         // given
         ClassificationSeries classification = TestUtil.createClassification("name");
         classification.setId(123L);
