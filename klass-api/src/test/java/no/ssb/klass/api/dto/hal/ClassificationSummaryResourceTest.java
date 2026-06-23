@@ -15,16 +15,16 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-public class ClassificationSummaryResourceTest {
+class ClassificationSummaryResourceTest {
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         RequestContextHolder.setRequestAttributes(
                 new ServletRequestAttributes(new MockHttpServletRequest()));
     }
 
     @Test
-    public void createWithoutClassificationFamily() {
+    void createWithoutClassificationFamily() {
         // given
         ClassificationSeries classification = TestUtil.createClassification("name");
         classification.setId(123L);
@@ -38,7 +38,7 @@ public class ClassificationSummaryResourceTest {
     }
 
     @Test
-    public void createWithClassificationFamily() {
+   void createWithClassificationFamily() {
         // given
         ClassificationSeries classification = TestUtil.createClassification("name");
         classification.setId(123L);
@@ -55,7 +55,7 @@ public class ClassificationSummaryResourceTest {
     }
 
     @Test
-    public void descriptionIncludedWhenRequested() {
+    void descriptionIncludedWhenRequested() {
         // given
         ClassificationSeries classification = TestUtil.createClassification("name");
         classification.setId(123L);
