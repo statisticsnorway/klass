@@ -37,8 +37,6 @@ public class ClassificationSummaryResource extends KlassResource {
     private final String classificationType;
     private final Long classificationFamilyId;
     private final Date lastModified;
-
-    @JsonInclude(NON_NULL)
     private final String description;
 
     public ClassificationSummaryResource(Language language, ClassificationSeries classification) {
@@ -66,6 +64,7 @@ public class ClassificationSummaryResource extends KlassResource {
                 .expand();
     }
 
+    @JsonInclude(NON_NULL)
     public String getDescription() {
         return description;
     }
