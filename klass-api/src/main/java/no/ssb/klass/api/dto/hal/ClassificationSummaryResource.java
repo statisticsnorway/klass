@@ -1,10 +1,12 @@
 package no.ssb.klass.api.dto.hal;
 
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 import static java.util.stream.Collectors.*;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import jakarta.validation.constraints.NotNull;
@@ -36,8 +38,7 @@ public class ClassificationSummaryResource extends KlassResource {
     private final Long classificationFamilyId;
     private final Date lastModified;
 
-    @com.fasterxml.jackson.annotation.JsonInclude(
-            com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)
+    @JsonInclude(NON_NULL)
     private final String description;
 
     public ClassificationSummaryResource(Language language, ClassificationSeries classification) {
