@@ -101,6 +101,12 @@ public class EditVariantEditorView extends EditVariantEditorDesign implements Ed
         // NB. checkUserAccess() must be before codeEditor.init(..), if not a NewCodeEditor will be
         // added even when user does not have permission to alter variant.
         codeEditor.init(variant, classificationFacade, applicationContext, xmlService);
+        log.debug(
+                "Enter variant editing view with user context {}, variant {} and classification facade {}",
+                userContext,
+                variant,
+                classificationFacade
+        );
         if (editingState.isCodeEditorNotMetadataVisible()) {
             accordion.setSelectedTab(codeEditor);
             codeEditor.restorePreviousEditingState(editingState);
@@ -182,6 +188,10 @@ public class EditVariantEditorView extends EditVariantEditorDesign implements Ed
     }
 
     private void saveVariant(ClassificationVariant classificationVariant, InformSubscribers informSubscribers) {
+        log.debug(
+                "will save variant editing view classificationVariant{}",
+                classificationVariant
+        );
         classificationFacade.saveAndIndexVariant(classificationVariant, informSubscribers);
         VaadinUtil.showSavedMessage();
         if (accordion.getSelectedTab() == codeEditor) {
