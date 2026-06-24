@@ -36,6 +36,7 @@ import org.slf4j.LoggerFactory;
 @UIScope
 @SpringComponent
 public class VariantTable extends AbstractTable {
+    // log this
     private static final Logger log = LoggerFactory.getLogger(VariantTable.class);
     private static final String NEW_CORRESPONDENCE_TABLE_TOOLTIP = "Lag ny korrespondansetabell";
     private static final String NEW_VARIANT_TOOLTIP = "Lag ny variant";
