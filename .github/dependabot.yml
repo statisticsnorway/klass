@@ -59,3 +59,33 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "daily"
+  - package-ecosystem: docker
+    directory: "/klass-api"
+    schedule:
+      interval: monthly
+    cooldown:
+      default-days: 7
+  - package-ecosystem: docker
+    directory: "/klass-forvaltning"
+    schedule:
+      interval: monthly
+    cooldown:
+      default-days: 7
+  - package-ecosystem: docker
+    directory: "/klass-index-job"
+    schedule:
+      interval: monthly
+    cooldown:
+      default-days: 7
+  - package-ecosystem: docker
+    directory: "/klass-mail"
+    schedule:
+      interval: monthly
+    cooldown:
+      default-days: 7
+  - package-ecosystem: docker
+    directory: "/klass-solr"
+    schedule:
+      interval: monthly
+    cooldown:
+      default-days: 7
