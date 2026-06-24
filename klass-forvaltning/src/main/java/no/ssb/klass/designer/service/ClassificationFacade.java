@@ -110,6 +110,23 @@ public class ClassificationFacade {
     public StatisticalUnit saveStatisticalUnit(StatisticalUnit stat) {
         return classificationService.saveStatisticalUnit(stat);
     }
+
+    /**
+     * Calls searchService.indexAsync and swallows any exception so that a failure in the search
+     * index (e.g. a connection timeout when indexing a large classification) never rolls back an
+     * already-committed database save and never surfaces as an error to the end user.
+     */
+    private void safeIndexAsync(Long classificationId) {
+        try {
+            searchService.indexAsync(classificationId);
+        } catch (Throwable e) {
+            // Catch Throwable (not just Exception) so that OutOfMemoryError from indexing a large
+            // classification does not propagate back to the UI and hide the fact that the DB save
+            // already committed successfully.
+            log.error("Failed to trigger async index for classification id={}: {}", classificationId, e.getMessage(), e);
+        }
+    }
+
     /*
      * Must not run in transaction, since saving and indexing must be performed in separate transactions
      */
@@ -117,7 +134,7 @@ public class ClassificationFacade {
     public ClassificationSeries saveAndIndexClassification(ClassificationSeries classification) {
         classificationService.saveNotIndexClassification(classification);
         log.debug("Classification saved {}, starting indexing", classification);
-        searchService.indexAsync(classification.getId());
+        safeIndexAsync(classification.getId());
         subscriberService.informSubscribersOfUpdatedClassification(classification,
                 "Endring i metadata for klassifikasjonen: " + classification.getNameInPrimaryLanguage(),
                 "Oppdatert metadata for klassifikasjonen");
@@ -132,7 +149,7 @@ public class ClassificationFacade {
             InformSubscribers informSubscribers) {
         classificationService.saveNotIndexCorrespondenceTable(correspondenceTable);
         log.debug("Correspondence table saved {}, starting indexing", correspondenceTable);
-        searchService.indexAsync(correspondenceTable.getOwnerClassification().getId());
+        safeIndexAsync(correspondenceTable.getOwnerClassification().getId());
         if (informSubscribers.isInformSubscribers()) {
             subscriberService.informSubscribersOfUpdatedClassification(correspondenceTable.getOwnerClassification(),
                     "Endring i korrespondansetabellen: " + correspondenceTable.getNameInPrimaryLanguage(),
@@ -149,7 +166,7 @@ public class ClassificationFacade {
             InformSubscribers informSubscribers) {
         classificationService.saveNotIndexVariant(variant);
         log.debug("Classification variant saved {}, starting indexing", variant);
-        searchService.indexAsync(variant.getOwnerClassification().getId());
+        safeIndexAsync(variant.getOwnerClassification().getId());
         if (informSubscribers.isInformSubscribers()) {
             subscriberService.informSubscribersOfUpdatedClassification(variant.getOwnerClassification(),
                     "Endring i varianten: " + variant.getNameInPrimaryLanguage(), informSubscribers
@@ -166,7 +183,7 @@ public class ClassificationFacade {
             InformSubscribers informSubscribers) {
         classificationService.saveNotIndexVersion(version);
         log.debug("Classification version saved {}, starting indexing", version);
-        searchService.indexAsync(version.getOwnerClassification().getId());
+        safeIndexAsync(version.getOwnerClassification().getId());
         if (informSubscribers.isInformSubscribers()) {
             subscriberService.informSubscribersOfUpdatedClassification(version.getOwnerClassification(),
                     "Endring i versjonen: " + version.getNameInPrimaryLanguage(), informSubscribers
@@ -187,7 +204,7 @@ public class ClassificationFacade {
             throws KlassMessageException {
         classificationService.deleteNotIndexClassification(currentUser, classification);
         log.debug("Classification {} deleted, starting indexing", classification);
-        searchService.indexAsync(classification.getId());
+        safeIndexAsync(classification.getId());
         subscriberService.informSubscribersOfUpdatedClassification(classification, "Klassifikasjonen er slettet: "
                 + classification.getNameInPrimaryLanguage(), "Klassifikasjonen er slettet");
     }
@@ -200,7 +217,7 @@ public class ClassificationFacade {
             CorrespondenceTable correspondenceTable) throws KlassMessageException {
         classificationService.deleteNotIndexCorrespondenceTable(currentUser, correspondenceTable);
         log.debug("Correspondence table {} deleted, starting indexing", correspondenceTable);
-        searchService.indexAsync(correspondenceTable.getOwnerClassification().getId());
+        safeIndexAsync(correspondenceTable.getOwnerClassification().getId());
         if (correspondenceTable.isPublishedInAnyLanguage()) {
             subscriberService.informSubscribersOfUpdatedClassification(correspondenceTable.getOwnerClassification(),
                     "Korrespondansetabellen er slettet: " + correspondenceTable.getNameInPrimaryLanguage(),
@@ -216,7 +233,7 @@ public class ClassificationFacade {
             throws KlassMessageException {
         classificationService.deleteNotIndexVariant(currentUser, variant);
         log.debug("Variant {} deleted, starting indexing", variant);
-        searchService.indexAsync(variant.getOwnerClassification().getId());
+        safeIndexAsync(variant.getOwnerClassification().getId());
         if (variant.isPublishedInAnyLanguage()) {
             subscriberService.informSubscribersOfUpdatedClassification(variant.getOwnerClassification(),
                     "Varianten er slettet: " + variant.getNameInPrimaryLanguage(), "En variant er slettet");
@@ -230,7 +247,7 @@ public class ClassificationFacade {
     public void deleteAndIndexVersion(User currentUser, ClassificationVersion version) throws KlassMessageException {
         classificationService.deleteNotIndexVersion(currentUser, version);
         log.debug("Version {} deleted, starting indexing", version);
-        searchService.indexAsync(version.getOwnerClassification().getId());
+        safeIndexAsync(version.getOwnerClassification().getId());
         if (version.isPublishedInAnyLanguage()) {
             subscriberService.informSubscribersOfUpdatedClassification(version.getOwnerClassification(),
                     "Versjonen er slettet: " + version.getNameInPrimaryLanguage(), "En versjon er slettet");
