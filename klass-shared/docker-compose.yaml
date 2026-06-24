@@ -92,6 +92,7 @@ services:
     depends_on:
       postgresql:
         condition: service_healthy
+    command: [ "java", "-XshowSettings:vm", "-Xms512m", "-Xmx2g", "-jar", "app.war" ]
     deploy:
       resources:
         limits:
