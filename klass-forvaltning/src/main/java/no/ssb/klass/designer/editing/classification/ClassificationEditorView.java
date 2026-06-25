@@ -377,6 +377,7 @@ public class ClassificationEditorView extends ClassificationEditorComponentLayer
         series.setIncludeValidity(includeValidCheckbox.getValue());
         series.setCopyrighted(copyrightCheckbox.getValue());
 
+        // could we do this in two operayions?
         series = classificationFacade.saveAndIndexClassification(series);
 
         VaadinUtil.showSavedMessage();
