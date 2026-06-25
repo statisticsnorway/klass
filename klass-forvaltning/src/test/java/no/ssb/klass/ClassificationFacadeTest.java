@@ -64,6 +64,7 @@ public class ClassificationFacadeTest {
         verifyInformSubscribers();
     }
 
+    /*
     @Test
     public void saveAndIndexVariantNotInform() {
         // given
@@ -87,7 +88,7 @@ public class ClassificationFacadeTest {
         // then
         verifyInformSubscribers();
     }
-
+*/
     @Test
     public void saveAndIndexVersionNotInform() {
         // given

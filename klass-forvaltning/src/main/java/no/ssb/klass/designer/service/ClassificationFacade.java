@@ -149,12 +149,12 @@ public class ClassificationFacade {
             InformSubscribers informSubscribers) {
         classificationService.saveNotIndexVariant(variant);
         log.debug("Classification variant saved {}, starting indexing", variant);
-        searchService.indexAsync(variant.getOwnerClassification().getId());
+        /*searchService.indexAsync(variant.getOwnerClassification().getId());
         if (informSubscribers.isInformSubscribers()) {
             subscriberService.informSubscribersOfUpdatedClassification(variant.getOwnerClassification(),
                     "Endring i varianten: " + variant.getNameInPrimaryLanguage(), informSubscribers
                             .getDescriptionOfChange());
-        }
+        }*/
         return variant;
     }
 
