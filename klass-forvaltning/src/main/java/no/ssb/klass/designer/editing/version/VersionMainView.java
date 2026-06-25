@@ -137,7 +137,7 @@ public class VersionMainView extends VersionMainEditor implements EditingView {
     }
 
     private void saveVersion(ClassificationVersion version, InformSubscribers informSubscribers) {
-        classificationFacade.saveAndIndexVersion(version, informSubscribers);
+        classificationFacade.saveVersion(version, informSubscribers);
         VaadinUtil.showSavedMessage();
         if (versionAccordion.getSelectedTab() == codeEditor) {
             VaadinUtil.getKlassState().setEditingState(codeEditor.currentEditingState());

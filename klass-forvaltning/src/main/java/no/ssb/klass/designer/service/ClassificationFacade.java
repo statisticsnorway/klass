@@ -160,11 +160,10 @@ public class ClassificationFacade {
      * Must not run in transaction, since saving and indexing must be performed in separate transactions
      */
     @Transactional(propagation = Propagation.NEVER)
-    public ClassificationVersion saveAndIndexVersion(ClassificationVersion version,
-            InformSubscribers informSubscribers) {
+    public ClassificationVersion saveVersion(ClassificationVersion version,
+                                             InformSubscribers informSubscribers) {
         classificationService.saveNotIndexVersion(version);
-        log.debug("Classification version saved {}, starting indexing", version);
-        searchService.indexAsync(version.getOwnerClassification().getId());
+        log.debug("Classification version saved {}", version);
         if (informSubscribers.isInformSubscribers()) {
             subscriberService.informSubscribersOfUpdatedClassification(version.getOwnerClassification(),
                     "Endring i versjonen: " + version.getNameInPrimaryLanguage(), informSubscribers

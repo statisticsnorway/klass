@@ -89,24 +89,24 @@ public class ClassificationFacadeTest {
     }
 
     @Test
-    public void saveAndIndexVersionNotInform() {
+    public void saveVersionNotInform() {
         // given
         ClassificationVersion version = createVersion();
 
         // when
-        subject.saveAndIndexVersion(version, createNotInformSubscribers());
+        subject.saveVersion(version, createNotInformSubscribers());
 
         // then
         verifyNotInformSubscribers();
     }
 
     @Test
-    public void saveAndIndexVersionInform() {
+    public void saveVersionInform() {
         // given
         ClassificationVersion version = createVersion();
 
         // when
-        subject.saveAndIndexVersion(version, createInformSubscribers());
+        subject.saveVersion(version, createInformSubscribers());
 
         // then
         verifyInformSubscribers();

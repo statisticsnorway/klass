@@ -182,7 +182,7 @@ public class LoggMessageTab extends LoggMessageTabDesign {
                 if (answerYes) {
                     version = reloadToAvoidLazyInitializationException(version);
                     version.deleteChangelog(changelog);
-                    classificationFacade.saveAndIndexVersion(version, InformSubscribers.createWhenWasUnpublished(version));
+                    classificationFacade.saveVersion(version, InformSubscribers.createWhenWasUnpublished(version));
                     classificationFacade.deleteChangelog(changelog);
                     VaadinUtil.showSavedMessage();
                     updateTableContent();
@@ -216,7 +216,7 @@ public class LoggMessageTab extends LoggMessageTabDesign {
             if (answerYes) {
                 version = reloadToAvoidLazyInitializationException(version);
                 version.addChangelog(changelog);
-                classificationFacade.saveAndIndexVersion(version, InformSubscribers.createWhenWasUnpublished(version));
+                classificationFacade.saveVersion(version, InformSubscribers.createWhenWasUnpublished(version));
                 VaadinUtil.showSavedMessage();
                 hlayout.setVisible(false);
                 buttonhlayout.setVisible(false);
