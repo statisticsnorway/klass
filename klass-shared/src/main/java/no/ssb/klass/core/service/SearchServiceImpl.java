@@ -34,6 +34,7 @@ import no.ssb.klass.core.service.search.InternalSearchQuery;
 import no.ssb.klass.core.service.search.PublicSearchQuery;
 import no.ssb.klass.core.service.search.SolrSearchResult;
 import no.ssb.klass.core.util.TimeUtil;
+import no.ssb.klass.core.service.ClassificationService;
 
 @Service
 public class SearchServiceImpl implements SearchService {
@@ -45,6 +46,9 @@ public class SearchServiceImpl implements SearchService {
 
     @Autowired
     private SolrTemplate solrTemplate;
+
+    @Autowired
+    private ClassificationService classificationService;
 
     @Autowired
     public SearchServiceImpl(ClassificationSeriesRepository classificationRepository) {
@@ -123,6 +127,40 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     @Transactional(readOnly = true)
+    @Async
+    public void indexVariantAsync(Long variantId) {
+        checkNotNull(variantId);
+        indexVariantSync(variantId);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public void indexVariantSync(Long variantId) {
+        checkNotNull(variantId);
+        ClassificationVariant variant = classificationService.getClassificationVariant(variantId);
+        Date start = TimeUtil.now();
+        for (Language language : Language.values()) {
+            if (!variant.getFullName(language).isEmpty()) {
+                SolrInputDocument doc = new SolrInputDocument();
+                doc.addField("itemid", variant.getId());
+                doc.addField("uuid", language.getLanguageCode() + "_" + variant.getUuid());
+                doc.addField("language", language.getLanguageCode());
+                doc.addField("type", "Variant");
+                doc.addField("title", variant.getFullName(language));
+                doc.addField("copyrighted", variant.getOwnerClassification().isCopyrighted());
+                doc.addField("published", variant.isPublished(language));
+                doc.addField("description", variant.getIntroduction(language));
+                doc.addField("section", variant.getContactPerson().getSection());
+                variant.getAllClassificationItems()
+                        .forEach(item -> doc.addField("codes", formatClassificationItem(language, item)));
+                updateSolr(variant, doc);
+            }
+        }
+        solrTemplate.commit(solrCore);
+        log.info("Indexing variant: " + variant.getFullName(Language.NB) + ". Took (ms): " + TimeUtil
+                .millisecondsSince(start));
+    }
+
     public void indexSync(ClassificationSeries classification) {
         Date start = TimeUtil.now();
         for (Language language : Language.values()) {

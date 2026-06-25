@@ -143,7 +143,7 @@ public class ClassificationFacade {
     public ClassificationVariant saveAndIndexVariant(ClassificationVariant variant,
             InformSubscribers informSubscribers) {
         classificationService.saveNotIndexVariant(variant);
-        searchService.indexAsync(variant.getOwnerClassification().getId());
+        searchService.indexVariantAsync(variant.getId());
         if (informSubscribers.isInformSubscribers()) {
             subscriberService.informSubscribersOfUpdatedClassification(variant.getOwnerClassification(),
                     "Endring i varianten: " + variant.getNameInPrimaryLanguage(), informSubscribers
@@ -206,7 +206,7 @@ public class ClassificationFacade {
     public void deleteAndIndexVariant(User currentUser, ClassificationVariant variant)
             throws KlassMessageException {
         classificationService.deleteNotIndexVariant(currentUser, variant);
-        searchService.indexAsync(variant.getOwnerClassification().getId());
+        searchService.indexVariantAsync(variant.getId());
         if (variant.isPublishedInAnyLanguage()) {
             subscriberService.informSubscribersOfUpdatedClassification(variant.getOwnerClassification(),
                     "Varianten er slettet: " + variant.getNameInPrimaryLanguage(), "En variant er slettet");

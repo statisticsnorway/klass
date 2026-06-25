@@ -69,4 +69,19 @@ public interface SearchService {
      * @param classificationSeries
      */
     void indexSync(ClassificationSeries classificationSeries);
+
+    /**
+     * Indexes a single ClassificationVariant synchronously. Mostly for tests or callers that need
+     * to wait until indexing is finished.
+     *
+     * @param variantId id of the variant to index
+     */
+    void indexVariantSync(Long variantId);
+
+    /**
+     * Indexes a single ClassificationVariant asynchronously.
+     *
+     * @param variantId id of the variant to index
+     */
+    void indexVariantAsync(Long variantId);
 }
