@@ -132,6 +132,7 @@ public class CreateVariantView extends CreateVariantDesign implements EditingVie
             VaadinUtil.getKlassState().setEditingState(metadataEditor.currentEditingState());
             VaadinUtil.navigateTo(EditVariantEditorView.NAME,
                     ImmutableMap.of(EditVariantEditorView.PARAM_ID, variant.getId().toString()));
+            //classificationFacade.indexVariant(variant, InformSubscribers.createNotInformSubscribers());
         }
     }
 

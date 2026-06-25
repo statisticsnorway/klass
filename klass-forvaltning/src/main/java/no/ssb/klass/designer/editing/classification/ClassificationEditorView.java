@@ -377,7 +377,7 @@ public class ClassificationEditorView extends ClassificationEditorComponentLayer
         series.setIncludeValidity(includeValidCheckbox.getValue());
         series.setCopyrighted(copyrightCheckbox.getValue());
 
-        // could we do this in two operayions?
+        // could we do this in two operations?
         series = classificationFacade.saveAndIndexClassification(series);
 
         VaadinUtil.showSavedMessage();
@@ -385,6 +385,7 @@ public class ClassificationEditorView extends ClassificationEditorComponentLayer
                 !showThirdLanguage));
         VaadinUtil.navigateTo(ClassificationEditorView.NAME, ImmutableMap.of(ClassificationEditorView.PARAM_ID, String
                 .valueOf(series.getId())));
+        classificationFacade.indexClassification(series);
     }
 
     private boolean validate() {

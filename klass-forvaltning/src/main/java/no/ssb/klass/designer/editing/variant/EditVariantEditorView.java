@@ -191,6 +191,7 @@ public class EditVariantEditorView extends EditVariantEditorDesign implements Ed
         }
         ignoreChanges = true;
         VaadinUtil.navigateToCurrentPage();
+        //classificationFacade.indexVariant(classificationVariant, informSubscribers);
     }
 
     private boolean updateVariantMetadataValues() {

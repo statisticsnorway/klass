@@ -115,6 +115,8 @@ public class CreateVersionView extends VerticalLayout implements EditingView {
         VaadinUtil.getKlassState().setEditingState(versionEditorView.currentEditingState());
         VaadinUtil.navigateTo(VersionMainView.NAME, ImmutableMap.of(VersionMainView.PARAM_VERSION_ID,
                 version.getId().toString()));
+        //classificationFacade.indexVersion(classificationVersion,
+         //       InformSubscribers.createNotInformSubscribers());
     }
 
     private void cancel() {

@@ -124,6 +124,8 @@ public class CreateCorrespondenceTableView extends CreateCorrespondenceTableDesi
             VaadinUtil.getKlassState().setEditingState(metadataEditor.currentEditingState());
             VaadinUtil.navigateTo(EditCorrespondenceTableView.NAME, ImmutableMap.of(
                     EditCorrespondenceTableView.PARAM_ID, correspondenceTable.getId().toString()));
+            //classificationFacade.indexCorrespondenceTable(correspondenceTable,
+             //       InformSubscribers.createNotInformSubscribers());
         }
     }
 
