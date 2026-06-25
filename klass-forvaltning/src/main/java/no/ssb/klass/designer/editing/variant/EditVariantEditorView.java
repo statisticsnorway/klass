@@ -182,7 +182,7 @@ public class EditVariantEditorView extends EditVariantEditorDesign implements Ed
     }
 
     private void saveVariant(ClassificationVariant classificationVariant, InformSubscribers informSubscribers) {
-        classificationFacade.saveAndIndexVariant(classificationVariant, informSubscribers);
+        classificationFacade.saveVariant(classificationVariant, informSubscribers);
         VaadinUtil.showSavedMessage();
         if (accordion.getSelectedTab() == codeEditor) {
             VaadinUtil.getKlassState().setEditingState(codeEditor.currentEditingState());

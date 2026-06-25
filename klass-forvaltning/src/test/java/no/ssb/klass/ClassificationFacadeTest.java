@@ -65,24 +65,24 @@ public class ClassificationFacadeTest {
     }
 
     @Test
-    public void saveAndIndexVariantNotInform() {
+    public void saveVariantNotInform() {
         // given
         ClassificationVariant variant = createVariant();
 
         // when
-        subject.saveAndIndexVariant(variant, createNotInformSubscribers());
+        subject.saveVariant(variant, createNotInformSubscribers());
 
         // then
         verifyNotInformSubscribers();
     }
 
     @Test
-    public void saveAndIndexVariantInform() {
+    public void saveVariantInform() {
         // given
         ClassificationVariant variant = createVariant();
 
         // when
-        subject.saveAndIndexVariant(variant, createInformSubscribers());
+        subject.saveVariant(variant, createInformSubscribers());
 
         // then
         verifyInformSubscribers();

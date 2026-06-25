@@ -144,11 +144,10 @@ public class ClassificationFacade {
      * Must not run in transaction, since saving and indexing must be performed in separate transactions
      */
     @Transactional(propagation = Propagation.NEVER)
-    public ClassificationVariant saveAndIndexVariant(ClassificationVariant variant,
-            InformSubscribers informSubscribers) {
+    public ClassificationVariant saveVariant(ClassificationVariant variant,
+                                             InformSubscribers informSubscribers) {
         classificationService.saveNotIndexVariant(variant);
-        log.debug("Classification variant saved {}, starting indexing", variant);
-        searchService.indexAsync(variant.getOwnerClassification().getId());
+        log.debug("Classification variant saved {}", variant);
         if (informSubscribers.isInformSubscribers()) {
             subscriberService.informSubscribersOfUpdatedClassification(variant.getOwnerClassification(),
                     "Endring i varianten: " + variant.getNameInPrimaryLanguage(), informSubscribers
