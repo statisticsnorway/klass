@@ -180,11 +180,10 @@ public class ClassificationFacade {
      * Must not run in transaction, since deleting and indexing must be performed in separate transactions
      */
     @Transactional(propagation = Propagation.NEVER)
-    public void deleteAndIndexClassification(User currentUser, ClassificationSeries classification)
+    public void deleteClassification(User currentUser, ClassificationSeries classification)
             throws KlassMessageException {
         classificationService.deleteNotIndexClassification(currentUser, classification);
-        log.debug("Classification {} deleted, starting indexing", classification);
-        searchService.indexAsync(classification.getId());
+        log.debug("Classification {} deleted", classification);
         subscriberService.informSubscribersOfUpdatedClassification(classification, "Klassifikasjonen er slettet: "
                 + classification.getNameInPrimaryLanguage(), "Klassifikasjonen er slettet");
     }
@@ -193,11 +192,10 @@ public class ClassificationFacade {
      * Must not run in transaction, since saving and indexing must be performed in separate transactions
      */
     @Transactional(propagation = Propagation.NEVER)
-    public void deleteAndIndexCorrespondenceTable(User currentUser,
+    public void deleteCorrespondenceTable(User currentUser,
             CorrespondenceTable correspondenceTable) throws KlassMessageException {
         classificationService.deleteNotIndexCorrespondenceTable(currentUser, correspondenceTable);
-        log.debug("Correspondence table {} deleted, starting indexing", correspondenceTable);
-        searchService.indexAsync(correspondenceTable.getOwnerClassification().getId());
+        log.debug("Correspondence table {} deleted", correspondenceTable);
         if (correspondenceTable.isPublishedInAnyLanguage()) {
             subscriberService.informSubscribersOfUpdatedClassification(correspondenceTable.getOwnerClassification(),
                     "Korrespondansetabellen er slettet: " + correspondenceTable.getNameInPrimaryLanguage(),
@@ -209,11 +207,10 @@ public class ClassificationFacade {
      * Must not run in transaction, since saving and indexing must be performed in separate transactions
      */
     @Transactional(propagation = Propagation.NEVER)
-    public void deleteAndIndexVariant(User currentUser, ClassificationVariant variant)
+    public void deleteVariant(User currentUser, ClassificationVariant variant)
             throws KlassMessageException {
         classificationService.deleteNotIndexVariant(currentUser, variant);
-        log.debug("Variant {} deleted, starting indexing", variant);
-        searchService.indexAsync(variant.getOwnerClassification().getId());
+        log.debug("Variant {} deleted", variant);
         if (variant.isPublishedInAnyLanguage()) {
             subscriberService.informSubscribersOfUpdatedClassification(variant.getOwnerClassification(),
                     "Varianten er slettet: " + variant.getNameInPrimaryLanguage(), "En variant er slettet");
@@ -224,10 +221,9 @@ public class ClassificationFacade {
      * Must not run in transaction, since saving and indexing must be performed in separate transactions
      */
     @Transactional(propagation = Propagation.NEVER)
-    public void deleteAndIndexVersion(User currentUser, ClassificationVersion version) throws KlassMessageException {
+    public void deleteVersion(User currentUser, ClassificationVersion version) throws KlassMessageException {
         classificationService.deleteNotIndexVersion(currentUser, version);
-        log.debug("Version {} deleted, starting indexing", version);
-        searchService.indexAsync(version.getOwnerClassification().getId());
+        log.debug("Version {} deleted", version);
         if (version.isPublishedInAnyLanguage()) {
             subscriberService.informSubscribersOfUpdatedClassification(version.getOwnerClassification(),
                     "Versjonen er slettet: " + version.getNameInPrimaryLanguage(), "En versjon er slettet");

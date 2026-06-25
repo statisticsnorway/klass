@@ -224,7 +224,7 @@ public class ClassificationTable extends AbstractTable {
 
         @Override
         protected void deleteClassificationEntity(ClassificationSeries classification) throws KlassMessageException {
-            classificationFacade.deleteAndIndexClassification(userContext.getDetachedUserObject(), classification);
+            classificationFacade.deleteClassification(userContext.getDetachedUserObject(), classification);
         }
     }
 }

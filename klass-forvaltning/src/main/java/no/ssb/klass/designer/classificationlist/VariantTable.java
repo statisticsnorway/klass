@@ -193,10 +193,10 @@ public class VariantTable extends AbstractTable {
         @Override
         protected void deleteClassificationEntity(ClassificationEntityOperations entity) throws KlassMessageException {
             if (isVariant(entity)) {
-                classificationFacade.deleteAndIndexVariant(userContext.getDetachedUserObject(),
+                classificationFacade.deleteVariant(userContext.getDetachedUserObject(),
                         (ClassificationVariant) entity);
             } else {
-                classificationFacade.deleteAndIndexCorrespondenceTable(userContext
+                classificationFacade.deleteCorrespondenceTable(userContext
                         .getDetachedUserObject(), (CorrespondenceTable) entity);
             }
         }
