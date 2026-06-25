@@ -29,36 +29,36 @@ public class ClassificationFacadeTest {
     }
 
     @Test
-    public void saveAndIndexClassification() {
+    public void saveClassification() {
         // given
         ClassificationSeries classification = TestUtil.createClassification("name");
 
         // when
-        subject.saveAndIndexClassification(classification);
+        subject.saveClassification(classification);
 
         // then
         verifyInformSubscribers();
     }
 
     @Test
-    public void saveAndIndexCorrespondenceTableNotInform() {
+    public void saveCorrespondenceTableNotInform() {
         // given
         CorrespondenceTable correspondenceTable = createCorrespondenceTable();
 
         // when
-        subject.saveAndIndexCorrespondenceTable(correspondenceTable, createNotInformSubscribers());
+        subject.saveCorrespondenceTable(correspondenceTable, createNotInformSubscribers());
 
         // then
         verifyNotInformSubscribers();
     }
 
     @Test
-    public void saveAndIndexCorrespondenceTableInform() {
+    public void saveCorrespondenceTableInform() {
         // given
         CorrespondenceTable correspondenceTable = createCorrespondenceTable();
 
         // when
-        subject.saveAndIndexCorrespondenceTable(correspondenceTable, createInformSubscribers());
+        subject.saveCorrespondenceTable(correspondenceTable, createInformSubscribers());
 
         // then
         verifyInformSubscribers();

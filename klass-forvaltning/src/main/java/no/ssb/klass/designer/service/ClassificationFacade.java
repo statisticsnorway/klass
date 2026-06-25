@@ -110,14 +110,14 @@ public class ClassificationFacade {
     public StatisticalUnit saveStatisticalUnit(StatisticalUnit stat) {
         return classificationService.saveStatisticalUnit(stat);
     }
+    // probably remove never transactional
     /*
      * Must not run in transaction, since saving and indexing must be performed in separate transactions
      */
     @Transactional(propagation = Propagation.NEVER)
-    public ClassificationSeries saveAndIndexClassification(ClassificationSeries classification) {
+    public ClassificationSeries saveClassification(ClassificationSeries classification) {
         classificationService.saveNotIndexClassification(classification);
-        log.debug("Classification saved {}, starting indexing", classification);
-        searchService.indexAsync(classification.getId());
+        log.debug("Classification saved {}", classification);
         subscriberService.informSubscribersOfUpdatedClassification(classification,
                 "Endring i metadata for klassifikasjonen: " + classification.getNameInPrimaryLanguage(),
                 "Oppdatert metadata for klassifikasjonen");
@@ -128,11 +128,10 @@ public class ClassificationFacade {
      * Must not run in transaction, since saving and indexing must be performed in separate transactions
      */
     @Transactional(propagation = Propagation.NEVER)
-    public CorrespondenceTable saveAndIndexCorrespondenceTable(CorrespondenceTable correspondenceTable,
-            InformSubscribers informSubscribers) {
+    public CorrespondenceTable saveCorrespondenceTable(CorrespondenceTable correspondenceTable,
+                                                       InformSubscribers informSubscribers) {
         classificationService.saveNotIndexCorrespondenceTable(correspondenceTable);
-        log.debug("Correspondence table saved {}, starting indexing", correspondenceTable);
-        searchService.indexAsync(correspondenceTable.getOwnerClassification().getId());
+        log.debug("Correspondence table saved {}", correspondenceTable);
         if (informSubscribers.isInformSubscribers()) {
             subscriberService.informSubscribersOfUpdatedClassification(correspondenceTable.getOwnerClassification(),
                     "Endring i korrespondansetabellen: " + correspondenceTable.getNameInPrimaryLanguage(),

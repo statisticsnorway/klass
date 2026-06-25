@@ -159,7 +159,7 @@ public class EditCorrespondenceTableView extends EditCorrespondenceTableDesign i
     }
 
     private void saveCorrespondenceTable(CorrespondenceTable correspondenceTable, InformSubscribers informSubscribers) {
-        classificationFacade.saveAndIndexCorrespondenceTable(correspondenceTable, informSubscribers);
+        classificationFacade.saveCorrespondenceTable(correspondenceTable, informSubscribers);
         VaadinUtil.showSavedMessage();
         if (accordion.getSelectedTab() == codeEditorTab) {
             VaadinUtil.getKlassState().setEditingState(codeEditor.currentEditingState());

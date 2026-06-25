@@ -118,7 +118,7 @@ public class CreateCorrespondenceTableView extends CreateCorrespondenceTableDesi
             correspondenceTable.setDescription(metadataEditor.getDescription(Language.NN), Language.NN);
             correspondenceTable.setDescription(metadataEditor.getDescription(Language.EN), Language.EN);
             correspondenceTable.setDraft(metadataEditor.getDraftCheckBoxValue());
-            correspondenceTable = classificationFacade.saveAndIndexCorrespondenceTable(correspondenceTable,
+            correspondenceTable = classificationFacade.saveCorrespondenceTable(correspondenceTable,
                     InformSubscribers.createNotInformSubscribers());
             VaadinUtil.showSavedMessage();
             VaadinUtil.getKlassState().setEditingState(metadataEditor.currentEditingState());
