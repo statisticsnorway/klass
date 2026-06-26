@@ -39,6 +39,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.concurrent.CompletableFuture;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Mads Lundemo, SSB.
@@ -67,6 +70,7 @@ public class ClassificationEditorView extends ClassificationEditorComponentLayer
     private Long classificationId;
     private ClassificationFamily classificationFamily;
     private ClassificationSeries series;
+    private static final Logger log = LoggerFactory.getLogger(ClassificationEditorView.class);
 
     public ClassificationEditorView() {
         actionButtons.setConfirmText("Lagre");
@@ -384,7 +388,18 @@ public class ClassificationEditorView extends ClassificationEditorComponentLayer
                 !showThirdLanguage));
         VaadinUtil.navigateTo(ClassificationEditorView.NAME, ImmutableMap.of(ClassificationEditorView.PARAM_ID, String
                 .valueOf(series.getId())));
-        classificationFacade.indexClassification(series);
+        // Run indexing and subscriber notification asynchronously so the UI thread
+        // (Vaadin request) is not blocked by potentially long-running IO operations
+        // which previously caused "Broken pipe" and transaction rollback errors.
+        CompletableFuture.runAsync(() -> {
+            try {
+                classificationFacade.indexClassification(series);
+            } catch (Exception e) {
+                // Log the error and avoid throwing back to the Vaadin UI thread
+                log.error("Async indexing failed for classification {}: {}", series != null ? series.getId() : "null",
+                        e.getMessage(), e);
+            }
+        });
     }
 
     private boolean validate() {
