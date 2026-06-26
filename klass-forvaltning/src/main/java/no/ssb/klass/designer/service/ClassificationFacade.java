@@ -113,7 +113,7 @@ public class ClassificationFacade {
 
     public ClassificationSeries saveClassification(ClassificationSeries classification) {
         classificationService.saveNotIndexClassification(classification);
-        log.debug("Classification saved {}", classification);
+        log.info("Classification saved {}", classification);
         subscriberService.informSubscribersOfUpdatedClassification(classification,
                 "Endring i metadata for klassifikasjonen: " + classification.getNameInPrimaryLanguage(),
                 "Oppdatert metadata for klassifikasjonen");
@@ -123,7 +123,7 @@ public class ClassificationFacade {
     public CorrespondenceTable saveCorrespondenceTable(CorrespondenceTable correspondenceTable,
                                                        InformSubscribers informSubscribers) {
         classificationService.saveNotIndexCorrespondenceTable(correspondenceTable);
-        log.debug("Correspondence table saved {}", correspondenceTable);
+        log.info("Correspondence table saved {}", correspondenceTable);
         if (informSubscribers.isInformSubscribers()) {
             subscriberService.informSubscribersOfUpdatedClassification(correspondenceTable.getOwnerClassification(),
                     "Endring i korrespondansetabellen: " + correspondenceTable.getNameInPrimaryLanguage(),
@@ -134,7 +134,6 @@ public class ClassificationFacade {
 
     public ClassificationVariant saveVariant(ClassificationVariant variant,
                                              InformSubscribers informSubscribers) {
-        log.info("Classification variant will be saved {}", variant);
         classificationService.saveNotIndexVariant(variant);
         log.info("Classification variant saved {}", variant);
         if (informSubscribers.isInformSubscribers()) {
@@ -150,7 +149,7 @@ public class ClassificationFacade {
     public ClassificationVersion saveVersion(ClassificationVersion version,
                                              InformSubscribers informSubscribers) {
         classificationService.saveNotIndexVersion(version);
-        log.debug("Classification version saved {}", version);
+        log.info("Classification version saved {}", version);
         if (informSubscribers.isInformSubscribers()) {
             subscriberService.informSubscribersOfUpdatedClassification(version.getOwnerClassification(),
                     "Endring i versjonen: " + version.getNameInPrimaryLanguage(), informSubscribers
@@ -166,7 +165,7 @@ public class ClassificationFacade {
     public void deleteClassification(User currentUser, ClassificationSeries classification)
             throws KlassMessageException {
         classificationService.deleteNotIndexClassification(currentUser, classification);
-        log.debug("Classification {} deleted", classification);
+        log.info("Classification {} deleted", classification);
         subscriberService.informSubscribersOfUpdatedClassification(classification, "Klassifikasjonen er slettet: "
                 + classification.getNameInPrimaryLanguage(), "Klassifikasjonen er slettet");
     }
@@ -174,7 +173,7 @@ public class ClassificationFacade {
     public void deleteCorrespondenceTable(User currentUser,
             CorrespondenceTable correspondenceTable) throws KlassMessageException {
         classificationService.deleteNotIndexCorrespondenceTable(currentUser, correspondenceTable);
-        log.debug("Correspondence table {} deleted", correspondenceTable);
+        log.info("Correspondence table {} deleted", correspondenceTable);
         if (correspondenceTable.isPublishedInAnyLanguage()) {
             subscriberService.informSubscribersOfUpdatedClassification(correspondenceTable.getOwnerClassification(),
                     "Korrespondansetabellen er slettet: " + correspondenceTable.getNameInPrimaryLanguage(),
@@ -185,7 +184,7 @@ public class ClassificationFacade {
     public void deleteVariant(User currentUser, ClassificationVariant variant)
             throws KlassMessageException {
         classificationService.deleteNotIndexVariant(currentUser, variant);
-        log.debug("Variant {} deleted", variant);
+        log.info("Variant {} deleted", variant);
         if (variant.isPublishedInAnyLanguage()) {
             subscriberService.informSubscribersOfUpdatedClassification(variant.getOwnerClassification(),
                     "Varianten er slettet: " + variant.getNameInPrimaryLanguage(), "En variant er slettet");
@@ -194,7 +193,7 @@ public class ClassificationFacade {
 
     public void deleteVersion(User currentUser, ClassificationVersion version) throws KlassMessageException {
         classificationService.deleteNotIndexVersion(currentUser, version);
-        log.debug("Version {} deleted", version);
+        log.info("Version {} deleted", version);
         if (version.isPublishedInAnyLanguage()) {
             subscriberService.informSubscribersOfUpdatedClassification(version.getOwnerClassification(),
                     "Versjonen er slettet: " + version.getNameInPrimaryLanguage(), "En versjon er slettet");
