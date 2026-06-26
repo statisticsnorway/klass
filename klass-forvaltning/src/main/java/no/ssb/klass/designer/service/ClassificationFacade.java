@@ -6,8 +6,6 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import no.ssb.klass.core.model.Changelog;
 import no.ssb.klass.core.model.ClassificationFamily;
@@ -126,10 +124,6 @@ public class ClassificationFacade {
         return classification;
     }
 
-    /*
-     * Save in its own transaction so saving and indexing are executed in separate transactions.
-     */
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public CorrespondenceTable saveAndIndexCorrespondenceTable(CorrespondenceTable correspondenceTable,
             InformSubscribers informSubscribers) {
         classificationService.saveNotIndexCorrespondenceTable(correspondenceTable);
@@ -149,10 +143,6 @@ public class ClassificationFacade {
         return correspondenceTable;
     }
 
-    /*
-     * Save in its own transaction so saving and indexing are executed in separate transactions.
-     */
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public ClassificationVariant saveAndIndexVariant(ClassificationVariant variant,
             InformSubscribers informSubscribers) {
         classificationService.saveNotIndexVariant(variant);
@@ -173,10 +163,6 @@ public class ClassificationFacade {
         return variant;
     }
 
-    /*
-     * Save in its own transaction so saving and indexing are executed in separate transactions.
-     */
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public ClassificationVersion saveAndIndexVersion(ClassificationVersion version,
             InformSubscribers informSubscribers) {
         classificationService.saveNotIndexVersion(version);
@@ -200,10 +186,6 @@ public class ClassificationFacade {
         return classificationService.copyClassificationVersion(originalVersion, dateRange);
     }
 
-    /*
-     * Delete in its own transaction so deleting and indexing are executed in separate transactions.
-     */
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void deleteAndIndexClassification(User currentUser, ClassificationSeries classification)
             throws KlassMessageException {
         classificationService.deleteNotIndexClassification(currentUser, classification);
@@ -213,10 +195,6 @@ public class ClassificationFacade {
                 + classification.getNameInPrimaryLanguage(), "Klassifikasjonen er slettet");
     }
 
-    /*
-     * Delete in its own transaction so deleting and indexing are executed in separate transactions.
-     */
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void deleteAndIndexCorrespondenceTable(User currentUser,
             CorrespondenceTable correspondenceTable) throws KlassMessageException {
         classificationService.deleteNotIndexCorrespondenceTable(currentUser, correspondenceTable);
@@ -229,10 +207,6 @@ public class ClassificationFacade {
         }
     }
 
-    /*
-     * Delete in its own transaction so deleting and indexing are executed in separate transactions.
-     */
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void deleteAndIndexVariant(User currentUser, ClassificationVariant variant)
             throws KlassMessageException {
         classificationService.deleteNotIndexVariant(currentUser, variant);
@@ -246,10 +220,6 @@ public class ClassificationFacade {
     }
 
 
-    /*
-     * Delete in its own transaction so deleting and indexing are executed in separate transactions.
-     */
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void deleteAndIndexVersion(User currentUser, ClassificationVersion version) throws KlassMessageException {
         classificationService.deleteNotIndexVersion(currentUser, version);
         log.debug("Version {} deleted, starting indexing", version);
