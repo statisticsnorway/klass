@@ -89,18 +89,9 @@ build-clean-klass-api:
 run-klass-forvaltning-local-postgres:
 	pushd klass-forvaltning && \
 	${sdk} env && \
-	mvn spring-boot\:run  -Dspring.profiles.active=frontend,postgres-local,hardcoded-user,embedded-solr,mock-mailserver,small-import,skip-indexing; \
+	mvn spring-boot\:run  -Dspring.profiles.active=frontend,postgres-local,hardcoded-user,mock-mailserver,small-import; \
 	popd; \
 	${sdk} env clear
-
-.PHONY: run-klass-forvaltning-local-postgres-search
-run-klass-forvaltning-local-postgres-search:
-	pushd klass-forvaltning && \
-	${sdk} env && \
-	mvn spring-boot\:run -Dspring.profiles.active=frontend,postgres-local,hardcoded-user,mock-mailserver,small-import,skip-indexing,remote-solr -Dklass.env.search.solr.url=http://localhost:8983/solr/; \
-	popd; \
-	${sdk} env clear
-
 
 .PHONY: run-klass-api-local-postgres
 run-klass-api-local-postgres:
