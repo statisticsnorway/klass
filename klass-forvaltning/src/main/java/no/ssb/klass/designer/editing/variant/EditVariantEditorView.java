@@ -149,12 +149,12 @@ public class EditVariantEditorView extends EditVariantEditorDesign implements Ed
             if (wasPublished) {
                 UI.getCurrent().addWindow(new DescriptionOfChangeWindow(userContext,
                         (changelog) -> {
-                            log.debug("Classification variant describe change {}", variant);
+                            log.info"Classification variant describe change {}", variant);
                             addChangelogToVariant(changelog, variant);
                             saveVariant(variant, InformSubscribers.createWhenPublished(changelog));
                         }));
             } else {
-                log.debug("Classification variant do not describe change {}", variant);
+                log.info("Classification variant do not describe change {}", variant);
                 saveVariant(variant, InformSubscribers.createWhenWasUnpublished(variant));
             }
         }
@@ -184,6 +184,7 @@ public class EditVariantEditorView extends EditVariantEditorDesign implements Ed
     }
 
     private void saveVariant(ClassificationVariant classificationVariant, InformSubscribers informSubscribers) {
+        log.info("Saving classification variant edit variant save {}", classificationVariant);
         classificationFacade.saveVariant(classificationVariant, informSubscribers);
         VaadinUtil.showSavedMessage();
         if (accordion.getSelectedTab() == codeEditor) {

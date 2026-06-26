@@ -146,15 +146,15 @@ public class ClassificationFacade {
     @Transactional(propagation = Propagation.NEVER)
     public ClassificationVariant saveVariant(ClassificationVariant variant,
                                              InformSubscribers informSubscribers) {
-        log.debug("Classification variant will be saved {}", variant);
+        log.info("Classification variant will be saved {}", variant);
         classificationService.saveNotIndexVariant(variant);
-        log.debug("Classification variant saved {}", variant);
+        log.info("Classification variant saved {}", variant);
         if (informSubscribers.isInformSubscribers()) {
-            log.debug("Classification variant will send email subscriber {}", variant);
+            log.info"Classification variant will send email subscriber {}", variant);
             subscriberService.informSubscribersOfUpdatedClassification(variant.getOwnerClassification(),
                     "Endring i varianten: " + variant.getNameInPrimaryLanguage(), informSubscribers
                             .getDescriptionOfChange());
-            log.debug("Classification variant inform subscriber finished {}", variant);
+            log.info("Classification variant inform subscriber finished {}", variant);
         }
         return variant;
     }
