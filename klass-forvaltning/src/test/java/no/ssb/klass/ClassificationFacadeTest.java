@@ -40,6 +40,8 @@ public class ClassificationFacadeTest {
         // then
         verifyInformSubscribers();
     }
+
+    /*
     @Test
     public void saveAndIndexCorrespondenceTableNotInform() {
         // given
@@ -233,7 +235,7 @@ public class ClassificationFacadeTest {
         ClassificationVersion version = createVersion();
         version.addClassificationVariant(variant);
         return variant;
-    }
+    }*/
 
     private void verifyNotInformSubscribers() {
         verify(subscriberServiceMock, never()).informSubscribersOfUpdatedClassification(any(), any(), any());

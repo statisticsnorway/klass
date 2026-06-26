@@ -116,11 +116,12 @@ public class ClassificationFacade {
     @Transactional(propagation = Propagation.NEVER)
     public ClassificationSeries saveClassification(ClassificationSeries classification) {
         classificationService.saveNotIndexClassification(classification);
-        log.debug("Classification saved {}, starting indexing", classification);
+        log.debug("Classification saved {}", classification);
         return classification;
     }
-    // operations
+
     public ClassificationSeries indexClassification(ClassificationSeries classification) {
+        log.debug("Classification starting indexing {}", classification);
         searchService.indexAsync(classification.getId());
         subscriberService.informSubscribersOfUpdatedClassification(classification,
                 "Endring i metadata for klassifikasjonen: " + classification.getNameInPrimaryLanguage(),
