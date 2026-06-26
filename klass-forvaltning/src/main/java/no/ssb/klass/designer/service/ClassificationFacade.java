@@ -110,8 +110,9 @@ public class ClassificationFacade {
     }
 
     public ClassificationSeries saveClassification(ClassificationSeries classification) {
+        log.info("Starting Classification save {}", classification);
         classificationService.saveNotIndexClassification(classification);
-        log.debug("Classification saved {}", classification);
+        log.info("Classification saved {}", classification);
         return classification;
     }
 
