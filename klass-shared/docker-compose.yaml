@@ -97,7 +97,7 @@ services:
         limits:
           memory: 3G
     environment:
-      SPRING_PROFILES_ACTIVE: frontend, hardcoded-user, postgres-local, ad-offline, small-import, skip-indexing, embedded-solr
+      SPRING_PROFILES_ACTIVE: frontend, hardcoded-user, postgres-local, ad-offline, small-import
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgresql:5432/klass
       SPRING_DATASOURCE_USERNAME: klass
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
