@@ -149,7 +149,7 @@ public class EditVariantEditorView extends EditVariantEditorDesign implements Ed
             if (wasPublished) {
                 UI.getCurrent().addWindow(new DescriptionOfChangeWindow(userContext,
                         (changelog) -> {
-                            log.info"Classification variant describe change {}", variant);
+                            log.info("Classification variant describe change {}", variant);
                             addChangelogToVariant(changelog, variant);
                             saveVariant(variant, InformSubscribers.createWhenPublished(changelog));
                         }));

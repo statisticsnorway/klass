@@ -137,7 +137,7 @@ public class ClassificationFacade {
         classificationService.saveNotIndexVariant(variant);
         log.info("Classification variant saved {}", variant);
         if (informSubscribers.isInformSubscribers()) {
-            log.info"Classification variant will send email subscriber {}", variant);
+            log.info("Classification variant will send email subscriber {}", variant);
             subscriberService.informSubscribersOfUpdatedClassification(variant.getOwnerClassification(),
                     "Endring i varianten: " + variant.getNameInPrimaryLanguage(), informSubscribers
                             .getDescriptionOfChange());
