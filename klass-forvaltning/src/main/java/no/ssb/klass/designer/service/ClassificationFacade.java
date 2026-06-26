@@ -6,8 +6,6 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import no.ssb.klass.core.model.Changelog;
 import no.ssb.klass.core.model.ClassificationFamily;
@@ -132,18 +130,15 @@ public class ClassificationFacade {
         return correspondenceTable;
     }
 
-    public ClassificationVariant saveVariant(ClassificationVariant variant,
+    public void saveVariant(ClassificationVariant variant,
                                              InformSubscribers informSubscribers) {
         classificationService.saveNotIndexVariant(variant);
         log.info("Classification variant saved {}", variant);
         if (informSubscribers.isInformSubscribers()) {
-            log.info("Classification variant will send email subscriber {}", variant);
             subscriberService.informSubscribersOfUpdatedClassification(variant.getOwnerClassification(),
                     "Endring i varianten: " + variant.getNameInPrimaryLanguage(), informSubscribers
                             .getDescriptionOfChange());
-            log.info("Classification variant inform subscriber finished {}", variant);
         }
-        return variant;
     }
 
     public ClassificationVersion saveVersion(ClassificationVersion version,
@@ -204,8 +199,8 @@ public class ClassificationFacade {
         classificationService.deleteStatisticalUnit(statisticalUnit);
     }
 
-    public StatisticalUnit createAndSaveNewStatisticalUnit(StatisticalUnit statisticalUnit) {
-        return classificationService.createAndSaveNewStatisticalUnit(statisticalUnit);
+    public void createAndSaveNewStatisticalUnit(StatisticalUnit statisticalUnit) {
+        classificationService.createAndSaveNewStatisticalUnit(statisticalUnit);
     }
 
     public List<ClassificationFamily> findAllClassificationFamilies() {
@@ -271,12 +266,10 @@ public class ClassificationFacade {
 
     @java.lang.Override
     public java.lang.String toString() {
-        final java.lang.StringBuffer sb = new java.lang.StringBuffer("ClassificationFacade{");
-        sb.append("classificationService=").append(classificationService);
-        sb.append(", searchService=").append(searchService);
-        sb.append(", subscriberService=").append(subscriberService);
-        sb.append(", changeLogService=").append(changeLogService);
-        sb.append('}');
-        return sb.toString();
+        return "ClassificationFacade{" + "classificationService=" + classificationService +
+                ", searchService=" + searchService +
+                ", subscriberService=" + subscriberService +
+                ", changeLogService=" + changeLogService +
+                '}';
     }
 }
