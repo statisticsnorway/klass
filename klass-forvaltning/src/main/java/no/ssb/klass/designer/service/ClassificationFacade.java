@@ -127,9 +127,9 @@ public class ClassificationFacade {
     }
 
     /*
-     * Must not run in transaction, since saving and indexing must be performed in separate transactions
+     * Save in its own transaction so saving and indexing are executed in separate transactions.
      */
-    @Transactional(propagation = Propagation.NEVER)
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public CorrespondenceTable saveAndIndexCorrespondenceTable(CorrespondenceTable correspondenceTable,
             InformSubscribers informSubscribers) {
         classificationService.saveNotIndexCorrespondenceTable(correspondenceTable);
@@ -150,9 +150,9 @@ public class ClassificationFacade {
     }
 
     /*
-     * Must not run in transaction, since saving and indexing must be performed in separate transactions
+     * Save in its own transaction so saving and indexing are executed in separate transactions.
      */
-    @Transactional(propagation = Propagation.NEVER)
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public ClassificationVariant saveAndIndexVariant(ClassificationVariant variant,
             InformSubscribers informSubscribers) {
         classificationService.saveNotIndexVariant(variant);
@@ -174,9 +174,9 @@ public class ClassificationFacade {
     }
 
     /*
-     * Must not run in transaction, since saving and indexing must be performed in separate transactions
+     * Save in its own transaction so saving and indexing are executed in separate transactions.
      */
-    @Transactional(propagation = Propagation.NEVER)
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public ClassificationVersion saveAndIndexVersion(ClassificationVersion version,
             InformSubscribers informSubscribers) {
         classificationService.saveNotIndexVersion(version);
@@ -201,9 +201,9 @@ public class ClassificationFacade {
     }
 
     /*
-     * Must not run in transaction, since deleting and indexing must be performed in separate transactions
+     * Delete in its own transaction so deleting and indexing are executed in separate transactions.
      */
-    @Transactional(propagation = Propagation.NEVER)
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void deleteAndIndexClassification(User currentUser, ClassificationSeries classification)
             throws KlassMessageException {
         classificationService.deleteNotIndexClassification(currentUser, classification);
@@ -214,9 +214,9 @@ public class ClassificationFacade {
     }
 
     /*
-     * Must not run in transaction, since saving and indexing must be performed in separate transactions
+     * Delete in its own transaction so deleting and indexing are executed in separate transactions.
      */
-    @Transactional(propagation = Propagation.NEVER)
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void deleteAndIndexCorrespondenceTable(User currentUser,
             CorrespondenceTable correspondenceTable) throws KlassMessageException {
         classificationService.deleteNotIndexCorrespondenceTable(currentUser, correspondenceTable);
@@ -230,9 +230,9 @@ public class ClassificationFacade {
     }
 
     /*
-     * Must not run in transaction, since saving and indexing must be performed in separate transactions
+     * Delete in its own transaction so deleting and indexing are executed in separate transactions.
      */
-    @Transactional(propagation = Propagation.NEVER)
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void deleteAndIndexVariant(User currentUser, ClassificationVariant variant)
             throws KlassMessageException {
         classificationService.deleteNotIndexVariant(currentUser, variant);
@@ -247,9 +247,9 @@ public class ClassificationFacade {
 
 
     /*
-     * Must not run in transaction, since saving and indexing must be performed in separate transactions
+     * Delete in its own transaction so deleting and indexing are executed in separate transactions.
      */
-    @Transactional(propagation = Propagation.NEVER)
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void deleteAndIndexVersion(User currentUser, ClassificationVersion version) throws KlassMessageException {
         classificationService.deleteNotIndexVersion(currentUser, version);
         log.debug("Version {} deleted, starting indexing", version);
