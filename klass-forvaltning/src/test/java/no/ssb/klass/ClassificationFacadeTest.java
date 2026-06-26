@@ -28,14 +28,13 @@ public class ClassificationFacadeTest {
                 subscriberServiceMock, ChangeLogServiceMock);
     }
 
-    /*
     @Test
-    public void saveAndIndexClassification() {
+    public void saveClassification() {
         // given
         ClassificationSeries classification = TestUtil.createClassification("name");
 
         // when
-        subject.saveAndindexClassification(classification);
+        subject.saveClassification(classification);
         subject.indexClassification(classification);
 
         // then
@@ -242,5 +241,5 @@ public class ClassificationFacadeTest {
 
     private void verifyInformSubscribers() {
         verify(subscriberServiceMock).informSubscribersOfUpdatedClassification(any(), any(), any());
-    }*/
+    }
 }

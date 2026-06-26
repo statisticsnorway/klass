@@ -114,7 +114,7 @@ public class ClassificationFacade {
      * Must not run in transaction, since saving and indexing must be performed in separate transactions
      */
     @Transactional(propagation = Propagation.NEVER)
-    public ClassificationSeries saveAndIndexClassification(ClassificationSeries classification) {
+    public ClassificationSeries saveClassification(ClassificationSeries classification) {
         classificationService.saveNotIndexClassification(classification);
         log.debug("Classification saved {}, starting indexing", classification);
         return classification;
