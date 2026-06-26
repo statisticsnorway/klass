@@ -36,9 +36,11 @@ public class ClassificationServiceImpl implements ClassificationService {
     private final ReferencingClassificationItemRepository referencingClassificationItemRepository;
     private final CorrespondenceMapRepository correspondenceMapRepository;
     private final StatisticalUnitRepository statisticalUnitRepository;
-    private final SearchService searchService;
     private final UserRepository userRepository;
     private final ClassificationFamilySummaryBuilder classificationFamilySummaryBuilder;
+
+    @Autowired(required = false)
+    private SearchService searchService;
 
     @Autowired
     public ClassificationServiceImpl(ClassificationFamilyRepository classificationFamilyRepository,
@@ -172,7 +174,9 @@ public class ClassificationServiceImpl implements ClassificationService {
     @Override
     public ClassificationSeries saveAndIndexClassification(ClassificationSeries classification) {
         classification = classificationRepository.save(classification);
-        searchService.indexSync(classification);
+        if (searchService != null) {
+            searchService.indexSync(classification);
+        }
         return classification;
     }
 
