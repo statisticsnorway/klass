@@ -26,7 +26,6 @@ import no.ssb.klass.core.repository.ClassificationFamilySummary;
 import no.ssb.klass.core.service.ChangeLogService;
 import no.ssb.klass.core.service.ClassificationService;
 import no.ssb.klass.core.service.KlassMessageException;
-import no.ssb.klass.core.service.SearchService;
 import no.ssb.klass.core.service.SubscriberService;
 import no.ssb.klass.core.util.DateRange;
 import no.ssb.klass.core.util.KlassResourceNotFoundException;
@@ -42,15 +41,13 @@ import org.slf4j.LoggerFactory;
 public class ClassificationFacade {
     private static final Logger log = LoggerFactory.getLogger(ClassificationFacade.class);
     private final ClassificationService classificationService;
-    private final SearchService searchService;
     private final SubscriberService subscriberService;
     private final ChangeLogService changeLogService;
 
     @Autowired
-    public ClassificationFacade(ClassificationService classificationService, SearchService searchService,
+    public ClassificationFacade(ClassificationService classificationService,
             SubscriberService subscriberService, ChangeLogService changeLogService) {
         this.classificationService = classificationService;
-        this.searchService = searchService;
         this.subscriberService = subscriberService;
         this.changeLogService = changeLogService;
     }
@@ -273,7 +270,6 @@ public class ClassificationFacade {
     public java.lang.String toString() {
         final java.lang.StringBuffer sb = new java.lang.StringBuffer("ClassificationFacade{");
         sb.append("classificationService=").append(classificationService);
-        sb.append(", searchService=").append(searchService);
         sb.append(", subscriberService=").append(subscriberService);
         sb.append(", changeLogService=").append(changeLogService);
         sb.append('}');

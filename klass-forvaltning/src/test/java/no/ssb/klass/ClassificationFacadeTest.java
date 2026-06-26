@@ -3,7 +3,6 @@ package no.ssb.klass;
 import no.ssb.klass.core.model.*;
 import no.ssb.klass.core.service.ChangeLogService;
 import no.ssb.klass.core.service.ClassificationService;
-import no.ssb.klass.core.service.SearchService;
 import no.ssb.klass.core.service.SubscriberService;
 import no.ssb.klass.designer.service.ClassificationFacade;
 import no.ssb.klass.designer.service.InformSubscribers;
@@ -24,7 +23,8 @@ public class ClassificationFacadeTest {
     public void setup() {
         subscriberServiceMock = mock(SubscriberService.class);
         ChangeLogServiceMock = mock(ChangeLogService.class);
-        subject = new ClassificationFacade(mock(ClassificationService.class), mock(SearchService.class),
+        subject = new ClassificationFacade(
+                mock(ClassificationService.class),
                 subscriberServiceMock, ChangeLogServiceMock);
     }
 
