@@ -110,11 +110,7 @@ public class ClassificationFacade {
     public StatisticalUnit saveStatisticalUnit(StatisticalUnit stat) {
         return classificationService.saveStatisticalUnit(stat);
     }
-    // probably remove never transactional
-    /*
-     * Must not run in transaction, since saving and indexing must be performed in separate transactions
-     */
-    @Transactional(propagation = Propagation.NEVER)
+
     public ClassificationSeries saveClassification(ClassificationSeries classification) {
         classificationService.saveNotIndexClassification(classification);
         log.debug("Classification saved {}", classification);
@@ -124,10 +120,6 @@ public class ClassificationFacade {
         return classification;
     }
 
-    /*
-     * Must not run in transaction, since saving and indexing must be performed in separate transactions
-     */
-    @Transactional(propagation = Propagation.NEVER)
     public CorrespondenceTable saveCorrespondenceTable(CorrespondenceTable correspondenceTable,
                                                        InformSubscribers informSubscribers) {
         classificationService.saveNotIndexCorrespondenceTable(correspondenceTable);
@@ -140,10 +132,6 @@ public class ClassificationFacade {
         return correspondenceTable;
     }
 
-    /*
-     * Must not run in transaction, since saving and indexing must be performed in separate transactions
-     */
-    @Transactional(propagation = Propagation.NEVER)
     public ClassificationVariant saveVariant(ClassificationVariant variant,
                                              InformSubscribers informSubscribers) {
         log.info("Classification variant will be saved {}", variant);
@@ -159,10 +147,6 @@ public class ClassificationFacade {
         return variant;
     }
 
-    /*
-     * Must not run in transaction, since saving and indexing must be performed in separate transactions
-     */
-    @Transactional(propagation = Propagation.NEVER)
     public ClassificationVersion saveVersion(ClassificationVersion version,
                                              InformSubscribers informSubscribers) {
         classificationService.saveNotIndexVersion(version);
@@ -179,10 +163,6 @@ public class ClassificationFacade {
         return classificationService.copyClassificationVersion(originalVersion, dateRange);
     }
 
-    /*
-     * Must not run in transaction, since deleting and indexing must be performed in separate transactions
-     */
-    @Transactional(propagation = Propagation.NEVER)
     public void deleteClassification(User currentUser, ClassificationSeries classification)
             throws KlassMessageException {
         classificationService.deleteNotIndexClassification(currentUser, classification);
@@ -191,10 +171,6 @@ public class ClassificationFacade {
                 + classification.getNameInPrimaryLanguage(), "Klassifikasjonen er slettet");
     }
 
-    /*
-     * Must not run in transaction, since saving and indexing must be performed in separate transactions
-     */
-    @Transactional(propagation = Propagation.NEVER)
     public void deleteCorrespondenceTable(User currentUser,
             CorrespondenceTable correspondenceTable) throws KlassMessageException {
         classificationService.deleteNotIndexCorrespondenceTable(currentUser, correspondenceTable);
@@ -206,10 +182,6 @@ public class ClassificationFacade {
         }
     }
 
-    /*
-     * Must not run in transaction, since saving and indexing must be performed in separate transactions
-     */
-    @Transactional(propagation = Propagation.NEVER)
     public void deleteVariant(User currentUser, ClassificationVariant variant)
             throws KlassMessageException {
         classificationService.deleteNotIndexVariant(currentUser, variant);
@@ -220,10 +192,6 @@ public class ClassificationFacade {
         }
     }
 
-    /*
-     * Must not run in transaction, since saving and indexing must be performed in separate transactions
-     */
-    @Transactional(propagation = Propagation.NEVER)
     public void deleteVersion(User currentUser, ClassificationVersion version) throws KlassMessageException {
         classificationService.deleteNotIndexVersion(currentUser, version);
         log.debug("Version {} deleted", version);
