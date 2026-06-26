@@ -110,10 +110,7 @@ public class ClassificationFacade {
     public StatisticalUnit saveStatisticalUnit(StatisticalUnit stat) {
         return classificationService.saveStatisticalUnit(stat);
     }
-    /*
-     * Must not run in transaction, since saving and indexing must be performed in separate transactions
-     */
-    @Transactional(propagation = Propagation.NEVER)
+
     public ClassificationSeries saveClassification(ClassificationSeries classification) {
         classificationService.saveNotIndexClassification(classification);
         log.debug("Classification saved {}", classification);
