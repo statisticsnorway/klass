@@ -38,7 +38,7 @@ import no.ssb.klass.core.util.TimeUtil;
 @Service
 public class SearchServiceImpl implements SearchService {
     private static final Logger log = LoggerFactory.getLogger(SearchServiceImpl.class);
-    @Value("${klass.env.search.solr.core}")
+    @Value("${klass.env.search.solr.core:disabled}")
     protected String solrCore;
 
     private final ClassificationSeriesRepository classificationRepository;
