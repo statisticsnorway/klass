@@ -5,7 +5,7 @@
     <name>Klass Forvaltning</name>
     <description>Forvaltningsgrensesnitt for Klass</description>
     <artifactId>klass-forvaltning</artifactId>
-    <version>4.4.3-SNAPSHOT</version>
+    <version>5.0.0</version>
     <packaging>war</packaging>
 
     <properties>
@@ -53,7 +53,7 @@
     <scm>
         <developerConnection>scm:git:https://github.com/${github.repository}.git</developerConnection>
         <url>https://github.com/${github.repository}</url>
-        <tag>v4.0.2</tag>
+        <tag>forvaltning-v5.0.0</tag>
     </scm>
 
     <repositories>
