@@ -206,19 +206,24 @@ public class ClassificationFacade {
     }
 
     /**
-     * Notifies subscribers about an updated classification. Errors are caught and logged rather
-     * than propagated, so a transient notification failure never rolls back an already-committed
-     * save/delete operation.
+     * Notifies subscribers about an updated classification asynchronously so that a slow or
+     * unreachable mail service never blocks the HTTP request / UI save operation. Errors are
+     * logged but never propagated, since the data has already been committed successfully.
      */
     private void tryInformSubscribers(ClassificationSeries classification, String whatChanged,
             String descriptionOfChange) {
-        try {
-            subscriberService.informSubscribersOfUpdatedClassification(classification, whatChanged,
-                    descriptionOfChange);
-        } catch (Exception e) {
-            log.error("Failed to notify subscribers for classification {}: {}",
-                    classification.getId(), e.getMessage(), e);
-        }
+        Thread thread = new Thread(() -> {
+            try {
+                subscriberService.informSubscribersOfUpdatedClassification(classification, whatChanged,
+                        descriptionOfChange);
+            } catch (Exception e) {
+                log.error("Failed to notify subscribers for classification {}: {}",
+                        classification.getId(), e.getMessage(), e);
+            }
+        });
+        thread.setName("subscriber-notification-" + classification.getId());
+        thread.setDaemon(true);
+        thread.start();
     }
 
     public void deleteStatisticalUnit(StatisticalUnit statisticalUnit) {
