@@ -6,8 +6,6 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import no.ssb.klass.core.model.Changelog;
 import no.ssb.klass.core.model.ClassificationFamily;
@@ -110,29 +108,20 @@ public class ClassificationFacade {
     public StatisticalUnit saveStatisticalUnit(StatisticalUnit stat) {
         return classificationService.saveStatisticalUnit(stat);
     }
-    /*
-     * Must not run in transaction, since saving and indexing must be performed in separate transactions
-     */
-    @Transactional(propagation = Propagation.NEVER)
-    public ClassificationSeries saveAndIndexClassification(ClassificationSeries classification) {
+
+    public ClassificationSeries saveClassification(ClassificationSeries classification) {
         classificationService.saveNotIndexClassification(classification);
-        log.debug("Classification saved {}, starting indexing", classification);
-        searchService.indexAsync(classification.getId());
+        log.info("Classification saved {}", classification);
         subscriberService.informSubscribersOfUpdatedClassification(classification,
                 "Endring i metadata for klassifikasjonen: " + classification.getNameInPrimaryLanguage(),
                 "Oppdatert metadata for klassifikasjonen");
         return classification;
     }
 
-    /*
-     * Must not run in transaction, since saving and indexing must be performed in separate transactions
-     */
-    @Transactional(propagation = Propagation.NEVER)
-    public CorrespondenceTable saveAndIndexCorrespondenceTable(CorrespondenceTable correspondenceTable,
-            InformSubscribers informSubscribers) {
+    public CorrespondenceTable saveCorrespondenceTable(CorrespondenceTable correspondenceTable,
+                                                       InformSubscribers informSubscribers) {
         classificationService.saveNotIndexCorrespondenceTable(correspondenceTable);
-        log.debug("Correspondence table saved {}, starting indexing", correspondenceTable);
-        searchService.indexAsync(correspondenceTable.getOwnerClassification().getId());
+        log.info("Correspondence table saved {}", correspondenceTable);
         if (informSubscribers.isInformSubscribers()) {
             subscriberService.informSubscribersOfUpdatedClassification(correspondenceTable.getOwnerClassification(),
                     "Endring i korrespondansetabellen: " + correspondenceTable.getNameInPrimaryLanguage(),
@@ -141,32 +130,21 @@ public class ClassificationFacade {
         return correspondenceTable;
     }
 
-    /*
-     * Must not run in transaction, since saving and indexing must be performed in separate transactions
-     */
-    @Transactional(propagation = Propagation.NEVER)
-    public ClassificationVariant saveAndIndexVariant(ClassificationVariant variant,
-            InformSubscribers informSubscribers) {
+    public void saveVariant(ClassificationVariant variant,
+                                             InformSubscribers informSubscribers) {
         classificationService.saveNotIndexVariant(variant);
-        log.debug("Classification variant saved {}, starting indexing", variant);
-        searchService.indexAsync(variant.getOwnerClassification().getId());
+        log.info("Classification variant saved {}", variant);
         if (informSubscribers.isInformSubscribers()) {
             subscriberService.informSubscribersOfUpdatedClassification(variant.getOwnerClassification(),
                     "Endring i varianten: " + variant.getNameInPrimaryLanguage(), informSubscribers
                             .getDescriptionOfChange());
         }
-        return variant;
     }
 
-    /*
-     * Must not run in transaction, since saving and indexing must be performed in separate transactions
-     */
-    @Transactional(propagation = Propagation.NEVER)
-    public ClassificationVersion saveAndIndexVersion(ClassificationVersion version,
-            InformSubscribers informSubscribers) {
+    public ClassificationVersion saveVersion(ClassificationVersion version,
+                                             InformSubscribers informSubscribers) {
         classificationService.saveNotIndexVersion(version);
-        log.debug("Classification version saved {}, starting indexing", version);
-        searchService.indexAsync(version.getOwnerClassification().getId());
+        log.info("Classification version saved {}", version);
         if (informSubscribers.isInformSubscribers()) {
             subscriberService.informSubscribersOfUpdatedClassification(version.getOwnerClassification(),
                     "Endring i versjonen: " + version.getNameInPrimaryLanguage(), informSubscribers
@@ -179,28 +157,18 @@ public class ClassificationFacade {
         return classificationService.copyClassificationVersion(originalVersion, dateRange);
     }
 
-    /*
-     * Must not run in transaction, since deleting and indexing must be performed in separate transactions
-     */
-    @Transactional(propagation = Propagation.NEVER)
-    public void deleteAndIndexClassification(User currentUser, ClassificationSeries classification)
+    public void deleteClassification(User currentUser, ClassificationSeries classification)
             throws KlassMessageException {
         classificationService.deleteNotIndexClassification(currentUser, classification);
-        log.debug("Classification {} deleted, starting indexing", classification);
-        searchService.indexAsync(classification.getId());
+        log.info("Classification {} deleted", classification);
         subscriberService.informSubscribersOfUpdatedClassification(classification, "Klassifikasjonen er slettet: "
                 + classification.getNameInPrimaryLanguage(), "Klassifikasjonen er slettet");
     }
 
-    /*
-     * Must not run in transaction, since saving and indexing must be performed in separate transactions
-     */
-    @Transactional(propagation = Propagation.NEVER)
-    public void deleteAndIndexCorrespondenceTable(User currentUser,
+    public void deleteCorrespondenceTable(User currentUser,
             CorrespondenceTable correspondenceTable) throws KlassMessageException {
         classificationService.deleteNotIndexCorrespondenceTable(currentUser, correspondenceTable);
-        log.debug("Correspondence table {} deleted, starting indexing", correspondenceTable);
-        searchService.indexAsync(correspondenceTable.getOwnerClassification().getId());
+        log.info("Correspondence table {} deleted", correspondenceTable);
         if (correspondenceTable.isPublishedInAnyLanguage()) {
             subscriberService.informSubscribersOfUpdatedClassification(correspondenceTable.getOwnerClassification(),
                     "Korrespondansetabellen er slettet: " + correspondenceTable.getNameInPrimaryLanguage(),
@@ -208,29 +176,19 @@ public class ClassificationFacade {
         }
     }
 
-    /*
-     * Must not run in transaction, since saving and indexing must be performed in separate transactions
-     */
-    @Transactional(propagation = Propagation.NEVER)
-    public void deleteAndIndexVariant(User currentUser, ClassificationVariant variant)
+    public void deleteVariant(User currentUser, ClassificationVariant variant)
             throws KlassMessageException {
         classificationService.deleteNotIndexVariant(currentUser, variant);
-        log.debug("Variant {} deleted, starting indexing", variant);
-        searchService.indexAsync(variant.getOwnerClassification().getId());
+        log.info("Variant {} deleted", variant);
         if (variant.isPublishedInAnyLanguage()) {
             subscriberService.informSubscribersOfUpdatedClassification(variant.getOwnerClassification(),
                     "Varianten er slettet: " + variant.getNameInPrimaryLanguage(), "En variant er slettet");
         }
     }
 
-    /*
-     * Must not run in transaction, since saving and indexing must be performed in separate transactions
-     */
-    @Transactional(propagation = Propagation.NEVER)
-    public void deleteAndIndexVersion(User currentUser, ClassificationVersion version) throws KlassMessageException {
+    public void deleteVersion(User currentUser, ClassificationVersion version) throws KlassMessageException {
         classificationService.deleteNotIndexVersion(currentUser, version);
-        log.debug("Version {} deleted, starting indexing", version);
-        searchService.indexAsync(version.getOwnerClassification().getId());
+        log.info("Version {} deleted", version);
         if (version.isPublishedInAnyLanguage()) {
             subscriberService.informSubscribersOfUpdatedClassification(version.getOwnerClassification(),
                     "Versjonen er slettet: " + version.getNameInPrimaryLanguage(), "En versjon er slettet");
@@ -241,8 +199,8 @@ public class ClassificationFacade {
         classificationService.deleteStatisticalUnit(statisticalUnit);
     }
 
-    public StatisticalUnit createAndSaveNewStatisticalUnit(StatisticalUnit statisticalUnit) {
-        return classificationService.createAndSaveNewStatisticalUnit(statisticalUnit);
+    public void createAndSaveNewStatisticalUnit(StatisticalUnit statisticalUnit) {
+        classificationService.createAndSaveNewStatisticalUnit(statisticalUnit);
     }
 
     public List<ClassificationFamily> findAllClassificationFamilies() {
@@ -308,12 +266,10 @@ public class ClassificationFacade {
 
     @java.lang.Override
     public java.lang.String toString() {
-        final java.lang.StringBuffer sb = new java.lang.StringBuffer("ClassificationFacade{");
-        sb.append("classificationService=").append(classificationService);
-        sb.append(", searchService=").append(searchService);
-        sb.append(", subscriberService=").append(subscriberService);
-        sb.append(", changeLogService=").append(changeLogService);
-        sb.append('}');
-        return sb.toString();
+        return "ClassificationFacade{" + "classificationService=" + classificationService +
+                ", searchService=" + searchService +
+                ", subscriberService=" + subscriberService +
+                ", changeLogService=" + changeLogService +
+                '}';
     }
 }

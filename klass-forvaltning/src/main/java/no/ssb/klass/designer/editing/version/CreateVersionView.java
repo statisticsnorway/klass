@@ -109,7 +109,7 @@ public class CreateVersionView extends VerticalLayout implements EditingView {
             return;
         }
         ignoreChanges = true;
-        ClassificationVersion version = classificationFacade.saveAndIndexVersion(classificationVersion,
+        ClassificationVersion version = classificationFacade.saveVersion(classificationVersion,
                 InformSubscribers.createNotInformSubscribers());
         VaadinUtil.showSavedMessage();
         VaadinUtil.getKlassState().setEditingState(versionEditorView.currentEditingState());

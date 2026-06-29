@@ -29,103 +29,103 @@ public class ClassificationFacadeTest {
     }
 
     @Test
-    public void saveAndIndexClassification() {
+    public void saveClassification() {
         // given
         ClassificationSeries classification = TestUtil.createClassification("name");
 
         // when
-        subject.saveAndIndexClassification(classification);
+        subject.saveClassification(classification);
 
         // then
         verifyInformSubscribers();
     }
 
     @Test
-    public void saveAndIndexCorrespondenceTableNotInform() {
+    public void saveCorrespondenceTableNotInform() {
         // given
         CorrespondenceTable correspondenceTable = createCorrespondenceTable();
 
         // when
-        subject.saveAndIndexCorrespondenceTable(correspondenceTable, createNotInformSubscribers());
+        subject.saveCorrespondenceTable(correspondenceTable, createNotInformSubscribers());
 
         // then
         verifyNotInformSubscribers();
     }
 
     @Test
-    public void saveAndIndexCorrespondenceTableInform() {
+    public void saveCorrespondenceTableInform() {
         // given
         CorrespondenceTable correspondenceTable = createCorrespondenceTable();
 
         // when
-        subject.saveAndIndexCorrespondenceTable(correspondenceTable, createInformSubscribers());
+        subject.saveCorrespondenceTable(correspondenceTable, createInformSubscribers());
 
         // then
         verifyInformSubscribers();
     }
 
     @Test
-    public void saveAndIndexVariantNotInform() {
+    public void saveVariantNotInform() {
         // given
         ClassificationVariant variant = createVariant();
 
         // when
-        subject.saveAndIndexVariant(variant, createNotInformSubscribers());
+        subject.saveVariant(variant, createNotInformSubscribers());
 
         // then
         verifyNotInformSubscribers();
     }
 
     @Test
-    public void saveAndIndexVariantInform() {
+    public void saveVariantInform() {
         // given
         ClassificationVariant variant = createVariant();
 
         // when
-        subject.saveAndIndexVariant(variant, createInformSubscribers());
+        subject.saveVariant(variant, createInformSubscribers());
 
         // then
         verifyInformSubscribers();
     }
 
     @Test
-    public void saveAndIndexVersionNotInform() {
+    public void saveVersionNotInform() {
         // given
         ClassificationVersion version = createVersion();
 
         // when
-        subject.saveAndIndexVersion(version, createNotInformSubscribers());
+        subject.saveVersion(version, createNotInformSubscribers());
 
         // then
         verifyNotInformSubscribers();
     }
 
     @Test
-    public void saveAndIndexVersionInform() {
+    public void saveVersionInform() {
         // given
         ClassificationVersion version = createVersion();
 
         // when
-        subject.saveAndIndexVersion(version, createInformSubscribers());
+        subject.saveVersion(version, createInformSubscribers());
 
         // then
         verifyInformSubscribers();
     }
 
     @Test
-    public void deleteAndIndexClassification() throws Exception {
+    public void deleteClassification() throws Exception {
         // given
         ClassificationSeries classification = TestUtil.createClassification("name");
 
         // when
-        subject.deleteAndIndexClassification(TestUtil.createUser(), classification);
+        subject.deleteClassification(TestUtil.createUser(), classification);
 
         // then
         verifyInformSubscribers();
     }
 
     @Test
-    public void deleteAndIndexUnpublishedCorrespondenceTable() throws Exception {
+    public void deleteUnpublishedCorrespondenceTable() throws Exception {
         // given
         CorrespondenceTable correspondenceTable = createCorrespondenceTable();
         for (Language language : Language.values()) {
@@ -133,27 +133,27 @@ public class ClassificationFacadeTest {
         }
 
         // when
-        subject.deleteAndIndexCorrespondenceTable(TestUtil.createUser(), correspondenceTable);
+        subject.deleteCorrespondenceTable(TestUtil.createUser(), correspondenceTable);
 
         // then
         verifyNotInformSubscribers();
     }
 
     @Test
-    public void deleteAndIndexPublishedCorrespondenceTable() throws Exception {
+    public void deletePublishedCorrespondenceTable() throws Exception {
         // given
         CorrespondenceTable correspondenceTable = createCorrespondenceTable();
         correspondenceTable.publish(Language.getDefault());
 
         // when
-        subject.deleteAndIndexCorrespondenceTable(TestUtil.createUser(), correspondenceTable);
+        subject.deleteCorrespondenceTable(TestUtil.createUser(), correspondenceTable);
 
         // then
         verifyInformSubscribers();
     }
 
     @Test
-    public void deleteAndIndexUnpublisedVariant() throws Exception {
+    public void deleteUnpublisedVariant() throws Exception {
         // given
         ClassificationVariant variant = createVariant();
         for (Language language : Language.values()) {
@@ -161,27 +161,27 @@ public class ClassificationFacadeTest {
         }
 
         // when
-        subject.deleteAndIndexVariant(TestUtil.createUser(), variant);
+        subject.deleteVariant(TestUtil.createUser(), variant);
 
         // then
         verifyNotInformSubscribers();
     }
 
     @Test
-    public void deleteAndIndexPublisedVariant() throws Exception {
+    public void deletePublisedVariant() throws Exception {
         // given
         ClassificationVariant variant = createVariant();
         variant.publish(Language.getDefault());
 
         // when
-        subject.deleteAndIndexVariant(TestUtil.createUser(), variant);
+        subject.deleteVariant(TestUtil.createUser(), variant);
 
         // then
         verifyInformSubscribers();
     }
 
     @Test
-    public void deleteAndIndexUnpublishedVersion() throws Exception {
+    public void deleteUnpublishedVersion() throws Exception {
         // given
         ClassificationVersion version = createVersion();
         for (Language language : Language.values()) {
@@ -189,20 +189,20 @@ public class ClassificationFacadeTest {
         }
 
         // when
-        subject.deleteAndIndexVersion(TestUtil.createUser(), version);
+        subject.deleteVersion(TestUtil.createUser(), version);
 
         // then
         verifyNotInformSubscribers();
     }
 
     @Test
-    public void deleteAndIndexPublishedVersion() throws Exception {
+    public void deletePublishedVersion() throws Exception {
         // given
         ClassificationVersion version = createVersion();
         version.publish(Language.getDefault());
 
         // when
-        subject.deleteAndIndexVersion(TestUtil.createUser(), version);
+        subject.deleteVersion(TestUtil.createUser(), version);
 
         // then
         verifyInformSubscribers();

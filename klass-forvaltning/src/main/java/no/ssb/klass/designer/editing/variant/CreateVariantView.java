@@ -126,7 +126,7 @@ public class CreateVariantView extends CreateVariantDesign implements EditingVie
             }
             variant.updateContactPerson(metadataEditor.getContactPerson());
             variant.setDateRange(metadataEditor.getDateRange());
-            classificationFacade.saveAndIndexVariant(variant, InformSubscribers.createNotInformSubscribers());
+            classificationFacade.saveVariant(variant, InformSubscribers.createNotInformSubscribers());
             VaadinUtil.showSavedMessage();
             VaadinUtil.getKlassState().setEditingState(metadataEditor.currentEditingState());
             VaadinUtil.navigateTo(EditVariantEditorView.NAME,

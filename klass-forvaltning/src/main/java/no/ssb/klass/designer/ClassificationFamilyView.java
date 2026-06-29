@@ -48,6 +48,7 @@ public class ClassificationFamilyView extends ClassificationFamilyDesign impleme
         this.userContext = userContext;
         this.classificationFilter = VaadinUtil.getKlassState().getClassificationFilter();
         UI.getCurrent().getPage().addBrowserWindowResizeListener(event -> updateGrid(event.getWidth()));
+        searchBox.setVisible(false);
         log.debug(
                 "Creating classification family view with user context {} and classification facade {}",
                 userContext, classificationFacade

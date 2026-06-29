@@ -264,7 +264,7 @@ public class VersionTable extends AbstractTable {
 
         @Override
         protected void deleteClassificationEntity(ClassificationVersion version) throws KlassMessageException {
-            classificationFacade.deleteAndIndexVersion(userContext.getDetachedUserObject(), version);
+            classificationFacade.deleteVersion(userContext.getDetachedUserObject(), version);
         }
 
         @Override
