@@ -115,7 +115,7 @@ public class ClassificationFacade {
     public ClassificationSeries saveClassification(ClassificationSeries classification) {
         classificationService.saveNotIndexClassification(classification);
         log.info("Classification saved {}", classification);
-        subscriberService.informSubscribersOfUpdatedClassification(classification,
+        tryInformSubscribers(classification,
                 "Endring i metadata for klassifikasjonen: " + classification.getNameInPrimaryLanguage(),
                 "Oppdatert metadata for klassifikasjonen");
         return classification;
@@ -127,7 +127,7 @@ public class ClassificationFacade {
         classificationService.saveNotIndexCorrespondenceTable(correspondenceTable);
         log.info("Correspondence table saved {}", correspondenceTable);
         if (informSubscribers.isInformSubscribers()) {
-            subscriberService.informSubscribersOfUpdatedClassification(correspondenceTable.getOwnerClassification(),
+            tryInformSubscribers(correspondenceTable.getOwnerClassification(),
                     "Endring i korrespondansetabellen: " + correspondenceTable.getNameInPrimaryLanguage(),
                     informSubscribers.getDescriptionOfChange());
         }
@@ -140,9 +140,9 @@ public class ClassificationFacade {
         classificationService.saveNotIndexVariant(variant);
         log.info("Classification variant saved {}", variant);
         if (informSubscribers.isInformSubscribers()) {
-            subscriberService.informSubscribersOfUpdatedClassification(variant.getOwnerClassification(),
-                    "Endring i varianten: " + variant.getNameInPrimaryLanguage(), informSubscribers
-                            .getDescriptionOfChange());
+            tryInformSubscribers(variant.getOwnerClassification(),
+                    "Endring i varianten: " + variant.getNameInPrimaryLanguage(),
+                    informSubscribers.getDescriptionOfChange());
         }
     }
 
@@ -152,9 +152,9 @@ public class ClassificationFacade {
         classificationService.saveNotIndexVersion(version);
         log.info("Classification version saved {}", version);
         if (informSubscribers.isInformSubscribers()) {
-            subscriberService.informSubscribersOfUpdatedClassification(version.getOwnerClassification(),
-                    "Endring i versjonen: " + version.getNameInPrimaryLanguage(), informSubscribers
-                            .getDescriptionOfChange());
+            tryInformSubscribers(version.getOwnerClassification(),
+                    "Endring i versjonen: " + version.getNameInPrimaryLanguage(),
+                    informSubscribers.getDescriptionOfChange());
         }
         return version;
     }
@@ -168,7 +168,7 @@ public class ClassificationFacade {
             throws KlassMessageException {
         classificationService.deleteNotIndexClassification(currentUser, classification);
         log.info("Classification {} deleted", classification);
-        subscriberService.informSubscribersOfUpdatedClassification(classification, "Klassifikasjonen er slettet: "
+        tryInformSubscribers(classification, "Klassifikasjonen er slettet: "
                 + classification.getNameInPrimaryLanguage(), "Klassifikasjonen er slettet");
     }
 
@@ -178,7 +178,7 @@ public class ClassificationFacade {
         classificationService.deleteNotIndexCorrespondenceTable(currentUser, correspondenceTable);
         log.info("Correspondence table {} deleted", correspondenceTable);
         if (correspondenceTable.isPublishedInAnyLanguage()) {
-            subscriberService.informSubscribersOfUpdatedClassification(correspondenceTable.getOwnerClassification(),
+            tryInformSubscribers(correspondenceTable.getOwnerClassification(),
                     "Korrespondansetabellen er slettet: " + correspondenceTable.getNameInPrimaryLanguage(),
                     "En korrespondansetabell er slettet");
         }
@@ -190,7 +190,7 @@ public class ClassificationFacade {
         classificationService.deleteNotIndexVariant(currentUser, variant);
         log.info("Variant {} deleted", variant);
         if (variant.isPublishedInAnyLanguage()) {
-            subscriberService.informSubscribersOfUpdatedClassification(variant.getOwnerClassification(),
+            tryInformSubscribers(variant.getOwnerClassification(),
                     "Varianten er slettet: " + variant.getNameInPrimaryLanguage(), "En variant er slettet");
         }
     }
@@ -200,8 +200,24 @@ public class ClassificationFacade {
         classificationService.deleteNotIndexVersion(currentUser, version);
         log.info("Version {} deleted", version);
         if (version.isPublishedInAnyLanguage()) {
-            subscriberService.informSubscribersOfUpdatedClassification(version.getOwnerClassification(),
+            tryInformSubscribers(version.getOwnerClassification(),
                     "Versjonen er slettet: " + version.getNameInPrimaryLanguage(), "En versjon er slettet");
+        }
+    }
+
+    /**
+     * Notifies subscribers about an updated classification. Errors are caught and logged rather
+     * than propagated, so a transient notification failure never rolls back an already-committed
+     * save/delete operation.
+     */
+    private void tryInformSubscribers(ClassificationSeries classification, String whatChanged,
+            String descriptionOfChange) {
+        try {
+            subscriberService.informSubscribersOfUpdatedClassification(classification, whatChanged,
+                    descriptionOfChange);
+        } catch (Exception e) {
+            log.error("Failed to notify subscribers for classification {}: {}",
+                    classification.getId(), e.getMessage(), e);
         }
     }
 
