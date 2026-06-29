@@ -6,6 +6,8 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import no.ssb.klass.core.model.Changelog;
 import no.ssb.klass.core.model.ClassificationFamily;
@@ -109,6 +111,7 @@ public class ClassificationFacade {
         return classificationService.saveStatisticalUnit(stat);
     }
 
+    @Transactional(propagation = Propagation.NEVER)
     public ClassificationSeries saveClassification(ClassificationSeries classification) {
         classificationService.saveNotIndexClassification(classification);
         log.info("Classification saved {}", classification);
@@ -118,6 +121,7 @@ public class ClassificationFacade {
         return classification;
     }
 
+    @Transactional(propagation = Propagation.NEVER)
     public CorrespondenceTable saveCorrespondenceTable(CorrespondenceTable correspondenceTable,
                                                        InformSubscribers informSubscribers) {
         classificationService.saveNotIndexCorrespondenceTable(correspondenceTable);
@@ -130,6 +134,7 @@ public class ClassificationFacade {
         return correspondenceTable;
     }
 
+    @Transactional(propagation = Propagation.NEVER)
     public void saveVariant(ClassificationVariant variant,
                                              InformSubscribers informSubscribers) {
         classificationService.saveNotIndexVariant(variant);
@@ -141,6 +146,7 @@ public class ClassificationFacade {
         }
     }
 
+    @Transactional(propagation = Propagation.NEVER)
     public ClassificationVersion saveVersion(ClassificationVersion version,
                                              InformSubscribers informSubscribers) {
         classificationService.saveNotIndexVersion(version);
@@ -157,6 +163,7 @@ public class ClassificationFacade {
         return classificationService.copyClassificationVersion(originalVersion, dateRange);
     }
 
+    @Transactional(propagation = Propagation.NEVER)
     public void deleteClassification(User currentUser, ClassificationSeries classification)
             throws KlassMessageException {
         classificationService.deleteNotIndexClassification(currentUser, classification);
@@ -165,6 +172,7 @@ public class ClassificationFacade {
                 + classification.getNameInPrimaryLanguage(), "Klassifikasjonen er slettet");
     }
 
+    @Transactional(propagation = Propagation.NEVER)
     public void deleteCorrespondenceTable(User currentUser,
             CorrespondenceTable correspondenceTable) throws KlassMessageException {
         classificationService.deleteNotIndexCorrespondenceTable(currentUser, correspondenceTable);
@@ -176,6 +184,7 @@ public class ClassificationFacade {
         }
     }
 
+    @Transactional(propagation = Propagation.NEVER)
     public void deleteVariant(User currentUser, ClassificationVariant variant)
             throws KlassMessageException {
         classificationService.deleteNotIndexVariant(currentUser, variant);
@@ -186,6 +195,7 @@ public class ClassificationFacade {
         }
     }
 
+    @Transactional(propagation = Propagation.NEVER)
     public void deleteVersion(User currentUser, ClassificationVersion version) throws KlassMessageException {
         classificationService.deleteNotIndexVersion(currentUser, version);
         log.info("Version {} deleted", version);
