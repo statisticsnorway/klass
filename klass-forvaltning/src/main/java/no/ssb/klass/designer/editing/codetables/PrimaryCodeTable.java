@@ -69,6 +69,14 @@ public class PrimaryCodeTable extends EditableCodeTable {
     @Override
     protected Item addClassificationItemToTable(ClassificationItem classificationItem) {
         Item item = super.addClassificationItemToTable(classificationItem);
+        if (item == null) {
+            log.warn(
+                    "Skipping duplicate item with uuid '{}' (code '{}') — two ReferencingClassificationItems share"
+                            + " the same UUID in this variant.",
+                    classificationItem.getUuid(),
+                    classificationItem.getCode());
+            return null;
+        }
         Button deleteButton = new Button(FontAwesome.TRASH_O);
         deleteButton.addStyleName(ValoTheme.BUTTON_BORDERLESS);
         deleteButton.setHeight("100%");
