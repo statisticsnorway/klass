@@ -9,17 +9,19 @@ public class ParameterException extends KlassRuntimeException {
     String parameterString;
 
     public ParameterException(String parameterName, String parameterString) {
+        super("Parameter not found: " + parameterName + " in " + parameterString);
         this.parameterName = parameterName;
         setParameter(parameterString);
     }
 
     public ParameterException(String parameterName, String parameterString, Exception ex) {
-        super(ex);
+        super("Parameter not found: " + parameterName + " in " + parameterString, ex);
         this.parameterName = parameterName;
         setParameter(parameterString);
     }
 
     public ParameterException(String context, String parameterName, String parameterString) {
+        super(context + " not found — " + parameterName + ": " + parameterString);
         this.context = context;
         this.parameterName = parameterName;
         setParameter(parameterString);

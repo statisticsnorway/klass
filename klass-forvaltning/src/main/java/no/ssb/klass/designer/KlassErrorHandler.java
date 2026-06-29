@@ -32,14 +32,15 @@ public class KlassErrorHandler extends DefaultErrorHandler {
     public void error(com.vaadin.server.ErrorEvent event) {
         boolean showErrorMessage = true;
         for (Throwable t = event.getThrowable(); t != null; t = t.getCause()) {
-            log.error(t.getMessage(), t);
-
             if (t instanceof ParameterException) {
+                log.warn("Navigation to non-existent resource: {}", t.getMessage());
                 ParameterException parameterException = (ParameterException) t;
                 String pageName = parameterException.getContext();
                 String parameter = parameterException.getParameterString();
                 displayParameterErrorPage(pageName != null ? pageName : "Error", parameter != null ? parameter : " ");
                 showErrorMessage = false;
+            } else {
+                log.error(t.getMessage(), t);
             }
             if (t instanceof InvalidValueException) {
                 AbstractComponent component = findAbstractComponent(event);
