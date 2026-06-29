@@ -43,8 +43,6 @@ spec:
       value: https://auth.test.ssb.no/realms/ssb/protocol/openid-connect/certs
     - name: KLASS_SECURITY_OAUTH2_JWT_ISSUER
       value: https://auth.test.ssb.no/realms/ssb
-    - name: SPRING_DATA_SOLR_HOST
-      value: http://klass-solr/solr/
     - name: KLASS_ENV_SERVER
       value: klass.intern.test.ssb.no
     - name: KLASS_ENV_CLIENT_KLASS_MAIL_URL
