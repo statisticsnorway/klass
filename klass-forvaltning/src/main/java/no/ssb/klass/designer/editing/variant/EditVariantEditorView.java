@@ -97,10 +97,21 @@ public class EditVariantEditorView extends EditVariantEditorDesign implements Ed
         header.setTypeText(TypeAndNameHeaderComponent.TEXT_VARIANT_OF + variant.getClassificationVersion()
                 .getNameInPrimaryLanguage());
         header.setNameText(variant.getNameInPrimaryLanguage());
-        checkUserAccess();
-        // NB. checkUserAccess() must be before codeEditor.init(..), if not a NewCodeEditor will be
-        // added even when user does not have permission to alter variant.
+        boolean canAlter = userContext.canUserAlterObject(variant);
+        log.info("canUserAlterObject({}) = {}", variant.getId(), canAlter);
+        // NB. codeEditor.setReadOnly() must be called AFTER codeEditor.init(), because
+        // configureDragDrop() selects a default value in the OptionGroup and would throw
+        // ReadOnlyException if the component is already read-only at that point.
+        if (!canAlter) {
+            actionButtons.disableConfirmButton(true, "Du har ikke lov til å endre denne varianten");
+            metadataEditor.setReadOnly(true);
+        } else {
+            actionButtons.disableConfirmButton(false, "");
+        }
         codeEditor.init(variant, classificationFacade, applicationContext, xmlService);
+        if (!canAlter) {
+            codeEditor.setReadOnly(true);
+        }
         if (editingState.isCodeEditorNotMetadataVisible()) {
             accordion.setSelectedTab(codeEditor);
             codeEditor.restorePreviousEditingState(editingState);
@@ -124,15 +135,6 @@ public class EditVariantEditorView extends EditVariantEditorDesign implements Ed
         ignoreChanges = true;
     }
 
-    private void checkUserAccess() {
-        if (!userContext.canUserAlterObject(variant)) {
-            actionButtons.disableConfirmButton(true, "Du har ikke lov til å endre denne varianten");
-            metadataEditor.setReadOnly(true);
-            codeEditor.setReadOnly(true);
-        } else {
-            actionButtons.disableConfirmButton(false, "");
-        }
-    }
 
     private void saveClick(Button.ClickEvent clickEvent) {
         codeEditor.prepareSave();
