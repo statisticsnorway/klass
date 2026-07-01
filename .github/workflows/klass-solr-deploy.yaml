@@ -5,17 +5,16 @@ on:
     branches:
       - main
     paths:
-      - ".nais/**/klass-solr.yaml"
+      - ".nais/prod/klass-solr.yaml"
       - ".github/workflows/klass-solr-deploy.yaml"
   workflow_dispatch:
     inputs:
       cluster:
         description: "Which cluster to deploy to?"
         required: true
-        default: "test"
+        default: "prod"
         type: choice
         options:
-          - test
           - prod
 
 env:
@@ -31,16 +30,10 @@ jobs:
       actions: read
     outputs:
       prod-manifest-changed: ${{ steps.prod-manifest-changed.outputs.changed != 'non-inputs' }}
-      test-manifest-changed: ${{ steps.test-manifest-changed.outputs.changed != 'non-inputs'}}
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           fetch-depth: 0
-      - name: Check for Test manifest changes
-        id: test-manifest-changed
-        uses: "nais/what-changed@e253615426610a2e873ada19749ca58896f3679f"
-        with:
-          files: .nais/test/klass-solr.yaml
 
       - name: Check for Prod manifest changes
         id: prod-manifest-changed
@@ -48,26 +41,6 @@ jobs:
         with:
           files: .nais/prod/klass-solr.yaml
 
-  deploy-test:
-    name: Deploy to Test
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      id-token: write
-      actions: read
-    needs: what-changed
-    if: needs.what-changed.outputs.test-manifest-changed == 'true' || github.event.inputs.cluster == 'test'
-    steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-        with:
-          fetch-depth: 0
-
-      - name: Deploy to Nais
-        uses: nais/deploy/actions/deploy@5fdd91aaf69bb0d6dd5e5118cdacb639f487b93b # v2
-        env:
-          CLUSTER: test
-          RESOURCE: .nais/test/klass-solr.yaml
-          WORKLOAD_IMAGE: ${{ env.IMAGE }}
 
   deploy-prod:
     name: Deploy to Prod
