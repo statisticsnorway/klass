@@ -813,7 +813,7 @@ public class ClassificationController {
         }
         try {
             URL endSubscriptionUrl =
-                    UriComponentsBuilder.fromHttpUrl(publicBaseUrl)
+                    UriComponentsBuilder.fromUriString(publicBaseUrl)
                             .path(apiBase + "/classifications/{id}/removeTracking")
                             .queryParam("email", email)
                             .buildAndExpand(classificationId)
@@ -824,7 +824,7 @@ public class ClassificationController {
                     subscriberService.trackChanges(email, classification, endSubscriptionUrl);
 
             URL verifySubscriptionUrl =
-                    UriComponentsBuilder.fromHttpUrl(publicBaseUrl)
+                    UriComponentsBuilder.fromUriString(publicBaseUrl)
                             .path(apiBase + "/classifications/verifyTracking/{email}/{token}")
                             .buildAndExpand(email, token)
                             .toUri()
