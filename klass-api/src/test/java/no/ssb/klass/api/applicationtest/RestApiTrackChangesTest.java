@@ -100,8 +100,7 @@ class RestApiTrackChangesTest extends AbstractRestApiApplicationTest {
                 startsWith(publicBaseUrl));
         assertThat(
                 storedUnsubscribeUrl,
-                containsString(
-                        "/classifications/" + kommuneinndeling.getId() + "/removeTracking"));
+                containsString("/classifications/" + kommuneinndeling.getId() + "/removeTracking"));
         assertThat(storedUnsubscribeUrl, containsString("email=" + TEST_EMAIL));
     }
 
