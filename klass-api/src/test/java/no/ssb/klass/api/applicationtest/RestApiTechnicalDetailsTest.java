@@ -35,8 +35,6 @@ class RestApiTechnicalDetailsTest extends AbstractRestApiApplicationTest {
                 .body(JSON_LINKS + ".self.href", startsWith("http://localhost"));
     }
 
-    /*
-
     @Test
     void hateoasLinksWithCustomForwardedHostHeader() {
         given().port(port)
@@ -49,7 +47,7 @@ class RestApiTechnicalDetailsTest extends AbstractRestApiApplicationTest {
                 .then()
                 .body(JSON_LINKS + ".self.href", containsString(REQUEST))
                 .body(JSON_LINKS + ".self.href", startsWith("https://klass.ssb.no"));
-    }*/
+    }
 
     @Test
     void restServiceAllowCors() {
