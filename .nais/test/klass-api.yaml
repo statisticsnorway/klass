@@ -48,6 +48,8 @@ spec:
       value: logstash
     - name: KLASS_ENV_CLIENT_KLASS_MAIL_URL
       value: http://klass-mail
+    - name: KLASS_PUBLIC_BASE_URL
+      value: https://data.test.ssb.no
     - name: JAVA_TOOL_OPTIONS
       value: "-XX:+ExitOnOutOfMemoryError -XX:InitialRAMPercentage=75.0 -XX:MaxRAMPercentage=75.0"
 
