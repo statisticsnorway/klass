@@ -70,7 +70,7 @@ public class PrimaryCodeTable extends EditableCodeTable {
     protected Item addClassificationItemToTable(ClassificationItem classificationItem) {
         Item item = super.addClassificationItemToTable(classificationItem);
         if (item == null) {
-            log.warn(
+            log.info(
                     "Could not add ClassificationItem to table (uuid={} already exists in container or is null);"
                             + " skipping delete-button setup for code={}",
                     classificationItem.getUuid(), classificationItem.getCode());
