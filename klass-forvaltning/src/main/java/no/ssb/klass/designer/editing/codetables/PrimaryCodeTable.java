@@ -69,6 +69,13 @@ public class PrimaryCodeTable extends EditableCodeTable {
     @Override
     protected Item addClassificationItemToTable(ClassificationItem classificationItem) {
         Item item = super.addClassificationItemToTable(classificationItem);
+        if (item == null) {
+            log.warn(
+                    "Could not add ClassificationItem to table (uuid={} already exists in container or is null);"
+                            + " skipping delete-button setup for code={}",
+                    classificationItem.getUuid(), classificationItem.getCode());
+            return null;
+        }
         Button deleteButton = new Button(FontAwesome.TRASH_O);
         deleteButton.addStyleName(ValoTheme.BUTTON_BORDERLESS);
         deleteButton.setHeight("100%");
