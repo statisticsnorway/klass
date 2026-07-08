@@ -32,7 +32,7 @@ public class MarkedTranslationCodeTable extends TranslationCodeTable {
     protected Item addClassificationItemToTable(ClassificationItem classificationItem) {
         Item item = super.addClassificationItemToTable(classificationItem);
         if (item == null) {
-            logger.info("Item {} is null", classificationItem.getUuid());
+            log.info("Item {} is null", classificationItem.getUuid());
             return null;
         }
 
