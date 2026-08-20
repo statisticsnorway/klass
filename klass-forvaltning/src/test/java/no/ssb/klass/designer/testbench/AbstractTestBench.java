@@ -2,7 +2,6 @@ package no.ssb.klass.designer.testbench;
 
 import java.io.File;
 
-import no.ssb.klass.solr.config.KlassSearchTestConfiguration;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.runner.RunWith;
@@ -37,7 +36,6 @@ import no.ssb.klass.designer.testbench.pages.LoginPage;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = { AbstractTestBench.Config.class }, webEnvironment = WebEnvironment.RANDOM_PORT)
-@ContextConfiguration(classes = { KlassSearchTestConfiguration.class })
 @ActiveProfiles({ ConfigurationProfiles.H2_INMEMORY, ConfigurationProfiles.AD_AUTHENTICATE_OFFLINE,
         ConfigurationProfiles.SMALL_IMPORT, ConfigurationProfiles.MOCK_MAILSERVER })
 // Need to explicitly set @TestExecutionListeners to get rid of

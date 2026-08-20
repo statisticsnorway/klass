@@ -12,7 +12,6 @@ on:
     paths-ignore:
       - '**.md'
       - klass-forvaltning
-      - klass-solr
 
 jobs:
   check-code-format:
