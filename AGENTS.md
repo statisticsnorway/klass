@@ -11,7 +11,6 @@ Klass is Statistics Norway's classification/code-list system. It is a multi-modu
 | `klass-mail` | 21 | Fire-and-forget email microservice (via SUP Postman) |
 | `klass-index-job` | 21 | Periodic OpenSearch indexing job |
 | `klass-forvaltning` | **8** | Internal admin frontend (Spring Boot WAR, separate Java version) |
-| `klass-solr` | – | Solr core configuration (legacy search, standalone service) |
 
 > **Critical**: `klass-forvaltning` uses Java 8 (see `klass-forvaltning/.sdkmanrc`). The root and all other modules use Java 21 (`/.sdkmanrc`). Building forvaltning from the root `pom.xml` is intentionally excluded — it must be built separately. `klass-forvaltning` also depends on the `backport-v2` branch of `klass-shared`, not `main`.
 
@@ -66,8 +65,7 @@ Profiles are combined at startup. Key ones:
 | `small-import` | Imports a small subset of classifications (faster startup) |
 | `mock-mailserver` | Logs outgoing emails instead of sending |
 | `skip-indexing` | Skips search index rebuild at startup |
-| `embedded-solr` | Runs Solr in-process (forvaltning dev) |
-| `remote-solr` / `open-search-local` / `remote-open-search` | Search backend selection |
+| `open-search-local` / `remote-open-search` | Search backend selection |
 | `mock-search` | Mocks search entirely |
 | `production` | Disables test beans, enables AD-only login |
 
@@ -78,11 +76,9 @@ Profiles are combined at startup. Key ones:
 - **Local workaround**: Migration `V4__grant_user_role.sql` fails locally unless the role exists. Create `klass-shared/initdb/init_roles.sql` containing: `CREATE ROLE "dapla-metadata-developers@groups.ssb.no";`
 - Forvaltning has Flyway **disabled** (`flyway.enabled=false`); it runs only from `klass-api`
 
-## Search Backends
+## Search Backend
 
-Two search backends coexist:
-- **Solr** (legacy): standalone service, configured via `klass-solr/`, still used by forvaltning
-- **OpenSearch**: newer; `klass-index-job` handles periodic index updates; `klass-api` can use it via `open-search-local` / `remote-open-search` profiles
+**OpenSearch**: newer; `klass-index-job` handles periodic index updates; `klass-api` can use it via `open-search-local` / `remote-open-search` profiles
 
 ## Code Quality
 

@@ -33,6 +33,6 @@ Klass is Statistics Norway's classification/code-list system. Multi-module Maven
 - Package prefix for all modules: `no.ssb.klass`.
 
 ## Spring Profiles for Local Dev
-Typical local run combines: `api,postgres-local,hardcoded-user,mock-search,mock-mailserver,small-import`  
-Forvaltning: `frontend,postgres-local,hardcoded-user,embedded-solr,mock-mailserver,small-import,skip-indexing`
+Typical local run combines: `api,postgres-local,hardcoded-user,mock-search,mock-mailserver,small-import`
+Forvaltning: `frontend,postgres-local,hardcoded-user,mock-mailserver,small-import,skip-indexing`
 
