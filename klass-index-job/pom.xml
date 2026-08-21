@@ -16,6 +16,8 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <tomcat.version>10.1.55</tomcat.version>
+        <!-- v42.7.13 breaks this app ref: https://ssb-norge.slack.com/lists/T399RN138/F08FV8ZAW58?record_id=Rec0BRN7FJ2CV -->
+        <postgresql.version>42.7.12</postgresql.version>
     </properties>
 
 
