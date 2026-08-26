@@ -9,11 +9,11 @@ on:
     branches:
       - main
     paths:
-      - klass-forvaltning
+      - 'klass-forvaltning/**'
       - .github/workflows/tests-klass-forvaltning.yml
   pull_request:
     paths:
-      - klass-forvaltning
+      - 'klass-forvaltning/**'
       - .github/workflows/tests-klass-forvaltning.yml
 
 jobs:
