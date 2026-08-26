@@ -11,7 +11,7 @@ on:
   pull_request:
     paths-ignore:
       - '**.md'
-      - 'klass-forvaltning/**'
+      - klass-forvaltning
       - klass-solr
 
 jobs:
