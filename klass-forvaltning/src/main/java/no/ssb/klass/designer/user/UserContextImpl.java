@@ -166,10 +166,6 @@ public class UserContextImpl implements UserContext {
     }
 
     private User updateOrCreateUser(User currentUser) {
-        return updateOrCreateUser(userService, currentUser);
-    }
-
-    static User updateOrCreateUser(UserService userService, User currentUser) {
         User savedUser = userService.getUserByUserName(currentUser.getUsername());
         if (savedUser == null) {
             log.debug("New user {}. Persisting.", currentUser.getUsername());
