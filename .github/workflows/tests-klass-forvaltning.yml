@@ -8,6 +8,7 @@ on:
   push:
     branches:
       - main
+      - fix/duplicated-contact-persons
     paths:
       - klass-forvaltning
       - .github/workflows/tests-klass-forvaltning.yml
