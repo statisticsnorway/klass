@@ -42,7 +42,7 @@
         <asciidoctor-version>3.2.0</asciidoctor-version>
         <commons-io-version>2.22.0</commons-io-version>
         <commons-lang3-version>3.20.0</commons-lang3-version>
-        <guava-version>33.6.0-jre</guava-version>
+        <guava-version>33.7.1-jre</guava-version>
         <!-- CVE-2026-54513 (HIGH, CVSS 8.1): fixed in 2.21.3+ -->
         <jackson-bom.version>2.21.6</jackson-bom.version>
         <log4j2.version>2.26.1</log4j2.version>
