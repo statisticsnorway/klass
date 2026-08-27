@@ -29,7 +29,7 @@ DO $$
 
         IF invalid_groups IS NOT NULL THEN
             RAISE EXCEPTION
-                E'Found duplicate groups with 2 users which does not adhere to pattern:\n%',
+                E'Found duplicate user groups with 2 users that do not match the expected pattern:\n%',
                 invalid_groups;
         END IF;
     END $$;
