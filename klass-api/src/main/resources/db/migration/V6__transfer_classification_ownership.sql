@@ -1,5 +1,5 @@
 -- =========================================================
--- 1. Validate duplicate users and ownership mappings
+-- 1. Validate duplicate users
 -- =========================================================
 DO $$
     DECLARE
