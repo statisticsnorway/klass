@@ -10,7 +10,7 @@ spec:
     - name: dapla-metadata
       rules:
         - alert: HTTP error responses
-          expr: 100 * sum(rate(nginx_ingress_controller_request_duration_seconds_count{ingress="klass-nais-ingress-eaceac17",status!~"499|5[0-9]{2}"}[10m])) by (ingress) / sum(rate(nginx_ingress_controller_request_duration_seconds_count{ingress="klass-nais-ingress-eaceac17"}[10m])) by (ingress) < 75.0
+          expr: 100 * sum(rate(haproxy_backend_http_responses_total{proxy=~"dapla-metadata_klass.*", code!~"5xx"}[10m])) / sum(rate(haproxy_backend_http_responses_total{proxy=~"dapla-metadata_klass.*"}[10m])) < 75.0
           for: 3m
           annotations:
             title: "HTTP error responses"
@@ -42,6 +42,19 @@ spec:
             title: "A Klass-api client is unavailable "
             consequence: "The service may lack some functionality"
             description: "Client {{ $labels.serviceId }} responded with {{ $labels.status }} causing {{ $labels.exception }}"
+          labels:
+            service: klass-api
+            namespace: dapla-metadata
+            severity: critical
+            environment: prod
+
+        - alert: GET operation timeouts
+          expr: sum(rate(http_server_requests_seconds_count{application="klass", method="GET", outcome="TIMEOUT"}[5m])) > 0.1
+          for: 2m
+          annotations:
+            title: "GET operation timeouts"
+            consequence: "Multiple GET requests are timing out. Users may be experiencing failed or slow responses."
+            action: "Check application logs for timeout details. Investigate slow queries, caching issues, or resource exhaustion."
           labels:
             service: klass-api
             namespace: dapla-metadata
