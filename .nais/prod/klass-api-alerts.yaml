@@ -10,7 +10,10 @@ spec:
     - name: dapla-metadata
       rules:
         - alert: HTTP error responses
-          expr: 100 * sum(rate(haproxy_backend_http_responses_total{proxy=~"dapla-metadata_klass.*", code!~"5xx"}[10m])) / sum(rate(haproxy_backend_http_responses_total{proxy=~"dapla-metadata_klass.*"}[10m])) < 75.0
+          expr: >-
+            (100 * sum(rate(haproxy_backend_http_responses_total{proxy=~"dapla-metadata_klass.*", code!~"5xx"}[10m]))
+            / sum(rate(haproxy_backend_http_responses_total{proxy=~"dapla-metadata_klass.*"}[10m])) < 75.0)
+            and sum(rate(haproxy_backend_http_responses_total{proxy=~"dapla-metadata_klass.*"}[10m])) > 0
           for: 3m
           annotations:
             title: "HTTP error responses"
