@@ -1,6 +1,5 @@
 package no.ssb.klass.api.filters;
 
-import io.micrometer.core.instrument.Metrics;
 
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
@@ -26,29 +25,6 @@ public class AccessFilter implements Filter {
     private String resolveEndpoint(HttpServletRequest req) {
         String endpoint = (String) req.getAttribute(HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE);
         return endpoint == null ? "unmapped" : endpoint;
-    }
-
-    /**
-     * Counts the number of writing failures.
-     *
-     * @param req: HttpServletRequest
-     * @param res: HttpServletResponse
-     * @param e: Exception
-     */
-    private void countWriteFailure(HttpServletRequest req, HttpServletResponse res, Exception e) {
-        String endpoint = resolveEndpoint(req);
-
-        Metrics.counter(
-                        "klass_response_write_failures_total",
-                        "method",
-                        req.getMethod(),
-                        "endpoint",
-                        endpoint,
-                        "exception",
-                        e.getClass().getSimpleName(),
-                        "committed",
-                        Boolean.toString(res.isCommitted()))
-                .increment();
     }
 
     /**
@@ -88,7 +64,6 @@ public class AccessFilter implements Filter {
                     res.getStatus(),
                     res.getContentType(),
                     e);
-            countWriteFailure(req, res, e);
             throw e;
         }
     }
