@@ -18,6 +18,17 @@ public class AccessFilter implements Filter {
     private static final Logger log = LoggerFactory.getLogger(AccessFilter.class);
 
     /**
+     * Resolves the endpoint from the request.
+     *
+     * @param req: HttpServletRequest
+     * @return String: endpoint
+     */
+    private String resolveEndpoint(HttpServletRequest req) {
+        String endpoint = (String) req.getAttribute(HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE);
+        return endpoint == null ? "unmapped" : endpoint;
+    }
+
+    /**
      * Counts the number of writing failures.
      *
      * @param req: HttpServletRequest
@@ -25,10 +36,7 @@ public class AccessFilter implements Filter {
      * @param e: Exception
      */
     private void countWriteFailure(HttpServletRequest req, HttpServletResponse res, Exception e) {
-        String endpoint = (String) req.getAttribute(HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE);
-        if (endpoint == null) {
-            endpoint = "unmapped";
-        }
+        String endpoint = resolveEndpoint(req);
 
         Metrics.counter(
                         "klass_response_write_failures_total",
@@ -70,10 +78,12 @@ public class AccessFilter implements Filter {
         try {
             chain.doFilter(request, response);
         } catch (IOException | ServletException | RuntimeException e) {
+            String endpoint = resolveEndpoint(req);
             log.error(
-                    "Response processing failed for {} {} (committed={}, status={}, contentType={})",
+                    "Response processing failed for {} {} [endpoint={}] (committed={}, status={}, contentType={})",
                     req.getMethod(),
                     requestTarget(req),
+                    endpoint,
                     res.isCommitted(),
                     res.getStatus(),
                     res.getContentType(),
