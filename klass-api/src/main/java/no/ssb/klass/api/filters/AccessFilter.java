@@ -17,6 +17,13 @@ import java.io.IOException;
 public class AccessFilter implements Filter {
     private static final Logger log = LoggerFactory.getLogger(AccessFilter.class);
 
+    /**
+     * Counts the number of writing failures.
+     *
+     * @param req: HttpServletRequest
+     * @param res: HttpServletResponse
+     * @param e: Exception
+     */
     private void countWriteFailure(HttpServletRequest req, HttpServletResponse res, Exception e) {
         String endpoint = (String) req.getAttribute(HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE);
         if (endpoint == null) {
@@ -36,12 +43,20 @@ public class AccessFilter implements Filter {
                 .increment();
     }
 
+    /**
+     * Format a readable request path in logstash format.
+     *
+     * @param req: HttpServletRequest
+     * @return String: request path
+     */
     private String requestTarget(HttpServletRequest req) {
         String queryString = req.getQueryString();
         return queryString == null ? req.getRequestURI() : req.getRequestURI() + "?" + queryString;
     }
 
-    @SuppressWarnings("java:S2139") // Intentional: in write-phase failures we must record metric context here and rethrow so container error handling remains unchanged
+    @SuppressWarnings(
+            "java:S2139") // Intentional: in write-phase failures we must record metric context here
+    // and rethrow so container error handling remains unchanged
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
