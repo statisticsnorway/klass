@@ -4,6 +4,7 @@ import static org.mockito.Mockito.*;
 
 import no.ssb.klass.api.controllers.ClassificationController;
 import no.ssb.klass.api.controllers.validators.CsvFieldsValidator;
+import no.ssb.klass.api.services.MaterializedViewCodeChangesService;
 import no.ssb.klass.api.services.SearchService;
 import no.ssb.klass.core.config.ConfigurationProfiles;
 import no.ssb.klass.core.service.*;
@@ -47,12 +48,18 @@ public class MockConfig {
     }
 
     @Bean
+    public MaterializedViewCodeChangesService materializedViewCodeChangesService() {
+        return mock(MaterializedViewCodeChangesService.class);
+    }
+
+    @Bean
     public ClassificationController classificationController() {
         return new ClassificationController(
                 classificationService(),
                 subscriberService(),
                 searchService(),
                 statisticsService(),
-                csvFieldsValidator());
+                csvFieldsValidator(),
+                materializedViewCodeChangesService());
     }
 }

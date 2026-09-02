@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import no.ssb.klass.api.controllers.validators.CsvFieldsValidator;
 import no.ssb.klass.api.dto.*;
 import no.ssb.klass.api.dto.hal.*;
+import no.ssb.klass.api.services.MaterializedViewCodeChangesService;
 import no.ssb.klass.api.services.OpenSearchResult;
 import no.ssb.klass.api.services.SearchService;
 import no.ssb.klass.api.util.OpenApiConstants;
@@ -58,6 +59,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin
 @RestController
@@ -69,6 +71,7 @@ public class ClassificationController {
     private final SearchService searchService;
     private final StatisticsService statisticsService;
     private final CsvFieldsValidator csvFieldsValidator;
+    private final MaterializedViewCodeChangesService materializedViewCodeChangesService;
 
     @Value("${klass.env.api.public.base.url}")
     private String publicBaseUrl;
@@ -82,12 +85,14 @@ public class ClassificationController {
             SubscriberService subscriberService,
             SearchService searchService,
             StatisticsService statisticsService,
-            CsvFieldsValidator csvFieldsValidator) {
+            CsvFieldsValidator csvFieldsValidator,
+            MaterializedViewCodeChangesService materializedViewCodeChangesService) {
         this.classificationService = classificationService;
         this.subscriberService = subscriberService;
         this.searchService = searchService;
         this.statisticsService = statisticsService;
         this.csvFieldsValidator = csvFieldsValidator;
+        this.materializedViewCodeChangesService = materializedViewCodeChangesService;
     }
 
     /** Redirect root to docs for convenience */
@@ -521,19 +526,31 @@ public class ClassificationController {
         boolean successMergeChangeTables = false;
         try {
             DateRange dateRange = DateRange.create(from, to);
-            ClassificationSeries classification = classificationService.getClassificationSeries(id);
-            successGetClassification = classification != null;
-            List<CorrespondenceTable> changeTables =
-                    classification.getChangeTables(dateRange, includeFuture).stream()
-                            .filter(
-                                    correspondenceTable ->
-                                            correspondenceTable.isPublished(language))
-                            .collect(toList());
-            successGetChangeTables = true;
+            Optional<CodeChangeList> materializedChanges =
+                    materializedViewCodeChangesService.findChanges(
+                            id, dateRange, language, includeFuture, csvSeparator);
 
-            CodeChangeList codeChanges = new CodeChangeList(csvSeparator);
-            for (CorrespondenceTable changeTable : changeTables) {
-                codeChanges = codeChanges.merge(codeChanges.convert(changeTable, language));
+            CodeChangeList codeChanges;
+            if (materializedChanges.isPresent()) {
+                successGetClassification = true;
+                successGetChangeTables = true;
+                codeChanges = materializedChanges.get();
+            } else {
+                ClassificationSeries classification =
+                        classificationService.getClassificationSeries(id);
+                successGetClassification = classification != null;
+                List<CorrespondenceTable> changeTables =
+                        classification.getChangeTables(dateRange, includeFuture).stream()
+                                .filter(
+                                        correspondenceTable ->
+                                                correspondenceTable.isPublished(language))
+                                .collect(toList());
+                successGetChangeTables = true;
+
+                codeChanges = new CodeChangeList(csvSeparator);
+                for (CorrespondenceTable changeTable : changeTables) {
+                    codeChanges = codeChanges.merge(codeChanges.convert(changeTable, language));
+                }
             }
             successMergeChangeTables = true;
 

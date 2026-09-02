@@ -48,6 +48,23 @@ public class CodeChangeItem {
         this.changeOccurred = changeOccurred;
     }
 
+    public CodeChangeItem(
+            String oldCode,
+            String oldName,
+            String oldShortName,
+            String newCode,
+            String newName,
+            String newShortName,
+            LocalDate changeOccurred) {
+        this.oldCode = oldCode;
+        this.oldName = oldName;
+        this.oldShortName = oldShortName;
+        this.newCode = newCode;
+        this.newName = newName;
+        this.newShortName = newShortName;
+        this.changeOccurred = changeOccurred;
+    }
+
     private ClassificationItem getOldItem(
             CorrespondenceMap correspondenceMap, boolean isTargetOldest) {
         Optional<ClassificationItem> classificationItem =
