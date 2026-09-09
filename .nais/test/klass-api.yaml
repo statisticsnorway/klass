@@ -59,6 +59,7 @@ spec:
         - application: klass-mail
     inbound:
       rules:
+        - application: vardef
         - application: dataportalen
         - application: dataportalen-dev
   openSearch:
