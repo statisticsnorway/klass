@@ -66,7 +66,6 @@ spec:
   dependsOn:
     - system:keycloak
     - resource:klass-postgresql
-    - resource:klass-solr
     - component:ssbno-varnish
     - component:klass-mail
 ---
@@ -105,22 +104,6 @@ metadata:
     - database
 spec:
   type: database
-  system: metadata
-  owner: dapla-metadata-developers
-  lifecycle: production
----
-apiVersion: backstage.io/v1alpha1
-kind: Resource
-metadata:
-  name: klass-solr
-  title: Klass Solr
-  description: Solr instance providing a search index. Used by Klass Forvaltning for legacy reasons.
-  tags:
-    - solr
-    - nais
-    - search
-spec:
-  type: search
   system: metadata
   owner: dapla-metadata-developers
   lifecycle: production

@@ -4,7 +4,7 @@
     <parent>
         <groupId>no.ssb.klass</groupId>
         <artifactId>klass-root</artifactId>
-        <version>5.0.1-SNAPSHOT</version>
+        <version>5.0.9-SNAPSHOT</version>
     </parent>
 
     <name>Klass Index Job</name>
@@ -15,7 +15,8 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <tomcat.version>10.1.55</tomcat.version>
+        <!-- v42.7.13 breaks this app ref: https://ssb-norge.slack.com/lists/T399RN138/F08FV8ZAW58?record_id=Rec0BRN7FJ2CV -->
+        <postgresql.version>42.7.12</postgresql.version>
     </properties>
 
 
@@ -53,7 +54,7 @@
             <!-- Needed to override the version for logstash-logback-encoder to one with vulnerability fixes -->
             <groupId>tools.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>3.2.0</version>
+            <version>3.2.1</version>
         </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>

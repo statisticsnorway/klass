@@ -10,12 +10,11 @@
     <parent>
         <groupId>no.ssb.klass</groupId>
         <artifactId>klass-root</artifactId>
-        <version>5.0.1-SNAPSHOT</version>
+        <version>5.0.9-SNAPSHOT</version>
     </parent>
 
     <properties>
-        <spring-cloud-gcp-dependencies.version>7.4.9</spring-cloud-gcp-dependencies.version>
-        <tomcat.version>10.1.55</tomcat.version>
+        <spring-cloud-gcp-dependencies.version>7.4.10</spring-cloud-gcp-dependencies.version>
     </properties>
 
     <dependencies>
@@ -45,6 +44,18 @@
             <groupId>net.logstash.logback</groupId>
             <artifactId>logstash-logback-encoder</artifactId>
             <version>9.0</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>jackson-databind</artifactId>
+                    <groupId>tools.jackson.core</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <!-- Needed to override the version for logstash-logback-encoder to one with vulnerability fixes -->
+            <groupId>tools.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>3.2.1</version>
         </dependency>
 
         <dependency>

@@ -2,31 +2,30 @@
         xmlns="http://www.ehcache.org/v3"
         xsi:schemaLocation="http://www.ehcache.org/v3 http://www.ehcache.org/schema/ehcache-core-3.0.xsd">
 
-    <cache alias="default">
+    <!--
+      Default template used by all named caches below.
+      Also used as a baseline for any cache regions created at runtime via
+      hibernate.javax.cache.missing_cache_strategy=create-warn.
+      NOTE: Ehcache 3 does NOT automatically apply this template to JCache-API-created
+      caches; see named caches below for the regions Hibernate actually uses.
+    -->
+    <cache-template name="default-ttl">
         <expiry>
-            <ttl unit="minutes">20</ttl>
+            <ttl unit="minutes">20  </ttl>
         </expiry>
         <resources>
             <heap>10000</heap>
             <offheap unit="MB">100</offheap>
         </resources>
-    </cache>
-    <cache alias="no.ssb.klass.core.model.CorrespondenceMap">
-        <expiry>
-            <ttl unit="minutes">20</ttl>
-        </expiry>
-        <resources>
-            <heap>10000</heap>
-            <offheap unit="MB">100</offheap>
-        </resources>
-    </cache>
-    <cache alias="no.ssb.klass.core.model.CorrespondenceTable.correspondenceMaps">
-        <expiry>
-            <ttl unit="minutes">20</ttl>
-        </expiry>
-        <resources>
-            <heap>10000</heap>
-            <offheap unit="MB">100</offheap>
-        </resources>
-    </cache>
+    </cache-template>
+
+    <!-- Fallback region (named "default") – not used by Hibernate directly -->
+    <cache alias="default" uses-template="default-ttl"/>
+
+    <!-- Hibernate second-level cache: CorrespondenceMap entity -->
+    <cache alias="no.ssb.klass.core.model.CorrespondenceMap" uses-template="default-ttl"/>
+
+    <!-- Hibernate second-level cache: CorrespondenceTable.correspondenceMaps collection -->
+    <cache alias="no.ssb.klass.core.model.CorrespondenceTable.correspondenceMaps" uses-template="default-ttl"/>
+
 </config>

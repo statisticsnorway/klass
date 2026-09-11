@@ -31,6 +31,11 @@ public class MarkedTranslationCodeTable extends TranslationCodeTable {
     @Override
     protected Item addClassificationItemToTable(ClassificationItem classificationItem) {
         Item item = super.addClassificationItemToTable(classificationItem);
+        if (item == null) {
+            log.info("Item {} is null", classificationItem.getUuid());
+            return null;
+        }
+
         if (classificationItem instanceof ConcreteClassificationItem) {
             Label mark = new Label("*");
             setPropertyValue(item.getItemProperty(TRANSLATABLE_MARK_COLUMN), mark);

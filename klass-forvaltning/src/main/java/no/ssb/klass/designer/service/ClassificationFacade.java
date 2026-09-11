@@ -6,6 +6,8 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import no.ssb.klass.core.model.Changelog;
 import no.ssb.klass.core.model.ClassificationFamily;
@@ -109,46 +111,50 @@ public class ClassificationFacade {
         return classificationService.saveStatisticalUnit(stat);
     }
 
+    @Transactional(propagation = Propagation.NEVER)
     public ClassificationSeries saveClassification(ClassificationSeries classification) {
         classificationService.saveNotIndexClassification(classification);
         log.info("Classification saved {}", classification);
-        subscriberService.informSubscribersOfUpdatedClassification(classification,
+        tryInformSubscribers(classification,
                 "Endring i metadata for klassifikasjonen: " + classification.getNameInPrimaryLanguage(),
                 "Oppdatert metadata for klassifikasjonen");
         return classification;
     }
 
+    @Transactional(propagation = Propagation.NEVER)
     public CorrespondenceTable saveCorrespondenceTable(CorrespondenceTable correspondenceTable,
                                                        InformSubscribers informSubscribers) {
         classificationService.saveNotIndexCorrespondenceTable(correspondenceTable);
         log.info("Correspondence table saved {}", correspondenceTable);
         if (informSubscribers.isInformSubscribers()) {
-            subscriberService.informSubscribersOfUpdatedClassification(correspondenceTable.getOwnerClassification(),
+            tryInformSubscribers(correspondenceTable.getOwnerClassification(),
                     "Endring i korrespondansetabellen: " + correspondenceTable.getNameInPrimaryLanguage(),
                     informSubscribers.getDescriptionOfChange());
         }
         return correspondenceTable;
     }
 
+    @Transactional(propagation = Propagation.NEVER)
     public void saveVariant(ClassificationVariant variant,
                                              InformSubscribers informSubscribers) {
         classificationService.saveNotIndexVariant(variant);
         log.info("Classification variant saved {}", variant);
         if (informSubscribers.isInformSubscribers()) {
-            subscriberService.informSubscribersOfUpdatedClassification(variant.getOwnerClassification(),
-                    "Endring i varianten: " + variant.getNameInPrimaryLanguage(), informSubscribers
-                            .getDescriptionOfChange());
+            tryInformSubscribers(variant.getOwnerClassification(),
+                    "Endring i varianten: " + variant.getNameInPrimaryLanguage(),
+                    informSubscribers.getDescriptionOfChange());
         }
     }
 
+    @Transactional(propagation = Propagation.NEVER)
     public ClassificationVersion saveVersion(ClassificationVersion version,
                                              InformSubscribers informSubscribers) {
         classificationService.saveNotIndexVersion(version);
         log.info("Classification version saved {}", version);
         if (informSubscribers.isInformSubscribers()) {
-            subscriberService.informSubscribersOfUpdatedClassification(version.getOwnerClassification(),
-                    "Endring i versjonen: " + version.getNameInPrimaryLanguage(), informSubscribers
-                            .getDescriptionOfChange());
+            tryInformSubscribers(version.getOwnerClassification(),
+                    "Endring i versjonen: " + version.getNameInPrimaryLanguage(),
+                    informSubscribers.getDescriptionOfChange());
         }
         return version;
     }
@@ -157,42 +163,67 @@ public class ClassificationFacade {
         return classificationService.copyClassificationVersion(originalVersion, dateRange);
     }
 
+    @Transactional(propagation = Propagation.NEVER)
     public void deleteClassification(User currentUser, ClassificationSeries classification)
             throws KlassMessageException {
         classificationService.deleteNotIndexClassification(currentUser, classification);
         log.info("Classification {} deleted", classification);
-        subscriberService.informSubscribersOfUpdatedClassification(classification, "Klassifikasjonen er slettet: "
+        tryInformSubscribers(classification, "Klassifikasjonen er slettet: "
                 + classification.getNameInPrimaryLanguage(), "Klassifikasjonen er slettet");
     }
 
+    @Transactional(propagation = Propagation.NEVER)
     public void deleteCorrespondenceTable(User currentUser,
             CorrespondenceTable correspondenceTable) throws KlassMessageException {
         classificationService.deleteNotIndexCorrespondenceTable(currentUser, correspondenceTable);
         log.info("Correspondence table {} deleted", correspondenceTable);
         if (correspondenceTable.isPublishedInAnyLanguage()) {
-            subscriberService.informSubscribersOfUpdatedClassification(correspondenceTable.getOwnerClassification(),
+            tryInformSubscribers(correspondenceTable.getOwnerClassification(),
                     "Korrespondansetabellen er slettet: " + correspondenceTable.getNameInPrimaryLanguage(),
                     "En korrespondansetabell er slettet");
         }
     }
 
+    @Transactional(propagation = Propagation.NEVER)
     public void deleteVariant(User currentUser, ClassificationVariant variant)
             throws KlassMessageException {
         classificationService.deleteNotIndexVariant(currentUser, variant);
         log.info("Variant {} deleted", variant);
         if (variant.isPublishedInAnyLanguage()) {
-            subscriberService.informSubscribersOfUpdatedClassification(variant.getOwnerClassification(),
+            tryInformSubscribers(variant.getOwnerClassification(),
                     "Varianten er slettet: " + variant.getNameInPrimaryLanguage(), "En variant er slettet");
         }
     }
 
+    @Transactional(propagation = Propagation.NEVER)
     public void deleteVersion(User currentUser, ClassificationVersion version) throws KlassMessageException {
         classificationService.deleteNotIndexVersion(currentUser, version);
         log.info("Version {} deleted", version);
         if (version.isPublishedInAnyLanguage()) {
-            subscriberService.informSubscribersOfUpdatedClassification(version.getOwnerClassification(),
+            tryInformSubscribers(version.getOwnerClassification(),
                     "Versjonen er slettet: " + version.getNameInPrimaryLanguage(), "En versjon er slettet");
         }
+    }
+
+    /**
+     * Notifies subscribers about an updated classification asynchronously so that a slow or
+     * unreachable mail service never blocks the HTTP request / UI save operation. Errors are
+     * logged but never propagated, since the data has already been committed successfully.
+     */
+    private void tryInformSubscribers(ClassificationSeries classification, String whatChanged,
+            String descriptionOfChange) {
+        Thread thread = new Thread(() -> {
+            try {
+                subscriberService.informSubscribersOfUpdatedClassification(classification, whatChanged,
+                        descriptionOfChange);
+            } catch (Exception e) {
+                log.error("Failed to notify subscribers for classification {}: {}",
+                        classification.getId(), e.getMessage(), e);
+            }
+        });
+        thread.setName("subscriber-notification-" + classification.getId());
+        thread.setDaemon(true);
+        thread.start();
     }
 
     public void deleteStatisticalUnit(StatisticalUnit statisticalUnit) {

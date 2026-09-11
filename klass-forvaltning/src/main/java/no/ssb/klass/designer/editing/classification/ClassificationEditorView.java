@@ -39,6 +39,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import no.ssb.klass.designer.util.UsernameUtil;
 
 /**
  * @author Mads Lundemo, SSB.
@@ -434,7 +435,7 @@ public class ClassificationEditorView extends ClassificationEditorComponentLayer
     }
 
     private void populateContactPerson() {
-        List<User> userList = userService.getAllUsers();
+        List<User> userList = UsernameUtil.filterOutEmailUsernames(userService.getAllUsers());
         contactPersonCombobox.clear();
         for (User user : userList) {
             contactPersonCombobox.addItem(user);

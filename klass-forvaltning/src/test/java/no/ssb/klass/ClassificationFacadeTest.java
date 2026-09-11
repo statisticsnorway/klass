@@ -239,6 +239,6 @@ public class ClassificationFacadeTest {
     }
 
     private void verifyInformSubscribers() {
-        verify(subscriberServiceMock).informSubscribersOfUpdatedClassification(any(), any(), any());
+        verify(subscriberServiceMock, timeout(2000)).informSubscribersOfUpdatedClassification(any(), any(), any());
     }
 }

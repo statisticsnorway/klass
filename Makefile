@@ -93,13 +93,6 @@ run-klass-forvaltning-local-postgres:
 	popd; \
 	${sdk} env clear
 
-.PHONY: run-klass-forvaltning-local-postgres-search
-run-klass-forvaltning-local-postgres-search:
-	pushd klass-forvaltning && \
-	${sdk} env && \
-	mvn spring-boot\:run -Dspring.profiles.active=frontend,postgres-local,hardcoded-user,mock-mailserver,small-import,skip-indexing,remote-solr -Dklass.env.search.solr.url=http://localhost:8983/solr/; \
-	popd; \
-	${sdk} env clear
 
 
 .PHONY: run-klass-api-local-postgres
