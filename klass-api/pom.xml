@@ -15,7 +15,6 @@
 
     <properties>
         <snippetsDirectory>${project.build.directory}/generated-snippets</snippetsDirectory>
-        <tomcat.version>10.1.55</tomcat.version>
     </properties>
 
 
