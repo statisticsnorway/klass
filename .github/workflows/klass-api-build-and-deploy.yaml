@@ -23,6 +23,10 @@ on:
           - test
           - prod
 
+concurrency:
+  group: klass-api-${{ github.event_name }}-${{ github.event.inputs.cluster || 'automatic' }}
+  cancel-in-progress: true
+
 jobs:
   docker-build:
     name: Docker Build
