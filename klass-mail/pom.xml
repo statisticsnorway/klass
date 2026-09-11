@@ -15,7 +15,6 @@
 
     <properties>
         <spring-cloud-gcp-dependencies.version>7.4.10</spring-cloud-gcp-dependencies.version>
-        <tomcat.version>10.1.55</tomcat.version>
     </properties>
 
     <dependencies>
