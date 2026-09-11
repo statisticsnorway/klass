@@ -1,0 +1,282 @@
+﻿adkomst, tilkomst, veg, heimel
+alkoholholdig, alkoholhaldig
+allmennheten, folk
+anbud, anbod
+andel, del, part
+ankomst, framkomst, innkomst
+anmelde, melda
+ansatt, tilsett
+ansettelse, tilsetjing
+anskaffelse, kjøp, nyskaffing
+anslag, overslag
+antall, kor mange
+arbeidsledig, arbeidslaus, arbeidslause, arbeidsløs, arbeidsledighet, ledighet, arbeidsløyse, arbeidsløshet, langtidsledige
+arbeidsmarked, arbeidsmarknad
+arbeidssøker, arbeidssøkjar
+arbeidstillatelse, arbeidsløyve
+avskrivning, avskriving
+avstemning, røysting
+beboer, bebuar, dei som bur i, innbyggjar
+bebyggelse, busetnad, bygningar, bygningsmasse, hus, bolig
+befolkning, folk, folkesetnad, folketall, innbyggertall, folketal, folkemengde, folkemengd
+befolkningsprognose, befolkningsframskrivning
+beholde, halde, behalde
+beholdning, kassesum, kontantar, behaldning
+bemanning, arbeidsstokk, bemanning, mannskap
+beskatning, skattlegging, utnytting
+bestand, populasjon, setnad, bestand, førekomst
+bevegelse, rørsle
+bevilgning, løyving
+bevilling, løyve
+bistand, assistanse, hjelp, medverknad, støtte
+bnp, bruttonasjonalprodukt
+bni, bruttonasjonalinntekt
+bo, bu
+bolig, bustad
+boligformue, bustadformue
+boligprisindeks, bustadprisindeks, boligpris
+bosetning, busetnad
+bosetting, busetjing
+bosted, bustad
+bostøtte, bustønad, bustøtte
+bredbånd, breiband
+bygge, byggje
+byggekostnadsindeks, byggjekostnadsindeks
+bønder, gårdbrukere
+bærekraftighet, berekraft
+deltakelse, deltaking
+dødelighet, dødsprosent, dødstal, dødelegheit
+egenandel, eigendel
+egenerklæring, eigenfråsegn
+egenmelding, eigenmelding
+eiendel, eigedel, eignelut
+eiendom, eigedom
+eier, eigar
+eierandel, eigardel
+eierskap, eigarskap
+eksport, utførsel
+ekteskap, giftarmål
+ektefelle, ektemake
+enebolig, einebustad
+engangsstønad, eingongsstønad
+enhet, einskap
+enhetsskole, einskapsskule
+enslig, einsleg
+ensomhet, einsemd
+erstatning, skadebot, vederlag, erstatning
+erstatte, vederlag
+erverv, arbeid, yrke
+ervervsevne, arbeidsevne, inntektsevne
+ervervstillatelse, overtakingsløyve
+etterlatt, attlevande, etterlaten
+etterlattepensjon, attlevandepensjon, etterlatnepensjon
+etterspørsel, etterspurnad, etterspørsel
+faglighet, fagkunne
+fattig, fattige, fattigdom
+ferdighet, dugleik, evne, tame, ferdigheit
+flom, flaum
+fogd, fut
+folketelling, folketeljing
+forbindelse, samband
+forbruk, konsum
+forbrytelse, brotsverk, kriminalitet, lovbrudd, kriminalstatistikk
+forbryter, brotsmann, forbrytar
+fordring, krav, tilgodehav
+fordringsløshet, kravløyse
+fordringsløyse, kravløyse
+forebyggelse, førebygging
+foregående, føregåande, førre
+forekomst, funn, førekomst
+foreløpig, førebels
+forespørsel, førespurnad
+foretak, føretak
+forhøyelse, auke, auking, oppgang
+forhøyet, auka, større
+fornybar, fornyast, vinnast, fornyeleg
+forpliktelse, skyldnad, plikt, forplikting
+forpliktet, skyldig, pliktig, forplikta
+forseelse, misferd, misfaring
+forsikring, trygding, forsikring, lovnad
+forsinkelse, seinking
+forskjell, skilnad
+forskjellig, ulik, ymse
+forskning, forsking
+forskudd, forskot
+forsørger, forsytar, forsørgjar
+fortegnelse, liste, oppgåve
+fortløpende, etter kvart, jamleg, samanhangande, ubroten
+fortrinnsrett, førerett
+forurense, ureina
+forurensning, ureining, forureinsing
+forutsetning, føresetnad, grunnlag, vilkår
+forutsigbarhet, føreseielegheit
+forventet, pårekna, venta
+forventning, von
+fradrag, frådrag
+fravær, fråvær
+fremkommelighet, framkjømd, framkomelegheit, samband
+frivillighet, frivilligheit
+nedkomst, fødsel, nedkomst, fødsler, fødte
+gevinst, vinst, gevinst
+gjenbruk, attbruk, ombruk, gjenbruk
+gjenvalg, attval
+gjenvinning, attvinning, gjenvinning
+godtgjørelse, godtgjersle
+grunnskole, grunnskule
+grunnkrets, grunnkrins
+hastighet, fart, hastigheit
+havn, hamn
+helbred, helse
+henlegge, bortleggje
+hensikt, føremål, mål, siktemål
+hensiktsmessig, føremålstenleg, god, tenleg
+henvendelse, førespurnad, kontakt, brev, spørsmål
+henvisning, tilvising
+hjem, heim
+hjemmel, heimel
+husholdning, husstand, hushald
+høyesterett, høgsterett
+import, innførsel
+inflasjon, konsumprisindeks
+index, indeks, prisindeks
+innbrudd, innbrot
+innbygger, innbyggjar
+innsatt, innsett
+iverksettelse, iverksetjing
+kilde, kjelde
+kirke, kyrkje
+kjedsomhet, keisemd
+kjemikalier, kjemikal, kjemikalium
+kjennelse, orskurd
+klageadgang, klagerett
+kommunevalg, kommunestyrevalg
+konkursbegjæring, krav om konkurs
+konsumprisindeksen, konsumpriser, prisvekst, konsumpris, inflasjon, kpi
+kostnadsberegne, kostnadsrekna
+krets, krins
+langsiktighet, langsiktigheit
+ledelse, leiing
+lege, lækjar
+legemiddel, lækjemiddel
+leilighet, husvære
+lovbestemmelse, lovføresegn
+lovbestemt, lovbestemd, lovpålagd
+lovgivning, lovgjeving
+lovlighet, lovleg, lovlegheit
+lovlydighet, lovlydnad
+lovmessig, lovbunden
+lærested, lærestad
+lønnet, lønsarbeid
+lønnsomhet, lønsemd
+løslatelse, lauslating, frisetje
+løsøre, lausøyre
+mangfold, mangfald
+marked, marknad
+markedsadgang, marknadstilgang
+medbestemmelsesrett, medråderett
+meddelelse, kunngjering, melding
+meddelelse, melding
+medvirkning, medverknad, medverking
+menighet, kyrkjelyd, forsamling
+menighetsråd, sokneråd
+merverdiavgift, meirverdiavgift
+myndighet, styresmakt, avgjerdsmakt, avgjerdsrett, mynde
+myndighetsområde, ansvarsområde
+nasjonalregnskap, nasjonalrekneskap
+navn, namn, navnestatestikk, navnesøk, navnestatistikk
+norge, noreg
+nyankommet, nykomen
+nyanskaffelse, nyinnkjøp
+nyhet, nyhende, nyheit
+nytelsesmiddel, nytingsmiddel
+næringsvirksomhet, næringsverksemd
+offentlig, offentleg
+offentlighet, offentlegheit
+offentlighetslov, offentleglov
+omsetning, omsetnad
+opphør, nedlegging, opphøyr, stans
+overskridelse, kryssing, overskriding
+pcaxis, axis
+prisnedsettelse, prisnedslag
+påtalemyndighet, påtalemakt
+rederi, reiarlag
+redskap, reiskap
+regnskap, rekneskap
+rettledning, rettleiing
+rettsvesen, rettsstell
+saksbehandler, saksarbeidar, saksbehandlar, sakshandsamar
+salg, sal
+samboer, sambuar
+sammenliknbar, jamførast, samanliknbar
+sammenlikning, jamføring, samanlikna
+sedelighetsdømt, utuktsdømd
+selvangivelse, sjølvmelding
+selvmord, sjølmord
+selvstendig, sjølvstendig
+senter, senter
+sentrum, sentrum
+sikkerhet, trygging, tryggleik, visse
+sikkerhetstjenesten, tryggingstenesta
+skatteregnskap, skatterekneskap
+skilsmiss, skilsmål, skilsmisse
+skolevesen, skuleverk
+statestikk, statistikk
+sted, stad
+stemmeberettiget, røystefør
+stemmegivning, røysting
+stemmerett, røysterett
+sterilisering, steriliseringar
+stiftelse, stifting
+straffbar, strafflagd, straffbar
+strøm, straum
+stønadsberettiget, stønadsrett
+sykrfravær, sjukefråvere
+sykehjem, sjukeheim
+sykehus, sjukehus
+sysselsatte, sysselsetting, sysselsette
+søsken, sysken
+tall, tal
+taushetsplikt, teieplikt
+telle, telja
+telling, teljing
+tilbud, tilbod
+tilgjengelighet, tilgang, tilgjengelegheit
+tillatelse, løyve, lov
+tilskudd, tilskot
+tjeneste, teneste
+tro, tru, trusamfunn, trosamfunn
+trygghet, tryggleik
+tvungen, pliktig, tvungen
+uaktsomhet, aktløyse
+uavhengig, sjølvstendig, uavhengig, ubunden
+ubesatt, vakant
+ubetinget, utan vilkår, vilkårslaus
+uførhet, uførleik, uføre, ufør
+uke, veke
+ulønnet, ulønt
+underskudd, underskot
+undersøkelse, gransking, undersøking
+utbytte, utbyte
+utenrikshandel, utanrikshandel
+utsatt, utsett
+utslipp, utslepp
+utvalg, utval
+valg, val
+valgkrets, valkrins
+veilede, rettleia
+veiledning, rettleiing
+virkedag, yrkedag
+virksomhet, verksemd
+vitenskap, vitskap
+vitenskapelig, vitskapleg
+vitnesbyrd, vitnemål
+vold, vald
+voldsforbrytelse, valdsbrotsverk, valdskriminalitet
+voldsoffer, valdsoffer
+ytelse, yting
+karasjok, karasjohka
+nesseby, unjarga
+tana, deatnu
+kåfjord, gaivuotna
+kautokeino, guovdageaidnu
+porsángu, porsanki, porsanger

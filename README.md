@@ -15,6 +15,7 @@ Klass consists of 4 maven modules
 - Klass API (Standalone application that provides the Klass API)
 - Klass Forvaltning (Internal tool for maintenance of classifications)
 - Klass Shared (Classes shared between API and Forvaltning. primary database and search components)
+- Klass Solr (Solr Core configuration and configuration for embedded solr for test/development)
 - Klass Index Job (Responsible for periodically updating the OpenSearch index)
 
 ## Build

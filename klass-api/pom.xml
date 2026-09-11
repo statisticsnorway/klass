@@ -10,12 +10,11 @@
     <parent>
         <groupId>no.ssb.klass</groupId>
         <artifactId>klass-root</artifactId>
-        <version>5.0.5-SNAPSHOT</version>
+        <version>5.0.9-SNAPSHOT</version>
     </parent>
 
     <properties>
         <snippetsDirectory>${project.build.directory}/generated-snippets</snippetsDirectory>
-        <tomcat.version>10.1.55</tomcat.version>
     </properties>
 
 

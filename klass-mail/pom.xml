@@ -10,12 +10,11 @@
     <parent>
         <groupId>no.ssb.klass</groupId>
         <artifactId>klass-root</artifactId>
-        <version>5.0.5-SNAPSHOT</version>
+        <version>5.0.9-SNAPSHOT</version>
     </parent>
 
     <properties>
         <spring-cloud-gcp-dependencies.version>7.4.10</spring-cloud-gcp-dependencies.version>
-        <tomcat.version>10.1.55</tomcat.version>
     </properties>
 
     <dependencies>

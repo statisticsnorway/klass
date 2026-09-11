@@ -50,6 +50,7 @@ spec:
         - application: klass-mail
     inbound:
       rules:
+        - application: vardef
         - application: dataportalen
   openSearch:
     access: admin

@@ -9,19 +9,21 @@ spec:
   groups:
     - name: dapla-metadata
       rules:
-        # This one doesn't work when there isn't any traffic.
-        #        - alert: HTTP error responses
-        #          expr: 100 * sum(rate(nginx_ingress_controller_request_duration_seconds_count{ingress="klass-nais-ingress-eaceac17",status!~"[4-5].*"}[10m])) by (ingress) / sum(rate(nginx_ingress_controller_request_duration_seconds_count{ingress="klass-nais-ingress-eaceac17"}[10m])) by (ingress) < 75.0
-        #          for: 3m
-        #          annotations:
-        #            title: "HTTP error responses"
-        #            consequence: "A high number of HTTP requests are receiving error responses. This may indicate a problem with the application."
-        #            action: "Investigate whether this indicates an app failure or user errors."
-        #          labels:
-        #            service: klass-api
-        #            namespace: dapla-metadata
-        #            severity: critical
-        #            environment: test
+        - alert: HTTP error responses
+          expr: >-
+            (100 * sum(rate(haproxy_backend_http_responses_total{proxy=~"dapla-metadata_klass.*", code!~"5xx"}[10m]))
+            / sum(rate(haproxy_backend_http_responses_total{proxy=~"dapla-metadata_klass.*"}[10m])) < 75.0)
+            and sum(rate(haproxy_backend_http_responses_total{proxy=~"dapla-metadata_klass.*"}[10m])) > 0
+          for: 3m
+          annotations:
+            title: "HTTP error responses"
+            consequence: "A high number of HTTP requests are receiving error responses. This may indicate a problem with the application."
+            action: "Investigate whether this indicates an app failure or user errors."
+          labels:
+            service: klass-api
+            namespace: dapla-metadata
+            severity: critical
+            environment: test
 
         - alert: High heap memory usage
           expr: (100 * sum by (instance) (jvm_memory_used_bytes{application="klass", area="heap"})) / (sum by (instance) (jvm_memory_max_bytes{application="klass", area="heap"}) ) > 90.0
@@ -43,6 +45,19 @@ spec:
             title: "A Klass-api client is unavailable "
             consequence: "The service may lack some functionality"
             description: "Client {{ $labels.serviceId }} responded with {{ $labels.status }} causing {{ $labels.exception }}"
+          labels:
+            service: klass-api
+            namespace: dapla-metadata
+            severity: critical
+            environment: test
+
+        - alert: GET operation timeouts
+          expr: sum(rate(http_server_requests_seconds_count{application="klass", method="GET", outcome="TIMEOUT"}[5m])) > 0.1
+          for: 2m
+          annotations:
+            title: "GET operation timeouts"
+            consequence: "Multiple GET requests are timing out. Users may be experiencing failed or slow responses."
+            action: "Check application logs for timeout details. Investigate slow queries, caching issues, or resource exhaustion."
           labels:
             service: klass-api
             namespace: dapla-metadata

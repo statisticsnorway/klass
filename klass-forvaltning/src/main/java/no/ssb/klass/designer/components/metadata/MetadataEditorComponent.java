@@ -1,6 +1,7 @@
 package no.ssb.klass.designer.components.metadata;
 
 import static no.ssb.klass.core.util.TimeUtil.*;
+import java.util.stream.Collectors;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -38,6 +39,7 @@ import no.ssb.klass.designer.util.PassiveValidationUtil;
 import no.ssb.klass.designer.util.VaadinUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import no.ssb.klass.designer.util.UsernameUtil;
 
 /**
  * @author Mads Lundemo, SSB.
@@ -155,7 +157,7 @@ public class MetadataEditorComponent extends CustomComponent implements HasEditi
         boolean isReadOnly = personCombobox.isReadOnly();
         personCombobox.setReadOnly(false);
         personCombobox.removeAllItems();
-        List<User> userList = userService.getAllUsers();
+        List<User> userList = UsernameUtil.filterOutEmailUsernames(userService.getAllUsers());
         personCombobox.clear();
         for (User user : userList) {
             personCombobox.addItem(user);
