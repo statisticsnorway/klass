@@ -12,6 +12,10 @@ on:
       - ".nais/**/klass-mail.yaml"
       - ".github/workflows/klass-mail-build-and-deploy.yaml"
 
+concurrency:
+  group: klass-mail-${{ github.event_name }}
+  cancel-in-progress: true
+
 jobs:
   docker-build:
     name: Docker build
@@ -71,7 +75,7 @@ jobs:
       id-token: "write"
       packages: "read"
     runs-on: ubuntu-latest
-    if: github.event_name != 'release' && needs.docker-build.outputs.prod-config-only != 'true'
+    if: github.event_name != 'release' && needs.docker-build.outputs.prod-config-changed != 'true'
     steps:
       - name: Checkout
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
