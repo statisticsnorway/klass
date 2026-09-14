@@ -66,7 +66,7 @@ spec:
 
         - alert: Klass is unavailable
           expr: kube_deployment_status_replicas_available{deployment="klass"} == 0
-          for: 1m
+          for: 5m
           annotations:
             title: "Klass-api is unavailable"
             consequence: "Service is unavailable to users. "
