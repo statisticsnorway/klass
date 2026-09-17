@@ -15,8 +15,8 @@ spec:
     max: 2
   resources:
     requests:
-      cpu: 500m
-      memory: 8192Mi
+      cpu: 176m
+      memory: 2976Mi
     limits:
       memory: 8192Mi
   gcp:
