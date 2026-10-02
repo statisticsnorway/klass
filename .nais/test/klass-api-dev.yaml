@@ -49,6 +49,10 @@ spec:
     outbound:
       rules:
         - application: klass-mail
+    inbound:
+      rules:
+        - application: dataportalen
+        - application: dataportalen-dev
   openSearch:
     access: admin
     instance: klass-search

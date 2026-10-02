@@ -15,8 +15,8 @@ spec:
     max: 2
   resources:
     requests:
-      cpu: 500m
-      memory: 8192Mi
+      cpu: 176m
+      memory: 2976Mi
     limits:
       memory: 8192Mi
   gcp:
@@ -39,6 +39,8 @@ spec:
       value: logstash
     - name: KLASS_ENV_CLIENT_KLASS_MAIL_URL
       value: http://klass-mail
+    - name: KLASS_PUBLIC_BASE_URL
+      value: https://data.ssb.no
     - name: JAVA_TOOL_OPTIONS
       value: "-XX:+ExitOnOutOfMemoryError -XX:InitialRAMPercentage=75.0 -XX:MaxRAMPercentage=75.0"
 
@@ -48,6 +50,7 @@ spec:
         - application: klass-mail
     inbound:
       rules:
+        - application: vardef
         - application: dataportalen
   openSearch:
     access: admin

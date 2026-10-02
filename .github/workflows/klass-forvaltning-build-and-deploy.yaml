@@ -38,10 +38,10 @@ jobs:
       only-config-changed: ${{ steps.changed-files.outputs.changed == 'only-inputs'}}
     steps:
       - name: Checkout
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
-      - uses: actions/setup-java@ad2b38190b15e4d6bdf0c97fb4fca8412226d287 # v5.3.0
+      - uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
         with:
           distribution: 'temurin'
           java-version: '8'
@@ -69,7 +69,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Build and push
         if: steps.changed-files.outputs.changed != 'only-inputs' || github.event.inputs.cluster == 'test' || github.event.inputs.cluster == 'prod'
-        uses: nais/docker-build-push@f8bc7437f7549c2b08197152d781b98f8727a08a # v0
+        uses: nais/docker-build-push@0e73849f69ff260ee27597553c0a7848ca4e9795 # v0
         id: docker-build-push
         with:
           team: dapla-metadata
@@ -88,9 +88,9 @@ jobs:
     if: (github.event_name != 'push' || !startsWith(github.ref, 'refs/tags/')) && (github.event_name != 'release' || github.event.inputs.cluster == 'test' || needs.docker-build.outputs.test-config-changed == 'true')
     steps:
       - name: Checkout
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - uses: nais/deploy/actions/deploy@5fdd91aaf69bb0d6dd5e5118cdacb639f487b93b # v2
+      - uses: nais/deploy/actions/deploy@027a91857992525139798892f2804b0ca21f4af6 # v2
         env:
           CLUSTER: test
           RESOURCE: .nais/test/klass-forvaltning.yaml
@@ -109,9 +109,9 @@ jobs:
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/forvaltning-') || (needs.docker-build.outputs.prod-config-changed == 'true' && needs.docker-build.outputs.only-config-changed == 'true')
     steps:
       - name: Checkout
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - uses: nais/deploy/actions/deploy@5fdd91aaf69bb0d6dd5e5118cdacb639f487b93b # v2
+      - uses: nais/deploy/actions/deploy@027a91857992525139798892f2804b0ca21f4af6 # v2
         env:
           CLUSTER: prod
           RESOURCE: .nais/prod/klass-forvaltning.yaml

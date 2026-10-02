@@ -28,10 +28,10 @@ spec:
     max: 1
   resources:
     requests:
-      cpu: 600m
-      memory: 1500Mi
+      cpu: 50m
+      memory: 1056Mi
     limits:
-      memory: 1500Mi
+      memory: 1056Mi
   env:
     - name: SPRING_PROFILES_ACTIVE
       value: frontend, postgres, skip-indexing, embedded-solr

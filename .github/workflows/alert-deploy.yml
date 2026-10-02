@@ -21,7 +21,7 @@ jobs:
       test-alerts: ${{ steps.discover.outputs.test }}
       prod-alerts: ${{ steps.discover.outputs.prod }}
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - id: discover
         run: |
@@ -42,9 +42,9 @@ jobs:
       matrix:
         resource: ${{ fromJson(needs.discover-alerts.outputs.test-alerts) }}
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Deploy ${{ matrix.resource }} to test
-        uses: nais/deploy/actions/deploy@5fdd91aaf69bb0d6dd5e5118cdacb639f487b93b # v2
+        uses: nais/deploy/actions/deploy@027a91857992525139798892f2804b0ca21f4af6 # v2
         env:
           CLUSTER: test
           RESOURCE: ${{ matrix.resource }}
@@ -58,9 +58,9 @@ jobs:
       matrix:
         resource: ${{ fromJson(needs.discover-alerts.outputs.prod-alerts) }}
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Deploy ${{ matrix.resource }} to prod
-        uses: nais/deploy/actions/deploy@5fdd91aaf69bb0d6dd5e5118cdacb639f487b93b # v2
+        uses: nais/deploy/actions/deploy@027a91857992525139798892f2804b0ca21f4af6 # v2
         env:
           CLUSTER: prod
           RESOURCE: ${{ matrix.resource }}

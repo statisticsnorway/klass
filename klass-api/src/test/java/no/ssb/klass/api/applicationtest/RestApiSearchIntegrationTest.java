@@ -301,6 +301,24 @@ class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest {
     }
 
     @Test
+    void restServiceSearchByClassificationId() {
+        given().port(port)
+                .accept(ContentType.JSON)
+                .param(QUERY, kommuneinndeling.getId().toString())
+                .get(REQUEST_SEARCH)
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .contentType(ContentType.JSON)
+                .body(JSON_PAGE + ".totalElements", equalTo(2))
+                .body(
+                        JSON_SEARCH_RESULTS + ".name",
+                        hasItems(
+                                TestDataProvider.KOMMUNEINNDELING_NAVN_NO,
+                                TestDataProvider.KOMMUNEINNDELING_NAVN_NN));
+    }
+
+    @Test
     void restServiceSearchGetClassificationAndNotCodeListJSON() {
         given().port(port)
                 .accept(ContentType.JSON)

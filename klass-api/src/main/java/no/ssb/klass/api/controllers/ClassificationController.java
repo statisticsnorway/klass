@@ -30,6 +30,7 @@ import no.ssb.klass.core.util.DateRange;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
@@ -47,6 +48,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.servlet.view.RedirectView;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.beans.PropertyEditorSupport;
 import java.net.MalformedURLException;
@@ -67,6 +69,12 @@ public class ClassificationController {
     private final SearchService searchService;
     private final StatisticsService statisticsService;
     private final CsvFieldsValidator csvFieldsValidator;
+
+    @Value("${klass.env.api.public.base.url}")
+    private String publicBaseUrl;
+
+    @Value("${klass.env.api.base}")
+    private String apiBase;
 
     @Autowired
     public ClassificationController(
@@ -805,9 +813,10 @@ public class ClassificationController {
         }
         try {
             URL endSubscriptionUrl =
-                    WebMvcLinkBuilder.linkTo(
-                                    WebMvcLinkBuilder.methodOn(ClassificationController.class)
-                                            .removeTracking(classificationId, email))
+                    UriComponentsBuilder.fromUriString(publicBaseUrl)
+                            .path(apiBase + "/classifications/{id}/removeTracking")
+                            .queryParam("email", email)
+                            .buildAndExpand(classificationId)
                             .toUri()
                             .toURL();
 
@@ -815,9 +824,9 @@ public class ClassificationController {
                     subscriberService.trackChanges(email, classification, endSubscriptionUrl);
 
             URL verifySubscriptionUrl =
-                    WebMvcLinkBuilder.linkTo(
-                                    WebMvcLinkBuilder.methodOn(ClassificationController.class)
-                                            .verifyTracking(email, token))
+                    UriComponentsBuilder.fromUriString(publicBaseUrl)
+                            .path(apiBase + "/classifications/verifyTracking/{email}/{token}")
+                            .buildAndExpand(email, token)
                             .toUri()
                             .toURL();
 
