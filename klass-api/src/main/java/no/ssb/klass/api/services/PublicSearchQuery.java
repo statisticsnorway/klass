@@ -42,6 +42,7 @@ public class PublicSearchQuery {
                 QueryBuilders.boolQuery()
                         .should(titlePrefixMatch(query))
                         .should(fuzzyTitleMatch(query))
+                        .should(partialTitleMatch(query))
                         .should(fuzzyDescriptionMatch(query))
                         .should(descriptionAndCodesMatch(query))
                         .minimumShouldMatch(1);
@@ -83,12 +84,16 @@ public class PublicSearchQuery {
     }
 
     private static QueryBuilder fuzzyTitleMatch(String query) {
-        // Allow a one-edit fuzzy match in titles and descriptions.
+        // Allow a one-edit fuzzy match in titles.
         return QueryBuilders.matchQuery("title", query)
                 .fuzziness(Fuzziness.fromEdits(1))
                 .prefixLength(2)
                 .maxExpansions(30)
                 .boost(5.0f);
+    }
+
+    private static QueryBuilder partialTitleMatch(String query) {
+        return QueryBuilders.matchQuery("title.partial", query).operator(Operator.AND).boost(0.5f);
     }
 
     private static QueryBuilder fuzzyDescriptionMatch(String query) {

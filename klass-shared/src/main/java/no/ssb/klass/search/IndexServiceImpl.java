@@ -33,6 +33,14 @@ public class IndexServiceImpl implements IndexService {
 
     private static final String ANALYZER = "analyzer";
     private static final String SEARCH_ANALYZER = "search_analyzer";
+    private static final String TOKENIZER = "tokenizer";
+    private static final String STANDARD_TOKENIZER = "standard";
+    private static final String TOKEN_FILTERS = "filter";
+    private static final String CUSTOM_ANALYZER = "custom";
+    private static final String LOWERCASE_FILTER = "lowercase";
+    private static final String TITLE_PARTIAL_ANALYZER = "title_partial_analyzer";
+    private static final String TITLE_PARTIAL_SEARCH_ANALYZER = "title_partial_search_analyzer";
+    private static final String TITLE_PARTIAL_FILTER = "title_partial_filter";
 
     private static final String ITEM_ID = "itemid";
     private static final String UUID = "uuid";
@@ -89,55 +97,73 @@ public class IndexServiceImpl implements IndexService {
 
             Map<String, Object> settings =
                     Map.of(
+                            "index",
+                            Map.of("max_ngram_diff", 17),
                             "analysis",
                             Map.of(
                                     ANALYZER,
                                     Map.of(
                                             NORWEGIAN_STEMMER_ANALYZER,
-                                            Map.of(
-                                                    "type", "custom",
-                                                    "tokenizer", "standard",
-                                                    "filter",
+                                                    customAnalyzer(
                                                             List.of(
-                                                                    "lowercase",
-                                                                    "norwegian_stemmer"))),
-                                    "filter",
+                                                                    LOWERCASE_FILTER,
+                                                                    "norwegian_stemmer")),
+                                            TITLE_PARTIAL_ANALYZER,
+                                                    customAnalyzer(
+                                                            List.of(
+                                                                    LOWERCASE_FILTER,
+                                                                    TITLE_PARTIAL_FILTER)),
+                                            TITLE_PARTIAL_SEARCH_ANALYZER,
+                                                    customAnalyzer(List.of(LOWERCASE_FILTER))),
+                                    TOKEN_FILTERS,
                                     Map.of(
                                             "norwegian_stemmer",
-                                            Map.of(
-                                                    "type", "stemmer",
-                                                    "name", "norwegian"))));
+                                            Map.of(TYPE, "stemmer", "name", "norwegian"),
+                                            TITLE_PARTIAL_FILTER,
+                                            Map.of(TYPE, "ngram", "min_gram", 3, "max_gram", 20))));
 
             Map<String, Object> mappings =
                     Map.of(
                             "properties",
                             Map.of(
                                     TITLE,
+                                    Map.of(
+                                            "type",
+                                            "text",
+                                            ANALYZER,
+                                            NORWEGIAN_STEMMER_ANALYZER,
+                                            SEARCH_ANALYZER,
+                                            NORWEGIAN_STEMMER_ANALYZER,
+                                            "fields",
                                             Map.of(
-                                                    "type",
-                                                    "text",
-                                                    ANALYZER,
-                                                    NORWEGIAN_STEMMER_ANALYZER,
-                                                    SEARCH_ANALYZER,
-                                                    NORWEGIAN_STEMMER_ANALYZER),
+                                                    "partial",
+                                                    Map.of(
+                                                            "type",
+                                                            "text",
+                                                            ANALYZER,
+                                                            TITLE_PARTIAL_ANALYZER,
+                                                            SEARCH_ANALYZER,
+                                                            TITLE_PARTIAL_SEARCH_ANALYZER))),
                                     DESCRIPTION,
-                                            Map.of(
-                                                    "type",
-                                                    "text",
-                                                    ANALYZER,
-                                                    NORWEGIAN_STEMMER_ANALYZER,
-                                                    SEARCH_ANALYZER,
-                                                    NORWEGIAN_STEMMER_ANALYZER),
+                                    Map.of(
+                                            "type",
+                                            "text",
+                                            ANALYZER,
+                                            NORWEGIAN_STEMMER_ANALYZER,
+                                            SEARCH_ANALYZER,
+                                            NORWEGIAN_STEMMER_ANALYZER),
                                     CODES,
-                                            Map.of(
-                                                    "type",
-                                                    "text",
-                                                    ANALYZER,
-                                                    NORWEGIAN_STEMMER_ANALYZER,
-                                                    SEARCH_ANALYZER,
-                                                    NORWEGIAN_STEMMER_ANALYZER),
-                                    FAMILY, Map.of("type", "keyword"),
-                                    SECTION, Map.of("type", "keyword")));
+                                    Map.of(
+                                            "type",
+                                            "text",
+                                            ANALYZER,
+                                            NORWEGIAN_STEMMER_ANALYZER,
+                                            SEARCH_ANALYZER,
+                                            NORWEGIAN_STEMMER_ANALYZER),
+                                    FAMILY,
+                                    Map.of("type", "keyword"),
+                                    SECTION,
+                                    Map.of("type", "keyword")));
 
             boolean created = indexOps.create(settings);
             if (created) {
@@ -151,6 +177,11 @@ public class IndexServiceImpl implements IndexService {
         } catch (Exception e) {
             log.error("Error creating index '{}': {}", elasticsearchIndex, e.getMessage(), e);
         }
+    }
+
+    private static Map<String, Object> customAnalyzer(List<String> tokenFilters) {
+        return Map.of(
+                TYPE, CUSTOM_ANALYZER, TOKENIZER, STANDARD_TOKENIZER, TOKEN_FILTERS, tokenFilters);
     }
 
     @Override
