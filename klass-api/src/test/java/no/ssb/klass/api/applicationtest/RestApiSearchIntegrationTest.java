@@ -254,6 +254,21 @@ class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest {
     }
 
     @Test
+    void restServiceSearchPartialWordsInCompoundTitle() {
+        given().port(port)
+                .accept(ContentType.JSON)
+                .param(QUERY, "komm innd")
+                .get(REQUEST_SEARCH)
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .contentType(ContentType.JSON)
+                .body(
+                        JSON_SEARCH_RESULTS + ".name",
+                        hasItem(TestDataProvider.KOMMUNEINNDELING_NAVN_NO));
+    }
+
+    @Test
     void restServiceSearchCodesJSON() {
         // 'Kommuneinndeling' has code "0101", "Halden"
         given().port(port)
