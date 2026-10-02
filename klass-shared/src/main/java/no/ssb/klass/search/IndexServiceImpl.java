@@ -33,6 +33,11 @@ public class IndexServiceImpl implements IndexService {
 
     private static final String ANALYZER = "analyzer";
     private static final String SEARCH_ANALYZER = "search_analyzer";
+    private static final String TOKENIZER = "tokenizer";
+    private static final String STANDARD_TOKENIZER = "standard";
+    private static final String TOKEN_FILTERS = "filter";
+    private static final String CUSTOM_ANALYZER = "custom";
+    private static final String LOWERCASE_FILTER = "lowercase";
     private static final String TITLE_PARTIAL_ANALYZER = "title_partial_analyzer";
     private static final String TITLE_PARTIAL_SEARCH_ANALYZER = "title_partial_search_analyzer";
     private static final String TITLE_PARTIAL_FILTER = "title_partial_filter";
@@ -99,35 +104,23 @@ public class IndexServiceImpl implements IndexService {
                                     ANALYZER,
                                     Map.of(
                                             NORWEGIAN_STEMMER_ANALYZER,
-                                                    Map.of(
-                                                            "type", "custom",
-                                                            "tokenizer", "standard",
-                                                            "filter",
-                                                                    List.of(
-                                                                            "lowercase",
-                                                                            "norwegian_stemmer")),
+                                                    customAnalyzer(
+                                                            List.of(
+                                                                    LOWERCASE_FILTER,
+                                                                    "norwegian_stemmer")),
                                             TITLE_PARTIAL_ANALYZER,
-                                                    Map.of(
-                                                            "type", "custom",
-                                                            "tokenizer", "standard",
-                                                            "filter",
-                                                                    List.of(
-                                                                            "lowercase",
-                                                                            TITLE_PARTIAL_FILTER)),
+                                                    customAnalyzer(
+                                                            List.of(
+                                                                    LOWERCASE_FILTER,
+                                                                    TITLE_PARTIAL_FILTER)),
                                             TITLE_PARTIAL_SEARCH_ANALYZER,
-                                                    Map.of(
-                                                            "type", "custom",
-                                                            "tokenizer", "standard",
-                                                            "filter", List.of("lowercase"))),
-                                    "filter",
+                                                    customAnalyzer(List.of(LOWERCASE_FILTER))),
+                                    TOKEN_FILTERS,
                                     Map.of(
                                             "norwegian_stemmer",
-                                            Map.of("type", "stemmer", "name", "norwegian"),
+                                            Map.of(TYPE, "stemmer", "name", "norwegian"),
                                             TITLE_PARTIAL_FILTER,
-                                            Map.of(
-                                                    "type", "ngram",
-                                                    "min_gram", 3,
-                                                    "max_gram", 20))));
+                                            Map.of(TYPE, "ngram", "min_gram", 3, "max_gram", 20))));
 
             Map<String, Object> mappings =
                     Map.of(
@@ -184,6 +177,11 @@ public class IndexServiceImpl implements IndexService {
         } catch (Exception e) {
             log.error("Error creating index '{}': {}", elasticsearchIndex, e.getMessage(), e);
         }
+    }
+
+    private static Map<String, Object> customAnalyzer(List<String> tokenFilters) {
+        return Map.of(
+                TYPE, CUSTOM_ANALYZER, TOKENIZER, STANDARD_TOKENIZER, TOKEN_FILTERS, tokenFilters);
     }
 
     @Override
