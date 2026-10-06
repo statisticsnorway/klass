@@ -12,14 +12,19 @@ import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestClientException;
+import org.springframework.web.context.request.async.AsyncRequestNotUsableException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
+import org.springframework.web.util.DisconnectedClientHelper;
 
 @RestControllerAdvice
 public class Handlers {
     private static final Logger log = LoggerFactory.getLogger(Handlers.class);
 
     private static final String EXCEPTION_HANDLER_LOG_MESSAGE_TEMPLATE = "{}. For request: {}";
+
+    private static final String CLIENT_DISCONNECTED_LOG_MESSAGE_TEMPLATE =
+            "Client disconnected before the response was fully written. For request: {}";
 
     @ExceptionHandler(
             exception = {KlassResourceNotFoundException.class, NoHandlerFoundException.class},
@@ -80,6 +85,30 @@ public class Handlers {
         return exception.getMessage();
     }
 
+    /**
+     * The client went away before we finished writing the response. The response is already
+     * committed, so there is nothing to report back and no status left to set. Log at DEBUG so
+     * these do not drown out genuine server faults.
+     */
+    @ExceptionHandler(AsyncRequestNotUsableException.class)
+    public void clientDisconnectedExceptionHandler(
+            AsyncRequestNotUsableException exception, HttpServletRequest request) {
+        log.debug(CLIENT_DISCONNECTED_LOG_MESSAGE_TEMPLATE, request.getRequestURI(), exception);
+    }
+
+    /**
+     * Catches disconnect variants that are not matched by type, so they are not reported as server
+     * faults by {@link #serverErrorProblemDetailExceptionHandler} and {@link
+     * #serverErrorTextExceptionHandler}.
+     */
+    private boolean isClientDisconnected(Exception exception, HttpServletRequest request) {
+        if (!DisconnectedClientHelper.isClientDisconnectedException(exception)) {
+            return false;
+        }
+        log.debug(CLIENT_DISCONNECTED_LOG_MESSAGE_TEMPLATE, request.getRequestURI(), exception);
+        return true;
+    }
+
     @ExceptionHandler(
             produces = {
                 MediaType.APPLICATION_JSON_VALUE,
@@ -91,6 +120,9 @@ public class Handlers {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ProblemDetail serverErrorProblemDetailExceptionHandler(
             Exception exception, HttpServletRequest request) {
+        if (isClientDisconnected(exception, request)) {
+            return null;
+        }
         log.error(
                 EXCEPTION_HANDLER_LOG_MESSAGE_TEMPLATE,
                 exception.getMessage(),
@@ -102,6 +134,9 @@ public class Handlers {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public String serverErrorTextExceptionHandler(Exception exception, HttpServletRequest request) {
+        if (isClientDisconnected(exception, request)) {
+            return null;
+        }
         log.error(
                 EXCEPTION_HANDLER_LOG_MESSAGE_TEMPLATE,
                 exception.getMessage(),
