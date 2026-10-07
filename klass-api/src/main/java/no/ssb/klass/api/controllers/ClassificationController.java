@@ -531,6 +531,10 @@ public class ClassificationController {
                             .collect(toList());
             successGetChangeTables = true;
 
+            // Without this each change table loads its maps on demand, which for a classification
+            // with many versions is hundreds of sequential round trips.
+            classificationService.prefetchCorrespondenceMaps(changeTables);
+
             CodeChangeList codeChanges = new CodeChangeList(csvSeparator);
             for (CorrespondenceTable changeTable : changeTables) {
                 codeChanges = codeChanges.merge(codeChanges.convert(changeTable, language));

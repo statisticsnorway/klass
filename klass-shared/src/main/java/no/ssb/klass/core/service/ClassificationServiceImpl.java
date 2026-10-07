@@ -131,6 +131,18 @@ public class ClassificationServiceImpl implements ClassificationService {
 
     @Override
     @Transactional(readOnly = true)
+    public void prefetchCorrespondenceMaps(Collection<CorrespondenceTable> correspondenceTables) {
+        if (correspondenceTables.isEmpty()) {
+            return;
+        }
+        // The returned tables are the same instances, now with their maps initialized in the
+        // persistence context, so callers keep reading through the objects they already hold.
+        correspondenceTableRepository.findAllByIdWithMaps(
+                correspondenceTables.stream().map(CorrespondenceTable::getId).toList());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public ClassificationVariant getClassificationVariant(Long id) {
         ClassificationVariant variant =
                 classificationVariantRepository

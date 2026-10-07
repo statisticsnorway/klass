@@ -3,6 +3,12 @@
         xsi:schemaLocation="http://www.ehcache.org/v3 http://www.ehcache.org/schema/ehcache-core-3.0.xsd">
 
     <!--
+      NOT IN USE BY klass-api. The Hibernate second-level cache is disabled
+      (spring.jpa.properties.hibernate.cache.use_second_level_cache=false) because caching
+      CorrespondenceMap without caching ClassificationItem made /correspondencetables/{id}
+      roughly twenty times slower. See the comment in klass-api/application.properties and
+      CorrespondenceTableFetchingTest, which still loads this file to keep that regression caught.
+
       Default template used by all named caches below.
       Also used as a baseline for any cache regions created at runtime via
       hibernate.javax.cache.missing_cache_strategy=create-warn.
