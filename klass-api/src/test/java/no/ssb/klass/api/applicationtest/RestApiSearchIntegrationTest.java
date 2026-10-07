@@ -10,11 +10,11 @@ import io.restassured.http.ContentType;
 import no.ssb.klass.api.applicationtest.config.ApplicationTestConfig;
 import no.ssb.klass.api.applicationtest.config.IndexServiceTestConfig;
 import no.ssb.klass.core.config.ConfigurationProfiles;
+import no.ssb.klass.core.model.ClassificationSeries;
 import no.ssb.klass.search.IndexServiceImpl;
 import no.ssb.klass.testutil.TestDataProvider;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.opensearch.data.client.orhlc.OpenSearchRestTemplate;
 import org.opensearch.testcontainers.OpensearchContainer;
@@ -41,13 +41,12 @@ import org.testcontainers.utility.DockerImageName;
             ConfigurationProfiles.OPEN_SEARCH_LOCAL
         },
         inheritProfiles = false)
-@Disabled
 class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest {
 
     @Container
     @SuppressWarnings("resource") // Managed by Testcontainers
     protected static final OpensearchContainer<?> opensearchContainer =
-            new OpensearchContainer<>(DockerImageName.parse("opensearchproject/opensearch:2.11.0"))
+            new OpensearchContainer<>(DockerImageName.parse("opensearchproject/opensearch:3.0.0"))
                     .withEnv("discovery.type", "single-node")
                     .withReuse(true);
 
@@ -181,6 +180,68 @@ class RestApiSearchIntegrationTest extends AbstractRestApiApplicationTest {
                 .body(
                         JSON_SEARCH_RESULTS + ".name",
                         hasItem(TestDataProvider.KOMMUNEINNDELING_NAVN_NO));
+    }
+
+    @Test
+    void restServiceSearchShortPrefixJSON() {
+        given().port(port)
+                .accept(ContentType.JSON)
+                .param(QUERY, "s")
+                .get(REQUEST_SEARCH)
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .body(JSON_SEARCH_RESULTS + ".size()", greaterThan(0));
+    }
+
+    @Test
+    void restServiceSearchInflectedCompoundWordJSON() {
+        given().port(port)
+                .accept(ContentType.JSON)
+                .param(QUERY, "kommunene")
+                .get(REQUEST_SEARCH)
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .body(
+                        JSON_SEARCH_RESULTS + ".name",
+                        hasItem(TestDataProvider.KOMMUNEINNDELING_NAVN_NO));
+    }
+
+    @Test
+    void restServiceSearchToleratesTyposInTitleJSON() {
+        indexExtraClassification("Standard for eierform", "Eierskap");
+
+        searchNames("eieform")
+                .body(JSON_SEARCH_RESULTS + ".name", hasItem("Standard for eierform"));
+    }
+
+    @Test
+    void restServiceSearchWithShortStopWordInQueryJSON() {
+        searchNames("kommune i bergen")
+                .body(
+                        JSON_SEARCH_RESULTS + ".name",
+                        hasItem(TestDataProvider.KOMMUNEINNDELING_NAVN_NO));
+    }
+
+    private io.restassured.response.ValidatableResponse searchNames(String query) {
+        return given().port(port)
+                .accept(ContentType.JSON)
+                .param(QUERY, query)
+                .get(REQUEST_SEARCH)
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value());
+    }
+
+    private void indexExtraClassification(String name, String description) {
+        ClassificationSeries series =
+                TestDataProvider.createPublishedClassification(
+                        userRepository.findAll().get(0), name, description);
+        classificationFamily.addClassificationSeries(series);
+        series = classificationService.saveAndIndexClassification(series);
+        indexService.indexSync(series);
+        openSearchRestTemplate.indexOps(IndexCoordinates.of("klass")).refresh();
     }
 
     @Test

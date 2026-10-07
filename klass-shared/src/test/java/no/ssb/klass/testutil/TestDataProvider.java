@@ -473,6 +473,23 @@ public final class TestDataProvider {
         return classification;
     }
 
+    /** Creates a published classification with the given title, for search tests. */
+    public static ClassificationSeries createPublishedClassification(
+            User user, String name, String description) {
+        ClassificationSeries classification = TestUtil.createClassification(name, description);
+        classification.setContactPerson(user);
+        ClassificationVersion version =
+                TestUtil.createClassificationVersion(
+                        DateRange.create("2014-01-01", TestDataProvider.TEN_YEARS_LATER_DATE));
+        Level level = TestUtil.createLevel(1);
+        version.addLevel(level);
+        version.addClassificationItem(
+                TestUtil.createClassificationItem("1", "Item"), level.getLevelNumber(), null);
+        version.publish(Language.NB);
+        classification.addClassificationVersion(version);
+        return classification;
+    }
+
     public static ClassificationSeries createCopyrightedCodeList(User user) {
         ClassificationSeries classification =
                 TestUtil.createCodelist(
