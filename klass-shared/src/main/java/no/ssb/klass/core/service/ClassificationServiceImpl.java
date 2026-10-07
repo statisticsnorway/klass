@@ -46,6 +46,7 @@ public class ClassificationServiceImpl implements ClassificationService {
     private final StatisticalUnitRepository statisticalUnitRepository;
     private final UserRepository userRepository;
     private final ClassificationFamilySummaryBuilder classificationFamilySummaryBuilder;
+    private final ClassificationService classificationService;
 
     @Autowired
     public ClassificationServiceImpl(
@@ -58,7 +59,9 @@ public class ClassificationServiceImpl implements ClassificationService {
             CorrespondenceMapRepository correspondenceMapRepository,
             StatisticalUnitRepository statisticalUnitRepository,
             UserRepository userRepository,
-            ClassificationFamilySummaryBuilder classificationFamilySummaryBuilder) {
+            ClassificationFamilySummaryBuilder classificationFamilySummaryBuilder,
+            ClassificationService classificationService
+    ) {
         this.classificationFamilyRepository = classificationFamilyRepository;
         this.classificationRepository = classificationRepository;
         this.classificationVersionRepository = classificationVersionRepository;
@@ -69,6 +72,7 @@ public class ClassificationServiceImpl implements ClassificationService {
         this.statisticalUnitRepository = statisticalUnitRepository;
         this.userRepository = userRepository;
         this.classificationFamilySummaryBuilder = classificationFamilySummaryBuilder;
+        this.classificationService = classificationService;
     }
 
     @Override
@@ -388,7 +392,8 @@ public class ClassificationServiceImpl implements ClassificationService {
                         dateRange,
                         language,
                         includeFuture);
-        prefetchCorrespondenceMaps(
+        // This method is annotated with @Transactional so it must be called via the injected bean
+        classificationService.prefetchCorrespondenceMaps(
                 tables.stream()
                         .map(
                                 ClassificationServiceHelper.CorrespondenceTableInRange
