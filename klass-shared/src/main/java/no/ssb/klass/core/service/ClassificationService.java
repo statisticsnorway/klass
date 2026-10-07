@@ -10,6 +10,7 @@ import no.ssb.klass.core.util.DateRange;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -118,6 +119,17 @@ public interface ClassificationService {
      *     found with id
      */
     ClassificationSeries getClassificationSeriesFullyInitialized(Long id);
+
+    /**
+     * Loads the correspondence maps of the given tables in a single query.
+     *
+     * <p>Reading a correspondence table's maps lazily costs three queries per table. Callers that
+     * walk many tables, such as the changes endpoint, should prefetch them together: for Standard
+     * for kommuneinndeling that is a handful of round trips instead of 423.
+     *
+     * @param correspondenceTables tables to initialize; may be empty
+     */
+    void prefetchCorrespondenceMaps(Collection<CorrespondenceTable> correspondenceTables);
 
     /**
      * Gets a ClassificationVersion
