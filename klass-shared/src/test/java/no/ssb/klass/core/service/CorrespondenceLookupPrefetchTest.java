@@ -55,7 +55,6 @@ import java.util.List;
  * few tables at a time; prefetching them together roughly halves both the query count and the time.
  * This guards against a change that reintroduces a round trip per table.
  */
-@ExtendWith(SpringExtension.class)
 @SpringBootTest(
         properties = {
             "spring.jpa.properties.hibernate.generate_statistics=true",
