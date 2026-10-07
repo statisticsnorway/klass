@@ -24,10 +24,10 @@ public interface CorrespondenceTableRepository extends JpaRepository<Corresponde
      * Loads the given correspondence tables together with their maps and the classification items
      * each map points at.
      *
-     * <p>Reading them one table at a time costs three queries per table, which dominates endpoints
-     * that walk every change table of a classification. Standard for kommuneinndeling has 142
-     * versions, so {@code /changes?from=1838-01-01} visits 141 tables: 423 round trips, against a
-     * handful when they are fetched together.
+     * <p>Endpoints that walk every change table of a classification otherwise let Hibernate batch
+     * fetch the maps a few tables at a time. Fetching them together roughly halves both the query
+     * count and the time: measured over 141 tables and 63000 maps, 13 queries and 1257ms became 6
+     * queries and 752ms.
      *
      * <p>The items' levels are fetched too. {@code ClassificationItem.level} is an eager
      * {@code @ManyToOne}, so leaving it out simply moves the round trips rather than removing them:

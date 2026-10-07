@@ -346,7 +346,7 @@ public class ClassificationServiceImpl implements ClassificationService {
         ClassificationSeries sourceClassification = getClassificationSeries(sourceClassificationId);
         ClassificationSeries targetClassification = getClassificationSeries(targetClassificationId);
         List<CorrespondenceDto> correspondences =
-                ClassificationServiceHelper.findCorrespondences(
+                findCorrespondencesBetween(
                         sourceClassification,
                         targetClassification,
                         dateRange,
@@ -355,7 +355,7 @@ public class ClassificationServiceImpl implements ClassificationService {
                         inverted);
         if (correspondences.isEmpty()) {
             correspondences =
-                    ClassificationServiceHelper.findCorrespondences(
+                    findCorrespondencesBetween(
                             targetClassification,
                             sourceClassification,
                             dateRange,
@@ -368,6 +368,33 @@ public class ClassificationServiceImpl implements ClassificationService {
                     createCorrespondenceNotFoundErrorMessage(
                             sourceClassification, targetClassification));
         return correspondences;
+    }
+
+    /**
+     * Loads the correspondence maps of every contributing table in one query before reading them,
+     * rather than letting each table fetch its own.
+     */
+    private List<CorrespondenceDto> findCorrespondencesBetween(
+            ClassificationSeries sourceClassification,
+            ClassificationSeries targetClassification,
+            DateRange dateRange,
+            Language language,
+            Boolean includeFuture,
+            Boolean inverted) {
+        List<ClassificationServiceHelper.CorrespondenceTableInRange> tables =
+                ClassificationServiceHelper.findCorrespondenceTables(
+                        sourceClassification,
+                        targetClassification,
+                        dateRange,
+                        language,
+                        includeFuture);
+        prefetchCorrespondenceMaps(
+                tables.stream()
+                        .map(
+                                ClassificationServiceHelper.CorrespondenceTableInRange
+                                        ::correspondenceTable)
+                        .toList());
+        return ClassificationServiceHelper.mapCorrespondences(tables, language, inverted);
     }
 
     public static String createCorrespondenceNotFoundErrorMessage(

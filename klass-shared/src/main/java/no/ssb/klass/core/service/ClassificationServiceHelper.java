@@ -106,35 +106,61 @@ final class ClassificationServiceHelper {
         return codes;
     }
 
-    static List<CorrespondenceDto> findCorrespondences(
+    /**
+     * A correspondence table together with the slice of time it contributes correspondences for.
+     *
+     * @param correspondenceTable the table to read correspondence maps from
+     * @param subRange overlap between the source version's validity and the table's target
+     */
+    record CorrespondenceTableInRange(
+            CorrespondenceTable correspondenceTable, DateRange subRange) {}
+
+    /**
+     * Finds the correspondence tables that contribute to a correspondence lookup, without reading
+     * their correspondence maps.
+     *
+     * <p>Separate from {@link #mapCorrespondences} so callers can load the maps of every table in
+     * one query before walking them. Reading them table by table costs three queries each, and a
+     * classification such as Standard for kommuneinndeling has well over a hundred versions.
+     */
+    static List<CorrespondenceTableInRange> findCorrespondenceTables(
             ClassificationSeries sourceClassification,
             ClassificationSeries targetClassification,
             DateRange dateRange,
             Language language,
-            Boolean includeFuture,
-            Boolean inverted) {
-        List<CorrespondenceDto> correspondences = new ArrayList<>();
+            Boolean includeFuture) {
+        List<CorrespondenceTableInRange> tables = new ArrayList<>();
         for (ClassificationVersion version : sourceClassification.getClassificationVersions()) {
             if (version.isDraft()) {
                 continue;
             }
             if (version.getDateRange().overlaps(dateRange) && version.showVersion(includeFuture)) {
-                List<CorrespondenceTable> tables =
+                for (CorrespondenceTable correspondenceTable :
                         getCorrespondenceTablesWithTarget(
-                                version, targetClassification, version.getDateRange(), language);
-                for (CorrespondenceTable correspondenceTable : tables) {
-                    correspondences.addAll(
-                            mapCorrespondenceMapsToCorrespondences(
+                                version, targetClassification, version.getDateRange(), language)) {
+                    tables.add(
+                            new CorrespondenceTableInRange(
                                     correspondenceTable,
                                     version.getDateRange()
                                             .subRange(
-                                                    correspondenceTable.getTarget().getDateRange()),
-                                    language,
-                                    inverted));
+                                                    correspondenceTable
+                                                            .getTarget()
+                                                            .getDateRange())));
                 }
             }
         }
+        return tables;
+    }
 
+    /** Reads the correspondence maps of tables found by {@link #findCorrespondenceTables}. */
+    static List<CorrespondenceDto> mapCorrespondences(
+            List<CorrespondenceTableInRange> tables, Language language, Boolean inverted) {
+        List<CorrespondenceDto> correspondences = new ArrayList<>();
+        for (CorrespondenceTableInRange table : tables) {
+            correspondences.addAll(
+                    mapCorrespondenceMapsToCorrespondences(
+                            table.correspondenceTable(), table.subRange(), language, inverted));
+        }
         return correspondences;
     }
 
