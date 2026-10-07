@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 
 public class PublicSearchQuery {
 
+    private static final String TITLE_FIELD = "title";
     private static final int MAX_SHORT_PREFIX_LENGTH = 2;
 
     /** Body matches need 75% of the terms, so a two-word query matches when one word is found. */
@@ -119,7 +120,7 @@ public class PublicSearchQuery {
 
     /** Matches the full analyzed query as an exact phrase in the title. */
     private static QueryBuilder exactTitleMatch(String query) {
-        return QueryBuilders.matchPhraseQuery("title", query).boost(EXACT_TITLE_BOOST);
+        return QueryBuilders.matchPhraseQuery(TITLE_FIELD, query).boost(EXACT_TITLE_BOOST);
     }
 
     /**
@@ -127,12 +128,12 @@ public class PublicSearchQuery {
      * "kommuneinndeling".
      */
     private static QueryBuilder titlePrefixMatch(String query) {
-        return QueryBuilders.matchPhrasePrefixQuery("title", query).boost(TITLE_PREFIX_BOOST);
+        return QueryBuilders.matchPhrasePrefixQuery(TITLE_FIELD, query).boost(TITLE_PREFIX_BOOST);
     }
 
     /** Requires all analyzed query terms in the title while treating the final term as a prefix. */
     private static QueryBuilder titleBoolPrefixMatch(String query) {
-        return QueryBuilders.matchBoolPrefixQuery("title", query)
+        return QueryBuilders.matchBoolPrefixQuery(TITLE_FIELD, query)
                 .operator(Operator.AND)
                 .boost(TITLE_BOOL_PREFIX_BOOST);
     }
@@ -142,14 +143,14 @@ public class PublicSearchQuery {
         String trimmedQuery = query.trim();
         if (!trimmedQuery.isEmpty() && trimmedQuery.length() <= MAX_SHORT_PREFIX_LENGTH) {
             matches.add(
-                    QueryBuilders.prefixQuery("title", trimmedQuery.toLowerCase(Locale.ROOT))
+                    QueryBuilders.prefixQuery(TITLE_FIELD, trimmedQuery.toLowerCase(Locale.ROOT))
                             .boost(SHORT_PREFIX_BOOST));
         }
     }
 
     /** Matches analyzed title terms while allowing a limited edit distance for typos. */
     private static QueryBuilder fuzzyTitleMatch(String query) {
-        return QueryBuilders.matchQuery("title", query)
+        return QueryBuilders.matchQuery(TITLE_FIELD, query)
                 .fuzziness(FUZZINESS)
                 .prefixLength(2)
                 .maxExpansions(30)
