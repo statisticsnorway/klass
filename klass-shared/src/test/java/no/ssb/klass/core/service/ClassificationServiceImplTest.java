@@ -43,7 +43,6 @@ public class ClassificationServiceImplTest {
     private StatisticalUnitRepository statisticalUnitRepositoryMock;
     private UserRepository userRepositoryMock;
     private ClassificationFamilySummaryBuilder classificationFamilySummaryBuilder;
-    private ClassificationService classificationServiceMock;
 
     @BeforeEach
     public void setup() {
@@ -57,7 +56,6 @@ public class ClassificationServiceImplTest {
         correspondenceMapRepositoryMock = mock(CorrespondenceMapRepository.class);
         statisticalUnitRepositoryMock = mock(StatisticalUnitRepository.class);
         userRepositoryMock = mock(UserRepository.class);
-        classificationServiceMock = mock(ClassificationService.class);
         subject =
                 new ClassificationServiceImpl(
                         classificationFamilyRepositoryMock,
@@ -69,9 +67,7 @@ public class ClassificationServiceImplTest {
                         correspondenceMapRepositoryMock,
                         statisticalUnitRepositoryMock,
                         userRepositoryMock,
-                        classificationFamilySummaryBuilder,
-                        classificationServiceMock
-                        );
+                        classificationFamilySummaryBuilder);
     }
 
     @Test
