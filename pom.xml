@@ -43,7 +43,7 @@
         <asciidoctor-version>3.2.0</asciidoctor-version>
         <commons-io-version>2.22.0</commons-io-version>
         <commons-lang3-version>3.21.0</commons-lang3-version>
-        <guava-version>33.7.1-jre</guava-version>
+        <guava-version>33.7.2-jre</guava-version>
         <!-- CVE-2026-54513 (HIGH, CVSS 8.1): fixed in 2.21.3+ -->
         <jackson-bom.version>2.21.6</jackson-bom.version>
         <log4j2.version>2.26.1</log4j2.version>
@@ -60,7 +60,7 @@
         <spring.version>4.3.7.RELEASE</spring.version>
         <spring-data-opensearch-starter.version>2.0.8</spring-data-opensearch-starter.version>
         <spring-restdocs-version>3.0.6</spring-restdocs-version>
-        <postgresql.version>42.7.13</postgresql.version>
+        <postgresql.version>42.7.14</postgresql.version>
         <testcontainers.version>1.20.1</testcontainers.version>
         <tomcat7-maven-plugin-version>2.2</tomcat7-maven-plugin-version>
         <woodstox-version>4.4.1</woodstox-version>
