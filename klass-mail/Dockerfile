@@ -1,4 +1,4 @@
-FROM gcr.io/distroless/java21-debian13@sha256:1de29c4b0865b76fb878ba0a7b5a1d80db189db99cf46a5d88ec9c253b5cea9b
+FROM gcr.io/distroless/java21-debian13@sha256:a2aeb5a7a714cfe928b31fdf67b2d23f503ea6b9612705af062de22e0c50ba77
 WORKDIR /app
 COPY target/*.war app.war
 USER nonroot
