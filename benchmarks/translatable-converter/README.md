@@ -44,6 +44,8 @@ ratios against the earlier baseline.
 Raw final samples and metadata are in [`results/comparison.json`](results/comparison.json);
 [`compare.py`](compare.py) regenerates the table and every fork-mean range.
 This is not evidence of an end-to-end API speedup; see the limitations below.
+The follow-up [local HTTP experiment](api/README.md) measures the real API
+request/response path separately rather than extrapolating these JMH results.
 
 ## Reproduce
 
