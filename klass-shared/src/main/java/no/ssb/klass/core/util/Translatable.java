@@ -6,9 +6,13 @@ import com.google.common.base.Strings;
 
 import no.ssb.klass.core.model.Language;
 
+import org.hibernate.annotations.Immutable;
+
 import java.io.Serializable;
 import java.util.Objects;
 
+/** Immutable value; changing a language returns a replacement, so Hibernate may reuse snapshots. */
+@Immutable
 public class Translatable implements Serializable {
     private final String no;
     private final String nn;
