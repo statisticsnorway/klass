@@ -7,10 +7,7 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * Frozen read implementation from bb11c5d877a9f3fce18789b39ff36fa97e793c86, used as a
- * differential-test and benchmark oracle.
- */
+/** Frozen pre-optimization reader used to verify compatibility in differential tests. */
 public class LegacyTranslatablePersistenceConverter extends TranslatablePersistenceConverter {
     private final Pattern noPattern;
     private final Pattern nnPattern;
