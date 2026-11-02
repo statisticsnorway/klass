@@ -31,6 +31,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -402,6 +403,7 @@ public class TranslatableConverterHttpBenchmarkTest extends AbstractRestApiAppli
     private record Workload(String name, long id, int size, String fixtureSha256) {}
 
     @TestConfiguration
+    @ConditionalOnProperty(name = "klass.converter.e2e", havingValue = "true")
     static class ConverterConfiguration {
         @Bean
         public HibernatePropertiesCustomizer benchmarkConverter(

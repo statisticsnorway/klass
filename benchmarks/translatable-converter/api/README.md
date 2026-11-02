@@ -135,6 +135,16 @@ Logs and uncompressed intermediate files remain under the ignored
 ## Controlled comparison
 
 The production converter commit is `e48ee876ed2ed0c03de021b7aabb5f6fee88734e`.
+The exact measured harness and raw results are preserved in
+`b7eefc6ef85f9f7ee3c52653150efebc6914eaf8`; the raw files' source hashes match
+that commit. A subsequent isolation guard makes the test configuration
+conditional on `klass.converter.e2e=true`, preventing component scanning from
+installing benchmark customizers in unrelated integration tests. That
+property was already true in all measured runs: the enabled HTTP path and
+reader implementations are unchanged. Both readers were rechecked with the
+guard enabled in a full-fixture quick preflight; the guard is independently
+covered by context tests for absent/present customizers.
+
 Every run uses the same application source and test configuration. A
 test-only Hibernate `BeanContainer` selects either:
 
@@ -310,13 +320,14 @@ performance claims.
 
 After measurement, the Java 21 regression command below passed the 16
 converter tests (including 20,000 differential inputs) and all 10 existing
-codes-endpoint integration tests. The opt-in HTTP benchmark was skipped
+codes-endpoint integration tests, plus two configuration-isolation tests.
+The opt-in HTTP benchmark was skipped
 without its enabling property. API/shared production and test compilation
 also completed as part of these runs.
 
 ```sh
 mvn -pl klass-api -am \
-  -Dtest=TranslatablePersistenceConverterTest,RestApiCodeIntegrationTest,TranslatableConverterHttpBenchmarkTest \
+  -Dtest=TranslatablePersistenceConverterTest,RestApiCodeIntegrationTest,TranslatableConverterBenchmarkIsolationTest,TranslatableConverterHttpBenchmarkTest \
   -Dsurefire.failIfNoSpecifiedTests=false \
   -Dserver.address=127.0.0.1 -Dmanagement.server.address=127.0.0.1 test
 ```
