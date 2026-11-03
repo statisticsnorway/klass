@@ -1,7 +1,5 @@
 package no.ssb.klass.core.util;
 
-import com.google.common.base.Strings;
-
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 
@@ -17,24 +15,18 @@ import java.util.regex.Pattern;
 @Component
 @Converter(autoApply = true)
 public class TranslatablePersistenceConverter implements AttributeConverter<Translatable, String> {
-    private final Pattern noPattern;
-    private final Pattern nnPattern;
-    private final Pattern enPattern;
+    private final TranslationPattern noPattern;
+    private final TranslationPattern nnPattern;
+    private final TranslationPattern enPattern;
 
     public TranslatablePersistenceConverter() {
         this("no", "nn", "en");
     }
 
     public TranslatablePersistenceConverter(String no, String nn, String en) {
-        this.noPattern =
-                Pattern.compile(
-                        "<" + no + ">(.*)</" + no + ">", Pattern.MULTILINE | Pattern.DOTALL);
-        this.nnPattern =
-                Pattern.compile(
-                        "<" + nn + ">(.*)</" + nn + ">", Pattern.MULTILINE | Pattern.DOTALL);
-        this.enPattern =
-                Pattern.compile(
-                        "<" + en + ">(.*)</" + en + ">", Pattern.MULTILINE | Pattern.DOTALL);
+        this.noPattern = new TranslationPattern(no);
+        this.nnPattern = new TranslationPattern(nn);
+        this.enPattern = new TranslationPattern(en);
     }
 
     @Override
@@ -68,20 +60,51 @@ public class TranslatablePersistenceConverter implements AttributeConverter<Tran
         if (dbData == null) {
             return null;
         }
-        String no = StringEscapeUtils.unescapeXml(find(noPattern, dbData));
-        String nn = StringEscapeUtils.unescapeXml(find(nnPattern, dbData));
-        String en = StringEscapeUtils.unescapeXml(find(enPattern, dbData));
+        String no = unescape(noPattern.find(dbData));
+        String nn = unescape(nnPattern.find(dbData));
+        String en = unescape(enPattern.find(dbData));
         return new Translatable(no, nn, en);
     }
 
-    private String find(Pattern pattern, String input) {
-        if (Strings.isNullOrEmpty(input)) {
-            return null;
+    private static String unescape(String text) {
+        return text == null || text.indexOf('&') < 0 ? text : StringEscapeUtils.unescapeXml(text);
+    }
+
+    private static final class TranslationPattern {
+        private final String openingTag;
+        private final String closingTag;
+        private final Pattern regex;
+
+        private TranslationPattern(String language) {
+            openingTag = "<" + language + ">";
+            closingTag = "</" + language + ">";
+            // Preserve the public constructor's historical regex semantics for custom patterns.
+            regex =
+                    String.valueOf(language)
+                                    .chars()
+                                    .anyMatch(c -> "\\.^$|?*+()[]{}".indexOf(c) >= 0)
+                            ? Pattern.compile(
+                                    openingTag + "(.*)" + closingTag,
+                                    Pattern.MULTILINE | Pattern.DOTALL)
+                            : null;
         }
-        Matcher matcher = pattern.matcher(input);
-        if (!matcher.find()) {
-            return null;
+
+        private String find(String input) {
+            if (input.isEmpty()) {
+                return null;
+            }
+            if (regex != null) {
+                Matcher matcher = regex.matcher(input);
+                return matcher.find() ? matcher.group(1) : null;
+            }
+            int start = input.indexOf(openingTag);
+            if (start < 0) {
+                return null;
+            }
+            start += openingTag.length();
+            // The old greedy regex captured from the first opening to the last closing tag.
+            int end = input.lastIndexOf(closingTag);
+            return end < start ? null : input.substring(start, end);
         }
-        return matcher.group(1);
     }
 }
