@@ -14,7 +14,7 @@
     </parent>
 
     <properties>
-        <spring-cloud-gcp-dependencies.version>7.4.10</spring-cloud-gcp-dependencies.version>
+        <spring-cloud-gcp-dependencies.version>7.5.2</spring-cloud-gcp-dependencies.version>
     </properties>
 
     <dependencies>
@@ -55,7 +55,7 @@
             <!-- Needed to override the version for logstash-logback-encoder to one with vulnerability fixes -->
             <groupId>tools.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>3.2.4</version>
+            <version>3.3.0</version>
         </dependency>
 
         <dependency>
