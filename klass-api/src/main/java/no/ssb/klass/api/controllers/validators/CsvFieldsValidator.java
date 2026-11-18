@@ -8,6 +8,7 @@ import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import no.ssb.klass.api.dto.CodeChangeItem;
 import no.ssb.klass.api.dto.CodeItem;
 import no.ssb.klass.api.dto.CorrespondenceItem;
+import no.ssb.klass.core.util.ClientInputException;
 
 import org.springframework.stereotype.Component;
 
@@ -27,7 +28,7 @@ public class CsvFieldsValidator {
                         .filter(s -> correspondenceItemSchema.column(s) == null)
                         .collect(toList());
         if (!fieldsNotFound.isEmpty()) {
-            throw new IllegalArgumentException(
+            throw new ClientInputException(
                     "CorrespondenceList does not contain the following field(s): "
                             + String.join(",", fieldsNotFound));
         }
@@ -37,7 +38,7 @@ public class CsvFieldsValidator {
         List<String> fieldsNotFound =
                 csvFields.stream().filter(s -> codeItemSchema.column(s) == null).collect(toList());
         if (!fieldsNotFound.isEmpty()) {
-            throw new IllegalArgumentException(
+            throw new ClientInputException(
                     "CorrespondenceList does not contain the following field(s): "
                             + String.join(",", fieldsNotFound));
         }
@@ -49,7 +50,7 @@ public class CsvFieldsValidator {
                         .filter(s -> codeChangeItemSchema.column(s) == null)
                         .collect(toList());
         if (!fieldsNotFound.isEmpty()) {
-            throw new IllegalArgumentException(
+            throw new ClientInputException(
                     "CorrespondenceList does not contain the following field(s): "
                             + String.join(",", fieldsNotFound));
         }

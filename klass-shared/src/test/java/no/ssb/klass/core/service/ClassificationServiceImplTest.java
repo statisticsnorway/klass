@@ -118,6 +118,19 @@ public class ClassificationServiceImplTest {
     }
 
     @Test
+    public void getClassificationSeriesMissing() {
+        final Long id = 99999L;
+        when(classificationSeriesRepositoryMock.findById(id)).thenReturn(Optional.empty());
+
+        KlassResourceNotFoundException exception =
+                Assertions.assertThrows(
+                        KlassResourceNotFoundException.class,
+                        () -> subject.getClassificationSeries(id));
+
+        assertEquals("Classification not found with id = " + id, exception.getMessage());
+    }
+
+    @Test
     public void getClassificationSeriesFiltersDeleted() {
         // given
         final Long id = 1L;
@@ -127,10 +140,12 @@ public class ClassificationServiceImplTest {
                 .thenReturn(Optional.of(classification));
 
         // when
-        Assertions.assertThrows(
-                KlassResourceNotFoundException.class, () -> subject.getClassificationSeries(id));
+        KlassResourceNotFoundException exception =
+                Assertions.assertThrows(
+                        KlassResourceNotFoundException.class,
+                        () -> subject.getClassificationSeries(id));
 
-        // then expect exception
+        assertEquals("Classification not found with id = " + id, exception.getMessage());
     }
 
     @Test
