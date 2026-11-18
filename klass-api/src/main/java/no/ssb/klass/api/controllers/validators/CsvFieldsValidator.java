@@ -26,7 +26,7 @@ public class CsvFieldsValidator {
         List<String> fieldsNotFound =
                 csvFields.stream()
                         .filter(s -> correspondenceItemSchema.column(s) == null)
-                        .collect(toList());
+                        .toList();
         if (!fieldsNotFound.isEmpty()) {
             throw new ClientInputException(
                     "CorrespondenceList does not contain the following field(s): "
