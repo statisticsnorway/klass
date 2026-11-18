@@ -25,12 +25,15 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 import org.springframework.web.util.DisconnectedClientHelper;
 
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
+import java.util.regex.Pattern;
 
 @RestControllerAdvice
 public class Handlers {
     private static final Logger log = LoggerFactory.getLogger(Handlers.class);
 
+    private static final Pattern SAFE_PATH = Pattern.compile("[A-Za-z0-9/._~-]*");
     private static final MediaType CSV_MEDIA_TYPE =
             MediaType.parseMediaType(RestConstants.CONTENT_TYPE_CSV);
 
@@ -59,9 +62,9 @@ public class Handlers {
                 MediaType.APPLICATION_PROBLEM_XML_VALUE
             })
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ProblemDetail resourceNotFoundProblemDetailExceptionHandler(Exception exception) {
-        return ProblemDetail.forStatusAndDetail(
-                HttpStatus.NOT_FOUND, resourceNotFoundMessage(exception));
+    public ProblemDetail resourceNotFoundProblemDetailExceptionHandler(
+            Exception exception, HttpServletRequest request) {
+        return problemDetail(HttpStatus.NOT_FOUND, resourceNotFoundMessage(exception), request);
     }
 
     @ExceptionHandler(
@@ -100,9 +103,9 @@ public class Handlers {
                 MediaType.APPLICATION_PROBLEM_XML_VALUE
             })
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ProblemDetail badRequestProblemDetailExceptionHandler(Exception exception) {
-        return ProblemDetail.forStatusAndDetail(
-                HttpStatus.BAD_REQUEST, badRequestMessage(exception));
+    public ProblemDetail badRequestProblemDetailExceptionHandler(
+            Exception exception, HttpServletRequest request) {
+        return problemDetail(HttpStatus.BAD_REQUEST, badRequestMessage(exception), request);
     }
 
     @ExceptionHandler(
@@ -127,6 +130,19 @@ public class Handlers {
             return exception.getMessage();
         }
         return HttpStatus.BAD_REQUEST.getReasonPhrase();
+    }
+
+    /**
+     * Spring fills in {@code instance} from the raw request path when it is null, which would
+     * reflect attacker-controlled input. Only plain path characters are echoed back.
+     */
+    private ProblemDetail problemDetail(
+            HttpStatus status, String detail, HttpServletRequest request) {
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(status, detail);
+        String path = request.getRequestURI();
+        problem.setInstance(
+                URI.create(path != null && SAFE_PATH.matcher(path).matches() ? path : "/"));
+        return problem;
     }
 
     private ResponseEntity<String> textErrorResponse(
@@ -188,9 +204,10 @@ public class Handlers {
                 exception.getMessage(),
                 request.getRequestURI(),
                 exception);
-        return ProblemDetail.forStatusAndDetail(
+        return problemDetail(
                 HttpStatus.INTERNAL_SERVER_ERROR,
-                HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
+                HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
+                request);
     }
 
     @ExceptionHandler
