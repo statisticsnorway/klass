@@ -242,6 +242,8 @@ class HandlersTest {
         }
 
         @GetMapping("/parameters")
-        public void parameters(@RequestParam long id) {}
+        public void parameters(@RequestParam long id) {
+            // Empty since no functionality is necessary, just the endpoint itself
+        }
     }
 }
