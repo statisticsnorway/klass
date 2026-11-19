@@ -24,7 +24,6 @@ import no.ssb.klass.core.service.SubscriberService;
 import no.ssb.klass.core.service.dto.CodeDto;
 import no.ssb.klass.core.service.dto.CorrespondenceDto;
 import no.ssb.klass.core.util.AlphaNumericalComparator;
-import no.ssb.klass.core.util.ClientException;
 import no.ssb.klass.core.util.DateRange;
 
 import org.slf4j.Logger;
@@ -45,7 +44,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestClientException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.servlet.view.RedirectView;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -852,13 +850,9 @@ public class ClassificationController {
             produces = MediaType.TEXT_HTML_VALUE)
     public ResponseEntity<String> removeTracking(
             @PathVariable Long classificationId, @RequestParam(value = "email") String email) {
-        try {
-            ClassificationSeries classification =
-                    classificationService.getClassificationSeries(classificationId);
-            subscriberService.removeTracking(email, classification);
-        } catch (ClientException e) {
-            throw new RestClientException(e.getMessage());
-        }
+        ClassificationSeries classification =
+                classificationService.getClassificationSeries(classificationId);
+        subscriberService.removeTracking(email, classification);
         return ResponseEntity.ok(
                 """
                 <!DOCTYPE html>
@@ -880,11 +874,7 @@ public class ClassificationController {
             produces = MediaType.TEXT_HTML_VALUE)
     public ResponseEntity<String> verifyTracking(
             @PathVariable String email, @PathVariable String token) {
-        try {
-            subscriberService.verifyTracking(email, token);
-        } catch (ClientException e) {
-            throw new RestClientException(e.getMessage());
-        }
+        subscriberService.verifyTracking(email, token);
         return ResponseEntity.ok(
                 """
                 <!DOCTYPE html>

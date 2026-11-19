@@ -18,7 +18,7 @@ public final class DateRange {
         checkNotNull(from);
         checkNotNull(to);
         if (from.equals(to) || from.isAfter(to)) {
-            throw new IllegalArgumentException(
+            throw new ClientInputException(
                     "From is equal or after to. From: " + from + " To: " + to);
         }
         this.from = from;
@@ -49,7 +49,7 @@ public final class DateRange {
 
     public DateRange subRange(DateRange other) {
         if (!overlaps(other)) {
-            throw new IllegalArgumentException(
+            throw new ClientInputException(
                     "dateRanges do not overlap. This: " + this + ". Other: " + other);
         }
         LocalDate highestFrom = TimeUtil.max(Lists.newArrayList(from, other.getFrom()));

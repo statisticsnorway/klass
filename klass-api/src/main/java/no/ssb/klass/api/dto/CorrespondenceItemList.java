@@ -10,6 +10,7 @@ import com.google.common.base.Preconditions;
 
 import no.ssb.klass.api.dto.CorrespondenceItem.RangedCorrespondenceItem;
 import no.ssb.klass.core.service.dto.CorrespondenceDto;
+import no.ssb.klass.core.util.ClientInputException;
 import no.ssb.klass.core.util.DateRange;
 
 import java.util.*;
@@ -25,7 +26,7 @@ public class CorrespondenceItemList {
     public CorrespondenceItemList(
             String csvSeparator, boolean displayWithValidRange, boolean includeFuture) {
         if (csvSeparator.toCharArray().length != 1) {
-            throw new IllegalArgumentException("Separator must be a single character");
+            throw new ClientInputException("Separator must be a single character");
         }
         this.csvSeparator = csvSeparator.charAt(0);
         this.displayWithValidRange = displayWithValidRange;

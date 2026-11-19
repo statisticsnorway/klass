@@ -9,6 +9,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 import no.ssb.klass.core.model.CorrespondenceTable;
 import no.ssb.klass.core.model.Language;
+import no.ssb.klass.core.util.ClientInputException;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ public class CodeChangeList {
 
     public CodeChangeList(String csvSeparator) {
         if (csvSeparator.toCharArray().length != 1) {
-            throw new IllegalArgumentException("Separator must be a single character");
+            throw new ClientInputException("Separator must be a single character");
         }
         this.csvSeparator = csvSeparator.charAt(0);
         this.codeChanges = new ArrayList<>();

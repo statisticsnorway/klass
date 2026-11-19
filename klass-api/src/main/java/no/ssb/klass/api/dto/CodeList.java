@@ -11,6 +11,7 @@ import com.google.common.base.Strings;
 import no.ssb.klass.api.dto.CodeItem.RangedCodeItem;
 import no.ssb.klass.api.util.PresentationNameBuilder;
 import no.ssb.klass.core.service.dto.CodeDto;
+import no.ssb.klass.core.util.ClientInputException;
 import no.ssb.klass.core.util.DateRange;
 import no.ssb.klass.core.util.TimeUtil;
 
@@ -39,7 +40,7 @@ public class CodeList {
             DateRange dateRange,
             Boolean includeFuture) {
         if (csvSeparator.toCharArray().length != 1) {
-            throw new IllegalArgumentException("Separator must be a single character");
+            throw new ClientInputException("Separator must be a single character");
         }
         this.csvSeparator = csvSeparator.charAt(0);
         this.displayWithValidRange = displayWithValidRange;
@@ -209,10 +210,10 @@ public class CodeList {
 
     private void validateSelectCodes(String selectCodes) {
         if (selectCodes.length() > MAX_SELECTCODES_LENGTH) {
-            throw new IllegalArgumentException("selectCodes too long");
+            throw new ClientInputException("selectCodes too long");
         }
         if (!LEGAL_SELECTCODES_CHARS.matcher(selectCodes).matches()) {
-            throw new IllegalArgumentException("selectCodes contains illegal characters");
+            throw new ClientInputException("selectCodes contains illegal characters");
         }
     }
 
@@ -263,7 +264,7 @@ public class CodeList {
         ParsedSelectCodes out = new ParsedSelectCodes();
         String[] parameters = input.split(",");
         if (parameters.length > MAX_PARAMETERS) {
-            throw new IllegalArgumentException("Too many selectCodes parameters");
+            throw new ClientInputException("Too many selectCodes parameters");
         }
         for (String raw : parameters) {
             String parameter = safeTrim(raw);
