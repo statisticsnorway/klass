@@ -42,7 +42,7 @@
 
         <asciidoctor-version>3.2.0</asciidoctor-version>
         <commons-io-version>2.22.0</commons-io-version>
-        <commons-lang3-version>3.21.0</commons-lang3-version>
+        <commons-lang3-version>3.22.0</commons-lang3-version>
         <guava-version>33.7.2-jre</guava-version>
         <!-- CVE-2026-54513 (HIGH, CVSS 8.1): fixed in 2.21.3+ -->
         <jackson-bom.version>2.21.6</jackson-bom.version>
@@ -56,7 +56,7 @@
         <rest-assured-version>5.5.6</rest-assured-version>
         <snakeyaml.version>2.5</snakeyaml.version>
         <solr-version>8.5.2</solr-version>
-        <sonar.version>5.8.0.7211</sonar.version>
+        <sonar.version>5.9.0.7382</sonar.version>
         <spring.version>4.3.7.RELEASE</spring.version>
         <spring-data-opensearch-starter.version>2.0.8</spring-data-opensearch-starter.version>
         <spring-restdocs-version>3.0.6</spring-restdocs-version>
